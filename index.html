@@ -41,6 +41,43 @@
         const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
 
+        // --- BIBLIOTECA DE ARCHIVOS (¡EDITA ESTA PARTE!) ---
+        const BIBLIOTECA_DATA = [
+            {
+                titulo: "Módulo 1: La Base Legal",
+                color: "text-emerald-800",
+                borde: "border-emerald-500",
+                iconColor: "text-emerald-600",
+                bgIcon: "bg-emerald-100",
+                archivos: [
+                    // Ejemplo: He puesto el link real del MINSAL para el Decreto 466. ¡Pruébalo!
+                    { nombre: "Decreto Supremo 466", desc: "PDF • Lectura Obligatoria", url: "https://www.minsal.cl/wp-content/uploads/2015/08/Decreto-466_2014.pdf" },
+                    // Aquí debes pegar tu link de Google Drive donde dice PEGAR_TU_LINK_AQUI
+                    { nombre: "Listado de Controlados", desc: "PDF • Referencia", url: "PEGAR_TU_LINK_AQUI" } 
+                ]
+            },
+            {
+                titulo: "Módulo 2: Gestión y Almacenamiento",
+                color: "text-blue-800",
+                borde: "border-blue-500",
+                iconColor: "text-blue-600",
+                bgIcon: "bg-blue-100",
+                archivos: [
+                    { nombre: "Manual Buenas Prácticas", desc: "PDF • Procedimientos", url: "PEGAR_TU_LINK_AQUI" }
+                ]
+            },
+            {
+                titulo: "Módulo 3: Atención y Farmacología",
+                color: "text-fuchsia-800",
+                borde: "border-fuchsia-500",
+                iconColor: "text-fuchsia-600",
+                bgIcon: "bg-fuchsia-100",
+                archivos: [
+                    { nombre: "Guía de Bioequivalencia", desc: "PDF • Minsal", url: "PEGAR_TU_LINK_AQUI" }
+                ]
+            }
+        ];
+
         // --- ICONOS ---
         const ICONS = {
             // CEREBRO ORIGINAL
