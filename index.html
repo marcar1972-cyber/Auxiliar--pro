@@ -17,34 +17,34 @@
     <script type="text/babel">
         const { useState, useEffect } = React;
 
-        // --- ICONOS CORREGIDOS (Con Fragmentos <>) ---
+        // --- ICONOS ARREGLADOS (No tienes que editar nada) ---
         const ICONS = {
             Brain: <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z" />,
             Shield: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />,
             Star: <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />,
-            User: <><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></>,
-            Layers: <><polygon points="12 2 2 7 12 12 22 7 12 2" /><polyline points="2 17 12 22 22 17" /><polyline points="2 12 12 17 22 12" /></>,
-            BookOpen: <><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" /></>,
+            User: <React.Fragment><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></React.Fragment>,
+            Layers: <React.Fragment><polygon points="12 2 2 7 12 12 22 7 12 2" /><polyline points="2 17 12 22 22 17" /><polyline points="2 12 12 17 22 12" /></React.Fragment>,
+            BookOpen: <React.Fragment><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" /></React.Fragment>,
             Heart: <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />,
-            Mail: <><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></>,
-            Lock: <><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></>,
+            Mail: <React.Fragment><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></React.Fragment>,
+            Lock: <React.Fragment><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></React.Fragment>,
             ChevronRight: <path d="m9 18 6-6-6-6" />,
-            CheckCircle: <><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></>,
-            ArrowLeft: <><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></>,
-            LogOut: <><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" x2="9" y1="12" y2="12" /></>,
+            CheckCircle: <React.Fragment><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></React.Fragment>,
+            ArrowLeft: <React.Fragment><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></React.Fragment>,
+            LogOut: <React.Fragment><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" x2="9" y1="12" y2="12" /></React.Fragment>,
             MessageSquare: <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />,
-            Users: <><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></>,
-            AlertTriangle: <><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" /><line x1="12" x2="12" y1="9" y2="13" /><line x1="12" x2="12.01" y1="17" y2="17" /></>,
-            Download: <><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" x2="12" y1="15" y2="3" /></>,
-            Unlock: <><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 9.9-1" /></>,
-            FileText: <><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" /><polyline points="14 2 14 8 20 8" /></>,
-            Newspaper: <><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2" /><path d="M18 14h-8" /><path d="M15 18h-5" /><path d="M10 6h8v4h-8V6Z" /></>,
+            Users: <React.Fragment><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></React.Fragment>,
+            AlertTriangle: <React.Fragment><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" /><line x1="12" x2="12" y1="9" y2="13" /><line x1="12" x2="12.01" y1="17" y2="17" /></React.Fragment>,
+            Download: <React.Fragment><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" x2="12" y1="15" y2="3" /></React.Fragment>,
+            Unlock: <React.Fragment><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 9.9-1" /></React.Fragment>,
+            FileText: <React.Fragment><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" /><polyline points="14 2 14 8 20 8" /></React.Fragment>,
+            Newspaper: <React.Fragment><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2" /><path d="M18 14h-8" /><path d="M15 18h-5" /><path d="M10 6h8v4h-8V6Z" /></React.Fragment>,
             Sparkles: <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />,
-            MapPin: <><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" /></>,
-            Info: <><circle cx="12" cy="12" r="10" /><line x1="12" x2="12" y1="16" y2="12" /><line x1="12" x2="12.01" y1="8" y2="8" /></>,
-            X: <><line x1="18" x2="6" y1="6" y2="18" /><line x1="6" x2="18" y1="6" y2="18" /></>,
-            XCircle: <><circle cx="12" cy="12" r="10" /><line x1="15" x2="9" y1="9" y2="15" /><line x1="9" x2="15" y1="9" y2="15" /></>,
-            Award: <><circle cx="12" cy="8" r="7" /><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" /></>
+            MapPin: <React.Fragment><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" /></React.Fragment>,
+            Info: <React.Fragment><circle cx="12" cy="12" r="10" /><line x1="12" x2="12" y1="16" y2="12" /><line x1="12" x2="12.01" y1="8" y2="8" /></React.Fragment>,
+            X: <React.Fragment><line x1="18" x2="6" y1="6" y2="18" /><line x1="6" x2="18" y1="6" y2="18" /></React.Fragment>,
+            XCircle: <React.Fragment><circle cx="12" cy="12" r="10" /><line x1="15" x2="9" y1="9" y2="15" /><line x1="9" x2="15" y1="9" y2="15" /></React.Fragment>,
+            Award: <React.Fragment><circle cx="12" cy="8" r="7" /><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" /></React.Fragment>
         };
 
         const Icon = ({ path, className = "w-6 h-6" }) => (
@@ -135,7 +135,7 @@
             );
         };
 
-        // --- APP PRINCIPAL ---
+        // --- APP ---
         const App = () => {
             const [user, setUser] = useState(null);
             const [view, setView] = useState('home');
@@ -236,4 +236,195 @@
             const LevelMapView = () => (
                 <div className="max-w-xl mx-auto px-4 py-6">
                     <Button variant="ghost" onClick={() => setView('home')} className="pl-0 mb-4 text-gray-500"><Icon path={ICONS.ArrowLeft} className="w-5 h-5 mr-2" /> Volver</Button>
-                    <h
+                    <h2 className="text-2xl font-bold text-gray-900 mb-6">Tu Ruta</h2>
+                    <div className="space-y-6 relative">
+                        <div className="absolute left-6 top-10 bottom-10 w-1 bg-gray-200 -z-10"></div>
+                        {/* NIVEL 1 */}
+                        <div className={`p-6 rounded-2xl border-2 bg-white ${userLevel >= 1 ? 'border-emerald-500 shadow-md' : 'border-gray-200'}`}>
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="w-12 h-12 bg-emerald-600 rounded-full flex items-center justify-center text-white font-bold text-xl">1</div>
+                                <div><h3 className="font-bold text-lg">Nivel 1: Aspirante</h3><p className="text-xs text-gray-500">Requisito: Aprobar A y B</p></div>
+                            </div>
+                            <div className="space-y-3 pl-4 ml-6 border-l-2 border-gray-100">
+                                <div className="flex flex-col gap-2">
+                                    <span className="text-sm font-bold text-gray-800">A) Prueba Diagnóstico</span>
+                                    <Button size="sm" fullWidth variant={progress['1A'] ? "ghost" : "primary"} onClick={() => { setCurrentQuizType('1A'); setView('quiz'); }}>
+                                        {progress['1A'] ? <span className="flex items-center gap-2"><Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-500" /> Aprobado</span> : 'Rendir Prueba A'}
+                                    </Button>
+                                </div>
+                                <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-gray-100">
+                                    <span className="text-sm font-bold text-gray-800">B) Cuestionario Corto</span>
+                                    <Button size="sm" fullWidth variant={progress['1B'] ? "ghost" : "primary"} onClick={() => { setCurrentQuizType('1B'); setView('quiz'); }}>
+                                        {progress['1B'] ? <span className="flex items-center gap-2"><Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-500" /> Aprobado</span> : 'Rendir Prueba B'}
+                                    </Button>
+                                </div>
+                            </div>
+                        </div>
+                        {/* NIVEL 2 */}
+                        <div className={`p-6 rounded-2xl border-2 ${userLevel >= 2 ? 'bg-white border-orange-400 shadow-md' : 'bg-gray-50 border-gray-200'}`}>
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl ${userLevel >= 2 ? 'bg-orange-600 text-white' : 'bg-gray-300 text-gray-500'}`}>{userLevel >= 2 ? '2' : <Icon path={ICONS.Lock} className="w-5 h-5" />}</div>
+                                <div><h3 className={`font-bold text-lg ${userLevel < 2 && 'text-gray-400'}`}>Nivel 2: Bronce</h3><p className="text-xs text-gray-500">Cuestionario (20 Preguntas)</p></div>
+                            </div>
+                            <div className="pl-4 ml-6">
+                                <Button fullWidth disabled={userLevel < 2} variant={progress['2'] ? "ghost" : "primary"} onClick={() => { setCurrentQuizType('2'); setView('quiz'); }}>
+                                    {progress['2'] ? <span className="flex items-center gap-2"><Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-500" /> Aprobado</span> : 'Rendir Cuestionario'}
+                                </Button>
+                            </div>
+                        </div>
+                        {/* NIVEL 3 */}
+                        <div className={`p-6 rounded-2xl border-2 ${userLevel >= 3 ? 'bg-white border-slate-400 shadow-md' : 'bg-gray-50 border-gray-200'}`}>
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl ${userLevel >= 3 ? 'bg-slate-600 text-white' : 'bg-gray-300 text-gray-500'}`}>{userLevel >= 3 ? '3' : <Icon path={ICONS.Lock} className="w-5 h-5" />}</div>
+                                <div><h3 className={`font-bold text-lg ${userLevel < 3 && 'text-gray-400'}`}>Nivel 3: Plata</h3><p className="text-xs text-gray-500">Cuestionario (30 Preguntas)</p></div>
+                            </div>
+                            <div className="pl-4 ml-6">
+                                <Button fullWidth disabled={userLevel < 3} variant={progress['3'] ? "ghost" : "primary"} onClick={() => { setCurrentQuizType('3'); setView('quiz'); }}>
+                                    {progress['3'] ? <span className="flex items-center gap-2"><Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-500" /> Aprobado</span> : 'Rendir Cuestionario'}
+                                </Button>
+                            </div>
+                        </div>
+                        {/* NIVEL 4 */}
+                        <div className={`p-6 rounded-2xl border-2 ${userLevel >= 4 ? 'bg-white border-yellow-400 shadow-xl' : 'bg-gray-50 border-gray-200'}`}>
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl ${userLevel >= 4 ? 'bg-yellow-500 text-white' : 'bg-gray-300 text-gray-500'}`}>{userLevel >= 4 ? '4' : <Icon path={ICONS.Lock} className="w-5 h-5" />}</div>
+                                <div><h3 className={`font-bold text-lg ${userLevel < 4 && 'text-gray-400'}`}>Nivel 4: Oro</h3><p className="text-xs text-yellow-600 font-bold">Simulacro Final (40)</p></div>
+                            </div>
+                            <div className="pl-4 ml-6">
+                                <Button fullWidth disabled={userLevel < 4} variant={progress['4'] ? "ghost" : "gold"} onClick={() => { setCurrentQuizType('4'); setView('quiz'); }}>
+                                    {progress['4'] ? <span className="flex items-center gap-2"><Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-500" /> Aprobado</span> : 'RENDIR PRUEBA FINAL'}
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+
+            // QUIZ ENGINE
+            const QuizView = () => {
+                const questions = getQuestionsForLevel(currentQuizType);
+                const title = getTitleForLevel(currentQuizType);
+                const [idx, setIdx] = useState(0);
+                const [answers, setAnswers] = useState([]);
+                const [selected, setSelected] = useState(null);
+                const [showResult, setShowResult] = useState(false);
+                const q = questions[idx];
+
+                const handleConfirm = () => {
+                    const isCorrect = selected === q.correcta;
+                    const newAnswers = [...answers, { ...q, isCorrect }];
+                    setAnswers(newAnswers);
+                    if (idx < questions.length - 1) { setIdx(idx + 1); setSelected(null); } 
+                    else { setShowResult(true); }
+                };
+
+                const handleFinish = (passed) => {
+                    if (passed) {
+                        const newProgress = { ...progress, [currentQuizType]: true };
+                        setProgress(newProgress);
+                        if (currentQuizType === '1A' && newProgress['1B'] && userLevel < 2) setUserLevel(2);
+                        if (currentQuizType === '1B' && newProgress['1A'] && userLevel < 2) setUserLevel(2);
+                        if (currentQuizType === '2' && userLevel < 3) setUserLevel(3);
+                        if (currentQuizType === '3' && userLevel < 4) setUserLevel(4);
+                        if (currentQuizType === '4') { setUserLevel(5); setView('victory'); return; }
+                    }
+                    setView('mapa_niveles');
+                };
+
+                if (showResult) {
+                    const correctCount = answers.filter(a => a.isCorrect).length;
+                    const passed = (correctCount / questions.length) >= 0.7;
+                    return (
+                        <div className="max-w-md mx-auto px-4 py-8 text-center">
+                            <div className={`w-24 h-24 rounded-full mx-auto flex items-center justify-center mb-6 ${passed ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
+                                <Icon path={passed ? ICONS.Award : ICONS.XCircle} className="w-12 h-12" />
+                            </div>
+                            <h2 className="text-2xl font-bold mb-2">{passed ? '¡Aprobado!' : 'No Aprobado'}</h2>
+                            <p className="text-5xl font-extrabold text-gray-800 mb-6">{correctCount}/{questions.length}</p>
+                            <Button fullWidth onClick={() => handleFinish(passed)}>{passed ? 'Continuar' : 'Volver'}</Button>
+                            {!passed && <Button variant="ghost" fullWidth onClick={() => { setIdx(0); setAnswers([]); setShowResult(false); setSelected(null); }} className="mt-2">Reintentar</Button>}
+                        </div>
+                    );
+                }
+
+                return (
+                    <div className="max-w-2xl mx-auto px-4 py-6">
+                        <div className="flex flex-col mb-6">
+                            <div className="flex justify-between items-center mb-2">
+                                <Button variant="ghost" onClick={() => setView('mapa_niveles')} className="pl-0 text-gray-500"><Icon path={ICONS.X} className="w-5 h-5 mr-2" /> Salir</Button>
+                                <span className="font-bold text-emerald-600">P. {idx + 1} / {questions.length}</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-sm font-semibold text-gray-500 bg-gray-50 p-2 rounded-lg border border-gray-200">
+                                <Icon path={ICONS.MapPin} className="w-4 h-4 text-gray-400" /> Estás en: <span className="text-gray-800">{title}</span>
+                            </div>
+                        </div>
+                        <Card>
+                            <div className="mb-2"><span className="bg-gray-100 text-gray-500 px-2 py-1 rounded text-xs font-bold uppercase">{q.cat}</span></div>
+                            <h3 className="text-xl font-bold mb-6">{q.pregunta}</h3>
+                            <div className="space-y-3">
+                                {q.opciones.map((op, i) => (
+                                    <button key={i} onClick={() => setSelected(i)} className={`w-full p-4 rounded-xl border-2 text-left transition-all ${selected === i ? 'border-emerald-600 bg-emerald-50 font-bold' : 'border-gray-200'}`}>{op}</button>
+                                ))}
+                            </div>
+                        </Card>
+                        <div className="mt-6 flex justify-end">
+                            <Button disabled={selected === null} onClick={handleConfirm}>Confirmar</Button>
+                        </div>
+                    </div>
+                );
+            };
+
+            // VISTA ZONA EXPERTO
+            const ExpertZoneView = () => (
+                <div className="max-w-2xl mx-auto px-4 py-6">
+                    <Button variant="ghost" onClick={() => setView('home')} className="pl-0 mb-4 text-gray-500"><Icon path={ICONS.ArrowLeft} className="w-5 h-5 mr-2" /> Volver</Button>
+                    <div className="text-center mb-8"><h2 className="text-3xl font-black text-gray-900">Zona de Experto</h2><p className="text-gray-500">Material liberado.</p></div>
+                    <div className="grid gap-4">
+                        <Card className="flex items-center gap-4"><div className="bg-red-100 p-3 rounded-xl text-red-600"><Icon path={ICONS.FileText} className="w-8 h-8" /></div><div><h3 className="font-bold text-lg">Pack PDFs Premium</h3></div></Card>
+                        <Card className="flex items-center gap-4"><div className="bg-emerald-100 p-3 rounded-xl text-emerald-600"><Icon path={ICONS.CheckCircle} className="w-8 h-8" /></div><div><h3 className="font-bold text-lg">Ensayos Ilimitados</h3></div></Card>
+                        <Card className="flex items-center gap-4"><div className="bg-fuchsia-100 p-3 rounded-xl text-fuchsia-600"><Icon path={ICONS.Sparkles} className="w-8 h-8" /></div><div><h3 className="font-bold text-lg">Flashcards Maestras</h3></div></Card>
+                        <Card className="flex items-center gap-4"><div className="bg-blue-100 p-3 rounded-xl text-blue-600"><Icon path={ICONS.Newspaper} className="w-8 h-8" /></div><div><h3 className="font-bold text-lg">Noticias del Rubro</h3></div></Card>
+                    </div>
+                </div>
+            );
+
+            // VISTA VICTORIA
+            const VictoryView = () => (
+                <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4 relative overflow-hidden">
+                    <div className="relative z-10 text-center max-w-md w-full animate-in zoom-in duration-700">
+                        <div className="w-32 h-32 mx-auto bg-gradient-to-br from-yellow-300 to-yellow-600 rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(234,179,8,0.5)] mb-8"><Icon path={ICONS.Star} className="w-16 h-16 text-white fill-current animate-pulse" /></div>
+                        <h1 className="text-4xl font-black text-white mb-2">¡LO LOGRASTE!</h1>
+                        <p className="text-yellow-400 text-lg font-bold mb-6 uppercase">Estás preparado</p>
+                        <Button onClick={() => setView('home')} size="lg" variant="gold" fullWidth>Volver al Inicio</Button>
+                    </div>
+                </div>
+            );
+
+            return (
+                <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-12">
+                    <nav className="bg-white border-b sticky top-0 z-50 h-16 flex items-center px-4 justify-between shadow-sm">
+                        <div className="flex items-center gap-2"><Icon path={ICONS.Brain} className="w-6 h-6 text-emerald-600" /><span className="font-bold text-xl text-gray-800">Auxiliar<span className="text-emerald-600">Pro</span></span></div>
+                        {user && <button onClick={() => setUser(null)} className="p-2 text-red-500"><Icon path={ICONS.LogOut} className="w-5 h-5" /></button>}
+                    </nav>
+                    <main>
+                        {!user && <AuthView />}
+                        {user && view === 'home' && <HomeView />}
+                        {user && view === 'mapa_niveles' && <LevelMapView />}
+                        {user && view === 'quiz' && <QuizView />}
+                        {user && view === 'victory' && <VictoryView />}
+                        {user && view === 'expert_zone' && <ExpertZoneView />}
+                        {user && view === 'forum' && <div className="p-8 text-center"><Button variant="ghost" onClick={() => setView('home')}>← Volver</Button><h2 className="text-2xl mt-4">Comunidad</h2><p>Foro de discusión.</p></div>}
+                        {user && view === 'feedback' && <div className="p-8 text-center"><Button variant="ghost" onClick={() => setView('home')}>← Volver</Button><h2 className="text-2xl mt-4">Feedback</h2><p>Déjanos tus comentarios.</p></div>}
+                        {user && view === 'resources' && <div className="p-8 text-center"><Button variant="ghost" onClick={() => setView('home')}>← Volver</Button><h2 className="text-2xl mt-4">Biblioteca</h2><p>PDFs disponibles.</p></div>}
+                    </main>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
+
+
