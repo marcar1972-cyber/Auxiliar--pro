@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auxiliar Pro - Conectado</title>
+    <title>Auxiliar Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
@@ -21,7 +21,7 @@
 
         const { useState, useEffect } = React;
 
-        // --- TUS LLAVES REALES DE FIREBASE ---
+        // --- TUS CREDENCIALES DE FIREBASE ---
         const firebaseConfig = {
           apiKey: "AIzaSyDNhuSBBhmmQSV0BHC8MOtLKgAUpvtfWfE",
           authDomain: "auxiliar-pro.firebaseapp.com",
@@ -31,12 +31,11 @@
           appId: "1:342196612566:web:c7f34365c4e10502e60877"
         };
 
-        // INICIALIZAR FIREBASE
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- ICONOS ---
+        // --- ICONOS CORREGIDOS (Usando React.Fragment para evitar error de pantalla blanca) ---
         const ICONS = {
             Brain: <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z" />,
             Shield: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />,
@@ -72,7 +71,7 @@
             </svg>
         );
 
-        // --- BANCOS DE PREGUNTAS ---
+        // --- BANCO DE PREGUNTAS ---
         const DB_1A = [
             { id: 1, cat: "Legislación", pregunta: "¿Qué decreto aprueba el reglamento de farmacias?", opciones: ["D.S. 466", "D.S. 594", "D.S. 707"], correcta: 0, explicacion: "El D.S. 466 es la normativa base." },
             { id: 2, cat: "Almacenamiento", pregunta: "Rango T° Refrigerador:", opciones: ["0-4°C", "2-8°C", "8-15°C"], correcta: 1, explicacion: "Cadena de frío estricta: 2°C a 8°C." },
@@ -166,12 +165,11 @@
             const [progress, setProgress] = useState({ '1A': false, '1B': false, '2': false, '3': false, '4': false });
             const [currentQuizType, setCurrentQuizType] = useState(null);
 
-            // --- ESCUCHAR AUTENTICACIÓN Y CARGAR DATOS ---
+            // --- ESCUCHAR AUTENTICACIÓN ---
             useEffect(() => {
                 const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
                     if (currentUser) {
                         setUser(currentUser);
-                        // Cargar datos de Firestore
                         const docRef = doc(db, "users", currentUser.uid);
                         const docSnap = await getDoc(docRef);
                         
@@ -180,7 +178,6 @@
                             setUserLevel(data.level || 1);
                             setProgress(data.progress || { '1A': false, '1B': false, '2': false, '3': false, '4': false });
                         } else {
-                            // Crear documento si no existe (usuario nuevo)
                             await setDoc(docRef, {
                                 level: 1,
                                 progress: { '1A': false, '1B': false, '2': false, '3': false, '4': false },
@@ -195,33 +192,24 @@
                 return () => unsubscribe();
             }, []);
 
-            // --- GUARDAR PROGRESO EN LA NUBE ---
             const saveProgress = async (newLevel, newProgress) => {
                 if (!user) return;
                 try {
                     const userRef = doc(db, "users", user.uid);
-                    await updateDoc(userRef, {
-                        level: newLevel,
-                        progress: newProgress
-                    });
-                } catch (e) {
-                    console.error("Error guardando:", e);
-                }
+                    await updateDoc(userRef, { level: newLevel, progress: newProgress });
+                } catch (e) { console.error(e); }
             };
 
             const handleLogin = async (email, password, isRegistering) => {
                 setErrorMsg('');
                 try {
-                    if (isRegistering) {
-                        await createUserWithEmailAndPassword(auth, email, password);
-                    } else {
-                        await signInWithEmailAndPassword(auth, email, password);
-                    }
+                    if (isRegistering) await createUserWithEmailAndPassword(auth, email, password);
+                    else await signInWithEmailAndPassword(auth, email, password);
                 } catch (error) {
                     let msg = "Error al ingresar.";
                     if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') msg = "Correo o contraseña incorrectos.";
-                    if (error.code === 'auth/email-already-in-use') msg = "Este correo ya está registrado.";
-                    if (error.code === 'auth/weak-password') msg = "La contraseña debe tener al menos 6 caracteres.";
+                    else if (error.code === 'auth/email-already-in-use') msg = "El correo ya está registrado.";
+                    else if (error.code === 'auth/weak-password') msg = "Contraseña muy débil.";
                     setErrorMsg(msg);
                 }
             };
@@ -232,12 +220,11 @@
                 setProgress({ '1A': false, '1B': false, '2': false, '3': false, '4': false });
             };
 
-            // AUTH VIEW
+            // VISTAS
             const AuthView = () => {
                 const [email, setEmail] = useState('');
                 const [password, setPassword] = useState('');
                 const [isRegistering, setIsRegistering] = useState(false);
-
                 return (
                     <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-emerald-50">
                         <div className="text-center mb-8">
@@ -250,147 +237,72 @@
                             <div className="space-y-4">
                                 <input type="email" placeholder="Correo" className="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500" value={email} onChange={e => setEmail(e.target.value)} />
                                 <input type="password" placeholder="Contraseña" className="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500" value={password} onChange={e => setPassword(e.target.value)} />
-                                
                                 {errorMsg && <p className="text-red-500 text-sm text-center">{errorMsg}</p>}
-
-                                <Button fullWidth onClick={() => handleLogin(email, password, isRegistering)}>
-                                    {isRegistering ? 'Registrarse' : 'Entrar'}
-                                </Button>
+                                <Button fullWidth onClick={() => handleLogin(email, password, isRegistering)}>{isRegistering ? 'Registrarse' : 'Entrar'}</Button>
                             </div>
-                            <div className="mt-4 text-center">
-                                <button onClick={() => { setIsRegistering(!isRegistering); setErrorMsg(''); }} className="text-sm text-emerald-600 font-bold hover:underline">
-                                    {isRegistering ? '¿Ya tienes cuenta? Inicia sesión' : '¿No tienes cuenta? Regístrate'}
-                                </button>
-                            </div>
+                            <div className="mt-4 text-center"><button onClick={() => { setIsRegistering(!isRegistering); setErrorMsg(''); }} className="text-sm text-emerald-600 font-bold hover:underline">{isRegistering ? '¿Ya tienes cuenta? Inicia sesión' : '¿No tienes cuenta? Regístrate'}</button></div>
                         </Card>
                     </div>
                 );
             };
 
-            // HOME VIEW
             const HomeView = () => (
                 <div className="max-w-2xl mx-auto px-4 py-6 animate-in">
-                    <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-2xl font-bold text-gray-800">Hola, {user.email.split('@')[0]}</h2>
-                    </div>
+                    <div className="flex justify-between items-center mb-6"><h2 className="text-2xl font-bold text-gray-800">Hola, {user.email.split('@')[0]}</h2></div>
                     <LevelBadgeHeader level={userLevel} />
-                    
                     {userLevel >= 5 && (
                         <button onClick={() => setView('expert_zone')} className="w-full mb-6 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white rounded-3xl p-6 text-left shadow-lg border-b-8 border-yellow-800 flex items-center justify-between">
-                            <div className="flex items-center gap-4">
-                                <div className="bg-white/20 p-3 rounded-2xl"><Icon path={ICONS.Unlock} className="w-8 h-8 text-white" /></div>
-                                <div><h3 className="text-2xl font-black uppercase">Zona Experto</h3><p className="text-yellow-100 text-sm">Recursos exclusivos liberados</p></div>
-                            </div>
-                            <Icon path={ICONS.ChevronRight} className="w-6 h-6 text-white" />
+                            <div className="flex items-center gap-4"><div className="bg-white/20 p-3 rounded-2xl"><Icon path={ICONS.Unlock} className="w-8 h-8 text-white" /></div><div><h3 className="text-2xl font-black uppercase">Zona Experto</h3><p className="text-yellow-100 text-sm">Recursos exclusivos liberados</p></div></div><Icon path={ICONS.ChevronRight} className="w-6 h-6 text-white" />
                         </button>
                     )}
-
                     <div className="space-y-6">
                         <button onClick={() => setView('mapa_niveles')} className="w-full bg-emerald-600 text-white rounded-3xl p-8 text-left shadow-lg relative overflow-hidden border-b-8 border-emerald-800 active:border-b-0 active:translate-y-2 transition-all">
-                            <div className="relative z-10">
-                                <div className="mb-4 text-emerald-100"><Icon path={ICONS.Layers} className="w-12 h-12" /></div>
-                                <h3 className="text-3xl font-bold mb-2">Zona de Niveles</h3>
-                                <p className="text-emerald-100">Rinde tus pruebas para avanzar.</p>
-                                <div className="mt-6 inline-flex items-center gap-2 bg-white text-emerald-800 px-4 py-2 rounded-xl font-bold text-sm">
-                                    {userLevel >= 5 ? 'Repasar Niveles' : 'Continuar Progreso'} <Icon path={ICONS.ChevronRight} className="w-4 h-4" />
-                                </div>
-                            </div>
+                            <div className="relative z-10"><div className="mb-4 text-emerald-100"><Icon path={ICONS.Layers} className="w-12 h-12" /></div><h3 className="text-3xl font-bold mb-2">Zona de Niveles</h3><p className="text-emerald-100">Rinde tus pruebas para avanzar.</p><div className="mt-6 inline-flex items-center gap-2 bg-white text-emerald-800 px-4 py-2 rounded-xl font-bold text-sm">{userLevel >= 5 ? 'Repasar Niveles' : 'Continuar Progreso'} <Icon path={ICONS.ChevronRight} className="w-4 h-4" /></div></div>
                         </button>
-
-                        {userLevel < 2 && (
-                            <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 flex items-center gap-3">
-                                <div className="bg-blue-100 p-2 rounded-full text-blue-600"><Icon path={ICONS.Lock} className="w-4 h-4" /></div>
-                                <p className="text-sm text-blue-800 font-medium">Aprueba el <strong>Nivel 1</strong> para desbloquear Biblioteca y Foro.</p>
-                            </div>
-                        )}
-
+                        {userLevel < 2 && <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 flex items-center gap-3"><div className="bg-blue-100 p-2 rounded-full text-blue-600"><Icon path={ICONS.Lock} className="w-4 h-4" /></div><p className="text-sm text-blue-800 font-medium">Aprueba el <strong>Nivel 1</strong> para desbloquear Biblioteca y Foro.</p></div>}
                         <div className="grid grid-cols-2 gap-4">
                             <button onClick={() => userLevel >= 2 && setView('resources')} className={`border-2 p-4 rounded-3xl text-left relative ${userLevel >= 2 ? 'bg-white border-gray-100 hover:border-blue-500' : 'bg-gray-100 border-gray-200 opacity-70 cursor-not-allowed'}`}>
                                 {userLevel < 2 && <div className="absolute top-2 right-2 bg-gray-200 p-1 rounded-full text-gray-400"><Icon path={ICONS.Lock} className="w-4 h-4" /></div>}
-                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${userLevel >= 2 ? 'bg-blue-100 text-blue-600' : 'bg-gray-200 text-gray-400'}`}><Icon path={ICONS.BookOpen} className="w-6 h-6" /></div>
-                                <h3 className="font-bold text-gray-800">Biblioteca</h3>
-                                <p className="text-xs text-gray-500">{userLevel >= 2 ? 'Material PDF' : 'Bloqueado'}</p>
+                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${userLevel >= 2 ? 'bg-blue-100 text-blue-600' : 'bg-gray-200 text-gray-400'}`}><Icon path={ICONS.BookOpen} className="w-6 h-6" /></div><h3 className="font-bold text-gray-800">Biblioteca</h3><p className="text-xs text-gray-500">{userLevel >= 2 ? 'Material PDF' : 'Bloqueado'}</p>
                             </button>
                             <button onClick={() => userLevel >= 2 && setView('forum')} className={`border-2 p-4 rounded-3xl text-left relative ${userLevel >= 2 ? 'bg-white border-gray-100 hover:border-fuchsia-500' : 'bg-gray-100 border-gray-200 opacity-70 cursor-not-allowed'}`}>
                                 {userLevel < 2 && <div className="absolute top-2 right-2 bg-gray-200 p-1 rounded-full text-gray-400"><Icon path={ICONS.Lock} className="w-4 h-4" /></div>}
-                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${userLevel >= 2 ? 'bg-fuchsia-100 text-fuchsia-600' : 'bg-gray-200 text-gray-400'}`}><Icon path={ICONS.Users} className="w-6 h-6" /></div>
-                                <h3 className="font-bold text-gray-800">Comunidad</h3>
-                                <p className="text-xs text-gray-500">{userLevel >= 2 ? 'Foro' : 'Bloqueado'}</p>
+                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${userLevel >= 2 ? 'bg-fuchsia-100 text-fuchsia-600' : 'bg-gray-200 text-gray-400'}`}><Icon path={ICONS.Users} className="w-6 h-6" /></div><h3 className="font-bold text-gray-800">Comunidad</h3><p className="text-xs text-gray-500">{userLevel >= 2 ? 'Foro' : 'Bloqueado'}</p>
                             </button>
                         </div>
                     </div>
                 </div>
             );
 
-            // MAPA DE NIVELES
             const LevelMapView = () => (
                 <div className="max-w-xl mx-auto px-4 py-6 animate-in">
                     <Button variant="ghost" onClick={() => setView('home')} className="pl-0 mb-4 text-gray-500"><Icon path={ICONS.ArrowLeft} className="w-5 h-5 mr-2" /> Volver</Button>
                     <h2 className="text-2xl font-bold text-gray-900 mb-6">Tu Ruta</h2>
                     <div className="space-y-6 relative">
                         <div className="absolute left-6 top-10 bottom-10 w-1 bg-gray-200 -z-10"></div>
-                        {/* NIVEL 1 */}
                         <div className={`p-6 rounded-2xl border-2 bg-white ${userLevel >= 1 ? 'border-emerald-500 shadow-md' : 'border-gray-200'}`}>
-                            <div className="flex items-center gap-3 mb-4">
-                                <div className="w-12 h-12 bg-emerald-600 rounded-full flex items-center justify-center text-white font-bold text-xl">1</div>
-                                <div><h3 className="font-bold text-lg">Nivel 1: Aspirante</h3><p className="text-xs text-gray-500">Requisito: Aprobar A y B</p></div>
-                            </div>
+                            <div className="flex items-center gap-3 mb-4"><div className="w-12 h-12 bg-emerald-600 rounded-full flex items-center justify-center text-white font-bold text-xl">1</div><div><h3 className="font-bold text-lg">Nivel 1: Aspirante</h3><p className="text-xs text-gray-500">Requisito: Aprobar A y B</p></div></div>
                             <div className="space-y-3 pl-4 ml-6 border-l-2 border-gray-100">
-                                <div className="flex flex-col gap-2">
-                                    <span className="text-sm font-bold text-gray-800">A) Prueba Diagnóstico</span>
-                                    <Button size="sm" fullWidth variant={progress['1A'] ? "ghost" : "primary"} onClick={() => { setCurrentQuizType('1A'); setView('quiz'); }}>
-                                        {progress['1A'] ? <span className="flex items-center gap-2"><Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-500" /> Aprobado</span> : 'Rendir Prueba A'}
-                                    </Button>
-                                </div>
-                                <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-gray-100">
-                                    <span className="text-sm font-bold text-gray-800">B) Cuestionario Corto</span>
-                                    <Button size="sm" fullWidth variant={progress['1B'] ? "ghost" : "primary"} onClick={() => { setCurrentQuizType('1B'); setView('quiz'); }}>
-                                        {progress['1B'] ? <span className="flex items-center gap-2"><Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-500" /> Aprobado</span> : 'Rendir Prueba B'}
-                                    </Button>
-                                </div>
+                                <div className="flex flex-col gap-2"><span className="text-sm font-bold text-gray-800">A) Prueba Diagnóstico</span><Button size="sm" fullWidth variant={progress['1A'] ? "ghost" : "primary"} onClick={() => { setCurrentQuizType('1A'); setView('quiz'); }}>{progress['1A'] ? <span className="flex items-center gap-2"><Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-500" /> Aprobado</span> : 'Rendir Prueba A'}</Button></div>
+                                <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-gray-100"><span className="text-sm font-bold text-gray-800">B) Cuestionario Corto</span><Button size="sm" fullWidth variant={progress['1B'] ? "ghost" : "primary"} onClick={() => { setCurrentQuizType('1B'); setView('quiz'); }}>{progress['1B'] ? <span className="flex items-center gap-2"><Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-500" /> Aprobado</span> : 'Rendir Prueba B'}</Button></div>
                             </div>
                         </div>
-                        {/* NIVEL 2 */}
                         <div className={`p-6 rounded-2xl border-2 ${userLevel >= 2 ? 'bg-white border-orange-400 shadow-md' : 'bg-gray-50 border-gray-200'}`}>
-                            <div className="flex items-center gap-3 mb-4">
-                                <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl ${userLevel >= 2 ? 'bg-orange-600 text-white' : 'bg-gray-300 text-gray-500'}`}>{userLevel >= 2 ? '2' : <Icon path={ICONS.Lock} className="w-5 h-5" />}</div>
-                                <div><h3 className={`font-bold text-lg ${userLevel < 2 && 'text-gray-400'}`}>Nivel 2: Bronce</h3><p className="text-xs text-gray-500">Cuestionario (20 Preguntas)</p></div>
-                            </div>
-                            <div className="pl-4 ml-6">
-                                <Button fullWidth disabled={userLevel < 2} variant={progress['2'] ? "ghost" : "primary"} onClick={() => { setCurrentQuizType('2'); setView('quiz'); }}>
-                                    {progress['2'] ? <span className="flex items-center gap-2"><Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-500" /> Aprobado</span> : 'Rendir Cuestionario'}
-                                </Button>
-                            </div>
+                            <div className="flex items-center gap-3 mb-4"><div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl ${userLevel >= 2 ? 'bg-orange-600 text-white' : 'bg-gray-300 text-gray-500'}`}>{userLevel >= 2 ? '2' : <Icon path={ICONS.Lock} className="w-5 h-5" />}</div><div><h3 className={`font-bold text-lg ${userLevel < 2 && 'text-gray-400'}`}>Nivel 2: Bronce</h3><p className="text-xs text-gray-500">Cuestionario (20 Preguntas)</p></div></div>
+                            <div className="pl-4 ml-6"><Button fullWidth disabled={userLevel < 2} variant={progress['2'] ? "ghost" : "primary"} onClick={() => { setCurrentQuizType('2'); setView('quiz'); }}>{progress['2'] ? <span className="flex items-center gap-2"><Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-500" /> Aprobado</span> : 'Rendir Cuestionario'}</Button></div>
                         </div>
-                        {/* NIVEL 3 */}
                         <div className={`p-6 rounded-2xl border-2 ${userLevel >= 3 ? 'bg-white border-slate-400 shadow-md' : 'bg-gray-50 border-gray-200'}`}>
-                            <div className="flex items-center gap-3 mb-4">
-                                <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl ${userLevel >= 3 ? 'bg-slate-600 text-white' : 'bg-gray-300 text-gray-500'}`}>{userLevel >= 3 ? '3' : <Icon path={ICONS.Lock} className="w-5 h-5" />}</div>
-                                <div><h3 className={`font-bold text-lg ${userLevel < 3 && 'text-gray-400'}`}>Nivel 3: Plata</h3><p className="text-xs text-gray-500">Cuestionario (30 Preguntas)</p></div>
-                            </div>
-                            <div className="pl-4 ml-6">
-                                <Button fullWidth disabled={userLevel < 3} variant={progress['3'] ? "ghost" : "primary"} onClick={() => { setCurrentQuizType('3'); setView('quiz'); }}>
-                                    {progress['3'] ? <span className="flex items-center gap-2"><Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-500" /> Aprobado</span> : 'Rendir Cuestionario'}
-                                </Button>
-                            </div>
+                            <div className="flex items-center gap-3 mb-4"><div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl ${userLevel >= 3 ? 'bg-slate-600 text-white' : 'bg-gray-300 text-gray-500'}`}>{userLevel >= 3 ? '3' : <Icon path={ICONS.Lock} className="w-5 h-5" />}</div><div><h3 className={`font-bold text-lg ${userLevel < 3 && 'text-gray-400'}`}>Nivel 3: Plata</h3><p className="text-xs text-gray-500">Cuestionario (30 Preguntas)</p></div></div>
+                            <div className="pl-4 ml-6"><Button fullWidth disabled={userLevel < 3} variant={progress['3'] ? "ghost" : "primary"} onClick={() => { setCurrentQuizType('3'); setView('quiz'); }}>{progress['3'] ? <span className="flex items-center gap-2"><Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-500" /> Aprobado</span> : 'Rendir Cuestionario'}</Button></div>
                         </div>
-                        {/* NIVEL 4 */}
                         <div className={`p-6 rounded-2xl border-2 ${userLevel >= 4 ? 'bg-white border-yellow-400 shadow-xl' : 'bg-gray-50 border-gray-200'}`}>
-                            <div className="flex items-center gap-3 mb-4">
-                                <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl ${userLevel >= 4 ? 'bg-yellow-500 text-white' : 'bg-gray-300 text-gray-500'}`}>{userLevel >= 4 ? '4' : <Icon path={ICONS.Lock} className="w-5 h-5" />}</div>
-                                <div><h3 className={`font-bold text-lg ${userLevel < 4 && 'text-gray-400'}`}>Nivel 4: Oro</h3><p className="text-xs text-yellow-600 font-bold">Simulacro Final (40)</p></div>
-                            </div>
-                            <div className="pl-4 ml-6">
-                                <Button fullWidth disabled={userLevel < 4} variant={progress['4'] ? "ghost" : "gold"} onClick={() => { setCurrentQuizType('4'); setView('quiz'); }}>
-                                    {progress['4'] ? <span className="flex items-center gap-2"><Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-500" /> Aprobado</span> : 'RENDIR PRUEBA FINAL'}
-                                </Button>
-                            </div>
+                            <div className="flex items-center gap-3 mb-4"><div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl ${userLevel >= 4 ? 'bg-yellow-500 text-white' : 'bg-gray-300 text-gray-500'}`}>{userLevel >= 4 ? '4' : <Icon path={ICONS.Lock} className="w-5 h-5" />}</div><div><h3 className={`font-bold text-lg ${userLevel < 4 && 'text-gray-400'}`}>Nivel 4: Oro</h3><p className="text-xs text-yellow-600 font-bold">Simulacro Final (40)</p></div></div>
+                            <div className="pl-4 ml-6"><Button fullWidth disabled={userLevel < 4} variant={progress['4'] ? "ghost" : "gold"} onClick={() => { setCurrentQuizType('4'); setView('quiz'); }}>{progress['4'] ? <span className="flex items-center gap-2"><Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-500" /> Aprobado</span> : 'RENDIR PRUEBA FINAL'}</Button></div>
                         </div>
                     </div>
                 </div>
             );
 
-            // QUIZ ENGINE
             const QuizView = () => {
                 const questions = getQuestionsForLevel(currentQuizType);
                 const title = getTitleForLevel(currentQuizType);
@@ -412,7 +324,6 @@
                     if (passed) {
                         const newProgress = { ...progress, [currentQuizType]: true };
                         let newLevel = userLevel;
-                        
                         if (currentQuizType === '1A' && newProgress['1B'] && userLevel < 2) newLevel = 2;
                         if (currentQuizType === '1B' && newProgress['1A'] && userLevel < 2) newLevel = 2;
                         if (currentQuizType === '2' && userLevel < 3) newLevel = 3;
@@ -421,8 +332,7 @@
                         
                         setUserLevel(newLevel);
                         setProgress(newProgress);
-                        saveProgress(newLevel, newProgress); // Guardar en Firebase
-                        
+                        saveProgress(newLevel, newProgress);
                         if(currentQuizType !== '4') setView('mapa_niveles');
                     } else {
                         setView('mapa_niveles');
@@ -448,31 +358,19 @@
                 return (
                     <div className="max-w-2xl mx-auto px-4 py-6 animate-in">
                         <div className="flex flex-col mb-6">
-                            <div className="flex justify-between items-center mb-2">
-                                <Button variant="ghost" onClick={() => setView('mapa_niveles')} className="pl-0 text-gray-500"><Icon path={ICONS.X} className="w-5 h-5 mr-2" /> Salir</Button>
-                                <span className="font-bold text-emerald-600">P. {idx + 1} / {questions.length}</span>
-                            </div>
-                            <div className="flex items-center gap-2 text-sm font-semibold text-gray-500 bg-gray-50 p-2 rounded-lg border border-gray-200">
-                                <Icon path={ICONS.MapPin} className="w-4 h-4 text-gray-400" /> Estás en: <span className="text-gray-800">{title}</span>
-                            </div>
+                            <div className="flex justify-between items-center mb-2"><Button variant="ghost" onClick={() => setView('mapa_niveles')} className="pl-0 text-gray-500"><Icon path={ICONS.X} className="w-5 h-5 mr-2" /> Salir</Button><span className="font-bold text-emerald-600">P. {idx + 1} / {questions.length}</span></div>
+                            <div className="flex items-center gap-2 text-sm font-semibold text-gray-500 bg-gray-50 p-2 rounded-lg border border-gray-200"><Icon path={ICONS.MapPin} className="w-4 h-4 text-gray-400" /> Estás en: <span className="text-gray-800">{title}</span></div>
                         </div>
                         <Card>
                             <div className="mb-2"><span className="bg-gray-100 text-gray-500 px-2 py-1 rounded text-xs font-bold uppercase">{q.cat}</span></div>
                             <h3 className="text-xl font-bold mb-6">{q.pregunta}</h3>
-                            <div className="space-y-3">
-                                {q.opciones.map((op, i) => (
-                                    <button key={i} onClick={() => setSelected(i)} className={`w-full p-4 rounded-xl border-2 text-left transition-all ${selected === i ? 'border-emerald-600 bg-emerald-50 font-bold' : 'border-gray-200'}`}>{op}</button>
-                                ))}
-                            </div>
+                            <div className="space-y-3">{q.opciones.map((op, i) => (<button key={i} onClick={() => setSelected(i)} className={`w-full p-4 rounded-xl border-2 text-left transition-all ${selected === i ? 'border-emerald-600 bg-emerald-50 font-bold' : 'border-gray-200'}`}>{op}</button>))}</div>
                         </Card>
-                        <div className="mt-6 flex justify-end">
-                            <Button disabled={selected === null} onClick={handleConfirm}>Confirmar</Button>
-                        </div>
+                        <div className="mt-6 flex justify-end"><Button disabled={selected === null} onClick={handleConfirm}>Confirmar</Button></div>
                     </div>
                 );
             };
 
-            // VISTA ZONA EXPERTO
             const ExpertZoneView = () => (
                 <div className="max-w-2xl mx-auto px-4 py-6 animate-in">
                     <Button variant="ghost" onClick={() => setView('home')} className="pl-0 mb-4 text-gray-500"><Icon path={ICONS.ArrowLeft} className="w-5 h-5 mr-2" /> Volver</Button>
@@ -486,7 +384,6 @@
                 </div>
             );
 
-            // VISTA VICTORIA
             const VictoryView = () => (
                 <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4 relative overflow-hidden">
                     <div className="relative z-10 text-center max-w-md w-full animate-in zoom-in duration-700">
