@@ -41,7 +41,7 @@
         const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
 
-        // --- BIBLIOTECA DE ARCHIVOS (ACTUALIZADA) ---
+        // --- BIBLIOTECA DE ARCHIVOS (ACTUALIZADA CON PSICOFÁRMACOS) ---
         const BIBLIOTECA_DATA = [
             {
                 titulo: "Módulo 1: La Base Legal",
@@ -50,9 +50,8 @@
                 iconColor: "text-emerald-600",
                 bgIcon: "bg-emerald-100",
                 archivos: [
-                    // ENLACE ACTUALIZADO A TU DRIVE
                     { nombre: "Decreto Supremo 466", desc: "PDF • Lectura Obligatoria", url: "https://drive.google.com/file/d/1x1vDcOIz1r1PmN1F7InUcZTDRJVBLmIo/view?usp=sharing" },
-                    { nombre: "Listado de Controlados", desc: "PDF • Referencia", url: "#" } 
+                    { nombre: "Listado de Controlados", desc: "PDF • Referencia", url: "PEGAR_TU_LINK_AQUI" } 
                 ]
             },
             {
@@ -62,7 +61,7 @@
                 iconColor: "text-blue-600",
                 bgIcon: "bg-blue-100",
                 archivos: [
-                    { nombre: "Manual Buenas Prácticas", desc: "PDF • Procedimientos", url: "#" }
+                    { nombre: "Manual Buenas Prácticas", desc: "PDF • Procedimientos", url: "PEGAR_TU_LINK_AQUI" }
                 ]
             },
             {
@@ -72,7 +71,9 @@
                 iconColor: "text-fuchsia-600",
                 bgIcon: "bg-fuchsia-100",
                 archivos: [
-                    { nombre: "Guía de Bioequivalencia", desc: "PDF • Minsal", url: "#" }
+                    { nombre: "Guía de Bioequivalencia", desc: "PDF • Minsal", url: "PEGAR_TU_LINK_AQUI" },
+                    // NUEVO ARCHIVO AGREGADO:
+                    { nombre: "Psicofármacos", desc: "PDF • Material de Estudio", url: "https://drive.google.com/file/d/1AFwbouD6gy-rTSXw6AEfiBgwDyxRnoGq/view?usp=sharing" }
                 ]
             }
         ];
