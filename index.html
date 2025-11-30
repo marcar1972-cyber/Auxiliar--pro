@@ -35,7 +35,7 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- ICONOS ---
+        // --- ICONOS CORREGIDOS ---
         const ICONS = {
             Brain: <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z" />,
             Shield: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />,
@@ -72,7 +72,7 @@
             </svg>
         );
 
-        // --- BANCOS DE PREGUNTAS ---
+        // --- BANCO DE PREGUNTAS ---
         const DB_1A = [
             { id: 1, cat: "Legislación", pregunta: "¿Qué decreto aprueba el reglamento de farmacias?", opciones: ["D.S. 466", "D.S. 594", "D.S. 707"], correcta: 0, explicacion: "El D.S. 466 es la normativa base." },
             { id: 2, cat: "Almacenamiento", pregunta: "Rango T° Refrigerador:", opciones: ["0-4°C", "2-8°C", "8-15°C"], correcta: 1, explicacion: "Cadena de frío estricta: 2°C a 8°C." },
@@ -85,8 +85,6 @@
             { id: 9, cat: "Atención", pregunta: "Actitud ante un cliente enojado:", opciones: ["Gritar más fuerte", "Escucha activa y empatía", "Ignorarlo"], correcta: 1, explicacion: "Mantener la calma y ser profesional." },
             { id: 10, cat: "Primeros Auxilios", pregunta: "¿Qué hacer si alguien se desmaya?", opciones: ["Darle agua rápido", "Levantarlo de golpe", "Proteger caída y pedir ayuda"], correcta: 2, explicacion: "Asegurar la escena y llamar a emergencias." }
         ];
-
-        // Se elimina DB_1B ya que se fusionó en el Nivel 1 único.
 
         const DB_NIVEL_2 = [
             { id: 26, cat: "Farmacología", pregunta: "¿Qué es la Bioequivalencia?", opciones: ["Más barato", "Misma eficacia y seguridad", "Genérico simple"], correcta: 1, explicacion: "Certificación de calidad terapéutica." },
@@ -248,9 +246,70 @@
                             </div>
                             <div className="mt-4 text-center"><button onClick={() => { setIsRegistering(!isRegistering); setErrorMsg(''); }} className="text-sm text-emerald-600 font-bold hover:underline">{isRegistering ? '¿Ya tienes cuenta? Inicia sesión' : '¿No tienes cuenta? Regístrate'}</button></div>
                         </Card>
+                        <div className="mt-8 text-center max-w-xs mx-auto">
+                            <h3 className="text-xs font-bold text-gray-500 uppercase mb-2">Iniciativa Independiente</h3>
+                            <p className="text-xs text-gray-400">Auxiliar Pro es un proyecto particular creado por auxiliares para auxiliares. No somos un sitio oficial del Gobierno, MINSAL ni SEREMI. Esta plataforma es una herramienta de estudio colaborativa.</p>
+                        </div>
                     </div>
                 );
             };
+
+            // VISTA BIBLIOTECA (RESOURCES) - ACTUALIZADA
+            const ResourcesView = () => (
+                <div className="max-w-2xl mx-auto px-4 py-6 animate-in">
+                    <Button variant="ghost" onClick={() => setView('home')} className="pl-0 mb-4 text-gray-500"><Icon path={ICONS.ArrowLeft} className="w-5 h-5 mr-2" /> Volver</Button>
+                    <div className="mb-8">
+                        <h2 className="text-2xl font-bold text-gray-900">Plan de Estudio</h2>
+                        <p className="text-gray-500 text-sm">No intentes leer todo a la vez. Sigue este orden lógico.</p>
+                    </div>
+
+                    <div className="space-y-6">
+                        {/* MÓDULO 1 */}
+                        <div className="border-l-4 border-emerald-500 pl-4">
+                            <h3 className="font-bold text-emerald-800 text-lg">Módulo 1: La Base Legal</h3>
+                            <p className="text-xs text-gray-500 mb-3">Sin esto no puedes operar. Es la regla del juego.</p>
+                            <div className="grid gap-2">
+                                <Card className="flex items-center gap-3 p-3 hover:bg-emerald-50 cursor-pointer transition-colors">
+                                    <div className="bg-red-100 p-2 rounded-lg text-red-600"><Icon path={ICONS.FileText} className="w-5 h-5" /></div>
+                                    <div className="flex-1"><div className="font-bold text-sm">Decreto Supremo 466</div><div className="text-xs text-gray-400">PDF • Lectura Obligatoria</div></div>
+                                    <Icon path={ICONS.Download} className="w-4 h-4 text-gray-300" />
+                                </Card>
+                                <Card className="flex items-center gap-3 p-3 hover:bg-emerald-50 cursor-pointer transition-colors">
+                                    <div className="bg-red-100 p-2 rounded-lg text-red-600"><Icon path={ICONS.FileText} className="w-5 h-5" /></div>
+                                    <div className="flex-1"><div className="font-bold text-sm">Listado de Medicamentos Controlados</div><div className="text-xs text-gray-400">PDF • Referencia</div></div>
+                                    <Icon path={ICONS.Download} className="w-4 h-4 text-gray-300" />
+                                </Card>
+                            </div>
+                        </div>
+
+                        {/* MÓDULO 2 */}
+                        <div className="border-l-4 border-blue-500 pl-4">
+                            <h3 className="font-bold text-blue-800 text-lg">Módulo 2: Gestión y Almacenamiento</h3>
+                            <p className="text-xs text-gray-500 mb-3">Cómo cuidar los medicamentos (Cadena de frío, FEFO).</p>
+                            <div className="grid gap-2">
+                                <Card className="flex items-center gap-3 p-3 hover:bg-blue-50 cursor-pointer transition-colors">
+                                    <div className="bg-red-100 p-2 rounded-lg text-red-600"><Icon path={ICONS.FileText} className="w-5 h-5" /></div>
+                                    <div className="flex-1"><div className="font-bold text-sm">Manual de Buenas Prácticas</div><div className="text-xs text-gray-400">PDF • Procedimientos</div></div>
+                                    <Icon path={ICONS.Download} className="w-4 h-4 text-gray-300" />
+                                </Card>
+                            </div>
+                        </div>
+
+                         {/* MÓDULO 3 */}
+                         <div className="border-l-4 border-fuchsia-500 pl-4">
+                            <h3 className="font-bold text-fuchsia-800 text-lg">Módulo 3: Atención y Farmacología</h3>
+                            <p className="text-xs text-gray-500 mb-3">El trato con el paciente y conceptos técnicos.</p>
+                            <div className="grid gap-2">
+                                <Card className="flex items-center gap-3 p-3 hover:bg-fuchsia-50 cursor-pointer transition-colors">
+                                    <div className="bg-red-100 p-2 rounded-lg text-red-600"><Icon path={ICONS.FileText} className="w-5 h-5" /></div>
+                                    <div className="flex-1"><div className="font-bold text-sm">Guía de Bioequivalencia</div><div className="text-xs text-gray-400">PDF • Minsal</div></div>
+                                    <Icon path={ICONS.Download} className="w-4 h-4 text-gray-300" />
+                                </Card>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
 
             const HomeView = () => (
                 <div className="max-w-2xl mx-auto px-4 py-6 animate-in">
@@ -404,6 +463,7 @@
 
                 if (showResult) {
                     const correctCount = answers.filter(a => a.isCorrect).length;
+                    // Se requiere 70% para aprobar
                     const passed = (correctCount / questions.length) >= 0.7;
                     return (
                         <div className="max-w-md mx-auto px-4 py-8 text-center animate-in">
@@ -477,7 +537,7 @@
                         {user && view === 'faq' && <FaqView />}
                         {user && view === 'forum' && <div className="p-8 text-center"><Button variant="ghost" onClick={() => setView('home')}>← Volver</Button><h2 className="text-2xl mt-4">Comunidad</h2><p>Foro de discusión.</p></div>}
                         {user && view === 'feedback' && <div className="p-8 text-center"><Button variant="ghost" onClick={() => setView('home')}>← Volver</Button><h2 className="text-2xl mt-4">Feedback</h2><p>Déjanos tus comentarios.</p></div>}
-                        {user && view === 'resources' && <div className="p-8 text-center"><Button variant="ghost" onClick={() => setView('home')}>← Volver</Button><h2 className="text-2xl mt-4">Biblioteca</h2><p>PDFs disponibles.</p></div>}
+                        {user && view === 'resources' && <ResourcesView />}
                     </main>
                 </div>
             );
