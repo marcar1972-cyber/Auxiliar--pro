@@ -35,7 +35,7 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- ICONOS ---
+        // --- ICONOS CORREGIDOS (Con React.Fragment para evitar errores) ---
         const ICONS = {
             Brain: <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z" />,
             Shield: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />,
@@ -74,7 +74,9 @@
             </svg>
         );
 
-        // --- BANCOS DE PREGUNTAS ---
+        // --- BANCO DE PREGUNTAS ---
+        
+        // NIVEL 1: 10 Preguntas (Diagnóstico Único)
         const DB_1A = [
             { id: 1, cat: "Legislación", pregunta: "¿Qué decreto aprueba el reglamento de farmacias?", opciones: ["D.S. 466", "D.S. 594", "D.S. 707"], correcta: 0, explicacion: "El D.S. 466 es la normativa base." },
             { id: 2, cat: "Almacenamiento", pregunta: "Rango T° Refrigerador:", opciones: ["0-4°C", "2-8°C", "8-15°C"], correcta: 1, explicacion: "Cadena de frío estricta: 2°C a 8°C." },
@@ -85,7 +87,7 @@
             { id: 7, cat: "Rol", pregunta: "Función principal del auxiliar:", opciones: ["Diagnosticar", "Colaborar en dispensación", "Recetar"], correcta: 1, explicacion: "Apoyo logístico y de venta informada." },
             { id: 8, cat: "Higiene", pregunta: "¿Cuándo lavarse las manos?", opciones: ["Solo al llegar", "Antes y después de atender/baño", "Nunca"], correcta: 1, explicacion: "Norma básica de higiene sanitaria." },
             { id: 9, cat: "Atención", pregunta: "Actitud ante un cliente enojado:", opciones: ["Gritar más fuerte", "Escucha activa y empatía", "Ignorarlo"], correcta: 1, explicacion: "Mantener la calma y ser profesional." },
-            { id: 10, cat: "Instituciones", pregunta: "¿Qué función cumple el ISP (Instituto de Salud Pública)?", opciones: ["Vender remedios", "Controlar y fiscalizar medicamentos", "Administrar hospitales"], correcta: 1, explicacion: "Es la autoridad encargada del control sanitario de los productos farmacéuticos en Chile." }
+            { id: 10, cat: "Instituciones", pregunta: "¿Qué función cumple el ISP?", opciones: ["Vender remedios", "Controlar y fiscalizar medicamentos", "Administrar hospitales"], correcta: 1, explicacion: "Es la autoridad encargada del control sanitario de productos farmacéuticos." }
         ];
 
         const DB_NIVEL_2 = [
@@ -211,7 +213,6 @@
                     setErrorMsg("Respuesta de seguridad incorrecta. ¿Cuánto es 4 + 3?");
                     return;
                 }
-
                 try {
                     if (isRegistering) await createUserWithEmailAndPassword(auth, email, password);
                     else await signInWithEmailAndPassword(auth, email, password);
@@ -236,7 +237,6 @@
                 const [password, setPassword] = useState('');
                 const [securityAnswer, setSecurityAnswer] = useState('');
                 const [isRegistering, setIsRegistering] = useState(false);
-                
                 return (
                     <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-emerald-50">
                         <div className="text-center mb-8">
@@ -249,17 +249,12 @@
                             <div className="space-y-4">
                                 <input type="email" placeholder="Correo" className="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500" value={email} onChange={e => setEmail(e.target.value)} />
                                 <input type="password" placeholder="Contraseña" className="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500" value={password} onChange={e => setPassword(e.target.value)} />
-                                
                                 {isRegistering && (
                                     <div className="bg-yellow-50 p-3 rounded-xl border border-yellow-200">
                                         <label className="text-xs font-bold text-yellow-800 block mb-1 flex items-center gap-1"><Icon path={ICONS.ShieldCheck} className="w-3 h-3" /> Pregunta de Seguridad:</label>
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-sm text-gray-700 font-medium">¿Cuánto es 4 + 3?</span>
-                                            <input type="number" placeholder="Respuesta" className="w-20 p-2 border rounded-lg text-center" value={securityAnswer} onChange={e => setSecurityAnswer(e.target.value)} />
-                                        </div>
+                                        <div className="flex items-center gap-2"><span className="text-sm text-gray-700 font-medium">¿Cuánto es 4 + 3?</span><input type="number" placeholder="Respuesta" className="w-20 p-2 border rounded-lg text-center" value={securityAnswer} onChange={e => setSecurityAnswer(e.target.value)} /></div>
                                     </div>
                                 )}
-
                                 {errorMsg && <p className="text-red-500 text-sm text-center">{errorMsg}</p>}
                                 <Button fullWidth onClick={() => handleLogin(email, password, isRegistering, securityAnswer)}>{isRegistering ? 'Registrarse' : 'Entrar'}</Button>
                             </div>
@@ -273,6 +268,146 @@
                 );
             };
 
+            // FORUM VIEW - FUNCIONAL
+            const ForumView = () => {
+                const [posts, setPosts] = useState([]);
+                const [newPostTitle, setNewPostTitle] = useState('');
+                const [newPostContent, setNewPostContent] = useState('');
+                const [showCreateForm, setShowCreateForm] = useState(false);
+
+                useEffect(() => {
+                    const q = query(collection(db, "forum"), orderBy("date", "desc"));
+                    const unsubscribe = onSnapshot(q, (snapshot) => {
+                        const postsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                        setPosts(postsData);
+                    });
+                    return () => unsubscribe();
+                }, []);
+
+                const handleCreatePost = async (e) => {
+                    e.preventDefault();
+                    if (!newPostTitle.trim() || !newPostContent.trim()) return;
+                    try {
+                        await addDoc(collection(db, "forum"), {
+                            title: newPostTitle,
+                            content: newPostContent,
+                            author: user.email.split('@')[0],
+                            date: serverTimestamp(),
+                            comments: 0
+                        });
+                        setNewPostTitle('');
+                        setNewPostContent('');
+                        setShowCreateForm(false);
+                    } catch (error) {
+                        console.error("Error creating post: ", error);
+                        alert("Error al crear el tema. Inténtalo de nuevo.");
+                    }
+                };
+
+                return (
+                    <div className="max-w-2xl mx-auto px-4 py-6 animate-in">
+                        <Button variant="ghost" onClick={() => setView('home')} className="pl-0 mb-4 text-gray-500"><Icon path={ICONS.ArrowLeft} className="w-5 h-5 mr-2" /> Volver</Button>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-6">Comunidad de Auxiliares</h2>
+                        
+                        {!showCreateForm ? (
+                            <>
+                                <div className="mb-6 bg-emerald-50 p-4 rounded-xl border border-emerald-100 flex justify-between items-center">
+                                    <div><h3 className="font-bold text-emerald-900">¿Tienes dudas?</h3><p className="text-sm text-emerald-700">Crea un tema y comparte.</p></div>
+                                    <Button size="sm" onClick={() => setShowCreateForm(true)}>Crear Tema</Button>
+                                </div>
+                                <div className="space-y-4">
+                                    {posts.length === 0 && <p className="text-center text-gray-500">No hay temas aún. ¡Sé el primero!</p>}
+                                    {posts.map((post) => (
+                                        <div key={post.id} className="bg-white border border-gray-200 p-4 rounded-xl hover:shadow-md transition-shadow">
+                                            <h4 className="font-bold text-gray-800 text-lg mb-1">{post.title}</h4>
+                                            <p className="text-sm text-gray-600 mb-2">{post.content}</p>
+                                            <div className="flex justify-between text-xs text-gray-500">
+                                                <span>Por {post.author}</span>
+                                                <span className="flex items-center gap-1"><Icon path={ICONS.MessageSquare} className="w-3 h-3" /> {post.comments}</span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </>
+                        ) : (
+                            <Card>
+                                <h3 className="text-lg font-bold mb-4">Nuevo Tema</h3>
+                                <form onSubmit={handleCreatePost} className="space-y-4">
+                                    <input type="text" placeholder="Título del tema" className="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500" value={newPostTitle} onChange={(e) => setNewPostTitle(e.target.value)} required />
+                                    <textarea placeholder="Escribe tu consulta o comentario..." className="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 h-32 resize-none" value={newPostContent} onChange={(e) => setNewPostContent(e.target.value)} required />
+                                    <div className="flex gap-2">
+                                        <Button variant="ghost" onClick={() => setShowCreateForm(false)}>Cancelar</Button>
+                                        <Button type="submit" fullWidth>Publicar</Button>
+                                    </div>
+                                </form>
+                            </Card>
+                        )}
+                    </div>
+                );
+            };
+
+            // FEEDBACK VIEW
+            const FeedbackView = () => (
+                <div className="max-w-md mx-auto px-4 py-6 animate-in">
+                    <Button variant="ghost" onClick={() => setView('home')} className="pl-0 mb-4 text-gray-500"><Icon path={ICONS.ArrowLeft} className="w-5 h-5 mr-2" /> Volver</Button>
+                    <Card>
+                        <div className="text-center mb-6">
+                            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3"><Icon path={ICONS.MessageSquare} className="w-6 h-6 text-blue-600" /></div>
+                            <h2 className="text-xl font-bold">Buzón de Sugerencias</h2>
+                            <p className="text-gray-500 text-sm">¿Qué te gustaría agregar?</p>
+                        </div>
+                        <textarea className="w-full border rounded-xl p-3 mb-4 h-32 resize-none focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="Escribe tu mensaje aquí..." />
+                        <Button fullWidth onClick={() => alert("¡Gracias por tu mensaje!")}><Icon path={ICONS.Send} className="w-4 h-4 mr-2" /> Enviar</Button>
+                    </Card>
+                </div>
+            );
+
+            // RESOURCES VIEW (BIBLIOTECA)
+            const ResourcesView = () => (
+                <div className="max-w-2xl mx-auto px-4 py-6 animate-in">
+                    <Button variant="ghost" onClick={() => setView('home')} className="pl-0 mb-4 text-gray-500"><Icon path={ICONS.ArrowLeft} className="w-5 h-5 mr-2" /> Volver</Button>
+                    <div className="mb-8"><h2 className="text-2xl font-bold text-gray-900">Plan de Estudio</h2><p className="text-gray-500 text-sm">Sigue este orden lógico.</p></div>
+                    <div className="space-y-6">
+                        <div className="border-l-4 border-emerald-500 pl-4">
+                            <h3 className="font-bold text-emerald-800 text-lg">Módulo 1: La Base Legal</h3>
+                            <div className="grid gap-2 mt-2">
+                                <Card className="flex items-center gap-3 p-3 hover:bg-emerald-50 cursor-pointer transition-colors">
+                                    <div className="bg-red-100 p-2 rounded-lg text-red-600"><Icon path={ICONS.FileText} className="w-5 h-5" /></div>
+                                    <div className="flex-1"><div className="font-bold text-sm">Decreto Supremo 466</div><div className="text-xs text-gray-400">PDF • Lectura Obligatoria</div></div>
+                                    <Icon path={ICONS.Download} className="w-4 h-4 text-gray-300" />
+                                </Card>
+                                <Card className="flex items-center gap-3 p-3 hover:bg-emerald-50 cursor-pointer transition-colors">
+                                    <div className="bg-red-100 p-2 rounded-lg text-red-600"><Icon path={ICONS.FileText} className="w-5 h-5" /></div>
+                                    <div className="flex-1"><div className="font-bold text-sm">Listado Controlados</div><div className="text-xs text-gray-400">PDF • Referencia</div></div>
+                                    <Icon path={ICONS.Download} className="w-4 h-4 text-gray-300" />
+                                </Card>
+                            </div>
+                        </div>
+                        <div className="border-l-4 border-blue-500 pl-4">
+                            <h3 className="font-bold text-blue-800 text-lg">Módulo 2: Gestión</h3>
+                            <div className="grid gap-2 mt-2">
+                                <Card className="flex items-center gap-3 p-3 hover:bg-blue-50 cursor-pointer transition-colors">
+                                    <div className="bg-red-100 p-2 rounded-lg text-red-600"><Icon path={ICONS.FileText} className="w-5 h-5" /></div>
+                                    <div className="flex-1"><div className="font-bold text-sm">Manual Buenas Prácticas</div><div className="text-xs text-gray-400">PDF • Procedimientos</div></div>
+                                    <Icon path={ICONS.Download} className="w-4 h-4 text-gray-300" />
+                                </Card>
+                            </div>
+                        </div>
+                        <div className="border-l-4 border-fuchsia-500 pl-4">
+                            <h3 className="font-bold text-fuchsia-800 text-lg">Módulo 3: Atención</h3>
+                            <div className="grid gap-2 mt-2">
+                                <Card className="flex items-center gap-3 p-3 hover:bg-fuchsia-50 cursor-pointer transition-colors">
+                                    <div className="bg-red-100 p-2 rounded-lg text-red-600"><Icon path={ICONS.FileText} className="w-5 h-5" /></div>
+                                    <div className="flex-1"><div className="font-bold text-sm">Guía Bioequivalencia</div><div className="text-xs text-gray-400">PDF • Minsal</div></div>
+                                    <Icon path={ICONS.Download} className="w-4 h-4 text-gray-300" />
+                                </Card>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+
+            // HOME VIEW
             const HomeView = () => (
                 <div className="max-w-2xl mx-auto px-4 py-6 animate-in">
                     <div className="flex justify-between items-center mb-6"><h2 className="text-2xl font-bold text-gray-800">Hola, {user.email.split('@')[0]}</h2></div>
@@ -315,37 +450,15 @@
                 </div>
             );
 
+            // FAQ VIEW
             const FaqView = () => (
                 <div className="max-w-2xl mx-auto px-4 py-6 animate-in">
                     <Button variant="ghost" onClick={() => setView('home')} className="pl-0 mb-4 text-gray-500"><Icon path={ICONS.ArrowLeft} className="w-5 h-5 mr-2" /> Volver</Button>
                     <h2 className="text-2xl font-bold text-gray-900 mb-6">Preguntas Frecuentes</h2>
-                    
                     <div className="space-y-4">
-                        <div className="bg-white border border-gray-200 rounded-xl p-5">
-                            <h3 className="font-bold text-emerald-800 mb-2">¿Cuándo son las fechas para dar la prueba?</h3>
-                            <p className="text-sm text-gray-600 leading-relaxed">
-                                La SEREMI no tiene un calendario fijo público. Generalmente abren procesos en marzo/abril y octubre/noviembre, pero varía por región. 
-                                <br/><br/>
-                                <strong>Consejo:</strong> Revisa periódicamente <code>seremienlinea.minsal.cl</code> o consulta en tu SEREMI regional.
-                            </p>
-                        </div>
-
-                        <div className="bg-white border border-gray-200 rounded-xl p-5">
-                            <h3 className="font-bold text-emerald-800 mb-2">¿Qué requisitos necesito?</h3>
-                            <ul className="text-sm text-gray-600 list-disc pl-4 space-y-1">
-                                <li>Licencia de Enseñanza Media completa.</li>
-                                <li>Certificado de 1 año de trabajo en farmacia (o práctica autorizada).</li>
-                                <li>Certificado de antecedentes.</li>
-                                <li>Pago del arancel correspondiente.</li>
-                            </ul>
-                        </div>
-
-                        <div className="bg-white border border-gray-200 rounded-xl p-5">
-                            <h3 className="font-bold text-emerald-800 mb-2">¿Cómo funciona esta App?</h3>
-                            <p className="text-sm text-gray-600 leading-relaxed">
-                                Es un simulador progresivo. Empiezas en Nivel 1. Si apruebas el diagnóstico, desbloqueas el siguiente nivel y material de estudio. Al llegar al Nivel 4, podrás rendir un ensayo completo.
-                            </p>
-                        </div>
+                        <div className="bg-white border border-gray-200 rounded-xl p-5"><h3 className="font-bold text-emerald-800 mb-2">¿Cuándo son las fechas para dar la prueba?</h3><p className="text-sm text-gray-600 leading-relaxed">La SEREMI no tiene un calendario fijo público. Generalmente abren procesos en marzo/abril y octubre/noviembre, pero varía por región.<br/><br/><strong>Consejo:</strong> Revisa periódicamente <code>seremienlinea.minsal.cl</code> o consulta en tu SEREMI regional.</p></div>
+                        <div className="bg-white border border-gray-200 rounded-xl p-5"><h3 className="font-bold text-emerald-800 mb-2">¿Qué requisitos necesito?</h3><ul className="text-sm text-gray-600 list-disc pl-4 space-y-1"><li>Licencia de Enseñanza Media completa.</li><li>Certificado de 1 año de trabajo en farmacia (o práctica autorizada).</li><li>Certificado de antecedentes.</li><li>Pago del arancel correspondiente.</li></ul></div>
+                        <div className="bg-white border border-gray-200 rounded-xl p-5"><h3 className="font-bold text-emerald-800 mb-2">¿Cómo funciona esta App?</h3><p className="text-sm text-gray-600 leading-relaxed">Es un simulador progresivo. Empiezas en Nivel 1. Si apruebas el diagnóstico, desbloqueas el siguiente nivel y material de estudio. Al llegar al Nivel 4, podrás rendir un ensayo completo.</p></div>
                     </div>
                 </div>
             );
@@ -356,6 +469,7 @@
                     <h2 className="text-2xl font-bold text-gray-900 mb-6">Tu Ruta</h2>
                     <div className="space-y-6 relative">
                         <div className="absolute left-6 top-10 bottom-10 w-1 bg-gray-200 -z-10"></div>
+                        {/* NIVEL 1 */}
                         <div className={`p-6 rounded-2xl border-2 bg-white ${userLevel >= 1 ? 'border-emerald-500 shadow-md' : 'border-gray-200'}`}>
                             <div className="flex items-center gap-3 mb-4"><div className="w-12 h-12 bg-emerald-600 rounded-full flex items-center justify-center text-white font-bold text-xl">1</div><div><h3 className="font-bold text-lg">Nivel 1: Aspirante</h3><p className="text-xs text-gray-500">Requisito: Aprobar Diagnóstico (70%)</p></div></div>
                             <div className="space-y-3 pl-4 ml-6 border-l-2 border-gray-100">
@@ -381,94 +495,30 @@
                 </div>
             );
 
-            // REVIEW VIEW (MODO REVISIÓN)
-            const ReviewView = ({ questions, answers, onBack }) => (
-                <div className="max-w-2xl mx-auto px-4 py-6 animate-in">
-                    <Button variant="ghost" onClick={onBack} className="pl-0 mb-4 text-gray-500"><Icon path={ICONS.ArrowLeft} className="w-5 h-5 mr-2" /> Volver al Resultado</Button>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-6">Revisión de Respuestas</h2>
-                    
-                    <div className="space-y-6">
-                        {questions.map((q, idx) => {
-                            // Buscamos la respuesta del usuario para esta pregunta
-                            const answerData = answers.find(a => a.id === q.id);
-                            const userSelected = answerData ? answerData.selectedOption : null;
-                            const isCorrect = userSelected === q.correcta;
-
-                            return (
-                                <Card key={idx} className={`border-l-4 ${isCorrect ? 'border-l-emerald-500' : 'border-l-red-500'}`}>
-                                    <div className="mb-3">
-                                        <span className="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-1 rounded uppercase">{q.cat}</span>
-                                    </div>
-                                    <h3 className="font-bold text-lg mb-4">{q.pregunta}</h3>
-                                    
-                                    <div className="space-y-2 mb-4">
-                                        {q.opciones.map((op, i) => {
-                                            let styles = "w-full p-3 rounded-lg text-left text-sm border ";
-                                            if (i === q.correcta) {
-                                                styles += "bg-emerald-50 border-emerald-500 text-emerald-800 font-bold"; // Correcta siempre verde
-                                            } else if (i === userSelected && !isCorrect) {
-                                                styles += "bg-red-50 border-red-500 text-red-800 font-bold"; // Incorrecta elegida rojo
-                                            } else {
-                                                styles += "bg-gray-50 border-gray-200 text-gray-500 opacity-70"; // Las demás
-                                            }
-
-                                            return (
-                                                <div key={i} className={styles}>
-                                                    <div className="flex justify-between items-center">
-                                                        <span>{op}</span>
-                                                        {i === q.correcta && <Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-600" />}
-                                                        {i === userSelected && !isCorrect && <Icon path={ICONS.XCircle} className="w-4 h-4 text-red-600" />}
-                                                    </div>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-
-                                    <div className="bg-blue-50 p-3 rounded-lg border border-blue-100">
-                                        <p className="text-xs font-bold text-blue-800 uppercase mb-1">Explicación:</p>
-                                        <p className="text-sm text-blue-700">{q.explicacion}</p>
-                                    </div>
-                                </Card>
-                            );
-                        })}
-                    </div>
-                </div>
-            );
-
             const QuizView = () => {
                 const questions = getQuestionsForLevel(currentQuizType);
                 const title = getTitleForLevel(currentQuizType);
                 const [idx, setIdx] = useState(0);
-                const [answers, setAnswers] = useState([]); // Ahora guardaremos objeto completo {id, selectedOption, isCorrect}
+                const [answers, setAnswers] = useState([]);
                 const [selected, setSelected] = useState(null);
                 const [showResult, setShowResult] = useState(false);
-                const [viewReview, setViewReview] = useState(false); // Estado para ver la revisión
-                
+                const [viewReview, setViewReview] = useState(false);
                 const q = questions[idx];
 
                 const handleConfirm = () => {
                     const isCorrect = selected === q.correcta;
-                    // Guardamos la respuesta con estructura para revisión
                     const newAnswer = { id: q.id, selectedOption: selected, isCorrect };
                     const newAnswers = [...answers, newAnswer];
                     setAnswers(newAnswers);
-
-                    if (idx < questions.length - 1) { 
-                        setIdx(idx + 1); 
-                        setSelected(null); 
-                    } else { 
-                        setShowResult(true); 
-                    }
+                    if (idx < questions.length - 1) { setIdx(idx + 1); setSelected(null); } 
+                    else { setShowResult(true); }
                 };
 
                 const handleFinish = (passed) => {
                     if (passed) {
                         const newProgress = { ...progress, [currentQuizType]: true };
                         let newLevel = userLevel;
-                        if (currentQuizType === '1A' && userLevel < 2) { 
-                            newLevel = 2; 
-                            alert("¡Nivel 1 Completado! Biblioteca y Foro desbloqueados 🔓"); 
-                        }
+                        if (currentQuizType === '1A' && userLevel < 2) { newLevel = 2; alert("¡Nivel 1 Completado! Biblioteca y Foro desbloqueados 🔓"); }
                         if (currentQuizType === '2' && userLevel < 3) newLevel = 3;
                         if (currentQuizType === '3' && userLevel < 4) newLevel = 4;
                         if (currentQuizType === '4') { newLevel = 5; setView('victory'); }
@@ -482,37 +532,51 @@
                     }
                 };
 
-                // Render de Revisión
                 if (viewReview) {
-                    return <ReviewView questions={questions} answers={answers} onBack={() => setViewReview(false)} />;
+                    return (
+                        <div className="max-w-2xl mx-auto px-4 py-6 animate-in">
+                            <Button variant="ghost" onClick={() => setViewReview(false)} className="pl-0 mb-4 text-gray-500"><Icon path={ICONS.ArrowLeft} className="w-5 h-5 mr-2" /> Volver al Resultado</Button>
+                            <h2 className="text-2xl font-bold text-gray-900 mb-6">Revisión de Respuestas</h2>
+                            <div className="space-y-6">{questions.map((q, idx) => {
+                                const answerData = answers.find(a => a.id === q.id);
+                                const userSelected = answerData ? answerData.selectedOption : null;
+                                const isCorrect = userSelected === q.correcta;
+                                return (
+                                    <Card key={idx} className={`border-l-4 ${isCorrect ? 'border-l-emerald-500' : 'border-l-red-500'}`}>
+                                        <div className="mb-3"><span className="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-1 rounded uppercase">{q.cat}</span></div><h3 className="font-bold text-lg mb-4">{q.pregunta}</h3>
+                                        <div className="space-y-2 mb-4">{q.opciones.map((op, i) => {
+                                            let styles = "w-full p-3 rounded-lg text-left text-sm border ";
+                                            if (i === q.correcta) styles += "bg-emerald-50 border-emerald-500 text-emerald-800 font-bold";
+                                            else if (i === userSelected && !isCorrect) styles += "bg-red-50 border-red-500 text-red-800 font-bold";
+                                            else styles += "bg-gray-50 border-gray-200 text-gray-500 opacity-70";
+                                            return (<div key={i} className={styles}><div className="flex justify-between items-center"><span>{op}</span>{i === q.correcta && <Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-600" />}{i === userSelected && !isCorrect && <Icon path={ICONS.XCircle} className="w-4 h-4 text-red-600" />}</div></div>);
+                                        })}</div>
+                                        <div className="bg-blue-50 p-3 rounded-lg border border-blue-100"><p className="text-xs font-bold text-blue-800 uppercase mb-1">Explicación:</p><p className="text-sm text-blue-700">{q.explicacion}</p></div>
+                                    </Card>
+                                );
+                            })}</div>
+                        </div>
+                    );
                 }
 
-                // Render de Resultado
                 if (showResult) {
                     const correctCount = answers.filter(a => a.isCorrect).length;
                     const passed = (correctCount / questions.length) >= 0.7;
                     return (
                         <div className="max-w-md mx-auto px-4 py-8 text-center animate-in">
-                            <div className={`w-24 h-24 rounded-full mx-auto flex items-center justify-center mb-6 ${passed ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
-                                <Icon path={passed ? ICONS.Award : ICONS.XCircle} className="w-12 h-12" />
-                            </div>
+                            <div className={`w-24 h-24 rounded-full mx-auto flex items-center justify-center mb-6 ${passed ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}><Icon path={passed ? ICONS.Award : ICONS.XCircle} className="w-12 h-12" /></div>
                             <h2 className="text-2xl font-bold mb-2">{passed ? '¡Aprobado!' : 'No Aprobado'}</h2>
                             <p className="text-lg text-gray-600 mb-2">{correctCount} correctas de {questions.length}</p>
                             <p className="text-sm font-bold text-emerald-600 mb-6">Necesitas 70% para aprobar</p>
-                            
                             <div className="space-y-3">
                                 <Button fullWidth onClick={() => handleFinish(passed)}>{passed ? 'Continuar' : 'Volver al Mapa'}</Button>
-                                {/* BOTÓN DE REVISIÓN */}
-                                <Button variant="secondary" fullWidth onClick={() => setViewReview(true)}>
-                                    <Icon path={ICONS.Eye} className="w-4 h-4 mr-2" /> Revisar mis Respuestas
-                                </Button>
+                                <Button variant="secondary" fullWidth onClick={() => setViewReview(true)}><Icon path={ICONS.Eye} className="w-4 h-4 mr-2" /> Revisar mis Respuestas</Button>
                                 {!passed && <Button variant="ghost" fullWidth onClick={() => { setIdx(0); setAnswers([]); setShowResult(false); setSelected(null); }} className="mt-2">Reintentar</Button>}
                             </div>
                         </div>
                     );
                 }
 
-                // Render de Pregunta Activa
                 return (
                     <div className="max-w-2xl mx-auto px-4 py-6 animate-in">
                         <div className="flex flex-col mb-6">
