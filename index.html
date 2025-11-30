@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auxiliar Pro</title>
+    <title>Auxiliar Pro - Conectado</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
@@ -12,12 +12,31 @@
     <style>body { font-family: 'Inter', sans-serif; }</style>
 </head>
 <body class="bg-slate-50 text-slate-900">
-    <div id="root"></div>
+    <div id="root">Cargando sistema...</div>
 
-    <script type="text/babel">
+    <script type="text/babel" data-type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
         const { useState, useEffect } = React;
 
-        // --- ICONOS ARREGLADOS (No tienes que editar nada) ---
+        // --- TUS LLAVES REALES DE FIREBASE ---
+        const firebaseConfig = {
+          apiKey: "AIzaSyDNhuSBBhmmQSV0BHC8MOtLKgAUpvtfWfE",
+          authDomain: "auxiliar-pro.firebaseapp.com",
+          projectId: "auxiliar-pro",
+          storageBucket: "auxiliar-pro.firebasestorage.app",
+          messagingSenderId: "342196612566",
+          appId: "1:342196612566:web:c7f34365c4e10502e60877"
+        };
+
+        // INICIALIZAR FIREBASE
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // --- ICONOS ---
         const ICONS = {
             Brain: <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z" />,
             Shield: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />,
@@ -53,7 +72,7 @@
             </svg>
         );
 
-        // --- DATOS ---
+        // --- BANCOS DE PREGUNTAS ---
         const DB_1A = [
             { id: 1, cat: "Legislación", pregunta: "¿Qué decreto aprueba el reglamento de farmacias?", opciones: ["D.S. 466", "D.S. 594", "D.S. 707"], correcta: 0, explicacion: "El D.S. 466 es la normativa base." },
             { id: 2, cat: "Almacenamiento", pregunta: "Rango T° Refrigerador:", opciones: ["0-4°C", "2-8°C", "8-15°C"], correcta: 1, explicacion: "Cadena de frío estricta: 2°C a 8°C." },
@@ -135,41 +154,113 @@
             );
         };
 
-        // --- APP ---
+        // --- APP PRINCIPAL ---
         const App = () => {
             const [user, setUser] = useState(null);
+            const [loading, setLoading] = useState(true);
+            const [errorMsg, setErrorMsg] = useState('');
             const [view, setView] = useState('home');
+            
+            // ESTADO INICIAL
             const [userLevel, setUserLevel] = useState(1);
             const [progress, setProgress] = useState({ '1A': false, '1B': false, '2': false, '3': false, '4': false });
             const [currentQuizType, setCurrentQuizType] = useState(null);
 
+            // --- ESCUCHAR AUTENTICACIÓN Y CARGAR DATOS ---
+            useEffect(() => {
+                const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+                    if (currentUser) {
+                        setUser(currentUser);
+                        // Cargar datos de Firestore
+                        const docRef = doc(db, "users", currentUser.uid);
+                        const docSnap = await getDoc(docRef);
+                        
+                        if (docSnap.exists()) {
+                            const data = docSnap.data();
+                            setUserLevel(data.level || 1);
+                            setProgress(data.progress || { '1A': false, '1B': false, '2': false, '3': false, '4': false });
+                        } else {
+                            // Crear documento si no existe (usuario nuevo)
+                            await setDoc(docRef, {
+                                level: 1,
+                                progress: { '1A': false, '1B': false, '2': false, '3': false, '4': false },
+                                email: currentUser.email
+                            });
+                        }
+                    } else {
+                        setUser(null);
+                    }
+                    setLoading(false);
+                });
+                return () => unsubscribe();
+            }, []);
+
+            // --- GUARDAR PROGRESO EN LA NUBE ---
+            const saveProgress = async (newLevel, newProgress) => {
+                if (!user) return;
+                try {
+                    const userRef = doc(db, "users", user.uid);
+                    await updateDoc(userRef, {
+                        level: newLevel,
+                        progress: newProgress
+                    });
+                } catch (e) {
+                    console.error("Error guardando:", e);
+                }
+            };
+
+            const handleLogin = async (email, password, isRegistering) => {
+                setErrorMsg('');
+                try {
+                    if (isRegistering) {
+                        await createUserWithEmailAndPassword(auth, email, password);
+                    } else {
+                        await signInWithEmailAndPassword(auth, email, password);
+                    }
+                } catch (error) {
+                    let msg = "Error al ingresar.";
+                    if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') msg = "Correo o contraseña incorrectos.";
+                    if (error.code === 'auth/email-already-in-use') msg = "Este correo ya está registrado.";
+                    if (error.code === 'auth/weak-password') msg = "La contraseña debe tener al menos 6 caracteres.";
+                    setErrorMsg(msg);
+                }
+            };
+
+            const handleLogout = async () => {
+                await signOut(auth);
+                setUserLevel(1);
+                setProgress({ '1A': false, '1B': false, '2': false, '3': false, '4': false });
+            };
+
             // AUTH VIEW
             const AuthView = () => {
                 const [email, setEmail] = useState('');
-                const [step, setStep] = useState('login');
-                if (step === 'verify') return (
-                    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-emerald-50">
-                        <Card className="max-w-md w-full text-center">
-                            <div className="mx-auto w-12 h-12 text-emerald-600 mb-4"><Icon path={ICONS.Mail} className="w-full h-full" /></div>
-                            <h2 className="text-2xl font-bold mb-2">Verifica tu correo</h2>
-                            <p className="text-gray-600 mb-6">Enlace enviado a <strong>{email}</strong></p>
-                            <Button fullWidth onClick={() => setUser({ name: "Marcelo", email })}>Simular Verificación</Button>
-                        </Card>
-                    </div>
-                );
+                const [password, setPassword] = useState('');
+                const [isRegistering, setIsRegistering] = useState(false);
+
                 return (
-                    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-slate-50">
+                    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-emerald-50">
                         <div className="text-center mb-8">
                             <div className="inline-flex bg-white p-4 rounded-3xl shadow-lg mb-4 text-emerald-600"><Icon path={ICONS.Brain} className="w-12 h-12" /></div>
                             <h1 className="text-4xl font-extrabold text-gray-800">Auxiliar<span className="text-emerald-600">Pro</span></h1>
                             <p className="text-gray-500 mt-2">Plataforma de estudio oficial</p>
                         </div>
                         <Card className="w-full max-w-md">
-                            <h2 className="text-xl font-bold mb-6 text-center">Acceso Seguro</h2>
+                            <h2 className="text-xl font-bold mb-6 text-center">{isRegistering ? 'Crear Cuenta' : 'Iniciar Sesión'}</h2>
                             <div className="space-y-4">
-                                <input type="email" placeholder="Correo" className="w-full p-3 border rounded-xl" value={email} onChange={e => setEmail(e.target.value)} />
-                                <input type="password" placeholder="Contraseña" className="w-full p-3 border rounded-xl" />
-                                <Button fullWidth onClick={() => email && setStep('verify')}>Entrar / Registrarse</Button>
+                                <input type="email" placeholder="Correo" className="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500" value={email} onChange={e => setEmail(e.target.value)} />
+                                <input type="password" placeholder="Contraseña" className="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500" value={password} onChange={e => setPassword(e.target.value)} />
+                                
+                                {errorMsg && <p className="text-red-500 text-sm text-center">{errorMsg}</p>}
+
+                                <Button fullWidth onClick={() => handleLogin(email, password, isRegistering)}>
+                                    {isRegistering ? 'Registrarse' : 'Entrar'}
+                                </Button>
+                            </div>
+                            <div className="mt-4 text-center">
+                                <button onClick={() => { setIsRegistering(!isRegistering); setErrorMsg(''); }} className="text-sm text-emerald-600 font-bold hover:underline">
+                                    {isRegistering ? '¿Ya tienes cuenta? Inicia sesión' : '¿No tienes cuenta? Regístrate'}
+                                </button>
                             </div>
                         </Card>
                     </div>
@@ -178,9 +269,9 @@
 
             // HOME VIEW
             const HomeView = () => (
-                <div className="max-w-2xl mx-auto px-4 py-6">
+                <div className="max-w-2xl mx-auto px-4 py-6 animate-in">
                     <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-2xl font-bold text-gray-800">Hola, {user.name}</h2>
+                        <h2 className="text-2xl font-bold text-gray-800">Hola, {user.email.split('@')[0]}</h2>
                     </div>
                     <LevelBadgeHeader level={userLevel} />
                     
@@ -206,7 +297,6 @@
                             </div>
                         </button>
 
-                        {/* MENSAJE DE BLOQUEO NIVEL 1 */}
                         {userLevel < 2 && (
                             <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 flex items-center gap-3">
                                 <div className="bg-blue-100 p-2 rounded-full text-blue-600"><Icon path={ICONS.Lock} className="w-4 h-4" /></div>
@@ -234,7 +324,7 @@
 
             // MAPA DE NIVELES
             const LevelMapView = () => (
-                <div className="max-w-xl mx-auto px-4 py-6">
+                <div className="max-w-xl mx-auto px-4 py-6 animate-in">
                     <Button variant="ghost" onClick={() => setView('home')} className="pl-0 mb-4 text-gray-500"><Icon path={ICONS.ArrowLeft} className="w-5 h-5 mr-2" /> Volver</Button>
                     <h2 className="text-2xl font-bold text-gray-900 mb-6">Tu Ruta</h2>
                     <div className="space-y-6 relative">
@@ -321,21 +411,29 @@
                 const handleFinish = (passed) => {
                     if (passed) {
                         const newProgress = { ...progress, [currentQuizType]: true };
+                        let newLevel = userLevel;
+                        
+                        if (currentQuizType === '1A' && newProgress['1B'] && userLevel < 2) newLevel = 2;
+                        if (currentQuizType === '1B' && newProgress['1A'] && userLevel < 2) newLevel = 2;
+                        if (currentQuizType === '2' && userLevel < 3) newLevel = 3;
+                        if (currentQuizType === '3' && userLevel < 4) newLevel = 4;
+                        if (currentQuizType === '4') { newLevel = 5; setView('victory'); }
+                        
+                        setUserLevel(newLevel);
                         setProgress(newProgress);
-                        if (currentQuizType === '1A' && newProgress['1B'] && userLevel < 2) setUserLevel(2);
-                        if (currentQuizType === '1B' && newProgress['1A'] && userLevel < 2) setUserLevel(2);
-                        if (currentQuizType === '2' && userLevel < 3) setUserLevel(3);
-                        if (currentQuizType === '3' && userLevel < 4) setUserLevel(4);
-                        if (currentQuizType === '4') { setUserLevel(5); setView('victory'); return; }
+                        saveProgress(newLevel, newProgress); // Guardar en Firebase
+                        
+                        if(currentQuizType !== '4') setView('mapa_niveles');
+                    } else {
+                        setView('mapa_niveles');
                     }
-                    setView('mapa_niveles');
                 };
 
                 if (showResult) {
                     const correctCount = answers.filter(a => a.isCorrect).length;
                     const passed = (correctCount / questions.length) >= 0.7;
                     return (
-                        <div className="max-w-md mx-auto px-4 py-8 text-center">
+                        <div className="max-w-md mx-auto px-4 py-8 text-center animate-in">
                             <div className={`w-24 h-24 rounded-full mx-auto flex items-center justify-center mb-6 ${passed ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
                                 <Icon path={passed ? ICONS.Award : ICONS.XCircle} className="w-12 h-12" />
                             </div>
@@ -348,7 +446,7 @@
                 }
 
                 return (
-                    <div className="max-w-2xl mx-auto px-4 py-6">
+                    <div className="max-w-2xl mx-auto px-4 py-6 animate-in">
                         <div className="flex flex-col mb-6">
                             <div className="flex justify-between items-center mb-2">
                                 <Button variant="ghost" onClick={() => setView('mapa_niveles')} className="pl-0 text-gray-500"><Icon path={ICONS.X} className="w-5 h-5 mr-2" /> Salir</Button>
@@ -376,7 +474,7 @@
 
             // VISTA ZONA EXPERTO
             const ExpertZoneView = () => (
-                <div className="max-w-2xl mx-auto px-4 py-6">
+                <div className="max-w-2xl mx-auto px-4 py-6 animate-in">
                     <Button variant="ghost" onClick={() => setView('home')} className="pl-0 mb-4 text-gray-500"><Icon path={ICONS.ArrowLeft} className="w-5 h-5 mr-2" /> Volver</Button>
                     <div className="text-center mb-8"><h2 className="text-3xl font-black text-gray-900">Zona de Experto</h2><p className="text-gray-500">Material liberado.</p></div>
                     <div className="grid gap-4">
@@ -400,11 +498,13 @@
                 </div>
             );
 
+            if (loading) return <div className="min-h-screen flex items-center justify-center text-emerald-600">Cargando tu progreso...</div>;
+
             return (
                 <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-12">
                     <nav className="bg-white border-b sticky top-0 z-50 h-16 flex items-center px-4 justify-between shadow-sm">
                         <div className="flex items-center gap-2"><Icon path={ICONS.Brain} className="w-6 h-6 text-emerald-600" /><span className="font-bold text-xl text-gray-800">Auxiliar<span className="text-emerald-600">Pro</span></span></div>
-                        {user && <button onClick={() => setUser(null)} className="p-2 text-red-500"><Icon path={ICONS.LogOut} className="w-5 h-5" /></button>}
+                        {user && <button onClick={handleLogout} className="p-2 text-red-500"><Icon path={ICONS.LogOut} className="w-5 h-5" /></button>}
                     </nav>
                     <main>
                         {!user && <AuthView />}
@@ -426,5 +526,3 @@
     </script>
 </body>
 </html>
-
-
