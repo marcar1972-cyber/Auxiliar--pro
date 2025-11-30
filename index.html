@@ -35,7 +35,7 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- ICONOS (CORREGIDOS PARA EVITAR ERRORES) ---
+        // --- ICONOS CORREGIDOS (Usando React.Fragment para evitar error de pantalla blanca) ---
         const ICONS = {
             Brain: <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z" />,
             Shield: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />,
@@ -73,7 +73,7 @@
 
         // --- BANCOS DE PREGUNTAS ---
         
-        // NIVEL 1A: 10 Preguntas
+        // NIVEL 1: 10 Preguntas (Diagnóstico Único)
         const DB_1A = [
             { id: 1, cat: "Legislación", pregunta: "¿Qué decreto aprueba el reglamento de farmacias?", opciones: ["D.S. 466", "D.S. 594", "D.S. 707"], correcta: 0, explicacion: "El D.S. 466 es la normativa base." },
             { id: 2, cat: "Almacenamiento", pregunta: "Rango T° Refrigerador:", opciones: ["0-4°C", "2-8°C", "8-15°C"], correcta: 1, explicacion: "Cadena de frío estricta: 2°C a 8°C." },
@@ -85,25 +85,6 @@
             { id: 8, cat: "Higiene", pregunta: "¿Cuándo lavarse las manos?", opciones: ["Solo al llegar", "Antes y después de atender/baño", "Nunca"], correcta: 1, explicacion: "Norma básica de higiene sanitaria." },
             { id: 9, cat: "Atención", pregunta: "Actitud ante un cliente enojado:", opciones: ["Gritar más fuerte", "Escucha activa y empatía", "Ignorarlo"], correcta: 1, explicacion: "Mantener la calma y ser profesional." },
             { id: 10, cat: "Primeros Auxilios", pregunta: "¿Qué hacer si alguien se desmaya?", opciones: ["Darle agua rápido", "Levantarlo de golpe", "Proteger caída y pedir ayuda"], correcta: 2, explicacion: "Asegurar la escena y llamar a emergencias." }
-        ];
-
-        // NIVEL 1B: 15 Preguntas
-        const DB_1B = [
-            { id: 11, cat: "Recetas", pregunta: "Vigencia Receta Cheque:", opciones: ["30 días", "60 días", "Indefinida"], correcta: 0, explicacion: "30 días corridos." },
-            { id: 12, cat: "Controlados", pregunta: "Estrella Verde indica:", opciones: ["Estupefaciente", "Psicotrópico", "Venta libre"], correcta: 1, explicacion: "Verde = Psicotrópico. Roja = Estupefaciente." },
-            { id: 13, cat: "Bioequivalencia", pregunta: "Identificación visual bioequivalente:", opciones: ["Logo rojo", "Franja amarilla (4 caras)", "Caja blanca"], correcta: 1, explicacion: "Franja amarilla inconfundible." },
-            { id: 14, cat: "Inventario", pregunta: "Significado de FEFO:", opciones: ["Primero vence, primero sale", "Primero entra, primero sale", "Farmacia Oficial"], correcta: 0, explicacion: "First Expired, First Out." },
-            { id: 15, cat: "Antibióticos", pregunta: "Venta de amoxicilina:", opciones: ["Sin receta", "Receta Retenida/Simple", "Receta Cheque"], correcta: 1, explicacion: "Nunca venta directa." },
-            { id: 16, cat: "Legislación", pregunta: "¿Auxiliar puede fraccionar?", opciones: ["Sí", "No, requiere QF y área", "A veces"], correcta: 1, explicacion: "Proceso clínico estricto." },
-            { id: 17, cat: "Seguridad", pregunta: "Receta ilegible:", opciones: ["Adivinar", "Preguntar al paciente", "No despachar/Consultar QF"], correcta: 2, explicacion: "Seguridad ante todo." },
-            { id: 18, cat: "Almacenamiento", pregunta: "¿Dónde se guardan los controlados?", opciones: ["Estantería abierta", "Mueble bajo llave", "Bodega común"], correcta: 1, explicacion: "Custodia estricta bajo llave." },
-            { id: 19, cat: "Insulinas", pregunta: "Insulina en uso (abierta):", opciones: ["Congelador", "T° Ambiente (<25-30°C)", "Horno"], correcta: 1, explicacion: "Abierta dura aprox 28 días a T° ambiente fresca." },
-            { id: 20, cat: "Formas", pregunta: "Diferencia Cápsula vs Comprimido:", opciones: ["Son iguales", "Cápsula tiene cubierta (gelatina)", "Comprimido es líquido"], correcta: 1, explicacion: "La cápsula contiene polvo/líquido dentro." },
-            { id: 21, cat: "Vías", pregunta: "Vía sublingual es:", opciones: ["Tragar con agua", "Debajo de la lengua", "Inyectable"], correcta: 1, explicacion: "Absorción rápida." },
-            { id: 22, cat: "Limpieza", pregunta: "Frecuencia limpieza estantes:", opciones: ["Anual", "Periódica/Diaria según programa", "Nunca"], correcta: 1, explicacion: "POES (Procedimientos Operativos Estandarizados)." },
-            { id: 23, cat: "Residuos", pregunta: "Medicamentos vencidos:", opciones: ["Basura común", "Reja (REAS)", "Regalar"], correcta: 1, explicacion: "Residuos especiales, se deben desnaturalizar." },
-            { id: 24, cat: "Atención", pregunta: "Paciente pide consejo médico:", opciones: ["Recetar", "Derivar a médico/QF", "Vender lo más caro"], correcta: 1, explicacion: "No ejercicio ilegal de la profesión." },
-            { id: 25, cat: "Legislación", pregunta: "Uso de credencial:", opciones: ["Opcional", "Obligatoria y visible", "En el bolsillo"], correcta: 1, explicacion: "Identificación obligatoria ante público." }
         ];
 
         // Nivel 2: Intermedio
@@ -122,7 +103,6 @@
 
         const getQuestionsForLevel = (levelType) => {
             if (levelType === '1A') return DB_1A;
-            if (levelType === '1B') return DB_1B;
             if (levelType === '2') return [...DB_NIVEL_2, ...DB_1A].slice(0, 5); 
             if (levelType === '3') return [...DB_AVANZADO, ...DB_NIVEL_2].slice(0, 7);
             if (levelType === '4') return [...DB_AVANZADO, ...DB_NIVEL_2, ...DB_1A].slice(0, 10);
@@ -131,7 +111,6 @@
 
         const getTitleForLevel = (levelType) => {
             if (levelType === '1A') return "Nivel 1: Diagnóstico";
-            if (levelType === '1B') return "Nivel 1: Cuestionario";
             if (levelType === '2') return "Nivel 2: Cuestionario Intermedio";
             if (levelType === '3') return "Nivel 3: Cuestionario Avanzado";
             if (levelType === '4') return "Nivel 4: Simulacro Final";
@@ -187,24 +166,28 @@
             const [loading, setLoading] = useState(true);
             const [errorMsg, setErrorMsg] = useState('');
             const [view, setView] = useState('home');
+            
+            // ESTADO INICIAL
             const [userLevel, setUserLevel] = useState(1);
-            const [progress, setProgress] = useState({ '1A': false, '1B': false, '2': false, '3': false, '4': false });
+            const [progress, setProgress] = useState({ '1A': false, '2': false, '3': false, '4': false });
             const [currentQuizType, setCurrentQuizType] = useState(null);
 
+            // --- ESCUCHAR AUTENTICACIÓN ---
             useEffect(() => {
                 const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
                     if (currentUser) {
                         setUser(currentUser);
                         const docRef = doc(db, "users", currentUser.uid);
                         const docSnap = await getDoc(docRef);
+                        
                         if (docSnap.exists()) {
                             const data = docSnap.data();
                             setUserLevel(data.level || 1);
-                            setProgress(data.progress || { '1A': false, '1B': false, '2': false, '3': false, '4': false });
+                            setProgress(data.progress || { '1A': false, '2': false, '3': false, '4': false });
                         } else {
                             await setDoc(docRef, {
                                 level: 1,
-                                progress: { '1A': false, '1B': false, '2': false, '3': false, '4': false },
+                                progress: { '1A': false, '2': false, '3': false, '4': false },
                                 email: currentUser.email
                             });
                         }
@@ -241,7 +224,7 @@
             const handleLogout = async () => {
                 await signOut(auth);
                 setUserLevel(1);
-                setProgress({ '1A': false, '1B': false, '2': false, '3': false, '4': false });
+                setProgress({ '1A': false, '2': false, '3': false, '4': false });
             };
 
             // VISTAS
@@ -304,21 +287,27 @@
                     <h2 className="text-2xl font-bold text-gray-900 mb-6">Tu Ruta</h2>
                     <div className="space-y-6 relative">
                         <div className="absolute left-6 top-10 bottom-10 w-1 bg-gray-200 -z-10"></div>
+                        {/* NIVEL 1 */}
                         <div className={`p-6 rounded-2xl border-2 bg-white ${userLevel >= 1 ? 'border-emerald-500 shadow-md' : 'border-gray-200'}`}>
-                            <div className="flex items-center gap-3 mb-4"><div className="w-12 h-12 bg-emerald-600 rounded-full flex items-center justify-center text-white font-bold text-xl">1</div><div><h3 className="font-bold text-lg">Nivel 1: Aspirante</h3><p className="text-xs text-gray-500">Requisito: Aprobar A y B</p></div></div>
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className="w-12 h-12 bg-emerald-600 rounded-full flex items-center justify-center text-white font-bold text-xl">1</div>
+                                <div><h3 className="font-bold text-lg">Nivel 1: Aspirante</h3><p className="text-xs text-gray-500">Requisito: Aprobar Diagnóstico (70%)</p></div>
+                            </div>
                             <div className="space-y-3 pl-4 ml-6 border-l-2 border-gray-100">
                                 <div className="flex flex-col gap-2"><span className="text-sm font-bold text-gray-800">A) Prueba Diagnóstico</span><Button size="sm" fullWidth variant={progress['1A'] ? "ghost" : "primary"} onClick={() => { setCurrentQuizType('1A'); setView('quiz'); }}>{progress['1A'] ? <span className="flex items-center gap-2"><Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-500" /> Aprobado</span> : 'Rendir Prueba A'}</Button></div>
-                                <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-gray-100"><span className="text-sm font-bold text-gray-800">B) Cuestionario Corto</span><Button size="sm" fullWidth variant={progress['1B'] ? "ghost" : "primary"} onClick={() => { setCurrentQuizType('1B'); setView('quiz'); }}>{progress['1B'] ? <span className="flex items-center gap-2"><Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-500" /> Aprobado</span> : 'Rendir Prueba B'}</Button></div>
                             </div>
                         </div>
+                        {/* NIVEL 2 */}
                         <div className={`p-6 rounded-2xl border-2 ${userLevel >= 2 ? 'bg-white border-orange-400 shadow-md' : 'bg-gray-50 border-gray-200'}`}>
                             <div className="flex items-center gap-3 mb-4"><div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl ${userLevel >= 2 ? 'bg-orange-600 text-white' : 'bg-gray-300 text-gray-500'}`}>{userLevel >= 2 ? '2' : <Icon path={ICONS.Lock} className="w-5 h-5" />}</div><div><h3 className={`font-bold text-lg ${userLevel < 2 && 'text-gray-400'}`}>Nivel 2: Bronce</h3><p className="text-xs text-gray-500">Cuestionario (20 Preguntas)</p></div></div>
                             <div className="pl-4 ml-6"><Button fullWidth disabled={userLevel < 2} variant={progress['2'] ? "ghost" : "primary"} onClick={() => { setCurrentQuizType('2'); setView('quiz'); }}>{progress['2'] ? <span className="flex items-center gap-2"><Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-500" /> Aprobado</span> : 'Rendir Cuestionario'}</Button></div>
                         </div>
+                        {/* NIVEL 3 */}
                         <div className={`p-6 rounded-2xl border-2 ${userLevel >= 3 ? 'bg-white border-slate-400 shadow-md' : 'bg-gray-50 border-gray-200'}`}>
                             <div className="flex items-center gap-3 mb-4"><div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl ${userLevel >= 3 ? 'bg-slate-600 text-white' : 'bg-gray-300 text-gray-500'}`}>{userLevel >= 3 ? '3' : <Icon path={ICONS.Lock} className="w-5 h-5" />}</div><div><h3 className={`font-bold text-lg ${userLevel < 3 && 'text-gray-400'}`}>Nivel 3: Plata</h3><p className="text-xs text-gray-500">Cuestionario (30 Preguntas)</p></div></div>
                             <div className="pl-4 ml-6"><Button fullWidth disabled={userLevel < 3} variant={progress['3'] ? "ghost" : "primary"} onClick={() => { setCurrentQuizType('3'); setView('quiz'); }}>{progress['3'] ? <span className="flex items-center gap-2"><Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-500" /> Aprobado</span> : 'Rendir Cuestionario'}</Button></div>
                         </div>
+                        {/* NIVEL 4 */}
                         <div className={`p-6 rounded-2xl border-2 ${userLevel >= 4 ? 'bg-white border-yellow-400 shadow-xl' : 'bg-gray-50 border-gray-200'}`}>
                             <div className="flex items-center gap-3 mb-4"><div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl ${userLevel >= 4 ? 'bg-yellow-500 text-white' : 'bg-gray-300 text-gray-500'}`}>{userLevel >= 4 ? '4' : <Icon path={ICONS.Lock} className="w-5 h-5" />}</div><div><h3 className={`font-bold text-lg ${userLevel < 4 && 'text-gray-400'}`}>Nivel 4: Oro</h3><p className="text-xs text-yellow-600 font-bold">Simulacro Final (40)</p></div></div>
                             <div className="pl-4 ml-6"><Button fullWidth disabled={userLevel < 4} variant={progress['4'] ? "ghost" : "gold"} onClick={() => { setCurrentQuizType('4'); setView('quiz'); }}>{progress['4'] ? <span className="flex items-center gap-2"><Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-500" /> Aprobado</span> : 'RENDIR PRUEBA FINAL'}</Button></div>
@@ -348,8 +337,11 @@
                     if (passed) {
                         const newProgress = { ...progress, [currentQuizType]: true };
                         let newLevel = userLevel;
-                        if (currentQuizType === '1A' && newProgress['1B'] && userLevel < 2) newLevel = 2;
-                        if (currentQuizType === '1B' && newProgress['1A'] && userLevel < 2) newLevel = 2;
+                        // Logica Simplificada: Si pasas 1A -> Nivel 2 directo
+                        if (currentQuizType === '1A' && userLevel < 2) { 
+                            newLevel = 2; 
+                            alert("¡Nivel 1 Completado! Biblioteca y Foro desbloqueados 🔓"); 
+                        }
                         if (currentQuizType === '2' && userLevel < 3) newLevel = 3;
                         if (currentQuizType === '3' && userLevel < 4) newLevel = 4;
                         if (currentQuizType === '4') { newLevel = 5; setView('victory'); }
@@ -365,12 +357,16 @@
 
                 if (showResult) {
                     const correctCount = answers.filter(a => a.isCorrect).length;
+                    // Se requiere 70% para aprobar
                     const passed = (correctCount / questions.length) >= 0.7;
                     return (
                         <div className="max-w-md mx-auto px-4 py-8 text-center animate-in">
-                            <div className={`w-24 h-24 rounded-full mx-auto flex items-center justify-center mb-6 ${passed ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}><Icon path={passed ? ICONS.Award : ICONS.XCircle} className="w-12 h-12" /></div>
+                            <div className={`w-24 h-24 rounded-full mx-auto flex items-center justify-center mb-6 ${passed ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}>
+                                <Icon path={passed ? ICONS.Award : ICONS.XCircle} className="w-12 h-12" />
+                            </div>
                             <h2 className="text-2xl font-bold mb-2">{passed ? '¡Aprobado!' : 'No Aprobado'}</h2>
-                            <p className="text-5xl font-extrabold text-gray-800 mb-6">{correctCount}/{questions.length}</p>
+                            <p className="text-lg text-gray-600 mb-2">{correctCount} correctas de {questions.length}</p>
+                            <p className="text-sm font-bold text-emerald-600 mb-6">Necesitas 70% para aprobar</p>
                             <Button fullWidth onClick={() => handleFinish(passed)}>{passed ? 'Continuar' : 'Volver'}</Button>
                             {!passed && <Button variant="ghost" fullWidth onClick={() => { setIdx(0); setAnswers([]); setShowResult(false); setSelected(null); }} className="mt-2">Reintentar</Button>}
                         </div>
