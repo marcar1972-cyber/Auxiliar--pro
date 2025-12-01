@@ -231,4 +231,360 @@
                             } else {
                                 docRef.set({
                                     level: 1,
-                                    progress: { '1A': 
+                                    progress: { '1A': false, '2': false, '3': false, '4': false },
+                                    email: currentUser.email
+                                });
+                            }
+                            setLoading(false);
+                        });
+                    } else {
+                        setUser(null);
+                        setLoading(false);
+                    }
+                });
+            }, []);
+
+            const saveProgress = (newLevel, newProgress) => {
+                if (!user) return;
+                db.collection("users").doc(user.uid).update({ level: newLevel, progress: newProgress });
+            };
+
+            const handleLogin = async (email, password, isRegistering, securityAnswer) => {
+                setErrorMsg('');
+                if (isRegistering && parseInt(securityAnswer) !== 7) { setErrorMsg("Respuesta incorrecta. 4+3=7"); return; }
+                try {
+                    if (isRegistering) await auth.createUserWithEmailAndPassword(email, password);
+                    else await auth.signInWithEmailAndPassword(email, password);
+                } catch (error) {
+                    setErrorMsg(error.message);
+                }
+            };
+
+            const handleGoogleLogin = async () => {
+                try { 
+                    // CAMBIO CLAVE: Usamos signInWithRedirect para móviles
+                    await auth.signInWithRedirect(googleProvider); 
+                } catch (error) { 
+                    setErrorMsg(error.message); 
+                }
+            };
+
+            const handleLogout = async () => {
+                await auth.signOut();
+                setUserLevel(1);
+                setProgress({ '1A': false, '2': false, '3': false, '4': false });
+                setView('landing');
+            };
+
+            // --- QUIZ LOGIC ---
+            const handleQuizFinish = (passed) => {
+                if (passed) {
+                    const newProgress = { ...progress, [currentQuizType]: true };
+                    let newLevel = userLevel;
+                    
+                    if (currentQuizType === '1A' && userLevel < 2) { newLevel = 2; alert("¡Felicidades! Nivel 2 Desbloqueado."); }
+                    if (currentQuizType === '2' && userLevel < 3) newLevel = 3;
+                    if (currentQuizType === '3' && userLevel < 4) newLevel = 4;
+                    if (currentQuizType === '4') { newLevel = 5; setView('victory'); }
+
+                    setUserLevel(newLevel);
+                    setProgress(newProgress);
+                    saveProgress(newLevel, newProgress);
+                    if(currentQuizType !== '4') setView('mapa_niveles');
+                } else {
+                    setView('mapa_niveles');
+                }
+            };
+
+            if (loading) return <div className="min-h-screen flex items-center justify-center text-emerald-600 font-bold">Cargando...</div>;
+
+            if (!user && !showAuth) {
+                return <LandingView onEnter={() => setShowAuth(true)} />;
+            }
+
+            if (!user && showAuth) {
+                return <AuthView onLogin={handleLogin} onGoogle={handleGoogleLogin} onBack={() => setShowAuth(false)} errorMsg={errorMsg} />;
+            }
+
+            return (
+                <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-12">
+                    <nav className="bg-white border-b sticky top-0 z-50 h-16 flex items-center px-4 justify-between shadow-sm">
+                        <div className="flex items-center gap-2"><Icon path={ICONS.Brain} className="w-6 h-6 text-emerald-600" /><span className="font-bold text-xl text-gray-800">Auxiliar<span className="text-emerald-600">Pro</span></span></div>
+                        <button onClick={handleLogout} className="p-2 text-red-500 bg-red-50 rounded-lg hover:bg-red-100"><Icon path={ICONS.LogOut} className="w-5 h-5" /></button>
+                    </nav>
+                    <main>
+                        {view === 'home' && <HomeView user={user} level={userLevel} setView={setView} />}
+                        {view === 'mapa_niveles' && <LevelMapView onBack={() => setView('home')} userLevel={userLevel} progress={progress} onSelectTest={(type) => { setCurrentQuizType(type); setView('quiz'); }} />}
+                        {view === 'quiz' && <QuizView currentQuizType={currentQuizType} onFinish={handleQuizFinish} onExit={() => setView('mapa_niveles')} />}
+                        {view === 'victory' && <VictoryView onHome={() => setView('home')} />}
+                        {view === 'expert_zone' && <ExpertZoneView onBack={() => setView('home')} />}
+                        {view === 'faq' && <FaqView onBack={() => setView('home')} />}
+                        {view === 'forum' && <ForumView user={user} db={db} onBack={() => setView('home')} />}
+                        {view === 'feedback' && <FeedbackView onBack={() => setView('home')} />}
+                        {view === 'resources' && <ResourcesView onBack={() => setView('home')} />}
+                    </main>
+                </div>
+            );
+            
+            // --- COMPONENTES INTERNOS ---
+            function LandingView({ onEnter }) {
+                return (
+                    <div className="min-h-screen bg-white flex flex-col animate-in">
+                        <header className="px-6 py-4 flex justify-between items-center sticky top-0 bg-white/90 backdrop-blur z-50 border-b border-slate-100">
+                            <div className="flex items-center gap-2"><Icon path={ICONS.Brain} className="w-8 h-8 text-emerald-600" /><span className="font-extrabold text-xl text-slate-800">Auxiliar<span className="text-emerald-600">Pro</span></span></div>
+                            <button onClick={onEnter} className="px-5 py-2 bg-emerald-600 text-white rounded-full font-bold text-sm hover:bg-emerald-700 transition-colors">Ingresar</button>
+                        </header>
+                        <section className="px-6 py-16 text-center max-w-lg mx-auto">
+                            <div className="inline-block px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-bold mb-6 tracking-wide uppercase">Certificación 2026</div>
+                            <h1 className="text-4xl font-black text-slate-900 mb-6 leading-tight">Prepárate para tu examen de <span className="text-emerald-600">Auxiliar de Farmacia</span></h1>
+                            <p className="text-slate-600 text-lg mb-8 leading-relaxed">Una iniciativa independiente hecha por colegas para colegas. Estudia a tu ritmo, supera niveles y asegura tu conocimiento.</p>
+                            <button onClick={onEnter} className="w-full bg-slate-900 text-white text-lg font-bold py-4 rounded-2xl shadow-xl hover:bg-slate-800 transform hover:scale-105 transition-all flex items-center justify-center gap-2">Comenzar Ahora <Icon path={ICONS.ArrowRight} className="w-5 h-5" /></button>
+                        </section>
+                        <section className="px-6 py-12 bg-slate-50 border-t border-slate-100">
+                            <h2 className="text-2xl font-bold text-slate-800 mb-8 text-center">Requisitos SEREMI</h2>
+                            <div className="space-y-4 max-w-md mx-auto">
+                                <div className="flex gap-4 p-4 bg-white rounded-xl border border-slate-200 shadow-sm"><div className="bg-emerald-100 p-2 rounded-full h-fit text-emerald-600"><Icon path={ICONS.CheckCircle} className="w-5 h-5" /></div><div><h3 className="font-bold text-slate-900">Licencia de Enseñanza Media</h3><p className="text-sm text-slate-500">Certificado original o legalizado.</p></div></div>
+                                <div className="flex gap-4 p-4 bg-white rounded-xl border border-slate-200 shadow-sm"><div className="bg-emerald-100 p-2 rounded-full h-fit text-emerald-600"><Icon path={ICONS.CheckCircle} className="w-5 h-5" /></div><div><h3 className="font-bold text-slate-900">Experiencia Laboral</h3><p className="text-sm text-slate-500">1 año trabajado en farmacia bajo supervisión.</p></div></div>
+                            </div>
+                        </section>
+                        <footer className="bg-slate-900 text-slate-400 py-8 px-6 text-center text-sm mt-auto"><p className="mb-2 font-bold text-white">Auxiliar Pro © 2024</p><p className="text-xs opacity-70">No somos un sitio oficial del Gobierno ni del MINSAL.</p></footer>
+                    </div>
+                );
+            }
+
+            function AuthView({ onLogin, onGoogle, onBack, errorMsg }) {
+                const [email, setEmail] = useState('');
+                const [pass, setPass] = useState('');
+                const [sec, setSec] = useState('');
+                const [isReg, setIsReg] = useState(false);
+                return (
+                    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-white animate-in">
+                        <button onClick={onBack} className="self-start mb-8 text-slate-500 flex items-center gap-2"><Icon path={ICONS.ArrowLeft} className="w-5 h-5" /> Volver al inicio</button>
+                        <div className="text-center mb-8"><div className="inline-flex bg-emerald-50 p-4 rounded-3xl mb-4 text-emerald-600"><Icon path={ICONS.Brain} className="w-12 h-12" /></div><h1 className="text-3xl font-extrabold text-slate-800">Ingreso Alumnos</h1><p className="text-slate-500">Plataforma de estudio</p></div>
+                        <Card className="w-full max-w-md border-slate-200">
+                            <button onClick={onGoogle} className="w-full mb-6 flex items-center justify-center gap-3 bg-white border border-slate-300 rounded-xl p-3 hover:bg-slate-50 transition-colors font-bold text-slate-700"><Icon path={ICONS.Google} className="w-5 h-5" /> Continuar con Google</button>
+                            <div className="relative mb-6"><div className="absolute inset-0 flex items-center"><div className="w-full border-t border-slate-200"></div></div><div className="relative flex justify-center text-xs uppercase"><span className="bg-white px-2 text-slate-400 font-bold">O usa tu correo</span></div></div>
+                            <div className="space-y-4">
+                                <input type="email" placeholder="Correo" className="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500" value={email} onChange={e=>setEmail(e.target.value)} />
+                                <input type="password" placeholder="Contraseña" className="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500" value={pass} onChange={e=>setPass(e.target.value)} />
+                                {isReg && <div className="bg-yellow-50 p-3 rounded-xl border border-yellow-200"><label className="text-xs font-bold text-yellow-800 block mb-1">Seguridad: 4 + 3 = ?</label><input type="number" className="w-full p-2 border rounded-lg" value={sec} onChange={e=>setSec(e.target.value)} /></div>}
+                                {errorMsg && <p className="text-red-500 text-sm text-center">{errorMsg}</p>}
+                                <Button fullWidth onClick={() => onLogin(email, pass, isReg, sec)}>{isReg ? 'Registrarse' : 'Entrar'}</Button>
+                                <div className="text-center mt-2"><button onClick={() => setIsReg(!isReg)} className="text-sm text-emerald-600 font-bold hover:underline">{isReg ? '¿Ya tienes cuenta? Entrar' : 'Crear cuenta nueva'}</button></div>
+                            </div>
+                        </Card>
+                    </div>
+                );
+            }
+
+            function HomeView({ user, level, setView }) {
+                 return (
+                    <div className="max-w-2xl mx-auto px-4 py-6 animate-in">
+                        <div className="flex justify-between items-center mb-6"><h2 className="text-2xl font-bold text-gray-800">Hola, {user.email.split('@')[0]}</h2></div>
+                        <div className="bg-white border border-emerald-100 rounded-2xl p-5 mb-6 shadow-sm"><h3 className="text-lg font-bold text-emerald-800 mb-2">Tu camino a la certificación</h3><p className="text-sm text-gray-600 leading-relaxed mb-4">Bienvenido al Campus Virtual. Prepárate hoy para estar listo cuando se abra el próximo llamado.</p></div>
+                        <LevelBadgeHeader level={level} />
+                        {level >= 5 && (
+                            <button onClick={() => setView('expert_zone')} className="w-full mb-6 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white rounded-3xl p-6 text-left shadow-lg border-b-8 border-yellow-800 flex items-center justify-between">
+                                <div className="flex items-center gap-4"><div className="bg-white/20 p-3 rounded-2xl"><Icon path={ICONS.Unlock} className="w-8 h-8 text-white" /></div><div><h3 className="text-2xl font-black uppercase">Zona Experto</h3><p className="text-yellow-100 text-sm">Recursos exclusivos liberados</p></div></div><Icon path={ICONS.ChevronRight} className="w-6 h-6 text-white" />
+                            </button>
+                        )}
+                        <div className="space-y-6">
+                            <button onClick={() => setView('mapa_niveles')} className="w-full group bg-emerald-600 text-white rounded-3xl p-8 text-left shadow-lg relative overflow-hidden border-b-8 border-emerald-800 active:border-b-0 active:translate-y-2 transition-all"><div className="relative z-10"><div className="mb-4 text-emerald-100"><Icon path={ICONS.Layers} className="w-12 h-12" /></div><h3 className="text-3xl font-bold mb-2">Zona de Niveles</h3><p className="text-emerald-100">Rinde tus pruebas.</p><div className="mt-6 inline-flex items-center gap-2 bg-white text-emerald-800 px-4 py-2 rounded-xl font-bold text-sm">{level >= 5 ? 'Repasar' : 'Continuar'} <Icon path={ICONS.ChevronRight} className="w-4 h-4" /></div></div></button>
+                            <div className="grid grid-cols-2 gap-4">
+                                <button onClick={() => level >= 2 && setView('resources')} className={`border-2 p-4 rounded-3xl text-left relative ${level >= 2 ? 'bg-white hover:border-blue-500' : 'bg-gray-100 opacity-70'}`}>{level < 2 && <div className="absolute top-2 right-2"><Icon path={ICONS.Lock} className="w-4 h-4 text-gray-400" /></div>}<div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${level >= 2 ? 'bg-blue-100 text-blue-600' : 'bg-gray-200 text-gray-400'}`}><Icon path={ICONS.BookOpen} className="w-6 h-6" /></div><h3 className="font-bold text-gray-800">Biblioteca</h3><p className="text-xs text-gray-500">{level >= 2 ? 'PDFs' : 'Bloqueado'}</p></button>
+                                <button onClick={() => level >= 2 && setView('forum')} className={`border-2 p-4 rounded-3xl text-left relative ${level >= 2 ? 'bg-white hover:border-fuchsia-500' : 'bg-gray-100 opacity-70'}`}>{level < 2 && <div className="absolute top-2 right-2"><Icon path={ICONS.Lock} className="w-4 h-4 text-gray-400" /></div>}<div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${level >= 2 ? 'bg-fuchsia-100 text-fuchsia-600' : 'bg-gray-200 text-gray-400'}`}><Icon path={ICONS.Users} className="w-6 h-6" /></div><h3 className="font-bold text-gray-800">Comunidad</h3><p className="text-xs text-gray-500">{level >= 2 ? 'Foro' : 'Bloqueado'}</p></button>
+                            </div>
+                            <button onClick={() => setView('faq')} className="w-full mt-6 bg-white border border-gray-200 p-3 rounded-xl flex items-center justify-center gap-2 text-gray-600 text-sm hover:bg-gray-50"><Icon path={ICONS.Help} className="w-4 h-4" /> Preguntas Frecuentes</button>
+                        </div>
+                    </div>
+                )
+            }
+
+            function LevelMapView({ onBack, userLevel, progress, onSelectTest }) {
+                 return (
+                    <div className="max-w-xl mx-auto px-4 py-6 animate-in">
+                        <Button variant="ghost" onClick={onBack} className="pl-0 mb-4 text-gray-500"><Icon path={ICONS.ArrowLeft} className="w-5 h-5 mr-2" /> Volver</Button>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-6">Tu Ruta</h2>
+                        <div className="space-y-6 relative">
+                            <div className="absolute left-6 top-10 bottom-10 w-1 bg-gray-200 -z-10"></div>
+                            {/* NIVEL 1 */}
+                            <div className={`p-6 rounded-2xl border-2 bg-white ${userLevel >= 1 ? 'border-emerald-500 shadow-md' : 'border-gray-200'}`}>
+                                <div className="flex items-center gap-3 mb-4"><div className="w-12 h-12 bg-emerald-600 rounded-full flex items-center justify-center text-white font-bold text-xl">1</div><div><h3 className="font-bold text-lg">Nivel 1: Aspirante</h3><p className="text-xs text-gray-500">Requisito: Aprobar Diagnóstico</p></div></div>
+                                <div className="pl-10"><Button size="sm" fullWidth variant={progress['1A'] ? "ghost" : "primary"} onClick={() => onSelectTest('1A')}>{progress['1A'] ? <span className="flex items-center gap-2"><Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-500" /> Aprobado</span> : 'Rendir Diagnóstico'}</Button></div>
+                            </div>
+                            {/* NIVEL 2 */}
+                            <div className={`p-6 rounded-2xl border-2 ${userLevel >= 2 ? 'bg-white border-orange-400 shadow-md' : 'bg-gray-50 border-gray-200'}`}>
+                                <div className="flex items-center gap-3 mb-4"><div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl ${userLevel >= 2 ? 'bg-orange-600 text-white' : 'bg-gray-300 text-gray-500'}`}>{userLevel >= 2 ? '2' : <Icon path={ICONS.Lock} className="w-5 h-5" />}</div><div><h3 className={`font-bold text-lg ${userLevel < 2 && 'text-gray-400'}`}>Nivel 2: Bronce</h3></div></div>
+                                <div className="pl-10"><Button fullWidth disabled={userLevel < 2} variant={progress['2'] ? "ghost" : "primary"} onClick={() => onSelectTest('2')}>{progress['2'] ? <span className="flex items-center gap-2"><Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-500" /> Aprobado</span> : 'Rendir Cuestionario'}</Button></div>
+                            </div>
+                            {/* NIVEL 3 */}
+                            <div className={`p-6 rounded-2xl border-2 ${userLevel >= 3 ? 'bg-white border-slate-400 shadow-md' : 'bg-gray-50 border-gray-200'}`}>
+                                <div className="flex items-center gap-3 mb-4"><div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl ${userLevel >= 3 ? 'bg-slate-600 text-white' : 'bg-gray-300 text-gray-500'}`}>{userLevel >= 3 ? '3' : <Icon path={ICONS.Lock} className="w-5 h-5" />}</div><div><h3 className={`font-bold text-lg ${userLevel < 3 && 'text-gray-400'}`}>Nivel 3: Plata</h3></div></div>
+                                <div className="pl-10"><Button fullWidth disabled={userLevel < 3} variant={progress['3'] ? "ghost" : "primary"} onClick={() => onSelectTest('3')}>{progress['3'] ? <span className="flex items-center gap-2"><Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-500" /> Aprobado</span> : 'Rendir Cuestionario'}</Button></div>
+                            </div>
+                            {/* NIVEL 4 */}
+                            <div className={`p-6 rounded-2xl border-2 ${userLevel >= 4 ? 'bg-white border-yellow-400 shadow-xl' : 'bg-gray-50 border-gray-200'}`}>
+                                <div className="flex items-center gap-3 mb-4"><div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl ${userLevel >= 4 ? 'bg-yellow-500 text-white' : 'bg-gray-300 text-gray-500'}`}>{userLevel >= 4 ? '4' : <Icon path={ICONS.Lock} className="w-5 h-5" />}</div><div><h3 className={`font-bold text-lg ${userLevel < 4 && 'text-gray-400'}`}>Nivel 4: Oro</h3></div></div>
+                                <div className="pl-10"><Button fullWidth disabled={userLevel < 4} variant={progress['4'] ? "ghost" : "gold"} onClick={() => onSelectTest('4')}>{progress['4'] ? <span className="flex items-center gap-2"><Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-500" /> Aprobado</span> : 'RENDIR PRUEBA FINAL'}</Button></div>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+
+            function QuizView({ currentQuizType, onFinish, onExit }) {
+                const questions = getQuestionsForLevel(currentQuizType);
+                const title = getTitleForLevel(currentQuizType);
+                const [idx, setIdx] = useState(0);
+                const [answers, setAnswers] = useState([]);
+                const [selected, setSelected] = useState(null);
+                const [showResult, setShowResult] = useState(false);
+                const [viewReview, setViewReview] = useState(false);
+                const q = questions[idx];
+
+                const handleConfirm = () => {
+                    const isCorrect = selected === q.correcta;
+                    const newAnswer = { id: q.id, selectedOption: selected, isCorrect };
+                    const newAnswers = [...answers, newAnswer];
+                    setAnswers(newAnswers);
+                    if (idx < questions.length - 1) { setIdx(idx + 1); setSelected(null); } else { setShowResult(true); }
+                };
+
+                const handleFinish = (passed) => onFinish(passed);
+
+                if (viewReview) {
+                    return (
+                        <div className="max-w-2xl mx-auto px-4 py-6 animate-in">
+                            <Button variant="ghost" onClick={() => setViewReview(false)} className="pl-0 mb-4 text-gray-500"><Icon path={ICONS.ArrowLeft} className="w-5 h-5 mr-2" /> Volver al Resultado</Button>
+                            <h2 className="text-2xl font-bold text-gray-900 mb-6">Revisión de Respuestas</h2>
+                            <div className="space-y-6">{questions.map((q, idx) => {
+                                const answerData = answers.find(a => a.id === q.id);
+                                const userSelected = answerData ? answerData.selectedOption : null;
+                                const isCorrect = userSelected === q.correcta;
+                                return (
+                                    <Card key={idx} className={`border-l-4 ${isCorrect ? 'border-l-emerald-500' : 'border-l-red-500'}`}>
+                                        <div className="mb-3"><span className="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-1 rounded uppercase">{q.cat}</span></div><h3 className="font-bold text-lg mb-4">{q.pregunta}</h3>
+                                        <div className="space-y-2 mb-4">{q.opciones.map((op, i) => {
+                                            let styles = "w-full p-3 rounded-lg text-left text-sm border ";
+                                            if (i === q.correcta) styles += "bg-emerald-50 border-emerald-500 text-emerald-800 font-bold";
+                                            else if (i === userSelected && !isCorrect) styles += "bg-red-50 border-red-500 text-red-800 font-bold";
+                                            else styles += "bg-gray-50 border-gray-200 text-gray-500 opacity-70";
+                                            return (<div key={i} className={styles}><div className="flex justify-between items-center"><span>{op}</span>{i === q.correcta && <Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-600" />}{i === userSelected && !isCorrect && <Icon path={ICONS.XCircle} className="w-4 h-4 text-red-600" />}</div></div>);
+                                        })}</div>
+                                        <div className="bg-blue-50 p-3 rounded-lg border border-blue-100"><p className="text-xs font-bold text-blue-800 uppercase mb-1">Explicación:</p><p className="text-sm text-blue-700">{q.explicacion}</p></div>
+                                    </Card>
+                                );
+                            })}</div>
+                        </div>
+                    );
+                }
+
+                if (showResult) {
+                    const correctCount = answers.filter(a => a.isCorrect).length;
+                    const passed = (correctCount / questions.length) >= 0.7;
+                    return (
+                        <div className="max-w-md mx-auto px-4 py-8 text-center animate-in">
+                            <div className={`w-24 h-24 rounded-full mx-auto flex items-center justify-center mb-6 ${passed ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}><Icon path={passed ? ICONS.Award : ICONS.XCircle} className="w-12 h-12" /></div>
+                            <h2 className="text-2xl font-bold mb-2">{passed ? '¡Aprobado!' : 'No Aprobado'}</h2>
+                            <p className="text-lg text-gray-600 mb-6">{correctCount} correctas de {questions.length}</p>
+                            <p className="text-sm font-bold text-emerald-600 mb-6">Necesitas 70% para aprobar</p>
+                            <div className="space-y-3">
+                                <Button fullWidth onClick={() => handleFinish(passed)}>{passed ? 'Continuar' : 'Volver al Mapa'}</Button>
+                                <Button variant="secondary" fullWidth onClick={() => setViewReview(true)}><Icon path={ICONS.Eye} className="w-4 h-4 mr-2" /> Revisar mis Respuestas</Button>
+                                {!passed && <Button variant="ghost" fullWidth onClick={() => { setIdx(0); setAnswers([]); setShowResult(false); setSelected(null); }} className="mt-2">Reintentar</Button>}
+                            </div>
+                        </div>
+                    );
+                }
+
+                return (
+                    <div className="max-w-2xl mx-auto px-4 py-6 animate-in">
+                        <div className="flex flex-col mb-6">
+                            <div className="flex justify-between items-center mb-2"><Button variant="ghost" onClick={() => setView('mapa_niveles')} className="pl-0 text-gray-500"><Icon path={ICONS.X} className="w-5 h-5 mr-2" /> Salir</Button><span className="font-bold text-emerald-600">P. {idx + 1} / {questions.length}</span></div>
+                            <div className="flex items-center gap-2 text-sm font-semibold text-gray-500 bg-gray-50 p-2 rounded-lg border border-gray-200"><Icon path={ICONS.MapPin} className="w-4 h-4 text-gray-400" /> Estás en: <span className="text-gray-800">{title}</span></div>
+                        </div>
+                        <Card>
+                            <div className="mb-2"><span className="bg-gray-100 text-gray-500 px-2 py-1 rounded text-xs font-bold uppercase">{q.cat}</span></div>
+                            <h3 className="text-xl font-bold mb-6">{q.pregunta}</h3>
+                            <div className="space-y-3">{q.opciones.map((op, i) => (<button key={i} onClick={() => setSelected(i)} className={`w-full p-4 rounded-xl border-2 text-left transition-all ${selected === i ? 'border-emerald-600 bg-emerald-50 font-bold' : 'border-gray-200'}`}>{op}</button>))}</div>
+                        </Card>
+                        <div className="mt-6 flex justify-end"><Button disabled={selected === null} onClick={handleConfirm}>Confirmar</Button></div>
+                    </div>
+                );
+            };
+
+            function ExpertZoneView({ onBack }) { return <div className="max-w-2xl mx-auto px-4 py-6 animate-in"><Button variant="ghost" onClick={onBack} className="pl-0 mb-4 text-gray-500"><Icon path={ICONS.ArrowLeft} className="w-5 h-5 mr-2" /> Volver</Button><div className="text-center mb-8"><h2 className="text-3xl font-black text-gray-900">Zona de Experto</h2><p className="text-gray-500">Material liberado.</p></div><div className="grid gap-4"><Card className="flex items-center gap-4"><div className="bg-red-100 p-3 rounded-xl text-red-600"><Icon path={ICONS.FileText} className="w-8 h-8" /></div><div><h3 className="font-bold text-lg">Pack PDFs Premium</h3></div></Card><Card className="flex items-center gap-4"><div className="bg-emerald-100 p-3 rounded-xl text-emerald-600"><Icon path={ICONS.CheckCircle} className="w-8 h-8" /></div><div><h3 className="font-bold text-lg">Ensayos Ilimitados</h3></div></Card></div></div>; }
+
+            function VictoryView({ onHome }) { return <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4 relative overflow-hidden"><div className="relative z-10 text-center max-w-md w-full animate-in zoom-in duration-700"><div className="w-32 h-32 mx-auto bg-gradient-to-br from-yellow-300 to-yellow-600 rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(234,179,8,0.5)] mb-8"><Icon path={ICONS.Star} className="w-16 h-16 text-white fill-current animate-pulse" /></div><h1 className="text-4xl font-black text-white mb-2">¡LO LOGRASTE!</h1><p className="text-yellow-400 text-lg font-bold mb-6 uppercase">Estás preparado</p><Button onClick={onHome} size="lg" variant="gold" fullWidth>Volver al Inicio</Button></div></div>; }
+
+            function FaqView({ onBack }) { return <div className="max-w-2xl mx-auto px-4 py-6 animate-in"><Button variant="ghost" onClick={onBack} className="pl-0 mb-4 text-gray-500"><Icon path={ICONS.ArrowLeft} className="w-5 h-5 mr-2" /> Volver</Button><h2 className="text-2xl font-bold text-gray-900 mb-6">Preguntas Frecuentes</h2><div className="space-y-4"><div className="bg-white border border-gray-200 rounded-xl p-5"><h3 className="font-bold text-emerald-800 mb-2">¿Cuándo son las fechas?</h3><p className="text-sm text-gray-600">Generalmente marzo/abril y octubre/noviembre. Revisa tu SEREMI local.</p></div><div className="bg-white border border-gray-200 rounded-xl p-5"><h3 className="font-bold text-emerald-800 mb-2">¿Qué requisitos necesito?</h3><p className="text-sm text-gray-600">Licencia de media, 1 año de experiencia y certificado de antecedentes.</p></div></div></div>; }
+
+            function ForumView({ user, db, onBack }) {
+                const [posts, setPosts] = useState([]);
+                const [title, setTitle] = useState('');
+                const [content, setContent] = useState('');
+                const [showForm, setShowForm] = useState(false);
+
+                useEffect(() => {
+                    return db.collection("forum").orderBy("date", "desc").onSnapshot(snap => {
+                        const data = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                        setPosts(data);
+                    });
+                }, []);
+
+                const sendPost = async (e) => {
+                    e.preventDefault();
+                    if(!title.trim() || !content.trim()) return;
+                    await db.collection("forum").add({
+                        title, content, author: user.email.split('@')[0], date: firebase.firestore.FieldValue.serverTimestamp(), comments: 0
+                    });
+                    setTitle(''); setContent(''); setShowForm(false);
+                };
+
+                return (
+                    <div className="max-w-2xl mx-auto px-4 py-6 animate-in">
+                        <Button variant="ghost" onClick={onBack} className="pl-0 mb-4 text-gray-500"><Icon path={ICONS.ArrowLeft} className="w-5 h-5 mr-2" /> Volver</Button>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-6">Comunidad</h2>
+                        {!showForm ? (
+                            <>
+                                <div className="mb-6 bg-emerald-50 p-4 rounded-xl border border-emerald-100 flex justify-between items-center">
+                                    <div><h3 className="font-bold text-emerald-900">¿Tienes dudas?</h3><p className="text-sm text-emerald-700">Crea un tema y comparte.</p></div>
+                                    <Button size="sm" onClick={() => setShowForm(true)}>Crear Tema</Button>
+                                </div>
+                                <div className="space-y-4">
+                                    {posts.length === 0 && <p className="text-center text-gray-500">No hay temas aún. ¡Sé el primero!</p>}
+                                    {posts.map(post => (
+                                        <Card key={post.id} className="hover:shadow-md transition-shadow">
+                                            <h4 className="font-bold text-gray-800 text-lg mb-1">{post.title}</h4>
+                                            <p className="text-sm text-gray-600 mb-2">{post.content}</p>
+                                            <div className="flex justify-between text-xs text-gray-500"><span>Por {post.author}</span><span>{post.comments} comentarios</span></div>
+                                        </Card>
+                                    ))}
+                                </div>
+                            </>
+                        ) : (
+                            <Card>
+                                <h3 className="text-lg font-bold mb-4">Nuevo Tema</h3>
+                                <form onSubmit={sendPost} className="space-y-4">
+                                    <input className="w-full p-3 border rounded-xl" placeholder="Título" value={title} onChange={e=>setTitle(e.target.value)} />
+                                    <textarea className="w-full p-3 border rounded-xl h-32" placeholder="Escribe aquí..." value={content} onChange={e=>setContent(e.target.value)} />
+                                    <div className="flex gap-2"><Button variant="ghost" onClick={()=>setShowForm(false)}>Cancelar</Button><Button type="submit" fullWidth>Publicar</Button></div>
+                                </form>
+                            </Card>
+                        )}
+                    </div>
+                );
+            }
+
+            function FeedbackView({ onBack }) { return <div className="max-w-md mx-auto px-4 py-6 animate-in"><Button variant="ghost" onClick={onBack} className="pl-0 mb-4 text-gray-500"><Icon path={ICONS.ArrowLeft} className="w-5 h-5 mr-2" /> Volver</Button><Card><div className="text-center mb-6"><div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3"><Icon path={ICONS.MessageSquare} className="w-6 h-6 text-blue-600" /></div><h2 className="text-xl font-bold">Buzón de Sugerencias</h2><p className="text-gray-500 text-sm">¿Qué te gustaría agregar?</p></div><textarea className="w-full border rounded-xl p-3 mb-4 h-32 resize-none focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="Escribe tu mensaje aquí..." /><Button fullWidth onClick={() => alert("¡Gracias por tu mensaje!")}><Icon path={ICONS.Send} className="w-4 h-4 mr-2" /> Enviar</Button></Card></div>; }
+
+            function ResourcesView({ onBack }) { return <div className="max-w-2xl mx-auto px-4 py-6 animate-in"><Button variant="ghost" onClick={onBack} className="pl-0 mb-4 text-gray-500"><Icon path={ICONS.ArrowLeft} className="w-5 h-5 mr-2" /> Volver</Button><div className="mb-8"><h2 className="text-2xl font-bold text-gray-900">Plan de Estudio</h2><p className="text-gray-500 text-sm">Sigue este orden lógico.</p></div><div className="space-y-6">{BIBLIOTECA_DATA.map((modulo, idx) => (<div key={idx} className={`border-l-4 ${modulo.borde} pl-4`}><h3 className={`font-bold ${modulo.color} text-lg`}>{modulo.titulo}</h3><div className="grid gap-2 mt-2">{modulo.archivos.map((archivo, i) => (<a key={i} href={archivo.url} target="_blank" rel="noopener noreferrer" className="no-underline"><Card className={`flex items-center gap-3 p-3 hover:${modulo.bgIcon.replace('bg-', 'bg-opacity-50 ')} cursor-pointer transition-colors`}><div className={`bg-red-100 p-2 rounded-lg text-red-600`}><Icon path={ICONS.FileText} className="w-5 h-5" /></div><div className="flex-1"><div className="font-bold text-sm text-gray-800">{archivo.nombre}</div><div className="text-xs text-gray-400">{archivo.desc}</div></div><Icon path={ICONS.Download} className={`w-4 h-4 ${modulo.iconColor}`} /></Card></a>))}</div></div>))}</div></div>; }
+
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
+
