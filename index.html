@@ -54,10 +54,10 @@
     <!-- APP CONTAINER -->
     <div class="w-full max-w-md bg-white h-screen md:h-[90vh] md:rounded-3xl md:shadow-2xl overflow-hidden flex flex-col relative">
 
-        <!-- LOADING OVERLAY (Para cargas de base de datos) -->
+        <!-- LOADING OVERLAY -->
         <div id="loading-overlay" class="absolute inset-0 bg-white z-50 flex flex-col items-center justify-center hidden">
             <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-farmacia-green mb-4"></div>
-            <p class="text-sm text-gray-500 animate-pulse">Sincronizando con la nube...</p>
+            <p class="text-sm text-gray-500 animate-pulse">Sincronizando...</p>
         </div>
 
         <!-- VISTA 1: LANDING -->
@@ -67,7 +67,7 @@
                     <div class="bg-farmacia-green text-white p-1.5 rounded-md"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6v12m-6-6h12"/></svg></div>
                     <span class="font-heading font-bold text-xl tracking-tight text-gray-900">Auxiliar<span class="text-farmacia-green">Pro</span></span>
                 </div>
-                <button onclick="checkAuthAndStart()" class="bg-farmacia-green hover:bg-green-600 text-white font-semibold py-2 px-6 rounded-full transition-all shadow-md text-sm" id="btn-ingresar-header">Ingresar</button>
+                <button onclick="checkAuthAndStart()" class="bg-farmacia-green hover:bg-green-600 text-white font-semibold py-2 px-6 rounded-full transition-all shadow-md text-sm">Ingresar</button>
             </header>
 
             <main class="flex-1 flex flex-col justify-center items-center text-center px-4 mt-8 mb-12">
@@ -76,12 +76,12 @@
                 </div>
                 <h1 class="font-heading text-4xl font-extrabold text-gray-900 leading-tight mb-6">Prepárate para tu examen de <br><span class="text-farmacia-green">Auxiliar de Farmacia</span></h1>
                 <p class="text-gray-500 text-lg max-w-xs mx-auto mb-10 leading-relaxed">
-                    Identifícate, guarda tu progreso en la nube y desbloquea la Biblioteca Técnica.
+                    Identifícate, guarda tu progreso y desbloquea la Biblioteca Técnica.
                 </p>
                 
                 <div class="bg-blue-50 border border-blue-100 rounded-lg p-3 mb-8 max-w-xs text-xs text-blue-700 flex items-start gap-2 text-left">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 shrink-0"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
-                    <span><strong>Nuevo:</strong> Registro de Estudiantes activo. Tu progreso ahora es seguro y privado.</span>
+                    <span><strong>Registro Activo:</strong> Tu progreso se guardará automáticamente al avanzar.</span>
                 </div>
 
                 <button onclick="checkAuthAndStart()" class="group bg-farmacia-dark hover:bg-slate-900 text-white text-lg font-semibold py-4 px-8 rounded-lg shadow-xl hover:shadow-2xl transition-all flex items-center gap-3">
@@ -104,6 +104,11 @@
             </header>
 
             <main class="flex-1 p-6 w-full pb-20 overflow-y-auto">
+                <!-- Estado de conexión -->
+                <div id="connection-status" class="hidden mb-4 bg-yellow-50 text-yellow-700 text-xs px-3 py-2 rounded border border-yellow-200 text-center">
+                    Modo Local: El progreso se guarda solo en este dispositivo.
+                </div>
+
                 <div class="bg-white rounded-2xl p-6 shadow-md border-t-4 border-farmacia-green mb-8 text-center relative overflow-hidden">
                     <p class="text-gray-500 text-sm font-semibold uppercase tracking-wider mb-2">Tu Camino al Éxito</p>
                     <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2"><div class="bg-farmacia-green h-2.5 rounded-full transition-all duration-1000" id="progress-bar" style="width: 5%"></div></div>
@@ -120,7 +125,7 @@
 
     </div>
 
-    <!-- MODAL DE REGISTRO / AUTENTICACIÓN -->
+    <!-- MODAL DE REGISTRO -->
     <div id="auth-modal" class="absolute inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden p-6 animate-bounce-in">
             <div class="text-center mb-6">
@@ -147,7 +152,7 @@
         </div>
     </div>
 
-    <!-- MODAL QUIZ -->
+    <!-- MODAL QUIZ (DENTRO DEL CONTENEDOR) -->
     <div id="quiz-modal" class="absolute inset-0 z-50 bg-white md:rounded-3xl hidden flex-col">
         <div class="bg-farmacia-dark p-6 text-white flex justify-between items-center shrink-0">
             <div>
@@ -176,18 +181,12 @@
         </div>
     </div>
 
-    <!-- FIREBASE & LOGIC -->
+    <!-- SCRIPT PRINCIPAL: BLINDADO PARA VERCEL/GITHUB -->
     <script type="module">
+        // Importamos Firebase, pero usaremos try-catch para no romper si falla
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // CONFIGURACIÓN (Inyectada por el entorno)
-        const firebaseConfig = JSON.parse(__firebase_config);
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
 
         // ESTADO GLOBAL
         let appState = { 
@@ -196,17 +195,54 @@
             userName: "Colega",
             userEmail: ""
         };
+        
         let currentUser = null;
+        let isCloudActive = false;
+        let db, auth;
 
-        // --- SISTEMA DE AUTENTICACIÓN ---
+        // INICIALIZACIÓN ROBUSTA (Corrección del error)
+        try {
+            // Intentamos obtener config del entorno (Solo funciona en Preview IA)
+            const configStr = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
+            
+            if (configStr) {
+                const firebaseConfig = JSON.parse(configStr);
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+                
+                // Escuchar cambios de sesión reales
+                onAuthStateChanged(auth, (user) => {
+                    currentUser = user;
+                    if (user) {
+                        isCloudActive = true;
+                        loadDataFromCloud(user.uid);
+                    }
+                });
+            } else {
+                console.warn("Modo Vercel/Local detectado: Usando almacenamiento local.");
+                throw new Error("Sin config Firebase");
+            }
+        } catch (e) {
+            // FALLBACK A MODO LOCAL (Para que funcione el botón siempre)
+            isCloudActive = false;
+            // Simulamos usuario si ya se registró antes localmente
+            const localUser = localStorage.getItem('auxiliarProLocalUser');
+            if(localUser) {
+                appState = JSON.parse(localUser);
+                currentUser = { uid: 'local-user' };
+            }
+        }
+
+        // --- SISTEMA DE NAVEGACIÓN Y AUTH ---
         
         window.checkAuthAndStart = async () => {
-            // Si ya hay usuario autenticado, vamos directo
+            // Si ya hay usuario (real o simulado), entramos
             if (currentUser) {
                 navToDashboard();
                 return;
             }
-            // Si no, mostramos el modal de registro
+            // Si no, mostramos registro
             document.getElementById('auth-modal').classList.remove('hidden');
             document.getElementById('auth-modal').classList.add('flex');
         };
@@ -218,114 +254,97 @@
             const btnText = document.getElementById('btn-auth-text');
             
             if(!name) return alert("Por favor ingresa tu nombre");
+            btnText.innerText = "Registrando...";
 
-            try {
-                btnText.innerText = "Registrando...";
-                // 1. Autenticación Anónima (Segura y rápida)
-                const userCredential = await signInAnonymously(auth);
-                const user = userCredential.user;
-                
-                // 2. Guardar perfil inicial en Firestore
-                // Usamos merge: true para no borrar progreso si ya existiera (aunque sea anónimo)
-                await setDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'data', 'profile'), {
-                    name: name,
-                    email: email,
-                    joinedAt: new Date().toISOString()
-                }, { merge: true });
-
-                // 3. Actualizar estado local
-                appState.userName = name;
-                appState.userEmail = email;
-                
-                // 4. Cerrar modal y entrar
-                document.getElementById('auth-modal').classList.add('hidden');
-                document.getElementById('auth-modal').classList.remove('flex');
-                btnText.innerText = "Comenzar Entrenamiento";
-                navToDashboard(); // Esto cargará los datos
-
-            } catch (error) {
-                console.error("Error registro:", error);
-                alert("Hubo un error al registrar. Intenta nuevamente.");
-                btnText.innerText = "Comenzar Entrenamiento";
+            if (isCloudActive && auth) {
+                // Registro Real en Nube
+                try {
+                    const userCredential = await signInAnonymously(auth);
+                    const user = userCredential.user;
+                    await setDoc(doc(db, 'artifacts', typeof __app_id !== 'undefined' ? __app_id : 'default', 'users', user.uid, 'data', 'profile'), {
+                        name: name, email: email, joinedAt: new Date().toISOString()
+                    }, { merge: true });
+                    appState.userName = name;
+                    appState.userEmail = email;
+                } catch (error) {
+                    console.error("Error nube, usando local", error);
+                    registerLocal(name, email);
+                }
+            } else {
+                // Registro Local (Fallback)
+                registerLocal(name, email);
             }
+
+            // Finalizar registro
+            document.getElementById('auth-modal').classList.add('hidden');
+            document.getElementById('auth-modal').classList.remove('flex');
+            btnText.innerText = "Comenzar Entrenamiento";
+            navToDashboard();
         };
 
-        // Escuchar cambios de sesión (Persistencia)
-        onAuthStateChanged(auth, (user) => {
-            currentUser = user;
-            if (user) {
-                // Si el usuario vuelve y ya estaba logueado, cargamos sus datos silenciosamente
-                loadDataFromCloud(user.uid);
-                // Cambiar texto botón principal si ya está listo
-                const mainBtn = document.querySelector('#view-landing button');
-                if(mainBtn) mainBtn.innerHTML = `Continuar como ${appState.userName || 'Estudiante'} ->`;
-            }
-        });
+        function registerLocal(name, email) {
+            appState.userName = name;
+            appState.userEmail = email;
+            currentUser = { uid: 'local-user' };
+            saveDataLocally();
+        }
 
-        // --- GESTIÓN DE DATOS EN LA NUBE ---
+        // --- GESTIÓN DE DATOS ---
 
         async function loadDataFromCloud(uid) {
+            if(!isCloudActive) return; // Ya cargamos de localStorage al inicio si es local
             document.getElementById('loading-overlay').classList.remove('hidden');
             try {
-                // 1. Cargar Perfil
+                const appId = typeof __app_id !== 'undefined' ? __app_id : 'default';
                 const profileSnap = await getDoc(doc(db, 'artifacts', appId, 'users', uid, 'data', 'profile'));
                 if (profileSnap.exists()) {
-                    const data = profileSnap.data();
-                    appState.userName = data.name || "Colega";
-                    appState.userEmail = data.email || "";
+                    appState.userName = profileSnap.data().name || "Colega";
                 }
-
-                // 2. Cargar Progreso
                 const progressSnap = await getDoc(doc(db, 'artifacts', appId, 'users', uid, 'data', 'progress'));
                 if (progressSnap.exists()) {
                     const data = progressSnap.data();
                     appState.currentLevel = data.currentLevel || 1;
                     appState.levelAttempts = data.levelAttempts || { 1: 0, 2: 0, 3: 0, 4: 0 };
                 }
-                
-                // Actualizar UI
-                document.getElementById('user-welcome').innerText = `Hola, ${appState.userName}`;
-                
+                updateUI();
             } catch (e) {
-                console.error("Error cargando datos:", e);
+                console.error(e);
             } finally {
                 document.getElementById('loading-overlay').classList.add('hidden');
             }
         }
 
         async function saveDataToCloud() {
-            if (!currentUser) return;
-            try {
-                await setDoc(doc(db, 'artifacts', appId, 'users', currentUser.uid, 'data', 'progress'), {
-                    currentLevel: appState.currentLevel,
-                    levelAttempts: appState.levelAttempts,
-                    lastUpdate: new Date().toISOString()
-                });
-            } catch (e) {
-                console.error("Error guardando:", e);
+            if (isCloudActive && currentUser && db) {
+                try {
+                    await setDoc(doc(db, 'artifacts', typeof __app_id !== 'undefined' ? __app_id : 'default', 'users', currentUser.uid, 'data', 'progress'), {
+                        currentLevel: appState.currentLevel,
+                        levelAttempts: appState.levelAttempts,
+                        lastUpdate: new Date().toISOString()
+                    });
+                } catch(e) { console.error(e); }
+            } else {
+                saveDataLocally();
             }
         }
 
-        // --- LÓGICA DE LA APP (Igual que antes, pero llama a saveDataToCloud) ---
-        
-        // (Datos de preguntas se mantienen idénticos)
-        const metalConfig = { "Bronce": "bg-gradient-to-br from-amber-600 to-amber-800 text-white shadow-amber-200 border-amber-600", "Plata": "bg-gradient-to-br from-gray-400 to-slate-500 text-white shadow-gray-300 border-gray-400", "Oro": "bg-gradient-to-br from-yellow-400 to-yellow-600 text-white shadow-yellow-200 border-yellow-500", "Platino": "bg-gradient-to-br from-cyan-400 to-blue-600 text-white shadow-blue-200 border-blue-400" };
-        const levelsData = [
-            { id: 1, title: "Conceptos Básicos", desc: "Nivel de Entrada. Preguntas sencillas.", metalName: "Bronce", questions: [ { q: "¿Dónde se deben comprar los medicamentos?", options: ["Feria", "Farmacias establecidas", "Redes Sociales", "Calle"], correct: 1 }, { q: "Rango temperatura refrigerador farmacia:", options: ["2°C a 8°C", "Bajo cero", "Ambiente", "Sobre 20°C"], correct: 0 }, { q: "¿Quién dirige técnicamente la farmacia?", options: ["Contador", "Químico Farmacéutico", "Bodeguero", "Cajero"], correct: 1 }, { q: "Documento para vender antibióticos:", options: ["Carnet", "Receta Médica", "Nada", "Boleta luz"], correct: 1 }, { q: "¿Quién fiscaliza las farmacias?", options: ["ISP", "Carabineros", "Bomberos", "Municipalidad"], correct: 0 }, { q: "Medicamento Venta Directa, ¿necesita receta?", options: ["Sí", "No", "A veces", "Solo niños"], correct: 1 }, { q: "¿Qué es un genérico?", options: ["Falso", "Sin marca (DCI)", "Vencido", "Natural"], correct: 1 }, { q: "¿Dónde se guardan los controlados?", options: ["Mostrador", "Bajo llave", "Vitrina", "Suelo"], correct: 1 }, { q: "¿Qué revisar al entregar?", options: ["Caja bonita", "Vencimiento y nombre", "Precio", "Color"], correct: 1 }, { q: "¿Quién ayuda al QF?", options: ["Guardia", "Auxiliar de Farmacia", "Cliente", "Nadie"], correct: 1 } ] },
-            { id: 2, title: "Legislación (Hardcore)", desc: "Estudia el PDF 'Decreto 466'.", metalName: "Plata", questions: [ { q: "¿Decreto que regula Psicotrópicos?", options: ["DS 466", "DS 404", "DS 405", "DS 594"], correct: 1 }, { q: "Validez Receta Cheque:", options: ["60 días corridos", "30 días corridos", "30 días hábiles", "Indefinida"], correct: 1 }, { q: "Libro NO obligatorio hoy:", options: ["Reclamos", "Psicotrópicos", "Sugerencias", "Recetas"], correct: 2 }, { q: "Validez receta Clonazepam (Lista IV):", options: ["30 días", "60 días", "1 año", "Hasta fin de caja"], correct: 0 }, { q: "Sanción venta antibióticos sin receta:", options: ["Multa/Sumario", "Amonestación", "Cierre", "Nada"], correct: 0 }, { q: "Venta online medicamentos:", options: ["Prohibida", "Solo venta directa", "Permitida con condiciones", "Libre"], correct: 2 }, { q: "¿Qué es la 'Canela'?", options: ["Saborizante", "Incentivo ilegal por marcas", "Descuento", "Hierba"], correct: 1 }, { q: "Guardar recetas cheque por:", options: ["6 meses", "1 año", "2 años", "5 años"], correct: 1 }, { q: "Lista Psicotrópicos con Receta Cheque:", options: ["Lista II y III", "Lista I", "Lista IV", "Todas"], correct: 1 }, { q: "¿Se puede fraccionar (blister suelto)?", options: ["Sí", "Solo farmacias autorizadas", "No", "Si falta dinero"], correct: 1 } ] },
-            { id: 3, title: "Farmacología y Cálculo", desc: "Usa la guía de Posología.", metalName: "Oro", questions: [ { q: "POSOLOGÍA: 50mg/kg/día, 3 tomas. Niño 15kg. Jarabe 500mg/5ml. ¿Ml/toma?", options: ["2.5 ml", "5 ml", "7.5 ml", "10 ml"], correct: 0 }, { q: "POSOLOGÍA: 1 comp c/8h x 7 días. Caja 20. ¿Cajas?", options: ["1", "2", "3", "Justo"], correct: 1 }, { q: "Interacción peligrosa con Warfarina:", options: ["Paracetamol", "Aspirina/AINEs", "Vitamina C", "Loratadina"], correct: 1 }, { q: "POSOLOGÍA: 15mg/kg/dosis. Niño 10kg. Jarabe 120mg/5ml. ¿Ml?", options: ["4 ml", "5 ml", "6.25 ml", "10 ml"], correct: 2 }, { q: "Acción Omeprazol:", options: ["Antiácido", "Inhibidor Bomba Protones", "Protector", "Antagonista H2"], correct: 1 }, { q: "NO es AINE:", options: ["Ketorolaco", "Naproxeno", "Celecoxib", "Paracetamol"], correct: 3 }, { q: "POSOLOGÍA: 1g c/12h. Tab 500mg. ¿Diarias?", options: ["2", "4", "6", "8"], correct: 1 }, { q: "POSOLOGÍA: 120ml. 5ml c/8h. ¿Días?", options: ["4", "6", "8", "10"], correct: 2 }, { q: "Diferencia Losartán/Enalapril:", options: ["ARA II vs IECA", "Iguales", "Diurético", "Betabloqueador"], correct: 0 }, { q: "POSOLOGÍA: 0.5 tab de 10mg. ¿Mg?", options: ["10", "5", "2.5", "20"], correct: 1 } ] },
-            { id: 4, title: "Simulacro Master", desc: "Examen Final Integrado.", metalName: "Platino", questions: [ { q: "POSOLOGÍA UCI (Trampa):", options: ["Saltar", "Es cálculo clínico, no farmacia comunitaria", "700", "7"], correct: 1 }, { q: "Receta Alprazolam fecha 35 días. ¿Vende?", options: ["Sí", "No (caducó 30 días)", "Sí con saldo", "Depende"], correct: 1 }, { q: "POSOLOGÍA: 2 al día x 10 días. Caja 14. ¿Cajas?", options: ["1", "2", "3", "4"], correct: 1 }, { q: "Medicamento Lábil a la luz:", options: ["Fotosensible", "Termolábil", "Hidro", "Vence"], correct: 0 }, { q: "Receta Cheque se usa para:", options: ["Lista IV", "Lista II y III", "Antibióticos", "Caros"], correct: 1 }, { q: "POSOLOGÍA: 1g c/8h. Vial 1g. ¿Viales/24h?", options: ["1", "2", "3", "4"], correct: 2 }, { q: "Acción Salbutamol:", options: ["Agonista Beta-2", "Corticoide", "Anticolinérgico", "Mucolítico"], correct: 0 }, { q: "POSOLOGÍA: Dosis 45mg. Jarabe 15mg/5ml. ¿Ml?", options: ["10", "15", "20", "5"], correct: 1 }, { q: "Vigencia Receta Magistral:", options: ["30", "40", "60", "Indef"], correct: 1 }, { q: "Sildenafil + Nitratos:", options: ["Nada", "Hipotensión fatal", "Hiper", "Dolor"], correct: 1 } ] }
-        ];
+        function saveDataLocally() {
+            localStorage.setItem('auxiliarProLocalUser', JSON.stringify(appState));
+        }
 
-        // Navegación UI
+        function updateUI() {
+            document.getElementById('user-welcome').innerText = `Hola, ${appState.userName}`;
+            if(!isCloudActive) {
+                document.getElementById('connection-status').classList.remove('hidden');
+            }
+        }
+
+        // --- NAVEGACIÓN Y RENDER ---
         const viewLanding = document.getElementById('view-landing');
         const viewDashboard = document.getElementById('view-dashboard');
 
         window.navToDashboard = () => {
-            // Asegurar que si recargamos y hay user, cargamos datos
-            if(currentUser && appState.userName === "Colega") {
-               loadDataFromCloud(currentUser.uid);
-            }
+            updateUI();
             viewLanding.classList.add('hidden');
             viewDashboard.classList.remove('hidden');
             viewDashboard.classList.add('fade-in');
@@ -338,7 +357,16 @@
             viewLanding.classList.add('fade-in');
         };
 
-        // Render Dashboard
+        // --- DATA PREGUNTAS ---
+        const metalConfig = { "Bronce": "bg-gradient-to-br from-amber-600 to-amber-800 text-white shadow-amber-200 border-amber-600", "Plata": "bg-gradient-to-br from-gray-400 to-slate-500 text-white shadow-gray-300 border-gray-400", "Oro": "bg-gradient-to-br from-yellow-400 to-yellow-600 text-white shadow-yellow-200 border-yellow-500", "Platino": "bg-gradient-to-br from-cyan-400 to-blue-600 text-white shadow-blue-200 border-blue-400" };
+        const levelsData = [
+            { id: 1, title: "Conceptos Básicos", desc: "Nivel de Entrada. Preguntas sencillas.", metalName: "Bronce", questions: [ { q: "¿Dónde se deben comprar los medicamentos?", options: ["Feria", "Farmacias establecidas", "Redes Sociales", "Calle"], correct: 1 }, { q: "Rango temperatura refrigerador farmacia:", options: ["2°C a 8°C", "Bajo cero", "Ambiente", "Sobre 20°C"], correct: 0 }, { q: "¿Quién dirige técnicamente la farmacia?", options: ["Contador", "Químico Farmacéutico", "Bodeguero", "Cajero"], correct: 1 }, { q: "Documento para vender antibióticos:", options: ["Carnet", "Receta Médica", "Nada", "Boleta luz"], correct: 1 }, { q: "¿Quién fiscaliza las farmacias?", options: ["ISP", "Carabineros", "Bomberos", "Municipalidad"], correct: 0 }, { q: "Medicamento Venta Directa, ¿necesita receta?", options: ["Sí", "No", "A veces", "Solo niños"], correct: 1 }, { q: "¿Qué es un genérico?", options: ["Falso", "Sin marca (DCI)", "Vencido", "Natural"], correct: 1 }, { q: "¿Dónde se guardan los controlados?", options: ["Mostrador", "Bajo llave", "Vitrina", "Suelo"], correct: 1 }, { q: "¿Qué revisar al entregar?", options: ["Caja bonita", "Vencimiento y nombre", "Precio", "Color"], correct: 1 }, { q: "¿Quién ayuda al QF?", options: ["Guardia", "Auxiliar de Farmacia", "Cliente", "Nadie"], correct: 1 } ] },
+            { id: 2, title: "Legislación (Hardcore)", desc: "Estudia el PDF 'Decreto 466'.", metalName: "Plata", questions: [ { q: "¿Decreto que regula Psicotrópicos?", options: ["DS 466", "DS 404", "DS 405", "DS 594"], correct: 1 }, { q: "Validez Receta Cheque:", options: ["60 días corridos", "30 días corridos", "30 días hábiles", "Indefinida"], correct: 1 }, { q: "Libro NO obligatorio hoy:", options: ["Reclamos", "Psicotrópicos", "Sugerencias", "Recetas"], correct: 2 }, { q: "Validez receta Clonazepam (Lista IV):", options: ["30 días", "60 días", "1 año", "Hasta fin de caja"], correct: 0 }, { q: "Sanción venta antibióticos sin receta:", options: ["Multa/Sumario", "Amonestación", "Cierre", "Nada"], correct: 0 }, { q: "Venta online medicamentos:", options: ["Prohibida", "Solo venta directa", "Permitida con condiciones", "Libre"], correct: 2 }, { q: "¿Qué es la 'Canela'?", options: ["Saborizante", "Incentivo ilegal por marcas", "Descuento", "Hierba"], correct: 1 }, { q: "Guardar recetas cheque por:", options: ["6 meses", "1 año", "2 años", "5 años"], correct: 1 }, { q: "Lista Psicotrópicos con Receta Cheque:", options: ["Lista II y III", "Lista I", "Lista IV", "Todas"], correct: 1 }, { q: "¿Se puede fraccionar (blister suelto)?", options: ["Sí", "Solo farmacias autorizadas", "No", "Si falta dinero"], correct: 1 } ] },
+            { id: 3, title: "Farmacología y Cálculo", desc: "Usa la guía de Posología.", metalName: "Oro", questions: [ { q: "POSOLOGÍA: 50mg/kg/día, 3 tomas. Niño 15kg. Jarabe 500mg/5ml. ¿Ml/toma?", options: ["2.5 ml", "5 ml", "7.5 ml", "10 ml"], correct: 0 }, { q: "POSOLOGÍA: 1 comp c/8h x 7 días. Caja 20. ¿Cajas?", options: ["1", "2", "3", "Justo"], correct: 1 }, { q: "Interacción peligrosa con Warfarina:", options: ["Paracetamol", "Aspirina/AINEs", "Vitamina C", "Loratadina"], correct: 1 }, { q: "POSOLOGÍA: 15mg/kg/dosis. Niño 10kg. Jarabe 120mg/5ml. ¿Ml?", options: ["4 ml", "5 ml", "6.25 ml", "10 ml"], correct: 2 }, { q: "Acción Omeprazol:", options: ["Antiácido", "Inhibidor Bomba Protones", "Protector", "Antagonista H2"], correct: 1 }, { q: "NO es AINE:", options: ["Ketorolaco", "Naproxeno", "Celecoxib", "Paracetamol"], correct: 3 }, { q: "POSOLOGÍA: 1g c/12h. Tab 500mg. ¿Diarias?", options: ["2", "4", "6", "8"], correct: 1 }, { q: "POSOLOGÍA: 120ml. 5ml c/8h. ¿Días?", options: ["4", "6", "8", "10"], correct: 2 }, { q: "Diferencia Losartán/Enalapril:", options: ["ARA II vs IECA", "Iguales", "Diurético", "Betabloqueador"], correct: 0 }, { q: "POSOLOGÍA: 0.5 tab de 10mg. ¿Mg?", options: ["10", "5", "2.5", "20"], correct: 1 } ] },
+            { id: 4, title: "Simulacro Master", desc: "Examen Final Integrado.", metalName: "Platino", questions: [ { q: "POSOLOGÍA UCI (Trampa):", options: ["Saltar", "Es cálculo clínico, no farmacia comunitaria", "700", "7"], correct: 1 }, { q: "Receta Alprazolam fecha 35 días. ¿Vende?", options: ["Sí", "No (caducó 30 días)", "Sí con saldo", "Depende"], correct: 1 }, { q: "POSOLOGÍA: 2 al día x 10 días. Caja 14. ¿Cajas?", options: ["1", "2", "3", "4"], correct: 1 }, { q: "Medicamento Lábil a la luz:", options: ["Fotosensible", "Termolábil", "Hidro", "Vence"], correct: 0 }, { q: "Receta Cheque se usa para:", options: ["Lista IV", "Lista II y III", "Antibióticos", "Caros"], correct: 1 }, { q: "POSOLOGÍA: 1g c/8h. Vial 1g. ¿Viales/24h?", options: ["1", "2", "3", "4"], correct: 2 }, { q: "Acción Salbutamol:", options: ["Agonista Beta-2", "Corticoide", "Anticolinérgico", "Mucolítico"], correct: 0 }, { q: "POSOLOGÍA: Dosis 45mg. Jarabe 15mg/5ml. ¿Ml?", options: ["10", "15", "20", "5"], correct: 1 }, { q: "Vigencia Receta Magistral:", options: ["30", "40", "60", "Indef"], correct: 1 }, { q: "Sildenafil + Nitratos:", options: ["Nada", "Hipotensión fatal", "Hiper", "Dolor"], correct: 1 } ] }
+        ];
+
+        // --- DASHBOARD RENDER ---
         function renderDashboard() {
             const container = document.getElementById('levels-container');
             const libraryContainer = document.getElementById('library-section');
@@ -369,11 +397,12 @@
                 const metalBadge = !isLocked ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider mb-1 inline-block border bg-gray-50 text-gray-600 border-gray-200">${level.metalName}</span>` : '';
                 let statusRight = isCompleted ? `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-farmacia-green"><polyline points="20 6 9 17 4 12"></polyline></svg>` : (isFailedAndLocked ? `<span class="text-xs font-bold text-red-500">Reprobado</span>` : (!isLocked ? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-farmacia-green"><polyline points="9 18 15 12 9 6"></polyline></svg>` : `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-300"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`));
                 let attemptText = (!isLocked && !isCompleted && level.id > 1) ? `<span class="text-[10px] text-gray-400 block mt-1">Intentos: ${attemptsUsed}/${maxAttempts}</span>` : "";
-                let clickAction = (!isLocked && !isFailedAndLocked) ? `startLevel(${level.id})` : (isFailedAndLocked ? "alert('Has agotado tus intentos. Debes reiniciar.')" : "");
+                let clickAction = (!isLocked && !isFailedAndLocked) ? `startLevel(${level.id})` : (isFailedAndLocked ? "alert('Has agotado tus intentos.')" : "");
 
                 container.innerHTML += `<div class="${cardClasses}" onclick="${clickAction}"><div class="flex items-center gap-4 relative z-10"><div class="${iconClasses}">${isCompleted ? '✓' : level.id}</div><div>${metalBadge}<h3 class="font-bold text-gray-800 leading-tight">${level.title}</h3><p class="text-xs text-gray-500 mt-0.5">${level.desc}</p>${attemptText}</div></div><div class="z-10 flex flex-col items-end">${statusRight}</div></div>`;
             });
 
+            // BIBLIOTECA - Links Reales para Vercel
             if (isLibraryUnlocked) {
                 libraryContainer.innerHTML = `<div class="library-unlocked bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200 shadow-md"><div class="flex items-center gap-3 mb-4"><div class="bg-blue-600 text-white p-2 rounded-lg shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div><div><h4 class="font-bold text-gray-900 text-lg">Biblioteca Técnica</h4><p class="text-xs text-blue-700 font-medium">¡Material desbloqueado! Listo para descarga.</p></div></div><div class="space-y-3"><a href="./decreto_466.pdf" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">📜 Decreto 466 (PDF)</span><span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">Descargar</span></a><a href="./guia_posologia.pdf" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">💊 Guía de Posología (PDF)</span><span class="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded">Descargar</span></a><a href="./modelo_examen.pdf" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">📝 Modelo Examen (PDF)</span><span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Descargar</span></a></div></div>`;
             } else {
@@ -381,7 +410,7 @@
             }
         }
 
-        // --- LÓGICA QUIZ (Sin cambios funcionales, solo UI integrada) ---
+        // --- LÓGICA QUIZ ---
         let activeLevelId = 0, currentQuizQuestions = [], userAnswers = [], currentQuestionIndex = 0, isReviewMode = false;
 
         window.startLevel = (levelId) => {
@@ -455,7 +484,7 @@
             appState.levelAttempts[activeLevelId]++;
             const passed = score >= Math.ceil(currentQuizQuestions.length * 0.7);
             if (passed && activeLevelId === appState.currentLevel) appState.currentLevel++;
-            saveDataToCloud(); // <-- GUARDADO EN NUBE AQUÍ
+            saveDataToCloud();
             showResultSummary(score, passed);
         }
 
