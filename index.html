@@ -5,23 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Auxiliar Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>body { font-family: 'Inter', sans-serif; }</style>
+    <script>
+        window.onerror = function(msg, url, line) {
+            document.getElementById('root').innerHTML = '<div style="padding:20px; color:red; text-align:center;"><h2>⚠️ Ocurrió un error</h2><p>'+msg+'</p><p>Línea: '+line+'</p><button onclick="location.reload()" style="margin-top:20px; padding:10px; background:#ccc;">Recargar Página</button></div>';
+        };
+    </script>
 </head>
 <body class="bg-slate-50 text-slate-900">
     <div id="root">Cargando sistema...</div>
 
     <script type="text/babel" data-type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const { useState, useEffect } = React;
 
-        // --- CREDENCIALES ---
+        // --- TUS CREDENCIALES DE FIREBASE ---
         const firebaseConfig = {
           apiKey: "AIzaSyDNhuSBBhmmQSV0BHC8MOtLKgAUpvtfWfE",
           authDomain: "auxiliar-pro.firebaseapp.com",
@@ -36,37 +41,50 @@
         const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
 
-        // --- ICONOS SVG (Estáticos para evitar errores) ---
-        const Icons = {
-            Brain: () => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-12 h-12"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z" /><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z" /></svg>,
-            Google: () => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-5 h-5"><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M2.18 14.1c-.19-.57-.29-1.18-.29-1.8s.1-1.23.29-1.8V7.66H.35C-.4 9.13-.81 10.76-.81 12.3c0 1.54.41 3.17 1.16 4.64l1.83-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/><path d="M24 12.3c0-.86-.08-1.68-.21-2.47H12v4.68h6.72c-.29 1.56-1.16 2.88-2.47 3.76v3.13h4.01c2.34-2.16 3.69-5.34 3.69-9.1z" fill="#4285F4"/></svg>,
-            Shield: () => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>,
-            // ... Resto de iconos simplificados ...
-            Simple: ({ d, className="w-6 h-6" }) => <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d={d} /></svg>
-        };
-        
-        const PATHS = {
-            user: "M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2 M12 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8z",
-            lock: "M7 11V7a5 5 0 0 1 10 0v4 M3 11h18v11H3z",
-            arrowRight: "M5 12h14 M12 5l7 7-7 7",
-            arrowLeft: "M19 12H5 M12 19l-7-7 7-7",
-            check: "M22 11.08V12a10 10 0 1 1-5.93-9.14 M22 4L12 14.01l-3-3",
-            book: "M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z",
-            msg: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z",
-            logout: "M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4 M16 17l5-12-5 7 M21 12H9",
-            file: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z M14 2v6h6",
-            star: "M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-5.82 3.25L7 14.14 2 9.27l6.91-1.01L12 2z",
-            award: "M12 8a6 6 0 0 0-6 6c0 4.41 4 8 6 8s6-3.59 6-8a6 6 0 0 0-6-6z M15.41 12.59L12 16l-3.41-3.41 M12 2v4"
+        // --- ICONOS ---
+        const ICONS = {
+            // CEREBRO ORIGINAL
+            Brain: <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z" />,
+            Shield: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />,
+            Star: <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />,
+            User: <React.Fragment><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></React.Fragment>,
+            Layers: <React.Fragment><polygon points="12 2 2 7 12 12 22 7 12 2" /><polyline points="2 17 12 22 22 17" /><polyline points="2 12 12 17 22 12" /></React.Fragment>,
+            BookOpen: <React.Fragment><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" /></React.Fragment>,
+            Heart: <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />,
+            Mail: <React.Fragment><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></React.Fragment>,
+            Lock: <React.Fragment><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></React.Fragment>,
+            ChevronRight: <path d="m9 18 6-6-6-6" />,
+            CheckCircle: <React.Fragment><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></React.Fragment>,
+            ArrowLeft: <React.Fragment><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></React.Fragment>,
+            LogOut: <React.Fragment><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" x2="9" y1="12" y2="12" /></React.Fragment>,
+            MessageSquare: <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />,
+            Users: <React.Fragment><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></React.Fragment>,
+            AlertTriangle: <React.Fragment><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" /><line x1="12" x2="12" y1="9" y2="13" /><line x1="12" x2="12.01" y1="17" y2="17" /></React.Fragment>,
+            Download: <React.Fragment><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" x2="12" y1="15" y2="3" /></React.Fragment>,
+            Unlock: <React.Fragment><rect width="18" height="11" x="3" y="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 9.9-1" /></React.Fragment>,
+            FileText: <React.Fragment><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" /><polyline points="14 2 14 8 20 8" /></React.Fragment>,
+            Newspaper: <React.Fragment><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2" /><path d="M18 14h-8" /><path d="M15 18h-5" /><path d="M10 6h8v4h-8V6Z" /></React.Fragment>,
+            Sparkles: <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" />,
+            MapPin: <React.Fragment><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" /></React.Fragment>,
+            Info: <React.Fragment><circle cx="12" cy="12" r="10" /><line x1="12" x2="12" y1="16" y2="12" /><line x1="12" x2="12.01" y1="8" y2="8" /></React.Fragment>,
+            X: <React.Fragment><line x1="18" x2="6" y1="6" y2="18" /><line x1="6" x2="18" y1="6" y2="18" /></React.Fragment>,
+            XCircle: <React.Fragment><circle cx="12" cy="12" r="10" /><line x1="15" x2="9" y1="9" y2="15" /><line x1="9" x2="15" y1="9" y2="15" /></React.Fragment>,
+            Award: <React.Fragment><circle cx="12" cy="8" r="7" /><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" /></React.Fragment>,
+            Help: <React.Fragment><circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /><line x1="12" x2="12.01" y1="17" y2="17" /></React.Fragment>,
+            ShieldCheck: <React.Fragment><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><path d="m9 12 2 2 4-4" /></React.Fragment>,
+            Eye: <React.Fragment><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" /><circle cx="12" cy="12" r="3" /></React.Fragment>,
+            Google: <React.Fragment><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M2.18 14.1c-.19-.57-.29-1.18-.29-1.8s.1-1.23.29-1.8V7.66H.35C-.4 9.13-.81 10.76-.81 12.3c0 1.54.41 3.17 1.16 4.64l1.83-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/><path d="M24 12.3c0-.86-.08-1.68-.21-2.47H12v4.68h6.72c-.29 1.56-1.16 2.88-2.47 3.76v3.13h4.01c2.34-2.16 3.69-5.34 3.69-9.1z" fill="#4285F4"/></React.Fragment>
         };
 
-        // --- BIBLIOTECA DE ARCHIVOS ---
-        const BIBLIOTECA_DATA = [
-            { titulo: "Módulo 1: La Base Legal", color: "text-emerald-800", borde: "border-emerald-500", iconColor: "text-emerald-600", bgIcon: "bg-emerald-100", archivos: [{ nombre: "Decreto Supremo 466", desc: "PDF • Lectura Obligatoria", url: "https://drive.google.com/file/d/1x1vDcOIz1r1PmN1F7InUcZTDRJVBLmIo/view?usp=sharing" }, { nombre: "Listado de Controlados", desc: "PDF • Referencia", url: "#" }] },
-            { titulo: "Módulo 2: Gestión y Almacenamiento", color: "text-blue-800", borde: "border-blue-500", iconColor: "text-blue-600", bgIcon: "bg-blue-100", archivos: [{ nombre: "Manual Buenas Prácticas", desc: "PDF • Procedimientos", url: "#" }] },
-            { titulo: "Módulo 3: Atención y Farmacología", color: "text-fuchsia-800", borde: "border-fuchsia-500", iconColor: "text-fuchsia-600", bgIcon: "bg-fuchsia-100", archivos: [{ nombre: "Guía de Bioequivalencia", desc: "PDF • Minsal", url: "#" }, { nombre: "Psicofármacos", desc: "PDF • Material de Estudio", url: "https://drive.google.com/file/d/1AFwbouD6gy-rTSXw6AEfiBgwDyxRnoGq/view?usp=sharing" }] }
-        ];
+        const Icon = ({ path, className = "w-6 h-6" }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                {path}
+            </svg>
+        );
 
         // --- BANCO DE PREGUNTAS ---
+        
+        // NIVEL 1: 10 Preguntas
         const DB_1A = [
             { id: 1, cat: "Legislación", pregunta: "¿Qué decreto aprueba el reglamento de farmacias?", opciones: ["D.S. 466", "D.S. 594", "D.S. 707"], correcta: 0, explicacion: "El D.S. 466 es la normativa base." },
             { id: 2, cat: "Almacenamiento", pregunta: "Rango T° Refrigerador:", opciones: ["0-4°C", "2-8°C", "8-15°C"], correcta: 1, explicacion: "Cadena de frío estricta: 2°C a 8°C." },
@@ -108,22 +126,24 @@
             return "Evaluación";
         };
 
-        // --- COMPONENTES VISUALES ---
-        const Card = ({ children, className = '' }) => (
-            <div className={`bg-white rounded-2xl shadow-sm border border-gray-100 p-6 ${className}`}>{children}</div>
-        );
-
-        const Button = ({ children, onClick, variant = 'primary', className = '', fullWidth = false, disabled = false }) => {
-            const base = `rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-md px-4 py-3 active:scale-95`;
+        // --- COMPONENTES ---
+        const Button = ({ children, onClick, variant = 'primary', className = '', fullWidth = false, size = 'md', disabled = false }) => {
+            const baseStyle = `rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-md ${disabled ? 'opacity-50 cursor-not-allowed grayscale' : 'active:scale-95'}`;
+            const sizes = { sm: "px-3 py-2 text-sm", md: "px-6 py-4 text-base", lg: "px-8 py-5 text-xl" };
             const variants = {
                 primary: "bg-emerald-600 text-white hover:bg-emerald-700 border-b-4 border-emerald-800",
                 secondary: "bg-white text-emerald-700 border-2 border-emerald-100 hover:border-emerald-300",
-                gold: "bg-yellow-500 text-white border-b-4 border-yellow-700",
-                ghost: "text-gray-500 hover:bg-gray-100 shadow-none border-none",
-                locked: "bg-gray-100 text-gray-400 border-2 border-gray-200 shadow-none cursor-not-allowed active:scale-100"
+                accent: "bg-fuchsia-600 text-white hover:bg-fuchsia-700 border-b-4 border-fuchsia-800",
+                ghost: "bg-transparent text-gray-600 hover:bg-gray-100 shadow-none",
+                locked: "bg-gray-100 text-gray-400 border-2 border-gray-200 shadow-none",
+                gold: "bg-gradient-to-r from-yellow-400 to-yellow-600 text-white border-b-4 border-yellow-700 shadow-yellow-200"
             };
-            return <button onClick={!disabled ? onClick : null} className={`${base} ${disabled ? variants.locked : variants[variant]} ${fullWidth ? 'w-full' : ''} ${className}`}>{children}</button>;
+            return <button onClick={!disabled ? onClick : null} className={`${baseStyle} ${sizes[size]} ${disabled ? variants.locked : variants[variant]} ${fullWidth ? 'w-full' : ''} ${className}`}>{children}</button>;
         };
+
+        const Card = ({ children, className = '' }) => (
+            <div className={`bg-white rounded-2xl shadow-sm border border-gray-100 p-6 ${className}`}>{children}</div>
+        );
 
         const LevelBadgeHeader = ({ level }) => {
             const badges = {
@@ -133,15 +153,16 @@
                 4: { icon: "Star", text: "Oro", color: "text-yellow-700", bg: "bg-yellow-50", border: "border-yellow-300", fill: "fill-yellow-400" },
                 5: { icon: "Award", text: "Auxiliar Pro", color: "text-emerald-700", bg: "bg-emerald-50", border: "border-emerald-300", fill: "fill-emerald-200" }
             };
-            const badge = badges[level >= 5 ? 5 : level >= 4 ? 4 : level];
+            const currentBadge = badges[level >= 5 ? 5 : level >= 4 ? 4 : level];
             
             return (
-                <div className={`w-full p-6 rounded-3xl border-2 ${badge.bg} ${badge.border} flex flex-col items-center justify-center mb-8 relative overflow-hidden`}>
+                <div className={`w-full p-6 rounded-3xl border-2 ${currentBadge.bg} ${currentBadge.border} flex flex-col items-center justify-center animate-in mb-8 relative overflow-hidden`}>
+                    <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-white transform rotate-12 scale-150"></div>
                     <div className="relative z-10 flex flex-col items-center">
-                        <div className={`p-4 bg-white rounded-full shadow-lg mb-3 border-4 ${badge.border}`}>
-                           {badge.icon === 'star' ? <Icons.Star className={`w-12 h-12 ${badge.color} fill-current`} /> : <Icons.Simple d={PATHS.shield} className={`w-12 h-12 ${badge.color}`} />}
+                        <div className={`p-4 bg-white rounded-full shadow-lg mb-3 border-4 ${currentBadge.border}`}>
+                            <Icon path={ICONS[currentBadge.icon]} className={`w-16 h-16 ${currentBadge.color} ${currentBadge.fill}`} />
                         </div>
-                        <h3 className={`text-2xl font-black uppercase tracking-widest ${badge.color}`}>{badge.text}</h3>
+                        <h3 className={`text-2xl font-black uppercase tracking-widest ${currentBadge.color}`}>{currentBadge.text}</h3>
                         <p className="text-sm font-medium text-gray-500 mt-1">Nivel {level >= 5 ? 'Finalizado' : level}</p>
                     </div>
                 </div>
@@ -152,300 +173,530 @@
         const App = () => {
             const [user, setUser] = useState(null);
             const [loading, setLoading] = useState(true);
-            const [view, setView] = useState('landing');
-            const [showAuth, setShowAuth] = useState(false);
-            const [userLevel, setUserLevel] = useState(1);
-            const [progress, setProgress] = useState({ '1A': false });
-            const [currentQuizType, setCurrentQuizType] = useState(null);
             const [errorMsg, setErrorMsg] = useState('');
+            const [view, setView] = useState('home');
+            
+            // ESTADO INICIAL
+            const [userLevel, setUserLevel] = useState(1);
+            const [progress, setProgress] = useState({ '1A': false, '2': false, '3': false, '4': false });
+            const [currentQuizType, setCurrentQuizType] = useState(null);
 
             useEffect(() => {
-                auth.onAuthStateChanged(async (currentUser) => {
+                const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
                     if (currentUser) {
                         setUser(currentUser);
-                        setShowAuth(false);
-                        setView('home');
+                        const docRef = doc(db, "users", currentUser.uid);
+                        const docSnap = await getDoc(docRef);
                         
-                        const docRef = db.collection("users").doc(currentUser.uid);
-                        docRef.get().then((doc) => {
-                            if (doc.exists) {
-                                const data = doc.data();
-                                setUserLevel(data.level || 1);
-                                setProgress(data.progress || { '1A': false });
-                            } else {
-                                docRef.set({
-                                    level: 1,
-                                    progress: { '1A': false },
-                                    email: currentUser.email
-                                });
-                            }
-                            setLoading(false);
-                        });
-
-                        // Detectar regreso de Google Redirect
-                        getRedirectResult(auth).then((result) => {
-                            if (result.user) console.log("Logged with Google");
-                        }).catch((error) => {
-                            console.error(error);
-                        });
-
+                        if (docSnap.exists()) {
+                            const data = docSnap.data();
+                            setUserLevel(data.level || 1);
+                            setProgress(data.progress || { '1A': false, '2': false, '3': false, '4': false });
+                        } else {
+                            await setDoc(docRef, {
+                                level: 1,
+                                progress: { '1A': false, '2': false, '3': false, '4': false },
+                                email: currentUser.email
+                            });
+                        }
                     } else {
                         setUser(null);
-                        setLoading(false);
                     }
+                    setLoading(false);
                 });
+                return () => unsubscribe();
             }, []);
 
-            const saveProgress = (newLevel, newProgress) => {
+            const saveProgress = async (newLevel, newProgress) => {
                 if (!user) return;
-                db.collection("users").doc(user.uid).update({ level: newLevel, progress: newProgress });
-            };
-
-            const handleLogin = async (email, pass, isReg, sec) => {
-                setErrorMsg('');
-                if (isReg && parseInt(sec) !== 7) { setErrorMsg("Respuesta incorrecta. 4+3=7"); return; }
                 try {
-                    if(isReg) await createUserWithEmailAndPassword(auth, email, pass);
-                    else await signInWithEmailAndPassword(auth, email, pass);
-                } catch(e) { setErrorMsg(e.message); }
+                    const userRef = doc(db, "users", user.uid);
+                    await updateDoc(userRef, { level: newLevel, progress: newProgress });
+                } catch (e) { console.error(e); }
             };
 
-            const handleGoogle = async () => {
-                 try { 
-                    // VOLVEMOS AL POPUP: Es la forma más segura de evitar el bucle de redirección en este entorno
-                    await auth.signInWithPopup(googleProvider); 
-                 } catch(e) { 
-                    setErrorMsg("Error: " + e.message + ". Intenta con correo y contraseña si el error persiste."); 
-                 }
-            };
-
-            const handleLogout = async () => {
-                await auth.signOut();
-                setUserLevel(1);
-                setProgress({ '1A': false });
-                setView('landing');
-            };
-
-            const handleQuizFinish = (passed) => {
-                if (passed) {
-                    const newProgress = { ...progress, [currentQuizType]: true };
-                    let newLevel = userLevel;
-                    if (currentQuizType === '1A' && userLevel < 2) { newLevel = 2; alert("¡Felicidades! Nivel 2 Desbloqueado."); }
-                    if (currentQuizType === '2' && userLevel < 3) newLevel = 3;
-                    if (currentQuizType === '3' && userLevel < 4) newLevel = 4;
-                    if (currentQuizType === '4') { newLevel = 5; setView('victory'); }
-                    
-                    setUserLevel(newLevel);
-                    setProgress(newProgress);
-                    if (user) db.collection("users").doc(user.uid).update({ level: newLevel, progress: newProgress });
-                    if (currentQuizType !== '4') setView('mapa_niveles');
-                } else {
-                    setView('mapa_niveles');
+            const handleLogin = async (email, password, isRegistering, securityAnswer) => {
+                setErrorMsg('');
+                if (isRegistering && parseInt(securityAnswer) !== 7) {
+                    setErrorMsg("Respuesta de seguridad incorrecta. ¿Cuánto es 4 + 3?");
+                    return;
+                }
+                try {
+                    if (isRegistering) await createUserWithEmailAndPassword(auth, email, password);
+                    else await signInWithEmailAndPassword(auth, email, password);
+                } catch (error) {
+                    let msg = "Error al ingresar.";
+                    if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') msg = "Correo o contraseña incorrectos.";
+                    else if (error.code === 'auth/email-already-in-use') msg = "El correo ya está registrado.";
+                    else if (error.code === 'auth/weak-password') msg = "Contraseña muy débil.";
+                    setErrorMsg(msg);
                 }
             };
 
-            // --- RENDER ---
-            if (loading) return <div className="flex h-screen items-center justify-center text-emerald-600 font-bold">Cargando...</div>;
+             // FUNCIÓN LOGIN CON GOOGLE
+             const handleGoogleLogin = async () => {
+                try {
+                    await signInWithPopup(auth, googleProvider);
+                } catch (error) {
+                    console.error("Error Google:", error);
+                    setErrorMsg("Error al iniciar con Google. Intenta de nuevo.");
+                }
+            };
 
-            if (!user && !showAuth) {
+            const handleLogout = async () => {
+                await signOut(auth);
+                setUserLevel(1);
+                setProgress({ '1A': false, '2': false, '3': false, '4': false });
+            };
+
+            // VISTAS
+            const AuthView = () => {
+                const [email, setEmail] = useState('');
+                const [password, setPassword] = useState('');
+                const [securityAnswer, setSecurityAnswer] = useState('');
+                const [isRegistering, setIsRegistering] = useState(false);
                 return (
-                    <div className="min-h-screen bg-white flex flex-col animate-in p-6 text-center justify-center">
-                        <Icons.Brain />
-                        <h1 className="text-4xl font-black text-slate-800 mt-4">Auxiliar<span className="text-emerald-600">Pro</span></h1>
-                        <p className="text-slate-500 mb-8">Plataforma de estudio</p>
-                        <Button onClick={() => setShowAuth(true)} fullWidth>Ingresar</Button>
-                        <p className="text-xs text-gray-400 mt-8">No somos sitio oficial del gobierno.</p>
+                    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-emerald-50">
+                        <div className="text-center mb-8">
+                            <div className="inline-flex bg-white p-4 rounded-3xl shadow-lg mb-4 text-emerald-600"><Icon path={ICONS.Brain} className="w-12 h-12" /></div>
+                            <h1 className="text-4xl font-extrabold text-gray-800">Auxiliar<span className="text-emerald-600">Pro</span></h1>
+                            {/* SIN PALABRA OFICIAL */}
+                            <p className="text-gray-500 mt-2">Plataforma de estudio</p>
+                        </div>
+                        <Card className="w-full max-w-md">
+                            <h2 className="text-xl font-bold mb-6 text-center">{isRegistering ? 'Crear Cuenta' : 'Iniciar Sesión'}</h2>
+                            
+                            <button onClick={handleGoogleLogin} className="w-full mb-4 flex items-center justify-center gap-3 bg-white border border-gray-300 rounded-xl p-3 hover:bg-gray-50 transition-colors">
+                                <Icon path={ICONS.Google} className="w-5 h-5" />
+                                <span className="text-sm font-bold text-gray-700">Continuar con Google</span>
+                            </button>
+
+                            <div className="flex items-center justify-center gap-2 mb-6">
+                                <div className="h-px bg-gray-200 w-full"></div>
+                                <span className="text-xs text-gray-400 uppercase font-bold">O usar correo</span>
+                                <div className="h-px bg-gray-200 w-full"></div>
+                            </div>
+
+                            <div className="space-y-4">
+                                <input type="email" placeholder="Correo" className="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500" value={email} onChange={e => setEmail(e.target.value)} />
+                                <input type="password" placeholder="Contraseña" className="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500" value={password} onChange={e => setPassword(e.target.value)} />
+                                {isRegistering && (
+                                    <div className="bg-yellow-50 p-3 rounded-xl border border-yellow-200">
+                                        <label className="text-xs font-bold text-yellow-800 block mb-1 flex items-center gap-1"><Icon path={ICONS.ShieldCheck} className="w-3 h-3" /> Pregunta de Seguridad:</label>
+                                        <div className="flex items-center gap-2"><span className="text-sm text-gray-700 font-medium">¿Cuánto es 4 + 3?</span><input type="number" placeholder="Respuesta" className="w-20 p-2 border rounded-lg text-center" value={securityAnswer} onChange={e => setSecurityAnswer(e.target.value)} /></div>
+                                    </div>
+                                )}
+                                {errorMsg && <p className="text-red-500 text-sm text-center">{errorMsg}</p>}
+                                <Button fullWidth onClick={() => handleLogin(email, password, isRegistering, securityAnswer)}>{isRegistering ? 'Registrarse' : 'Entrar'}</Button>
+                            </div>
+                            <div className="mt-4 text-center"><button onClick={() => { setIsRegistering(!isRegistering); setErrorMsg(''); }} className="text-sm text-emerald-600 font-bold hover:underline">{isRegistering ? '¿Ya tienes cuenta? Inicia sesión' : '¿No tienes cuenta? Regístrate'}</button></div>
+                        </Card>
+                        <div className="mt-8 text-center max-w-xs mx-auto">
+                            <h3 className="text-xs font-bold text-gray-500 uppercase mb-2">Iniciativa Independiente</h3>
+                            <p className="text-xs text-gray-400">Auxiliar Pro es un proyecto particular creado por auxiliares para auxiliares. No somos un sitio oficial del Gobierno, MINSAL ni SEREMI. Esta plataforma es una herramienta de estudio colaborativa.</p>
+                        </div>
                     </div>
                 );
-            }
+            };
 
-            if (!user && showAuth) {
+            // FORUM VIEW - ROBUSTO
+            const ForumView = () => {
+                const [posts, setPosts] = useState([]);
+                const [newPostTitle, setNewPostTitle] = useState('');
+                const [newPostContent, setNewPostContent] = useState('');
+                const [showCreateForm, setShowCreateForm] = useState(false);
+
+                useEffect(() => {
+                    const q = query(collection(db, "forum"));
+                    const unsubscribe = onSnapshot(q, (snapshot) => {
+                        const postsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                        setPosts(postsData);
+                    });
+                    return () => unsubscribe();
+                }, []);
+
+                const handleCreatePost = async (e) => {
+                    e.preventDefault();
+                    if (!newPostTitle.trim() || !newPostContent.trim()) return;
+                    try {
+                        await addDoc(collection(db, "forum"), {
+                            title: newPostTitle,
+                            content: newPostContent,
+                            author: user.email ? user.email.split('@')[0] : 'Anonimo',
+                            date: serverTimestamp(),
+                            comments: 0
+                        });
+                        setNewPostTitle('');
+                        setNewPostContent('');
+                        setShowCreateForm(false);
+                    } catch (error) {
+                        console.error("Error creating post: ", error);
+                        alert("Error al crear el tema. Inténtalo de nuevo.");
+                    }
+                };
+
                 return (
-                    <div className="min-h-screen bg-white flex flex-col p-6 justify-center animate-in">
-                        <button onClick={() => setShowAuth(false)} className="mb-6 text-slate-500 flex gap-2">← Volver</button>
-                        <h2 className="text-2xl font-bold mb-6 text-center">Acceso</h2>
-                        <button onClick={handleGoogle} className="w-full flex justify-center gap-3 border p-3 rounded-xl font-bold text-slate-700 mb-6"><Icons.Google /> Google</button>
-                        <LoginBox onLogin={handleLogin} error={errorMsg} />
+                    <div className="max-w-2xl mx-auto px-4 py-6 animate-in">
+                        <Button variant="ghost" onClick={() => setView('home')} className="pl-0 mb-4 text-gray-500"><Icon path={ICONS.ArrowLeft} className="w-5 h-5 mr-2" /> Volver</Button>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-6">Comunidad de Auxiliares</h2>
+                        
+                        {!showCreateForm ? (
+                            <>
+                                <div className="mb-6 bg-emerald-50 p-4 rounded-xl border border-emerald-100 flex justify-between items-center">
+                                    <div><h3 className="font-bold text-emerald-900">¿Tienes dudas?</h3><p className="text-sm text-emerald-700">Crea un tema y comparte.</p></div>
+                                    <Button size="sm" onClick={() => setShowCreateForm(true)}>Crear Tema</Button>
+                                </div>
+                                <div className="space-y-4">
+                                    {posts.length === 0 && <p className="text-center text-gray-500">No hay temas aún. ¡Sé el primero!</p>}
+                                    {posts.map((post) => (
+                                        <div key={post.id} className="bg-white border border-gray-200 p-4 rounded-xl hover:shadow-md transition-shadow">
+                                            <h4 className="font-bold text-gray-800 text-lg mb-1">{post.title}</h4>
+                                            <p className="text-sm text-gray-600 mb-2">{post.content}</p>
+                                            <div className="flex justify-between text-xs text-gray-500">
+                                                <span>Por {post.author}</span>
+                                                <span className="flex items-center gap-1"><Icon path={ICONS.MessageSquare} className="w-3 h-3" /> {post.comments}</span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </>
+                        ) : (
+                            <Card>
+                                <h3 className="text-lg font-bold mb-4">Nuevo Tema</h3>
+                                <form onSubmit={handleCreatePost} className="space-y-4">
+                                    <input type="text" placeholder="Título del tema" className="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500" value={newPostTitle} onChange={(e) => setNewPostTitle(e.target.value)} required />
+                                    <textarea placeholder="Escribe tu consulta o comentario..." className="w-full p-3 border rounded-xl outline-none focus:ring-2 focus:ring-emerald-500 h-32 resize-none" value={newPostContent} onChange={(e) => setNewPostContent(e.target.value)} required />
+                                    <div className="flex gap-2">
+                                        <Button variant="ghost" onClick={() => setShowCreateForm(false)}>Cancelar</Button>
+                                        <Button type="submit" fullWidth>Publicar</Button>
+                                    </div>
+                                </form>
+                            </Card>
+                        )}
                     </div>
                 );
-            }
+            };
 
-            return (
-                <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-12">
-                    <nav className="bg-white border-b sticky top-0 z-50 h-16 flex items-center px-4 justify-between shadow-sm">
-                         <div className="flex items-center gap-2"><Icons.Brain /><span className="font-bold text-xl">AuxiliarPro</span></div>
-                         <button onClick={handleLogout}><Icons.Simple d={PATHS.logout} className="text-red-500 w-6 h-6" /></button>
-                    </nav>
-                    <main>
-                        {view === 'home' && <HomeView user={user} level={userLevel} setView={setView} />}
-                        {view === 'mapa_niveles' && <LevelMap onBack={() => setView('home')} level={userLevel} progress={progress} onTest={(type) => { setCurrentQuizType(type); setView('quiz'); }} />}
-                        {view === 'quiz' && <QuizRunner type={currentQuizType} onFinish={handleQuizFinish} onExit={() => setView('mapa_niveles')} />}
-                        {view === 'victory' && <Victory onHome={() => setView('home')} />}
-                        {view === 'resources' && <Resources onBack={() => setView('home')} />}
-                        {view === 'forum' && <Forum user={user} db={db} onBack={() => setView('home')} />}
-                        {view === 'faq' && <FAQ onBack={() => setView('home')} />}
-                    </main>
+            // FEEDBACK VIEW
+            const FeedbackView = () => (
+                <div className="max-w-md mx-auto px-4 py-6 animate-in">
+                    <Button variant="ghost" onClick={() => setView('home')} className="pl-0 mb-4 text-gray-500"><Icon path={ICONS.ArrowLeft} className="w-5 h-5 mr-2" /> Volver</Button>
+                    <Card>
+                        <div className="text-center mb-6">
+                            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3"><Icon path={ICONS.MessageSquare} className="w-6 h-6 text-blue-600" /></div>
+                            <h2 className="text-xl font-bold">Buzón de Sugerencias</h2>
+                            <p className="text-gray-500 text-sm">¿Qué te gustaría agregar?</p>
+                        </div>
+                        <textarea className="w-full border rounded-xl p-3 mb-4 h-32 resize-none focus:ring-2 focus:ring-emerald-500 outline-none" placeholder="Escribe tu mensaje aquí..." />
+                        <Button fullWidth onClick={() => alert("¡Gracias por tu mensaje!")}><Icon path={ICONS.Send} className="w-4 h-4 mr-2" /> Enviar</Button>
+                    </Card>
                 </div>
             );
 
-            // --- SUBCOMPONENTES ---
-            function LoginBox({ onLogin, error }) {
-                const [email, setEmail] = useState('');
-                const [pass, setPass] = useState('');
-                const [isReg, setIsReg] = useState(false);
-                const [sec, setSec] = useState('');
-                return (
-                    <div className="space-y-4">
-                        <div className="flex items-center gap-2 mb-4"><div className="h-px bg-gray-200 flex-1"></div><span className="text-xs text-gray-400 font-bold">O CORREO</span><div className="h-px bg-gray-200 flex-1"></div></div>
-                        <input className="w-full p-3 border rounded-xl" placeholder="Correo" value={email} onChange={e=>setEmail(e.target.value)} />
-                        <input className="w-full p-3 border rounded-xl" type="password" placeholder="Contraseña" value={pass} onChange={e=>setPass(e.target.value)} />
-                        {isReg && <div className="bg-yellow-50 p-3 rounded border border-yellow-200 text-sm">Seguridad: 4 + 3 = ? <input className="w-16 border ml-2 p-1" type="number" value={sec} onChange={e=>setSec(e.target.value)} /></div>}
-                        {error && <p className="text-red-500 text-center text-sm">{error}</p>}
-                        <Button fullWidth onClick={() => onLogin(email, pass, isReg, sec)}>{isReg ? 'Registrarse' : 'Entrar'}</Button>
-                        <p onClick={() => setIsReg(!isReg)} className="text-center text-emerald-600 text-sm font-bold mt-2 cursor-pointer">{isReg ? '¿Tienes cuenta? Entrar' : 'Crear cuenta'}</p>
-                    </div>
-                );
-            }
-
-            function HomeView({ user, level, setView }) {
-                return (
-                    <div className="p-4 animate-in">
-                        <div className="text-center mb-6"><h2 className="text-2xl font-bold">Hola, {user.email.split('@')[0]}</h2></div>
-                        <LevelBadgeHeader level={level} />
-                        <div className="space-y-4">
-                            <button onClick={() => setView('mapa_niveles')} className="w-full bg-emerald-600 text-white p-6 rounded-2xl text-left shadow-lg flex justify-between items-center">
-                                <div><h3 className="text-xl font-bold">Zona de Niveles</h3><p className="text-emerald-100 text-sm">Avanza en tu carrera</p></div>
-                                <Icons.Simple d={PATHS.arrowRight} />
-                            </button>
-                            <div className="grid grid-cols-2 gap-4">
-                                <button onClick={() => level >= 2 ? setView('resources') : alert("Bloqueado")} className={`p-4 border-2 rounded-2xl text-left ${level >= 2 ? 'bg-white' : 'bg-gray-100 opacity-50'}`}>
-                                    <Icons.Simple d={PATHS.book} className="text-blue-600 mb-2" /><div className="font-bold">Biblioteca</div>
-                                </button>
-                                <button onClick={() => level >= 2 ? setView('forum') : alert("Bloqueado")} className={`p-4 border-2 rounded-2xl text-left ${level >= 2 ? 'bg-white' : 'bg-gray-100 opacity-50'}`}>
-                                    <Icons.Simple d={PATHS.msg} className="text-fuchsia-600 mb-2" /><div className="font-bold">Comunidad</div>
-                                </button>
+            // RESOURCES VIEW (BIBLIOTECA)
+            const ResourcesView = () => (
+                <div className="max-w-2xl mx-auto px-4 py-6 animate-in">
+                    <Button variant="ghost" onClick={() => setView('home')} className="pl-0 mb-4 text-gray-500"><Icon path={ICONS.ArrowLeft} className="w-5 h-5 mr-2" /> Volver</Button>
+                    <div className="mb-8"><h2 className="text-2xl font-bold text-gray-900">Plan de Estudio</h2><p className="text-gray-500 text-sm">Sigue este orden lógico.</p></div>
+                    <div className="space-y-6">
+                        <div className="border-l-4 border-emerald-500 pl-4">
+                            <h3 className="font-bold text-emerald-800 text-lg">Módulo 1: La Base Legal</h3>
+                            <div className="grid gap-2 mt-2">
+                                <Card className="flex items-center gap-3 p-3 hover:bg-emerald-50 cursor-pointer transition-colors">
+                                    <div className="bg-red-100 p-2 rounded-lg text-red-600"><Icon path={ICONS.FileText} className="w-5 h-5" /></div>
+                                    <div className="flex-1"><div className="font-bold text-sm">Decreto Supremo 466</div><div className="text-xs text-gray-400">PDF • Lectura Obligatoria</div></div>
+                                    <a href="#" target="_blank" rel="noopener noreferrer"><Icon path={ICONS.Download} className="w-4 h-4 text-gray-300 hover:text-emerald-600" /></a>
+                                </Card>
+                                <Card className="flex items-center gap-3 p-3 hover:bg-emerald-50 cursor-pointer transition-colors">
+                                    <div className="bg-red-100 p-2 rounded-lg text-red-600"><Icon path={ICONS.FileText} className="w-5 h-5" /></div>
+                                    <div className="flex-1"><div className="font-bold text-sm">Listado Controlados</div><div className="text-xs text-gray-400">PDF • Referencia</div></div>
+                                    <a href="#" target="_blank" rel="noopener noreferrer"><Icon path={ICONS.Download} className="w-4 h-4 text-gray-300 hover:text-emerald-600" /></a>
+                                </Card>
                             </div>
-                            <button onClick={() => setView('faq')} className="w-full p-3 bg-white border rounded-xl flex justify-center gap-2 font-bold text-slate-600">Preguntas Frecuentes</button>
+                        </div>
+                        <div className="border-l-4 border-blue-500 pl-4">
+                            <h3 className="font-bold text-blue-800 text-lg">Módulo 2: Gestión</h3>
+                            <div className="grid gap-2 mt-2">
+                                <Card className="flex items-center gap-3 p-3 hover:bg-blue-50 cursor-pointer transition-colors">
+                                    <div className="bg-red-100 p-2 rounded-lg text-red-600"><Icon path={ICONS.FileText} className="w-5 h-5" /></div>
+                                    <div className="flex-1"><div className="font-bold text-sm">Manual Buenas Prácticas</div><div className="text-xs text-gray-400">PDF • Procedimientos</div></div>
+                                    <a href="#" target="_blank" rel="noopener noreferrer"><Icon path={ICONS.Download} className="w-4 h-4 text-gray-300 hover:text-blue-600" /></a>
+                                </Card>
+                            </div>
+                        </div>
+                        <div className="border-l-4 border-fuchsia-500 pl-4">
+                            <h3 className="font-bold text-fuchsia-800 text-lg">Módulo 3: Atención</h3>
+                            <div className="grid gap-2 mt-2">
+                                <Card className="flex items-center gap-3 p-3 hover:bg-fuchsia-50 cursor-pointer transition-colors">
+                                    <div className="bg-red-100 p-2 rounded-lg text-red-600"><Icon path={ICONS.FileText} className="w-5 h-5" /></div>
+                                    <div className="flex-1"><div className="font-bold text-sm">Guía Bioequivalencia</div><div className="text-xs text-gray-400">PDF • Minsal</div></div>
+                                    <a href="#" target="_blank" rel="noopener noreferrer"><Icon path={ICONS.Download} className="w-4 h-4 text-gray-300 hover:text-fuchsia-600" /></a>
+                                </Card>
+                            </div>
                         </div>
                     </div>
-                );
-            }
-            
-            function LevelMap({ onBack, level, progress, onTest }) {
-                return (
-                    <div className="p-4 animate-in max-w-md mx-auto">
-                        <button onClick={onBack} className="mb-4 text-gray-500">← Volver</button>
-                        <h2 className="text-2xl font-bold mb-6">Mapa de Progreso</h2>
-                        <div className="space-y-4 relative">
-                             <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gray-200 -z-10"></div>
-                             <div className="bg-white p-4 rounded-xl border-2 border-emerald-500 shadow-sm">
-                                <div className="font-bold text-lg mb-2 text-emerald-800">Nivel 1: Diagnóstico</div>
-                                <Button fullWidth variant={progress['1A'] ? "ghost" : "primary"} onClick={() => onTest('1A')}>{progress['1A'] ? '✅ Aprobado' : 'Rendir Prueba'}</Button>
-                             </div>
-                             <div className={`bg-white p-4 rounded-xl border-2 ${level >= 2 ? 'border-orange-400' : 'border-gray-200 opacity-70'}`}>
-                                <div className="font-bold text-lg mb-2 text-orange-800">Nivel 2: Bronce</div>
-                                <Button fullWidth disabled={level < 2} onClick={() => onTest('2')}>{level < 2 ? '🔒 Bloqueado' : 'Rendir Cuestionario'}</Button>
-                             </div>
-                             <div className={`bg-white p-4 rounded-xl border-2 ${level >= 3 ? 'border-slate-400' : 'border-gray-200 opacity-70'}`}>
-                                <div className="font-bold text-lg mb-2 text-slate-800">Nivel 3: Plata</div>
-                                <Button fullWidth disabled={level < 3} onClick={() => onTest('3')}>{level < 3 ? '🔒 Bloqueado' : 'Rendir Cuestionario'}</Button>
-                             </div>
-                             <div className={`bg-white p-4 rounded-xl border-2 ${level >= 4 ? 'border-yellow-400' : 'border-gray-200 opacity-70'}`}>
-                                <div className="font-bold text-lg mb-2 text-yellow-800">Nivel 4: Oro</div>
-                                <Button fullWidth disabled={level < 4} variant="gold" onClick={() => onTest('4')}>{level < 4 ? '🔒 Bloqueado' : 'EXAMEN FINAL'}</Button>
-                             </div>
-                        </div>
-                    </div>
-                )
-            }
+                </div>
+            );
 
-            function QuizRunner({ type, onFinish, onExit }) {
-                const questions = getQuestionsForLevel(type);
-                const [i, setI] = useState(0);
-                const [score, setScore] = useState(0);
-                const [sel, setSel] = useState(null);
-                const [showRes, setShowRes] = useState(false);
-                
-                const confirm = () => {
-                    if (sel === questions[i].correcta) setScore(s => s + 1);
-                    if (i < questions.length - 1) { setI(i + 1); setSel(null); } 
-                    else setShowRes(true);
+            // HOME VIEW
+            const HomeView = () => (
+                <div className="max-w-2xl mx-auto px-4 py-6 animate-in">
+                    <div className="flex justify-between items-center mb-6"><h2 className="text-2xl font-bold text-gray-800">Hola, {user.email.split('@')[0]}</h2></div>
+                    
+                    <div className="bg-white border border-emerald-100 rounded-2xl p-5 mb-6 shadow-sm">
+                        <h3 className="text-lg font-bold text-emerald-800 mb-2">Tu camino a la certificación comienza aquí</h3>
+                        <p className="text-sm text-gray-600 leading-relaxed mb-4">
+                            Bienvenido a Auxiliar Pro. Hemos diseñado un sistema de entrenamiento por niveles para prepararte para el examen de competencia de la SEREMI de Salud.
+                            <br/><br/>
+                            Sabemos que la fecha de la prueba es incierta, pero tu conocimiento no tiene por qué serlo. Te invitamos a completar todos los niveles para que estés listo cuando llegue tu momento.
+                        </p>
+                    </div>
+
+                    <LevelBadgeHeader level={userLevel} />
+                    {userLevel >= 5 && (
+                        <button onClick={() => setView('expert_zone')} className="w-full mb-6 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white rounded-3xl p-6 text-left shadow-lg border-b-8 border-yellow-800 flex items-center justify-between">
+                            <div className="flex items-center gap-4"><div className="bg-white/20 p-3 rounded-2xl"><Icon path={ICONS.Unlock} className="w-8 h-8 text-white" /></div><div><h3 className="text-2xl font-black uppercase">Zona Experto</h3><p className="text-yellow-100 text-sm">Recursos exclusivos liberados</p></div></div><Icon path={ICONS.ChevronRight} className="w-6 h-6 text-white" />
+                        </button>
+                    )}
+                    <div className="space-y-6">
+                        <button onClick={() => setView('mapa_niveles')} className="w-full bg-emerald-600 text-white rounded-3xl p-8 text-left shadow-lg relative overflow-hidden border-b-8 border-emerald-800 active:border-b-0 active:translate-y-2 transition-all">
+                            <div className="relative z-10"><div className="mb-4 text-emerald-100"><Icon path={ICONS.Layers} className="w-12 h-12" /></div><h3 className="text-3xl font-bold mb-2">Zona de Niveles</h3><p className="text-emerald-100">Rinde tus pruebas para avanzar.</p><div className="mt-6 inline-flex items-center gap-2 bg-white text-emerald-800 px-4 py-2 rounded-xl font-bold text-sm">{userLevel >= 5 ? 'Repasar Niveles' : 'Continuar Progreso'} <Icon path={ICONS.ChevronRight} className="w-4 h-4" /></div></div>
+                        </button>
+                        {userLevel < 2 && <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 flex items-center gap-3"><div className="bg-blue-100 p-2 rounded-full text-blue-600"><Icon path={ICONS.Lock} className="w-4 h-4" /></div><p className="text-sm text-blue-800 font-medium">Aprueba el <strong>Nivel 1</strong> para desbloquear Biblioteca y Foro.</p></div>}
+                        <div className="grid grid-cols-2 gap-4">
+                            <button onClick={() => userLevel >= 2 && setView('resources')} className={`border-2 p-4 rounded-3xl text-left relative ${userLevel >= 2 ? 'bg-white border-gray-100 hover:border-blue-500' : 'bg-gray-100 border-gray-200 opacity-70 cursor-not-allowed'}`}>
+                                {userLevel < 2 && <div className="absolute top-2 right-2 bg-gray-200 p-1 rounded-full text-gray-400"><Icon path={ICONS.Lock} className="w-4 h-4" /></div>}
+                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${userLevel >= 2 ? 'bg-blue-100 text-blue-600' : 'bg-gray-200 text-gray-400'}`}><Icon path={ICONS.BookOpen} className="w-6 h-6" /></div><h3 className="font-bold text-gray-800">Biblioteca</h3><p className="text-xs text-gray-500">{userLevel >= 2 ? 'Material PDF' : 'Bloqueado'}</p>
+                            </button>
+                            <button onClick={() => userLevel >= 2 && setView('forum')} className={`border-2 p-4 rounded-3xl text-left relative ${userLevel >= 2 ? 'bg-white border-gray-100 hover:border-fuchsia-500' : 'bg-gray-100 border-gray-200 opacity-70 cursor-not-allowed'}`}>
+                                {userLevel < 2 && <div className="absolute top-2 right-2 bg-gray-200 p-1 rounded-full text-gray-400"><Icon path={ICONS.Lock} className="w-4 h-4" /></div>}
+                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center mb-3 ${userLevel >= 2 ? 'bg-fuchsia-100 text-fuchsia-600' : 'bg-gray-200 text-gray-400'}`}><Icon path={ICONS.Users} className="w-6 h-6" /></div><h3 className="font-bold text-gray-800">Comunidad</h3><p className="text-xs text-gray-500">{userLevel >= 2 ? 'Foro' : 'Bloqueado'}</p>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button onClick={() => setView('faq')} className="w-full mt-6 bg-white border border-gray-200 p-3 rounded-xl flex items-center justify-center gap-2 text-gray-600 text-sm hover:bg-gray-50">
+                        <Icon path={ICONS.Help} className="w-4 h-4" /> Preguntas Frecuentes (FAQ)
+                    </button>
+                </div>
+            );
+
+            // FAQ VIEW
+            const FaqView = () => (
+                <div className="max-w-2xl mx-auto px-4 py-6 animate-in">
+                    <Button variant="ghost" onClick={() => setView('home')} className="pl-0 mb-4 text-gray-500"><Icon path={ICONS.ArrowLeft} className="w-5 h-5 mr-2" /> Volver</Button>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-6">Preguntas Frecuentes</h2>
+                    
+                    <div className="space-y-4">
+                        <div className="bg-white border border-gray-200 rounded-xl p-5">
+                            <h3 className="font-bold text-emerald-800 mb-2">¿Cuándo son las fechas para dar la prueba?</h3>
+                            <p className="text-sm text-gray-600 leading-relaxed">
+                                La SEREMI no tiene un calendario fijo público. Generalmente abren procesos en marzo/abril y octubre/noviembre, pero varía por región. 
+                                <br/><br/>
+                                <strong>Consejo:</strong> Revisa periódicamente <code>seremienlinea.minsal.cl</code> o consulta en tu SEREMI regional.
+                            </p>
+                        </div>
+
+                        <div className="bg-white border border-gray-200 rounded-xl p-5">
+                            <h3 className="font-bold text-emerald-800 mb-2">¿Qué requisitos necesito?</h3>
+                            <ul className="text-sm text-gray-600 list-disc pl-4 space-y-1">
+                                <li>Licencia de Enseñanza Media completa.</li>
+                                <li>Certificado de 1 año de trabajo en farmacia (o práctica autorizada).</li>
+                                <li>Certificado de antecedentes.</li>
+                                <li>Pago del arancel correspondiente.</li>
+                            </ul>
+                        </div>
+
+                        <div className="bg-white border border-gray-200 rounded-xl p-5">
+                            <h3 className="font-bold text-emerald-800 mb-2">¿Cómo funciona esta App?</h3>
+                            <p className="text-sm text-gray-600 leading-relaxed">
+                                Es un simulador progresivo. Empiezas en Nivel 1. Si apruebas el diagnóstico, desbloqueas el siguiente nivel y material de estudio. Al llegar al Nivel 4, podrás rendir un ensayo completo.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            );
+
+            const LevelMapView = () => (
+                <div className="max-w-xl mx-auto px-4 py-6 animate-in">
+                    <Button variant="ghost" onClick={() => setView('home')} className="pl-0 mb-4 text-gray-500"><Icon path={ICONS.ArrowLeft} className="w-5 h-5 mr-2" /> Volver</Button>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-6">Tu Ruta</h2>
+                    <div className="space-y-6 relative">
+                        <div className="absolute left-6 top-10 bottom-10 w-1 bg-gray-200 -z-10"></div>
+                        {/* NIVEL 1 */}
+                        <div className={`p-6 rounded-2xl border-2 bg-white ${userLevel >= 1 ? 'border-emerald-500 shadow-md' : 'border-gray-200'}`}>
+                            <div className="flex items-center gap-3 mb-4"><div className="w-12 h-12 bg-emerald-600 rounded-full flex items-center justify-center text-white font-bold text-xl">1</div><div><h3 className="font-bold text-lg">Nivel 1: Aspirante</h3><p className="text-xs text-gray-500">Requisito: Aprobar Diagnóstico (70%)</p></div></div>
+                            <div className="space-y-3 pl-4 ml-6 border-l-2 border-gray-100">
+                                <div className="flex flex-col gap-2"><span className="text-sm font-bold text-gray-800">A) Prueba Diagnóstico</span><Button size="sm" fullWidth variant={progress['1A'] ? "ghost" : "primary"} onClick={() => { setCurrentQuizType('1A'); setView('quiz'); }}>{progress['1A'] ? <span className="flex items-center gap-2"><Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-500" /> Aprobado</span> : 'Rendir Prueba A'}</Button></div>
+                            </div>
+                        </div>
+                        {/* NIVEL 2 */}
+                        <div className={`p-6 rounded-2xl border-2 ${userLevel >= 2 ? 'bg-white border-orange-400 shadow-md' : 'bg-gray-50 border-gray-200'}`}>
+                            <div className="flex items-center gap-3 mb-4"><div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl ${userLevel >= 2 ? 'bg-orange-600 text-white' : 'bg-gray-300 text-gray-500'}`}>{userLevel >= 2 ? '2' : <Icon path={ICONS.Lock} className="w-5 h-5" />}</div><div><h3 className={`font-bold text-lg ${userLevel < 2 && 'text-gray-400'}`}>Nivel 2: Bronce</h3><p className="text-xs text-gray-500">Cuestionario (20 Preguntas)</p></div></div>
+                            <div className="pl-4 ml-6"><Button fullWidth disabled={userLevel < 2} variant={progress['2'] ? "ghost" : "primary"} onClick={() => { setCurrentQuizType('2'); setView('quiz'); }}>{progress['2'] ? <span className="flex items-center gap-2"><Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-500" /> Aprobado</span> : 'Rendir Cuestionario'}</Button></div>
+                        </div>
+                        {/* NIVEL 3 */}
+                        <div className={`p-6 rounded-2xl border-2 ${userLevel >= 3 ? 'bg-white border-slate-400 shadow-md' : 'bg-gray-50 border-gray-200'}`}>
+                            <div className="flex items-center gap-3 mb-4"><div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl ${userLevel >= 3 ? 'bg-slate-600 text-white' : 'bg-gray-300 text-gray-500'}`}>{userLevel >= 3 ? '3' : <Icon path={ICONS.Lock} className="w-5 h-5" />}</div><div><h3 className={`font-bold text-lg ${userLevel < 3 && 'text-gray-400'}`}>Nivel 3: Plata</h3><p className="text-xs text-gray-500">Cuestionario (30 Preguntas)</p></div></div>
+                            <div className="pl-4 ml-6"><Button fullWidth disabled={userLevel < 3} variant={progress['3'] ? "ghost" : "primary"} onClick={() => { setCurrentQuizType('3'); setView('quiz'); }}>{progress['3'] ? <span className="flex items-center gap-2"><Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-500" /> Aprobado</span> : 'Rendir Cuestionario'}</Button></div>
+                        </div>
+                        {/* NIVEL 4 */}
+                        <div className={`p-6 rounded-2xl border-2 ${userLevel >= 4 ? 'bg-white border-yellow-400 shadow-xl' : 'bg-gray-50 border-gray-200'}`}>
+                            <div className="flex items-center gap-3 mb-4"><div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl ${userLevel >= 4 ? 'bg-yellow-500 text-white' : 'bg-gray-300 text-gray-500'}`}>{userLevel >= 4 ? '4' : <Icon path={ICONS.Lock} className="w-5 h-5" />}</div><div><h3 className={`font-bold text-lg ${userLevel < 4 && 'text-gray-400'}`}>Nivel 4: Oro</h3><p className="text-xs text-yellow-600 font-bold">Simulacro Final (40)</p></div></div>
+                            <div className="pl-4 ml-6"><Button fullWidth disabled={userLevel < 4} variant={progress['4'] ? "ghost" : "gold"} onClick={() => { setCurrentQuizType('4'); setView('quiz'); }}>{progress['4'] ? <span className="flex items-center gap-2"><Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-500" /> Aprobado</span> : 'RENDIR PRUEBA FINAL'}</Button></div>
+                        </div>
+                    </div>
+                </div>
+            );
+
+            const QuizView = () => {
+                const questions = getQuestionsForLevel(currentQuizType);
+                const title = getTitleForLevel(currentQuizType);
+                const [idx, setIdx] = useState(0);
+                const [answers, setAnswers] = useState([]);
+                const [selected, setSelected] = useState(null);
+                const [showResult, setShowResult] = useState(false);
+                const [viewReview, setViewReview] = useState(false);
+                const q = questions[idx];
+
+                const handleConfirm = () => {
+                    const isCorrect = selected === q.correcta;
+                    const newAnswer = { id: q.id, selectedOption: selected, isCorrect };
+                    const newAnswers = [...answers, newAnswer];
+                    setAnswers(newAnswers);
+                    if (idx < questions.length - 1) { setIdx(idx + 1); setSelected(null); } 
+                    else { setShowResult(true); }
                 };
 
-                if (showRes) {
-                    const passed = (score / questions.length) >= 0.7;
+                const handleFinish = (passed) => {
+                    if (passed) {
+                        const newProgress = { ...progress, [currentQuizType]: true };
+                        let newLevel = userLevel;
+                        // Simplificación: Pasar 1A sube a Nivel 2
+                        if (currentQuizType === '1A' && userLevel < 2) { 
+                            newLevel = 2; 
+                            alert("¡Nivel 1 Completado! Biblioteca y Foro desbloqueados 🔓"); 
+                        }
+                        if (currentQuizType === '2' && userLevel < 3) newLevel = 3;
+                        if (currentQuizType === '3' && userLevel < 4) newLevel = 4;
+                        if (currentQuizType === '4') { newLevel = 5; setView('victory'); }
+                        
+                        setUserLevel(newLevel);
+                        setProgress(newProgress);
+                        saveProgress(newLevel, newProgress);
+                        if(currentQuizType !== '4') setView('mapa_niveles');
+                    } else {
+                        setView('mapa_niveles');
+                    }
+                };
+
+                if (viewReview) {
                     return (
-                        <div className="p-6 text-center animate-in h-screen flex flex-col justify-center">
-                            <h2 className="text-3xl font-black mb-2">{passed ? '¡Aprobado!' : 'No Aprobado'}</h2>
-                            <p className="text-xl mb-6">{score} / {questions.length}</p>
-                            <Button fullWidth onClick={() => onFinish(passed)}>{passed ? 'Continuar' : 'Volver'}</Button>
+                        <div className="max-w-2xl mx-auto px-4 py-6 animate-in">
+                            <Button variant="ghost" onClick={() => setViewReview(false)} className="pl-0 mb-4 text-gray-500"><Icon path={ICONS.ArrowLeft} className="w-5 h-5 mr-2" /> Volver al Resultado</Button>
+                            <h2 className="text-2xl font-bold text-gray-900 mb-6">Revisión de Respuestas</h2>
+                            <div className="space-y-6">{questions.map((q, idx) => {
+                                const answerData = answers.find(a => a.id === q.id);
+                                const userSelected = answerData ? answerData.selectedOption : null;
+                                const isCorrect = userSelected === q.correcta;
+                                return (
+                                    <Card key={idx} className={`border-l-4 ${isCorrect ? 'border-l-emerald-500' : 'border-l-red-500'}`}>
+                                        <div className="mb-3"><span className="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-1 rounded uppercase">{q.cat}</span></div><h3 className="font-bold text-lg mb-4">{q.pregunta}</h3>
+                                        <div className="space-y-2 mb-4">{q.opciones.map((op, i) => {
+                                            let styles = "w-full p-3 rounded-lg text-left text-sm border ";
+                                            if (i === q.correcta) styles += "bg-emerald-50 border-emerald-500 text-emerald-800 font-bold";
+                                            else if (i === userSelected && !isCorrect) styles += "bg-red-50 border-red-500 text-red-800 font-bold";
+                                            else styles += "bg-gray-50 border-gray-200 text-gray-500 opacity-70";
+                                            return (<div key={i} className={styles}><div className="flex justify-between items-center"><span>{op}</span>{i === q.correcta && <Icon path={ICONS.CheckCircle} className="w-4 h-4 text-emerald-600" />}{i === userSelected && !isCorrect && <Icon path={ICONS.XCircle} className="w-4 h-4 text-red-600" />}</div></div>);
+                                        })}</div>
+                                        <div className="bg-blue-50 p-3 rounded-lg border border-blue-100"><p className="text-xs font-bold text-blue-800 uppercase mb-1">Explicación:</p><p className="text-sm text-blue-700">{q.explicacion}</p></div>
+                                    </Card>
+                                );
+                            })}</div>
+                        </div>
+                    );
+                }
+
+                if (showResult) {
+                    const correctCount = answers.filter(a => a.isCorrect).length;
+                    const passed = (correctCount / questions.length) >= 0.7;
+                    return (
+                        <div className="max-w-md mx-auto px-4 py-8 text-center animate-in">
+                            <div className={`w-24 h-24 rounded-full mx-auto flex items-center justify-center mb-6 ${passed ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'}`}><Icon path={passed ? ICONS.Award : ICONS.XCircle} className="w-12 h-12" /></div>
+                            <h2 className="text-2xl font-bold mb-2">{passed ? '¡Aprobado!' : 'No Aprobado'}</h2>
+                            <p className="text-lg text-gray-600 mb-2">{correctCount} correctas de {questions.length}</p>
+                            <p className="text-sm font-bold text-emerald-600 mb-6">Necesitas 70% para aprobar</p>
+                            <div className="space-y-3">
+                                <Button fullWidth onClick={() => handleFinish(passed)}>{passed ? 'Continuar' : 'Volver al Mapa'}</Button>
+                                <Button variant="secondary" fullWidth onClick={() => setViewReview(true)}><Icon path={ICONS.Eye} className="w-4 h-4 mr-2" /> Revisar mis Respuestas</Button>
+                                {!passed && <Button variant="ghost" fullWidth onClick={() => { setIdx(0); setAnswers([]); setShowResult(false); setSelected(null); }} className="mt-2">Reintentar</Button>}
+                            </div>
                         </div>
                     );
                 }
 
                 return (
-                    <div className="p-4 animate-in max-w-md mx-auto">
-                        <div className="flex justify-between mb-6"><button onClick={onExit}>Salir</button> <span className="font-bold text-emerald-600">{i + 1}/{questions.length}</span></div>
-                        <Card className="mb-4">
-                            <div className="text-xs font-bold text-gray-400 mb-2 uppercase">{questions[i].cat}</div>
-                            <h3 className="text-xl font-bold mb-4">{questions[i].pregunta}</h3>
-                            <div className="space-y-2">{questions[i].opciones.map((op, k) => (
-                                <button key={k} onClick={() => setSel(k)} className={`w-full p-3 rounded border-2 text-left ${sel === k ? 'border-emerald-500 bg-emerald-50' : 'border-gray-100'}`}>{op}</button>
-                            ))}</div>
+                    <div className="max-w-2xl mx-auto px-4 py-6 animate-in">
+                        <div className="flex flex-col mb-6">
+                            <div className="flex justify-between items-center mb-2"><Button variant="ghost" onClick={() => setView('mapa_niveles')} className="pl-0 text-gray-500"><Icon path={ICONS.X} className="w-5 h-5 mr-2" /> Salir</Button><span className="font-bold text-emerald-600">P. {idx + 1} / {questions.length}</span></div>
+                            <div className="flex items-center gap-2 text-sm font-semibold text-gray-500 bg-gray-50 p-2 rounded-lg border border-gray-200"><Icon path={ICONS.MapPin} className="w-4 h-4 text-gray-400" /> Estás en: <span className="text-gray-800">{title}</span></div>
+                        </div>
+                        <Card>
+                            <div className="mb-2"><span className="bg-gray-100 text-gray-500 px-2 py-1 rounded text-xs font-bold uppercase">{q.cat}</span></div>
+                            <h3 className="text-xl font-bold mb-6">{q.pregunta}</h3>
+                            <div className="space-y-3">{q.opciones.map((op, i) => (<button key={i} onClick={() => setSelected(i)} className={`w-full p-4 rounded-xl border-2 text-left transition-all ${selected === i ? 'border-emerald-600 bg-emerald-50 font-bold' : 'border-gray-200'}`}>{op}</button>))}</div>
                         </Card>
-                        <Button fullWidth disabled={sel === null} onClick={confirm}>Siguiente</Button>
+                        <div className="mt-6 flex justify-end"><Button disabled={selected === null} onClick={handleConfirm}>Confirmar</Button></div>
                     </div>
                 );
-            }
+            };
 
-            function Victory({ onHome }) {
-                return <div className="h-screen bg-slate-900 flex flex-col items-center justify-center p-6 text-center text-white"><Icons.Star className="w-20 h-20 text-yellow-400 mb-4"/><h1 className="text-4xl font-black mb-4">¡LO LOGRASTE!</h1><p className="mb-8">Estás listo para la certificación.</p><Button variant="gold" onClick={onHome}>Volver al Inicio</Button></div>;
-            }
-
-            function Resources({ onBack }) {
-                return (
-                    <div className="p-4 animate-in max-w-md mx-auto">
-                        <button onClick={onBack} className="mb-6 text-gray-500">← Volver</button>
-                        <h2 className="text-2xl font-bold mb-6">Biblioteca</h2>
-                        <div className="space-y-6">{BIBLIOTECA_DATA.map((m, i) => (
-                            <div key={i} className={`border-l-4 ${m.borde} pl-4`}>
-                                <h3 className={`font-bold ${m.color}`}>{m.titulo}</h3>
-                                <div className="grid gap-2 mt-2">{m.archivos.map((a, k) => (
-                                    <a key={k} href={a.url} target="_blank" className="block p-3 bg-white border rounded-lg shadow-sm hover:bg-gray-50">
-                                        <div className="font-bold text-sm">{a.nombre}</div>
-                                        <div className="text-xs text-gray-500">{a.desc}</div>
-                                    </a>
-                                ))}</div>
-                            </div>
-                        ))}</div>
+            const ExpertZoneView = () => (
+                <div className="max-w-2xl mx-auto px-4 py-6 animate-in">
+                    <Button variant="ghost" onClick={() => setView('home')} className="pl-0 mb-4 text-gray-500"><Icon path={ICONS.ArrowLeft} className="w-5 h-5 mr-2" /> Volver</Button>
+                    <div className="text-center mb-8"><h2 className="text-3xl font-black text-gray-900">Zona de Experto</h2><p className="text-gray-500">Material liberado.</p></div>
+                    <div className="grid gap-4">
+                        <Card className="flex items-center gap-4"><div className="bg-red-100 p-3 rounded-xl text-red-600"><Icon path={ICONS.FileText} className="w-8 h-8" /></div><div><h3 className="font-bold text-lg">Pack PDFs Premium</h3></div></Card>
+                        <Card className="flex items-center gap-4"><div className="bg-emerald-100 p-3 rounded-xl text-emerald-600"><Icon path={ICONS.CheckCircle} className="w-8 h-8" /></div><div><h3 className="font-bold text-lg">Ensayos Ilimitados</h3></div></Card>
+                        <Card className="flex items-center gap-4"><div className="bg-fuchsia-100 p-3 rounded-xl text-fuchsia-600"><Icon path={ICONS.Sparkles} className="w-8 h-8" /></div><div><h3 className="font-bold text-lg">Flashcards Maestras</h3></div></Card>
+                        <Card className="flex items-center gap-4"><div className="bg-blue-100 p-3 rounded-xl text-blue-600"><Icon path={ICONS.Newspaper} className="w-8 h-8" /></div><div><h3 className="font-bold text-lg">Noticias del Rubro</h3></div></Card>
                     </div>
-                );
-            }
+                </div>
+            );
 
-            function Forum({ user, db, onBack }) {
-                const [posts, setPosts] = useState([]);
-                const [form, setForm] = useState(false);
-                const [t, setT] = useState('');
-                const [c, setC] = useState('');
-
-                useEffect(() => db.collection("forum").orderBy("date", "desc").onSnapshot(s => setPosts(s.docs.map(d => ({id: d.id, ...d.data()})))), []);
-                const pub = async () => {
-                    if(t && c) { await db.collection("forum").add({ title: t, content: c, author: user.email.split('@')[0], date: new Date(), comments: 0 }); setForm(false); setT(''); setC(''); }
-                };
-
-                return (
-                    <div className="p-4 animate-in max-w-md mx-auto">
-                        <button onClick={onBack} className="mb-4 text-gray-500">← Volver</button>
-                        <div className="flex justify-between items-center mb-6"><h2 className="text-2xl font-bold">Foro</h2><button onClick={() => setForm(true)} className="text-sm bg-emerald-100 text-emerald-700 px-3 py-1 rounded">Nuevo</button></div>
-                        {form ? <div className="space-y-3"><input className="w-full border p-2 rounded" placeholder="Título" value={t} onChange={e=>setT(e.target.value)} /><textarea className="w-full border p-2 rounded h-24" placeholder="Texto" value={c} onChange={e=>setC(e.target.value)} /><Button fullWidth onClick={pub}>Publicar</Button></div> :
-                        <div className="space-y-3">{posts.map(p => <div key={p.id} className="bg-white p-4 rounded-xl border shadow-sm"><h4 className="font-bold">{p.title}</h4><p className="text-sm text-gray-600">{p.content}</p><div className="text-xs text-gray-400 mt-2">Por {p.author}</div></div>)}</div>}
+            const VictoryView = () => (
+                <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4 relative overflow-hidden">
+                    <div className="relative z-10 text-center max-w-md w-full animate-in zoom-in duration-700">
+                        <div className="w-32 h-32 mx-auto bg-gradient-to-br from-yellow-300 to-yellow-600 rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(234,179,8,0.5)] mb-8"><Icon path={ICONS.Star} className="w-16 h-16 text-white fill-current animate-pulse" /></div>
+                        <h1 className="text-4xl font-black text-white mb-2">¡LO LOGRASTE!</h1>
+                        <p className="text-yellow-400 text-lg font-bold mb-6 uppercase">Estás preparado</p>
+                        <Button onClick={() => setView('home')} size="lg" variant="gold" fullWidth>Volver al Inicio</Button>
                     </div>
-                )
-            }
+                </div>
+            );
 
-            function FAQ({ onBack }) {
-                return <div className="p-4 animate-in max-w-md mx-auto"><button onClick={onBack} className="mb-6">← Volver</button><h2 className="text-2xl font-bold mb-4">Preguntas Frecuentes</h2><div className="space-y-4"><div className="p-4 bg-white border rounded-xl"><h3 className="font-bold text-emerald-700">¿Cuándo son las pruebas?</h3><p className="text-sm">Marzo y Octubre generalmente. Revisa SEREMI en línea.</p></div></div></div>;
-            }
+            if (loading) return <div className="min-h-screen flex items-center justify-center text-emerald-600">Cargando tu progreso...</div>;
+
+            return (
+                <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-12">
+                    <nav className="bg-white border-b sticky top-0 z-50 h-16 flex items-center px-4 justify-between shadow-sm">
+                        <div className="flex items-center gap-2"><Icon path={ICONS.Brain} className="w-6 h-6 text-emerald-600" /><span className="font-bold text-xl text-gray-800">Auxiliar<span className="text-emerald-600">Pro</span></span></div>
+                        {user && <button onClick={handleLogout} className="p-2 text-red-500"><Icon path={ICONS.LogOut} className="w-5 h-5" /></button>}
+                    </nav>
+                    <main>
+                        {!user && <AuthView />}
+                        {user && view === 'home' && <HomeView />}
+                        {user && view === 'mapa_niveles' && <LevelMapView />}
+                        {user && view === 'quiz' && <QuizView />}
+                        {user && view === 'victory' && <VictoryView />}
+                        {user && view === 'expert_zone' && <ExpertZoneView />}
+                        {user && view === 'faq' && <FaqView />}
+                        {user && view === 'forum' && <ForumView />}
+                        {user && view === 'feedback' && <FeedbackView />}
+                        {user && view === 'resources' && <ResourcesView />}
+                    </main>
+                </div>
+            );
         };
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
