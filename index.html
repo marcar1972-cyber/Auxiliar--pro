@@ -5,13 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Auxiliar Pro</title>
     
+    <!-- Estilos -->
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- React -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     
+    <!-- Babel -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
+    <!-- FIREBASE (Versión Compat - Máxima compatibilidad móvil) -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -23,7 +27,7 @@
     <div id="root">Cargando sistema...</div>
 
     <script type="text/babel">
-        // --- CONFIGURACIÓN FIREBASE ---
+        // --- 1. CONFIGURACIÓN FIREBASE ---
         const firebaseConfig = {
           apiKey: "AIzaSyDNhuSBBhmmQSV0BHC8MOtLKgAUpvtfWfE",
           authDomain: "auxiliar-pro.firebaseapp.com",
@@ -43,7 +47,7 @@
 
         const { useState, useEffect } = React;
 
-        // --- BIBLIOTECA DE ARCHIVOS ---
+        // --- 2. BIBLIOTECA DE ARCHIVOS ---
         const BIBLIOTECA_DATA = [
             {
                 titulo: "Módulo 1: La Base Legal",
@@ -79,7 +83,7 @@
             }
         ];
 
-        // --- ICONOS (SVG) ---
+        // --- 3. ICONOS (SVG BLINDADOS) ---
         const Icon = ({ path, className = "w-6 h-6" }) => (
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{path}</svg>
         );
@@ -160,24 +164,22 @@
             return "Evaluación";
         };
 
-        // --- COMPONENTES ---
-        const Button = ({ children, onClick, variant = 'primary', className = '', fullWidth = false, size = 'md', disabled = false }) => {
-            const baseStyle = `rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-md ${disabled ? 'opacity-50 cursor-not-allowed grayscale' : 'active:scale-95'}`;
-            const sizes = { sm: "px-3 py-2 text-sm", md: "px-6 py-4 text-base", lg: "px-8 py-5 text-xl" };
-            const variants = {
-                primary: "bg-emerald-600 text-white hover:bg-emerald-700 border-b-4 border-emerald-800",
-                secondary: "bg-white text-emerald-700 border-2 border-emerald-100 hover:border-emerald-300",
-                accent: "bg-fuchsia-600 text-white hover:bg-fuchsia-700 border-b-4 border-fuchsia-800",
-                ghost: "bg-transparent text-gray-600 hover:bg-gray-100 shadow-none",
-                locked: "bg-gray-100 text-gray-400 border-2 border-gray-200 shadow-none",
-                gold: "bg-gradient-to-r from-yellow-400 to-yellow-600 text-white border-b-4 border-yellow-700 shadow-yellow-200"
-            };
-            return <button onClick={!disabled ? onClick : null} className={`${baseStyle} ${sizes[size]} ${disabled ? variants.locked : variants[variant]} ${fullWidth ? 'w-full' : ''} ${className}`}>{children}</button>;
-        };
-
+        // --- COMPONENTES VISUALES ---
         const Card = ({ children, className = '' }) => (
             <div className={`bg-white rounded-2xl shadow-sm border border-gray-100 p-6 ${className}`}>{children}</div>
         );
+
+        const Button = ({ children, onClick, variant = 'primary', className = '', fullWidth = false, disabled = false }) => {
+            const base = `rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-md px-4 py-3 active:scale-95`;
+            const variants = {
+                primary: "bg-emerald-600 text-white hover:bg-emerald-700 border-b-4 border-emerald-800",
+                secondary: "bg-white text-emerald-700 border-2 border-emerald-100 hover:border-emerald-300",
+                gold: "bg-yellow-500 text-white border-b-4 border-yellow-700",
+                ghost: "text-gray-500 hover:bg-gray-100 shadow-none border-none",
+                locked: "bg-gray-100 text-gray-400 border-2 border-gray-200 shadow-none cursor-not-allowed active:scale-100"
+            };
+            return <button onClick={!disabled ? onClick : null} className={`${base} ${disabled ? variants.locked : variants[variant]} ${fullWidth ? 'w-full' : ''} ${className}`}>{children}</button>;
+        };
 
         const LevelBadgeHeader = ({ level }) => {
             const badges = {
@@ -188,9 +190,8 @@
                 5: { icon: "Award", text: "Auxiliar Pro", color: "text-emerald-700", bg: "bg-emerald-50", border: "border-emerald-300", fill: "fill-emerald-200" }
             };
             const currentBadge = badges[level >= 5 ? 5 : level >= 4 ? 4 : level];
-            
             return (
-                <div className={`w-full p-6 rounded-3xl border-2 ${currentBadge.bg} ${currentBadge.border} flex flex-col items-center justify-center animate-in mb-8 relative overflow-hidden`}>
+                <div className={`w-full p-6 rounded-3xl border-2 ${currentBadge.bg} ${currentBadge.border} flex flex-col items-center justify-center mb-8 relative overflow-hidden`}>
                     <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-white transform rotate-12 scale-150"></div>
                     <div className="relative z-10 flex flex-col items-center">
                         <div className={`p-4 bg-white rounded-full shadow-lg mb-3 border-4 ${currentBadge.border}`}>
@@ -216,12 +217,11 @@
             const [currentQuizType, setCurrentQuizType] = useState(null);
 
             useEffect(() => {
-                auth.onAuthStateChanged(async (currentUser) => {
+                const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
                     if (currentUser) {
                         setUser(currentUser);
                         setShowAuth(false);
                         setView('home');
-                        
                         const docRef = db.collection("users").doc(currentUser.uid);
                         docRef.get().then((doc) => {
                             if (doc.exists) {
@@ -237,11 +237,22 @@
                             }
                             setLoading(false);
                         });
+                        
+                        // Escucha de redirección para completar login si es necesario
+                        auth.getRedirectResult().then((result) => {
+                             if (result.user) {
+                                 // Redirección completada con éxito (ya manejada por onAuthStateChanged, pero bueno para debug)
+                             }
+                        }).catch((error) => {
+                             console.error(error);
+                        });
+
                     } else {
                         setUser(null);
                         setLoading(false);
                     }
                 });
+                return () => unsubscribe();
             }, []);
 
             const saveProgress = (newLevel, newProgress) => {
@@ -262,7 +273,7 @@
 
             const handleGoogleLogin = async () => {
                 try { 
-                    // CAMBIO CLAVE: Usamos signInWithRedirect para móviles
+                    // Usamos Redirect explícitamente
                     await auth.signInWithRedirect(googleProvider); 
                 } catch (error) { 
                     setErrorMsg(error.message); 
@@ -552,7 +563,7 @@
                                     <Button size="sm" onClick={() => setShowForm(true)}>Crear Tema</Button>
                                 </div>
                                 <div className="space-y-4">
-                                    {posts.length === 0 && <p className="text-center text-gray-500">No hay temas aún. ¡Sé el primero!</p>}
+                                    {posts.length === 0 && <p className="text-center text-gray-500">Sé el primero en publicar.</p>}
                                     {posts.map(post => (
                                         <Card key={post.id} className="hover:shadow-md transition-shadow">
                                             <h4 className="font-bold text-gray-800 text-lg mb-1">{post.title}</h4>
@@ -587,4 +598,3 @@
     </script>
 </body>
 </html>
-
