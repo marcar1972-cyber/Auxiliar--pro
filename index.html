@@ -109,6 +109,10 @@
         };
 
         // --- COMPONENTES VISUALES ---
+        const Card = ({ children, className = '' }) => (
+            <div className={`bg-white rounded-2xl shadow-sm border border-gray-100 p-6 ${className}`}>{children}</div>
+        );
+
         const Button = ({ children, onClick, variant = 'primary', className = '', fullWidth = false, disabled = false }) => {
             const base = `rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-md px-4 py-3 active:scale-95`;
             const variants = {
@@ -121,15 +125,13 @@
             return <button onClick={!disabled ? onClick : null} className={`${base} ${disabled ? variants.locked : variants[variant]} ${fullWidth ? 'w-full' : ''} ${className}`}>{children}</button>;
         };
 
-        const Card = ({ children, className = '' }) => <div className={`bg-white rounded-2xl shadow-sm border border-gray-100 p-6 ${className}`}>{children}</div>;
-
         const LevelBadgeHeader = ({ level }) => {
             const badges = {
-                1: { icon: "shield", text: "Aspirante", color: "text-gray-500", bg: "bg-gray-100", border: "border-gray-300" },
-                2: { icon: "shield", text: "Bronce", color: "text-orange-700", bg: "bg-orange-50", border: "border-orange-300" },
-                3: { icon: "shield", text: "Plata", color: "text-slate-700", bg: "bg-slate-100", border: "border-slate-300" },
-                4: { icon: "star", text: "Oro", color: "text-yellow-700", bg: "bg-yellow-50", border: "border-yellow-300" },
-                5: { icon: "award", text: "Auxiliar Pro", color: "text-emerald-700", bg: "bg-emerald-50", border: "border-emerald-300" }
+                1: { icon: "Shield", text: "Aspirante", color: "text-gray-500", bg: "bg-gray-100", border: "border-gray-300", fill: "fill-gray-200" },
+                2: { icon: "Shield", text: "Bronce", color: "text-orange-700", bg: "bg-orange-50", border: "border-orange-300", fill: "fill-orange-200" },
+                3: { icon: "Shield", text: "Plata", color: "text-slate-700", bg: "bg-slate-100", border: "border-slate-300", fill: "fill-slate-300" },
+                4: { icon: "Star", text: "Oro", color: "text-yellow-700", bg: "bg-yellow-50", border: "border-yellow-300", fill: "fill-yellow-400" },
+                5: { icon: "Award", text: "Auxiliar Pro", color: "text-emerald-700", bg: "bg-emerald-50", border: "border-emerald-300", fill: "fill-emerald-200" }
             };
             const badge = badges[level >= 5 ? 5 : level >= 4 ? 4 : level];
             
@@ -163,6 +165,7 @@
                         setUser(currentUser);
                         setShowAuth(false);
                         setView('home');
+                        
                         const docRef = db.collection("users").doc(currentUser.uid);
                         docRef.get().then((doc) => {
                             if (doc.exists) {
@@ -170,7 +173,11 @@
                                 setUserLevel(data.level || 1);
                                 setProgress(data.progress || { '1A': false });
                             } else {
-                                docRef.set({ level: 1, progress: { '1A': false }, email: currentUser.email });
+                                docRef.set({
+                                    level: 1,
+                                    progress: { '1A': false },
+                                    email: currentUser.email
+                                });
                             }
                             setLoading(false);
                         });
@@ -181,6 +188,7 @@
                         }).catch((error) => {
                             console.error(error);
                         });
+
                     } else {
                         setUser(null);
                         setLoading(false);
@@ -188,9 +196,14 @@
                 });
             }, []);
 
+            const saveProgress = (newLevel, newProgress) => {
+                if (!user) return;
+                db.collection("users").doc(user.uid).update({ level: newLevel, progress: newProgress });
+            };
+
             const handleLogin = async (email, pass, isReg, sec) => {
                 setErrorMsg('');
-                if (isReg && parseInt(sec) !== 7) { setErrorMsg("Error seguridad (4+3=?)"); return; }
+                if (isReg && parseInt(sec) !== 7) { setErrorMsg("Respuesta incorrecta. 4+3=7"); return; }
                 try {
                     if(isReg) await createUserWithEmailAndPassword(auth, email, pass);
                     else await signInWithEmailAndPassword(auth, email, pass);
@@ -198,12 +211,18 @@
             };
 
             const handleGoogle = async () => {
-                 try { await signInWithRedirect(auth, googleProvider); } catch(e) { setErrorMsg(e.message); }
+                 try { 
+                    // VOLVEMOS AL POPUP: Es la forma más segura de evitar el bucle de redirección en este entorno
+                    await auth.signInWithPopup(googleProvider); 
+                 } catch(e) { 
+                    setErrorMsg("Error: " + e.message + ". Intenta con correo y contraseña si el error persiste."); 
+                 }
             };
 
             const handleLogout = async () => {
-                await signOut(auth);
+                await auth.signOut();
                 setUserLevel(1);
+                setProgress({ '1A': false });
                 setView('landing');
             };
 
@@ -211,7 +230,7 @@
                 if (passed) {
                     const newProgress = { ...progress, [currentQuizType]: true };
                     let newLevel = userLevel;
-                    if (currentQuizType === '1A' && userLevel < 2) { newLevel = 2; alert("¡Nivel 2 Desbloqueado!"); }
+                    if (currentQuizType === '1A' && userLevel < 2) { newLevel = 2; alert("¡Felicidades! Nivel 2 Desbloqueado."); }
                     if (currentQuizType === '2' && userLevel < 3) newLevel = 3;
                     if (currentQuizType === '3' && userLevel < 4) newLevel = 4;
                     if (currentQuizType === '4') { newLevel = 5; setView('victory'); }
