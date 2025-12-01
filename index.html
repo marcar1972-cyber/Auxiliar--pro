@@ -5,17 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Auxiliar Pro</title>
     
-    <!-- Estilos -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- React -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     
-    <!-- Babel -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <!-- FIREBASE (Versión Compat - Máxima compatibilidad móvil) -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -27,7 +23,7 @@
     <div id="root">Cargando sistema...</div>
 
     <script type="text/babel">
-        // --- 1. CONFIGURACIÓN FIREBASE ---
+        // --- CONFIGURACIÓN FIREBASE ---
         const firebaseConfig = {
           apiKey: "AIzaSyDNhuSBBhmmQSV0BHC8MOtLKgAUpvtfWfE",
           authDomain: "auxiliar-pro.firebaseapp.com",
@@ -47,7 +43,7 @@
 
         const { useState, useEffect } = React;
 
-        // --- 2. BIBLIOTECA DE ARCHIVOS ---
+        // --- BIBLIOTECA DE ARCHIVOS ---
         const BIBLIOTECA_DATA = [
             {
                 titulo: "Módulo 1: La Base Legal",
@@ -83,7 +79,7 @@
             }
         ];
 
-        // --- 3. ICONOS (SVG BLINDADOS) ---
+        // --- ICONOS (SVG) ---
         const Icon = ({ path, className = "w-6 h-6" }) => (
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>{path}</svg>
         );
@@ -219,36 +215,20 @@
             const [progress, setProgress] = useState({ '1A': false, '2': false, '3': false, '4': false });
             const [currentQuizType, setCurrentQuizType] = useState(null);
 
-            // 1. Escuchar si el usuario entra (Login)
             useEffect(() => {
                 auth.onAuthStateChanged(async (currentUser) => {
                     if (currentUser) {
-                        // Logueado
                         setUser(currentUser);
                         setShowAuth(false);
                         setView('home');
                         
-                        // Buscar datos en Firestore
                         const docRef = db.collection("users").doc(currentUser.uid);
                         docRef.get().then((doc) => {
                             if (doc.exists) {
-                                // Usuario antiguo: Cargar su nivel
                                 const data = doc.data();
                                 setUserLevel(data.level || 1);
                                 setProgress(data.progress || { '1A': false, '2': false, '3': false, '4': false });
                             } else {
-                                // Usuario nuevo: Crear nivel 1
                                 docRef.set({
                                     level: 1,
-                                    progress: { '1A': false, '2': false, '3': false, '4': false },
-                                    email: currentUser.email
-                                });
-                            }
-                            setLoading(false);
-                        });
-
-                        // 2. Escuchar si vuelve de la redirección de Google (¡CLAVE!)
-                        auth.getRedirectResult().then((result) => {
-                            if (result.user) {
-                                // Ya manejado por onAuthStateChanged, pero bueno saberlo
-                                console.l
+                                    progress: { '1A': 
