@@ -1,24 +1,384 @@
-import React from 'react';
-import { ICONS } from '../components/Icons';
-import { Button } from '../components/UI';
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auxiliar Pro | Certificación 2026</title>
+    <meta name="description" content="App de estudio para Auxiliares de Farmacia en Chile.">
+    
+    <!-- Tailwind CSS (CDN para rapidez en Vercel) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fuentes Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Efecto Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-export const FAQ: React.FC<{ onBack: () => void }> = ({ onBack }) => {
-    return (
-        <div className="max-w-2xl mx-auto px-4 py-6 animate-fade-in">
-             <Button variant="ghost" onClick={onBack} className="pl-0 mb-4 text-gray-500">
-                <ICONS.ArrowLeft className="w-5 h-5 mr-2" /> Volver
-            </Button>
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Preguntas Frecuentes</h2>
-            <div className="space-y-4">
-                <div className="bg-white border border-gray-200 rounded-xl p-5">
-                    <h3 className="font-bold text-emerald-800 mb-2">¿Cuándo son las fechas?</h3>
-                    <p className="text-sm text-gray-600">Generalmente marzo/abril y octubre/noviembre. Revisa tu SEREMI local.</p>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'farmacia-green': '#00C853',
+                        'farmacia-dark': '#0d1b2a',
+                        'metal-bronze': '#cd7f32',
+                        'metal-silver': '#9e9e9e',
+                        'metal-gold': '#ffd700',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Roboto', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .locked-level { filter: grayscale(100%); opacity: 0.6; pointer-events: none; }
+        .medal-shine { position: relative; overflow: hidden; }
+        .medal-shine::after {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-25deg); animation: shine 3s infinite;
+        }
+        @keyframes shine { 100% { left: 200%; } }
+        .library-unlocked { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+        
+        /* Scrollbar personalizada */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+
+<!-- Fondo neutro para escritorio, la app se centra -->
+<body class="bg-gray-100 text-gray-800 antialiased min-h-screen flex flex-col items-center justify-center">
+
+    <!-- CONTENEDOR PRINCIPAL (Móvil centrado en PC) -->
+    <div class="w-full max-w-md bg-white h-screen md:h-[90vh] md:rounded-3xl md:shadow-2xl overflow-hidden flex flex-col relative">
+
+        <!-- VISTA 1: LANDING -->
+        <div id="view-landing" class="flex-1 flex flex-col fade-in overflow-y-auto">
+            <header class="w-full py-4 px-6 flex justify-between items-center border-b border-gray-100 sticky top-0 bg-white/95 backdrop-blur-sm z-10">
+                <div class="flex items-center gap-2">
+                    <div class="bg-farmacia-green text-white p-1.5 rounded-md"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6v12m-6-6h12"/></svg></div>
+                    <span class="font-heading font-bold text-xl tracking-tight text-gray-900">Auxiliar<span class="text-farmacia-green">Pro</span></span>
                 </div>
-                <div className="bg-white border border-gray-200 rounded-xl p-5">
-                    <h3 className="font-bold text-emerald-800 mb-2">¿Qué requisitos necesito?</h3>
-                    <p className="text-sm text-gray-600">Licencia de media, 1 año de experiencia y certificado de antecedentes.</p>
+                <button onclick="navToDashboard()" class="bg-farmacia-green hover:bg-green-600 text-white font-semibold py-2 px-6 rounded-full transition-all shadow-md text-sm">Ingresar</button>
+            </header>
+
+            <main class="flex-1 flex flex-col justify-center items-center text-center px-4 mt-8 mb-12">
+                <div class="inline-flex items-center gap-2 bg-green-100 border border-green-200 text-green-800 text-xs font-bold px-3 py-1 rounded-full mb-6 uppercase tracking-wide">
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Certificación 2026
+                </div>
+                <h1 class="font-heading text-4xl font-extrabold text-gray-900 leading-tight mb-6">Prepárate para tu examen de <br><span class="text-farmacia-green">Auxiliar de Farmacia</span></h1>
+                <p class="text-gray-500 text-lg max-w-xs mx-auto mb-10 leading-relaxed">
+                    Aprueba el Nivel Básico para desbloquear la Biblioteca Técnica y prepárate para los niveles expertos.
+                </p>
+                
+                <!-- Aviso de persistencia -->
+                <div class="bg-yellow-50 border border-yellow-100 rounded-lg p-3 mb-8 max-w-xs text-xs text-yellow-700">
+                    <span class="font-bold">Nota:</span> Tu progreso se guarda automáticamente en este dispositivo.
+                </div>
+
+                <button onclick="navToDashboard()" class="group bg-farmacia-dark hover:bg-slate-900 text-white text-lg font-semibold py-4 px-8 rounded-lg shadow-xl hover:shadow-2xl transition-all flex items-center gap-3">Comenzar Ahora <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+                <div class="mt-12"><button onclick="resetProgress()" class="text-xs text-gray-400 underline hover:text-red-500">Reiniciar mi progreso (Reset Total)</button></div>
+            </main>
+        </div>
+
+        <!-- VISTA 2: DASHBOARD -->
+        <div id="view-dashboard" class="hidden flex-1 flex flex-col bg-slate-50 h-full overflow-hidden">
+            <header class="bg-white shadow-sm py-4 px-6 flex justify-between items-center sticky top-0 z-10">
+                <div class="flex flex-col">
+                    <span class="font-heading font-bold text-gray-700">Panel de Estudio</span>
+                    <span class="text-xs text-gray-400" id="header-medal-status">Rango Actual: Novato</span>
+                </div>
+                <button onclick="navToLanding()" class="text-sm text-gray-500 hover:text-farmacia-dark font-medium flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> Salir
+                </button>
+            </header>
+
+            <main class="flex-1 p-6 w-full pb-20 overflow-y-auto">
+                <div class="bg-white rounded-2xl p-6 shadow-md border-t-4 border-farmacia-green mb-8 text-center relative overflow-hidden">
+                    <p class="text-gray-500 text-sm font-semibold uppercase tracking-wider mb-2">Tu Camino al Éxito</p>
+                    <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2"><div class="bg-farmacia-green h-2.5 rounded-full transition-all duration-1000" id="progress-bar" style="width: 5%"></div></div>
+                    <div class="flex justify-between text-xs text-gray-400 font-medium"><span>Inicio</span><span>Certificado</span></div>
+                </div>
+
+                <div class="space-y-4" id="levels-container"></div>
+                <div id="library-section" class="mt-8 pt-8 border-t border-gray-200 mb-8"></div>
+            </main>
+        </div>
+
+    </div>
+
+    <!-- MODAL QUIZ (Full Overlay) -->
+    <div id="quiz-modal" class="absolute inset-0 z-50 bg-white md:rounded-3xl hidden flex-col">
+        <!-- Header Fijo -->
+        <div class="bg-farmacia-dark p-6 text-white flex justify-between items-center shrink-0">
+            <div>
+                <h3 class="font-bold text-xl" id="quiz-title">Evaluación</h3>
+                <p class="text-blue-200 text-sm" id="quiz-subtitle">Modo Examen</p>
+            </div>
+            <button onclick="closeQuiz()" class="text-white/70 hover:text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        </div>
+
+        <!-- Contenido Scrollable -->
+        <div class="flex-1 overflow-y-auto p-6">
+            <div id="quiz-content-active">
+                <div id="quiz-question-container"></div>
+            </div>
+
+            <div id="quiz-content-result" class="hidden text-center mt-10">
+                <div id="result-icon" class="mb-4 flex justify-center"></div>
+                <h2 id="result-title" class="text-2xl font-bold mb-2 text-gray-900"></h2>
+                <p id="result-message" class="text-gray-600 mb-6"></p>
+                <div class="bg-gray-50 rounded-lg p-4 mb-6 border border-gray-200">
+                    <p class="text-sm text-gray-500 uppercase font-bold">Tu Puntaje</p>
+                    <p class="text-3xl font-bold text-farmacia-dark" id="result-score">0/0</p>
+                </div>
+                <div class="flex flex-col gap-3">
+                    <button id="btn-review" onclick="startReviewMode()" class="w-full border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 font-bold py-3 rounded-lg transition-colors">Ver Respuestas Correctas</button>
+                    <button id="btn-retry" onclick="retryLevel()" class="w-full bg-farmacia-green hover:bg-green-600 text-white font-bold py-3 rounded-lg transition-colors">Intentar de Nuevo</button>
+                    <button onclick="closeQuiz()" class="text-sm text-gray-400 mt-2 hover:text-gray-600 underline">Salir al Panel</button>
                 </div>
             </div>
         </div>
-    );
-};
+
+        <!-- Footer Fijo (Solo visible en modo activo) -->
+        <div id="quiz-footer" class="p-4 border-t border-gray-100 bg-gray-50 shrink-0 flex justify-between items-center">
+            <span class="text-xs text-gray-500 font-bold">PREGUNTA <span id="current-q-num">1</span>/<span id="total-q-num">3</span></span>
+            <button id="next-btn" onclick="nextQuestion()" class="bg-farmacia-dark hover:bg-slate-700 text-white px-6 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed">Siguiente</button>
+        </div>
+    </div>
+
+    <script>
+        const metalConfig = { "Bronce": "bg-gradient-to-br from-amber-600 to-amber-800 text-white shadow-amber-200 border-amber-600", "Plata": "bg-gradient-to-br from-gray-400 to-slate-500 text-white shadow-gray-300 border-gray-400", "Oro": "bg-gradient-to-br from-yellow-400 to-yellow-600 text-white shadow-yellow-200 border-yellow-500", "Platino": "bg-gradient-to-br from-cyan-400 to-blue-600 text-white shadow-blue-200 border-blue-400" };
+
+        const levelsData = [
+            { id: 1, title: "Conceptos Básicos", desc: "Nivel de Entrada. Preguntas sencillas.", metalName: "Bronce", questions: [ { q: "¿Dónde se deben comprar los medicamentos?", options: ["Feria", "Farmacias establecidas", "Redes Sociales", "Calle"], correct: 1 }, { q: "Rango temperatura refrigerador farmacia:", options: ["2°C a 8°C", "Bajo cero", "Ambiente", "Sobre 20°C"], correct: 0 }, { q: "¿Quién dirige técnicamente la farmacia?", options: ["Contador", "Químico Farmacéutico", "Bodeguero", "Cajero"], correct: 1 }, { q: "Documento para vender antibióticos:", options: ["Carnet", "Receta Médica", "Nada", "Boleta luz"], correct: 1 }, { q: "¿Quién fiscaliza las farmacias?", options: ["ISP", "Carabineros", "Bomberos", "Municipalidad"], correct: 0 }, { q: "Medicamento Venta Directa, ¿necesita receta?", options: ["Sí", "No", "A veces", "Solo niños"], correct: 1 }, { q: "¿Qué es un genérico?", options: ["Falso", "Sin marca (DCI)", "Vencido", "Natural"], correct: 1 }, { q: "¿Dónde se guardan los controlados?", options: ["Mostrador", "Bajo llave", "Vitrina", "Suelo"], correct: 1 }, { q: "¿Qué revisar al entregar?", options: ["Caja bonita", "Vencimiento y nombre", "Precio", "Color"], correct: 1 }, { q: "¿Quién ayuda al QF?", options: ["Guardia", "Auxiliar de Farmacia", "Cliente", "Nadie"], correct: 1 } ] },
+            { id: 2, title: "Legislación (Hardcore)", desc: "Estudia el PDF 'Decreto 466'.", metalName: "Plata", questions: [ { q: "¿Decreto que regula Psicotrópicos?", options: ["DS 466", "DS 404", "DS 405", "DS 594"], correct: 1 }, { q: "Validez Receta Cheque:", options: ["60 días corridos", "30 días corridos", "30 días hábiles", "Indefinida"], correct: 1 }, { q: "Libro NO obligatorio hoy:", options: ["Reclamos", "Psicotrópicos", "Sugerencias", "Recetas"], correct: 2 }, { q: "Validez receta Clonazepam (Lista IV):", options: ["30 días", "60 días", "1 año", "Hasta fin de caja"], correct: 0 }, { q: "Sanción venta antibióticos sin receta:", options: ["Multa/Sumario", "Amonestación", "Cierre", "Nada"], correct: 0 }, { q: "Venta online medicamentos:", options: ["Prohibida", "Solo venta directa", "Permitida con condiciones", "Libre"], correct: 2 }, { q: "¿Qué es la 'Canela'?", options: ["Saborizante", "Incentivo ilegal por marcas", "Descuento", "Hierba"], correct: 1 }, { q: "Guardar recetas cheque por:", options: ["6 meses", "1 año", "2 años", "5 años"], correct: 1 }, { q: "Lista Psicotrópicos con Receta Cheque:", options: ["Lista II y III", "Lista I", "Lista IV", "Todas"], correct: 1 }, { q: "¿Se puede fraccionar (blister suelto)?", options: ["Sí", "Solo farmacias autorizadas", "No", "Si falta dinero"], correct: 1 } ] },
+            { id: 3, title: "Farmacología y Cálculo", desc: "Usa la guía de Posología.", metalName: "Oro", questions: [ { q: "POSOLOGÍA: 50mg/kg/día, 3 tomas. Niño 15kg. Jarabe 500mg/5ml. ¿Ml/toma?", options: ["2.5 ml", "5 ml", "7.5 ml", "10 ml"], correct: 0 }, { q: "POSOLOGÍA: 1 comp c/8h x 7 días. Caja 20. ¿Cajas?", options: ["1", "2", "3", "Justo"], correct: 1 }, { q: "Interacción peligrosa con Warfarina:", options: ["Paracetamol", "Aspirina/AINEs", "Vitamina C", "Loratadina"], correct: 1 }, { q: "POSOLOGÍA: 15mg/kg/dosis. Niño 10kg. Jarabe 120mg/5ml. ¿Ml?", options: ["4 ml", "5 ml", "6.25 ml", "10 ml"], correct: 2 }, { q: "Acción Omeprazol:", options: ["Antiácido", "Inhibidor Bomba Protones", "Protector", "Antagonista H2"], correct: 1 }, { q: "NO es AINE:", options: ["Ketorolaco", "Naproxeno", "Celecoxib", "Paracetamol"], correct: 3 }, { q: "POSOLOGÍA: 1g c/12h. Tab 500mg. ¿Diarias?", options: ["2", "4", "6", "8"], correct: 1 }, { q: "POSOLOGÍA: 120ml. 5ml c/8h. ¿Días?", options: ["4", "6", "8", "10"], correct: 2 }, { q: "Diferencia Losartán/Enalapril:", options: ["ARA II vs IECA", "Iguales", "Diurético", "Betabloqueador"], correct: 0 }, { q: "POSOLOGÍA: 0.5 tab de 10mg. ¿Mg?", options: ["10", "5", "2.5", "20"], correct: 1 } ] },
+            { id: 4, title: "Simulacro Master", desc: "Examen Final Integrado.", metalName: "Platino", questions: [ { q: "POSOLOGÍA UCI (Trampa):", options: ["Saltar", "Es cálculo clínico, no farmacia comunitaria", "700", "7"], correct: 1 }, { q: "Receta Alprazolam fecha 35 días. ¿Vende?", options: ["Sí", "No (caducó 30 días)", "Sí con saldo", "Depende"], correct: 1 }, { q: "POSOLOGÍA: 2 al día x 10 días. Caja 14. ¿Cajas?", options: ["1", "2", "3", "4"], correct: 1 }, { q: "Medicamento Lábil a la luz:", options: ["Fotosensible", "Termolábil", "Hidro", "Vence"], correct: 0 }, { q: "Receta Cheque se usa para:", options: ["Lista IV", "Lista II y III", "Antibióticos", "Caros"], correct: 1 }, { q: "POSOLOGÍA: 1g c/8h. Vial 1g. ¿Viales/24h?", options: ["1", "2", "3", "4"], correct: 2 }, { q: "Acción Salbutamol:", options: ["Agonista Beta-2", "Corticoide", "Anticolinérgico", "Mucolítico"], correct: 0 }, { q: "POSOLOGÍA: Dosis 45mg. Jarabe 15mg/5ml. ¿Ml?", options: ["10", "15", "20", "5"], correct: 1 }, { q: "Vigencia Receta Magistral:", options: ["30", "40", "60", "Indef"], correct: 1 }, { q: "Sildenafil + Nitratos:", options: ["Nada", "Hipotensión fatal", "Hiper", "Dolor"], correct: 1 } ] }
+        ];
+
+        let appState = { currentLevel: 1, levelAttempts: { 1: 0, 2: 0, 3: 0, 4: 0 } };
+
+        function loadState() {
+            const saved = localStorage.getItem('auxiliarProVercel2026');
+            if (saved) appState = JSON.parse(saved);
+        }
+        function saveState() { localStorage.setItem('auxiliarProVercel2026', JSON.stringify(appState)); }
+        function resetProgress() { if(confirm("¿Seguro quieres reiniciar?")) { localStorage.removeItem('auxiliarProVercel2026'); location.reload(); } }
+
+        const viewLanding = document.getElementById('view-landing');
+        const viewDashboard = document.getElementById('view-dashboard');
+
+        function navToDashboard() {
+            loadState();
+            viewLanding.classList.add('hidden');
+            viewDashboard.classList.remove('hidden');
+            viewDashboard.classList.add('fade-in');
+            renderDashboard();
+        }
+
+        function navToLanding() {
+            viewDashboard.classList.add('hidden');
+            viewLanding.classList.remove('hidden');
+            viewLanding.classList.add('fade-in');
+        }
+
+        function renderDashboard() {
+            const container = document.getElementById('levels-container');
+            const libraryContainer = document.getElementById('library-section');
+            container.innerHTML = '';
+            
+            const isLibraryUnlocked = appState.currentLevel > 1;
+            const progressPercent = Math.min(((appState.currentLevel - 1) / levelsData.length) * 100, 100); 
+            document.getElementById('progress-bar').style.width = Math.max(5, progressPercent) + "%";
+            
+            const currentLevelIdx = Math.min(appState.currentLevel, levelsData.length) - 1;
+            const currentMetal = levelsData[currentLevelIdx] ? levelsData[currentLevelIdx].metalName : "Certificado";
+            document.getElementById('header-medal-status').innerText = `Rango: ${appState.currentLevel > levelsData.length ? 'Certificado 🏆' : currentMetal}`;
+
+            levelsData.forEach((level) => {
+                const isLocked = level.id > appState.currentLevel;
+                const isCompleted = level.id < appState.currentLevel;
+                const attemptsUsed = appState.levelAttempts[level.id] || 0;
+                const maxAttempts = level.id === 1 ? 999 : 2;
+                const isFailedAndLocked = attemptsUsed >= maxAttempts && !isCompleted && !isLocked;
+
+                let cardClasses = "bg-white p-5 rounded-xl shadow-sm border flex items-center justify-between transition-all relative overflow-hidden ";
+                let iconClasses = "w-14 h-14 rounded-full flex items-center justify-center font-bold text-xl border-2 shadow-lg ";
+                
+                if (isLocked) { cardClasses += "locked-level border-gray-100 bg-gray-50"; iconClasses += "bg-gray-200 text-gray-400 border-gray-300"; }
+                else if (isFailedAndLocked) { cardClasses += "bg-red-50 border-red-200 cursor-not-allowed"; iconClasses += "bg-red-100 text-red-500 border-red-300"; }
+                else { cardClasses += "hover:shadow-md cursor-pointer border-gray-100 hover:border-farmacia-green"; iconClasses += metalConfig[level.metalName] + " medal-shine"; }
+
+                const metalBadge = !isLocked ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider mb-1 inline-block border bg-gray-50 text-gray-600 border-gray-200">${level.metalName}</span>` : '';
+                let statusRight = isCompleted ? `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-farmacia-green"><polyline points="20 6 9 17 4 12"></polyline></svg>` : (isFailedAndLocked ? `<span class="text-xs font-bold text-red-500">Reprobado</span>` : (!isLocked ? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-farmacia-green"><polyline points="9 18 15 12 9 6"></polyline></svg>` : `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-300"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`));
+                let attemptText = (!isLocked && !isCompleted && level.id > 1) ? `<span class="text-[10px] text-gray-400 block mt-1">Intentos: ${attemptsUsed}/${maxAttempts}</span>` : "";
+                let clickAction = (!isLocked && !isFailedAndLocked) ? `startLevel(${level.id})` : (isFailedAndLocked ? "alert('Has agotado tus intentos. Debes reiniciar.')" : "");
+
+                container.innerHTML += `<div class="${cardClasses}" onclick="${clickAction}"><div class="flex items-center gap-4 relative z-10"><div class="${iconClasses}">${isCompleted ? '✓' : level.id}</div><div>${metalBadge}<h3 class="font-bold text-gray-800 leading-tight">${level.title}</h3><p class="text-xs text-gray-500 mt-0.5">${level.desc}</p>${attemptText}</div></div><div class="z-10 flex flex-col items-end">${statusRight}</div></div>`;
+            });
+
+            // BIBLIOTECA: AHORA USA ENLACES REALES (a href)
+            // Asegúrate de que los archivos existan en la misma carpeta en GitHub
+            if (isLibraryUnlocked) {
+                libraryContainer.innerHTML = `
+                <div class="library-unlocked bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200 shadow-md">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="bg-blue-600 text-white p-2 rounded-lg shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div>
+                        <div><h4 class="font-bold text-gray-900 text-lg">Biblioteca Técnica</h4><p class="text-xs text-blue-700 font-medium">¡Material desbloqueado! Listo para descarga.</p></div>
+                    </div>
+                    <div class="space-y-3">
+                        <!-- Enlaces reales a los PDFs -->
+                        <a href="./decreto_466.pdf" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline">
+                            <span class="flex items-center gap-2 text-sm font-semibold text-gray-700">📜 Decreto 466 (PDF)</span>
+                            <span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">Descargar</span>
+                        </a>
+                        <a href="./guia_posologia.pdf" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline">
+                            <span class="flex items-center gap-2 text-sm font-semibold text-gray-700">💊 Guía de Posología (PDF)</span>
+                            <span class="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded">Descargar</span>
+                        </a>
+                        <a href="./modelo_examen.pdf" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline">
+                            <span class="flex items-center gap-2 text-sm font-semibold text-gray-700">📝 Modelo Examen (PDF)</span>
+                            <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Descargar</span>
+                        </a>
+                    </div>
+                </div>`;
+            } else {
+                libraryContainer.innerHTML = `<div class="bg-gray-100 rounded-xl p-4 flex items-center gap-4 opacity-60"><div class="bg-gray-300 p-3 rounded-lg text-gray-500"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div><div><h4 class="font-bold text-gray-700">Biblioteca Técnica</h4><p class="text-xs text-gray-500">🔒 Aprueba el Nivel 1 para desbloquear.</p></div></div>`;
+            }
+        }
+
+        let activeLevelId = 0, currentQuizQuestions = [], userAnswers = [], currentQuestionIndex = 0, isReviewMode = false;
+
+        function startLevel(levelId) {
+            if (levelId > appState.currentLevel) return;
+            const level = levelsData.find(l => l.id === levelId);
+            activeLevelId = levelId;
+            currentQuizQuestions = level.questions;
+            currentQuestionIndex = 0;
+            userAnswers = new Array(currentQuizQuestions.length).fill(null);
+            isReviewMode = false;
+            document.getElementById('quiz-title').innerText = `Examen ${level.metalName}`;
+            document.getElementById('quiz-subtitle').innerText = `Pregunta 1 de ${currentQuizQuestions.length}`;
+            document.getElementById('quiz-content-active').classList.remove('hidden');
+            document.getElementById('quiz-footer').classList.remove('hidden');
+            document.getElementById('quiz-content-result').classList.add('hidden');
+            document.getElementById('quiz-modal').classList.remove('hidden');
+            document.getElementById('quiz-modal').classList.add('flex');
+            showQuestion();
+        }
+
+        function closeQuiz() { 
+            document.getElementById('quiz-modal').classList.add('hidden');
+            document.getElementById('quiz-modal').classList.remove('flex');
+            renderDashboard(); 
+        }
+
+        function showQuestion() {
+            const q = currentQuizQuestions[currentQuestionIndex];
+            const currentAnswer = userAnswers[currentQuestionIndex];
+            document.getElementById('current-q-num').innerText = currentQuestionIndex + 1;
+            document.getElementById('total-q-num').innerText = currentQuizQuestions.length;
+            
+            const container = document.getElementById('quiz-question-container');
+            container.innerHTML = `<h4 class="text-lg font-bold text-gray-800 mb-6">${q.q}</h4>`;
+            const optionsContainer = document.createElement('div');
+            optionsContainer.className = "space-y-3";
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 rounded-lg border transition-all option-btn text-sm md:text-base font-medium ";
+                if (isReviewMode) {
+                    btn.disabled = true;
+                    if (idx === q.correct) {
+                        btn.className += "bg-green-100 border-green-500 text-green-800 font-bold";
+                        btn.innerHTML = `${opt} <span class="float-right">✅</span>`;
+                    } else if (idx === currentAnswer && idx !== q.correct) {
+                        btn.className += "bg-red-50 border-red-500 text-red-800";
+                        btn.innerHTML = `${opt} <span class="float-right">❌</span>`;
+                    } else { btn.className += "border-gray-200 opacity-60"; btn.innerText = opt; }
+                } else {
+                    if (idx === currentAnswer) btn.className += "bg-blue-50 border-blue-500 text-blue-800 shadow-inner ring-1 ring-blue-500";
+                    else btn.className += "border-gray-200 hover:bg-gray-50 hover:border-blue-300";
+                    btn.onclick = () => selectAnswer(idx);
+                    btn.innerText = opt;
+                }
+                optionsContainer.appendChild(btn);
+            });
+            container.appendChild(optionsContainer);
+
+            const nextBtn = document.getElementById('next-btn');
+            if (isReviewMode) {
+                nextBtn.disabled = false;
+                nextBtn.innerText = (currentQuestionIndex === currentQuizQuestions.length - 1) ? "Volver al Resumen" : "Siguiente";
+                nextBtn.onclick = (currentQuestionIndex === currentQuizQuestions.length - 1) ? () => showResultSummary() : nextQuestion;
+            } else {
+                nextBtn.disabled = (currentAnswer === null);
+                nextBtn.innerText = (currentQuestionIndex === currentQuizQuestions.length - 1) ? "Finalizar Examen" : "Siguiente";
+                nextBtn.onclick = (currentQuestionIndex === currentQuizQuestions.length - 1) ? finishLevel : nextQuestion;
+            }
+        }
+
+        function selectAnswer(idx) { if (isReviewMode) return; userAnswers[currentQuestionIndex] = idx; showQuestion(); }
+        function nextQuestion() { currentQuestionIndex++; showQuestion(); }
+
+        function finishLevel() {
+            let score = 0;
+            userAnswers.forEach((ans, idx) => { if (ans === currentQuizQuestions[idx].correct) score++; });
+            if (!appState.levelAttempts) appState.levelAttempts = {1:0, 2:0, 3:0, 4:0};
+            appState.levelAttempts[activeLevelId]++;
+            const passed = score >= Math.ceil(currentQuizQuestions.length * 0.7);
+            if (passed && activeLevelId === appState.currentLevel) appState.currentLevel++;
+            saveState();
+            showResultSummary(score, passed);
+        }
+
+        function showResultSummary(score, passed) {
+            if (typeof score !== 'number') {
+                 score = 0;
+                 userAnswers.forEach((ans, idx) => { if (ans === currentQuizQuestions[idx].correct) score++; });
+                 passed = score >= Math.ceil(currentQuizQuestions.length * 0.7);
+            }
+            document.getElementById('quiz-content-active').classList.add('hidden');
+            document.getElementById('quiz-footer').classList.add('hidden');
+            document.getElementById('quiz-content-result').classList.remove('hidden');
+            
+            const resultTitle = document.getElementById('result-title');
+            const resultMsg = document.getElementById('result-message');
+            const resultIcon = document.getElementById('result-icon');
+            const retryBtn = document.getElementById('btn-retry');
+            document.getElementById('result-score').innerText = `${score} / ${currentQuizQuestions.length}`;
+
+            if (passed) {
+                resultIcon.innerHTML = `<div class="bg-green-100 p-4 rounded-full text-green-600"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>`;
+                resultTitle.innerText = "¡Aprobado!";
+                if (activeLevelId === 1) resultMsg.innerText = "¡Bien hecho! Biblioteca desbloqueada.";
+                else if (activeLevelId === 4) { confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } }); resultMsg.innerText = "¡CERTIFICADO MASTER!"; }
+                else resultMsg.innerText = "Has superado el desafío.";
+                retryBtn.classList.add('hidden');
+            } else {
+                resultIcon.innerHTML = `<div class="bg-red-100 p-4 rounded-full text-red-600"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg></div>`;
+                resultTitle.innerText = "Reprobado";
+                resultMsg.innerText = "No alcanzaste el mínimo.";
+                const attemptsUsed = appState.levelAttempts[activeLevelId];
+                const maxAttempts = activeLevelId === 1 ? 999 : 2;
+                if (attemptsUsed >= maxAttempts) { retryBtn.disabled = true; retryBtn.className = "w-full bg-gray-300 text-gray-500 font-bold py-3 rounded-lg cursor-not-allowed"; retryBtn.innerText = "Intentos Agotados"; }
+                else { retryBtn.disabled = false; retryBtn.classList.remove('hidden'); retryBtn.className = "w-full bg-farmacia-green hover:bg-green-600 text-white font-bold py-3 rounded-lg transition-colors"; retryBtn.innerText = `Reintentar (Intento ${attemptsUsed + 1}/${maxAttempts})`; }
+            }
+        }
+        function startReviewMode() { isReviewMode = true; currentQuestionIndex = 0; document.getElementById('quiz-content-result').classList.add('hidden'); document.getElementById('quiz-content-active').classList.remove('hidden'); document.getElementById('quiz-footer').classList.remove('hidden'); showQuestion(); }
+        function retryLevel() { startLevel(activeLevelId); }
+        loadState();
+    </script>
+</body>
+</html>
