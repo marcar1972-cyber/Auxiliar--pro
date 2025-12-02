@@ -54,6 +54,12 @@
     <!-- APP CONTAINER -->
     <div class="w-full max-w-md bg-white h-screen md:h-[90vh] md:rounded-3xl md:shadow-2xl overflow-hidden flex flex-col relative">
 
+        <!-- LOADING OVERLAY -->
+        <div id="loading-overlay" class="absolute inset-0 bg-white z-50 flex flex-col items-center justify-center hidden">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-farmacia-green mb-4"></div>
+            <p class="text-sm text-gray-500 animate-pulse">Cargando...</p>
+        </div>
+
         <!-- VISTA 1: LANDING -->
         <div id="view-landing" class="flex-1 flex flex-col fade-in overflow-y-auto relative z-10">
             <header class="w-full py-4 px-6 flex justify-between items-center border-b border-gray-100 sticky top-0 bg-white/95 backdrop-blur-sm z-10">
@@ -61,7 +67,7 @@
                     <div class="bg-farmacia-green text-white p-1.5 rounded-md"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6v12m-6-6h12"/></svg></div>
                     <span class="font-heading font-bold text-xl tracking-tight text-gray-900">Auxiliar<span class="text-farmacia-green">Pro</span></span>
                 </div>
-                <!-- Este botón llama a una función global definida abajo -->
+                <!-- Botón Ingresar lleva al mismo flujo de chequeo -->
                 <button onclick="checkAuthAndStart()" class="bg-farmacia-green hover:bg-green-600 text-white font-semibold py-2 px-6 rounded-full transition-all shadow-md text-sm">Ingresar</button>
             </header>
 
@@ -76,7 +82,7 @@
                 
                 <div class="bg-blue-50 border border-blue-100 rounded-lg p-3 mb-8 max-w-xs text-xs text-blue-700 flex items-start gap-2 text-left">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 shrink-0"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
-                    <span><strong>Registro Activo:</strong> Tu progreso se guardará automáticamente en este dispositivo.</span>
+                    <span><strong>Registro Activo:</strong> Inicia sesión con Google para no perder tu avance.</span>
                 </div>
 
                 <button onclick="checkAuthAndStart()" class="group bg-farmacia-dark hover:bg-slate-900 text-white text-lg font-semibold py-4 px-8 rounded-lg shadow-xl hover:shadow-2xl transition-all flex items-center gap-3 cursor-pointer">
@@ -113,7 +119,7 @@
             </main>
         </div>
 
-        <!-- MODAL DE REGISTRO (Dentro del App Container) -->
+        <!-- MODAL DE REGISTRO (CON GOOGLE) -->
         <div id="auth-modal" class="absolute inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
             <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden p-6 animate-bounce-in">
                 <div class="text-center mb-6">
@@ -121,20 +127,29 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                     </div>
                     <h2 class="text-2xl font-bold text-gray-900">Registro de Estudiante</h2>
-                    <p class="text-sm text-gray-500">Ingresa tus datos para guardar tu progreso.</p>
+                    <p class="text-sm text-gray-500">Ingresa para guardar tu progreso.</p>
+                </div>
+                
+                <!-- BOTÓN GOOGLE -->
+                <button onclick="handleGoogleLogin()" type="button" class="w-full bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-bold py-3 rounded-lg transition-colors flex justify-center items-center gap-3 mb-4 shadow-sm">
+                    <!-- Icono Google SVG -->
+                    <svg class="w-5 h-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+                    Continuar con Google
+                </button>
+
+                <div class="relative flex py-2 items-center mb-4">
+                    <div class="flex-grow border-t border-gray-300"></div>
+                    <span class="flex-shrink-0 mx-4 text-gray-400 text-xs uppercase">O ingresa manualmente</span>
+                    <div class="flex-grow border-t border-gray-300"></div>
                 </div>
                 
                 <form onsubmit="handleRegister(event)" class="space-y-4">
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nombre Completo</label>
-                        <input type="text" id="input-name" required placeholder="Ej: Marcelo Pérez" class="w-full p-3 rounded-lg border border-gray-300 focus:border-farmacia-green focus:ring-1 focus:ring-farmacia-green outline-none transition-all">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Email (Opcional)</label>
-                        <input type="email" id="input-email" placeholder="contacto@ejemplo.com" class="w-full p-3 rounded-lg border border-gray-300 focus:border-farmacia-green focus:ring-1 focus:ring-farmacia-green outline-none transition-all">
+                        <input type="text" id="input-name" placeholder="Ej: Marcelo Pérez" class="w-full p-3 rounded-lg border border-gray-300 focus:border-farmacia-green focus:ring-1 focus:ring-farmacia-green outline-none transition-all">
                     </div>
                     <button type="submit" class="w-full bg-farmacia-dark hover:bg-slate-900 text-white font-bold py-3 rounded-lg transition-colors flex justify-center items-center gap-2">
-                        <span id="btn-auth-text">Comenzar Entrenamiento</span>
+                        <span id="btn-auth-text">Ingresar sin Google</span>
                     </button>
                 </form>
             </div>
@@ -171,7 +186,7 @@
 
     </div>
 
-    <!-- LÓGICA PRINCIPAL (NO TIPO MODULO) PARA GARANTIZAR FUNCIONAMIENTO -->
+    <!-- LÓGICA PRINCIPAL -->
     <script>
         // --- 1. ESTADO DE LA APP ---
         let appState = { 
@@ -186,6 +201,15 @@
         let userAnswers = [];
         let currentQuestionIndex = 0;
 
+        // Variables para la nube (se llenan si hay conexión)
+        let cloudAuth = null;
+        let cloudProvider = null;
+        let cloudDb = null;
+        let cloudSetDoc = null;
+        let cloudDoc = null;
+        let cloudGetDoc = null;
+        let cloudSignInWithPopup = null;
+
         // --- 2. INICIALIZACIÓN ---
         // Cargar datos locales al abrir
         const saved = localStorage.getItem('auxiliarProLocalData');
@@ -195,31 +219,67 @@
 
         // --- 3. FUNCIONES DE NAVEGACIÓN Y REGISTRO ---
         function checkAuthAndStart() {
+            // Si ya hay nombre guardado (y no es el default), pasamos
             if (appState.userName !== "Colega") {
                 navToDashboard();
             } else {
-                // Mostrar Modal Registro
+                // Mostrar Modal Registro si es usuario nuevo
                 document.getElementById('auth-modal').classList.remove('hidden');
                 document.getElementById('auth-modal').classList.add('flex');
             }
         }
 
+        // Manejo de Registro Manual
         function handleRegister(e) {
             e.preventDefault();
             const name = document.getElementById('input-name').value;
-            const email = document.getElementById('input-email').value;
             
-            if(!name) return alert("Ingresa tu nombre");
+            if(!name) return alert("Por favor, ingresa un nombre para continuar.");
 
             // Guardar localmente
             appState.userName = name;
-            appState.userEmail = email;
             saveDataLocally();
 
             // Ocultar modal e ir al dashboard
             document.getElementById('auth-modal').classList.add('hidden');
             document.getElementById('auth-modal').classList.remove('flex');
             navToDashboard();
+        }
+
+        // Manejo de Registro con Google (Híbrido)
+        async function handleGoogleLogin() {
+            if (cloudAuth && cloudSignInWithPopup && cloudProvider) {
+                try {
+                    const result = await cloudSignInWithPopup(cloudAuth, cloudProvider);
+                    const user = result.user;
+                    
+                    // Actualizar estado local con datos de Google
+                    appState.userName = user.displayName;
+                    appState.userEmail = user.email;
+                    saveDataLocally();
+
+                    // Intentar guardar perfil en nube
+                    if (cloudDb && cloudSetDoc && cloudDoc) {
+                        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default';
+                        await cloudSetDoc(cloudDoc(cloudDb, 'artifacts', appId, 'users', user.uid, 'data', 'profile'), {
+                            name: user.displayName, email: user.email, lastLogin: new Date().toISOString()
+                        }, { merge: true });
+                        
+                        // Intentar recuperar progreso viejo de la nube
+                        loadDataFromCloud(user.uid);
+                    }
+
+                    document.getElementById('auth-modal').classList.add('hidden');
+                    document.getElementById('auth-modal').classList.remove('flex');
+                    navToDashboard();
+
+                } catch (error) {
+                    console.error("Error Google Auth:", error);
+                    alert("No se pudo conectar con Google. Verifica tu configuración de Firebase en Vercel. Puedes usar el ingreso manual por ahora.");
+                }
+            } else {
+                alert("El servicio de Google no está configurado o disponible en este entorno. Por favor usa el ingreso manual.");
+            }
         }
 
         function navToDashboard() {
@@ -244,6 +304,38 @@
             if(confirm("¿Seguro quieres reiniciar?")) {
                 localStorage.removeItem('auxiliarProLocalData');
                 location.reload();
+            }
+        }
+
+        // Funciones Nube (Helpers)
+        async function loadDataFromCloud(uid) {
+            if (!cloudGetDoc || !cloudDoc || !cloudDb) return;
+            try {
+                const appId = typeof __app_id !== 'undefined' ? __app_id : 'default';
+                const progressSnap = await cloudGetDoc(cloudDoc(cloudDb, 'artifacts', appId, 'users', uid, 'data', 'progress'));
+                if (progressSnap.exists()) {
+                    const data = progressSnap.data();
+                    // Usar datos de la nube si tienen mejor nivel
+                    if (data.currentLevel > appState.currentLevel) {
+                        appState.currentLevel = data.currentLevel;
+                        appState.levelAttempts = data.levelAttempts;
+                        saveDataLocally();
+                        renderDashboard();
+                    }
+                }
+            } catch(e) { console.log("Error sync nube", e); }
+        }
+
+        async function saveDataToCloud() {
+            if (cloudAuth && cloudAuth.currentUser && cloudDb && cloudSetDoc) {
+                try {
+                    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default';
+                    await cloudSetDoc(cloudDoc(cloudDb, 'artifacts', appId, 'users', cloudAuth.currentUser.uid, 'data', 'progress'), {
+                        currentLevel: appState.currentLevel,
+                        levelAttempts: appState.levelAttempts,
+                        lastUpdate: new Date().toISOString()
+                    });
+                } catch(e) { console.log("Error guardar nube", e); }
             }
         }
 
@@ -285,9 +377,7 @@
 
                 const metalBadge = !isLocked ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider mb-1 inline-block border bg-gray-50 text-gray-600 border-gray-200">${level.metalName}</span>` : '';
                 let statusRight = isCompleted ? `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-farmacia-green"><polyline points="20 6 9 17 4 12"></polyline></svg>` : (isFailedAndLocked ? `<span class="text-xs font-bold text-red-500">Reprobado</span>` : (!isLocked ? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-farmacia-green"><polyline points="9 18 15 12 9 6"></polyline></svg>` : `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-300"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`));
-                let attemptText = (!isLocked && !isCompleted && level.id > 1) ? `<span class="text-[10px] text-gray-400 block mt-1">Intentos: ${attemptsUsed}/${maxAttempts}</span>` : "";
                 
-                // Función global onclick debe recibir string
                 let clickAction = "";
                 if (!isLocked && !isFailedAndLocked) {
                     clickAction = `startLevel(${level.id})`;
@@ -377,7 +467,10 @@
             appState.levelAttempts[activeLevelId]++;
             const passed = score >= Math.ceil(currentQuizQuestions.length * 0.7);
             if (passed && activeLevelId === appState.currentLevel) appState.currentLevel++;
-            saveDataLocally();
+            
+            saveDataLocally(); // Guardar local siempre
+            saveDataToCloud(); // Guardar nube si es posible
+
             showResultSummary(score, passed);
         }
 
@@ -412,20 +505,41 @@
         function retryLevel() { startLevel(activeLevelId); }
     </script>
     
-    <!-- SCRIPT ADICIONAL: INTENTO DE NUBE SILENCIOSO (OPCIONAL) -->
+    <!-- SCRIPT DE CONEXIÓN A NUBE (SEGUNDO PLANO) -->
     <script type="module">
         try {
             if (typeof __firebase_config !== 'undefined') {
                 import("https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js").then(({ initializeApp }) => {
                     import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ getFirestore, doc, setDoc, getDoc }) => {
-                        const app = initializeApp(JSON.parse(__firebase_config));
-                        const db = getFirestore(app);
-                        // Lógica de sincronización opcional aquí...
-                        console.log("Firebase conectado en segundo plano.");
+                        import("https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js").then(({ getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged }) => {
+                            const app = initializeApp(JSON.parse(__firebase_config));
+                            
+                            // Asignar a globales
+                            window.cloudAuth = getAuth(app);
+                            window.cloudDb = getFirestore(app);
+                            window.cloudProvider = new GoogleAuthProvider();
+                            window.cloudSignInWithPopup = signInWithPopup;
+                            window.cloudSetDoc = setDoc;
+                            window.cloudDoc = doc;
+                            window.cloudGetDoc = getDoc;
+
+                            // Listener de sesión
+                            onAuthStateChanged(window.cloudAuth, (user) => {
+                                if (user) {
+                                    // Si hay usuario en nube, sincronizar con local
+                                    // (Simplificado: asume que si hay user, es el mismo que estaba en local o lo pisa)
+                                    // Para producción real habría que manejar conflictos, aquí simplificamos
+                                    // Si no hay datos locales, traer de nube
+                                    // ...
+                                }
+                            });
+                            
+                            console.log("Servicios de Nube activos.");
+                        });
                     });
                 });
             }
-        } catch(e) { console.log("Modo offline activo."); }
+        } catch(e) { console.log("Modo Offline."); }
     </script>
 </body>
 </html>
