@@ -45,12 +45,6 @@
     <!-- APP CONTAINER -->
     <div class="w-full max-w-md bg-white h-screen md:h-[90vh] md:rounded-3xl md:shadow-2xl overflow-hidden flex flex-col relative">
 
-        <!-- LOADING -->
-        <div id="loading-overlay" class="absolute inset-0 bg-white/90 z-[60] flex flex-col items-center justify-center hidden">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-farmacia-green mb-4"></div>
-            <p class="text-sm text-gray-500 animate-pulse">Cargando...</p>
-        </div>
-
         <!-- VISTA 1: LANDING -->
         <div id="view-landing" class="flex-1 flex flex-col fade-in overflow-y-auto relative z-10">
             <header class="w-full py-4 px-6 flex justify-between items-center border-b border-gray-100 sticky top-0 bg-white/95 backdrop-blur-sm z-10">
@@ -67,12 +61,12 @@
                 </div>
                 <h1 class="font-heading text-4xl font-extrabold text-gray-900 leading-tight mb-6">Prepárate para tu examen de <br><span class="text-farmacia-green">Auxiliar de Farmacia</span></h1>
                 <p class="text-gray-500 text-lg max-w-xs mx-auto mb-10 leading-relaxed">
-                    Identifícate para guardar tu progreso y desbloquea la Biblioteca Técnica.
+                    Identifícate con Google para guardar tu progreso real en la nube y desbloquear la Biblioteca Técnica.
                 </p>
                 
                 <div class="bg-blue-50 border border-blue-100 rounded-lg p-3 mb-8 max-w-xs text-xs text-blue-700 flex items-start gap-2 text-left">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mt-0.5 shrink-0"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
-                    <span><strong>Registro Activo:</strong> Inicia sesión para no perder tu avance.</span>
+                    <span><strong>Login Real:</strong> Requiere configuración de Firebase.</span>
                 </div>
 
                 <button onclick="checkAuthAndStart()" class="group bg-farmacia-dark hover:bg-slate-900 text-white text-lg font-semibold py-4 px-8 rounded-lg shadow-xl hover:shadow-2xl transition-all flex items-center gap-3 cursor-pointer">
@@ -89,8 +83,8 @@
                     <span class="font-heading font-bold text-gray-700">Panel de Estudio</span>
                     <span class="text-xs text-gray-400" id="user-welcome">Hola, Colega</span>
                 </div>
-                <button onclick="navToLanding()" class="text-sm text-gray-500 hover:text-farmacia-dark font-medium flex items-center gap-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> Salir
+                <button onclick="logout()" class="text-sm text-gray-500 hover:text-red-500 font-medium flex items-center gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> Cerrar Sesión
                 </button>
             </header>
 
@@ -114,7 +108,7 @@
             <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden p-6 animate-bounce-in">
                 <div class="text-center mb-6">
                     <h2 class="text-2xl font-bold text-gray-900">Bienvenido</h2>
-                    <p class="text-sm text-gray-500">Elige cómo quieres guardar tu progreso.</p>
+                    <p class="text-sm text-gray-500">Ingresa con tu cuenta para guardar progreso.</p>
                 </div>
                 
                 <button onclick="handleGoogleLogin()" class="w-full bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-bold py-3 rounded-lg transition-colors flex justify-center items-center gap-3 mb-4 shadow-sm">
@@ -132,7 +126,7 @@
                     <div>
                         <input type="text" id="input-name" placeholder="Tu Nombre Completo" class="w-full p-3 rounded-lg border border-gray-300 focus:border-farmacia-green focus:ring-1 outline-none text-center">
                     </div>
-                    <button type="submit" class="w-full bg-farmacia-dark hover:bg-slate-900 text-white font-bold py-3 rounded-lg">Entrar sin cuenta</button>
+                    <button type="submit" class="w-full bg-farmacia-dark hover:bg-slate-900 text-white font-bold py-3 rounded-lg">Entrar sin cuenta (Local)</button>
                 </form>
             </div>
         </div>
@@ -168,84 +162,188 @@
 
     </div>
 
-    <!-- LOGICA PRINCIPAL (Siempre carga) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // =========================================================================
+        // --- AIzaSyDNhuSBBhmmQSV0BHC8MOtLKgAUpvtfWfE ---
+        // (Borra todo lo que está dentro de las llaves {} y pega lo de Firebase)
+        // =========================================================================
+        
+        const firebaseConfig = {
+            apiKey: "TU_API_KEY_AQUI",
+            authDomain: "TU_PROYECTO.firebaseapp.com",
+            projectId: "TU_PROYECTO",
+            storageBucket: "TU_PROYECTO.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abcdef"
+        };
+
+        // =========================================================================
+
+        let app, auth, db, googleProvider;
+        let isFirebaseReady = false;
+
+        // INICIALIZACIÓN SEGURA DE FIREBASE
+        if (firebaseConfig.apiKey !== "TU_API_KEY_AQUI") {
+            try {
+                app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+                googleProvider = new GoogleAuthProvider();
+                isFirebaseReady = true;
+                
+                // Escuchar estado de sesión
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        window.currentUser = user;
+                        window.appState.userName = user.displayName;
+                        // Cargar datos de la nube
+                        await loadCloudData(user.uid);
+                        window.updateUI();
+                        // Si estábamos en landing, ir a dashboard
+                        if(!document.getElementById('view-landing').classList.contains('hidden')) {
+                            window.navToDashboard();
+                        }
+                    } else {
+                        window.currentUser = null;
+                    }
+                });
+            } catch (e) {
+                console.error("Error iniciando Firebase:", e);
+            }
+        }
+
+        // --- EXPORTAR FUNCIONES A GLOBAL ---
+        window.handleGoogleLogin = async () => {
+            if (!isFirebaseReady) {
+                alert("⚠️ FALTA CONFIGURAR FIREBASE\n\nPara usar Google, debes crear un proyecto en Firebase Console y pegar tus API Keys en el código (index.html, línea 345).");
+                return;
+            }
+            try {
+                await signInWithPopup(auth, googleProvider);
+                // El listener onAuthStateChanged hará el resto
+            } catch (error) {
+                console.error(error);
+                alert("Error al conectar con Google: " + error.message);
+            }
+        };
+
+        window.logout = async () => {
+            if (isFirebaseReady && auth) {
+                await signOut(auth);
+                localStorage.removeItem('auxiliarProLocalData'); // Limpiar local también
+                window.location.reload();
+            } else {
+                // Logout local
+                localStorage.removeItem('auxiliarProLocalData');
+                window.location.reload();
+            }
+        };
+
+        // Función auxiliar para guardar en nube
+        window.saveCloudData = async () => {
+            if (isFirebaseReady && window.currentUser) {
+                try {
+                    await setDoc(doc(db, 'usuarios', window.currentUser.uid), {
+                        currentLevel: window.appState.currentLevel,
+                        levelAttempts: window.appState.levelAttempts,
+                        lastUpdate: new Date()
+                    }, { merge: true });
+                } catch(e) { console.error("Error guardando:", e); }
+            }
+        };
+
+        async function loadCloudData(uid) {
+            try {
+                const docSnap = await getDoc(doc(db, 'usuarios', uid));
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    if(data.currentLevel > window.appState.currentLevel) {
+                        window.appState.currentLevel = data.currentLevel;
+                        window.appState.levelAttempts = data.levelAttempts || window.appState.levelAttempts;
+                        window.renderDashboard();
+                    }
+                }
+            } catch(e) { console.error("Error cargando:", e); }
+        }
+
+    </script>
+
+    <!-- LÓGICA DE JUEGO (SEPARADA Y ROBUSTA) -->
     <script>
-        // ESTADO
-        let appState = { currentLevel: 1, levelAttempts: { 1: 0, 2: 0, 3: 0, 4: 0 }, userName: "Colega", userEmail: "" };
-        let currentUser = null;
-        let isReviewMode = false;
-        let activeLevelId = 0;
-        let currentQuizQuestions = [];
-        let userAnswers = [];
-        let currentQuestionIndex = 0;
+        // ESTADO GLOBAL
+        window.appState = { currentLevel: 1, levelAttempts: { 1: 0, 2: 0, 3: 0, 4: 0 }, userName: "Colega" };
+        window.currentUser = null;
+        let activeLevelId = 0, currentQuizQuestions = [], userAnswers = [], currentQuestionIndex = 0, isReviewMode = false;
 
-        // CARGA INICIAL LOCAL
-        const localData = localStorage.getItem('auxiliarProLocalData');
-        if (localData) appState = JSON.parse(localData);
+        // Carga Local Inicial
+        const saved = localStorage.getItem('auxiliarProLocalData');
+        if (saved) window.appState = JSON.parse(saved);
 
-        // FUNCIONES UI
-        function checkAuthAndStart() {
-            if (appState.userName !== "Colega" || currentUser) {
-                navToDashboard();
+        // UI NAVEGACIÓN
+        window.checkAuthAndStart = () => {
+            if (window.currentUser || window.appState.userName !== "Colega") {
+                window.navToDashboard();
             } else {
                 document.getElementById('auth-modal').classList.remove('hidden');
                 document.getElementById('auth-modal').classList.add('flex');
             }
-        }
+        };
 
-        function handleRegister(e) {
+        window.handleRegister = (e) => {
             e.preventDefault();
             const name = document.getElementById('input-name').value || "Estudiante";
-            appState.userName = name;
-            localStorage.setItem('auxiliarProLocalData', JSON.stringify(appState));
+            window.appState.userName = name;
+            localStorage.setItem('auxiliarProLocalData', JSON.stringify(window.appState));
             document.getElementById('auth-modal').classList.add('hidden');
             document.getElementById('auth-modal').classList.remove('flex');
-            navToDashboard();
-        }
+            window.navToDashboard();
+        };
 
-        async function handleGoogleLogin() {
-            if (window.cloudSignInWithPopup && window.cloudAuth && window.cloudProvider) {
-                try {
-                    document.getElementById('loading-overlay').classList.remove('hidden');
-                    const res = await window.cloudSignInWithPopup(window.cloudAuth, window.cloudProvider);
-                    // El listener onAuthStateChanged manejará el resto
-                } catch (e) {
-                    alert("No se pudo conectar con Google. Verifica tu configuración o usa el ingreso manual.");
-                    document.getElementById('loading-overlay').classList.add('hidden');
-                }
-            } else {
-                alert("Servicio de Google no disponible (Modo Offline). Usa el ingreso manual.");
-            }
-        }
-
-        function navToDashboard() {
-            document.getElementById('user-welcome').innerText = `Hola, ${appState.userName.split(' ')[0]}`;
+        window.navToDashboard = () => {
+            window.updateUI();
             document.getElementById('view-landing').classList.add('hidden');
             document.getElementById('view-dashboard').classList.remove('hidden');
             document.getElementById('view-dashboard').classList.add('fade-in');
             renderDashboard();
-        }
+        };
 
-        function navToLanding() {
+        window.navToLanding = () => {
             document.getElementById('view-dashboard').classList.add('hidden');
             document.getElementById('view-landing').classList.remove('hidden');
             document.getElementById('view-landing').classList.add('fade-in');
+        };
+
+        window.updateUI = () => {
+            document.getElementById('user-welcome').innerText = `Hola, ${window.appState.userName.split(' ')[0]}`;
         }
+
+        // DATOS
+        const metalConfig = { "Bronce": "bg-gradient-to-br from-amber-600 to-amber-800 text-white shadow-amber-200 border-amber-600", "Plata": "bg-gradient-to-br from-gray-400 to-slate-500 text-white shadow-gray-300 border-gray-400", "Oro": "bg-gradient-to-br from-yellow-400 to-yellow-600 text-white shadow-yellow-200 border-yellow-500", "Platino": "bg-gradient-to-br from-cyan-400 to-blue-600 text-white shadow-blue-200 border-blue-400" };
+        const levelsData = [
+            { id: 1, title: "Conceptos Básicos", desc: "Nivel de Entrada. Preguntas sencillas.", metalName: "Bronce", questions: [ { q: "¿Dónde se deben comprar los medicamentos?", options: ["Feria", "Farmacias establecidas", "Redes Sociales", "Calle"], correct: 1 }, { q: "Rango temperatura refrigerador farmacia:", options: ["2°C a 8°C", "Bajo cero", "Ambiente", "Sobre 20°C"], correct: 0 }, { q: "¿Quién dirige técnicamente la farmacia?", options: ["Contador", "Químico Farmacéutico", "Bodeguero", "Cajero"], correct: 1 }, { q: "Documento para vender antibióticos:", options: ["Carnet", "Receta Médica", "Nada", "Boleta luz"], correct: 1 }, { q: "¿Quién fiscaliza las farmacias?", options: ["ISP", "Carabineros", "Bomberos", "Municipalidad"], correct: 0 }, { q: "Medicamento Venta Directa, ¿necesita receta?", options: ["Sí", "No", "A veces", "Solo niños"], correct: 1 }, { q: "¿Qué es un genérico?", options: ["Falso", "Sin marca (DCI)", "Vencido", "Natural"], correct: 1 }, { q: "¿Dónde se guardan los controlados?", options: ["Mostrador", "Bajo llave", "Vitrina", "Suelo"], correct: 1 }, { q: "¿Qué revisar al entregar?", options: ["Caja bonita", "Vencimiento y nombre", "Precio", "Color"], correct: 1 }, { q: "¿Quién ayuda al QF?", options: ["Guardia", "Auxiliar de Farmacia", "Cliente", "Nadie"], correct: 1 } ] },
+            { id: 2, title: "Legislación (Hardcore)", desc: "Estudia el PDF 'Decreto 466'.", metalName: "Plata", questions: [ { q: "¿Decreto que regula Psicotrópicos?", options: ["DS 466", "DS 404", "DS 405", "DS 594"], correct: 1 }, { q: "Validez Receta Cheque:", options: ["60 días corridos", "30 días corridos", "30 días hábiles", "Indefinida"], correct: 1 }, { q: "Libro NO obligatorio hoy:", options: ["Reclamos", "Psicotrópicos", "Sugerencias", "Recetas"], correct: 2 }, { q: "Validez receta Clonazepam (Lista IV):", options: ["30 días", "60 días", "1 año", "Hasta fin de caja"], correct: 0 }, { q: "Sanción venta antibióticos sin receta:", options: ["Multa/Sumario", "Amonestación", "Cierre", "Nada"], correct: 0 }, { q: "Venta online medicamentos:", options: ["Prohibida", "Solo venta directa", "Permitida con condiciones", "Libre"], correct: 2 }, { q: "¿Qué es la 'Canela'?", options: ["Saborizante", "Incentivo ilegal por marcas", "Descuento", "Hierba"], correct: 1 }, { q: "Guardar recetas cheque por:", options: ["6 meses", "1 año", "2 años", "5 años"], correct: 1 }, { q: "Lista Psicotrópicos con Receta Cheque:", options: ["Lista II y III", "Lista I", "Lista IV", "Todas"], correct: 1 }, { q: "¿Se puede fraccionar (blister suelto)?", options: ["Sí", "Solo farmacias autorizadas", "No", "Si falta dinero"], correct: 1 } ] },
+            { id: 3, title: "Farmacología y Cálculo", desc: "Usa la guía de Posología.", metalName: "Oro", questions: [ { q: "POSOLOGÍA: 50mg/kg/día, 3 tomas. Niño 15kg. Jarabe 500mg/5ml. ¿Ml/toma?", options: ["2.5 ml", "5 ml", "7.5 ml", "10 ml"], correct: 0 }, { q: "POSOLOGÍA: 1 comp c/8h x 7 días. Caja 20. ¿Cajas?", options: ["1", "2", "3", "Justo"], correct: 1 }, { q: "Interacción peligrosa con Warfarina:", options: ["Paracetamol", "Aspirina/AINEs", "Vitamina C", "Loratadina"], correct: 1 }, { q: "POSOLOGÍA: 15mg/kg/dosis. Niño 10kg. Jarabe 120mg/5ml. ¿Ml?", options: ["4 ml", "5 ml", "6.25 ml", "10 ml"], correct: 2 }, { q: "Acción Omeprazol:", options: ["Antiácido", "Inhibidor Bomba Protones", "Protector", "Antagonista H2"], correct: 1 }, { q: "NO es AINE:", options: ["Ketorolaco", "Naproxeno", "Celecoxib", "Paracetamol"], correct: 3 }, { q: "POSOLOGÍA: 1g c/12h. Tab 500mg. ¿Diarias?", options: ["2", "4", "6", "8"], correct: 1 }, { q: "POSOLOGÍA: 120ml. 5ml c/8h. ¿Días?", options: ["4", "6", "8", "10"], correct: 2 }, { q: "Diferencia Losartán/Enalapril:", options: ["ARA II vs IECA", "Iguales", "Diurético", "Betabloqueador"], correct: 0 }, { q: "POSOLOGÍA: 0.5 tab de 10mg. ¿Mg?", options: ["10", "5", "2.5", "20"], correct: 1 } ] },
+            { id: 4, title: "Simulacro Master", desc: "Examen Final Integrado.", metalName: "Platino", questions: [ { q: "POSOLOGÍA UCI (Trampa):", options: ["Saltar", "Es cálculo clínico, no farmacia comunitaria", "700", "7"], correct: 1 }, { q: "Receta Alprazolam fecha 35 días. ¿Vende?", options: ["Sí", "No (caducó 30 días)", "Sí con saldo", "Depende"], correct: 1 }, { q: "POSOLOGÍA: 2 al día x 10 días. Caja 14. ¿Cajas?", options: ["1", "2", "3", "4"], correct: 1 }, { q: "Medicamento Lábil a la luz:", options: ["Fotosensible", "Termolábil", "Hidro", "Vence"], correct: 0 }, { q: "Receta Cheque se usa para:", options: ["Lista IV", "Lista II y III", "Antibióticos", "Caros"], correct: 1 }, { q: "POSOLOGÍA: 1g c/8h. Vial 1g. ¿Viales/24h?", options: ["1", "2", "3", "4"], correct: 2 }, { q: "Acción Salbutamol:", options: ["Agonista Beta-2", "Corticoide", "Anticolinérgico", "Mucolítico"], correct: 0 }, { q: "POSOLOGÍA: Dosis 45mg. Jarabe 15mg/5ml. ¿Ml?", options: ["10", "15", "20", "5"], correct: 1 }, { q: "Vigencia Receta Magistral:", options: ["30", "40", "60", "Indef"], correct: 1 }, { q: "Sildenafil + Nitratos:", options: ["Nada", "Hipotensión fatal", "Hiper", "Dolor"], correct: 1 } ] }
+        ];
 
         function renderDashboard() {
             const container = document.getElementById('levels-container');
             const libraryContainer = document.getElementById('library-section');
             container.innerHTML = '';
             
-            const isLibraryUnlocked = appState.currentLevel > 1;
-            const progressPercent = Math.min(((appState.currentLevel - 1) / levelsData.length) * 100, 100); 
+            const isLibraryUnlocked = window.appState.currentLevel > 1;
+            const progressPercent = Math.min(((window.appState.currentLevel - 1) / levelsData.length) * 100, 100); 
             document.getElementById('progress-bar').style.width = Math.max(5, progressPercent) + "%";
-            document.getElementById('header-medal-status').innerText = `Rango: ${appState.currentLevel > levelsData.length ? 'Certificado 🏆' : (levelsData[Math.min(appState.currentLevel, levelsData.length)-1]?.metalName || 'Novato')}`;
+            document.getElementById('header-medal-status').innerText = `Rango: ${window.appState.currentLevel > levelsData.length ? 'Certificado 🏆' : (levelsData[Math.min(window.appState.currentLevel, levelsData.length)-1]?.metalName || 'Novato')}`;
 
             levelsData.forEach((level) => {
-                const isLocked = level.id > appState.currentLevel;
-                const isCompleted = level.id < appState.currentLevel;
-                const attemptsUsed = appState.levelAttempts[level.id] || 0;
+                const isLocked = level.id > window.appState.currentLevel;
+                const isCompleted = level.id < window.appState.currentLevel;
+                const attemptsUsed = window.appState.levelAttempts[level.id] || 0;
                 const maxAttempts = level.id === 1 ? 999 : 2;
                 const isFailedAndLocked = attemptsUsed >= maxAttempts && !isCompleted && !isLocked;
 
@@ -258,9 +356,7 @@
 
                 const metalBadge = !isLocked ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider mb-1 inline-block border bg-gray-50 text-gray-600 border-gray-200">${level.metalName}</span>` : '';
                 let statusRight = isCompleted ? `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-farmacia-green"><polyline points="20 6 9 17 4 12"></polyline></svg>` : (isFailedAndLocked ? `<span class="text-xs font-bold text-red-500">Reprobado</span>` : (!isLocked ? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-farmacia-green"><polyline points="9 18 15 12 9 6"></polyline></svg>` : `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-300"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`));
-                let attemptText = (!isLocked && !isCompleted && level.id > 1) ? `<span class="text-[10px] text-gray-400 block mt-1">Intentos: ${attemptsUsed}/${maxAttempts}</span>` : "";
                 
-                // IMPORTANTE: Onclick como string simple
                 let clickAction = "";
                 if (!isLocked && !isFailedAndLocked) clickAction = `startLevel(${level.id})`;
                 else if (isFailedAndLocked) clickAction = "alert('Has agotado tus intentos. Debes reiniciar.')";
@@ -276,7 +372,7 @@
         }
 
         // QUIZ LOGIC
-        function startLevel(levelId) {
+        window.startLevel = (levelId) => {
             const level = levelsData.find(l => l.id === levelId);
             activeLevelId = levelId;
             currentQuizQuestions = level.questions;
@@ -294,7 +390,7 @@
             showQuestion();
         }
 
-        function closeQuiz() { 
+        window.closeQuiz = () => { 
             document.getElementById('quiz-modal').classList.add('hidden');
             document.getElementById('quiz-modal').classList.remove('flex');
             renderDashboard(); 
@@ -327,7 +423,6 @@
             });
             container.appendChild(optionsContainer);
             
-            // Botón Siguiente Limpio
             const nextBtn = document.getElementById('next-btn');
             if (isReviewMode) {
                 nextBtn.disabled = false;
@@ -341,30 +436,27 @@
         }
 
         function selectAnswer(idx) { if (isReviewMode) return; userAnswers[currentQuestionIndex] = idx; showQuestion(); }
-        function nextQuestion() { currentQuestionIndex++; showQuestion(); }
+        window.nextQuestion = () => { currentQuestionIndex++; showQuestion(); }
 
         function finishLevel() {
             let score = 0;
             userAnswers.forEach((ans, idx) => { if (ans === currentQuizQuestions[idx].correct) score++; });
-            if (!appState.levelAttempts) appState.levelAttempts = {1:0, 2:0, 3:0, 4:0};
-            appState.levelAttempts[activeLevelId]++;
+            if (!window.appState.levelAttempts) window.appState.levelAttempts = {1:0, 2:0, 3:0, 4:0};
+            window.appState.levelAttempts[activeLevelId]++;
             const passed = score >= Math.ceil(currentQuizQuestions.length * 0.7);
-            if (passed && activeLevelId === appState.currentLevel) appState.currentLevel++;
+            if (passed && activeLevelId === window.appState.currentLevel) window.appState.currentLevel++;
             
             // Guardar local
-            localStorage.setItem('auxiliarProLocalData', JSON.stringify(appState));
-            // Guardar nube
-            if(window.cloudSetDoc) saveCloudData();
+            localStorage.setItem('auxiliarProLocalData', JSON.stringify(window.appState));
+            // Guardar nube si es posible
+            if(window.saveCloudData) window.saveCloudData();
 
             showResultSummary(score, passed);
         }
 
-        // FUNCIÓN BLINDADA CONTRA EL ERROR DE POINTEREVENT
         function showResultSummary(scoreInput, passedInput) {
             let score = scoreInput;
             let passed = passedInput;
-
-            // Si score no es número (ej: evento click), recalcular
             if (typeof score !== 'number') { 
                 score = 0; 
                 userAnswers.forEach((ans, idx) => { if (ans === currentQuizQuestions[idx].correct) score++; }); 
@@ -392,80 +484,16 @@
                 resultIcon.innerHTML = `<div class="bg-red-100 p-4 rounded-full text-red-600"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg></div>`;
                 resultTitle.innerText = "Reprobado";
                 resultMsg.innerText = "No alcanzaste el mínimo.";
-                const attemptsUsed = appState.levelAttempts[activeLevelId];
+                const attemptsUsed = window.appState.levelAttempts[activeLevelId];
                 const maxAttempts = activeLevelId === 1 ? 999 : 2;
                 if (attemptsUsed >= maxAttempts) { retryBtn.disabled = true; retryBtn.className = "w-full bg-gray-300 text-gray-500 font-bold py-3 rounded-lg cursor-not-allowed"; retryBtn.innerText = "Intentos Agotados"; }
                 else { retryBtn.disabled = false; retryBtn.classList.remove('hidden'); retryBtn.className = "w-full bg-farmacia-green hover:bg-green-600 text-white font-bold py-3 rounded-lg transition-colors"; retryBtn.innerText = `Reintentar (Intento ${attemptsUsed + 1}/${maxAttempts})`; }
             }
         }
 
-        function startReviewMode() { isReviewMode = true; currentQuestionIndex = 0; document.getElementById('quiz-content-result').classList.add('hidden'); document.getElementById('quiz-content-active').classList.remove('hidden'); document.getElementById('quiz-footer').classList.remove('hidden'); showQuestion(); }
-        function retryLevel() { startLevel(activeLevelId); }
-        function resetProgress() { if(confirm("¿Seguro? Se borrará todo.")) { localStorage.removeItem('auxiliarProLocalData'); location.reload(); } }
-
-        // DATOS
-        const metalConfig = { "Bronce": "bg-gradient-to-br from-amber-600 to-amber-800 text-white shadow-amber-200 border-amber-600", "Plata": "bg-gradient-to-br from-gray-400 to-slate-500 text-white shadow-gray-300 border-gray-400", "Oro": "bg-gradient-to-br from-yellow-400 to-yellow-600 text-white shadow-yellow-200 border-yellow-500", "Platino": "bg-gradient-to-br from-cyan-400 to-blue-600 text-white shadow-blue-200 border-blue-400" };
-        const levelsData = [
-            { id: 1, title: "Conceptos Básicos", desc: "Nivel de Entrada. Preguntas sencillas.", metalName: "Bronce", questions: [ { q: "¿Dónde se deben comprar los medicamentos?", options: ["Feria", "Farmacias establecidas", "Redes Sociales", "Calle"], correct: 1 }, { q: "Rango temperatura refrigerador farmacia:", options: ["2°C a 8°C", "Bajo cero", "Ambiente", "Sobre 20°C"], correct: 0 }, { q: "¿Quién dirige técnicamente la farmacia?", options: ["Contador", "Químico Farmacéutico", "Bodeguero", "Cajero"], correct: 1 }, { q: "Documento para vender antibióticos:", options: ["Carnet", "Receta Médica", "Nada", "Boleta luz"], correct: 1 }, { q: "¿Quién fiscaliza las farmacias?", options: ["ISP", "Carabineros", "Bomberos", "Municipalidad"], correct: 0 }, { q: "Medicamento Venta Directa, ¿necesita receta?", options: ["Sí", "No", "A veces", "Solo niños"], correct: 1 }, { q: "¿Qué es un genérico?", options: ["Falso", "Sin marca (DCI)", "Vencido", "Natural"], correct: 1 }, { q: "¿Dónde se guardan los controlados?", options: ["Mostrador", "Bajo llave", "Vitrina", "Suelo"], correct: 1 }, { q: "¿Qué revisar al entregar?", options: ["Caja bonita", "Vencimiento y nombre", "Precio", "Color"], correct: 1 }, { q: "¿Quién ayuda al QF?", options: ["Guardia", "Auxiliar de Farmacia", "Cliente", "Nadie"], correct: 1 } ] },
-            { id: 2, title: "Legislación (Hardcore)", desc: "Estudia el PDF 'Decreto 466'.", metalName: "Plata", questions: [ { q: "¿Decreto que regula Psicotrópicos?", options: ["DS 466", "DS 404", "DS 405", "DS 594"], correct: 1 }, { q: "Validez Receta Cheque:", options: ["60 días corridos", "30 días corridos", "30 días hábiles", "Indefinida"], correct: 1 }, { q: "Libro NO obligatorio hoy:", options: ["Reclamos", "Psicotrópicos", "Sugerencias", "Recetas"], correct: 2 }, { q: "Validez receta Clonazepam (Lista IV):", options: ["30 días", "60 días", "1 año", "Hasta fin de caja"], correct: 0 }, { q: "Sanción venta antibióticos sin receta:", options: ["Multa/Sumario", "Amonestación", "Cierre", "Nada"], correct: 0 }, { q: "Venta online medicamentos:", options: ["Prohibida", "Solo venta directa", "Permitida con condiciones", "Libre"], correct: 2 }, { q: "¿Qué es la 'Canela'?", options: ["Saborizante", "Incentivo ilegal por marcas", "Descuento", "Hierba"], correct: 1 }, { q: "Guardar recetas cheque por:", options: ["6 meses", "1 año", "2 años", "5 años"], correct: 1 }, { q: "Lista Psicotrópicos con Receta Cheque:", options: ["Lista II y III", "Lista I", "Lista IV", "Todas"], correct: 1 }, { q: "¿Se puede fraccionar (blister suelto)?", options: ["Sí", "Solo farmacias autorizadas", "No", "Si falta dinero"], correct: 1 } ] },
-            { id: 3, title: "Farmacología y Cálculo", desc: "Usa la guía de Posología.", metalName: "Oro", questions: [ { q: "POSOLOGÍA: 50mg/kg/día, 3 tomas. Niño 15kg. Jarabe 500mg/5ml. ¿Ml/toma?", options: ["2.5 ml", "5 ml", "7.5 ml", "10 ml"], correct: 0 }, { q: "POSOLOGÍA: 1 comp c/8h x 7 días. Caja 20. ¿Cajas?", options: ["1", "2", "3", "Justo"], correct: 1 }, { q: "Interacción peligrosa con Warfarina:", options: ["Paracetamol", "Aspirina/AINEs", "Vitamina C", "Loratadina"], correct: 1 }, { q: "POSOLOGÍA: 15mg/kg/dosis. Niño 10kg. Jarabe 120mg/5ml. ¿Ml?", options: ["4 ml", "5 ml", "6.25 ml", "10 ml"], correct: 2 }, { q: "Acción Omeprazol:", options: ["Antiácido", "Inhibidor Bomba Protones", "Protector", "Antagonista H2"], correct: 1 }, { q: "NO es AINE:", options: ["Ketorolaco", "Naproxeno", "Celecoxib", "Paracetamol"], correct: 3 }, { q: "POSOLOGÍA: 1g c/12h. Tab 500mg. ¿Diarias?", options: ["2", "4", "6", "8"], correct: 1 }, { q: "POSOLOGÍA: 120ml. 5ml c/8h. ¿Días?", options: ["4", "6", "8", "10"], correct: 2 }, { q: "Diferencia Losartán/Enalapril:", options: ["ARA II vs IECA", "Iguales", "Diurético", "Betabloqueador"], correct: 0 }, { q: "POSOLOGÍA: 0.5 tab de 10mg. ¿Mg?", options: ["10", "5", "2.5", "20"], correct: 1 } ] },
-            { id: 4, title: "Simulacro Master", desc: "Examen Final Integrado.", metalName: "Platino", questions: [ { q: "POSOLOGÍA UCI (Trampa):", options: ["Saltar", "Es cálculo clínico, no farmacia comunitaria", "700", "7"], correct: 1 }, { q: "Receta Alprazolam fecha 35 días. ¿Vende?", options: ["Sí", "No (caducó 30 días)", "Sí con saldo", "Depende"], correct: 1 }, { q: "POSOLOGÍA: 2 al día x 10 días. Caja 14. ¿Cajas?", options: ["1", "2", "3", "4"], correct: 1 }, { q: "Medicamento Lábil a la luz:", options: ["Fotosensible", "Termolábil", "Hidro", "Vence"], correct: 0 }, { q: "Receta Cheque se usa para:", options: ["Lista IV", "Lista II y III", "Antibióticos", "Caros"], correct: 1 }, { q: "POSOLOGÍA: 1g c/8h. Vial 1g. ¿Viales/24h?", options: ["1", "2", "3", "4"], correct: 2 }, { q: "Acción Salbutamol:", options: ["Agonista Beta-2", "Corticoide", "Anticolinérgico", "Mucolítico"], correct: 0 }, { q: "POSOLOGÍA: Dosis 45mg. Jarabe 15mg/5ml. ¿Ml?", options: ["10", "15", "20", "5"], correct: 1 }, { q: "Vigencia Receta Magistral:", options: ["30", "40", "60", "Indef"], correct: 1 }, { q: "Sildenafil + Nitratos:", options: ["Nada", "Hipotensión fatal", "Hiper", "Dolor"], correct: 1 } ] }
-        ];
-    </script>
-
-    <!-- LOGICA DE NUBE (OPCIONAL) -->
-    <script type="module">
-        // Se ejecuta si hay configuración de Firebase
-        try {
-            if (typeof __firebase_config !== 'undefined') {
-                const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js");
-                const { getFirestore, doc, setDoc, getDoc } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js");
-                const { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js");
-
-                const app = initializeApp(JSON.parse(__firebase_config));
-                window.cloudAuth = getAuth(app);
-                window.cloudDb = getFirestore(app);
-                window.cloudProvider = new GoogleAuthProvider();
-                window.cloudSignInWithPopup = signInWithPopup;
-                
-                // Exponer guardar/cargar a global para usar en funciones de arriba
-                window.saveCloudData = async () => {
-                    if(window.cloudAuth.currentUser) {
-                        try {
-                            const appId = typeof __app_id !== 'undefined' ? __app_id : 'default';
-                            await setDoc(doc(window.cloudDb, 'artifacts', appId, 'users', window.cloudAuth.currentUser.uid, 'data', 'progress'), {
-                                currentLevel: appState.currentLevel, levelAttempts: appState.levelAttempts
-                            }, { merge: true });
-                        } catch(e) { console.log(e); }
-                    }
-                };
-
-                // Sync inicial
-                onAuthStateChanged(window.cloudAuth, async (user) => {
-                    if (user) {
-                        document.getElementById('loading-overlay').classList.remove('hidden');
-                        try {
-                            const appId = typeof __app_id !== 'undefined' ? __app_id : 'default';
-                            const snap = await getDoc(doc(window.cloudDb, 'artifacts', appId, 'users', user.uid, 'data', 'progress'));
-                            if (snap.exists() && snap.data().currentLevel > appState.currentLevel) {
-                                appState.currentLevel = snap.data().currentLevel;
-                                appState.levelAttempts = snap.data().levelAttempts;
-                                localStorage.setItem('auxiliarProLocalData', JSON.stringify(appState));
-                                renderDashboard();
-                            }
-                        } catch(e) {}
-                        document.getElementById('loading-overlay').classList.add('hidden');
-                        
-                        // Si estábamos en Landing, pasar a Dashboard
-                        if(!document.getElementById('view-landing').classList.contains('hidden')) {
-                            appState.userName = user.displayName;
-                            navToDashboard();
-                        }
-                    }
-                });
-                console.log("Nube activa");
-            }
-        } catch(e) { console.log("Modo Offline (Vercel sin config)"); }
+        window.startReviewMode = () => { isReviewMode = true; currentQuestionIndex = 0; document.getElementById('quiz-content-result').classList.add('hidden'); document.getElementById('quiz-content-active').classList.remove('hidden'); document.getElementById('quiz-footer').classList.remove('hidden'); showQuestion(); }
+        window.retryLevel = () => { startLevel(activeLevelId); }
+        window.resetProgress = () => { if(confirm("¿Seguro? Se borrará todo.")) { localStorage.removeItem('auxiliarProLocalData'); location.reload(); } }
     </script>
 </body>
 </html>
