@@ -48,7 +48,7 @@
         <!-- LOADING -->
         <div id="loading-overlay" class="absolute inset-0 bg-white/90 z-[60] flex flex-col items-center justify-center hidden">
             <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-farmacia-green mb-4"></div>
-            <p class="text-sm text-gray-500 animate-pulse">Procesando...</p>
+            <p class="text-sm text-gray-500 animate-pulse">Cargando...</p>
         </div>
 
         <!-- VISTA 1: LANDING -->
@@ -67,7 +67,7 @@
                 </div>
                 <h1 class="font-heading text-4xl font-extrabold text-gray-900 leading-tight mb-6">Prepárate para tu examen de <br><span class="text-farmacia-green">Auxiliar de Farmacia</span></h1>
                 <p class="text-gray-500 text-lg max-w-xs mx-auto mb-10 leading-relaxed">
-                    Identifícate para guardar tu progreso real en la nube y desbloquear la Biblioteca Técnica.
+                    Identifícate con Google para guardar tu progreso real en la nube y desbloquear la Biblioteca Técnica.
                 </p>
                 
                 <div class="bg-blue-50 border border-blue-100 rounded-lg p-3 mb-8 max-w-xs text-xs text-blue-700 flex items-start gap-2 text-left">
@@ -132,7 +132,7 @@
                     <div>
                         <input type="text" id="input-name" placeholder="Tu Nombre Completo" class="w-full p-3 rounded-lg border border-gray-300 focus:border-farmacia-green focus:ring-1 outline-none text-center">
                     </div>
-                    <button type="submit" class="w-full bg-farmacia-dark hover:bg-slate-900 text-white font-bold py-3 rounded-lg">Entrar sin cuenta (Local)</button>
+                    <button type="submit" class="w-full bg-farmacia-dark hover:bg-slate-900 text-white font-bold py-3 rounded-lg">Entrar sin cuenta (Solo en este equipo)</button>
                 </form>
             </div>
         </div>
@@ -175,23 +175,24 @@
         import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // =========================================================================
-        // ⚠️ PEGA AQUÍ TUS CREDENCIALES DE FIREBASE (Entre las llaves)
+        // ⚠️ INSTRUCCIÓN: PEGA TUS CREDENCIALES DE FIREBASE AQUÍ ABAJO
+        // (Reemplaza todo el bloque const firebaseConfig con el tuyo)
         // =========================================================================
         const firebaseConfig = {
             apiKey: "AIzaSyDNhuSBBhmmQSV0BHC8MOtLKgAUpvtfWfE",
-            authDomain: "auxiliar-pro.firebaseapp.com",
-            projectId: "auxiliar-pro",
-            storageBucket: "auxiliar-pro.firebasestorage.app",
-            messagingSenderId: "342196612566",
-            appId: "1:342196612566:web:c7f34365c4e10502e60877"
+  authDomain: "auxiliar-pro.firebaseapp.com",
+  projectId: "auxiliar-pro",
+  storageBucket: "auxiliar-pro.firebasestorage.app",
+  messagingSenderId: "342196612566",
+  appId: "1:342196612566:web:c7f34365c4e10502e60877"
 };
-        };
         // =========================================================================
 
         let app, auth, db, googleProvider;
         let isFirebaseReady = false;
 
-        // INICIALIZAR SI HAY CONFIG
+        // INICIALIZAR SI HAY CONFIG REAL
+        // (Detecta si has cambiado el texto "TU_API_KEY_AQUI")
         if (firebaseConfig.apiKey !== "TU_API_KEY_AQUI") {
             try {
                 app = initializeApp(firebaseConfig);
@@ -207,9 +208,13 @@
                         window.appState.userName = user.displayName;
                         await loadCloudData(user.uid);
                         window.updateUI();
+                        // Redirigir al dashboard si estamos en el landing
                         if(!document.getElementById('view-landing').classList.contains('hidden')) {
                             window.navToDashboard();
                         }
+                        // Ocultar modal si estaba abierto
+                        document.getElementById('auth-modal').classList.add('hidden');
+                        document.getElementById('auth-modal').classList.remove('flex');
                     } else {
                         window.currentUser = null;
                     }
@@ -222,10 +227,9 @@
 
         // --- FUNCIONES EXPORTADAS ---
         window.handleGoogleLogin = async () => {
-            // SI NO HAY LLAVES: Usamos Simulación (Fallback inteligente)
+            // SI NO HAY LLAVES: Alerta honesta (No simulación)
             if (!isFirebaseReady) {
-                console.warn("Firebase no configurado. Usando simulación.");
-                handleGoogleSimulation();
+                alert("⚠️ FALTA CONFIGURACIÓN \n\nPara que el botón de Google funcione, debes pegar tus API Keys de Firebase en el código (Línea 347).\n\nPor ahora, usa la opción 'Entrar sin cuenta'.");
                 return;
             }
             // SI HAY LLAVES: Login Real
@@ -284,28 +288,14 @@
 
         // UI
         window.checkAuthAndStart = () => {
-            if (window.currentUser || window.appState.userName !== "Colega") {
+            // Si ya hay usuario autenticado (nube o local con nombre)
+            if (window.currentUser || (window.appState.userName && window.appState.userName !== "Colega")) {
                 window.navToDashboard();
             } else {
+                // Mostrar Modal
                 document.getElementById('auth-modal').classList.remove('hidden');
                 document.getElementById('auth-modal').classList.add('flex');
             }
-        };
-
-        // SIMULACIÓN DE GOOGLE (Para cuando no hay llaves)
-        window.handleGoogleSimulation = () => {
-            const btn = document.querySelector('#auth-modal button'); // Botón de Google
-            const originalText = btn.innerHTML;
-            btn.innerHTML = "Conectando...";
-            setTimeout(() => {
-                window.appState.userName = "Marcelo (Demo)";
-                window.appState.userEmail = "usuario@gmail.com";
-                localStorage.setItem('auxiliarProLocalData', JSON.stringify(window.appState));
-                document.getElementById('auth-modal').classList.add('hidden');
-                document.getElementById('auth-modal').classList.remove('flex');
-                window.navToDashboard();
-                btn.innerHTML = originalText;
-            }, 1000);
         };
 
         window.handleRegister = (e) => {
