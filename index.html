@@ -34,7 +34,6 @@
     <style>
         body { font-family: 'Inter', sans-serif; }
         .fade-in { animation: fadeIn 0.5s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .locked-level { filter: grayscale(100%); opacity: 0.6; pointer-events: none; }
         .medal-shine { position: relative; overflow: hidden; }
         .medal-shine::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%); transform: skewX(-25deg); animation: shine 3s infinite; }
@@ -52,9 +51,7 @@
         .prose ul { list-style-type: disc; }
         .prose ol { list-style-type: decimal; }
         .prose li { margin-bottom: 0.5em; color: #4B5563; }
-        .prose strong { color: #111827; font-weight: 700; }
         .prose a { color: #00C853; text-decoration: underline; cursor: pointer; font-weight: 600; }
-        .prose a:hover { color: #00963f; }
         .prose .highlight { background-color: #ecfdf5; padding: 2px 5px; border-radius: 4px; color: #065f46; font-weight: 600; }
     </style>
 </head>
@@ -274,7 +271,7 @@
         import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // =========================================================================
-        // --- TUS LLAVES REALES DE FIREBASE ---
+        // --- TUS LLAVES REALES DE FIREBASE (CONFIGURADAS POR MARCELO) ---
         // =========================================================================
         const firebaseConfig = {
           apiKey: "AIzaSyDNhuSBBhmmQSV0BHC8MOtLKgAUpvtfWfE",
@@ -449,51 +446,135 @@
             });
 
             if (isLibraryUnlocked) {
-                libraryContainer.innerHTML = `<div class="library-unlocked bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200 shadow-md"><div class="flex items-center gap-3 mb-4"><div class="bg-blue-600 text-white p-2 rounded-lg shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div><div><h4 class="font-bold text-gray-900 text-lg">Biblioteca Técnica</h4><p class="text-xs text-blue-700 font-medium">¡Material desbloqueado! Listo para descarga.</p></div></div><div class="space-y-3"><a href="./decreto_466.pdf" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">📜 Decreto 466 (PDF)</span><span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">Descargar</span></a><a href="./guia_posologia.pdf" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">💊 Guía de Posología (PDF)</span><span class="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded">Descargar</span></a><a href="./modelo_examen.pdf" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">📝 Modelo Examen (PDF)</span><span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Descargar</span></a></div></div>`;
+                libraryContainer.innerHTML = `<div class="library-unlocked bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200 shadow-md"><div class="flex items-center gap-3 mb-4"><div class="bg-blue-600 text-white p-2 rounded-lg shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div><div><h4 class="font-bold text-gray-900 text-lg">Biblioteca Técnica</h4><p class="text-xs text-blue-700 font-medium">¡Material desbloqueado! Listo para descarga.</p></div></div><div class="space-y-3"><a href="./decreto_466.pdf" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">📜 Decreto 466 (PDF)</span><span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">Descargar</span></a><a href="./guia_posologia.pdf" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">💊 Guía de Posología (PDF)</span><span class="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded">Descargar</span></a><a href="./modelo_examen.pdf" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">📝 Modelo Examen (PDF)</span><span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Descargar</span></a></div></div><div class="bg-gradient-to-br from-purple-50 to-fuchsia-50 rounded-xl p-6 border border-purple-200 shadow-md mt-4"><div class="flex items-center gap-3 mb-2"><div class="bg-purple-600 text-white p-2 rounded-lg shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div><div><h4 class="font-bold text-gray-900 text-lg">Foro de Colegas</h4><p class="text-xs text-purple-700 font-medium">Comunidad Auxiliar Pro</p></div></div><p class="text-xs text-gray-600 mb-4">Únete a nuestra comunidad en WhatsApp y Facebook.</p><button onclick="openForum()" class="w-full bg-purple-600 hover:bg-purple-700 text-white text-sm font-bold py-2 px-4 rounded-lg transition-colors">Ver Grupos</button></div>`;
             } else {
-                libraryContainer.innerHTML = `<div class="bg-gray-100 rounded-xl p-4 flex items-center gap-4 opacity-60"><div class="bg-gray-300 p-3 rounded-lg text-gray-500"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div><div><h4 class="font-bold text-gray-700">Biblioteca Técnica</h4><p class="text-xs text-gray-500">🔒 Aprueba el Nivel 1 para desbloquear.</p></div></div>`;
+                libraryContainer.innerHTML = `<div class="bg-gray-100 rounded-xl p-4 flex items-center gap-4 opacity-60"><div class="bg-gray-300 p-3 rounded-lg text-gray-500"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div><div><h4 class="font-bold text-gray-700">Biblioteca y Foros</h4><p class="text-xs text-gray-500">🔒 Aprueba el Nivel 1 para desbloquear.</p></div></div>`;
             }
         }
 
-        // 1. BLOG DATA
-        const BLOG_POSTS = [
-            { 
-                id: 'guia-maestra', 
-                title: "Guía Completa para ser Auxiliar de Farmacia", 
-                excerpt: "Todo lo que necesitas saber para certificarte en 2026: requisitos, examen y trámites.", 
-                content: `
-                    <h2>Tu Camino a la Meta SEREMI</h2>
-                    <p>Convertirse en Auxiliar de Farmacia certificado es un gran paso profesional...</p>
-                ` 
-            },
-            // ... (Resto de artículos)
-            { 
-                id: 'fechas-examen', 
-                title: "¿Cuándo es el examen? La verdad sobre las fechas", 
-                excerpt: "No esperes un calendario oficial. Entiende cómo funciona el sistema.", 
-                content: `<h2>La Verdad sobre las Fechas</h2><p>El proceso es a demanda...</p>` 
+        // QUIZ LOGIC
+        window.startLevel = (levelId) => {
+            const level = levelsData.find(l => l.id === levelId);
+            activeLevelId = levelId;
+            currentQuizQuestions = level.questions;
+            currentQuestionIndex = 0;
+            userAnswers = new Array(currentQuizQuestions.length).fill(null);
+            isReviewMode = false;
+            
+            document.getElementById('quiz-title').innerText = `Examen ${level.metalName}`;
+            document.getElementById('quiz-subtitle').innerText = `Pregunta 1 de ${currentQuizQuestions.length}`;
+            document.getElementById('quiz-content-active').classList.remove('hidden');
+            document.getElementById('quiz-footer').classList.remove('hidden');
+            document.getElementById('quiz-content-result').classList.add('hidden');
+            document.getElementById('quiz-modal').classList.remove('hidden');
+            document.getElementById('quiz-modal').classList.add('flex');
+            showQuestion();
+        }
+
+        window.closeQuiz = () => { 
+            document.getElementById('quiz-modal').classList.add('hidden');
+            document.getElementById('quiz-modal').classList.remove('flex');
+            renderDashboard(); 
+        }
+
+        function showQuestion() {
+            const q = currentQuizQuestions[currentQuestionIndex];
+            const currentAnswer = userAnswers[currentQuestionIndex];
+            document.getElementById('current-q-num').innerText = currentQuestionIndex + 1;
+            document.getElementById('total-q-num').innerText = currentQuizQuestions.length;
+            const container = document.getElementById('quiz-question-container');
+            container.innerHTML = `<h4 class="text-lg font-bold text-gray-800 mb-6">${q.q}</h4>`;
+            const optionsContainer = document.createElement('div');
+            optionsContainer.className = "space-y-3";
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 rounded-lg border transition-all option-btn text-sm md:text-base font-medium ";
+                if (isReviewMode) {
+                    btn.disabled = true;
+                    if (idx === q.correct) { btn.className += "bg-green-100 border-green-500 text-green-800 font-bold"; btn.innerHTML = `${opt} <span class="float-right">✅</span>`; }
+                    else if (idx === currentAnswer && idx !== q.correct) { btn.className += "bg-red-50 border-red-500 text-red-800"; btn.innerHTML = `${opt} <span class="float-right">❌</span>`; }
+                    else { btn.className += "border-gray-200 opacity-60"; btn.innerText = opt; }
+                } else {
+                    if (idx === currentAnswer) btn.className += "bg-blue-50 border-blue-500 text-blue-800 shadow-inner ring-1 ring-blue-500";
+                    else btn.className += "border-gray-200 hover:bg-gray-50 hover:border-blue-300";
+                    btn.onclick = () => selectAnswer(idx);
+                    btn.innerText = opt;
+                }
+                optionsContainer.appendChild(btn);
+            });
+            container.appendChild(optionsContainer);
+            const nextBtn = document.getElementById('next-btn');
+            nextBtn.onclick = null;
+            if (isReviewMode) {
+                nextBtn.disabled = false;
+                nextBtn.innerText = (currentQuestionIndex === currentQuizQuestions.length - 1) ? "Volver al Resumen" : "Siguiente";
+                nextBtn.onclick = (currentQuestionIndex === currentQuizQuestions.length - 1) ? () => showResultSummary(null, null) : nextQuestion;
+            } else {
+                nextBtn.disabled = (currentAnswer === null);
+                nextBtn.innerText = (currentQuestionIndex === currentQuizQuestions.length - 1) ? "Finalizar Examen" : "Siguiente";
+                nextBtn.onclick = (currentQuestionIndex === currentQuizQuestions.length - 1) ? finishLevel : nextQuestion;
             }
-        ];
-
-        // --- RESTO DE LA LÓGICA (Quiz, Navigation, etc.) ---
-        // (Mismo código de lógica que antes)
-        
-        // ...
-        
-        function navToBlog() {
-            ['view-landing', 'view-dashboard', 'view-article'].forEach(id=>document.getElementById(id).classList.add('hidden'));
-            document.getElementById('view-blog').classList.remove('hidden');
-            window.scrollTo(0,0);
-            renderBlogList();
         }
 
-        function renderBlogList() {
-            const c = document.getElementById('blog-list-container'); c.innerHTML = '';
-            BLOG_POSTS.forEach(p => { c.innerHTML += `<div onclick="openArticle('${p.id}')" class="bg-white border border-gray-100 rounded-xl p-5 mb-4 shadow-sm hover:shadow-md cursor-pointer"><h3 class="font-bold text-gray-800 text-lg mb-2">${p.title}</h3><p class="text-sm text-gray-500">${p.excerpt}</p></div>`; });
-        }
-        
-        // ... (Funciones de Quiz, StartLevel, etc.)
+        function selectAnswer(idx) { if (isReviewMode) return; userAnswers[currentQuestionIndex] = idx; showQuestion(); }
+        window.nextQuestion = () => { currentQuestionIndex++; showQuestion(); }
 
+        function finishLevel() {
+            let score = 0;
+            userAnswers.forEach((ans, idx) => { if (ans === currentQuizQuestions[idx].correct) score++; });
+            if (!window.appState.levelAttempts) window.appState.levelAttempts = {1:0, 2:0, 3:0, 4:0};
+            window.appState.levelAttempts[activeLevelId]++;
+            const passed = score >= Math.ceil(currentQuizQuestions.length * 0.7);
+            if (passed && activeLevelId === window.appState.currentLevel) window.appState.currentLevel++;
+            
+            // Guardar local
+            localStorage.setItem('auxiliarProLocalData', JSON.stringify(window.appState));
+            // Guardar nube si es posible
+            if(window.saveCloudData) window.saveCloudData();
+
+            showResultSummary(score, passed);
+        }
+
+        function showResultSummary(scoreInput, passedInput) {
+            let score = scoreInput;
+            let passed = passedInput;
+            if (typeof score !== 'number') { 
+                score = 0; 
+                userAnswers.forEach((ans, idx) => { if (ans === currentQuizQuestions[idx].correct) score++; }); 
+                passed = score >= Math.ceil(currentQuizQuestions.length * 0.7); 
+            }
+
+            document.getElementById('quiz-content-active').classList.add('hidden');
+            document.getElementById('quiz-footer').classList.add('hidden');
+            document.getElementById('quiz-content-result').classList.remove('hidden');
+            const resultTitle = document.getElementById('result-title');
+            const resultMsg = document.getElementById('result-message');
+            const resultIcon = document.getElementById('result-icon');
+            const retryBtn = document.getElementById('btn-retry');
+            
+            document.getElementById('result-score').innerText = `${score} / ${currentQuizQuestions.length}`;
+
+            if (passed) {
+                resultIcon.innerHTML = `<div class="bg-green-100 p-4 rounded-full text-green-600"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>`;
+                resultTitle.innerText = "¡Aprobado!";
+                if (activeLevelId === 1) resultMsg.innerText = "¡Bien hecho! Biblioteca desbloqueada.";
+                else if (activeLevelId === 4) { confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } }); resultMsg.innerText = "¡CERTIFICADO MASTER!"; }
+                else resultMsg.innerText = "Has superado el desafío.";
+                retryBtn.classList.add('hidden');
+            } else {
+                resultIcon.innerHTML = `<div class="bg-red-100 p-4 rounded-full text-red-600"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg></div>`;
+                resultTitle.innerText = "Reprobado";
+                resultMsg.innerText = "No alcanzaste el mínimo.";
+                const attemptsUsed = window.appState.levelAttempts[activeLevelId];
+                const maxAttempts = activeLevelId === 1 ? 999 : 2;
+                if (attemptsUsed >= maxAttempts) { retryBtn.disabled = true; retryBtn.className = "w-full bg-gray-300 text-gray-500 font-bold py-3 rounded-lg cursor-not-allowed"; retryBtn.innerText = "Intentos Agotados"; }
+                else { retryBtn.disabled = false; retryBtn.classList.remove('hidden'); retryBtn.className = "w-full bg-farmacia-green hover:bg-green-600 text-white font-bold py-3 rounded-lg transition-colors"; retryBtn.innerText = `Reintentar (Intento ${attemptsUsed + 1}/${maxAttempts})`; }
+            }
+        }
+
+        window.startReviewMode = () => { isReviewMode = true; currentQuestionIndex = 0; document.getElementById('quiz-content-result').classList.add('hidden'); document.getElementById('quiz-content-active').classList.remove('hidden'); document.getElementById('quiz-footer').classList.remove('hidden'); showQuestion(); }
+        window.retryLevel = () => { startLevel(activeLevelId); }
+        window.resetProgress = () => { if(confirm("¿Seguro? Se borrará todo.")) { localStorage.removeItem('auxiliarProLocalData'); location.reload(); } }
     </script>
 </body>
 </html>
