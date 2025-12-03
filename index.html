@@ -109,7 +109,7 @@
             <header class="bg-white shadow-sm py-4 px-6 flex justify-between items-center sticky top-0 z-10">
                 <div class="flex flex-col">
                     <span class="font-heading font-bold text-gray-700">Panel de Estudio</span>
-                    <span class="text-xs text-gray-400" id="user-welcome">Hola, Colega</span>
+                    <span class="text-xs text-gray-400" id="header-user-welcome">Hola, Colega</span>
                 </div>
                 <button onclick="window.logout()" class="text-sm text-gray-500 hover:text-red-500 font-medium flex items-center gap-1">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> Salir
@@ -169,7 +169,7 @@
             </div>
         </div>
 
-        <!-- MODAL LEGAL -->
+        <!-- OTROS MODALES (Legal, Foro, Quiz) -->
         <div id="legal-modal" class="absolute inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
             <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden p-6 relative max-h-[80vh] flex flex-col">
                 <button onclick="document.getElementById('legal-modal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
@@ -179,7 +179,6 @@
             </div>
         </div>
 
-        <!-- MODAL FORO -->
         <div id="forum-modal" class="absolute inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
             <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden p-6 relative">
                 <button onclick="document.getElementById('forum-modal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
@@ -191,7 +190,6 @@
             </div>
         </div>
 
-        <!-- MODAL QUIZ -->
         <div id="quiz-modal" class="absolute inset-0 z-50 bg-white md:rounded-3xl hidden flex-col">
             <div class="bg-farmacia-dark p-6 text-white flex justify-between items-center shrink-0"><div><h3 class="font-bold text-xl" id="quiz-title">Evaluación</h3></div><button onclick="window.closeQuiz()" class="text-white/70 hover:text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>
             <div class="flex-1 overflow-y-auto p-6"><div id="quiz-content-active"><div id="quiz-question-container"></div></div><div id="quiz-content-result" class="hidden text-center mt-10"><div id="result-icon" class="mb-4 flex justify-center"></div><h2 id="result-title" class="text-2xl font-bold mb-2"></h2><p id="result-message" class="text-gray-600 mb-6"></p><div class="bg-gray-50 rounded-lg p-4 mb-6"><p class="text-sm font-bold">Tu Puntaje</p><p class="text-3xl font-bold text-farmacia-dark" id="result-score">0/0</p></div><div class="flex flex-col gap-3"><button id="btn-review" onclick="window.startReviewMode()" class="w-full border border-gray-300 text-gray-700 font-bold py-3 rounded-lg">Ver Respuestas</button><button id="btn-retry" onclick="window.retryLevel()" class="w-full bg-farmacia-green text-white font-bold py-3 rounded-lg">Reintentar</button><button onclick="window.closeQuiz()" class="text-sm text-gray-400 underline">Salir</button></div></div></div>
@@ -264,7 +262,9 @@
         window.navToBlog = () => { window.showView('view-blog'); renderBlogList(); };
 
         window.checkAuthAndStart = () => {
-            // Si el usuario ya existe y no es el default "Colega", pasa directo
+            // Siempre mostrar modal si no hay usuario real autenticado, 
+            // pero permitir paso directo si ya hay nombre local Y el usuario no quiere conectarse
+            // (Modificado para que el botón siempre funcione: si hay nombre local, va al dashboard)
             if (window.currentUser || (window.appState && window.appState.userName !== "Colega")) {
                 window.navToDashboard();
             } else {
