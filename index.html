@@ -1,435 +1,68 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Auxiliar Pro | Preparación 2026</title>
-    
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'farmacia-green': '#00C853',
-                        'farmacia-dark': '#0d1b2a',
-                        'metal-bronze': '#cd7f32',
-                        'metal-silver': '#9e9e9e',
-                        'metal-gold': '#ffd700',
-                        'facebook-blue': '#1877F2', 
-                    },
-                    fontFamily: { sans: ['Inter', 'sans-serif'], heading: ['Roboto', 'sans-serif'] }
-                }
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'farmacia-green': '#00C853',
+              'farmacia-dark': '#0d1b2a',
+              'metal-bronze': '#cd7f32',
+              'metal-silver': '#9e9e9e',
+              'metal-gold': '#ffd700',
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              heading: ['Roboto', 'sans-serif']
+            },
+            animation: {
+              'fade-in': 'fadeIn 0.4s ease-out forwards',
+              'slide-up': 'slideUp 0.3s ease-out forwards',
+            },
+            keyframes: {
+              fadeIn: {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' },
+              },
+              slideUp: {
+                '0%': { opacity: '0', transform: 'translateY(10px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              }
             }
+          }
         }
+      }
     </script>
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .locked-level { filter: grayscale(100%); opacity: 0.6; pointer-events: none; }
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        /* Prose */
-        .prose h2 { font-size: 1.4rem; font-weight: 800; color: #111827; margin-top: 1.2em; margin-bottom: 0.5em; }
-        .prose ul { list-style-type: disc; padding-left: 1.2em; }
-        .prose p { margin-bottom: 0.8em; line-height: 1.6; color: #4B5563; }
-        .prose a { color: #00C853; text-decoration: underline; }
+      /* Custom Scrollbar for inner containers */
+      .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+      .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+      .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
     </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.2.1/",
+    "react": "https://aistudiocdn.com/react@^19.2.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
+    "react-dom": "https://aistudiocdn.com/react-dom@^19.2.1",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
+    "firebase/app": "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js",
+    "firebase/auth": "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js",
+    "firebase/firestore": "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js",
+    "firebase/": "https://aistudiocdn.com/firebase@^12.6.0/"
+  }
+}
+</script>
 </head>
-
-<body class="bg-gray-100 text-gray-800 antialiased min-h-screen flex flex-col items-center justify-center">
-
-    <div class="w-full max-w-md bg-white h-screen md:h-[90vh] md:rounded-3xl md:shadow-2xl overflow-hidden flex flex-col relative">
-
-        <!-- LOADING OVERLAY -->
-        <div id="loading-overlay" class="absolute inset-0 bg-white/95 z-[100] flex flex-col items-center justify-center hidden">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-farmacia-green mb-4"></div>
-            <p class="text-sm text-gray-500 font-semibold animate-pulse">Cargando...</p>
-        </div>
-
-        <!-- VISTA 1: LANDING -->
-        <div id="view-landing" class="flex-1 flex flex-col fade-in overflow-y-auto relative z-10">
-            <header class="w-full py-4 px-6 flex justify-between items-center border-b border-gray-100 sticky top-0 bg-white/95 backdrop-blur-sm z-10">
-                <div class="flex items-center gap-2">
-                    <div class="bg-farmacia-green text-white p-1.5 rounded-md"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6v12m-6-6h12"/></svg></div>
-                    <span class="font-heading font-bold text-xl tracking-tight text-gray-900">Auxiliar<span class="text-farmacia-green">Pro</span></span>
-                </div>
-                <div class="flex items-center gap-3">
-                    <button onclick="window.navToBlog()" class="text-xs font-bold text-gray-500 hover:text-farmacia-green uppercase tracking-wide">Blog</button>
-                    <button onclick="window.checkAuthAndStart()" class="bg-farmacia-green hover:bg-green-600 text-white font-semibold py-1.5 px-4 rounded-full transition-all shadow-md text-xs">Entrar</button>
-                </div>
-            </header>
-
-            <main class="flex-1 flex flex-col items-center text-center px-6 mt-10 pb-10">
-                <div class="inline-flex items-center gap-2 bg-green-100 border border-green-200 text-green-800 text-xs font-bold px-3 py-1 rounded-full mb-6 uppercase tracking-wide">
-                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> PREPARACIÓN 2026
-                </div>
-
-                <h1 class="font-heading text-4xl font-extrabold text-gray-900 leading-tight mb-4">Prepárate para tu examen de <br><span class="text-farmacia-green">Auxiliar de Farmacia</span></h1>
-                
-                <p class="text-gray-500 text-lg mb-8 leading-relaxed max-w-xs">
-                    Plataforma de estudio independiente. Practica, aprueba niveles y logra tu meta.
-                </p>
-
-                <div class="w-full space-y-4 mb-12">
-                    <button onclick="window.checkAuthAndStart()" class="w-full group bg-farmacia-dark hover:bg-slate-900 text-white text-lg font-semibold py-4 px-8 rounded-lg shadow-xl hover:shadow-2xl transition-all flex items-center justify-center gap-3 cursor-pointer transform hover:-translate-y-1">
-                        Comenzar Ahora 
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                    </button>
-                    
-                    <button onclick="window.navToBlog()" class="w-full bg-white border border-gray-200 hover:border-farmacia-green text-gray-600 hover:text-farmacia-green font-bold py-3 px-8 rounded-lg transition-all flex items-center justify-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
-                        Leer Guías y Artículos
-                    </button>
-                </div>
-
-                <footer class="text-center border-t border-gray-200 pt-8 pb-4 w-full mt-auto">
-                    <p class="text-xs text-gray-400 mb-4">© 2025 AuxiliarPro. Hecho con ❤️ en Chile.</p>
-                    <div class="flex justify-center gap-4 text-[10px] text-gray-500 uppercase font-semibold tracking-wide mb-6">
-                        <span onclick="window.openLegal('terms')" class="hover:text-farmacia-green transition-colors cursor-pointer">Términos</span>
-                        <span onclick="window.openLegal('privacy')" class="hover:text-farmacia-green transition-colors cursor-pointer">Privacidad</span>
-                    </div>
-                </footer>
-            </main>
-        </div>
-
-        <!-- VISTA 2: DASHBOARD -->
-        <div id="view-dashboard" class="hidden flex-1 flex flex-col bg-slate-50 h-full overflow-hidden relative z-10">
-            <header class="bg-white shadow-sm py-4 px-6 flex justify-between items-center sticky top-0 z-10">
-                <div class="flex flex-col">
-                    <span class="font-heading font-bold text-gray-700">Panel de Estudio</span>
-                    <span class="text-xs text-gray-400" id="header-user-welcome">Hola, Colega</span>
-                </div>
-                <button onclick="window.logout()" class="text-sm text-gray-500 hover:text-red-500 font-medium flex items-center gap-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> Salir
-                </button>
-            </header>
-            <main class="flex-1 p-6 w-full pb-20 overflow-y-auto">
-                <div class="bg-white rounded-2xl p-6 shadow-md border-t-4 border-farmacia-green mb-8 text-center relative overflow-hidden">
-                    <p class="text-gray-500 text-sm font-semibold uppercase tracking-wider mb-2">Tu Camino al Éxito</p>
-                    <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2"><div class="bg-farmacia-green h-2.5 rounded-full transition-all duration-1000" id="progress-bar" style="width: 5%"></div></div>
-                    <div class="flex justify-between text-xs text-gray-400 font-medium">
-                        <span id="header-medal-status">Rango: Novato</span>
-                        <span>Meta 2026</span>
-                    </div>
-                </div>
-                <div class="space-y-4" id="levels-container"></div>
-                <div id="rewards-section" class="mt-8 pt-8 border-t border-gray-200 mb-8 space-y-4"></div>
-            </main>
-        </div>
-
-        <!-- VISTAS SECUNDARIAS -->
-        <div id="view-blog" class="hidden flex-1 flex flex-col bg-white h-full overflow-hidden relative z-10">
-            <header class="bg-white shadow-sm py-4 px-6 flex justify-between items-center sticky top-0 z-10 border-b border-gray-100">
-                <div class="flex items-center gap-3">
-                    <button onclick="window.navToLanding()" class="text-gray-500 hover:text-farmacia-dark p-1 rounded-md hover:bg-gray-100 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg></button>
-                    <span class="font-heading font-bold text-lg text-gray-900">Centro de Recursos</span>
-                </div>
-            </header>
-            <main class="flex-1 p-6 overflow-y-auto bg-gray-50" id="blog-list-container"></main>
-        </div>
-
-        <div id="view-article" class="hidden flex-1 flex flex-col bg-white h-full overflow-hidden relative z-20">
-             <header class="bg-white shadow-sm py-4 px-6 flex justify-between items-center sticky top-0 z-10 border-b border-gray-100">
-                <button onclick="window.navToBlog()" class="flex items-center gap-2 text-sm text-gray-600 hover:text-farmacia-dark font-medium"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Volver</button>
-                <span class="text-xs font-bold text-farmacia-green uppercase tracking-wider bg-green-50 px-2 py-1 rounded">Blog</span>
-            </header>
-            <main class="flex-1 p-6 overflow-y-auto prose max-w-none" id="article-content-container"></main>
-        </div>
-
-        <!-- MODALES -->
-        <div id="auth-modal" class="absolute inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
-            <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden p-6 animate-bounce-in">
-                <div class="text-center mb-6">
-                    <h2 class="text-2xl font-bold text-gray-900">Bienvenido</h2>
-                    <p class="text-sm text-gray-500">Elige cómo quieres guardar tu progreso.</p>
-                </div>
-                <button onclick="window.handleGoogleLogin()" class="w-full bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-bold py-3 rounded-lg transition-colors flex justify-center items-center gap-3 mb-4 shadow-sm">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-                    Continuar con Google
-                </button>
-                <div class="relative flex py-2 items-center mb-4"><div class="flex-grow border-t border-gray-300"></div><span class="flex-shrink-0 mx-4 text-gray-400 text-xs uppercase">O solo en este equipo</span><div class="flex-grow border-t border-gray-300"></div></div>
-                <form onsubmit="window.handleRegister(event)" class="space-y-4">
-                    <div><input type="text" id="input-name" placeholder="Tu Nombre o Pseudónimo" class="w-full p-3 rounded-lg border border-gray-300 focus:border-farmacia-green focus:ring-1 outline-none text-center font-medium"></div>
-                    <button type="submit" class="w-full bg-farmacia-dark hover:bg-slate-900 text-white font-bold py-3 rounded-lg transition-colors">Entrar (Modo Local)</button>
-                </form>
-            </div>
-        </div>
-
-        <div id="legal-modal" class="absolute inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
-            <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden p-6 relative max-h-[80vh] flex flex-col">
-                <button onclick="document.getElementById('legal-modal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-                <h2 id="legal-title" class="text-xl font-bold text-gray-900 mb-4 shrink-0"></h2>
-                <div id="legal-content" class="overflow-y-auto text-sm text-gray-600 space-y-3 pr-2 text-justify"></div>
-                <button onclick="document.getElementById('legal-modal').classList.add('hidden')" class="mt-4 w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded-lg transition-colors shrink-0">Entendido</button>
-            </div>
-        </div>
-
-        <div id="forum-modal" class="absolute inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
-            <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden p-6 relative">
-                <button onclick="document.getElementById('forum-modal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-                <div class="text-center mb-6"><h2 class="text-xl font-bold text-gray-900">Comunidad</h2><p class="text-sm text-gray-500">Únete a los grupos.</p></div>
-                <div class="space-y-3">
-                    <a href="https://chat.whatsapp.com/IPvHmnNGWYmH61FrdV56g1" target="_blank" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-lg flex justify-center items-center gap-2">WhatsApp</a>
-                    <a href="https://www.facebook.com/share/g/1KFQPWG1YN/" target="_blank" class="w-full bg-facebook-blue hover:bg-blue-700 text-white font-bold py-3 rounded-lg flex justify-center items-center gap-2">Facebook</a>
-                </div>
-            </div>
-        </div>
-
-        <div id="quiz-modal" class="absolute inset-0 z-50 bg-white md:rounded-3xl hidden flex-col">
-            <div class="bg-farmacia-dark p-6 text-white flex justify-between items-center shrink-0"><div><h3 class="font-bold text-xl" id="quiz-title">Evaluación</h3></div><button onclick="window.closeQuiz()" class="text-white/70 hover:text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>
-            <div class="flex-1 overflow-y-auto p-6"><div id="quiz-content-active"><div id="quiz-question-container"></div></div><div id="quiz-content-result" class="hidden text-center mt-10"><div id="result-icon" class="mb-4 flex justify-center"></div><h2 id="result-title" class="text-2xl font-bold mb-2"></h2><p id="result-message" class="text-gray-600 mb-6"></p><div class="bg-gray-50 rounded-lg p-4 mb-6"><p class="text-sm font-bold">Tu Puntaje</p><p class="text-3xl font-bold text-farmacia-dark" id="result-score">0/0</p></div><div class="flex flex-col gap-3"><button id="btn-review" onclick="window.startReviewMode()" class="w-full border border-gray-300 text-gray-700 font-bold py-3 rounded-lg">Ver Respuestas</button><button id="btn-retry" onclick="window.retryLevel()" class="w-full bg-farmacia-green text-white font-bold py-3 rounded-lg">Reintentar</button><button onclick="window.closeQuiz()" class="text-sm text-gray-400 underline">Salir</button></div></div></div>
-            <div id="quiz-footer" class="p-4 border-t border-gray-100 bg-gray-50 shrink-0 flex justify-between items-center"><span class="text-xs text-gray-500 font-bold">PREGUNTA <span id="current-q-num">1</span></span><button id="next-btn" onclick="window.nextQuestion()" class="bg-farmacia-dark text-white px-6 py-2 rounded-lg">Siguiente</button></div>
-        </div>
-    </div>
-
-    <!-- LÓGICA DEL SISTEMA -->
-    <script>
-        // 1. DEFINICIÓN DE VARIABLES GLOBALES (CRÍTICO)
-        window.appState = { currentLevel: 1, levelAttempts: { 1: 0, 2: 0, 3: 0, 4: 0 }, userName: "Colega" };
-        window.currentUser = null;
-        window.activeLevelId = 0;
-        window.currentQuizQuestions = [];
-        window.userAnswers = [];
-        window.currentQuestionIndex = 0;
-        window.isReviewMode = false;
-
-        // 2. RECUPERACIÓN SEGURA DE DATOS LOCALES
-        try {
-            const localData = localStorage.getItem('auxiliarProLocalData');
-            if (localData) {
-                const parsed = JSON.parse(localData);
-                if (parsed && parsed.currentLevel) {
-                    window.appState = parsed;
-                    console.log("Datos locales cargados:", window.appState);
-                }
-            }
-        } catch(e) {
-            console.error("Error cargando datos locales:", e);
-        }
-
-        // 3. FUNCIONES DE NAVEGACIÓN
-        window.showView = (viewId) => {
-            // Ocultar todo
-            ['view-landing', 'view-dashboard', 'view-blog', 'view-article'].forEach(id => {
-                document.getElementById(id).classList.add('hidden');
-            });
-            // Mostrar objetivo
-            const target = document.getElementById(viewId);
-            if(target) {
-                target.classList.remove('hidden');
-                target.classList.add('fade-in');
-            }
-            window.scrollTo(0,0);
-        };
-
-        window.navToDashboard = () => {
-            // Asegurar estado
-            if (!window.appState) window.appState = { currentLevel: 1, userName: "Colega" };
-            
-            // Actualizar nombre
-            const welcomeName = window.appState.userName.split(' ')[0];
-            document.getElementById('user-welcome').innerText = `Hola, ${welcomeName}`;
-            document.getElementById('header-user-welcome').innerText = `Hola, ${welcomeName}`;
-            
-            window.showView('view-dashboard');
-            window.renderDashboard();
-        };
-
-        window.navToLanding = () => window.showView('view-landing');
-        window.navToBlog = () => { window.showView('view-blog'); window.renderBlogList(); };
-
-        // 4. LÓGICA DE AUTENTICACIÓN / INICIO
-        window.checkAuthAndStart = () => {
-            // Si ya hay usuario logueado o datos locales válidos, entrar directo
-            if (window.currentUser || (window.appState.userName && window.appState.userName !== "Colega")) {
-                window.navToDashboard();
-            } else {
-                // Si no, abrir modal
-                document.getElementById('auth-modal').classList.remove('hidden');
-                document.getElementById('auth-modal').classList.add('flex');
-            }
-        };
-
-        window.handleRegister = (e) => {
-            e.preventDefault();
-            const input = document.getElementById('input-name');
-            const name = input.value.trim() || "Estudiante";
-            
-            window.appState.userName = name;
-            localStorage.setItem('auxiliarProLocalData', JSON.stringify(window.appState));
-            
-            document.getElementById('auth-modal').classList.add('hidden');
-            document.getElementById('auth-modal').classList.remove('flex');
-            window.navToDashboard();
-        };
-
-        // 5. FUNCIONES DE UTILIDAD (LEGAL, FORO, BLOG)
-        window.openLegal = (type) => {
-            const texts = {
-                terms: "<p>Términos y Condiciones...</p>",
-                privacy: "<p>Política de Privacidad...</p>",
-                disclaimer: "<p>Descargo de Responsabilidad...</p>"
-            };
-            document.getElementById('legal-title').innerText = type.charAt(0).toUpperCase() + type.slice(1);
-            document.getElementById('legal-content').innerHTML = texts[type] || "Texto no disponible";
-            document.getElementById('legal-modal').classList.remove('hidden');
-            document.getElementById('legal-modal').classList.add('flex');
-        };
-
-        window.openForum = () => {
-            document.getElementById('forum-modal').classList.remove('hidden');
-            document.getElementById('forum-modal').classList.add('flex');
-        };
-
-        const BLOG_POSTS = [
-            { id: 'guia', title: "Guía Completa", excerpt: "Todo lo que necesitas saber.", content: "<h2>Guía Completa</h2><p>Detalles del examen...</p>" },
-            { id: 'decreto', title: "Decreto 466", excerpt: "Lo esencial del reglamento.", content: "<h2>Decreto 466</h2><p>Puntos clave...</p>" }
-        ];
-
-        window.renderBlogList = () => {
-            const container = document.getElementById('blog-list-container');
-            container.innerHTML = '';
-            BLOG_POSTS.forEach(post => {
-                container.innerHTML += `
-                <div onclick="window.openArticle('${post.id}')" class="bg-white border border-gray-100 rounded-xl p-5 mb-4 shadow-sm cursor-pointer">
-                    <h3 class="font-bold text-gray-800">${post.title}</h3>
-                    <p class="text-sm text-gray-500">${post.excerpt}</p>
-                </div>`;
-            });
-        };
-
-        window.openArticle = (id) => {
-            const post = BLOG_POSTS.find(p => p.id === id);
-            if (!post) return;
-            window.showView('view-article');
-            document.getElementById('article-content-container').innerHTML = `
-                <h1 class="text-2xl font-bold mb-4">${post.title}</h1>
-                <div class="prose">${post.content}</div>
-            `;
-        };
-
-        // 6. RENDERIZADO DEL DASHBOARD Y JUEGO
-        // (Aquí incluimos tus datos y lógica de niveles)
-        const levelsData = [
-            { id: 1, title: "Conceptos Básicos", desc: "Diagnóstico.", metalName: "Bronce", questions: [{ q: "Pregunta 1", options: ["A", "B"], correct: 0 }] },
-            { id: 2, title: "Legislación", desc: "Decretos.", metalName: "Plata", questions: [{ q: "Pregunta 1", options: ["A", "B"], correct: 0 }] },
-            // ... (Puedes expandir esto con tus 90 preguntas reales)
-        ];
-
-        window.renderDashboard = () => {
-            const container = document.getElementById('levels-container');
-            const rewards = document.getElementById('rewards-section');
-            container.innerHTML = '';
-
-            levelsData.forEach(level => {
-                let status = "DISPONIBLE";
-                let cardClass = "bg-white border-blue-200 hover:border-farmacia-green cursor-pointer";
-                let onClick = `onclick="window.startLevel(${level.id})"`;
-
-                if (level.id > window.appState.currentLevel) {
-                    status = "BLOQUEADO";
-                    cardClass = "bg-gray-50 border-gray-200 opacity-60 pointer-events-none";
-                    onClick = "";
-                } else if (level.id < window.appState.currentLevel) {
-                    status = "¡LOGRADO!";
-                    cardClass = "bg-green-50 border-green-200";
-                }
-
-                container.innerHTML += `
-                <div class="p-5 rounded-xl shadow-sm border mb-3 ${cardClass}" ${onClick}>
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold">${level.id}</div>
-                        <div>
-                            <div class="text-xs font-bold uppercase text-gray-500">${status}</div>
-                            <h3 class="font-bold text-gray-800">${level.title}</h3>
-                        </div>
-                    </div>
-                </div>`;
-            });
-
-            // Recompensas
-            if (window.appState.currentLevel > 1) {
-                rewards.innerHTML = `
-                <div class="bg-blue-50 p-5 rounded-xl border border-blue-200">
-                    <h3 class="font-bold text-blue-800 mb-3">Biblioteca Técnica</h3>
-                    <div class="space-y-2">
-                        <a href="./decreto_466.pdf" target="_blank" class="block bg-white p-3 rounded border text-sm text-blue-600">📜 Decreto 466</a>
-                    </div>
-                    <button onclick="window.openForum()" class="w-full mt-4 bg-blue-600 text-white font-bold py-2 rounded-lg">Ver Grupos</button>
-                </div>`;
-            } else {
-                rewards.innerHTML = `<div class="bg-gray-100 p-5 rounded-xl text-center text-gray-500 text-sm">🔒 Aprueba el Nivel 1 para desbloquear.</div>`;
-            }
-        };
-
-        window.startLevel = (id) => {
-            // Lógica simplificada de inicio de nivel
-            alert("Iniciando nivel " + id); 
-            // Aquí iría la lógica completa de abrir el modal del quiz
-        };
-    </script>
-
-    <!-- FIREBASE MODULE (Tus llaves) -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        const firebaseConfig = {
-          apiKey: "AIzaSyDNhuSBBhmmQSV0BHC8MOtLKgAUpvtfWfE",
-          authDomain: "auxiliar-pro.firebaseapp.com",
-          projectId: "auxiliar-pro",
-          storageBucket: "auxiliar-pro.firebasestorage.app",
-          messagingSenderId: "342196612566",
-          appId: "1:342196612566:web:c7f34365c4e10502e60877"
-        };
-
-        try {
-            const app = initializeApp(firebaseConfig);
-            const auth = getAuth(app);
-            const db = getFirestore(app);
-            const provider = new GoogleAuthProvider();
-
-            window.handleGoogleLogin = async () => {
-                try {
-                    document.getElementById('loading-overlay').classList.remove('hidden');
-                    const result = await signInWithPopup(auth, provider);
-                    const user = result.user;
-                    
-                    // Guardar/Fusionar datos
-                    window.appState.userName = user.displayName;
-                    await setDoc(doc(db, "users", user.uid), {
-                        currentLevel: window.appState.currentLevel
-                    }, { merge: true });
-
-                    document.getElementById('loading-overlay').classList.add('hidden');
-                    document.getElementById('auth-modal').classList.add('hidden');
-                    document.getElementById('auth-modal').classList.remove('flex');
-                    window.navToDashboard();
-                } catch (error) {
-                    document.getElementById('loading-overlay').classList.add('hidden');
-                    alert("Error: " + error.message);
-                }
-            };
-
-            onAuthStateChanged(auth, (user) => {
-                if (user) {
-                    window.currentUser = user;
-                    window.appState.userName = user.displayName;
-                    // Podrías cargar datos aquí también
-                }
-            });
-
-        } catch (e) {
-            console.error("Firebase Error:", e);
-        }
-    </script>
-</body>
+  <body class="bg-gray-100 text-gray-800 antialiased min-h-screen flex flex-col items-center justify-center">
+    <div id="root" class="w-full h-full flex justify-center items-center"></div>
+  </body>
 </html>
