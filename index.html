@@ -37,6 +37,15 @@
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        
+        /* Estilos Blog */
+        .prose h2 { font-size: 1.25rem; font-weight: 700; color: #111827; margin-top: 1.5em; margin-bottom: 0.5em; }
+        .prose h3 { font-size: 1.1rem; font-weight: 600; color: #374151; margin-top: 1.2em; margin-bottom: 0.5em; }
+        .prose p { margin-bottom: 1em; line-height: 1.6; color: #4B5563; text-align: justify; }
+        .prose ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 1em; }
+        .prose ol { list-style-type: decimal; padding-left: 1.5em; margin-bottom: 1em; }
+        .prose li { margin-bottom: 0.5em; }
+        .prose a { color: #00C853; text-decoration: underline; font-weight: 600; cursor: pointer; }
     </style>
 </head>
 
@@ -45,58 +54,54 @@
     <!-- APP CONTAINER -->
     <div class="w-full max-w-md bg-white h-screen md:h-[90vh] md:rounded-3xl md:shadow-2xl overflow-hidden flex flex-col relative">
 
-        <!-- VISTA 1: LANDING -->
+        <!-- VISTA 1: LANDING (LIMPIA) -->
         <div id="view-landing" class="flex-1 flex flex-col fade-in overflow-y-auto relative z-10">
             <header class="w-full py-4 px-6 flex justify-between items-center border-b border-gray-100 sticky top-0 bg-white/95 backdrop-blur-sm z-10">
                 <div class="flex items-center gap-2">
                     <div class="bg-farmacia-green text-white p-1.5 rounded-md"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6v12m-6-6h12"/></svg></div>
                     <span class="font-heading font-bold text-xl tracking-tight text-gray-900">Auxiliar<span class="text-farmacia-green">Pro</span></span>
                 </div>
-                <button onclick="checkAuthAndStart()" class="bg-farmacia-green hover:bg-green-600 text-white font-semibold py-2 px-6 rounded-full transition-all shadow-md text-sm">Entrar</button>
+                <div class="flex items-center gap-3">
+                    <button onclick="navToBlog()" class="text-xs font-bold text-gray-500 hover:text-farmacia-green uppercase tracking-wide">Guías</button>
+                    <button onclick="checkAuthAndStart()" class="bg-farmacia-green hover:bg-green-600 text-white font-semibold py-1.5 px-4 rounded-full transition-all shadow-md text-xs">Entrar</button>
+                </div>
             </header>
 
-            <main class="flex-1 flex flex-col items-center text-center px-6 mt-8 pb-10">
+            <main class="flex-1 flex flex-col items-center text-center px-6 mt-12 pb-10">
                 <div class="inline-flex items-center gap-2 bg-green-100 border border-green-200 text-green-800 text-xs font-bold px-3 py-1 rounded-full mb-6 uppercase tracking-wide">
                     <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Certificación 2026
                 </div>
 
                 <h1 class="font-heading text-4xl font-extrabold text-gray-900 leading-tight mb-4">Prepárate para tu examen de <br><span class="text-farmacia-green">Auxiliar de Farmacia</span></h1>
                 
-                <p class="text-gray-500 text-lg mb-8 leading-relaxed">
-                    Estudia a tu ritmo. Aprueba el Nivel Básico para desbloquear la <span class="font-bold text-farmacia-dark">Biblioteca y Foros</span>.
+                <p class="text-gray-500 text-lg mb-10 leading-relaxed max-w-xs">
+                    Plataforma de estudio independiente. Practica, aprueba niveles y certifícate.
                 </p>
 
-                <button onclick="checkAuthAndStart()" class="group bg-farmacia-dark hover:bg-slate-900 text-white text-lg font-semibold py-4 px-8 rounded-lg shadow-xl hover:shadow-2xl transition-all flex items-center justify-center gap-3 cursor-pointer transform hover:-translate-y-1 w-full mb-12">
-                    Comenzar Ahora 
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                </button>
-
-                <!-- Mensaje Personal -->
-                <div class="bg-blue-50 rounded-2xl p-6 mb-10 text-left border border-blue-100 relative overflow-hidden">
-                    <svg class="absolute -right-4 -bottom-4 text-blue-100 w-24 h-24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-10 h-10 rounded-full bg-blue-200 flex items-center justify-center text-blue-700 font-bold text-xl">M</div>
-                        <div>
-                            <h3 class="font-bold text-gray-900 text-sm">De un colega para ti</h3>
-                            <p class="text-xs text-blue-600">Marcelo, Auxiliar Trainee</p>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-600 leading-relaxed relative z-10">
-                        "Sé lo difícil que es estudiar mientras trabajamos turnos largos. Creé esta herramienta porque siento empatía por nuestro esfuerzo. ¡Vamos por ese logro juntos!"
-                    </p>
+                <div class="w-full space-y-4 mb-12">
+                    <button onclick="checkAuthAndStart()" class="w-full group bg-farmacia-dark hover:bg-slate-900 text-white text-lg font-semibold py-4 px-8 rounded-lg shadow-xl hover:shadow-2xl transition-all flex items-center justify-center gap-3 cursor-pointer transform hover:-translate-y-1">
+                        Comenzar Ahora 
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </button>
+                    
+                    <button onclick="navToBlog()" class="w-full bg-white border border-gray-200 hover:border-farmacia-green text-gray-600 hover:text-farmacia-green font-bold py-3 px-8 rounded-lg transition-all flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                        Leer Guías y Artículos
+                    </button>
                 </div>
 
-                <!-- Botón Colaboración -->
-                <div class="mb-8 w-full max-w-sm">
-                    <div onclick="alert('¡Gracias por tu intención! Pronto habilitaremos un link real para aportar.')" class="bg-white border border-yellow-200 hover:border-yellow-400 rounded-xl p-4 shadow-sm hover:shadow-md transition-all cursor-pointer flex items-center gap-4 group">
-                        <div class="bg-yellow-100 p-3 rounded-full text-yellow-600 group-hover:scale-110 transition-transform">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
-                        </div>
-                        <div class="text-left">
-                            <h4 class="font-bold text-gray-800 text-sm">Invítame un café</h4>
-                            <p class="text-xs text-gray-500">Colabora para mantener el proyecto.</p>
+                <!-- Mensaje Personal -->
+                <div class="bg-gray-50 rounded-2xl p-6 mb-10 text-left border border-gray-200 relative overflow-hidden">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 font-bold text-xl">M</div>
+                        <div>
+                            <h3 class="font-bold text-gray-900 text-sm">De un colega para ti</h3>
+                            <p class="text-xs text-gray-500">Marcelo, Auxiliar Trainee</p>
                         </div>
                     </div>
+                    <p class="text-sm text-gray-600 leading-relaxed relative z-10 italic">
+                        "Esta web es mi cuaderno de estudio. Aquí encontrarás lo que estoy aprendiendo para el examen de 2026. ¡Vamos por ese logro juntos!"
+                    </p>
                 </div>
 
                 <footer class="text-center border-t border-gray-200 pt-8 pb-4 w-full">
@@ -110,7 +115,34 @@
             </main>
         </div>
 
-        <!-- VISTA 2: DASHBOARD -->
+        <!-- VISTA 2: BLOG (LISTADO) - PÁGINA INDEPENDIENTE -->
+        <div id="view-blog" class="hidden flex-1 flex flex-col bg-white h-full overflow-hidden relative z-10">
+            <header class="bg-white shadow-sm py-4 px-6 flex justify-between items-center sticky top-0 z-10 border-b border-gray-100">
+                <div class="flex items-center gap-3">
+                    <button onclick="navToLanding()" class="text-gray-500 hover:text-farmacia-dark p-1 rounded-md hover:bg-gray-100 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    </button>
+                    <span class="font-heading font-bold text-lg text-gray-900">Centro de Recursos</span>
+                </div>
+            </header>
+            <main class="flex-1 p-6 overflow-y-auto bg-gray-50" id="blog-list-container">
+                <!-- Se llena dinámicamente con JS -->
+            </main>
+        </div>
+
+        <!-- VISTA 3: ARTÍCULO (LECTURA) -->
+        <div id="view-article" class="hidden flex-1 flex flex-col bg-white h-full overflow-hidden relative z-20">
+             <header class="bg-white shadow-sm py-4 px-6 flex justify-between items-center sticky top-0 z-10 border-b border-gray-100">
+                <button onclick="navToBlog()" class="flex items-center gap-2 text-sm text-gray-600 hover:text-farmacia-dark font-medium">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    Volver al listado
+                </button>
+                <span class="text-xs font-bold text-farmacia-green uppercase tracking-wider bg-green-50 px-2 py-1 rounded">Blog</span>
+            </header>
+            <main class="flex-1 p-6 overflow-y-auto prose max-w-none" id="article-content-container"></main>
+        </div>
+
+        <!-- VISTA 4: DASHBOARD -->
         <div id="view-dashboard" class="hidden flex-1 flex flex-col bg-slate-50 h-full overflow-hidden relative z-10">
             <header class="bg-white shadow-sm py-4 px-6 flex justify-between items-center sticky top-0 z-10">
                 <div class="flex flex-col">
@@ -121,7 +153,6 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> Salir
                 </button>
             </header>
-
             <main class="flex-1 p-6 w-full pb-20 overflow-y-auto">
                 <div class="bg-white rounded-2xl p-6 shadow-md border-t-4 border-farmacia-green mb-8 text-center relative overflow-hidden">
                     <p class="text-gray-500 text-sm font-semibold uppercase tracking-wider mb-2">Tu Camino al Éxito</p>
@@ -131,167 +162,184 @@
                         <span>Certificado</span>
                     </div>
                 </div>
-
                 <div class="space-y-4" id="levels-container"></div>
-                
-                <div id="rewards-section" class="mt-8 pt-8 border-t border-gray-200 mb-8 space-y-4">
-                    <!-- Se llena con JS -->
-                </div>
+                <div id="rewards-section" class="mt-8 pt-8 border-t border-gray-200 mb-8 space-y-4"></div>
             </main>
         </div>
 
-        <!-- MODAL LEGAL -->
+        <!-- MODALES (Registro, Legal, Foro, Quiz) -->
+        <div id="auth-modal" class="absolute inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
+            <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden p-6 animate-bounce-in">
+                <div class="text-center mb-6">
+                    <div class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-farmacia-green"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
+                    <h2 class="text-2xl font-bold text-gray-900">Bienvenido Colega</h2>
+                    <p class="text-sm text-gray-500">Ingresa tu nombre para personalizar tu experiencia.</p>
+                </div>
+                <form onsubmit="handleRegister(event)" class="space-y-4">
+                    <div><input type="text" id="input-name" placeholder="Tu Nombre o Pseudónimo" class="w-full p-3 rounded-lg border border-gray-300 focus:border-farmacia-green focus:ring-1 outline-none text-center font-medium" required></div>
+                    <button type="submit" class="w-full bg-farmacia-dark hover:bg-slate-900 text-white font-bold py-3 rounded-lg transition-colors">Comenzar Entrenamiento</button>
+                </form>
+            </div>
+        </div>
+
         <div id="legal-modal" class="absolute inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
             <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden p-6 relative max-h-[80vh] flex flex-col">
-                <button onclick="document.getElementById('legal-modal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </button>
+                <button onclick="document.getElementById('legal-modal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
                 <h2 id="legal-title" class="text-xl font-bold text-gray-900 mb-4 shrink-0">Términos Legales</h2>
                 <div id="legal-content" class="overflow-y-auto text-sm text-gray-600 space-y-3 pr-2 text-justify"></div>
                 <button onclick="document.getElementById('legal-modal').classList.add('hidden')" class="mt-4 w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded-lg transition-colors shrink-0">Entendido</button>
             </div>
         </div>
 
-        <!-- MODAL REGISTRO SIMPLE -->
-        <div id="auth-modal" class="absolute inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
-            <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden p-6 animate-bounce-in">
-                <div class="text-center mb-6">
-                    <div class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-farmacia-green">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                    </div>
-                    <h2 class="text-2xl font-bold text-gray-900">Bienvenido Colega</h2>
-                    <p class="text-sm text-gray-500">Ingresa tu nombre para personalizar tu experiencia.</p>
-                </div>
-                
-                <form onsubmit="handleRegister(event)" class="space-y-4">
-                    <div>
-                        <input type="text" id="input-name" placeholder="Tu Nombre o Pseudónimo" class="w-full p-3 rounded-lg border border-gray-300 focus:border-farmacia-green focus:ring-1 outline-none text-center font-medium" required>
-                    </div>
-                    <button type="submit" class="w-full bg-farmacia-dark hover:bg-slate-900 text-white font-bold py-3 rounded-lg transition-colors">
-                        Comenzar Entrenamiento
-                    </button>
-                </form>
-            </div>
-        </div>
-
-        <!-- MODAL FORO -->
         <div id="forum-modal" class="absolute inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
             <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden p-6 relative">
-                <button onclick="document.getElementById('forum-modal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </button>
-                <div class="text-center mb-6">
-                    <div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-purple-600">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                    </div>
-                    <h2 class="text-xl font-bold text-gray-900">Comunidad de Colegas</h2>
-                    <p class="text-sm text-gray-500">Únete a nuestros grupos para compartir dudas.</p>
-                </div>
+                <button onclick="document.getElementById('forum-modal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                <div class="text-center mb-6"><div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-purple-600"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div><h2 class="text-xl font-bold text-gray-900">Comunidad</h2><p class="text-sm text-gray-500">Únete a los grupos.</p></div>
                 <div class="space-y-3">
-                    <a href="https://chat.whatsapp.com/IPvHmnNGWYmH61FrdV56g1" target="_blank" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-lg transition-colors flex justify-center items-center gap-2">
-                        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> Grupo de WhatsApp
-                    </a>
-                    <a href="#" onclick="alert('Grupo de Telegram próximamente')" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-lg transition-colors flex justify-center items-center gap-2">
-                        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg> Grupo de Telegram
-                    </a>
+                    <a href="https://chat.whatsapp.com/IPvHmnNGWYmH61FrdV56g1" target="_blank" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-lg transition-colors flex justify-center items-center gap-2"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> WhatsApp</a>
+                    <a href="#" onclick="alert('Próximamente')" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-lg transition-colors flex justify-center items-center gap-2"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg> Telegram</a>
                 </div>
             </div>
         </div>
 
-        <!-- MODAL QUIZ -->
         <div id="quiz-modal" class="absolute inset-0 z-50 bg-white md:rounded-3xl hidden flex-col">
-            <div class="bg-farmacia-dark p-6 text-white flex justify-between items-center shrink-0">
-                <div><h3 class="font-bold text-xl" id="quiz-title">Evaluación</h3><p class="text-blue-200 text-sm" id="quiz-subtitle">Modo Examen</p></div>
-                <button onclick="closeQuiz()" class="text-white/70 hover:text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-            </div>
-            <div class="flex-1 overflow-y-auto p-6">
-                <div id="quiz-content-active"><div id="quiz-question-container"></div></div>
-                <div id="quiz-content-result" class="hidden text-center mt-10">
-                    <div id="result-icon" class="mb-4 flex justify-center"></div>
-                    <h2 id="result-title" class="text-2xl font-bold mb-2 text-gray-900"></h2>
-                    <p id="result-message" class="text-gray-600 mb-6"></p>
-                    <div class="bg-gray-50 rounded-lg p-4 mb-6 border border-gray-200"><p class="text-sm text-gray-500 uppercase font-bold">Tu Puntaje</p><p class="text-3xl font-bold text-farmacia-dark" id="result-score">0/0</p></div>
-                    <div class="flex flex-col gap-3">
-                        <button id="btn-review" onclick="startReviewMode()" class="w-full border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 font-bold py-3 rounded-lg">Ver Respuestas Correctas</button>
-                        <button id="btn-retry" onclick="retryLevel()" class="w-full bg-farmacia-green hover:bg-green-600 text-white font-bold py-3 rounded-lg">Intentar de Nuevo</button>
-                        <button onclick="closeQuiz()" class="text-sm text-gray-400 mt-2 hover:text-gray-600 underline">Salir al Panel</button>
-                    </div>
-                </div>
-            </div>
-            <div id="quiz-footer" class="p-4 border-t border-gray-100 bg-gray-50 shrink-0 flex justify-between items-center">
-                <span class="text-xs text-gray-500 font-bold">PREGUNTA <span id="current-q-num">1</span>/<span id="total-q-num">3</span></span>
-                <button id="next-btn" onclick="nextQuestion()" class="bg-farmacia-dark hover:bg-slate-700 text-white px-6 py-2 rounded-lg font-medium">Siguiente</button>
-            </div>
+            <div class="bg-farmacia-dark p-6 text-white flex justify-between items-center shrink-0"><div><h3 class="font-bold text-xl" id="quiz-title">Evaluación</h3><p class="text-blue-200 text-sm" id="quiz-subtitle">Modo Examen</p></div><button onclick="closeQuiz()" class="text-white/70 hover:text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>
+            <div class="flex-1 overflow-y-auto p-6"><div id="quiz-content-active"><div id="quiz-question-container"></div></div><div id="quiz-content-result" class="hidden text-center mt-10"><div id="result-icon" class="mb-4 flex justify-center"></div><h2 id="result-title" class="text-2xl font-bold mb-2 text-gray-900"></h2><p id="result-message" class="text-gray-600 mb-6"></p><div id="weakness-feedback" class="hidden bg-orange-50 border border-orange-100 p-3 rounded-lg text-xs text-orange-800 mb-4 text-left"></div><div class="bg-gray-50 rounded-lg p-4 mb-6 border border-gray-200"><p class="text-sm text-gray-500 uppercase font-bold">Tu Puntaje</p><p class="text-3xl font-bold text-farmacia-dark" id="result-score">0/0</p></div><div class="flex flex-col gap-3"><button id="btn-review" onclick="startReviewMode()" class="w-full border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 font-bold py-3 rounded-lg">Ver Respuestas Correctas</button><button id="btn-retry" onclick="retryLevel()" class="w-full bg-farmacia-green hover:bg-green-600 text-white font-bold py-3 rounded-lg">Intentar de Nuevo</button><button onclick="closeQuiz()" class="text-sm text-gray-400 mt-2 hover:text-gray-600 underline">Salir al Panel</button></div></div></div>
+            <div id="quiz-footer" class="p-4 border-t border-gray-100 bg-gray-50 shrink-0 flex justify-between items-center"><span class="text-xs text-gray-500 font-bold">PREGUNTA <span id="current-q-num">1</span>/<span id="total-q-num">3</span></span><button id="next-btn" onclick="nextQuestion()" class="bg-farmacia-dark hover:bg-slate-700 text-white px-6 py-2 rounded-lg font-medium">Siguiente</button></div>
         </div>
     </div>
 
     <!-- LÓGICA PRINCIPAL -->
     <script>
-        const LINKS_PDF = { 
-            decreto: "./decreto_466.pdf", 
-            decreto404: "./decreto_404.pdf", 
-            decreto405: "./decreto_405.pdf", 
-            ley: "./ley_20724.pdf",
-            posologia: "./guia_posologia.pdf",
-            examen: "./modelo_examen.pdf"
-        };
+        // 1. BLOG DATA (CONTENIDO REAL)
+        const BLOG_POSTS = [
+            { 
+                id: 'guia-maestra', 
+                title: "Guía Completa para ser Auxiliar de Farmacia", 
+                excerpt: "Todo lo que necesitas saber para certificarte en 2026: requisitos, examen y trámites.", 
+                content: `
+                    <h2>Tu Camino a la Certificación SEREMI</h2>
+                    <p>Convertirse en Auxiliar de Farmacia certificado es un gran paso profesional. No solo te permite trabajar legalmente, sino que valida tus conocimientos técnicos ante la autoridad sanitaria.</p>
+                    
+                    <h3>1. Requisitos Básicos</h3>
+                    <p>Para rendir el examen de competencia, debes cumplir con lo siguiente:</p>
+                    <ul>
+                        <li><span class="highlight">Licencia de Enseñanza Media</span> (Original o legalizada).</li>
+                        <li><span class="highlight">Experiencia Laboral:</span> Acreditar al menos 1 año de trabajo bajo la supervisión de un Químico Farmacéutico.</li>
+                        <li>Certificado de Antecedentes (Fines especiales).</li>
+                    </ul>
 
-        // --- TEXTOS LEGALES RESTAURADOS ---
-        const LEGAL_TEXTS = {
-            terms: `<p class="font-bold mb-2">1. Naturaleza del Servicio</p>
-                    <p class="mb-4">Auxiliar Pro es una iniciativa independiente creada por un estudiante en formación. NO tiene afiliación con el Ministerio de Salud (MINSAL), el Instituto de Salud Pública (ISP) ni ninguna entidad gubernamental.</p>
-                    <p class="font-bold mb-2">2. Propósito Educativo</p>
-                    <p class="mb-4">El contenido aquí presentado es exclusivamente para fines de repaso y estudio personal. No garantiza la aprobación del examen de competencia ni reemplaza la documentación oficial vigente.</p>
-                    <p class="font-bold mb-2">3. Responsabilidad</p>
-                    <p class="mb-4">El creador de la aplicación no se hace responsable por errores, omisiones o el uso indebido de la información. Es deber del usuario contrastar los datos con la normativa legal actualizada.</p>
-                    <p class="font-bold mb-2">4. Modificaciones</p>
-                    <p>Nos reservamos el derecho de modificar o descontinuar el servicio en cualquier momento sin previo aviso.</p>`,
-            privacy: `<p class="font-bold mb-2">1. Datos Recopilados</p>
-                      <p class="mb-4">Esta aplicación solo solicita un nombre o pseudónimo para personalizar la experiencia visual.</p>
-                      <p class="font-bold mb-2">2. Almacenamiento Local</p>
-                      <p class="mb-4">Toda la información de tu progreso (niveles, puntajes y nombre) se guarda EXCLUSIVAMENTE en la memoria de tu dispositivo (LocalStorage). No enviamos tus datos a ningún servidor externo ni base de datos.</p>
-                      <p class="font-bold mb-2">3. Control del Usuario</p>
-                      <p>Tú tienes el control total. Si borras el historial de navegación o los datos del sitio, tu progreso se eliminará permanentemente.</p>`,
-            disclaimer: `<p class="font-bold mb-2 text-red-500">IMPORTANTE: DESCARGO DE RESPONSABILIDAD</p>
-                         <p class="mb-4">Esta aplicación web es un proyecto personal de apoyo al estudio ("Fan Made").</p>
-                         <ul class="list-disc pl-5 space-y-2">
-                            <li>No emite certificados válidos legalmente.</li>
-                            <li>No tiene relación con el proceso oficial de certificación de la SEREMI de Salud.</li>
-                            <li>El uso de esta herramienta es bajo tu propia responsabilidad y criterio.</li>
-                         </ul>`
-        };
+                    <h3>2. El Examen de Competencia</h3>
+                    <p>Es una prueba teórica que evalúa si dominas los aspectos críticos de la farmacia. Los temas principales son:</p>
+                    <ul>
+                        <li><strong>Legislación Farmacéutica:</strong> Debes dominar el <a onclick="openArticle('decreto-466-detalle')">Decreto Supremo 466</a> y la normativa de controlados.</li>
+                        <li><strong>Almacenamiento y Cadena de Frío:</strong> Cómo asegurar que los medicamentos no pierdan su efectividad.</li>
+                        <li><strong>Dispensación y Recetas:</strong> Identificar tipos de recetas y su validez.</li>
+                    </ul>
+
+                    <h3>3. ¿Cómo me inscribo?</h3>
+                    <p>Todo el trámite se realiza de forma digital. Hemos preparado un tutorial específico para ti: <a onclick="openArticle('tutorial-as-digital')">Ver Tutorial AS Digital</a>.</p>
+                ` 
+            },
+            { 
+                id: 'decreto-466-detalle', 
+                title: "¿Qué es el Decreto 466?", 
+                excerpt: "Análisis de los artículos clave que siempre preguntan en el examen.", 
+                content: `
+                    <h2>El Reglamento que rige tu trabajo</h2>
+                    <p>El Decreto Supremo N° 466 aprueba el "Reglamento de Farmacias, Droguerías, Almacenes Farmacéuticos, Botiquines y Depósitos Autorizados". Es la base legal de nuestra profesión.</p>
+                    
+                    <h3>Puntos Críticos para el Examen:</h3>
+                    <ul>
+                        <li><strong>Artículo 7:</strong> Define los tipos de establecimientos. Recuerda la diferencia entre Farmacia (dirigida por Q.F.) y Almacén Farmacéutico (arsenal limitado).</li>
+                        <li><strong>Dirección Técnica:</strong> La presencia del Q.F. es obligatoria durante todo el horario de funcionamiento. Sin Q.F., la farmacia no puede abrir.</li>
+                        <li><strong>El Auxiliar:</strong> Se define como el colaborador del Q.F. que, bajo su supervisión, realiza tareas de expendio.</li>
+                    </ul>
+                    <p>Si quieres estudiar el texto completo, puedes descargarlo en nuestra <span class="highlight" onclick="checkAuthAndStart()">Biblioteca Técnica</span> (disponible al aprobar el Nivel 1).</p>
+                ` 
+            },
+            { 
+                id: 'tutorial-as-digital', 
+                title: "Tutorial: Subir documentos a AS Digital", 
+                excerpt: "Guía paso a paso para solicitar tu examen de competencia online.", 
+                content: `
+                    <h2>Trámite en Autoridad Sanitaria Digital</h2>
+                    <p>Ya no es necesario ir presencialmente a la SEREMI para inscribirte. Sigue estos pasos:</p>
+                    
+                    <ol>
+                        <li>Ingresa a <strong>asdigital.minsal.cl</strong>.</li>
+                        <li>Inicia sesión con tu <strong>Clave Única</strong>.</li>
+                        <li>En el buscador de trámites escribe: "Autorización para ejercer como Auxiliar de Farmacia".</li>
+                        <li>Sube tus documentos en formato PDF (asegúrate que sean legibles).</li>
+                        <li>Realiza el pago del arancel correspondiente vía WebPay.</li>
+                    </ol>
+                    <p><strong>Consejo Pro:</strong> Guarda el número de solicitud para hacer seguimiento. La respuesta puede tardar algunas semanas.</p>
+                ` 
+            }
+        ];
+
+        const LINKS_PDF = { decreto: "./decreto_466.pdf", decreto404: "./decreto_404.pdf", decreto405: "./decreto_405.pdf", ley: "./ley_20724.pdf", posologia: "./guia_posologia.pdf", examen: "./modelo_examen.pdf" };
+        const LEGAL_TEXTS = { terms: `<p class="font-bold mb-2">1. Naturaleza</p><p class="mb-4">Auxiliar Pro es una iniciativa independiente sin afiliación gubernamental.</p><p class="font-bold mb-2">2. Propósito</p><p>Herramienta de estudio y repaso.</p>`, privacy: `<p class="font-bold mb-2">Datos</p><p>Los datos de progreso se guardan localmente en tu dispositivo.</p>`, disclaimer: `<p class="font-bold mb-2 text-red-500">DESCARGO</p><p>Esta web no emite certificados oficiales.</p>` };
 
         function openLegal(type) {
              const modal = document.getElementById('legal-modal');
-             document.getElementById('legal-title').innerText = type === 'terms' ? "Términos y Condiciones" : (type === 'privacy' ? "Política de Privacidad" : "Descargo de Responsabilidad");
+             document.getElementById('legal-title').innerText = type === 'terms' ? "Términos" : (type === 'privacy' ? "Privacidad" : "Descargo");
              document.getElementById('legal-content').innerHTML = LEGAL_TEXTS[type];
              modal.classList.remove('hidden'); modal.classList.add('flex');
         }
 
         let appState = { currentLevel: 1, levelAttempts: { 1: 0, 2: 0, 3: 0, 4: 0 }, userName: null };
-        let activeLevelId = 0, currentQuizQuestions = [], userAnswers = [], currentQuestionIndex = 0, isReviewMode = false;
-
+        let activeLevelId=0, currentQuizQuestions=[], userAnswers=[], currentQuestionIndex=0, isReviewMode=false;
+        
         const saved = localStorage.getItem('auxiliarProSimple');
-        if (saved) appState = JSON.parse(saved);
+        if(saved) appState = JSON.parse(saved);
 
-        function checkAuthAndStart() { if (appState.userName) navToDashboard(); else { document.getElementById('auth-modal').classList.remove('hidden'); document.getElementById('auth-modal').classList.add('flex'); } }
-        function handleRegister(e) { e.preventDefault(); const name = document.getElementById('input-name').value; if(name.trim() === "") return; appState.userName = name; saveData(); document.getElementById('auth-modal').classList.add('hidden'); document.getElementById('auth-modal').classList.remove('flex'); navToDashboard(); }
+        function checkAuthAndStart() { if(appState.userName) navToDashboard(); else { document.getElementById('auth-modal').classList.remove('hidden'); document.getElementById('auth-modal').classList.add('flex'); } }
+        function handleRegister(e) { e.preventDefault(); const name=document.getElementById('input-name').value; if(!name.trim()) return; appState.userName=name; saveData(); document.getElementById('auth-modal').classList.add('hidden'); document.getElementById('auth-modal').classList.remove('flex'); navToDashboard(); }
         function openForum() { document.getElementById('forum-modal').classList.remove('hidden'); document.getElementById('forum-modal').classList.add('flex'); }
-        function navToDashboard() { document.getElementById('header-user-welcome').innerText = `Hola, Colega ${appState.userName}`; document.getElementById('view-landing').classList.add('hidden'); document.getElementById('view-dashboard').classList.remove('hidden'); document.getElementById('view-dashboard').classList.add('fade-in'); renderDashboard(); }
-        function navToLanding() { document.getElementById('view-dashboard').classList.add('hidden'); document.getElementById('view-landing').classList.remove('hidden'); document.getElementById('view-landing').classList.add('fade-in'); }
+
+        function navToBlog() {
+            ['view-landing', 'view-dashboard', 'view-article'].forEach(id => document.getElementById(id).classList.add('hidden'));
+            document.getElementById('view-blog').classList.remove('hidden');
+            window.scrollTo(0,0);
+            renderBlogList();
+        }
+
+        function renderBlogList() {
+            const c = document.getElementById('blog-list-container'); c.innerHTML = '';
+            BLOG_POSTS.forEach(p => { c.innerHTML += `<div onclick="openArticle('${p.id}')" class="bg-white border border-gray-100 rounded-xl p-5 mb-4 shadow-sm hover:shadow-md transition-all cursor-pointer group"><h3 class="font-bold text-gray-800 text-lg mb-2 group-hover:text-farmacia-green transition-colors">${p.title}</h3><p class="text-sm text-gray-500 leading-relaxed mb-3">${p.excerpt}</p><span class="text-xs text-farmacia-green font-semibold uppercase tracking-wide flex items-center gap-1">Leer Artículo <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span></div>`; });
+        }
+
+        function openArticle(id) {
+            const p = BLOG_POSTS.find(x => x.id === id);
+            if(!p) return;
+            document.getElementById('view-blog').classList.add('hidden');
+            document.getElementById('view-article').classList.remove('hidden');
+            document.getElementById('article-content-container').innerHTML = `<h1 class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-6">${p.title}</h1><div class="prose">${p.content}</div><div class="mt-10 bg-green-50 border border-green-100 rounded-xl p-6 text-center"><p class="font-bold text-green-800 mb-2">¿Listo para practicar?</p><button onclick="checkAuthAndStart()" class="bg-farmacia-green hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg transition-colors shadow-md">Ir al Simulador</button></div>`;
+            window.scrollTo(0,0);
+        }
+        
+        function navToDashboard() {
+            document.getElementById('header-user-welcome').innerText = `Hola, Colega ${appState.userName}`;
+            ['view-landing', 'view-blog', 'view-article'].forEach(id => document.getElementById(id).classList.add('hidden'));
+            document.getElementById('view-dashboard').classList.remove('hidden');
+            document.getElementById('view-dashboard').classList.add('fade-in');
+            renderDashboard();
+        }
+
+        function navToLanding() { ['view-dashboard', 'view-blog', 'view-article'].forEach(id => document.getElementById(id).classList.add('hidden')); document.getElementById('view-landing').classList.remove('hidden'); document.getElementById('view-landing').classList.add('fade-in'); }
         function logout() { navToLanding(); }
         function saveData() { localStorage.setItem('auxiliarProSimple', JSON.stringify(appState)); }
         function resetProgress() { if(confirm("¿Seguro?")) { localStorage.removeItem('auxiliarProSimple'); location.reload(); } }
 
         const metalConfig = { "Bronce": "bg-gradient-to-br from-amber-600 to-amber-800 text-white shadow-amber-200 border-amber-600", "Plata": "bg-gradient-to-br from-gray-400 to-slate-500 text-white shadow-gray-300 border-gray-400", "Oro": "bg-gradient-to-br from-yellow-400 to-yellow-600 text-white shadow-yellow-200 border-yellow-500", "Platino": "bg-gradient-to-br from-cyan-400 to-blue-600 text-white shadow-blue-200 border-blue-400" };
         
-        // PREGUNTAS ACTUALIZADAS Y DIAGNÓSTICO
         const levelsData = [
             { 
-                id: 1, title: "Conceptos Básicos", desc: "Diagnóstico de entrada (10 preguntas).", metalName: "Bronce", 
+                id: 1, title: "Conceptos Básicos", desc: "Diagnóstico (10 preg).", metalName: "Bronce", 
                 questions: [ 
                     { q: "¿Qué significa D.C.I.?", options: ["Denominación Común Internacional", "Dosis Clínica", "Depto Central"], correct: 0, topic: "Definiciones" },
-                    { q: "Rango de temperatura refrigerador:", options: ["2°C a 8°C", "0°C a 5°C", "Ambiente"], correct: 0, topic: "Cadena de Frío" },
+                    { q: "Rango temperatura refrigerador:", options: ["2°C a 8°C", "0°C a 5°C", "Ambiente"], correct: 0, topic: "Cadena de Frío" },
                     { q: "¿Cuál es un libro oficial OBLIGATORIO?", options: ["Libro de Reclamos", "Libro de Visitas", "Libro de Caja"], correct: 0, topic: "Legislación" },
                     { q: "Función principal del Auxiliar:", options: ["Recetar", "Colaborar con el Q.F.", "Diagnosticar"], correct: 1, topic: "Rol Profesional" },
                     { q: "¿Qué es la Bioequivalencia?", options: ["Mismo efecto terapéutico comprobado", "Mismo precio", "Mismo color"], correct: 0, topic: "Definiciones" },
@@ -303,7 +351,7 @@
                 ] 
             },
             { 
-                id: 2, title: "Legislación", desc: "Decretos y Leyes (15 preguntas).", metalName: "Plata", 
+                id: 2, title: "Legislación", desc: "Decretos y Leyes (15 preg).", metalName: "Plata", 
                 questions: [
                     { q: "¿Qué decreto regula los Psicotrópicos?", options: ["404", "466", "594"], correct: 0 }, 
                     { q: "Validez Receta Cheque:", options: ["30 días", "60 días", "1 año"], correct: 0 }, 
@@ -323,7 +371,7 @@
                 ] 
             },
             { 
-                id: 3, title: "Farmacología", desc: "Posología y Cálculo (25 preguntas).", metalName: "Oro", 
+                id: 3, title: "Farmacología", desc: "Posología y Cálculo (25 preg).", metalName: "Oro", 
                 questions: [ 
                     { q: "Dosis 500mg. Tab 250mg. ¿Cuántas?", options: ["1", "2", "3"], correct: 1 }, 
                     { q: "10ml c/8h x 5 días. Total:", options: ["150ml", "100ml", "50ml"], correct: 0 },
@@ -353,7 +401,7 @@
                 ] 
             },
             { 
-                id: 4, title: "Simulacro Final", desc: "Integración (40 preguntas).", metalName: "Platino", 
+                id: 4, title: "Simulacro Final", desc: "Integración (40 preg).", metalName: "Platino", 
                 questions: [ 
                     { q: "Receta Cheque plazo:", options: ["30 días", "60 días"], correct: 0 }, 
                     { q: "Dosis pediátrica estándar Amoxicilina:", options: ["50-100 mg/kg/día", "10 mg/kg/día"], correct: 0 },
@@ -403,7 +451,6 @@
             const container = document.getElementById('levels-container');
             const rewardsContainer = document.getElementById('rewards-section');
             container.innerHTML = '';
-            
             const isUnlocked = appState.currentLevel > 1;
             const progressPercent = Math.min(((appState.currentLevel - 1) / levelsData.length) * 100, 100); 
             document.getElementById('progress-bar').style.width = Math.max(5, progressPercent) + "%";
@@ -418,8 +465,7 @@
 
                 let cardClasses = "bg-white p-5 rounded-xl shadow-sm border flex items-center justify-between transition-all relative overflow-hidden ";
                 let iconClasses = "w-14 h-14 rounded-full flex items-center justify-center font-bold text-xl border-2 shadow-lg ";
-                let statusLabel = "";
-                let statusColorClass = "";
+                let statusLabel = "", statusColorClass = "";
 
                 if (isCompleted) {
                     cardClasses += "hover:shadow-md cursor-pointer border-green-200 bg-green-50/30";
@@ -448,44 +494,11 @@
                 let attemptText = (!isLocked && !isCompleted && level.id > 1 && !isFailedAndLocked) ? `<span class="text-[10px] text-gray-400 block mt-1">Intentos: ${attemptsUsed}/${maxAttempts}</span>` : "";
                 let clickAction = isCompleted ? `alert('¡Nivel ya aprobado!')` : (!isLocked && !isFailedAndLocked ? `startLevel(${level.id})` : "alert('Nivel bloqueado.')");
 
-                container.innerHTML += `
-                <div class="${cardClasses}" onclick="${clickAction}">
-                    <div class="flex items-center gap-4 relative z-10 w-full">
-                        <div class="${iconClasses} shrink-0">
-                            ${isCompleted ? '✓' : level.id}
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex justify-between items-start">
-                                <div>
-                                    ${metalBadge}
-                                    <h3 class="font-bold text-gray-800 leading-tight truncate pr-2">${level.title}</h3>
-                                </div>
-                                <div class="shrink-0">
-                                    ${statusBadge}
-                                </div>
-                            </div>
-                            <p class="text-xs text-gray-500 mt-1 line-clamp-2">${level.desc}</p>
-                            ${attemptText}
-                        </div>
-                    </div>
-                </div>`;
+                container.innerHTML += `<div class="${cardClasses}" onclick="${clickAction}"><div class="flex items-center gap-4 relative z-10 w-full"><div class="${iconClasses} shrink-0">${isCompleted ? '✓' : level.id}</div><div class="flex-1 min-w-0"><div class="flex justify-between items-start"><div>${metalBadge}<h3 class="font-bold text-gray-800 leading-tight truncate pr-2">${level.title}</h3></div><div class="shrink-0">${statusBadge}</div></div><p class="text-xs text-gray-500 mt-1 line-clamp-2">${level.desc}</p>${attemptText}</div></div></div>`;
             });
 
             if (isUnlocked) {
-                rewardsContainer.innerHTML = `
-                <div class="library-unlocked bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200 shadow-md">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="bg-blue-600 text-white p-2 rounded-lg shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div>
-                        <div><h4 class="font-bold text-gray-900 text-lg">Biblioteca Técnica</h4><p class="text-xs text-blue-700 font-medium">¡Material desbloqueado!</p></div>
-                    </div>
-                    <div class="space-y-3">
-                        <a href="${LINKS_PDF.decreto404}" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">📜 Guía Decreto 404</span><span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">Descargar</span></a>
-                        <a href="${LINKS_PDF.decreto405}" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">📜 Guía Decreto 405</span><span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">Descargar</span></a>
-                        <a href="${LINKS_PDF.ley}" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">⚖️ Guía Ley 20.724</span><span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">Descargar</span></a>
-                        <a href="${LINKS_PDF.decreto}" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">📜 Guía Decreto 466</span><span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">Descargar</span></a>
-                    </div>
-                </div>
-                
+                rewardsContainer.innerHTML = `<div class="library-unlocked bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200 shadow-md"><div class="flex items-center gap-3 mb-4"><div class="bg-blue-600 text-white p-2 rounded-lg shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div><div><h4 class="font-bold text-gray-900 text-lg">Biblioteca Técnica</h4><p class="text-xs text-blue-700 font-medium">¡Material desbloqueado!</p></div></div><div class="space-y-3"><a href="${LINKS_PDF.decreto404}" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">📜 Guía Decreto 404</span><span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">Descargar</span></a><a href="${LINKS_PDF.decreto405}" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">📜 Guía Decreto 405</span><span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">Descargar</span></a><a href="${LINKS_PDF.ley}" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">⚖️ Guía Ley 20.724</span><span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">Descargar</span></a><a href="${LINKS_PDF.decreto}" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">📜 Guía Decreto 466</span><span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">Descargar</span></a></div></div>
                 <div class="bg-gradient-to-br from-purple-50 to-fuchsia-50 rounded-xl p-6 border border-purple-200 shadow-md mt-4">
                     <div class="flex items-center gap-3 mb-2">
                         <div class="bg-purple-600 text-white p-2 rounded-lg shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div>
