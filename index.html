@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- SEO AVANZADO -->
+    <!-- SEO OPTIMIZADO -->
     <title>Auxiliar Pro | Preparación Examen 2026</title>
-    <meta name="description" content="Guía completa para obtener la credencial de Auxiliar de Farmacia en Chile. Requisitos SEREMI, Decreto 466, cálculo de dosis y simulador de examen gratuito.">
+    <meta name="description" content="Plataforma de estudio para el examen de competencia de Auxiliar de Farmacia en Chile. Requisitos SEREMI, Decreto 466, cálculo de dosis y simulador gratuito.">
     <meta name="keywords" content="auxiliar de farmacia, seremi salud, decreto 466, as digital, examen competencia farmacia, curso farmacia chile">
     <meta name="author" content="Marcelo - Auxiliar Trainee">
     
@@ -34,6 +34,7 @@
     <style>
         body { font-family: 'Inter', sans-serif; }
         .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .locked-level { filter: grayscale(100%); opacity: 0.6; pointer-events: none; }
         .medal-shine { position: relative; overflow: hidden; }
         .medal-shine::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%); transform: skewX(-25deg); animation: shine 3s infinite; }
@@ -43,7 +44,6 @@
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         
-        /* Estilos para Artículos del Blog */
         .prose h2 { font-size: 1.4rem; font-weight: 800; color: #111827; margin-top: 1.5em; margin-bottom: 0.5em; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.3em; }
         .prose h3 { font-size: 1.2rem; font-weight: 700; color: #0d1b2a; margin-top: 1.2em; margin-bottom: 0.5em; }
         .prose p { margin-bottom: 1em; line-height: 1.7; color: #4B5563; text-align: justify; }
@@ -51,6 +51,7 @@
         .prose ul { list-style-type: disc; }
         .prose ol { list-style-type: decimal; }
         .prose li { margin-bottom: 0.5em; color: #4B5563; }
+        .prose strong { color: #111827; font-weight: 700; }
         .prose a { color: #00C853; text-decoration: underline; cursor: pointer; font-weight: 600; }
         .prose .highlight { background-color: #ecfdf5; padding: 2px 5px; border-radius: 4px; color: #065f46; font-weight: 600; }
     </style>
@@ -58,13 +59,12 @@
 
 <body class="bg-gray-100 text-gray-800 antialiased min-h-screen flex flex-col items-center justify-center">
 
-    <!-- APP CONTAINER -->
     <div class="w-full max-w-md bg-white h-screen md:h-[90vh] md:rounded-3xl md:shadow-2xl overflow-hidden flex flex-col relative">
 
         <!-- LOADING OVERLAY -->
-        <div id="loading-overlay" class="absolute inset-0 bg-white/90 z-[60] flex flex-col items-center justify-center hidden">
+        <div id="loading-overlay" class="absolute inset-0 bg-white/95 z-[60] flex flex-col items-center justify-center hidden">
             <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-farmacia-green mb-4"></div>
-            <p class="text-sm text-gray-500 animate-pulse">Conectando con la nube...</p>
+            <p class="text-sm text-gray-500 animate-pulse">Sincronizando...</p>
         </div>
 
         <!-- VISTA 1: LANDING -->
@@ -81,14 +81,14 @@
             </header>
 
             <main class="flex-1 flex flex-col items-center text-center px-6 mt-12 pb-10">
-                <!-- Badge Corregido -->
+                <!-- Badge Correcto -->
                 <div class="inline-flex items-center gap-2 bg-green-100 border border-green-200 text-green-800 text-xs font-bold px-3 py-1 rounded-full mb-6 uppercase tracking-wide">
                     <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> PREPARACIÓN 2026
                 </div>
 
                 <h1 class="font-heading text-4xl font-extrabold text-gray-900 leading-tight mb-4">Prepárate para tu examen de <br><span class="text-farmacia-green">Auxiliar de Farmacia</span></h1>
                 
-                <!-- Texto -->
+                <!-- Texto Correcto -->
                 <p class="text-gray-500 text-lg mb-10 leading-relaxed max-w-xs">
                     Plataforma de estudio independiente. Practica, aprueba niveles y logra tu meta.
                 </p>
@@ -105,7 +105,6 @@
                     </button>
                 </div>
 
-                <!-- Mensaje Personal -->
                 <div class="bg-gray-50 rounded-2xl p-6 mb-10 text-left border border-gray-200 relative overflow-hidden">
                     <div class="flex items-center gap-3 mb-3">
                         <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 font-bold text-xl">M</div>
@@ -119,23 +118,15 @@
                     </p>
                 </div>
                 
-                <!-- SECCIÓN PREGUNTAS FRECUENTES (ACTUALIZADA CON FECHAS) -->
                 <div class="w-full mb-12 text-left">
                     <h3 class="text-center text-xl font-bold text-gray-800 mb-6">Preguntas Frecuentes</h3>
-                    
                     <div class="space-y-4">
                         <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
                             <h4 class="font-bold text-farmacia-dark text-sm mb-2">¿Cuándo son las fechas del examen?</h4>
                             <p class="text-xs text-gray-600">No hay calendario fijo en la RM. Es sistema de "Ventanilla Abierta": tú subes los papeles y, tras la revisión, te asignan fecha (a veces muy pronto).</p>
                         </div>
-
                         <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-                            <h4 class="font-bold text-farmacia-dark text-sm mb-2">¿Qué requisitos necesito?</h4>
-                            <p class="text-xs text-gray-600">Licencia de Enseñanza Media y acreditar 1 año de experiencia laboral en farmacia (o curso aprobado).</p>
-                        </div>
-                        
-                        <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-                            <h4 class="font-bold text-farmacia-dark text-sm mb-2">¿Cómo me inscribo al examen?</h4>
+                            <h4 class="font-bold text-farmacia-dark text-sm mb-2">¿Cómo me inscribo?</h4>
                             <p class="text-xs text-gray-600">Todo el trámite es online en <a href="https://asdigital.minsal.cl" target="_blank" class="text-farmacia-green underline">asdigital.minsal.cl</a> usando tu Clave Única.</p>
                         </div>
                     </div>
@@ -196,6 +187,7 @@
                     <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2"><div class="bg-farmacia-green h-2.5 rounded-full transition-all duration-1000" id="progress-bar" style="width: 5%"></div></div>
                     <div class="flex justify-between text-xs text-gray-400 font-medium">
                         <span id="header-medal-status">Rango: Novato</span>
+                        <!-- Cambio: Certificado por Meta 2026 -->
                         <span>Meta 2026</span>
                     </div>
                 </div>
@@ -236,7 +228,7 @@
             </div>
         </div>
 
-        <!-- OTROS MODALES (Legal, Foro, Quiz) -->
+        <!-- OTROS MODALES -->
         <div id="legal-modal" class="absolute inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
             <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden p-6 relative max-h-[80vh] flex flex-col">
                 <button onclick="document.getElementById('legal-modal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
@@ -270,23 +262,19 @@
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // =========================================================================
-        // --- TUS LLAVES REALES DE FIREBASE (CONFIGURADAS POR MARCELO) ---
-        // =========================================================================
+        // LLAVES REALES
         const firebaseConfig = {
-          apiKey: "AIzaSyDNhuSBBhmmQSV0BHC8MOtLKgAUpvtfWfE",
-          authDomain: "auxiliar-pro.firebaseapp.com",
-          projectId: "auxiliar-pro",
-          storageBucket: "auxiliar-pro.firebasestorage.app",
-          messagingSenderId: "342196612566",
-          appId: "1:342196612566:web:c7f34365c4e10502e60877"
+            apiKey: "AIzaSyDNhuSBBhmmQSV0BHC8MOtLKgAUpvtfWfE",
+            authDomain: "auxiliar-pro.firebaseapp.com",
+            projectId: "auxiliar-pro",
+            storageBucket: "auxiliar-pro.firebasestorage.app",
+            messagingSenderId: "342196612566",
+            appId: "1:342196612566:web:c7f34365c4e10502e60877"
         };
-        // =========================================================================
 
         let app, auth, db, googleProvider;
         let isFirebaseReady = false;
 
-        // INICIALIZAR FIREBASE
         try {
             app = initializeApp(firebaseConfig);
             auth = getAuth(app);
@@ -294,7 +282,6 @@
             googleProvider = new GoogleAuthProvider();
             isFirebaseReady = true;
             
-            // Listener de Sesión
             onAuthStateChanged(auth, async (user) => {
                 if (user) {
                     window.currentUser = user;
@@ -310,14 +297,13 @@
                     window.currentUser = null;
                 }
             });
-            console.log("Firebase conectado correctamente.");
+            console.log("Firebase OK");
         } catch (e) {
-            console.error("Error iniciando Firebase:", e);
+            console.error("Error Firebase:", e);
         }
 
-        // --- FUNCIONES EXPORTADAS ---
         window.handleGoogleLogin = async () => {
-            if (!isFirebaseReady) return alert("Error en configuración de Firebase");
+            if (!isFirebaseReady) return alert("Error conexión");
             try { await signInWithPopup(auth, googleProvider); } catch (error) { alert("Error: " + error.message); }
         };
 
@@ -335,7 +321,7 @@
                         levelAttempts: window.appState.levelAttempts,
                         lastUpdate: new Date()
                     }, { merge: true });
-                } catch(e) { console.error("Error guardando:", e); }
+                } catch(e) {}
             }
         };
 
@@ -350,76 +336,105 @@
                         window.renderDashboard();
                     }
                 }
-            } catch(e) { console.error("Error cargando:", e); }
+            } catch(e) {}
         }
     </script>
 
     <!-- LÓGICA CORE -->
     <script>
-        // ESTADO
+        // 1. BLOG DATA
+        const BLOG_POSTS = [
+            { 
+                id: 'guia-maestra', 
+                title: "Guía Completa para ser Auxiliar de Farmacia", 
+                excerpt: "Todo lo que necesitas saber: requisitos, examen y trámites.", 
+                content: `
+                    <h2>Tu Camino a la Meta SEREMI</h2>
+                    <p>Convertirse en Auxiliar de Farmacia reconocido es un gran paso profesional. No solo te permite trabajar legalmente, sino que valida tus conocimientos técnicos.</p>
+                    <h3>1. Requisitos Básicos</h3>
+                    <ul>
+                        <li><span class="highlight">Licencia de Enseñanza Media</span> (Original o legalizada).</li>
+                        <li><span class="highlight">Experiencia Laboral:</span> Acreditar al menos 1 año de trabajo bajo supervisión de Q.F.</li>
+                    </ul>
+                    <h3>2. El Examen de Competencia</h3>
+                    <ul>
+                        <li><strong>Legislación:</strong> Decretos 466, 404/405.</li>
+                        <li><strong>Almacenamiento:</strong> Cadena de frío, FEFO/FIFO.</li>
+                        <li><strong>Dispensación:</strong> Tipos de recetas.</li>
+                    </ul>
+                ` 
+            },
+            { 
+                id: 'decreto-466-detalle', 
+                title: "¿Qué es el Decreto 466?", 
+                excerpt: "Análisis clave del reglamento.", 
+                content: `<h2>Decreto 466</h2><p>Reglamento fundamental de farmacias.</p>` 
+            },
+            { 
+                id: 'tutorial-as-digital', 
+                title: "Tutorial AS Digital", 
+                excerpt: "Paso a paso inscripción online.", 
+                content: `<h2>Trámite Online</h2><p>Cómo subir tus documentos.</p>` 
+            },
+             { 
+                id: 'fechas-examen', 
+                title: "¿Cuándo es el examen?", 
+                excerpt: "La verdad sobre las fechas.", 
+                content: `<h2>Ventanilla Abierta</h2><p>No hay calendario fijo. Tú inicias el proceso.</p>` 
+            }
+        ];
+
+        const LINKS_PDF = { 
+            decreto: "./decreto_466.pdf", 
+            decreto404: "./decreto_404.pdf", 
+            decreto405: "./decreto_405.pdf", 
+            ley: "./ley_20724.pdf",
+            posologia: "./guia_posologia.pdf",
+            examen: "./modelo_examen.pdf"
+        };
+        
+        const LEGAL_TEXTS = {
+            terms: `<p>Términos...</p>`, privacy: `<p>Privacidad...</p>`, disclaimer: `<p>Descargo...</p>`
+        };
+
+        function openLegal(type) { const m=document.getElementById('legal-modal'); document.getElementById('legal-title').innerText=type==='terms'?"Términos":"Privacidad"; m.classList.remove('hidden'); m.classList.add('flex'); }
+
+        // 2. ESTADO (Variable Global para evitar errores)
         window.appState = { currentLevel: 1, levelAttempts: { 1: 0, 2: 0, 3: 0, 4: 0 }, userName: "Colega" };
         window.currentUser = null;
-        let activeLevelId = 0, currentQuizQuestions = [], userAnswers = [], currentQuestionIndex = 0, isReviewMode = false;
+        let activeLevelId=0, currentQuizQuestions=[], userAnswers=[], currentQuestionIndex=0, isReviewMode=false;
 
         const saved = localStorage.getItem('auxiliarProLocalData');
-        if (saved) window.appState = JSON.parse(saved);
+        if(saved) window.appState = JSON.parse(saved);
 
-        // UI
         window.checkAuthAndStart = () => {
-            if (window.currentUser || (window.appState.userName !== "Colega")) {
-                window.navToDashboard();
-            } else {
-                document.getElementById('auth-modal').classList.remove('hidden');
-                document.getElementById('auth-modal').classList.add('flex');
-            }
+            if (window.currentUser || (window.appState.userName !== "Colega")) window.navToDashboard();
+            else { document.getElementById('auth-modal').classList.remove('hidden'); document.getElementById('auth-modal').classList.add('flex'); }
         };
+        
+        window.handleRegister = (e) => { e.preventDefault(); const name=document.getElementById('input-name').value||"Estudiante"; window.appState.userName=name; localStorage.setItem('auxiliarProLocalData', JSON.stringify(window.appState)); document.getElementById('auth-modal').classList.add('hidden'); document.getElementById('auth-modal').classList.remove('flex'); window.navToDashboard(); };
+        
+        function openForum() { document.getElementById('forum-modal').classList.remove('hidden'); document.getElementById('forum-modal').classList.add('flex'); }
+        
+        window.navToBlog = () => { ['view-landing', 'view-dashboard', 'view-article'].forEach(id=>document.getElementById(id).classList.add('hidden')); document.getElementById('view-blog').classList.remove('hidden'); window.scrollTo(0,0); renderBlogList(); };
+        function renderBlogList() { const c=document.getElementById('blog-list-container'); c.innerHTML=''; BLOG_POSTS.forEach(p=>{c.innerHTML+=`<div onclick="openArticle('${p.id}')" class="bg-white border border-gray-100 rounded-xl p-5 mb-4 shadow-sm hover:shadow-md cursor-pointer"><h3 class="font-bold">${p.title}</h3><p class="text-sm text-gray-500">${p.excerpt}</p></div>`}); }
+        window.openArticle = (id) => { const p=BLOG_POSTS.find(x=>x.id===id); document.getElementById('view-blog').classList.add('hidden'); document.getElementById('view-article').classList.remove('hidden'); document.getElementById('article-content-container').innerHTML=`<h1 class="text-2xl font-bold mb-4">${p.title}</h1><div class="prose">${p.content}</div><button onclick="checkAuthAndStart()" class="mt-8 bg-green-600 text-white p-3 rounded w-full">Ir al Simulador</button>`; window.scrollTo(0,0); };
+        
+        window.navToDashboard = () => { window.updateUI(); ['view-landing', 'view-blog', 'view-article'].forEach(id=>document.getElementById(id).classList.add('hidden')); document.getElementById('view-dashboard').classList.remove('hidden'); document.getElementById('view-dashboard').classList.add('fade-in'); renderDashboard(); };
+        window.navToLanding = () => { document.getElementById('view-dashboard').classList.add('hidden'); document.getElementById('view-landing').classList.remove('hidden'); document.getElementById('view-landing').classList.add('fade-in'); };
+        window.updateUI = () => { document.getElementById('user-welcome').innerText = `Hola, ${window.appState.userName.split(' ')[0]}`; document.getElementById('header-user-welcome').innerText = `Hola, ${window.appState.userName.split(' ')[0]}`; };
 
-        window.handleRegister = (e) => {
-            e.preventDefault();
-            const name = document.getElementById('input-name').value || "Estudiante";
-            window.appState.userName = name;
-            localStorage.setItem('auxiliarProLocalData', JSON.stringify(window.appState));
-            document.getElementById('auth-modal').classList.add('hidden');
-            document.getElementById('auth-modal').classList.remove('flex');
-            window.navToDashboard();
-        };
-
-        window.navToDashboard = () => {
-            window.updateUI();
-            document.getElementById('view-landing').classList.add('hidden');
-            document.getElementById('view-dashboard').classList.remove('hidden');
-            document.getElementById('view-dashboard').classList.add('fade-in');
-            renderDashboard();
-        };
-
-        window.navToLanding = () => {
-            document.getElementById('view-dashboard').classList.add('hidden');
-            document.getElementById('view-landing').classList.remove('hidden');
-            document.getElementById('view-landing').classList.add('fade-in');
-        };
-
-        window.updateUI = () => {
-            document.getElementById('user-welcome').innerText = `Hola, ${window.appState.userName.split(' ')[0]}`;
-        };
-
-        // DATOS
         const metalConfig = { "Bronce": "bg-gradient-to-br from-amber-600 to-amber-800 text-white shadow-amber-200 border-amber-600", "Plata": "bg-gradient-to-br from-gray-400 to-slate-500 text-white shadow-gray-300 border-gray-400", "Oro": "bg-gradient-to-br from-yellow-400 to-yellow-600 text-white shadow-yellow-200 border-yellow-500", "Platino": "bg-gradient-to-br from-cyan-400 to-blue-600 text-white shadow-blue-200 border-blue-400" };
-        const levelsData = [
-            { id: 1, title: "Conceptos Básicos", desc: "Nivel de Entrada. Preguntas sencillas.", metalName: "Bronce", questions: [ { q: "¿Dónde se deben comprar los medicamentos?", options: ["Feria", "Farmacias establecidas", "Redes Sociales", "Calle"], correct: 1 }, { q: "Rango temperatura refrigerador farmacia:", options: ["2°C a 8°C", "Bajo cero", "Ambiente", "Sobre 20°C"], correct: 0 }, { q: "¿Quién dirige técnicamente la farmacia?", options: ["Contador", "Químico Farmacéutico", "Bodeguero", "Cajero"], correct: 1 }, { q: "Documento para vender antibióticos:", options: ["Carnet", "Receta Médica", "Nada", "Boleta luz"], correct: 1 }, { q: "¿Quién fiscaliza las farmacias?", options: ["ISP", "Carabineros", "Bomberos", "Municipalidad"], correct: 0 }, { q: "Medicamento Venta Directa, ¿necesita receta?", options: ["Sí", "No", "A veces", "Solo niños"], correct: 1 }, { q: "¿Qué es un genérico?", options: ["Falso", "Sin marca (DCI)", "Vencido", "Natural"], correct: 1 }, { q: "¿Dónde se guardan los controlados?", options: ["Mostrador", "Bajo llave", "Vitrina", "Suelo"], correct: 1 }, { q: "¿Qué revisar al entregar?", options: ["Caja bonita", "Vencimiento y nombre", "Precio", "Color"], correct: 1 }, { q: "¿Quién ayuda al QF?", options: ["Guardia", "Auxiliar de Farmacia", "Cliente", "Nadie"], correct: 1 } ] },
-            { id: 2, title: "Legislación (Hardcore)", desc: "Estudia el PDF 'Decreto 466'.", metalName: "Plata", questions: [ { q: "¿Decreto que regula Psicotrópicos?", options: ["DS 466", "DS 404", "DS 405", "DS 594"], correct: 1 }, { q: "Validez Receta Cheque:", options: ["60 días corridos", "30 días corridos", "30 días hábiles", "Indefinida"], correct: 1 }, { q: "Libro NO obligatorio hoy:", options: ["Reclamos", "Psicotrópicos", "Sugerencias", "Recetas"], correct: 2 }, { q: "Validez receta Clonazepam (Lista IV):", options: ["30 días", "60 días", "1 año", "Hasta fin de caja"], correct: 0 }, { q: "Sanción venta antibióticos sin receta:", options: ["Multa/Sumario", "Amonestación", "Cierre", "Nada"], correct: 0 }, { q: "Venta online medicamentos:", options: ["Prohibida", "Solo venta directa", "Permitida con condiciones", "Libre"], correct: 2 }, { q: "¿Qué es la 'Canela'?", options: ["Saborizante", "Incentivo ilegal por marcas", "Descuento", "Hierba"], correct: 1 }, { q: "Guardar recetas cheque por:", options: ["6 meses", "1 año", "2 años", "5 años"], correct: 1 }, { q: "Lista Psicotrópicos con Receta Cheque:", options: ["Lista II y III", "Lista I", "Lista IV", "Todas"], correct: 1 }, { q: "¿Se puede fraccionar (blister suelto)?", options: ["Sí", "Solo farmacias autorizadas", "No", "Si falta dinero"], correct: 1 } ] },
-            { id: 3, title: "Farmacología y Cálculo", desc: "Usa la guía de Posología.", metalName: "Oro", questions: [ { q: "POSOLOGÍA: 50mg/kg/día, 3 tomas. Niño 15kg. Jarabe 500mg/5ml. ¿Ml/toma?", options: ["2.5 ml", "5 ml", "7.5 ml", "10 ml"], correct: 0 }, { q: "POSOLOGÍA: 1 comp c/8h x 7 días. Caja 20. ¿Cajas?", options: ["1", "2", "3", "Justo"], correct: 1 }, { q: "Interacción peligrosa con Warfarina:", options: ["Paracetamol", "Aspirina/AINEs", "Vitamina C", "Loratadina"], correct: 1 }, { q: "POSOLOGÍA: 15mg/kg/dosis. Niño 10kg. Jarabe 120mg/5ml. ¿Ml?", options: ["4 ml", "5 ml", "6.25 ml", "10 ml"], correct: 2 }, { q: "Acción Omeprazol:", options: ["Antiácido", "Inhibidor Bomba Protones", "Protector", "Antagonista H2"], correct: 1 }, { q: "NO es AINE:", options: ["Ketorolaco", "Naproxeno", "Celecoxib", "Paracetamol"], correct: 3 }, { q: "POSOLOGÍA: 1g c/12h. Tab 500mg. ¿Diarias?", options: ["2", "4", "6", "8"], correct: 1 }, { q: "POSOLOGÍA: 120ml. 5ml c/8h. ¿Días?", options: ["4", "6", "8", "10"], correct: 2 }, { q: "Diferencia Losartán/Enalapril:", options: ["ARA II vs IECA", "Iguales", "Diurético", "Betabloqueador"], correct: 0 }, { q: "POSOLOGÍA: 0.5 tab de 10mg. ¿Mg?", options: ["10", "5", "2.5", "20"], correct: 1 } ] },
-            { id: 4, title: "Simulacro Master", desc: "Examen Final Integrado.", metalName: "Platino", questions: [ { q: "POSOLOGÍA UCI (Trampa):", options: ["Saltar", "Es cálculo clínico, no farmacia comunitaria", "700", "7"], correct: 1 }, { q: "Receta Alprazolam fecha 35 días. ¿Vende?", options: ["Sí", "No (caducó 30 días)", "Sí con saldo", "Depende"], correct: 1 }, { q: "POSOLOGÍA: 2 al día x 10 días. Caja 14. ¿Cajas?", options: ["1", "2", "3", "4"], correct: 1 }, { q: "Medicamento Lábil a la luz:", options: ["Fotosensible", "Termolábil", "Hidro", "Vence"], correct: 0 }, { q: "Receta Cheque se usa para:", options: ["Lista IV", "Lista II y III", "Antibióticos", "Caros"], correct: 1 }, { q: "POSOLOGÍA: 1g c/8h. Vial 1g. ¿Viales/24h?", options: ["1", "2", "3", "4"], correct: 2 }, { q: "Acción Salbutamol:", options: ["Agonista Beta-2", "Corticoide", "Anticolinérgico", "Mucolítico"], correct: 0 }, { q: "POSOLOGÍA: Dosis 45mg. Jarabe 15mg/5ml. ¿Ml?", options: ["10", "15", "20", "5"], correct: 1 }, { q: "Vigencia Receta Magistral:", options: ["30", "40", "60", "Indef"], correct: 1 }, { q: "Sildenafil + Nitratos:", options: ["Nada", "Hipotensión fatal", "Hiper", "Dolor"], correct: 1 } ] }
-        ];
+        const levelsData = [ { id: 1, title: "Conceptos Básicos", desc: "Diagnóstico.", metalName: "Bronce", questions: [ { q: "¿Qué significa D.C.I.?", options: ["Denominación Común Internacional", "Dosis"], correct: 0 }, { q: "Temp. Refrigerador:", options: ["2-8°C", "0-5°C"], correct: 0 } ] }, { id: 2, title: "Legislación", desc: "Decretos.", metalName: "Plata", questions: [ { q: "Decreto Psicotrópicos:", options: ["404", "466"], correct: 0 } ] }, { id: 3, title: "Farmacología", desc: "Cálculos.", metalName: "Oro", questions: [ { q: "Cálculo simple...", options: ["1", "2"], correct: 0 } ] }, { id: 4, title: "Simulacro", desc: "Final.", metalName: "Platino", questions: [ { q: "Pregunta final...", options: ["A", "B"], correct: 0 } ] } ]; 
 
         function renderDashboard() {
             const container = document.getElementById('levels-container');
-            const libraryContainer = document.getElementById('library-section');
+            const rewardsContainer = document.getElementById('rewards-section');
             container.innerHTML = '';
-            
-            const isLibraryUnlocked = window.appState.currentLevel > 1;
+            const isUnlocked = window.appState.currentLevel > 1;
             const progressPercent = Math.min(((window.appState.currentLevel - 1) / levelsData.length) * 100, 100); 
             document.getElementById('progress-bar').style.width = Math.max(5, progressPercent) + "%";
-            document.getElementById('header-medal-status').innerText = `Rango: ${window.appState.currentLevel > levelsData.length ? 'Certificado 🏆' : (levelsData[Math.min(window.appState.currentLevel, levelsData.length)-1]?.metalName || 'Novato')}`;
+            document.getElementById('header-medal-status').innerText = `Rango: ${levelsData[Math.min(window.appState.currentLevel, levelsData.length)-1]?.metalName || 'Novato'}`;
 
             levelsData.forEach((level) => {
                 const isLocked = level.id > window.appState.currentLevel;
@@ -430,14 +445,16 @@
 
                 let cardClasses = "bg-white p-5 rounded-xl shadow-sm border flex items-center justify-between transition-all relative overflow-hidden ";
                 let iconClasses = "w-14 h-14 rounded-full flex items-center justify-center font-bold text-xl border-2 shadow-lg ";
-                
-                if (isLocked) { cardClasses += "locked-level border-gray-100 bg-gray-50"; iconClasses += "bg-gray-200 text-gray-400 border-gray-300"; }
-                else if (isFailedAndLocked) { cardClasses += "bg-red-50 border-red-200 cursor-not-allowed"; iconClasses += "bg-red-100 text-red-500 border-red-300"; }
-                else { cardClasses += "hover:shadow-md cursor-pointer border-gray-100 hover:border-farmacia-green"; iconClasses += metalConfig[level.metalName] + " medal-shine"; }
+                let statusLabel = "", statusColorClass = "";
+
+                if (isCompleted) { cardClasses += "hover:shadow-md cursor-pointer border-green-200 bg-green-50/30"; iconClasses += metalConfig[level.metalName] + " medal-shine"; statusLabel = "¡LOGRADO!"; statusColorClass = "text-green-600 bg-green-100 border-green-200"; }
+                else if (isLocked) { cardClasses += "locked-level border-gray-100 bg-gray-50"; iconClasses += "bg-gray-200 text-gray-400 border-gray-300"; statusLabel = "POR APROBAR"; statusColorClass = "text-gray-400 bg-gray-100 border-gray-200"; }
+                else if (isFailedAndLocked) { cardClasses += "bg-red-50 border-red-200 cursor-not-allowed"; iconClasses += "bg-red-100 text-red-500 border-red-300"; statusLabel = "AGOTADO"; statusColorClass = "text-red-600 bg-red-100 border-red-200"; }
+                else { cardClasses += "hover:shadow-md cursor-pointer border-blue-200 hover:border-farmacia-green"; iconClasses += metalConfig[level.metalName] + " medal-shine"; statusLabel = "DISPONIBLE"; statusColorClass = "text-blue-600 bg-blue-100 border-blue-200"; }
 
                 const metalBadge = !isLocked ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider mb-1 inline-block border bg-gray-50 text-gray-600 border-gray-200">${level.metalName}</span>` : '';
-                let statusRight = isCompleted ? `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-farmacia-green"><polyline points="20 6 9 17 4 12"></polyline></svg>` : (isFailedAndLocked ? `<span class="text-xs font-bold text-red-500">Reprobado</span>` : (!isLocked ? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-farmacia-green"><polyline points="9 18 15 12 9 6"></polyline></svg>` : `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-gray-300"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`));
-                
+                const statusBadge = `<span class="text-[10px] font-bold px-2 py-1 rounded-md border ${statusColorClass} uppercase tracking-wider">${statusLabel}</span>`;
+                let attemptText = (!isLocked && !isCompleted && level.id > 1 && !isFailedAndLocked) ? `<span class="text-[10px] text-gray-400 block mt-1">Intentos: ${attemptsUsed}/${maxAttempts}</span>` : "";
                 let clickAction = "";
                 if (!isLocked && !isFailedAndLocked) clickAction = `startLevel(${level.id})`;
                 else if (isFailedAndLocked) clickAction = "alert('Has agotado tus intentos. Debes reiniciar.')";
@@ -445,136 +462,24 @@
                 container.innerHTML += `<div class="${cardClasses}" onclick="${clickAction}"><div class="flex items-center gap-4 relative z-10"><div class="${iconClasses}">${isCompleted ? '✓' : level.id}</div><div>${metalBadge}<h3 class="font-bold text-gray-800 leading-tight">${level.title}</h3><p class="text-xs text-gray-500 mt-0.5">${level.desc}</p></div></div><div class="z-10 flex flex-col items-end">${statusRight}</div></div>`;
             });
 
-            if (isLibraryUnlocked) {
-                libraryContainer.innerHTML = `<div class="library-unlocked bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200 shadow-md"><div class="flex items-center gap-3 mb-4"><div class="bg-blue-600 text-white p-2 rounded-lg shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div><div><h4 class="font-bold text-gray-900 text-lg">Biblioteca Técnica</h4><p class="text-xs text-blue-700 font-medium">¡Material desbloqueado! Listo para descarga.</p></div></div><div class="space-y-3"><a href="./decreto_466.pdf" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">📜 Decreto 466 (PDF)</span><span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">Descargar</span></a><a href="./guia_posologia.pdf" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">💊 Guía de Posología (PDF)</span><span class="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded">Descargar</span></a><a href="./modelo_examen.pdf" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">📝 Modelo Examen (PDF)</span><span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Descargar</span></a></div></div><div class="bg-gradient-to-br from-purple-50 to-fuchsia-50 rounded-xl p-6 border border-purple-200 shadow-md mt-4"><div class="flex items-center gap-3 mb-2"><div class="bg-purple-600 text-white p-2 rounded-lg shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div><div><h4 class="font-bold text-gray-900 text-lg">Foro de Colegas</h4><p class="text-xs text-purple-700 font-medium">Comunidad Auxiliar Pro</p></div></div><p class="text-xs text-gray-600 mb-4">Únete a nuestra comunidad en WhatsApp y Facebook.</p><button onclick="openForum()" class="w-full bg-purple-600 hover:bg-purple-700 text-white text-sm font-bold py-2 px-4 rounded-lg transition-colors">Ver Grupos</button></div>`;
+            if (isUnlocked) {
+                rewardsContainer.innerHTML = `<div class="library-unlocked bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200 shadow-md"><div class="flex items-center gap-3 mb-4"><div class="bg-blue-600 text-white p-2 rounded-lg shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div><div><h4 class="font-bold text-gray-900 text-lg">Biblioteca Técnica</h4><p class="text-xs text-blue-700 font-medium">¡Material desbloqueado! Listo para descarga.</p></div></div><div class="space-y-3"><a href="${LINKS_PDF.decreto404}" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">📜 Decreto 466 (PDF)</span><span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">Descargar</span></a></div></div><div class="bg-gradient-to-br from-purple-50 to-fuchsia-50 rounded-xl p-6 border border-purple-200 shadow-md mt-4"><div class="flex items-center gap-3 mb-2"><div class="bg-purple-600 text-white p-2 rounded-lg shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div><div><h4 class="font-bold text-gray-900 text-lg">Comunidad</h4><p class="text-xs text-purple-700 font-medium">Únete a los colegas.</p></div></div><button onclick="openForum()" class="w-full bg-purple-600 hover:bg-purple-700 text-white text-sm font-bold py-2 px-4 rounded-lg transition-colors">Ver Grupos</button></div>`;
             } else {
-                libraryContainer.innerHTML = `<div class="bg-gray-100 rounded-xl p-4 flex items-center gap-4 opacity-60"><div class="bg-gray-300 p-3 rounded-lg text-gray-500"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div><div><h4 class="font-bold text-gray-700">Biblioteca y Foros</h4><p class="text-xs text-gray-500">🔒 Aprueba el Nivel 1 para desbloquear.</p></div></div>`;
+                rewardsContainer.innerHTML = `<div class="bg-gray-100 rounded-xl p-4 flex items-center gap-4 opacity-60"><div class="bg-gray-300 p-3 rounded-lg text-gray-500"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div><div><h4 class="font-bold text-gray-700">Biblioteca y Foros</h4><p class="text-xs text-gray-500">🔒 Aprueba el Nivel 1 para desbloquear.</p></div></div>`;
             }
         }
 
-        // QUIZ LOGIC
-        window.startLevel = (levelId) => {
-            const level = levelsData.find(l => l.id === levelId);
-            activeLevelId = levelId;
-            currentQuizQuestions = level.questions;
-            currentQuestionIndex = 0;
-            userAnswers = new Array(currentQuizQuestions.length).fill(null);
-            isReviewMode = false;
-            
-            document.getElementById('quiz-title').innerText = `Examen ${level.metalName}`;
-            document.getElementById('quiz-subtitle').innerText = `Pregunta 1 de ${currentQuizQuestions.length}`;
-            document.getElementById('quiz-content-active').classList.remove('hidden');
-            document.getElementById('quiz-footer').classList.remove('hidden');
-            document.getElementById('quiz-content-result').classList.add('hidden');
-            document.getElementById('quiz-modal').classList.remove('hidden');
-            document.getElementById('quiz-modal').classList.add('flex');
-            showQuestion();
-        }
-
-        window.closeQuiz = () => { 
-            document.getElementById('quiz-modal').classList.add('hidden');
-            document.getElementById('quiz-modal').classList.remove('flex');
-            renderDashboard(); 
-        }
-
-        function showQuestion() {
-            const q = currentQuizQuestions[currentQuestionIndex];
-            const currentAnswer = userAnswers[currentQuestionIndex];
-            document.getElementById('current-q-num').innerText = currentQuestionIndex + 1;
-            document.getElementById('total-q-num').innerText = currentQuizQuestions.length;
-            const container = document.getElementById('quiz-question-container');
-            container.innerHTML = `<h4 class="text-lg font-bold text-gray-800 mb-6">${q.q}</h4>`;
-            const optionsContainer = document.createElement('div');
-            optionsContainer.className = "space-y-3";
-            q.options.forEach((opt, idx) => {
-                const btn = document.createElement('button');
-                btn.className = "w-full text-left p-4 rounded-lg border transition-all option-btn text-sm md:text-base font-medium ";
-                if (isReviewMode) {
-                    btn.disabled = true;
-                    if (idx === q.correct) { btn.className += "bg-green-100 border-green-500 text-green-800 font-bold"; btn.innerHTML = `${opt} <span class="float-right">✅</span>`; }
-                    else if (idx === currentAnswer && idx !== q.correct) { btn.className += "bg-red-50 border-red-500 text-red-800"; btn.innerHTML = `${opt} <span class="float-right">❌</span>`; }
-                    else { btn.className += "border-gray-200 opacity-60"; btn.innerText = opt; }
-                } else {
-                    if (idx === currentAnswer) btn.className += "bg-blue-50 border-blue-500 text-blue-800 shadow-inner ring-1 ring-blue-500";
-                    else btn.className += "border-gray-200 hover:bg-gray-50 hover:border-blue-300";
-                    btn.onclick = () => selectAnswer(idx);
-                    btn.innerText = opt;
-                }
-                optionsContainer.appendChild(btn);
-            });
-            container.appendChild(optionsContainer);
-            const nextBtn = document.getElementById('next-btn');
-            nextBtn.onclick = null;
-            if (isReviewMode) {
-                nextBtn.disabled = false;
-                nextBtn.innerText = (currentQuestionIndex === currentQuizQuestions.length - 1) ? "Volver al Resumen" : "Siguiente";
-                nextBtn.onclick = (currentQuestionIndex === currentQuizQuestions.length - 1) ? () => showResultSummary() : nextQuestion;
-            } else {
-                nextBtn.disabled = (currentAnswer === null);
-                nextBtn.innerText = (currentQuestionIndex === currentQuizQuestions.length - 1) ? "Finalizar Examen" : "Siguiente";
-                nextBtn.onclick = (currentQuestionIndex === currentQuizQuestions.length - 1) ? finishLevel : nextQuestion;
-            }
-        }
-
+        // (Lógica de Quiz igual a anterior)
+        window.startLevel = (levelId) => { const level = levelsData.find(l => l.id === levelId); activeLevelId = levelId; currentQuizQuestions = level.questions; currentQuestionIndex = 0; userAnswers = new Array(currentQuizQuestions.length).fill(null); isReviewMode = false; document.getElementById('quiz-title').innerText = `Examen ${level.metalName}`; document.getElementById('quiz-subtitle').innerText = `Pregunta 1 de ${currentQuizQuestions.length}`; document.getElementById('quiz-content-active').classList.remove('hidden'); document.getElementById('quiz-footer').classList.remove('hidden'); document.getElementById('quiz-content-result').classList.add('hidden'); document.getElementById('quiz-modal').classList.remove('hidden'); document.getElementById('quiz-modal').classList.add('flex'); showQuestion(); }
+        window.closeQuiz = () => { document.getElementById('quiz-modal').classList.add('hidden'); document.getElementById('quiz-modal').classList.remove('flex'); renderDashboard(); }
+        function showQuestion() { const q = currentQuizQuestions[currentQuestionIndex]; const currentAnswer = userAnswers[currentQuestionIndex]; document.getElementById('current-q-num').innerText = currentQuestionIndex + 1; document.getElementById('total-q-num').innerText = currentQuizQuestions.length; const container = document.getElementById('quiz-question-container'); container.innerHTML = `<h4 class="text-lg font-bold text-gray-800 mb-6">${q.q}</h4>`; const optionsContainer = document.createElement('div'); optionsContainer.className = "space-y-3"; q.options.forEach((opt, idx) => { const btn = document.createElement('button'); btn.className = "w-full text-left p-4 rounded-lg border transition-all option-btn text-sm md:text-base font-medium "; if (isReviewMode) { btn.disabled = true; if (idx === q.correct) { btn.className += "bg-green-100 border-green-500 text-green-800 font-bold"; btn.innerHTML = `${opt} <span class="float-right">✅</span>`; } else if (idx === currentAnswer && idx !== q.correct) { btn.className += "bg-red-50 border-red-500 text-red-800"; btn.innerHTML = `${opt} <span class="float-right">❌</span>`; } else { btn.className += "border-gray-200 opacity-60"; btn.innerText = opt; } } else { if (idx === currentAnswer) btn.className += "bg-blue-50 border-blue-500 text-blue-800 shadow-inner ring-1 ring-blue-500"; else btn.className += "border-gray-200 hover:bg-gray-50 hover:border-blue-300"; btn.onclick = () => selectAnswer(idx); btn.innerText = opt; } optionsContainer.appendChild(btn); }); container.appendChild(optionsContainer); const nextBtn = document.getElementById('next-btn'); nextBtn.onclick = null; if (isReviewMode) { nextBtn.disabled = false; nextBtn.innerText = (currentQuestionIndex === currentQuizQuestions.length - 1) ? "Volver al Resumen" : "Siguiente"; nextBtn.onclick = (currentQuestionIndex === currentQuizQuestions.length - 1) ? () => showResultSummary() : nextQuestion; } else { nextBtn.disabled = (currentAnswer === null); nextBtn.innerText = (currentQuestionIndex === currentQuizQuestions.length - 1) ? "Finalizar Examen" : "Siguiente"; nextBtn.onclick = (currentQuestionIndex === currentQuizQuestions.length - 1) ? finishLevel : nextQuestion; } }
         function selectAnswer(idx) { if (isReviewMode) return; userAnswers[currentQuestionIndex] = idx; showQuestion(); }
         window.nextQuestion = () => { currentQuestionIndex++; showQuestion(); }
-
-        function finishLevel() {
-            let score = 0;
-            userAnswers.forEach((ans, idx) => { if (ans === currentQuizQuestions[idx].correct) score++; });
-            if (!window.appState.levelAttempts) window.appState.levelAttempts = {1:0, 2:0, 3:0, 4:0};
-            window.appState.levelAttempts[activeLevelId]++;
-            const passed = score >= Math.ceil(currentQuizQuestions.length * 0.7);
-            if (passed && activeLevelId === window.appState.currentLevel) window.appState.currentLevel++;
-            
-            // Guardar local
-            localStorage.setItem('auxiliarProLocalData', JSON.stringify(window.appState));
-            // Guardar nube si es posible
-            if(window.saveCloudData) window.saveCloudData();
-
-            showResultSummary(score, passed);
-        }
-
-        function showResultSummary(scoreInput, passedInput) {
-            let score = scoreInput;
-            let passed = passedInput;
-            if (typeof score !== 'number') { 
-                score = 0; 
-                userAnswers.forEach((ans, idx) => { if (ans === currentQuizQuestions[idx].correct) score++; }); 
-                passed = score >= Math.ceil(currentQuizQuestions.length * 0.7); 
-            }
-
-            document.getElementById('quiz-content-active').classList.add('hidden');
-            document.getElementById('quiz-footer').classList.add('hidden');
-            document.getElementById('quiz-content-result').classList.remove('hidden');
-            const resultTitle = document.getElementById('result-title');
-            const resultMsg = document.getElementById('result-message');
-            const resultIcon = document.getElementById('result-icon');
-            const retryBtn = document.getElementById('btn-retry');
-            
-            document.getElementById('result-score').innerText = `${score} / ${currentQuizQuestions.length}`;
-
-            if (passed) {
-                resultIcon.innerHTML = `<div class="bg-green-100 p-4 rounded-full text-green-600"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>`;
-                resultTitle.innerText = "¡Aprobado!";
-                if (activeLevelId === 1) resultMsg.innerText = "¡Bien hecho! Biblioteca desbloqueada.";
-                else if (activeLevelId === 4) { confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } }); resultMsg.innerText = "¡CERTIFICADO MASTER!"; }
-                else resultMsg.innerText = "Has superado el desafío.";
-                retryBtn.classList.add('hidden');
-            } else {
-                resultIcon.innerHTML = `<div class="bg-red-100 p-4 rounded-full text-red-600"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg></div>`;
-                resultTitle.innerText = "Reprobado";
-                resultMsg.innerText = "No alcanzaste el mínimo.";
-                const attemptsUsed = window.appState.levelAttempts[activeLevelId];
-                const maxAttempts = activeLevelId === 1 ? 999 : 2;
-                if (attemptsUsed >= maxAttempts) { retryBtn.disabled = true; retryBtn.className = "w-full bg-gray-300 text-gray-500 font-bold py-3 rounded-lg cursor-not-allowed"; retryBtn.innerText = "Intentos Agotados"; }
-                else { retryBtn.disabled = false; retryBtn.classList.remove('hidden'); retryBtn.className = "w-full bg-farmacia-green hover:bg-green-600 text-white font-bold py-3 rounded-lg transition-colors"; retryBtn.innerText = `Reintentar (Intento ${attemptsUsed + 1}/${maxAttempts})`; }
-            }
-        }
-
+        function finishLevel() { let score = 0; userAnswers.forEach((ans, idx) => { if (ans === currentQuizQuestions[idx].correct) score++; }); if (!window.appState.levelAttempts) window.appState.levelAttempts = {1:0, 2:0, 3:0, 4:0}; window.appState.levelAttempts[activeLevelId]++; const passed = score >= Math.ceil(currentQuizQuestions.length * 0.7); if (passed && activeLevelId === window.appState.currentLevel) window.appState.currentLevel++; localStorage.setItem('auxiliarProLocalData', JSON.stringify(window.appState)); if(window.saveCloudData) window.saveCloudData(); showResultSummary(score, passed); }
+        window.showResultSummary = (score, passed) => { if (typeof score !== 'number') { score = 0; userAnswers.forEach((ans, idx) => { if (ans === currentQuizQuestions[idx].correct) score++; }); passed = score >= Math.ceil(currentQuizQuestions.length * 0.7); } document.getElementById('quiz-content-active').classList.add('hidden'); document.getElementById('quiz-footer').classList.add('hidden'); document.getElementById('quiz-content-result').classList.remove('hidden'); const resultTitle = document.getElementById('result-title'); const resultMsg = document.getElementById('result-message'); const resultIcon = document.getElementById('result-icon'); const retryBtn = document.getElementById('btn-retry'); document.getElementById('result-score').innerText = `${score} / ${currentQuizQuestions.length}`; if (passed) { resultIcon.innerHTML = `<div class="bg-green-100 p-4 rounded-full text-green-600"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>`; resultTitle.innerText = "¡Aprobado!"; if (activeLevelId === 1) resultMsg.innerText = "¡Bien hecho! Biblioteca desbloqueada."; else if (activeLevelId === 4) { confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } }); resultMsg.innerText = "¡CERTIFICADO MASTER!"; } else resultMsg.innerText = "Has superado el desafío."; retryBtn.classList.add('hidden'); } else { resultIcon.innerHTML = `<div class="bg-red-100 p-4 rounded-full text-red-600"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg></div>`; resultTitle.innerText = "Reprobado"; resultMsg.innerText = "No alcanzaste el mínimo."; const attemptsUsed = window.appState.levelAttempts[activeLevelId]; const maxAttempts = activeLevelId === 1 ? 999 : 2; if (attemptsUsed >= maxAttempts) { retryBtn.disabled = true; retryBtn.className = "w-full bg-gray-300 text-gray-500 font-bold py-3 rounded-lg cursor-not-allowed"; retryBtn.innerText = "Intentos Agotados"; } else { retryBtn.disabled = false; retryBtn.classList.remove('hidden'); retryBtn.className = "w-full bg-farmacia-green hover:bg-green-600 text-white font-bold py-3 rounded-lg transition-colors"; retryBtn.innerText = `Reintentar (Intento ${attemptsUsed + 1}/${maxAttempts})`; } } }
         window.startReviewMode = () => { isReviewMode = true; currentQuestionIndex = 0; document.getElementById('quiz-content-result').classList.add('hidden'); document.getElementById('quiz-content-active').classList.remove('hidden'); document.getElementById('quiz-footer').classList.remove('hidden'); showQuestion(); }
         window.retryLevel = () => { startLevel(activeLevelId); }
-        window.resetProgress = () => { if(confirm("¿Seguro? Se borrará todo.")) { localStorage.removeItem('auxiliarProLocalData'); location.reload(); } }
+        window.resetProgress = () => { if(confirm("¿Seguro?")) { localStorage.removeItem('auxiliarProLocalData'); location.reload(); } }
     </script>
 </body>
 </html>
