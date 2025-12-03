@@ -508,7 +508,7 @@
             if (isReviewMode) {
                 nextBtn.disabled = false;
                 nextBtn.innerText = (currentQuestionIndex === currentQuizQuestions.length - 1) ? "Volver al Resumen" : "Siguiente";
-                nextBtn.onclick = (currentQuestionIndex === currentQuizQuestions.length - 1) ? () => showResultSummary(null, null) : nextQuestion;
+                nextBtn.onclick = (currentQuestionIndex === currentQuizQuestions.length - 1) ? () => showResultSummary() : nextQuestion;
             } else {
                 nextBtn.disabled = (currentAnswer === null);
                 nextBtn.innerText = (currentQuestionIndex === currentQuizQuestions.length - 1) ? "Finalizar Examen" : "Siguiente";
