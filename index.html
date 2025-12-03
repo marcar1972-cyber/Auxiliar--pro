@@ -189,7 +189,7 @@
 
     <!-- SCRIPT PRINCIPAL -->
     <script>
-        // 1. CONFIGURACIÓN Y DATOS
+        // 1. DATOS (Definidos primero para evitar undefined)
         const LEGAL_TEXTS = {
             terms: `<p class="font-bold mb-2">1. Naturaleza del Servicio</p><p class="mb-4">Auxiliar Pro es una iniciativa independiente creada por un estudiante en formación. NO tiene afiliación con el Ministerio de Salud (MINSAL), el Instituto de Salud Pública (ISP) ni ninguna entidad gubernamental.</p><p class="font-bold mb-2">2. Propósito Educativo</p><p class="mb-4">El contenido aquí presentado es exclusivamente para fines de repaso y estudio personal.</p><p class="font-bold mb-2">3. Responsabilidad</p><p>El usuario es responsable de contrastar la información con la normativa oficial.</p>`,
             privacy: `<p class="font-bold mb-2">1. Datos Recopilados</p><p class="mb-4">Esta aplicación solo solicita un nombre o pseudónimo.</p><p class="font-bold mb-2">2. Almacenamiento</p><p>Si no usas Google, los datos se guardan solo en tu dispositivo. Si usas Google, se guarda tu progreso en la nube segura de Firebase.</p>`,
@@ -204,15 +204,24 @@
         ];
 
         const LINKS_PDF = { decreto: "./decreto_466.pdf", decreto404: "./decreto_404.pdf", decreto405: "./decreto_405.pdf", ley: "./ley_20724.pdf", posologia: "./guia_posologia.pdf", examen: "./modelo_examen.pdf" };
-        
+        const metalConfig = { "Bronce": "bg-gradient-to-br from-amber-600 to-amber-800 text-white shadow-amber-200 border-amber-600", "Plata": "bg-gradient-to-br from-gray-400 to-slate-500 text-white shadow-gray-300 border-gray-400", "Oro": "bg-gradient-to-br from-yellow-400 to-yellow-600 text-white shadow-yellow-200 border-yellow-500", "Platino": "bg-gradient-to-br from-cyan-400 to-blue-600 text-white shadow-blue-200 border-blue-400" };
+        const levelsData = [ { id: 1, title: "Conceptos Básicos", desc: "Diagnóstico.", metalName: "Bronce", questions: [{ q: "¿Qué significa D.C.I.?", options: ["Denominación Común Internacional", "Dosis"], correct: 0 }, { q: "Temp. Refrigerador:", options: ["2-8°C", "0-5°C"], correct: 0 }] }, { id: 2, title: "Legislación", desc: "Decretos.", metalName: "Plata", questions: [{ q: "Decreto Psicotrópicos:", options: ["404", "466"], correct: 0 }] }, { id: 3, title: "Farmacología", desc: "Cálculos.", metalName: "Oro", questions: [{ q: "Cálculo simple...", options: ["1", "2"], correct: 0 }] }, { id: 4, title: "Simulacro", desc: "Final.", metalName: "Platino", questions: [{ q: "Pregunta final...", options: ["A", "B"], correct: 0 }] } ]; 
+
+        // 2. INICIALIZAR ESTADO GLOBAL
         window.appState = { currentLevel: 1, levelAttempts: { 1: 0, 2: 0, 3: 0, 4: 0 }, userName: "Colega" };
         window.currentUser = null;
         let activeLevelId=0, currentQuizQuestions=[], userAnswers=[], currentQuestionIndex=0, isReviewMode=false;
 
-        const saved = localStorage.getItem('auxiliarProLocalData');
-        if(saved) window.appState = JSON.parse(saved);
+        // Recuperar LocalStorage con Try/Catch para seguridad
+        try {
+            const saved = localStorage.getItem('auxiliarProLocalData');
+            if (saved) window.appState = JSON.parse(saved);
+        } catch(e) {
+            console.log("Error leyendo datos locales, reseteando...");
+            localStorage.removeItem('auxiliarProLocalData');
+        }
 
-        // 3. FUNCIONES DE NAVEGACIÓN
+        // 3. FUNCIONES GLOBALES (ACCESIBLES DESDE HTML)
         window.showView = (viewId) => {
             ['view-landing', 'view-dashboard', 'view-blog', 'view-article'].forEach(id => {
                 const el = document.getElementById(id);
@@ -227,6 +236,10 @@
         };
 
         window.navToDashboard = () => {
+            if (!window.appState || !window.appState.userName) {
+                 // Fallback si el estado está corrupto
+                 window.appState = { currentLevel: 1, levelAttempts: { 1: 0, 2: 0, 3: 0, 4: 0 }, userName: "Colega" };
+            }
             document.getElementById('user-welcome').innerText = `Hola, ${window.appState.userName.split(' ')[0]}`;
             document.getElementById('header-user-welcome').innerText = `Hola, ${window.appState.userName.split(' ')[0]}`;
             window.showView('view-dashboard');
@@ -236,9 +249,9 @@
         window.navToLanding = () => { window.showView('view-landing'); };
         window.navToBlog = () => { window.showView('view-blog'); renderBlogList(); };
 
-        // 4. AUTH
         window.checkAuthAndStart = () => {
-            if (window.currentUser || (window.appState.userName !== "Colega")) {
+            // Si el usuario ya existe y no es el default "Colega", pasa directo
+            if (window.currentUser || (window.appState && window.appState.userName !== "Colega")) {
                 window.navToDashboard();
             } else {
                 document.getElementById('auth-modal').classList.remove('hidden');
@@ -248,7 +261,8 @@
 
         window.handleRegister = (e) => {
             e.preventDefault();
-            const name = document.getElementById('input-name').value || "Estudiante";
+            const nameInput = document.getElementById('input-name');
+            const name = nameInput ? nameInput.value : "Estudiante";
             window.appState.userName = name;
             localStorage.setItem('auxiliarProLocalData', JSON.stringify(window.appState));
             document.getElementById('auth-modal').classList.add('hidden');
@@ -279,15 +293,6 @@
             window.showView('view-article');
             document.getElementById('article-content-container').innerHTML = `<h1 class="text-2xl font-bold mb-4">${p.title}</h1><div class="prose">${p.content}</div>`;
         };
-
-        const metalConfig = { "Bronce": "bg-gradient-to-br from-amber-600 to-amber-800 text-white shadow-amber-200 border-amber-600", "Plata": "bg-gradient-to-br from-gray-400 to-slate-500 text-white shadow-gray-300 border-gray-400", "Oro": "bg-gradient-to-br from-yellow-400 to-yellow-600 text-white shadow-yellow-200 border-yellow-500", "Platino": "bg-gradient-to-br from-cyan-400 to-blue-600 text-white shadow-blue-200 border-blue-400" };
-        
-        const levelsData = [
-             { id: 1, title: "Conceptos Básicos", desc: "Diagnóstico.", metalName: "Bronce", questions: [{ q: "¿Qué significa D.C.I.?", options: ["Denominación Común Internacional", "Dosis"], correct: 0 }, { q: "Temp. Refrigerador:", options: ["2-8°C", "0-5°C"], correct: 0 }] },
-             { id: 2, title: "Legislación", desc: "Decretos.", metalName: "Plata", questions: [{ q: "Decreto Psicotrópicos:", options: ["404", "466"], correct: 0 }] },
-             { id: 3, title: "Farmacología", desc: "Cálculos.", metalName: "Oro", questions: [{ q: "Cálculo simple...", options: ["1", "2"], correct: 0 }] },
-             { id: 4, title: "Simulacro", desc: "Final.", metalName: "Platino", questions: [{ q: "Pregunta final...", options: ["A", "B"], correct: 0 }] }
-        ];
 
         function renderDashboard() {
             const container = document.getElementById('levels-container');
