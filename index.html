@@ -72,7 +72,6 @@
                     <span class="font-heading font-bold text-xl tracking-tight text-gray-900">Auxiliar<span class="text-farmacia-green">Pro</span></span>
                 </div>
                 <div class="flex items-center gap-3">
-                    <!-- CAMBIO REALIZADO AQUI: Dice BLOG -->
                     <button onclick="navToBlog()" class="text-xs font-bold text-gray-500 hover:text-farmacia-green uppercase tracking-wide">Blog</button>
                     <button onclick="checkAuthAndStart()" class="bg-farmacia-green hover:bg-green-600 text-white font-semibold py-1.5 px-4 rounded-full transition-all shadow-md text-xs">Entrar</button>
                 </div>
@@ -117,11 +116,16 @@
                     </p>
                 </div>
                 
-                <!-- SECCIÓN PREGUNTAS FRECUENTES -->
+                <!-- SECCIÓN PREGUNTAS FRECUENTES (ACTUALIZADA CON FECHAS) -->
                 <div class="w-full mb-12 text-left">
                     <h3 class="text-center text-xl font-bold text-gray-800 mb-6">Preguntas Frecuentes</h3>
                     
                     <div class="space-y-4">
+                        <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+                            <h4 class="font-bold text-farmacia-dark text-sm mb-2">¿Cuándo son las fechas del examen?</h4>
+                            <p class="text-xs text-gray-600">No hay calendario fijo en la RM. Es sistema de "Ventanilla Abierta": tú subes los papeles y, tras la revisión, te asignan fecha (a veces muy pronto).</p>
+                        </div>
+
                         <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
                             <h4 class="font-bold text-farmacia-dark text-sm mb-2">¿Qué requisitos necesito?</h4>
                             <p class="text-xs text-gray-600">Licencia de Enseñanza Media y acreditar 1 año de experiencia laboral en farmacia (o curso aprobado).</p>
@@ -130,11 +134,6 @@
                         <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
                             <h4 class="font-bold text-farmacia-dark text-sm mb-2">¿Cómo me inscribo al examen?</h4>
                             <p class="text-xs text-gray-600">Todo el trámite es online en <a href="https://asdigital.minsal.cl" target="_blank" class="text-farmacia-green underline">asdigital.minsal.cl</a> usando tu Clave Única.</p>
-                        </div>
-
-                        <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-                            <h4 class="font-bold text-farmacia-dark text-sm mb-2">¿La resolución vence?</h4>
-                            <p class="text-xs text-gray-600">No, la resolución sanitaria es indefinida, salvo faltas graves al Código Sanitario.</p>
                         </div>
                     </div>
                 </div>
@@ -232,7 +231,6 @@
                 <div class="text-center mb-6"><div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-purple-600"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div><h2 class="text-xl font-bold text-gray-900">Comunidad</h2><p class="text-sm text-gray-500">Únete a los grupos.</p></div>
                 <div class="space-y-3">
                     <a href="https://chat.whatsapp.com/IPvHmnNGWYmH61FrdV56g1" target="_blank" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-lg transition-colors flex justify-center items-center gap-2"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> WhatsApp</a>
-                    <!-- BOTÓN FACEBOOK NUEVO -->
                     <a href="https://www.facebook.com/share/g/1KFQPWG1YN/" target="_blank" class="w-full bg-facebook-blue hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-colors flex justify-center items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg> Facebook
                     </a>
@@ -249,7 +247,7 @@
 
     <!-- LÓGICA PRINCIPAL -->
     <script>
-        // 1. BLOG DATA
+        // 1. BLOG DATA (CONTENIDO REAL + FECHAS ACTUALIZADO)
         const BLOG_POSTS = [
             { 
                 id: 'guia-maestra', 
@@ -269,6 +267,26 @@
                         <li><strong>Almacenamiento:</strong> Cadena de frío, FEFO/FIFO.</li>
                         <li><strong>Dispensación:</strong> Tipos de recetas.</li>
                     </ul>
+                ` 
+            },
+            { 
+                id: 'fechas-examen', 
+                title: "¿Cuándo es el examen? La verdad sobre las fechas", 
+                excerpt: "No esperes un calendario oficial. Entiende cómo funciona el sistema de ventanilla abierta.", 
+                content: `
+                    <h2>La Verdad sobre las Fechas de Examen (RM)</h2>
+                    <p>A diferencia de otros exámenes estatales, la prueba de competencia para Auxiliares de Farmacia en la Región Metropolitana no tiene un "calendario fijo" publicado anualmente.</p>
+
+                    <h3>El Sistema "Ventanilla Abierta"</h3>
+                    <p>El proceso funciona a demanda. Esto significa que:</p>
+                    <ol>
+                        <li><strong>Tú inicias el proceso:</strong> Al subir tus documentos a AS Digital.</li>
+                        <li><strong>La "Caja Negra":</strong> Entras a una etapa de admisibilidad donde revisan tus papeles. Esto puede tardar desde 2 semanas hasta 2 meses.</li>
+                        <li><strong>El Aviso Repentino:</strong> Apenas te aprueban los papeles, te asignan una fecha para rendir el examen, muchas veces con solo una semana de aviso.</li>
+                    </ol>
+                    
+                    <h3>Consejo de Colega:</h3>
+                    <p><strong>Estudia ANTES de subir los papeles.</strong> No esperes a tener la fecha para empezar a leer, porque el aviso te puede pillar desprevenido.</p>
                 ` 
             },
             { 
@@ -471,6 +489,7 @@
             const container = document.getElementById('levels-container');
             const rewardsContainer = document.getElementById('rewards-section');
             container.innerHTML = '';
+            
             const isUnlocked = appState.currentLevel > 1;
             const progressPercent = Math.min(((appState.currentLevel - 1) / levelsData.length) * 100, 100); 
             document.getElementById('progress-bar').style.width = Math.max(5, progressPercent) + "%";
@@ -485,7 +504,8 @@
 
                 let cardClasses = "bg-white p-5 rounded-xl shadow-sm border flex items-center justify-between transition-all relative overflow-hidden ";
                 let iconClasses = "w-14 h-14 rounded-full flex items-center justify-center font-bold text-xl border-2 shadow-lg ";
-                let statusLabel = "", statusColorClass = "";
+                let statusLabel = "";
+                let statusColorClass = "";
 
                 if (isCompleted) {
                     cardClasses += "hover:shadow-md cursor-pointer border-green-200 bg-green-50/30";
@@ -514,12 +534,44 @@
                 let attemptText = (!isLocked && !isCompleted && level.id > 1 && !isFailedAndLocked) ? `<span class="text-[10px] text-gray-400 block mt-1">Intentos: ${attemptsUsed}/${maxAttempts}</span>` : "";
                 let clickAction = isCompleted ? `alert('Ya aprobaste este nivel. ¡Sigue avanzando!')` : (!isLocked && !isFailedAndLocked ? `startLevel(${level.id})` : "alert('Nivel bloqueado.')");
 
-                container.innerHTML += `<div class="${cardClasses}" onclick="${clickAction}"><div class="flex items-center gap-4 relative z-10 w-full"><div class="${iconClasses} shrink-0">${isCompleted ? '✓' : level.id}</div><div class="flex-1 min-w-0"><div class="flex justify-between items-start"><div>${metalBadge}<h3 class="font-bold text-gray-800 leading-tight truncate pr-2">${level.title}</h3></div><div class="shrink-0">${statusBadge}</div></div><p class="text-xs text-gray-500 mt-1 line-clamp-2">${level.desc}</p>${attemptText}</div></div></div>`;
+                container.innerHTML += `
+                <div class="${cardClasses}" onclick="${clickAction}">
+                    <div class="flex items-center gap-4 relative z-10 w-full">
+                        <div class="${iconClasses} shrink-0">
+                            ${isCompleted ? '✓' : level.id}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    ${metalBadge}
+                                    <h3 class="font-bold text-gray-800 leading-tight truncate pr-2">${level.title}</h3>
+                                </div>
+                                <div class="shrink-0">
+                                    ${statusBadge}
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1 line-clamp-2">${level.desc}</p>
+                            ${attemptText}
+                        </div>
+                    </div>
+                </div>`;
             });
 
             if (isUnlocked) {
                 rewardsContainer.innerHTML = `
-                <div class="library-unlocked bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200 shadow-md"><div class="flex items-center gap-3 mb-4"><div class="bg-blue-600 text-white p-2 rounded-lg shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div><div><h4 class="font-bold text-gray-900 text-lg">Biblioteca Técnica</h4><p class="text-xs text-blue-700 font-medium">¡Material desbloqueado!</p></div></div><div class="space-y-3"><a href="${LINKS_PDF.decreto404}" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">📜 Guía Decreto 404</span><span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">Descargar</span></a><a href="${LINKS_PDF.decreto405}" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">📜 Guía Decreto 405</span><span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">Descargar</span></a><a href="${LINKS_PDF.ley}" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">⚖️ Guía Ley 20.724</span><span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">Descargar</span></a><a href="${LINKS_PDF.decreto}" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">📜 Guía Decreto 466</span><span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">Descargar</span></a></div></div>
+                <div class="library-unlocked bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200 shadow-md">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="bg-blue-600 text-white p-2 rounded-lg shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div>
+                        <div><h4 class="font-bold text-gray-900 text-lg">Biblioteca Técnica</h4><p class="text-xs text-blue-700 font-medium">¡Material desbloqueado!</p></div>
+                    </div>
+                    <div class="space-y-3">
+                        <a href="${LINKS_PDF.decreto404}" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">📜 Guía Decreto 404</span><span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">Descargar</span></a>
+                        <a href="${LINKS_PDF.decreto405}" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">📜 Guía Decreto 405</span><span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">Descargar</span></a>
+                        <a href="${LINKS_PDF.ley}" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">⚖️ Guía Ley 20.724</span><span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">Descargar</span></a>
+                        <a href="${LINKS_PDF.decreto}" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">📜 Guía Decreto 466</span><span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">Descargar</span></a>
+                    </div>
+                </div>
+                
                 <div class="bg-gradient-to-br from-purple-50 to-fuchsia-50 rounded-xl p-6 border border-purple-200 shadow-md mt-4">
                     <div class="flex items-center gap-3 mb-2">
                         <div class="bg-purple-600 text-white p-2 rounded-lg shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div>
@@ -530,136 +582,6 @@
                 </div>`;
             } else {
                 rewardsContainer.innerHTML = `<div class="bg-gray-100 rounded-xl p-4 flex items-center gap-4 opacity-60"><div class="bg-gray-300 p-3 rounded-lg text-gray-500"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div><div><h4 class="font-bold text-gray-700">Biblioteca y Foros</h4><p class="text-xs text-gray-500">🔒 Aprueba el Nivel 1 para desbloquear.</p></div></div>`;
-            }
-        }
-
-        function startLevel(levelId) {
-            const level = levelsData.find(l => l.id === levelId);
-            activeLevelId = levelId;
-            currentQuizQuestions = level.questions;
-            currentQuestionIndex = 0;
-            userAnswers = new Array(currentQuizQuestions.length).fill(null);
-            isReviewMode = false;
-            document.getElementById('quiz-title').innerText = `Examen ${level.metalName}`;
-            document.getElementById('quiz-subtitle').innerText = `Pregunta 1 de ${currentQuizQuestions.length}`;
-            document.getElementById('quiz-content-active').classList.remove('hidden');
-            document.getElementById('quiz-footer').classList.remove('hidden');
-            document.getElementById('quiz-content-result').classList.add('hidden');
-            document.getElementById('quiz-modal').classList.remove('hidden');
-            document.getElementById('quiz-modal').classList.add('flex');
-            showQuestion();
-        }
-
-        function closeQuiz() { document.getElementById('quiz-modal').classList.add('hidden'); document.getElementById('quiz-modal').classList.remove('flex'); renderDashboard(); }
-
-        function showQuestion() {
-            const q = currentQuizQuestions[currentQuestionIndex];
-            const currentAnswer = userAnswers[currentQuestionIndex];
-            document.getElementById('current-q-num').innerText = currentQuestionIndex + 1;
-            document.getElementById('total-q-num').innerText = currentQuizQuestions.length;
-            const container = document.getElementById('quiz-question-container');
-            container.innerHTML = `<h4 class="text-lg font-bold text-gray-800 mb-6">${q.q}</h4>`;
-            const optionsContainer = document.createElement('div');
-            optionsContainer.className = "space-y-3";
-            q.options.forEach((opt, idx) => {
-                const btn = document.createElement('button');
-                btn.className = "w-full text-left p-4 rounded-lg border transition-all option-btn text-sm md:text-base font-medium ";
-                if (isReviewMode) {
-                    btn.disabled = true;
-                    if (idx === q.correct) { btn.className += "bg-green-100 border-green-500 text-green-800 font-bold"; btn.innerHTML = `${opt} <span class="float-right">✅</span>`; }
-                    else if (idx === currentAnswer && idx !== q.correct) { btn.className += "bg-red-50 border-red-500 text-red-800"; btn.innerHTML = `${opt} <span class="float-right">❌</span>`; }
-                    else { btn.className += "border-gray-200 opacity-60"; btn.innerText = opt; }
-                } else {
-                    if (idx === currentAnswer) btn.className += "bg-blue-50 border-blue-500 text-blue-800 shadow-inner ring-1 ring-blue-500";
-                    else btn.className += "border-gray-200 hover:bg-gray-50 hover:border-blue-300";
-                    btn.onclick = () => selectAnswer(idx);
-                    btn.innerText = opt;
-                }
-                optionsContainer.appendChild(btn);
-            });
-            container.appendChild(optionsContainer);
-            const nextBtn = document.getElementById('next-btn');
-            nextBtn.onclick = null;
-            if (isReviewMode) {
-                nextBtn.disabled = false;
-                nextBtn.innerText = (currentQuestionIndex === currentQuizQuestions.length - 1) ? "Volver al Resumen" : "Siguiente";
-                nextBtn.onclick = (currentQuestionIndex === currentQuizQuestions.length - 1) ? () => showResultSummary() : nextQuestion;
-            } else {
-                nextBtn.disabled = (currentAnswer === null);
-                nextBtn.innerText = (currentQuestionIndex === currentQuizQuestions.length - 1) ? "Finalizar Examen" : "Siguiente";
-                nextBtn.onclick = (currentQuestionIndex === currentQuizQuestions.length - 1) ? finishLevel : nextQuestion;
-            }
-        }
-
-        function selectAnswer(idx) { if (isReviewMode) return; userAnswers[currentQuestionIndex] = idx; showQuestion(); }
-        function nextQuestion() { currentQuestionIndex++; showQuestion(); }
-
-        function finishLevel() {
-            let score = 0;
-            userAnswers.forEach((ans, idx) => { if (ans === currentQuizQuestions[idx].correct) score++; });
-            if (!appState.levelAttempts) appState.levelAttempts = {1:0, 2:0, 3:0, 4:0};
-            appState.levelAttempts[activeLevelId]++;
-            const passed = score >= Math.ceil(currentQuizQuestions.length * 0.7);
-            if (passed && activeLevelId === appState.currentLevel) appState.currentLevel++;
-            saveData();
-            showResultSummary(score, passed);
-        }
-
-        function showResultSummary(scoreInput, passedInput) {
-            let score = scoreInput, passed = passedInput;
-            if (typeof score !== 'number') { 
-                score = 0; 
-                userAnswers.forEach((ans, idx) => { if (ans === currentQuizQuestions[idx].correct) score++; }); 
-                passed = score >= Math.ceil(currentQuizQuestions.length * 0.7); 
-            }
-            
-            let feedbackHtml = "";
-            if (activeLevelId === 1 && !passed) {
-                let wrongTopics = {};
-                userAnswers.forEach((ans, idx) => {
-                    if (ans !== currentQuizQuestions[idx].correct) {
-                        const topic = currentQuizQuestions[idx].topic;
-                        wrongTopics[topic] = (wrongTopics[topic] || 0) + 1;
-                    }
-                });
-                let maxErrors = 0;
-                let weakTopic = "";
-                for (const topic in wrongTopics) {
-                    if (wrongTopics[topic] > maxErrors) {
-                        maxErrors = wrongTopics[topic];
-                        weakTopic = topic;
-                    }
-                }
-                if (weakTopic) feedbackHtml = `Te sugerimos repasar: <strong>${weakTopic}</strong>`;
-            }
-
-            document.getElementById('quiz-content-active').classList.add('hidden');
-            document.getElementById('quiz-footer').classList.add('hidden');
-            document.getElementById('quiz-content-result').classList.remove('hidden');
-            document.getElementById('weakness-feedback').innerHTML = feedbackHtml;
-            document.getElementById('weakness-feedback').classList.toggle('hidden', !feedbackHtml);
-
-            const resultTitle = document.getElementById('result-title');
-            const resultMsg = document.getElementById('result-message');
-            const resultIcon = document.getElementById('result-icon');
-            const retryBtn = document.getElementById('btn-retry');
-            document.getElementById('result-score').innerText = `${score} / ${currentQuizQuestions.length}`;
-            
-            if (passed) {
-                resultIcon.innerHTML = `<div class="bg-green-100 p-4 rounded-full text-green-600"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>`;
-                resultTitle.innerText = "¡Aprobado!";
-                if (activeLevelId === 1) resultMsg.innerText = "¡Felicidades! Has desbloqueado la Biblioteca y los Foros.";
-                else if (activeLevelId === 4) { confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } }); resultMsg.innerText = "¡CERTIFICADO MASTER!"; }
-                else resultMsg.innerText = "Has superado el desafío.";
-                retryBtn.classList.add('hidden');
-            } else {
-                resultIcon.innerHTML = `<div class="bg-red-100 p-4 rounded-full text-red-600"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg></div>`;
-                resultTitle.innerText = "Reprobado";
-                resultMsg.innerText = "No alcanzaste el mínimo.";
-                const attemptsUsed = appState.levelAttempts[activeLevelId];
-                const maxAttempts = activeLevelId === 1 ? 999 : 2;
-                if (attemptsUsed >= maxAttempts) { retryBtn.disabled = true; retryBtn.className = "w-full bg-gray-300 text-gray-500 font-bold py-3 rounded-lg cursor-not-allowed"; retryBtn.innerText = "Intentos Agotados"; }
-                else { retryBtn.disabled = false; retryBtn.classList.remove('hidden'); retryBtn.className = "w-full bg-farmacia-green hover:bg-green-600 text-white font-bold py-3 rounded-lg transition-colors"; retryBtn.innerText = `Reintentar (Intento ${attemptsUsed + 1}/${maxAttempts})`; }
             }
         }
 
