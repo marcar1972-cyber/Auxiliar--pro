@@ -137,7 +137,9 @@
                     <span class="font-heading font-bold text-lg text-gray-900">Centro de Recursos</span>
                 </div>
             </header>
-            <main class="flex-1 p-6 overflow-y-auto bg-gray-50" id="blog-list-container"></main>
+            <main class="flex-1 p-6 overflow-y-auto bg-gray-50" id="blog-list-container">
+                <!-- Se llena dinámicamente con JS -->
+            </main>
         </div>
 
         <!-- VISTA 4: ARTÍCULO -->
@@ -169,7 +171,7 @@
             </div>
         </div>
 
-        <!-- OTROS MODALES (Legal, Foro, Quiz) -->
+        <!-- MODAL LEGAL -->
         <div id="legal-modal" class="absolute inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
             <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden p-6 relative max-h-[80vh] flex flex-col">
                 <button onclick="document.getElementById('legal-modal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
@@ -179,6 +181,7 @@
             </div>
         </div>
 
+        <!-- MODAL FORO -->
         <div id="forum-modal" class="absolute inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
             <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden p-6 relative">
                 <button onclick="document.getElementById('forum-modal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
@@ -190,6 +193,7 @@
             </div>
         </div>
 
+        <!-- MODAL QUIZ -->
         <div id="quiz-modal" class="absolute inset-0 z-50 bg-white md:rounded-3xl hidden flex-col">
             <div class="bg-farmacia-dark p-6 text-white flex justify-between items-center shrink-0"><div><h3 class="font-bold text-xl" id="quiz-title">Evaluación</h3></div><button onclick="window.closeQuiz()" class="text-white/70 hover:text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>
             <div class="flex-1 overflow-y-auto p-6"><div id="quiz-content-active"><div id="quiz-question-container"></div></div><div id="quiz-content-result" class="hidden text-center mt-10"><div id="result-icon" class="mb-4 flex justify-center"></div><h2 id="result-title" class="text-2xl font-bold mb-2"></h2><p id="result-message" class="text-gray-600 mb-6"></p><div class="bg-gray-50 rounded-lg p-4 mb-6"><p class="text-sm font-bold">Tu Puntaje</p><p class="text-3xl font-bold text-farmacia-dark" id="result-score">0/0</p></div><div class="flex flex-col gap-3"><button id="btn-review" onclick="window.startReviewMode()" class="w-full border border-gray-300 text-gray-700 font-bold py-3 rounded-lg">Ver Respuestas</button><button id="btn-retry" onclick="window.retryLevel()" class="w-full bg-farmacia-green text-white font-bold py-3 rounded-lg">Reintentar</button><button onclick="window.closeQuiz()" class="text-sm text-gray-400 underline">Salir</button></div></div></div>
@@ -199,7 +203,7 @@
 
     <!-- SCRIPT PRINCIPAL -->
     <script>
-        // 1. CONFIGURACIÓN Y DATOS
+        // 1. CONFIGURACIÓN Y DATOS (VARIABLES GLOBALES)
         const LEGAL_TEXTS = {
             terms: `<p class="font-bold mb-2">1. Naturaleza del Servicio</p><p class="mb-4">Auxiliar Pro es una iniciativa independiente creada por un estudiante en formación. NO tiene afiliación con el Ministerio de Salud (MINSAL), el Instituto de Salud Pública (ISP) ni ninguna entidad gubernamental.</p><p class="font-bold mb-2">2. Propósito Educativo</p><p class="mb-4">El contenido aquí presentado es exclusivamente para fines de repaso y estudio personal.</p><p class="font-bold mb-2">3. Responsabilidad</p><p>El usuario es responsable de contrastar la información con la normativa oficial.</p>`,
             privacy: `<p class="font-bold mb-2">1. Datos Recopilados</p><p class="mb-4">Esta aplicación solo solicita un nombre o pseudónimo.</p><p class="font-bold mb-2">2. Almacenamiento</p><p>Si no usas Google, los datos se guardan solo en tu dispositivo. Si usas Google, se guarda tu progreso en la nube segura de Firebase.</p>`,
@@ -217,21 +221,24 @@
         const metalConfig = { "Bronce": "bg-gradient-to-br from-amber-600 to-amber-800 text-white shadow-amber-200 border-amber-600", "Plata": "bg-gradient-to-br from-gray-400 to-slate-500 text-white shadow-gray-300 border-gray-400", "Oro": "bg-gradient-to-br from-yellow-400 to-yellow-600 text-white shadow-yellow-200 border-yellow-500", "Platino": "bg-gradient-to-br from-cyan-400 to-blue-600 text-white shadow-blue-200 border-blue-400" };
         const levelsData = [ { id: 1, title: "Conceptos Básicos", desc: "Diagnóstico.", metalName: "Bronce", questions: [{ q: "¿Qué significa D.C.I.?", options: ["Denominación Común Internacional", "Dosis"], correct: 0 }, { q: "Temp. Refrigerador:", options: ["2-8°C", "0-5°C"], correct: 0 }] }, { id: 2, title: "Legislación", desc: "Decretos.", metalName: "Plata", questions: [{ q: "Decreto Psicotrópicos:", options: ["404", "466"], correct: 0 }] }, { id: 3, title: "Farmacología", desc: "Cálculos.", metalName: "Oro", questions: [{ q: "Cálculo simple...", options: ["1", "2"], correct: 0 }] }, { id: 4, title: "Simulacro", desc: "Final.", metalName: "Platino", questions: [{ q: "Pregunta final...", options: ["A", "B"], correct: 0 }] } ]; 
 
-        // 2. INICIALIZAR ESTADO GLOBAL
+        // 2. INICIALIZAR ESTADO GLOBAL DE FORMA ROBUSTA
         window.appState = { currentLevel: 1, levelAttempts: { 1: 0, 2: 0, 3: 0, 4: 0 }, userName: "Colega" };
         window.currentUser = null;
         let activeLevelId=0, currentQuizQuestions=[], userAnswers=[], currentQuestionIndex=0, isReviewMode=false;
 
-        // Recuperar LocalStorage con Try/Catch para seguridad
+        // Intentar cargar datos locales
         try {
             const saved = localStorage.getItem('auxiliarProLocalData');
-            if (saved) window.appState = JSON.parse(saved);
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                if(parsed && parsed.userName) window.appState = parsed;
+            }
         } catch(e) {
-            console.log("Error leyendo datos locales, reseteando...");
-            localStorage.removeItem('auxiliarProLocalData');
+            console.error("Error loading local data", e);
+            localStorage.removeItem('auxiliarProLocalData'); // Limpieza de seguridad
         }
 
-        // 3. FUNCIONES GLOBALES (ACCESIBLES DESDE HTML)
+        // 3. FUNCIONES DE NAVEGACIÓN Y LÓGICA
         window.showView = (viewId) => {
             ['view-landing', 'view-dashboard', 'view-blog', 'view-article'].forEach(id => {
                 const el = document.getElementById(id);
@@ -246,12 +253,10 @@
         };
 
         window.navToDashboard = () => {
-            if (!window.appState || !window.appState.userName) {
-                 // Fallback si el estado está corrupto
-                 window.appState = { currentLevel: 1, levelAttempts: { 1: 0, 2: 0, 3: 0, 4: 0 }, userName: "Colega" };
-            }
-            // CORRECCION CLAVE: Usar ID correcto "user-welcome" (no header-user-welcome que no existe)
-            const welcomeEl = document.getElementById('user-welcome');
+            // Asegurarse de que appState existe
+            if (!window.appState) window.appState = { currentLevel: 1, levelAttempts: { 1: 0, 2: 0, 3: 0, 4: 0 }, userName: "Colega" };
+            
+            const welcomeEl = document.getElementById('header-user-welcome');
             if(welcomeEl) welcomeEl.innerText = `Hola, ${window.appState.userName.split(' ')[0]}`;
             
             window.showView('view-dashboard');
@@ -262,14 +267,22 @@
         window.navToBlog = () => { window.showView('view-blog'); renderBlogList(); };
 
         window.checkAuthAndStart = () => {
-            // Siempre mostrar modal si no hay usuario real autenticado, 
-            // pero permitir paso directo si ya hay nombre local Y el usuario no quiere conectarse
-            // (Modificado para que el botón siempre funcione: si hay nombre local, va al dashboard)
-            if (window.currentUser || (window.appState && window.appState.userName !== "Colega")) {
+            // Forzar la existencia de appState si falló
+            if (!window.appState) window.appState = { currentLevel: 1, levelAttempts: { 1: 0, 2: 0, 3: 0, 4: 0 }, userName: "Colega" };
+
+            // Lógica simple: si ya tiene nombre (diferente a Colega) o hay usuario de Google, entra. Si no, pide registro.
+            if (window.currentUser || (window.appState.userName && window.appState.userName !== "Colega")) {
                 window.navToDashboard();
             } else {
-                document.getElementById('auth-modal').classList.remove('hidden');
-                document.getElementById('auth-modal').classList.add('flex');
+                const modal = document.getElementById('auth-modal');
+                if(modal) {
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                } else {
+                    // Fallback de emergencia si el modal no existe (no debería pasar)
+                    console.error("Modal no encontrado");
+                    window.navToDashboard();
+                }
             }
         };
 
@@ -297,20 +310,22 @@
         };
 
         function renderBlogList() {
-            const c = document.getElementById('blog-list-container'); c.innerHTML = '';
-            BLOG_POSTS.forEach(p => { c.innerHTML += `<div onclick="window.openArticle('${p.id}')" class="bg-white border border-gray-100 rounded-xl p-5 mb-4 shadow-sm hover:shadow-md cursor-pointer"><h3 class="font-bold text-gray-800">${p.title}</h3><p class="text-sm text-gray-500">${p.excerpt}</p></div>`; });
+            const c = document.getElementById('blog-list-container'); if(c) { c.innerHTML = ''; BLOG_POSTS.forEach(p => { c.innerHTML += `<div onclick="window.openArticle('${p.id}')" class="bg-white border border-gray-100 rounded-xl p-5 mb-4 shadow-sm hover:shadow-md cursor-pointer"><h3 class="font-bold text-gray-800">${p.title}</h3><p class="text-sm text-gray-500">${p.excerpt}</p></div>`; }); }
         }
 
         window.openArticle = (id) => {
             const p = BLOG_POSTS.find(x => x.id === id);
             if(!p) return;
             window.showView('view-article');
-            document.getElementById('article-content-container').innerHTML = `<h1 class="text-2xl font-bold mb-4">${p.title}</h1><div class="prose">${p.content}</div>`;
+            const content = document.getElementById('article-content-container');
+            if(content) content.innerHTML = `<h1 class="text-2xl font-bold mb-4">${p.title}</h1><div class="prose">${p.content}</div>`;
         };
 
         function renderDashboard() {
             const container = document.getElementById('levels-container');
             const rewards = document.getElementById('rewards-section');
+            if(!container || !rewards) return;
+            
             container.innerHTML = '';
             
             levelsData.forEach(level => {
@@ -351,7 +366,7 @@
             }
         }
 
-        // 6. QUIZ LOGIC
+        // 6. QUIZ LOGIC (Simplificado para robustez)
         window.startLevel = (levelId) => {
             activeLevelId = levelId;
             currentQuizQuestions = levelsData.find(l => l.id === levelId).questions;
