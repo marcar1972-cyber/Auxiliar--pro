@@ -3,12 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- SEO OPTIMIZADO -->
     <title>Auxiliar Pro | Preparación Examen 2026</title>
-    <meta name="description" content="Plataforma de estudio para el examen de competencia de Auxiliar de Farmacia en Chile. Requisitos SEREMI, Decreto 466, cálculo de dosis y simulador gratuito.">
-    <meta name="keywords" content="auxiliar de farmacia, seremi salud, decreto 466, as digital, examen competencia farmacia, curso farmacia chile">
-    <meta name="author" content="Marcelo - Auxiliar Trainee">
+    <meta name="description" content="Plataforma de estudio para Auxiliares de Farmacia.">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
@@ -21,9 +17,6 @@
                     colors: {
                         'farmacia-green': '#00C853',
                         'farmacia-dark': '#0d1b2a',
-                        'metal-bronze': '#cd7f32',
-                        'metal-silver': '#9e9e9e',
-                        'metal-gold': '#ffd700',
                         'facebook-blue': '#1877F2', 
                     },
                     fontFamily: { sans: ['Inter', 'sans-serif'], heading: ['Roboto', 'sans-serif'] }
@@ -33,39 +26,23 @@
     </script>
     <style>
         body { font-family: 'Inter', sans-serif; }
-        .fade-in { animation: fadeIn 0.5s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .locked-level { filter: grayscale(100%); opacity: 0.6; pointer-events: none; }
-        .medal-shine { position: relative; overflow: hidden; }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         .medal-shine::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%); transform: skewX(-25deg); animation: shine 3s infinite; }
         @keyframes shine { 100% { left: 200%; } }
-        .library-unlocked { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
-        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #f1f1f1; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        
-        .prose h2 { font-size: 1.4rem; font-weight: 800; color: #111827; margin-top: 1.5em; margin-bottom: 0.5em; border-bottom: 2px solid #e5e7eb; padding-bottom: 0.3em; }
-        .prose h3 { font-size: 1.2rem; font-weight: 700; color: #0d1b2a; margin-top: 1.2em; margin-bottom: 0.5em; }
-        .prose p { margin-bottom: 1em; line-height: 1.7; color: #4B5563; text-align: justify; }
-        .prose ul, .prose ol { padding-left: 1.2em; margin-bottom: 1em; }
-        .prose ul { list-style-type: disc; }
-        .prose ol { list-style-type: decimal; }
-        .prose li { margin-bottom: 0.5em; color: #4B5563; }
-        .prose strong { color: #111827; font-weight: 700; }
-        .prose a { color: #00C853; text-decoration: underline; cursor: pointer; font-weight: 600; }
-        .prose .highlight { background-color: #ecfdf5; padding: 2px 5px; border-radius: 4px; color: #065f46; font-weight: 600; }
+        .prose h2 { font-size: 1.4rem; font-weight: 800; color: #111827; margin-top: 1em; margin-bottom: 0.5em; }
+        .prose ul { list-style-type: disc; padding-left: 1.2em; }
+        .prose p { margin-bottom: 0.8em; line-height: 1.6; color: #4B5563; }
+        .prose a { color: #00C853; text-decoration: underline; cursor: pointer; }
     </style>
 </head>
 
 <body class="bg-gray-100 text-gray-800 antialiased min-h-screen flex flex-col items-center justify-center">
 
     <div class="w-full max-w-md bg-white h-screen md:h-[90vh] md:rounded-3xl md:shadow-2xl overflow-hidden flex flex-col relative">
-
-        <!-- LOADING OVERLAY -->
-        <div id="loading-overlay" class="absolute inset-0 bg-white/95 z-[60] flex flex-col items-center justify-center hidden">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-farmacia-green mb-4"></div>
-            <p class="text-sm text-gray-500 animate-pulse">Sincronizando...</p>
-        </div>
 
         <!-- VISTA 1: LANDING -->
         <div id="view-landing" class="flex-1 flex flex-col fade-in overflow-y-auto relative z-10">
@@ -75,109 +52,54 @@
                     <span class="font-heading font-bold text-xl tracking-tight text-gray-900">Auxiliar<span class="text-farmacia-green">Pro</span></span>
                 </div>
                 <div class="flex items-center gap-3">
-                    <button onclick="navToBlog()" class="text-xs font-bold text-gray-500 hover:text-farmacia-green uppercase tracking-wide">Blog</button>
-                    <button onclick="checkAuthAndStart()" class="bg-farmacia-green hover:bg-green-600 text-white font-semibold py-1.5 px-4 rounded-full transition-all shadow-md text-xs">Entrar</button>
+                    <button onclick="window.navToBlog()" class="text-xs font-bold text-gray-500 hover:text-farmacia-green uppercase tracking-wide">Blog</button>
+                    <button onclick="window.checkAuthAndStart()" class="bg-farmacia-green hover:bg-green-600 text-white font-semibold py-1.5 px-4 rounded-full transition-all shadow-md text-xs">Entrar</button>
                 </div>
             </header>
 
-            <main class="flex-1 flex flex-col items-center text-center px-6 mt-12 pb-10">
-                <!-- Badge Correcto -->
+            <main class="flex-1 flex flex-col items-center text-center px-6 mt-10 pb-10">
                 <div class="inline-flex items-center gap-2 bg-green-100 border border-green-200 text-green-800 text-xs font-bold px-3 py-1 rounded-full mb-6 uppercase tracking-wide">
                     <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> PREPARACIÓN 2026
                 </div>
 
                 <h1 class="font-heading text-4xl font-extrabold text-gray-900 leading-tight mb-4">Prepárate para tu examen de <br><span class="text-farmacia-green">Auxiliar de Farmacia</span></h1>
                 
-                <!-- Texto Correcto -->
-                <p class="text-gray-500 text-lg mb-10 leading-relaxed max-w-xs">
+                <p class="text-gray-500 text-lg mb-8 leading-relaxed max-w-xs">
                     Plataforma de estudio independiente. Practica, aprueba niveles y logra tu meta.
                 </p>
 
                 <div class="w-full space-y-4 mb-12">
-                    <button onclick="checkAuthAndStart()" class="w-full group bg-farmacia-dark hover:bg-slate-900 text-white text-lg font-semibold py-4 px-8 rounded-lg shadow-xl hover:shadow-2xl transition-all flex items-center justify-center gap-3 cursor-pointer transform hover:-translate-y-1">
+                    <button onclick="window.checkAuthAndStart()" class="w-full group bg-farmacia-dark hover:bg-slate-900 text-white text-lg font-semibold py-4 px-8 rounded-lg shadow-xl hover:shadow-2xl transition-all flex items-center justify-center gap-3 transform hover:-translate-y-1">
                         Comenzar Ahora 
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                     </button>
                     
-                    <button onclick="navToBlog()" class="w-full bg-white border border-gray-200 hover:border-farmacia-green text-gray-600 hover:text-farmacia-green font-bold py-3 px-8 rounded-lg transition-all flex items-center justify-center gap-2">
+                    <button onclick="window.navToBlog()" class="w-full bg-white border border-gray-200 hover:border-farmacia-green text-gray-600 hover:text-farmacia-green font-bold py-3 px-8 rounded-lg transition-all flex items-center justify-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
                         Leer Guías y Artículos
                     </button>
                 </div>
 
-                <div class="bg-gray-50 rounded-2xl p-6 mb-10 text-left border border-gray-200 relative overflow-hidden">
-                    <div class="flex items-center gap-3 mb-3">
-                        <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 font-bold text-xl">M</div>
-                        <div>
-                            <h3 class="font-bold text-gray-900 text-sm">De un colega para ti</h3>
-                            <p class="text-xs text-gray-500">Marcelo, Auxiliar Trainee</p>
-                        </div>
-                    </div>
-                    <p class="text-sm text-gray-600 leading-relaxed relative z-10 italic">
-                        "Esta web es mi cuaderno de estudio. Aquí encontrarás lo que estoy aprendiendo para el examen de 2026. ¡Vamos por ese logro juntos!"
-                    </p>
-                </div>
-                
-                <div class="w-full mb-12 text-left">
-                    <h3 class="text-center text-xl font-bold text-gray-800 mb-6">Preguntas Frecuentes</h3>
-                    <div class="space-y-4">
-                        <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-                            <h4 class="font-bold text-farmacia-dark text-sm mb-2">¿Cuándo son las fechas del examen?</h4>
-                            <p class="text-xs text-gray-600">No hay calendario fijo en la RM. Es sistema de "Ventanilla Abierta": tú subes los papeles y, tras la revisión, te asignan fecha (a veces muy pronto).</p>
-                        </div>
-                        <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
-                            <h4 class="font-bold text-farmacia-dark text-sm mb-2">¿Cómo me inscribo?</h4>
-                            <p class="text-xs text-gray-600">Todo el trámite es online en <a href="https://asdigital.minsal.cl" target="_blank" class="text-farmacia-green underline">asdigital.minsal.cl</a> usando tu Clave Única.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <footer class="text-center border-t border-gray-200 pt-8 pb-4 w-full">
+                <!-- Footer -->
+                <footer class="text-center border-t border-gray-200 pt-8 pb-4 w-full mt-auto">
                     <p class="text-xs text-gray-400 mb-4">© 2025 AuxiliarPro. Hecho con ❤️ en Chile.</p>
                     <div class="flex justify-center gap-4 text-[10px] text-gray-500 uppercase font-semibold tracking-wide mb-6">
-                        <span onclick="openLegal('terms')" class="hover:text-farmacia-green transition-colors cursor-pointer">Términos</span>
-                        <span onclick="openLegal('privacy')" class="hover:text-farmacia-green transition-colors cursor-pointer">Privacidad</span>
-                        <span onclick="openLegal('disclaimer')" class="hover:text-farmacia-green transition-colors cursor-pointer">Descargo</span>
+                        <span onclick="window.openLegal('terms')" class="hover:text-farmacia-green transition-colors cursor-pointer">Términos</span>
+                        <span onclick="window.openLegal('privacy')" class="hover:text-farmacia-green transition-colors cursor-pointer">Privacidad</span>
+                        <span onclick="window.openLegal('disclaimer')" class="hover:text-farmacia-green transition-colors cursor-pointer">Descargo</span>
                     </div>
                 </footer>
             </main>
         </div>
 
-        <!-- VISTA 2: BLOG (LISTADO) -->
-        <div id="view-blog" class="hidden flex-1 flex flex-col bg-white h-full overflow-hidden relative z-10">
-            <header class="bg-white shadow-sm py-4 px-6 flex justify-between items-center sticky top-0 z-10 border-b border-gray-100">
-                <div class="flex items-center gap-3">
-                    <button onclick="navToLanding()" class="text-gray-500 hover:text-farmacia-dark p-1 rounded-md hover:bg-gray-100 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-                    </button>
-                    <span class="font-heading font-bold text-lg text-gray-900">Centro de Recursos</span>
-                </div>
-            </header>
-            <main class="flex-1 p-6 overflow-y-auto bg-gray-50" id="blog-list-container">
-                <!-- Se llena dinámicamente con JS -->
-            </main>
-        </div>
-
-        <!-- VISTA 3: ARTÍCULO (LECTURA) -->
-        <div id="view-article" class="hidden flex-1 flex flex-col bg-white h-full overflow-hidden relative z-20">
-             <header class="bg-white shadow-sm py-4 px-6 flex justify-between items-center sticky top-0 z-10 border-b border-gray-100">
-                <button onclick="navToBlog()" class="flex items-center gap-2 text-sm text-gray-600 hover:text-farmacia-dark font-medium">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-                    Volver al listado
-                </button>
-                <span class="text-xs font-bold text-farmacia-green uppercase tracking-wider bg-green-50 px-2 py-1 rounded">Blog</span>
-            </header>
-            <main class="flex-1 p-6 overflow-y-auto prose max-w-none" id="article-content-container"></main>
-        </div>
-
-        <!-- VISTA 4: DASHBOARD -->
+        <!-- VISTA 2: DASHBOARD -->
         <div id="view-dashboard" class="hidden flex-1 flex flex-col bg-slate-50 h-full overflow-hidden relative z-10">
             <header class="bg-white shadow-sm py-4 px-6 flex justify-between items-center sticky top-0 z-10">
                 <div class="flex flex-col">
                     <span class="font-heading font-bold text-gray-700">Panel de Estudio</span>
                     <span class="text-xs text-gray-400" id="header-user-welcome">Hola, Colega</span>
                 </div>
-                <button onclick="logout()" class="text-sm text-gray-500 hover:text-farmacia-dark font-medium flex items-center gap-1">
+                <button onclick="window.logout()" class="text-sm text-gray-500 hover:text-red-500 font-medium flex items-center gap-1">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg> Salir
                 </button>
             </header>
@@ -187,7 +109,6 @@
                     <div class="w-full bg-gray-200 rounded-full h-2.5 mb-2"><div class="bg-farmacia-green h-2.5 rounded-full transition-all duration-1000" id="progress-bar" style="width: 5%"></div></div>
                     <div class="flex justify-between text-xs text-gray-400 font-medium">
                         <span id="header-medal-status">Rango: Novato</span>
-                        <!-- Cambio: Certificado por Meta 2026 -->
                         <span>Meta 2026</span>
                     </div>
                 </div>
@@ -196,290 +117,385 @@
             </main>
         </div>
 
-        <!-- MODAL LOGIN / REGISTRO -->
+        <!-- VISTA 3: BLOG LIST -->
+        <div id="view-blog" class="hidden flex-1 flex flex-col bg-white h-full overflow-hidden relative z-10">
+            <header class="bg-white shadow-sm py-4 px-6 flex justify-between items-center sticky top-0 z-10 border-b border-gray-100">
+                <div class="flex items-center gap-3">
+                    <button onclick="window.navToLanding()" class="text-gray-500 hover:text-farmacia-dark p-1 rounded-md hover:bg-gray-100 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg></button>
+                    <span class="font-heading font-bold text-lg text-gray-900">Centro de Recursos</span>
+                </div>
+            </header>
+            <main class="flex-1 p-6 overflow-y-auto bg-gray-50" id="blog-list-container"></main>
+        </div>
+
+        <!-- VISTA 4: ARTÍCULO -->
+        <div id="view-article" class="hidden flex-1 flex flex-col bg-white h-full overflow-hidden relative z-20">
+             <header class="bg-white shadow-sm py-4 px-6 flex justify-between items-center sticky top-0 z-10 border-b border-gray-100">
+                <button onclick="window.navToBlog()" class="flex items-center gap-2 text-sm text-gray-600 hover:text-farmacia-dark font-medium">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Volver
+                </button>
+                <span class="text-xs font-bold text-farmacia-green uppercase tracking-wider bg-green-50 px-2 py-1 rounded">Blog</span>
+            </header>
+            <main class="flex-1 p-6 overflow-y-auto prose max-w-none" id="article-content-container"></main>
+        </div>
+
+        <!-- MODAL LOGIN -->
         <div id="auth-modal" class="absolute inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
             <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden p-6 animate-bounce-in">
                 <div class="text-center mb-6">
                     <h2 class="text-2xl font-bold text-gray-900">Bienvenido</h2>
                     <p class="text-sm text-gray-500">Elige cómo quieres guardar tu progreso.</p>
                 </div>
-                
-                <!-- BOTÓN GOOGLE REAL -->
-                <button onclick="handleGoogleLogin()" class="w-full bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-bold py-3 rounded-lg transition-colors flex justify-center items-center gap-3 mb-4 shadow-sm">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-                    Continuar con Google
+                <button onclick="window.handleGoogleLogin()" class="w-full bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-bold py-3 rounded-lg transition-colors flex justify-center items-center gap-3 mb-4 shadow-sm">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg> Continuar con Google
                 </button>
-
-                <div class="relative flex py-2 items-center mb-4">
-                    <div class="flex-grow border-t border-gray-300"></div>
-                    <span class="flex-shrink-0 mx-4 text-gray-400 text-xs uppercase">O solo en este equipo</span>
-                    <div class="flex-grow border-t border-gray-300"></div>
-                </div>
-                
-                <!-- FORM MANUAL -->
-                <form onsubmit="handleRegister(event)" class="space-y-4">
-                    <div>
-                        <input type="text" id="input-name" placeholder="Tu Nombre o Pseudónimo" class="w-full p-3 rounded-lg border border-gray-300 focus:border-farmacia-green focus:ring-1 outline-none text-center font-medium">
-                    </div>
-                    <button type="submit" class="w-full bg-farmacia-dark hover:bg-slate-900 text-white font-bold py-3 rounded-lg transition-colors">
-                        Entrar (Modo Local)
-                    </button>
+                <div class="relative flex py-2 items-center mb-4"><div class="flex-grow border-t border-gray-300"></div><span class="flex-shrink-0 mx-4 text-gray-400 text-xs uppercase">O solo en este equipo</span><div class="flex-grow border-t border-gray-300"></div></div>
+                <form onsubmit="window.handleRegister(event)" class="space-y-4">
+                    <div><input type="text" id="input-name" placeholder="Tu Nombre o Pseudónimo" class="w-full p-3 rounded-lg border border-gray-300 focus:border-farmacia-green focus:ring-1 outline-none text-center font-medium"></div>
+                    <button type="submit" class="w-full bg-farmacia-dark hover:bg-slate-900 text-white font-bold py-3 rounded-lg transition-colors">Entrar (Modo Local)</button>
                 </form>
             </div>
         </div>
 
-        <!-- OTROS MODALES -->
+        <!-- MODAL LEGAL (RESTAURADO) -->
         <div id="legal-modal" class="absolute inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
             <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden p-6 relative max-h-[80vh] flex flex-col">
                 <button onclick="document.getElementById('legal-modal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-                <h2 id="legal-title" class="text-xl font-bold text-gray-900 mb-4 shrink-0">Términos Legales</h2>
+                <h2 id="legal-title" class="text-xl font-bold text-gray-900 mb-4 shrink-0">Términos</h2>
                 <div id="legal-content" class="overflow-y-auto text-sm text-gray-600 space-y-3 pr-2 text-justify"></div>
                 <button onclick="document.getElementById('legal-modal').classList.add('hidden')" class="mt-4 w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2 px-4 rounded-lg transition-colors shrink-0">Entendido</button>
             </div>
         </div>
 
+        <!-- OTROS MODALES -->
         <div id="forum-modal" class="absolute inset-0 z-50 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4">
             <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden p-6 relative">
                 <button onclick="document.getElementById('forum-modal').classList.add('hidden')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-                <div class="text-center mb-6"><div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-purple-600"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div><h2 class="text-xl font-bold text-gray-900">Comunidad</h2><p class="text-sm text-gray-500">Únete a los grupos.</p></div>
+                <div class="text-center mb-6"><h2 class="text-xl font-bold text-gray-900">Comunidad</h2><p class="text-sm text-gray-500">Únete a los grupos.</p></div>
                 <div class="space-y-3">
-                    <a href="https://chat.whatsapp.com/IPvHmnNGWYmH61FrdV56g1" target="_blank" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-lg transition-colors flex justify-center items-center gap-2"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> WhatsApp</a>
-                    <a href="https://www.facebook.com/share/g/1KFQPWG1YN/" target="_blank" class="w-full bg-facebook-blue hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition-colors flex justify-center items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg> Facebook</a>
+                    <a href="https://chat.whatsapp.com/IPvHmnNGWYmH61FrdV56g1" target="_blank" class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-lg flex justify-center items-center gap-2">WhatsApp</a>
+                    <a href="https://www.facebook.com/share/g/1KFQPWG1YN/" target="_blank" class="w-full bg-facebook-blue hover:bg-blue-700 text-white font-bold py-3 rounded-lg flex justify-center items-center gap-2">Facebook</a>
                 </div>
             </div>
         </div>
 
         <div id="quiz-modal" class="absolute inset-0 z-50 bg-white md:rounded-3xl hidden flex-col">
-            <div class="bg-farmacia-dark p-6 text-white flex justify-between items-center shrink-0"><div><h3 class="font-bold text-xl" id="quiz-title">Evaluación</h3><p class="text-blue-200 text-sm" id="quiz-subtitle">Modo Examen</p></div><button onclick="closeQuiz()" class="text-white/70 hover:text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>
-            <div class="flex-1 overflow-y-auto p-6"><div id="quiz-content-active"><div id="quiz-question-container"></div></div><div id="quiz-content-result" class="hidden text-center mt-10"><div id="result-icon" class="mb-4 flex justify-center"></div><h2 id="result-title" class="text-2xl font-bold mb-2 text-gray-900"></h2><p id="result-message" class="text-gray-600 mb-6"></p><div class="bg-gray-50 rounded-lg p-4 mb-6 border border-gray-200"><p class="text-sm text-gray-500 uppercase font-bold">Tu Puntaje</p><p class="text-3xl font-bold text-farmacia-dark" id="result-score">0/0</p></div><div class="flex flex-col gap-3"><button id="btn-review" onclick="startReviewMode()" class="w-full border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 font-bold py-3 rounded-lg">Ver Respuestas Correctas</button><button id="btn-retry" onclick="retryLevel()" class="w-full bg-farmacia-green hover:bg-green-600 text-white font-bold py-3 rounded-lg">Intentar de Nuevo</button><button onclick="closeQuiz()" class="text-sm text-gray-400 mt-2 hover:text-gray-600 underline">Salir al Panel</button></div></div></div>
-            <div id="quiz-footer" class="p-4 border-t border-gray-100 bg-gray-50 shrink-0 flex justify-between items-center"><span class="text-xs text-gray-500 font-bold">PREGUNTA <span id="current-q-num">1</span>/<span id="total-q-num">3</span></span><button id="next-btn" onclick="nextQuestion()" class="bg-farmacia-dark hover:bg-slate-700 text-white px-6 py-2 rounded-lg font-medium">Siguiente</button></div>
+            <div class="bg-farmacia-dark p-6 text-white flex justify-between items-center shrink-0"><div><h3 class="font-bold text-xl" id="quiz-title">Evaluación</h3></div><button onclick="window.closeQuiz()" class="text-white/70 hover:text-white"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>
+            <div class="flex-1 overflow-y-auto p-6"><div id="quiz-content-active"><div id="quiz-question-container"></div></div><div id="quiz-content-result" class="hidden text-center mt-10"><div id="result-icon" class="mb-4 flex justify-center"></div><h2 id="result-title" class="text-2xl font-bold mb-2"></h2><p id="result-message" class="text-gray-600 mb-6"></p><div class="bg-gray-50 rounded-lg p-4 mb-6"><p class="text-sm font-bold">Tu Puntaje</p><p class="text-3xl font-bold text-farmacia-dark" id="result-score">0/0</p></div><div class="flex flex-col gap-3"><button id="btn-review" onclick="window.startReviewMode()" class="w-full border border-gray-300 text-gray-700 font-bold py-3 rounded-lg">Ver Respuestas</button><button id="btn-retry" onclick="window.retryLevel()" class="w-full bg-farmacia-green text-white font-bold py-3 rounded-lg">Reintentar</button><button onclick="window.closeQuiz()" class="text-sm text-gray-400 underline">Salir</button></div></div></div>
+            <div id="quiz-footer" class="p-4 border-t border-gray-100 bg-gray-50 shrink-0 flex justify-between items-center"><span class="text-xs text-gray-500 font-bold">PREGUNTA <span id="current-q-num">1</span></span><button id="next-btn" onclick="window.nextQuestion()" class="bg-farmacia-dark text-white px-6 py-2 rounded-lg">Siguiente</button></div>
         </div>
     </div>
 
-    <!-- MÓDULO FIREBASE -->
+    <!-- SCRIPT PRINCIPAL -->
+    <script>
+        // 1. CONFIGURACIÓN Y DATOS
+        const LEGAL_TEXTS = {
+            terms: `<p class="font-bold mb-2">1. Naturaleza del Servicio</p><p class="mb-4">Auxiliar Pro es una iniciativa independiente...</p>`,
+            privacy: `<p class="font-bold mb-2">1. Datos Recopilados</p><p>Esta aplicación solo solicita un nombre...</p>`,
+            disclaimer: `<p class="font-bold mb-2 text-red-500">DESCARGO</p><p>Esta aplicación web es un proyecto personal...</p>`
+        };
+        
+        const BLOG_POSTS = [
+            { id: 'guia-maestra', title: "Guía Completa Auxiliar de Farmacia", excerpt: "Requisitos y examen.", content: `<h2>Tu Camino a la Meta</h2><p>Información clave sobre el proceso.</p>` },
+            { id: 'decreto-466-detalle', title: "Decreto 466", excerpt: "Análisis clave.", content: `<h2>Decreto 466</h2><p>Reglamento fundamental.</p>` },
+            { id: 'tutorial-as-digital', title: "Tutorial AS Digital", excerpt: "Paso a paso.", content: `<h2>Trámite Online</h2><p>Cómo subir tus documentos.</p>` },
+            { id: 'fechas-examen', title: "¿Cuándo es el examen?", excerpt: "La verdad sobre las fechas.", content: `<h2>Ventanilla Abierta</h2><p>No hay calendario fijo.</p>` }
+        ];
+
+        const metalConfig = { "Bronce": "bg-gradient-to-br from-amber-600 to-amber-800 text-white shadow-amber-200 border-amber-600", "Plata": "bg-gradient-to-br from-gray-400 to-slate-500 text-white shadow-gray-300 border-gray-400", "Oro": "bg-gradient-to-br from-yellow-400 to-yellow-600 text-white shadow-yellow-200 border-yellow-500", "Platino": "bg-gradient-to-br from-cyan-400 to-blue-600 text-white shadow-blue-200 border-blue-400" };
+        
+        const levelsData = [
+             { id: 1, title: "Conceptos Básicos", desc: "Diagnóstico.", metalName: "Bronce", questions: [{ q: "¿Qué significa D.C.I.?", options: ["Denominación Común Internacional", "Dosis"], correct: 0 }, { q: "Temp. Refrigerador:", options: ["2-8°C", "0-5°C"], correct: 0 }] },
+             { id: 2, title: "Legislación", desc: "Decretos.", metalName: "Plata", questions: [{ q: "Decreto Psicotrópicos:", options: ["404", "466"], correct: 0 }] },
+             { id: 3, title: "Farmacología", desc: "Cálculos.", metalName: "Oro", questions: [{ q: "Cálculo simple...", options: ["1", "2"], correct: 0 }] },
+             { id: 4, title: "Simulacro", desc: "Final.", metalName: "Platino", questions: [{ q: "Pregunta final...", options: ["A", "B"], correct: 0 }] }
+        ];
+
+        // 2. ESTADO GLOBAL
+        window.appState = { currentLevel: 1, levelAttempts: { 1: 0, 2: 0, 3: 0, 4: 0 }, userName: "Colega" };
+        window.currentUser = null;
+        let activeLevelId=0, currentQuizQuestions=[], userAnswers=[], currentQuestionIndex=0, isReviewMode=false;
+
+        // Cargar LocalStorage
+        const saved = localStorage.getItem('auxiliarProLocalData');
+        if(saved) window.appState = JSON.parse(saved);
+
+        // 3. FUNCIONES DE NAVEGACIÓN (MAESTRA)
+        window.showView = (viewId) => {
+            ['view-landing', 'view-dashboard', 'view-blog', 'view-article'].forEach(id => {
+                const el = document.getElementById(id);
+                if(el) el.classList.add('hidden');
+            });
+            const target = document.getElementById(viewId);
+            if(target) {
+                target.classList.remove('hidden');
+                target.classList.add('fade-in');
+            }
+            window.scrollTo(0,0);
+        };
+
+        window.navToDashboard = () => {
+            document.getElementById('user-welcome').innerText = `Hola, ${window.appState.userName.split(' ')[0]}`;
+            document.getElementById('header-user-welcome').innerText = `Hola, ${window.appState.userName.split(' ')[0]}`;
+            window.showView('view-dashboard');
+            renderDashboard();
+        };
+
+        window.navToLanding = () => { window.showView('view-landing'); };
+        window.navToBlog = () => { window.showView('view-blog'); renderBlogList(); };
+
+        // 4. AUTH & GOOGLE
+        window.checkAuthAndStart = () => {
+            if (window.currentUser || (window.appState.userName !== "Colega")) {
+                window.navToDashboard();
+            } else {
+                document.getElementById('auth-modal').classList.remove('hidden');
+                document.getElementById('auth-modal').classList.add('flex');
+            }
+        };
+
+        window.handleRegister = (e) => {
+            e.preventDefault();
+            const name = document.getElementById('input-name').value || "Estudiante";
+            window.appState.userName = name;
+            localStorage.setItem('auxiliarProLocalData', JSON.stringify(window.appState));
+            document.getElementById('auth-modal').classList.add('hidden');
+            document.getElementById('auth-modal').classList.remove('flex');
+            window.navToDashboard();
+        };
+
+        // 5. INTERFAZ
+        window.openLegal = (type) => {
+            document.getElementById('legal-title').innerText = type === 'terms' ? "Términos" : (type === 'privacy' ? "Privacidad" : "Descargo");
+            document.getElementById('legal-content').innerHTML = LEGAL_TEXTS[type];
+            document.getElementById('legal-modal').classList.remove('hidden');
+            document.getElementById('legal-modal').classList.add('flex');
+        };
+
+        window.openForum = () => {
+            document.getElementById('forum-modal').classList.remove('hidden');
+            document.getElementById('forum-modal').classList.add('flex');
+        };
+
+        function renderBlogList() {
+            const c = document.getElementById('blog-list-container'); c.innerHTML = '';
+            BLOG_POSTS.forEach(p => { c.innerHTML += `<div onclick="window.openArticle('${p.id}')" class="bg-white border border-gray-100 rounded-xl p-5 mb-4 cursor-pointer"><h3 class="font-bold text-gray-800">${p.title}</h3><p class="text-sm text-gray-500">${p.excerpt}</p></div>`; });
+        }
+
+        window.openArticle = (id) => {
+            const p = BLOG_POSTS.find(x => x.id === id);
+            if(!p) return;
+            window.showView('view-article');
+            document.getElementById('article-content-container').innerHTML = `<h1 class="text-2xl font-bold mb-4">${p.title}</h1><div class="prose">${p.content}</div>`;
+        };
+
+        function renderDashboard() {
+            const container = document.getElementById('levels-container');
+            const rewards = document.getElementById('rewards-section');
+            container.innerHTML = '';
+            
+            // Niveles
+            levelsData.forEach(level => {
+                const isLocked = level.id > window.appState.currentLevel;
+                const isCompleted = level.id < window.appState.currentLevel;
+                let status = isCompleted ? "¡LOGRADO!" : (isLocked ? "BLOQUEADO" : "DISPONIBLE");
+                let color = isCompleted ? "green" : (isLocked ? "gray" : "blue");
+                
+                let onclick = isLocked ? "" : `onclick="window.startLevel(${level.id})"`;
+                let opacity = isLocked ? "opacity-60" : "";
+                
+                container.innerHTML += `
+                <div class="bg-white p-5 rounded-xl shadow-sm border border-${color}-200 mb-3 ${opacity}" ${onclick}>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-${color}-100 flex items-center justify-center text-${color}-600 font-bold">${isCompleted ? '✓' : level.id}</div>
+                        <div>
+                            <div class="text-xs font-bold text-${color}-600 uppercase">${status}</div>
+                            <h3 class="font-bold text-gray-800">${level.title}</h3>
+                        </div>
+                    </div>
+                </div>`;
+            });
+
+            // Recompensas (Biblioteca)
+            if (window.appState.currentLevel > 1) {
+                rewards.innerHTML = `
+                <div class="bg-blue-50 p-5 rounded-xl border border-blue-200">
+                    <h3 class="font-bold text-blue-800 mb-3">Biblioteca Técnica</h3>
+                    <div class="space-y-2">
+                         <a href="./decreto_466.pdf" target="_blank" class="block bg-white p-3 rounded border text-sm text-blue-600 font-medium">📜 Decreto 466</a>
+                         <a href="./guia_posologia.pdf" target="_blank" class="block bg-white p-3 rounded border text-sm text-blue-600 font-medium">💊 Guía Posología</a>
+                         <a href="./modelo_examen.pdf" target="_blank" class="block bg-white p-3 rounded border text-sm text-blue-600 font-medium">📝 Modelo Examen</a>
+                    </div>
+                    
+                    <h3 class="font-bold text-blue-800 mt-6 mb-3">Comunidad</h3>
+                    <button onclick="window.openForum()" class="w-full bg-blue-600 text-white font-bold py-2 rounded-lg">Ver Grupos</button>
+                </div>`;
+            } else {
+                rewards.innerHTML = `<div class="bg-gray-100 p-5 rounded-xl text-center text-gray-500 text-sm">🔒 Aprueba el Nivel 1 para desbloquear Biblioteca y Foros.</div>`;
+            }
+        }
+
+        // 6. QUIZ LOGIC
+        window.startLevel = (levelId) => {
+            activeLevelId = levelId;
+            currentQuizQuestions = levelsData.find(l => l.id === levelId).questions;
+            currentQuestionIndex = 0;
+            userAnswers = new Array(currentQuizQuestions.length).fill(null);
+            isReviewMode = false;
+            document.getElementById('quiz-modal').classList.remove('hidden');
+            document.getElementById('quiz-modal').classList.add('flex');
+            document.getElementById('quiz-content-active').classList.remove('hidden');
+            document.getElementById('quiz-footer').classList.remove('hidden');
+            document.getElementById('quiz-content-result').classList.add('hidden');
+            showQuestion();
+        };
+
+        window.closeQuiz = () => {
+            document.getElementById('quiz-modal').classList.add('hidden');
+            document.getElementById('quiz-modal').classList.remove('flex');
+            renderDashboard();
+        };
+
+        function showQuestion() {
+            const q = currentQuizQuestions[currentQuestionIndex];
+            const container = document.getElementById('quiz-question-container');
+            container.innerHTML = `<h4 class="text-lg font-bold mb-4">${q.q}</h4>`;
+            
+            q.options.forEach((opt, idx) => {
+                let cls = "w-full text-left p-4 rounded-lg border mb-2 ";
+                if (isReviewMode) {
+                    if (idx === q.correct) cls += "bg-green-100 border-green-500 text-green-800 font-bold";
+                    else if (userAnswers[currentQuestionIndex] === idx) cls += "bg-red-100 border-red-500 text-red-800";
+                    else cls += "opacity-50";
+                } else {
+                    cls += userAnswers[currentQuestionIndex] === idx ? "bg-blue-100 border-blue-500" : "bg-white hover:bg-gray-50";
+                }
+                container.innerHTML += `<button onclick="window.selectAnswer(${idx})" class="${cls}" ${isReviewMode ? 'disabled' : ''}>${opt}</button>`;
+            });
+            
+            const btn = document.getElementById('next-btn');
+            if (isReviewMode) {
+                btn.onclick = (currentQuestionIndex === currentQuizQuestions.length - 1) ? () => showResult(true) : () => { currentQuestionIndex++; showQuestion(); };
+                btn.innerText = (currentQuestionIndex === currentQuizQuestions.length - 1) ? "Volver" : "Siguiente";
+            } else {
+                btn.onclick = (currentQuestionIndex === currentQuizQuestions.length - 1) ? finishLevel : () => { currentQuestionIndex++; showQuestion(); };
+                btn.innerText = (currentQuestionIndex === currentQuizQuestions.length - 1) ? "Finalizar" : "Siguiente";
+            }
+            document.getElementById('current-q-num').innerText = currentQuestionIndex + 1;
+        }
+
+        window.selectAnswer = (idx) => {
+            userAnswers[currentQuestionIndex] = idx;
+            showQuestion();
+        };
+
+        function finishLevel() {
+            let score = 0;
+            userAnswers.forEach((ans, i) => { if(ans === currentQuizQuestions[i].correct) score++; });
+            const passed = score >= Math.ceil(currentQuizQuestions.length * 0.6); // 60% para aprobar
+            
+            if(passed && activeLevelId === window.appState.currentLevel) {
+                window.appState.currentLevel++;
+                localStorage.setItem('auxiliarProLocalData', JSON.stringify(window.appState));
+                if(window.saveCloudData) window.saveCloudData();
+            }
+            
+            showResult(false, score, passed);
+        }
+
+        function showResult(fromReview, scoreIn, passedIn) {
+            if(fromReview) {
+                document.getElementById('quiz-content-active').classList.add('hidden');
+                document.getElementById('quiz-content-result').classList.remove('hidden');
+                document.getElementById('quiz-footer').classList.add('hidden');
+                return;
+            }
+            
+            document.getElementById('quiz-content-active').classList.add('hidden');
+            document.getElementById('quiz-content-result').classList.remove('hidden');
+            document.getElementById('quiz-footer').classList.add('hidden');
+            
+            const title = document.getElementById('result-title');
+            const msg = document.getElementById('result-message');
+            const scoreEl = document.getElementById('result-score');
+            
+            scoreEl.innerText = `${scoreIn} / ${currentQuizQuestions.length}`;
+            
+            if (passedIn) {
+                title.innerText = "¡Aprobado!";
+                msg.innerText = "Has demostrado un buen dominio del tema.";
+                confetti({ particleCount: 150, spread: 60 });
+            } else {
+                title.innerText = "Reprobado";
+                msg.innerText = "Necesitas repasar más este contenido.";
+            }
+        }
+
+        window.startReviewMode = () => {
+            isReviewMode = true;
+            currentQuestionIndex = 0;
+            document.getElementById('quiz-content-result').classList.add('hidden');
+            document.getElementById('quiz-content-active').classList.remove('hidden');
+            document.getElementById('quiz-footer').classList.remove('hidden');
+            showQuestion();
+        };
+        
+        window.retryLevel = () => { window.startLevel(activeLevelId); };
+    </script>
+
+    <!-- FIREBASE MODULE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // LLAVES REALES
         const firebaseConfig = {
-            apiKey: "AIzaSyDNhuSBBhmmQSV0BHC8MOtLKgAUpvtfWfE",
-            authDomain: "auxiliar-pro.firebaseapp.com",
-            projectId: "auxiliar-pro",
-            storageBucket: "auxiliar-pro.firebasestorage.app",
-            messagingSenderId: "342196612566",
-            appId: "1:342196612566:web:c7f34365c4e10502e60877"
+          apiKey: "AIzaSyDNhuSBBhmmQSV0BHC8MOtLKgAUpvtfWfE",
+          authDomain: "auxiliar-pro.firebaseapp.com",
+          projectId: "auxiliar-pro",
+          storageBucket: "auxiliar-pro.firebasestorage.app",
+          messagingSenderId: "342196612566",
+          appId: "1:342196612566:web:c7f34365c4e10502e60877"
         };
 
-        let app, auth, db, googleProvider;
-        let isFirebaseReady = false;
-
         try {
-            app = initializeApp(firebaseConfig);
-            auth = getAuth(app);
-            db = getFirestore(app);
-            googleProvider = new GoogleAuthProvider();
-            isFirebaseReady = true;
-            
-            onAuthStateChanged(auth, async (user) => {
+            const app = initializeApp(firebaseConfig);
+            window.cloudAuth = getAuth(app);
+            window.cloudDb = getFirestore(app);
+            window.cloudProvider = new GoogleAuthProvider();
+            window.cloudSignInWithPopup = signInWithPopup;
+            window.isFirebaseReady = true;
+
+            onAuthStateChanged(window.cloudAuth, async (user) => {
                 if (user) {
                     window.currentUser = user;
                     window.appState.userName = user.displayName;
-                    await loadCloudData(user.uid);
+                    
+                    // Cargar nube
+                    const docSnap = await getDoc(doc(window.cloudDb, 'usuarios', user.uid));
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        if (data.currentLevel > window.appState.currentLevel) {
+                            window.appState.currentLevel = data.currentLevel;
+                        }
+                    }
+                    
                     window.updateUI();
-                    if(!document.getElementById('view-landing').classList.contains('hidden')) {
+                    if (!document.getElementById('view-landing').classList.contains('hidden')) {
                         window.navToDashboard();
                     }
                     document.getElementById('auth-modal').classList.add('hidden');
                     document.getElementById('auth-modal').classList.remove('flex');
-                } else {
-                    window.currentUser = null;
                 }
             });
-            console.log("Firebase OK");
         } catch (e) {
-            console.error("Error Firebase:", e);
+            console.log("Error Firebase", e);
         }
 
         window.handleGoogleLogin = async () => {
-            if (!isFirebaseReady) return alert("Error conexión");
-            try { await signInWithPopup(auth, googleProvider); } catch (error) { alert("Error: " + error.message); }
+            if (!window.isFirebaseReady) return alert("Error de conexión");
+            try { await window.cloudSignInWithPopup(window.cloudAuth, window.cloudProvider); } catch (e) { alert(e.message); }
         };
-
-        window.logout = async () => {
-            if (isFirebaseReady && auth) await signOut(auth);
-            localStorage.removeItem('auxiliarProLocalData');
-            window.location.reload();
-        };
-
-        window.saveCloudData = async () => {
-            if (isFirebaseReady && window.currentUser) {
-                try {
-                    await setDoc(doc(db, 'usuarios', window.currentUser.uid), {
-                        currentLevel: window.appState.currentLevel,
-                        levelAttempts: window.appState.levelAttempts,
-                        lastUpdate: new Date()
-                    }, { merge: true });
-                } catch(e) {}
-            }
-        };
-
-        async function loadCloudData(uid) {
-            try {
-                const docSnap = await getDoc(doc(db, 'usuarios', uid));
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    if(data.currentLevel > window.appState.currentLevel) {
-                        window.appState.currentLevel = data.currentLevel;
-                        window.appState.levelAttempts = data.levelAttempts || window.appState.levelAttempts;
-                        window.renderDashboard();
-                    }
-                }
-            } catch(e) {}
-        }
-    </script>
-
-    <!-- LÓGICA CORE -->
-    <script>
-        // 1. BLOG DATA
-        const BLOG_POSTS = [
-            { 
-                id: 'guia-maestra', 
-                title: "Guía Completa para ser Auxiliar de Farmacia", 
-                excerpt: "Todo lo que necesitas saber: requisitos, examen y trámites.", 
-                content: `
-                    <h2>Tu Camino a la Meta SEREMI</h2>
-                    <p>Convertirse en Auxiliar de Farmacia reconocido es un gran paso profesional. No solo te permite trabajar legalmente, sino que valida tus conocimientos técnicos.</p>
-                    <h3>1. Requisitos Básicos</h3>
-                    <ul>
-                        <li><span class="highlight">Licencia de Enseñanza Media</span> (Original o legalizada).</li>
-                        <li><span class="highlight">Experiencia Laboral:</span> Acreditar al menos 1 año de trabajo bajo supervisión de Q.F.</li>
-                    </ul>
-                    <h3>2. El Examen de Competencia</h3>
-                    <ul>
-                        <li><strong>Legislación:</strong> Decretos 466, 404/405.</li>
-                        <li><strong>Almacenamiento:</strong> Cadena de frío, FEFO/FIFO.</li>
-                        <li><strong>Dispensación:</strong> Tipos de recetas.</li>
-                    </ul>
-                ` 
-            },
-            { 
-                id: 'decreto-466-detalle', 
-                title: "¿Qué es el Decreto 466?", 
-                excerpt: "Análisis clave del reglamento.", 
-                content: `<h2>Decreto 466</h2><p>Reglamento fundamental de farmacias.</p>` 
-            },
-            { 
-                id: 'tutorial-as-digital', 
-                title: "Tutorial AS Digital", 
-                excerpt: "Paso a paso inscripción online.", 
-                content: `<h2>Trámite Online</h2><p>Cómo subir tus documentos.</p>` 
-            },
-             { 
-                id: 'fechas-examen', 
-                title: "¿Cuándo es el examen?", 
-                excerpt: "La verdad sobre las fechas.", 
-                content: `<h2>Ventanilla Abierta</h2><p>No hay calendario fijo. Tú inicias el proceso.</p>` 
-            }
-        ];
-
-        const LINKS_PDF = { 
-            decreto: "./decreto_466.pdf", 
-            decreto404: "./decreto_404.pdf", 
-            decreto405: "./decreto_405.pdf", 
-            ley: "./ley_20724.pdf",
-            posologia: "./guia_posologia.pdf",
-            examen: "./modelo_examen.pdf"
-        };
-        
-        const LEGAL_TEXTS = {
-            terms: `<p>Términos...</p>`, privacy: `<p>Privacidad...</p>`, disclaimer: `<p>Descargo...</p>`
-        };
-
-        function openLegal(type) { const m=document.getElementById('legal-modal'); document.getElementById('legal-title').innerText=type==='terms'?"Términos":"Privacidad"; m.classList.remove('hidden'); m.classList.add('flex'); }
-
-        // 2. ESTADO (Variable Global para evitar errores)
-        window.appState = { currentLevel: 1, levelAttempts: { 1: 0, 2: 0, 3: 0, 4: 0 }, userName: "Colega" };
-        window.currentUser = null;
-        let activeLevelId=0, currentQuizQuestions=[], userAnswers=[], currentQuestionIndex=0, isReviewMode=false;
-
-        const saved = localStorage.getItem('auxiliarProLocalData');
-        if(saved) window.appState = JSON.parse(saved);
-
-        window.checkAuthAndStart = () => {
-            if (window.currentUser || (window.appState.userName !== "Colega")) window.navToDashboard();
-            else { document.getElementById('auth-modal').classList.remove('hidden'); document.getElementById('auth-modal').classList.add('flex'); }
-        };
-        
-        window.handleRegister = (e) => { e.preventDefault(); const name=document.getElementById('input-name').value||"Estudiante"; window.appState.userName=name; localStorage.setItem('auxiliarProLocalData', JSON.stringify(window.appState)); document.getElementById('auth-modal').classList.add('hidden'); document.getElementById('auth-modal').classList.remove('flex'); window.navToDashboard(); };
-        
-        function openForum() { document.getElementById('forum-modal').classList.remove('hidden'); document.getElementById('forum-modal').classList.add('flex'); }
-        
-        window.navToBlog = () => { ['view-landing', 'view-dashboard', 'view-article'].forEach(id=>document.getElementById(id).classList.add('hidden')); document.getElementById('view-blog').classList.remove('hidden'); window.scrollTo(0,0); renderBlogList(); };
-        function renderBlogList() { const c=document.getElementById('blog-list-container'); c.innerHTML=''; BLOG_POSTS.forEach(p=>{c.innerHTML+=`<div onclick="openArticle('${p.id}')" class="bg-white border border-gray-100 rounded-xl p-5 mb-4 shadow-sm hover:shadow-md cursor-pointer"><h3 class="font-bold">${p.title}</h3><p class="text-sm text-gray-500">${p.excerpt}</p></div>`}); }
-        window.openArticle = (id) => { const p=BLOG_POSTS.find(x=>x.id===id); document.getElementById('view-blog').classList.add('hidden'); document.getElementById('view-article').classList.remove('hidden'); document.getElementById('article-content-container').innerHTML=`<h1 class="text-2xl font-bold mb-4">${p.title}</h1><div class="prose">${p.content}</div><button onclick="checkAuthAndStart()" class="mt-8 bg-green-600 text-white p-3 rounded w-full">Ir al Simulador</button>`; window.scrollTo(0,0); };
-        
-        window.navToDashboard = () => { window.updateUI(); ['view-landing', 'view-blog', 'view-article'].forEach(id=>document.getElementById(id).classList.add('hidden')); document.getElementById('view-dashboard').classList.remove('hidden'); document.getElementById('view-dashboard').classList.add('fade-in'); renderDashboard(); };
-        window.navToLanding = () => { document.getElementById('view-dashboard').classList.add('hidden'); document.getElementById('view-landing').classList.remove('hidden'); document.getElementById('view-landing').classList.add('fade-in'); };
-        window.updateUI = () => { document.getElementById('user-welcome').innerText = `Hola, ${window.appState.userName.split(' ')[0]}`; document.getElementById('header-user-welcome').innerText = `Hola, ${window.appState.userName.split(' ')[0]}`; };
-
-        const metalConfig = { "Bronce": "bg-gradient-to-br from-amber-600 to-amber-800 text-white shadow-amber-200 border-amber-600", "Plata": "bg-gradient-to-br from-gray-400 to-slate-500 text-white shadow-gray-300 border-gray-400", "Oro": "bg-gradient-to-br from-yellow-400 to-yellow-600 text-white shadow-yellow-200 border-yellow-500", "Platino": "bg-gradient-to-br from-cyan-400 to-blue-600 text-white shadow-blue-200 border-blue-400" };
-        const levelsData = [ { id: 1, title: "Conceptos Básicos", desc: "Diagnóstico.", metalName: "Bronce", questions: [ { q: "¿Qué significa D.C.I.?", options: ["Denominación Común Internacional", "Dosis"], correct: 0 }, { q: "Temp. Refrigerador:", options: ["2-8°C", "0-5°C"], correct: 0 } ] }, { id: 2, title: "Legislación", desc: "Decretos.", metalName: "Plata", questions: [ { q: "Decreto Psicotrópicos:", options: ["404", "466"], correct: 0 } ] }, { id: 3, title: "Farmacología", desc: "Cálculos.", metalName: "Oro", questions: [ { q: "Cálculo simple...", options: ["1", "2"], correct: 0 } ] }, { id: 4, title: "Simulacro", desc: "Final.", metalName: "Platino", questions: [ { q: "Pregunta final...", options: ["A", "B"], correct: 0 } ] } ]; 
-
-        function renderDashboard() {
-            const container = document.getElementById('levels-container');
-            const rewardsContainer = document.getElementById('rewards-section');
-            container.innerHTML = '';
-            const isUnlocked = window.appState.currentLevel > 1;
-            const progressPercent = Math.min(((window.appState.currentLevel - 1) / levelsData.length) * 100, 100); 
-            document.getElementById('progress-bar').style.width = Math.max(5, progressPercent) + "%";
-            document.getElementById('header-medal-status').innerText = `Rango: ${levelsData[Math.min(window.appState.currentLevel, levelsData.length)-1]?.metalName || 'Novato'}`;
-
-            levelsData.forEach((level) => {
-                const isLocked = level.id > window.appState.currentLevel;
-                const isCompleted = level.id < window.appState.currentLevel;
-                const attemptsUsed = window.appState.levelAttempts[level.id] || 0;
-                const maxAttempts = level.id === 1 ? 999 : 2;
-                const isFailedAndLocked = attemptsUsed >= maxAttempts && !isCompleted && !isLocked;
-
-                let cardClasses = "bg-white p-5 rounded-xl shadow-sm border flex items-center justify-between transition-all relative overflow-hidden ";
-                let iconClasses = "w-14 h-14 rounded-full flex items-center justify-center font-bold text-xl border-2 shadow-lg ";
-                let statusLabel = "", statusColorClass = "";
-
-                if (isCompleted) { cardClasses += "hover:shadow-md cursor-pointer border-green-200 bg-green-50/30"; iconClasses += metalConfig[level.metalName] + " medal-shine"; statusLabel = "¡LOGRADO!"; statusColorClass = "text-green-600 bg-green-100 border-green-200"; }
-                else if (isLocked) { cardClasses += "locked-level border-gray-100 bg-gray-50"; iconClasses += "bg-gray-200 text-gray-400 border-gray-300"; statusLabel = "POR APROBAR"; statusColorClass = "text-gray-400 bg-gray-100 border-gray-200"; }
-                else if (isFailedAndLocked) { cardClasses += "bg-red-50 border-red-200 cursor-not-allowed"; iconClasses += "bg-red-100 text-red-500 border-red-300"; statusLabel = "AGOTADO"; statusColorClass = "text-red-600 bg-red-100 border-red-200"; }
-                else { cardClasses += "hover:shadow-md cursor-pointer border-blue-200 hover:border-farmacia-green"; iconClasses += metalConfig[level.metalName] + " medal-shine"; statusLabel = "DISPONIBLE"; statusColorClass = "text-blue-600 bg-blue-100 border-blue-200"; }
-
-                const metalBadge = !isLocked ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider mb-1 inline-block border bg-gray-50 text-gray-600 border-gray-200">${level.metalName}</span>` : '';
-                const statusBadge = `<span class="text-[10px] font-bold px-2 py-1 rounded-md border ${statusColorClass} uppercase tracking-wider">${statusLabel}</span>`;
-                let attemptText = (!isLocked && !isCompleted && level.id > 1 && !isFailedAndLocked) ? `<span class="text-[10px] text-gray-400 block mt-1">Intentos: ${attemptsUsed}/${maxAttempts}</span>` : "";
-                let clickAction = "";
-                if (!isLocked && !isFailedAndLocked) clickAction = `startLevel(${level.id})`;
-                else if (isFailedAndLocked) clickAction = "alert('Has agotado tus intentos. Debes reiniciar.')";
-
-                container.innerHTML += `<div class="${cardClasses}" onclick="${clickAction}"><div class="flex items-center gap-4 relative z-10"><div class="${iconClasses}">${isCompleted ? '✓' : level.id}</div><div>${metalBadge}<h3 class="font-bold text-gray-800 leading-tight">${level.title}</h3><p class="text-xs text-gray-500 mt-0.5">${level.desc}</p></div></div><div class="z-10 flex flex-col items-end">${statusRight}</div></div>`;
-            });
-
-            if (isUnlocked) {
-                rewardsContainer.innerHTML = `<div class="library-unlocked bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200 shadow-md"><div class="flex items-center gap-3 mb-4"><div class="bg-blue-600 text-white p-2 rounded-lg shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div><div><h4 class="font-bold text-gray-900 text-lg">Biblioteca Técnica</h4><p class="text-xs text-blue-700 font-medium">¡Material desbloqueado! Listo para descarga.</p></div></div><div class="space-y-3"><a href="${LINKS_PDF.decreto404}" target="_blank" class="w-full bg-white hover:bg-blue-50 text-left p-3 rounded-lg border border-blue-200 flex items-center justify-between group no-underline"><span class="flex items-center gap-2 text-sm font-semibold text-gray-700">📜 Decreto 466 (PDF)</span><span class="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded">Descargar</span></a></div></div><div class="bg-gradient-to-br from-purple-50 to-fuchsia-50 rounded-xl p-6 border border-purple-200 shadow-md mt-4"><div class="flex items-center gap-3 mb-2"><div class="bg-purple-600 text-white p-2 rounded-lg shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div><div><h4 class="font-bold text-gray-900 text-lg">Comunidad</h4><p class="text-xs text-purple-700 font-medium">Únete a los colegas.</p></div></div><button onclick="openForum()" class="w-full bg-purple-600 hover:bg-purple-700 text-white text-sm font-bold py-2 px-4 rounded-lg transition-colors">Ver Grupos</button></div>`;
-            } else {
-                rewardsContainer.innerHTML = `<div class="bg-gray-100 rounded-xl p-4 flex items-center gap-4 opacity-60"><div class="bg-gray-300 p-3 rounded-lg text-gray-500"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div><div><h4 class="font-bold text-gray-700">Biblioteca y Foros</h4><p class="text-xs text-gray-500">🔒 Aprueba el Nivel 1 para desbloquear.</p></div></div>`;
-            }
-        }
-
-        // (Lógica de Quiz igual a anterior)
-        window.startLevel = (levelId) => { const level = levelsData.find(l => l.id === levelId); activeLevelId = levelId; currentQuizQuestions = level.questions; currentQuestionIndex = 0; userAnswers = new Array(currentQuizQuestions.length).fill(null); isReviewMode = false; document.getElementById('quiz-title').innerText = `Examen ${level.metalName}`; document.getElementById('quiz-subtitle').innerText = `Pregunta 1 de ${currentQuizQuestions.length}`; document.getElementById('quiz-content-active').classList.remove('hidden'); document.getElementById('quiz-footer').classList.remove('hidden'); document.getElementById('quiz-content-result').classList.add('hidden'); document.getElementById('quiz-modal').classList.remove('hidden'); document.getElementById('quiz-modal').classList.add('flex'); showQuestion(); }
-        window.closeQuiz = () => { document.getElementById('quiz-modal').classList.add('hidden'); document.getElementById('quiz-modal').classList.remove('flex'); renderDashboard(); }
-        function showQuestion() { const q = currentQuizQuestions[currentQuestionIndex]; const currentAnswer = userAnswers[currentQuestionIndex]; document.getElementById('current-q-num').innerText = currentQuestionIndex + 1; document.getElementById('total-q-num').innerText = currentQuizQuestions.length; const container = document.getElementById('quiz-question-container'); container.innerHTML = `<h4 class="text-lg font-bold text-gray-800 mb-6">${q.q}</h4>`; const optionsContainer = document.createElement('div'); optionsContainer.className = "space-y-3"; q.options.forEach((opt, idx) => { const btn = document.createElement('button'); btn.className = "w-full text-left p-4 rounded-lg border transition-all option-btn text-sm md:text-base font-medium "; if (isReviewMode) { btn.disabled = true; if (idx === q.correct) { btn.className += "bg-green-100 border-green-500 text-green-800 font-bold"; btn.innerHTML = `${opt} <span class="float-right">✅</span>`; } else if (idx === currentAnswer && idx !== q.correct) { btn.className += "bg-red-50 border-red-500 text-red-800"; btn.innerHTML = `${opt} <span class="float-right">❌</span>`; } else { btn.className += "border-gray-200 opacity-60"; btn.innerText = opt; } } else { if (idx === currentAnswer) btn.className += "bg-blue-50 border-blue-500 text-blue-800 shadow-inner ring-1 ring-blue-500"; else btn.className += "border-gray-200 hover:bg-gray-50 hover:border-blue-300"; btn.onclick = () => selectAnswer(idx); btn.innerText = opt; } optionsContainer.appendChild(btn); }); container.appendChild(optionsContainer); const nextBtn = document.getElementById('next-btn'); nextBtn.onclick = null; if (isReviewMode) { nextBtn.disabled = false; nextBtn.innerText = (currentQuestionIndex === currentQuizQuestions.length - 1) ? "Volver al Resumen" : "Siguiente"; nextBtn.onclick = (currentQuestionIndex === currentQuizQuestions.length - 1) ? () => showResultSummary() : nextQuestion; } else { nextBtn.disabled = (currentAnswer === null); nextBtn.innerText = (currentQuestionIndex === currentQuizQuestions.length - 1) ? "Finalizar Examen" : "Siguiente"; nextBtn.onclick = (currentQuestionIndex === currentQuizQuestions.length - 1) ? finishLevel : nextQuestion; } }
-        function selectAnswer(idx) { if (isReviewMode) return; userAnswers[currentQuestionIndex] = idx; showQuestion(); }
-        window.nextQuestion = () => { currentQuestionIndex++; showQuestion(); }
-        function finishLevel() { let score = 0; userAnswers.forEach((ans, idx) => { if (ans === currentQuizQuestions[idx].correct) score++; }); if (!window.appState.levelAttempts) window.appState.levelAttempts = {1:0, 2:0, 3:0, 4:0}; window.appState.levelAttempts[activeLevelId]++; const passed = score >= Math.ceil(currentQuizQuestions.length * 0.7); if (passed && activeLevelId === window.appState.currentLevel) window.appState.currentLevel++; localStorage.setItem('auxiliarProLocalData', JSON.stringify(window.appState)); if(window.saveCloudData) window.saveCloudData(); showResultSummary(score, passed); }
-        window.showResultSummary = (score, passed) => { if (typeof score !== 'number') { score = 0; userAnswers.forEach((ans, idx) => { if (ans === currentQuizQuestions[idx].correct) score++; }); passed = score >= Math.ceil(currentQuizQuestions.length * 0.7); } document.getElementById('quiz-content-active').classList.add('hidden'); document.getElementById('quiz-footer').classList.add('hidden'); document.getElementById('quiz-content-result').classList.remove('hidden'); const resultTitle = document.getElementById('result-title'); const resultMsg = document.getElementById('result-message'); const resultIcon = document.getElementById('result-icon'); const retryBtn = document.getElementById('btn-retry'); document.getElementById('result-score').innerText = `${score} / ${currentQuizQuestions.length}`; if (passed) { resultIcon.innerHTML = `<div class="bg-green-100 p-4 rounded-full text-green-600"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg></div>`; resultTitle.innerText = "¡Aprobado!"; if (activeLevelId === 1) resultMsg.innerText = "¡Bien hecho! Biblioteca desbloqueada."; else if (activeLevelId === 4) { confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } }); resultMsg.innerText = "¡CERTIFICADO MASTER!"; } else resultMsg.innerText = "Has superado el desafío."; retryBtn.classList.add('hidden'); } else { resultIcon.innerHTML = `<div class="bg-red-100 p-4 rounded-full text-red-600"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg></div>`; resultTitle.innerText = "Reprobado"; resultMsg.innerText = "No alcanzaste el mínimo."; const attemptsUsed = window.appState.levelAttempts[activeLevelId]; const maxAttempts = activeLevelId === 1 ? 999 : 2; if (attemptsUsed >= maxAttempts) { retryBtn.disabled = true; retryBtn.className = "w-full bg-gray-300 text-gray-500 font-bold py-3 rounded-lg cursor-not-allowed"; retryBtn.innerText = "Intentos Agotados"; } else { retryBtn.disabled = false; retryBtn.classList.remove('hidden'); retryBtn.className = "w-full bg-farmacia-green hover:bg-green-600 text-white font-bold py-3 rounded-lg transition-colors"; retryBtn.innerText = `Reintentar (Intento ${attemptsUsed + 1}/${maxAttempts})`; } } }
-        window.startReviewMode = () => { isReviewMode = true; currentQuestionIndex = 0; document.getElementById('quiz-content-result').classList.add('hidden'); document.getElementById('quiz-content-active').classList.remove('hidden'); document.getElementById('quiz-footer').classList.remove('hidden'); showQuestion(); }
-        window.retryLevel = () => { startLevel(activeLevelId); }
-        window.resetProgress = () => { if(confirm("¿Seguro?")) { localStorage.removeItem('auxiliarProLocalData'); location.reload(); } }
     </script>
 </body>
 </html>
