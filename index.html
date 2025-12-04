@@ -112,7 +112,7 @@
 
         const { useState, useEffect } = React;
 
-        const APP_VERSION = "6.4.2 New Logo";
+        const APP_VERSION = "6.5.0 FB Link Added";
         const LOCAL_STORAGE_KEY = 'auxiliar_pro_data';
 
         const BLOG_POSTS = [
@@ -132,17 +132,8 @@
         // --- BANCO DE PREGUNTAS ---
         const LEVELS = [
             {
-                id: 1, 
-                title: 'Prueba de Conocimientos Básicos', 
-                desc: 'Fundamentos esenciales.', 
-                medal: 'Bronce',
-                iconBg: 'bg-gradient-to-br from-[#cd7f32] to-[#8B4513]',
-                borderColor: 'border-[#cd7f32]/50',
-                textColor: 'text-[#8B4513]',
-                qCount: 10, 
-                passingScore: 6, 
+                id: 1, title: 'Prueba de Conocimientos Básicos', desc: 'Fundamentos esenciales.', medal: 'Bronce', iconBg: 'bg-gradient-to-br from-[#cd7f32] to-[#8B4513]', borderColor: 'border-[#cd7f32]/50', textColor: 'text-[#8B4513]', qCount: 10, passingScore: 6, examLabel: 'DIAGNÓSTICO INICIAL', 
                 topics: ['Conceptos Básicos', 'Rol del Auxiliar'],
-                examLabel: 'PRUEBA DE CONOCIMIENTOS', 
                 questions: [ 
                     { id: 101, topic: 'Rol del Auxiliar', text: '¿Quién es el responsable técnico legal de la farmacia?', options: ['Dueño', 'Auxiliar', 'Químico Farmacéutico', 'Gerente'], correctIndex: 2, explanation: 'El QF es el único responsable legal ante la autoridad sanitaria.' },
                     { id: 102, topic: 'Almacenamiento', text: 'Rango de temperatura para cadena de frío:', options: ['0-5°C', '2-8°C', '8-15°C', 'Ambiente'], correctIndex: 1, explanation: 'El rango estricto es entre 2°C y 8°C.' },
@@ -157,9 +148,8 @@
                 ]
             },
             {
-                id: 2, title: 'Nivel 2: Intermedio', desc: 'Legislación y almacenamiento.', medal: 'Plata', 
-                iconBg: 'bg-gradient-to-br from-[#E0E0E0] to-[#9E9E9E]', borderColor: 'border-[#9E9E9E]/50', textColor: 'text-[#757575]',
-                qCount: 15, passingScore: 9, examLabel: 'SIMULACRO NIVEL 2',
+                id: 2, title: 'Nivel 2: Intermedio', desc: 'Legislación y almacenamiento.', medal: 'Plata', iconBg: 'bg-gradient-to-br from-[#E0E0E0] to-[#9E9E9E]', borderColor: 'border-[#9E9E9E]/50', textColor: 'text-[#757575]', qCount: 15, passingScore: 9, examLabel: 'SIMULACRO NIVEL 2',
+                topics: ['Legislación', 'Reglamentos'],
                 questions: [
                     { id: 201, topic: 'Decretos', text: '¿Decreto que aprueba el Reglamento de Farmacias?', options: ['DS 594', 'DS 466', 'DS 404', 'DS 405'], correctIndex: 1, explanation: 'DS 466 es el reglamento base.' },
                     { id: 202, topic: 'Recetas', text: 'Validez de una Receta Cheque:', options: ['60 días', '30 días', '10 días', 'Indefinida'], correctIndex: 1, explanation: '30 días corridos desde su emisión.' },
@@ -179,9 +169,8 @@
                 ] 
             },
             {
-                id: 3, title: 'Nivel 3: Avanzado', desc: 'Atención y dispensación.', medal: 'Oro', 
-                iconBg: 'bg-gradient-to-br from-[#FFD700] to-[#B8860B]', borderColor: 'border-[#FFD700]/50', textColor: 'text-[#B8860B]',
-                qCount: 25, passingScore: 18, examLabel: 'SIMULACRO NIVEL 3',
+                id: 3, title: 'Nivel 3: Avanzado', desc: 'Atención y dispensación.', medal: 'Oro', iconBg: 'bg-gradient-to-br from-[#FFD700] to-[#B8860B]', borderColor: 'border-[#FFD700]/50', textColor: 'text-[#B8860B]', qCount: 25, passingScore: 18, examLabel: 'SIMULACRO NIVEL 3',
+                topics: ['Dispensación', 'Bioequivalencia'],
                 questions: [
                     { id: 301, topic: 'Dispensación', text: 'Al dispensar un antibiótico, ¿qué es lo más importante?', options: ['Cobrar primero', 'Verificar receta y fecha', 'Ofrecer vitaminas', 'Ver la marca'], correctIndex: 1, explanation: 'Es obligatorio verificar receta y vigencia.' },
                     { id: 302, topic: 'Bioequivalencia', text: 'La franja amarilla en un envase indica:', options: ['Venta Directa', 'Bioequivalencia', 'Uso hospitalario', 'Producto natural'], correctIndex: 1, explanation: 'Medicamento Bioequivalente.' },
@@ -211,9 +200,7 @@
                 ] 
             },
             {
-                id: 4, title: 'Nivel 4: Final (Simulacro)', desc: 'Posología y cálculos.', medal: 'Platino', 
-                iconBg: 'bg-gradient-to-br from-[#E5E4E2] to-[#607D8B]', borderColor: 'border-[#607D8B]/50', textColor: 'text-[#455A64]',
-                qCount: 20, passingScore: 14, topics: ['Cálculos', 'Posología'], examLabel: 'SIMULACRO FINAL',
+                id: 4, title: 'Nivel 4: Final (Simulacro)', desc: 'Posología y cálculos.', medal: 'Platino', iconBg: 'bg-gradient-to-br from-[#E5E4E2] to-[#607D8B]', borderColor: 'border-[#607D8B]/50', textColor: 'text-[#455A64]', qCount: 20, passingScore: 14, topics: ['Cálculos', 'Posología'], examLabel: 'SIMULACRO FINAL',
                 questions: [
                     { id: 401, topic: 'Cálculos', text: 'Si la dosis es 500mg y tengo comprimidos de 250mg, ¿cuántos dispenso?', options: ['1', '1.5', '2', '3'], correctIndex: 2, explanation: '500/250 = 2 comprimidos.' },
                     { id: 402, topic: 'Posología', text: '¿Cuántos ml hay en una cuchara de té (medida estándar)?', options: ['2.5 ml', '5 ml', '10 ml', '15 ml'], correctIndex: 1, explanation: '5 ml.' },
@@ -345,7 +332,7 @@
                 <div className="flex-1 flex flex-col animate-fade-in overflow-y-auto relative z-10 bg-white">
                     <header className="w-full py-4 px-6 flex justify-between items-center border-b border-slate-100 bg-white/95 backdrop-blur-sm sticky top-0 z-30 shadow-sm">
                         <div className="flex items-center gap-2 text-xl font-heading font-bold text-slate-800 cursor-pointer" onClick={() => setView('LANDING')}>
-                            <img src="https://raw.githubusercontent.com/marcar1972-cyber/Auxiliar--pro/34923cb127c2feede55ec712bdc0261f1b23da3c/logo_auxiliarpro_3_400x240_ajustado.png" alt="Logo AuxiliarPro" className="h-24 w-auto object-contain" />
+                            <img src="https://raw.githubusercontent.com/marcar1972-cyber/Auxiliar--pro/f61da2f53e2c942bcb59d7d119b4b167ad7fa7e4/logo_auxiliarpro_3_400x240_ajustado.png" alt="Logo AuxiliarPro" className="h-24 w-auto object-contain" />
                         </div>
                         <div className="flex items-center gap-2">
                             <button onClick={() => setView('BLOG')} className="text-sm font-bold text-slate-500 hover:text-farmacia-green transition-colors mr-2 hidden md:block">Blog</button>
@@ -415,9 +402,9 @@
                             <p className="text-xs text-slate-500">Hola, {user.name.split(' ')[0]}</p>
                         </div>
                         <div className="flex gap-2">
-                            <button onClick={() => setView('BLOG')} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-farmacia-green hover:border-green-200 transition-colors shadow-sm" title="Blog"><Icon name="article" size={20}/></button>
-                            <button onClick={() => setActiveModal('community')} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-blue-600 hover:border-blue-200 transition-colors shadow-sm" title="Comunidad"><Icon name="users" size={20}/></button>
-                            <button onClick={async () => { await signOut(auth); localStorage.removeItem(LOCAL_STORAGE_KEY); setView('LANDING'); }} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-red-500 hover:border-red-200 transition-colors shadow-sm"><Icon name="power" size={20}/></button>
+                            <button onClick={() => setView('BLOG')} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-farmacia-green hover:border-green-200 transition-colors shadow-sm flex items-center gap-2 text-xs font-bold" title="Blog"><Icon name="article" size={20}/><span className="hidden md:inline">Blog</span></button>
+                            <button onClick={() => setActiveModal('community')} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-blue-600 hover:border-blue-200 transition-colors shadow-sm flex items-center gap-2 text-xs font-bold" title="Comunidad"><Icon name="users" size={20}/><span className="hidden md:inline">Comunidad</span></button>
+                            <button onClick={async () => { await signOut(auth); localStorage.removeItem(LOCAL_STORAGE_KEY); setView('LANDING'); }} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-red-500 hover:border-red-200 transition-colors shadow-sm flex items-center gap-2 text-xs font-bold"><Icon name="power" size={20}/><span className="hidden md:inline">Salir</span></button>
                         </div>
                     </header>
                     <main className="flex-1 p-6 overflow-y-auto pb-24">
@@ -555,7 +542,7 @@
                                             <h4 className="font-bold text-slate-800 mb-3 border-b border-slate-100 pb-2 flex items-center gap-2"><Icon name="files" /> Análisis de Resultados</h4>
                                             <div className="space-y-3 text-sm">
                                                 <div className="flex justify-between"><span className="text-slate-500">Estado:</span><span className={`font-bold ${passed ? 'text-farmacia-green' : 'text-red-500'}`}>{passed ? 'APROBADO' : 'REPROBADO'}</span></div>
-                                                {/* FEEDBACK MEJORADO - SIEMPRE VISIBLE SI HAY ERRORES */}
+                                                {/* FEEDBACK MEJORADO CON BOTÓN A BIBLIOTECA - SIEMPRE VISIBLE SI HAY ERRORES */}
                                                 {wrongTopics.length > 0 ? (
                                                     <div className="mt-3 p-3 bg-red-50 rounded-lg border border-red-100">
                                                         <p className="text-xs font-bold text-red-500 uppercase mb-1">Debes reforzar:</p>
@@ -667,7 +654,7 @@
                             </div>
                             <div className="space-y-3">
                                 <a href="#" className="w-full bg-[#25D366] text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-3 hover:opacity-90 transition-opacity shadow-lg shadow-green-100"><Icon name="whatsapp" size={24} /> Grupo de WhatsApp</a>
-                                <a href="#" className="w-full bg-[#1877F2] text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-3 hover:opacity-90 transition-opacity shadow-lg shadow-blue-100"><Icon name="facebook" size={24} /> Grupo de Facebook</a>
+                                <a href="https://www.facebook.com/share/g/1AFb8riMpT/" className="w-full bg-[#1877F2] text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-3 hover:opacity-90 transition-opacity shadow-lg shadow-blue-100"><Icon name="facebook" size={24} /> Grupo de Facebook</a>
                             </div>
                             <div className="mt-6"><Button variant="outline" fullWidth onClick={() => setActiveModal(null)}>Volver</Button></div>
                         </div>
