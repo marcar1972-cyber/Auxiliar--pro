@@ -112,7 +112,7 @@
 
         const { useState, useEffect } = React;
 
-        const APP_VERSION = "6.1.2 Recs Update";
+        const APP_VERSION = "6.2.0 Legal Full";
         const LOCAL_STORAGE_KEY = 'auxiliar_pro_data';
 
         const BLOG_POSTS = [
@@ -129,32 +129,10 @@
             { q: "¿Qué validez tiene?", a: "Indefinida y nacional." }
         ];
 
-        // --- MAPPING DE RECURSOS POR TEMA ---
-        const TOPIC_RESOURCES = {
-            'Rol del Auxiliar': 'Decreto Supremo 466',
-            'Almacenamiento': 'Decreto Supremo 466',
-            'Vías de Administración': 'Bibliografía General',
-            'Terminología': 'Decreto Supremo 466',
-            'Bioequivalencia': 'Ley 20.724',
-            'Conceptos Básicos': 'Decreto Supremo 466',
-            'Legislación': 'Decreto Supremo 466',
-            'Decretos': 'Decreto Supremo 466',
-            'Recetas': 'Decreto Supremo 466',
-            'Controlados': 'Decretos 404 y 405',
-            'Libros Oficiales': 'Decreto Supremo 466',
-            'Autoridad Sanitaria': 'Decreto Supremo 466',
-            'Dispensación': 'Decreto Supremo 466',
-            'Formas Farmacéuticas': 'Bibliografía General',
-            'Atención': 'Ley 20.724',
-            'Cálculos': 'Práctica de Matemáticas',
-            'Posología': 'Práctica de Matemáticas',
-            'Preparados': 'Decreto Supremo 466',
-            'Gestión': 'Decreto Supremo 466'
-        };
-
         const LEVELS = [
             {
                 id: 1, title: 'Prueba de Conocimientos Básicos', desc: 'Fundamentos esenciales.', medal: 'Bronce', iconBg: 'bg-gradient-to-br from-[#cd7f32] to-[#8B4513]', borderColor: 'border-[#cd7f32]/50', textColor: 'text-[#8B4513]', qCount: 10, passingScore: 6, examLabel: 'DIAGNÓSTICO INICIAL', 
+                topics: ['Conceptos Básicos', 'Rol del Auxiliar'],
                 questions: [ 
                     { id: 101, topic: 'Rol del Auxiliar', text: '¿Quién es el responsable técnico legal de la farmacia?', options: ['Dueño', 'Auxiliar', 'Químico Farmacéutico', 'Gerente'], correctIndex: 2, explanation: 'El QF es el único responsable legal ante la autoridad sanitaria.' },
                     { id: 102, topic: 'Almacenamiento', text: 'Rango de temperatura para cadena de frío:', options: ['0-5°C', '2-8°C', '8-15°C', 'Ambiente'], correctIndex: 1, explanation: 'El rango estricto es entre 2°C y 8°C.' },
@@ -170,6 +148,7 @@
             },
             {
                 id: 2, title: 'Nivel 2: Intermedio', desc: 'Legislación y almacenamiento.', medal: 'Plata', iconBg: 'bg-gradient-to-br from-[#E0E0E0] to-[#9E9E9E]', borderColor: 'border-[#9E9E9E]/50', textColor: 'text-[#757575]', qCount: 15, passingScore: 9, examLabel: 'SIMULACRO NIVEL 2',
+                topics: ['Legislación', 'Reglamentos'],
                 questions: [
                     { id: 201, topic: 'Decretos', text: '¿Decreto que aprueba el Reglamento de Farmacias?', options: ['DS 594', 'DS 466', 'DS 404', 'DS 405'], correctIndex: 1, explanation: 'DS 466 es el reglamento base.' },
                     { id: 202, topic: 'Recetas', text: 'Validez de una Receta Cheque:', options: ['60 días', '30 días', '10 días', 'Indefinida'], correctIndex: 1, explanation: '30 días corridos desde su emisión.' },
@@ -190,6 +169,7 @@
             },
             {
                 id: 3, title: 'Nivel 3: Avanzado', desc: 'Atención y dispensación.', medal: 'Oro', iconBg: 'bg-gradient-to-br from-[#FFD700] to-[#B8860B]', borderColor: 'border-[#FFD700]/50', textColor: 'text-[#B8860B]', qCount: 25, passingScore: 18, examLabel: 'SIMULACRO NIVEL 3',
+                topics: ['Dispensación', 'Bioequivalencia'],
                 questions: [
                     { id: 301, topic: 'Dispensación', text: 'Al dispensar un antibiótico, ¿qué es lo más importante?', options: ['Cobrar primero', 'Verificar receta y fecha', 'Ofrecer vitaminas', 'Ver la marca'], correctIndex: 1, explanation: 'Es obligatorio verificar receta y vigencia.' },
                     { id: 302, topic: 'Bioequivalencia', text: 'La franja amarilla en un envase indica:', options: ['Venta Directa', 'Bioequivalencia', 'Uso hospitalario', 'Producto natural'], correctIndex: 1, explanation: 'Medicamento Bioequivalente.' },
@@ -399,6 +379,11 @@
                             <Button variant="outline" fullWidth onClick={() => setView('FAQS')}><Icon name="question" /> Ver Preguntas Frecuentes</Button>
                         </section>
                         <footer className="bg-slate-900 text-slate-400 py-10 px-6 text-center text-xs">
+                            <div className="flex justify-center gap-6 mb-6 font-bold uppercase tracking-wider text-slate-500">
+                                <button onClick={() => { setLegalTab('terms'); setActiveModal('legal'); }} className="hover:text-white">Términos</button>
+                                <button onClick={() => { setLegalTab('privacy'); setActiveModal('legal'); }} className="hover:text-white">Privacidad</button>
+                                <button onClick={() => { setLegalTab('disclaimers'); setActiveModal('legal'); }} className="hover:text-white">Descargos</button>
+                            </div>
                             <p className="opacity-60">© 2025 AuxiliarPro</p>
                         </footer>
                     </main>
@@ -625,9 +610,9 @@
             const LegalModal = () => {
                 if (activeModal !== 'legal') return null;
                 const contents = {
-                    terms: "Términos de Uso:\nEsta aplicación, 'AuxiliarPro', es una herramienta educativa...",
-                    privacy: "Política de Privacidad:\nRespetamos tu privacidad...",
-                    disclaimers: "Descargos de Responsabilidad:\n1. Independencia: AuxiliarPro NO tiene afiliación alguna con el Ministerio de Salud..."
+                    terms: "Términos de Uso:\nEsta aplicación, 'AuxiliarPro', es una herramienta educativa de apoyo y estudio independiente. El contenido se basa en la normativa chilena vigente (Decretos 404, 405, 466) y bibliografía farmacéutica estándar, pero NO reemplaza la documentación oficial ni la capacitación formal requerida por la autoridad sanitaria.\n\nEl uso de esta aplicación es gratuito y voluntario. El usuario acepta utilizarla como complemento de estudio y no como única fuente de preparación.",
+                    privacy: "Política de Privacidad:\nRespetamos tu privacidad. Los datos recolectados (nombre, correo electrónico y progreso de estudio) se utilizan exclusivamente para:\n1. Personalizar tu experiencia en el panel de estudio.\n2. Guardar tu avance en los niveles para que no pierdas tu progreso.\n\nNo vendemos, compartimos ni publicamos tus datos personales con terceros. Puedes solicitar la eliminación de tu cuenta en cualquier momento contactando al administrador.",
+                    disclaimers: "Descargos de Responsabilidad:\n1. Independencia: AuxiliarPro NO tiene afiliación alguna con el Ministerio de Salud (MINSAL), SEREMIs, Instituto de Salud Pública (ISP) ni ninguna entidad gubernamental de Chile.\n2. Exámenes: Los simulacros y preguntas presentados aquí son referenciales y creados con fines pedagógicos. No garantizan la aprobación del examen de competencia real.\n3. Exactitud: Aunque nos esforzamos por mantener la información actualizada, la normativa sanitaria puede cambiar. Siempre consulta las fuentes oficiales."
                 };
                 return (
                     <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
