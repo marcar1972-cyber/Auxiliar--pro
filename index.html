@@ -112,7 +112,7 @@
 
         const { useState, useEffect } = React;
 
-        const APP_VERSION = "6.6.0 Nav Fixed";
+        const APP_VERSION = "6.5.1 WA Link Added";
         const LOCAL_STORAGE_KEY = 'auxiliar_pro_data';
 
         const BLOG_POSTS = [
@@ -126,7 +126,7 @@
             { q: "¿Cuáles son los requisitos para ser Auxiliar?", a: "Licencia de enseñanza básica completa y 1 año de experiencia laboral en farmacia bajo supervisión de QF." },
             { q: "¿Cómo y dónde se solicita el examen?", a: "El trámite se realiza ante la SEREMI de Salud. Puedes iniciarlo en <a href='https://seremienlinea.minsal.cl' target='_blank' class='text-farmacia-green font-bold hover:underline'>seremienlinea.minsal.cl</a> adjuntando contrato y certificado de cotizaciones." },
             { q: "¿Cuándo se rinde la prueba?", a: "No hay fechas fijas. La SEREMI te notifica tras validar tus documentos." },
-            { q: "¿Qué validez tiene?", a: "Indefinida y nacional." }
+            { q: "¿Qué validez tiene la credencial?", a: "La Resolución Sanitaria que te certifica como Auxiliar de Farmacia tiene validez indefinida y es reconocida en todo el territorio nacional chileno." }
         ];
 
         // --- BANCO DE PREGUNTAS ---
@@ -614,9 +614,9 @@
             const LegalModal = () => {
                 if (activeModal !== 'legal') return null;
                 const contents = {
-                    terms: "Términos de Uso:\nEsta aplicación, 'AuxiliarPro', es una herramienta educativa de apoyo y estudio independiente. El contenido se basa en la normativa chilena vigente (Decretos 404, 405, 466) y bibliografía farmacéutica estándar, pero NO reemplaza la documentación oficial ni la capacitación formal requerida por la autoridad sanitaria.\n\nEl uso de esta aplicación es gratuito y voluntario. El usuario acepta utilizarla como complemento de estudio y no como única fuente de preparación.",
-                    privacy: "Política de Privacidad:\nRespetamos tu privacidad. Los datos recolectados (nombre, correo electrónico y progreso de estudio) se utilizan exclusivamente para:\n1. Personalizar tu experiencia en el panel de estudio.\n2. Guardar tu avance en los niveles para que no pierdas tu progreso.\n\nNo vendemos, compartimos ni publicamos tus datos personales con terceros. Puedes solicitar la eliminación de tu cuenta en cualquier momento contactando al administrador.",
-                    disclaimers: "Descargos de Responsabilidad:\n1. Independencia: AuxiliarPro NO tiene afiliación alguna con el Ministerio de Salud (MINSAL), SEREMIs, Instituto de Salud Pública (ISP) ni ninguna entidad gubernamental de Chile.\n2. Exámenes: Los simulacros y preguntas presentados aquí son referenciales y creados con fines pedagógicos. No garantizan la aprobación del examen de competencia real.\n3. Exactitud: Aunque nos esforzamos por mantener la información actualizada, la normativa sanitaria puede cambiar. Siempre consulta las fuentes oficiales."
+                    terms: "Términos de Uso:\nEsta aplicación, 'AuxiliarPro', es una herramienta educativa...",
+                    privacy: "Política de Privacidad:\nRespetamos tu privacidad...",
+                    disclaimers: "Descargos de Responsabilidad:\n1. Independencia: AuxiliarPro NO tiene afiliación alguna con el Ministerio de Salud..."
                 };
                 return (
                     <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
