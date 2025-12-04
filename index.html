@@ -112,14 +112,16 @@
 
         const { useState, useEffect } = React;
 
-        const APP_VERSION = "6.2.0 Final";
+        const APP_VERSION = "6.1.1 Final Fix";
         const LOCAL_STORAGE_KEY = 'auxiliar_pro_data';
 
         const BLOG_POSTS = [
-            { id: 'art1', date: '04 DIC', category: 'Legal', title: 'Decreto 466: La "Biblia" que define tu rol en la Farmacia', excerpt: 'Entender el Reglamento de Farmacias es la diferencia entre aprobar y reprobar.', content: '<h1>Decreto 466</h1><p>El Decreto 466 es fundamental...</p>' },
-            { id: 'art2', date: '02 DIC', category: 'Técnico', title: 'Ley de Fármacos (Ley 20.724)', excerpt: 'Bioequivalencia, venta directa y fraccionamiento.', content: '<h1>Ley de Fármacos</h1><p>Claves para el examen...</p>' }
+            { id: 'art1', date: '04 DIC', category: 'Legal', title: 'Decreto 466: La "Biblia" que define tu rol en la Farmacia', excerpt: 'Entender el Reglamento de Farmacias es la diferencia entre aprobar y reprobar. Aquí te explico los artículos claves.', content: '<h1>Decreto 466: La "Biblia" que define tu rol en la Farmacia</h1><p>Colega, si hay un documento que debes tener bajo la almohada, es el <strong>Decreto Supremo 466</strong>. No es solo papeleo; es el reglamento que define qué puedes hacer, qué no, y quién manda en la farmacia.</p><h2>1. ¿Quién es el Jefe? (Art. 12 y 14)</h2><p>La normativa es tajante: <strong>La Dirección Técnica corresponde exclusivamente al Químico Farmacéutico (QF)</strong>. </p><ul><li>El QF debe estar <strong>siempre presente</strong> durante el horario de funcionamiento.</li><li>Si el QF no está, la farmacia <strong>no puede funcionar</strong>.</li><li>Tú, como auxiliar, eres su brazo derecho, pero legalmente actúas bajo su supervisión directa.</li></ul><h2>2. Condiciones Ambientales (Art. 28)</h2><p>No es solo por comodidad. Los medicamentos se degradan.</p><ul><li><strong>Temperatura ambiente:</strong> Máximo 25°C.</li><li><strong>Cadena de Frío:</strong> Estrictamente entre <strong>2°C y 8°C</strong>.</li></ul><div class="cta-box"><h3 class="text-farmacia-green">¿Te sientes seguro con la legislación?</h3><p>Pon a prueba lo que acabas de leer en el <strong>Nivel 2: Intermedio</strong> del simulador.</p></div>' },
+            { id: 'art2', date: '02 DIC', category: 'Técnico', title: 'Ley de Fármacos (Ley 20.724): Cambios que impactan tu trabajo', excerpt: 'Bioequivalencia, venta directa y fraccionamiento. Descubre cómo esta ley cambió la forma en que dispensamos.', content: '<h1>Ley de Fármacos (Ley 20.724)</h1><p>Seguramente has escuchado hablar de la "Ley de Fármacos". Para nosotros, los auxiliares, esta ley cambió las reglas del juego.</p><h2>1. La Bioequivalencia es Ley</h2><p>Antes era opcional, hoy es obligación. La ley exige que la farmacia tenga disponibles los <strong>medicamentos bioequivalentes</strong> (los de la franja amarilla).</p><p><strong>Tu deber:</strong> Debes informar al paciente que existe una alternativa bioequivalente si la receta lo permite.</p><h2>2. Medicamentos de Venta Directa (OTC) en Góndolas</h2><p>La ley permitió que ciertos medicamentos que no requieren receta puedan estar al alcance del público en estanterías.</p><p><strong>Ojo:</strong> Aunque estén en góndola, la venta final siempre pasa por caja y debe haber asesoría disponible.</p><div class="cta-box"><h3 class="text-farmacia-green">¡A practicar!</h3><p>Revisa las preguntas sobre Bioequivalencia en la <strong>Prueba de Conocimientos Básicos</strong>.</p></div>' }
         ];
 
+        const sourceLink = `<br/><a href='https://seremienlinea.minsal.cl' target='_blank' class='text-xs text-farmacia-green font-bold hover:underline mt-2 inline-block'>🔗 Revisar fuente oficial</a>`;
+        
         const FAQS = [
             { q: "¿Cuáles son los requisitos para ser Auxiliar?", a: "Licencia de enseñanza básica completa y 1 año de experiencia laboral en farmacia bajo supervisión de QF." },
             { q: "¿Cómo y dónde se solicita el examen?", a: "El trámite se realiza ante la SEREMI de Salud. Puedes iniciarlo en <a href='https://seremienlinea.minsal.cl' target='_blank' class='text-farmacia-green font-bold hover:underline'>seremienlinea.minsal.cl</a> adjuntando contrato y certificado de cotizaciones." },
@@ -127,7 +129,6 @@
             { q: "¿Qué validez tiene?", a: "Indefinida y nacional." }
         ];
 
-        // --- BANCO DE PREGUNTAS ---
         const LEVELS = [
             {
                 id: 1, title: 'Prueba de Conocimientos Básicos', desc: 'Fundamentos esenciales.', medal: 'Bronce', iconBg: 'bg-gradient-to-br from-[#cd7f32] to-[#8B4513]', borderColor: 'border-[#cd7f32]/50', textColor: 'text-[#8B4513]', qCount: 10, passingScore: 6, examLabel: 'DIAGNÓSTICO INICIAL', 
@@ -198,8 +199,7 @@
                 ] 
             },
             {
-                id: 4, title: 'Nivel 4: Final (Simulacro)', desc: 'Posología y cálculos.', medal: 'Platino', iconBg: 'bg-gradient-to-br from-[#E5E4E2] to-[#607D8B]', borderColor: 'border-[#607D8B]/50', textColor: 'text-[#455A64]', qCount: 20, passingScore: 14, examLabel: 'SIMULACRO FINAL',
-                topics: ['Cálculos', 'Posología'],
+                id: 4, title: 'Nivel 4: Final (Simulacro)', desc: 'Posología y cálculos.', medal: 'Platino', iconBg: 'bg-gradient-to-br from-[#E5E4E2] to-[#607D8B]', borderColor: 'border-[#607D8B]/50', textColor: 'text-[#455A64]', qCount: 20, passingScore: 14, topics: ['Cálculos', 'Posología'], examLabel: 'SIMULACRO FINAL',
                 questions: [
                     { id: 401, topic: 'Cálculos', text: 'Si la dosis es 500mg y tengo comprimidos de 250mg, ¿cuántos dispenso?', options: ['1', '1.5', '2', '3'], correctIndex: 2, explanation: '500/250 = 2 comprimidos.' },
                     { id: 402, topic: 'Posología', text: '¿Cuántos ml hay en una cuchara de té (medida estándar)?', options: ['2.5 ml', '5 ml', '10 ml', '15 ml'], correctIndex: 1, explanation: '5 ml.' },
