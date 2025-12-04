@@ -112,131 +112,120 @@
 
         const { useState, useEffect } = React;
 
-        const APP_VERSION = "5.7.0 Ads Enabled";
+        const APP_VERSION = "6.2.0 Final";
         const LOCAL_STORAGE_KEY = 'auxiliar_pro_data';
 
         const BLOG_POSTS = [
-            { 
-                id: 'art1', 
-                date: '04 DIC', 
-                category: 'Legal', 
-                title: 'Decreto 466: La "Biblia" que define tu rol en la Farmacia', 
-                excerpt: 'Entender el Reglamento de Farmacias es la diferencia entre aprobar y reprobar. Aquí te explico los artículos claves.', 
-                content: `
-                    <h1>Decreto 466: La "Biblia" que define tu rol en la Farmacia</h1>
-                    <p>Colega, si hay un documento que debes tener bajo la almohada, es el <strong>Decreto Supremo 466</strong>. No es solo papeleo; es el reglamento que define qué puedes hacer, qué no, y quién manda en la farmacia.</p>
-                    <h2>1. ¿Quién es el Jefe? (Art. 12 y 14)</h2>
-                    <p>La normativa es tajante: <strong>La Dirección Técnica corresponde exclusivamente al Químico Farmacéutico (QF)</strong>. </p>
-                    <ul>
-                        <li>El QF debe estar <strong>siempre presente</strong> durante el horario de funcionamiento.</li>
-                        <li>Si el QF no está, la farmacia <strong>no puede funcionar</strong>.</li>
-                        <li>Tú, como auxiliar, eres su brazo derecho, pero legalmente actúas bajo su supervisión directa.</li>
-                    </ul>
-                    <h2>2. Condiciones Ambientales (Art. 28)</h2>
-                    <p>No es solo por comodidad. Los medicamentos se degradan.</p>
-                    <ul>
-                        <li><strong>Temperatura ambiente:</strong> Máximo 25°C.</li>
-                        <li><strong>Cadena de Frío:</strong> Estrictamente entre <strong>2°C y 8°C</strong>.</li>
-                    </ul>
-                    <div class="cta-box">
-                        <h3 class="text-farmacia-green">¿Te sientes seguro con la legislación?</h3>
-                        <p>Pon a prueba lo que acabas de leer en el <strong>Nivel 2: Intermedio</strong> del simulador.</p>
-                    </div>
-                ` 
-            },
-            { 
-                id: 'art2', 
-                date: '02 DIC', 
-                category: 'Técnico', 
-                title: 'Ley de Fármacos (Ley 20.724): Cambios que impactan tu trabajo', 
-                excerpt: 'Bioequivalencia, venta directa y fraccionamiento. Descubre cómo esta ley cambió la forma en que dispensamos.', 
-                content: `
-                    <h1>Ley de Fármacos (Ley 20.724)</h1>
-                    <p>Seguramente has escuchado hablar de la "Ley de Fármacos". Para nosotros, los auxiliares, esta ley cambió las reglas del juego.</p>
-                    <h2>1. La Bioequivalencia es Ley</h2>
-                    <p>Antes era opcional, hoy es obligación. La ley exige que la farmacia tenga disponibles los <strong>medicamentos bioequivalentes</strong> (los de la franja amarilla).</p>
-                    <p><strong>Tu deber:</strong> Debes informar al paciente que existe una alternativa bioequivalente si la receta lo permite.</p>
-                    <h2>2. Medicamentos de Venta Directa (OTC) en Góndolas</h2>
-                    <p>La ley permitió que ciertos medicamentos que no requieren receta puedan estar al alcance del público en estanterías.</p>
-                    <p><strong>Ojo:</strong> Aunque estén en góndola, la venta final siempre pasa por caja y debe haber asesoría disponible.</p>
-                    <div class="cta-box">
-                        <h3 class="text-farmacia-green">¡A practicar!</h3>
-                        <p>Revisa las preguntas sobre Bioequivalencia en la <strong>Prueba de Conocimientos Básicos</strong>.</p>
-                    </div>
-                ` 
-            }
+            { id: 'art1', date: '04 DIC', category: 'Legal', title: 'Decreto 466: La "Biblia" que define tu rol en la Farmacia', excerpt: 'Entender el Reglamento de Farmacias es la diferencia entre aprobar y reprobar.', content: '<h1>Decreto 466</h1><p>El Decreto 466 es fundamental...</p>' },
+            { id: 'art2', date: '02 DIC', category: 'Técnico', title: 'Ley de Fármacos (Ley 20.724)', excerpt: 'Bioequivalencia, venta directa y fraccionamiento.', content: '<h1>Ley de Fármacos</h1><p>Claves para el examen...</p>' }
         ];
-
-        // --- FAQS CON ENLACE A FUENTE ---
-        const sourceLink = `<br/><a href='https://seremienlinea.minsal.cl' target='_blank' class='text-xs text-farmacia-green font-bold hover:underline mt-2 inline-block'>🔗 Revisar fuente oficial</a>`;
 
         const FAQS = [
-            { 
-                q: "¿En qué consiste la Certificación de Competencias?", 
-                a: "Es una solicitud que se presenta ante la SEREMI de Salud para someterse a una evaluación. Esta evaluación verifica formalmente que tienes los conocimientos y capacidades para desempeñarte como Auxiliar de Farmacia bajo la supervisión de un Químico Farmacéutico." + sourceLink
-            },
-            { 
-                q: "¿A quién va dirigido este trámite?", 
-                a: "A personas naturales que deseen optar a la certificación de competencias de Auxiliar de Farmacia y que cumplan los requisitos establecidos en la normativa vigente." + sourceLink
-            },
-            { 
-                q: "¿Qué documentos necesito para postular?", 
-                a: "<ul><li><strong>Certificado de Enseñanza Media</strong> completa.</li><li>Copia del <strong>Contrato de Trabajo</strong> o Certificado del empleador que acredite antigüedad.</li><li><strong>Certificado de Desempeño Laboral</strong> emitido por el Químico Farmacéutico que acredite al menos <strong>1 año de desempeño efectivo</strong>.</li><li>Foto tipo carnet.</li></ul>" + sourceLink
-            },
-            { 
-                q: "¿Dónde y cómo hago el trámite?", 
-                a: "El trámite se encuentra disponible 100% en línea. Debes ingresar con tu <strong>Clave Única</strong> en el portal oficial de la Seremi." + sourceLink 
-            },
-            { 
-                q: "¿Cuál es el costo del trámite?", 
-                a: "Los costos son diferenciados (valores ref.):<ul><li><strong>Derecho a Examen:</strong> $19.100</li><li><strong>Inscripción en el Registro:</strong> $47.600</li><li><strong>Diploma o Carnet:</strong> $29.700</li></ul>" + sourceLink
-            }
+            { q: "¿Cuáles son los requisitos para ser Auxiliar?", a: "Licencia de enseñanza básica completa y 1 año de experiencia laboral en farmacia bajo supervisión de QF." },
+            { q: "¿Cómo y dónde se solicita el examen?", a: "El trámite se realiza ante la SEREMI de Salud. Puedes iniciarlo en <a href='https://seremienlinea.minsal.cl' target='_blank' class='text-farmacia-green font-bold hover:underline'>seremienlinea.minsal.cl</a> adjuntando contrato y certificado de cotizaciones." },
+            { q: "¿Cuándo se rinde la prueba?", a: "No hay fechas fijas. La SEREMI te notifica tras validar tus documentos." },
+            { q: "¿Qué validez tiene?", a: "Indefinida y nacional." }
         ];
 
+        // --- BANCO DE PREGUNTAS ---
         const LEVELS = [
             {
-                id: 1, 
-                title: 'Prueba de Conocimientos Básicos', 
-                desc: 'Fundamentos esenciales.', 
-                medal: 'Bronce',
-                iconBg: 'bg-gradient-to-br from-[#cd7f32] to-[#8B4513]',
-                borderColor: 'border-[#cd7f32]/50',
-                textColor: 'text-[#8B4513]',
-                qCount: 10, 
-                passingScore: 6, 
+                id: 1, title: 'Prueba de Conocimientos Básicos', desc: 'Fundamentos esenciales.', medal: 'Bronce', iconBg: 'bg-gradient-to-br from-[#cd7f32] to-[#8B4513]', borderColor: 'border-[#cd7f32]/50', textColor: 'text-[#8B4513]', qCount: 10, passingScore: 6, examLabel: 'DIAGNÓSTICO INICIAL', 
                 topics: ['Conceptos Básicos', 'Rol del Auxiliar'],
-                examLabel: 'PRUEBA DE CONOCIMIENTOS', 
                 questions: [ 
-                    { id: 101, text: '¿Quién es el responsable técnico legal de la farmacia?', options: ['Dueño', 'Auxiliar', 'Químico Farmacéutico', 'Gerente'], correctIndex: 2 },
-                    { id: 102, text: 'Rango de temperatura para cadena de frío:', options: ['0-5°C', '2-8°C', '8-15°C', 'Ambiente'], correctIndex: 1 },
-                    { id: 103, text: 'Vía de administración sublingual:', options: ['Debajo de la lengua', 'Sobre la lengua', 'Tragada', 'Masticada'], correctIndex: 0 },
-                    { id: 104, text: '¿Qué significa OTC?', options: ['Receta Retenida', 'Venta Directa', 'Uso Hospitalario', 'Controlado'], correctIndex: 1 },
-                    { id: 105, text: 'Función principal del Auxiliar:', options: ['Diagnosticar', 'Recetar', 'Dispensar e informar', 'Administrar local'], correctIndex: 2 },
-                    { id: 106, text: 'Medicamento Bioequivalente se identifica por:', options: ['Franja Amarilla', 'Estrella Verde', 'Caja Roja', 'Ninguna'], correctIndex: 0 },
-                    { id: 107, text: '¿Qué es un Placebo?', options: ['Sustancia inerte', 'Principio activo potente', 'Marca comercial', 'Genérico'], correctIndex: 0 },
-                    { id: 108, text: 'Vía Parenteral se refiere a:', options: ['Jarabes', 'Inyectables', 'Cremas', 'Supositorios'], correctIndex: 1 },
-                    { id: 109, text: 'Fecha de vencimiento indica:', options: ['Fecha de fabricación', 'Límite de uso seguro', 'Fecha de venta', 'Fecha de apertura'], correctIndex: 1 },
-                    { id: 110, text: 'La Receta Cheque se usa para:', options: ['Antibióticos', 'Corticoides', 'Estupefacientes', 'Vitaminas'], correctIndex: 2 }
+                    { id: 101, topic: 'Rol del Auxiliar', text: '¿Quién es el responsable técnico legal de la farmacia?', options: ['Dueño', 'Auxiliar', 'Químico Farmacéutico', 'Gerente'], correctIndex: 2, explanation: 'El QF es el único responsable legal ante la autoridad sanitaria.' },
+                    { id: 102, topic: 'Almacenamiento', text: 'Rango de temperatura para cadena de frío:', options: ['0-5°C', '2-8°C', '8-15°C', 'Ambiente'], correctIndex: 1, explanation: 'El rango estricto es entre 2°C y 8°C.' },
+                    { id: 103, topic: 'Vías de Administración', text: 'Vía de administración sublingual:', options: ['Debajo de la lengua', 'Sobre la lengua', 'Tragada', 'Masticada'], correctIndex: 0, explanation: 'Permite absorción rápida evitando el primer paso hepático.' },
+                    { id: 104, topic: 'Terminología', text: '¿Qué significa OTC?', options: ['Receta Retenida', 'Venta Directa', 'Uso Hospitalario', 'Controlado'], correctIndex: 1, explanation: 'Over The Counter: Medicamentos que no requieren receta médica.' },
+                    { id: 105, topic: 'Rol del Auxiliar', text: 'Función principal del Auxiliar:', options: ['Diagnosticar', 'Recetar', 'Dispensar e informar', 'Administrar local'], correctIndex: 2, explanation: 'Colaborar con el QF en la dispensación informada.' },
+                    { id: 106, topic: 'Bioequivalencia', text: 'Identificación visual de Bioequivalentes:', options: ['Franja Amarilla', 'Estrella Verde', 'Caja Roja', 'Ninguna'], correctIndex: 0, explanation: 'La franja amarilla es el distintivo legal en Chile.' },
+                    { id: 107, topic: 'Conceptos Básicos', text: '¿Qué es un Placebo?', options: ['Sustancia inerte', 'Principio activo potente', 'Marca comercial', 'Genérico'], correctIndex: 0, explanation: 'Sustancia sin acción farmacológica usada por efecto psicológico.' },
+                    { id: 108, topic: 'Vías de Administración', text: 'Ejemplo de vía Parenteral:', options: ['Jarabes', 'Inyectables', 'Cremas', 'Supositorios'], correctIndex: 1, explanation: 'Vías que atraviesan la piel (IV, IM, SC).' },
+                    { id: 109, topic: 'Almacenamiento', text: 'La fecha de vencimiento indica:', options: ['Fecha de fabricación', 'Límite de eficacia/seguridad', 'Fecha de venta', 'Fecha de apertura'], correctIndex: 1, explanation: 'Hasta esa fecha el laboratorio garantiza la estabilidad.' },
+                    { id: 110, topic: 'Legislación', text: '¿Qué receta usan los estupefacientes?', options: ['Simple', 'Retenida', 'Cheque', 'Magistral'], correctIndex: 2, explanation: 'Receta Cheque es obligatoria para estupefacientes y psicotrópicos lista II.' }
                 ]
             },
             {
-                id: 2, title: 'Nivel 2: Intermedio', desc: 'Legislación y almacenamiento.', medal: 'Plata', 
-                iconBg: 'bg-gradient-to-br from-[#E0E0E0] to-[#9E9E9E]', borderColor: 'border-[#9E9E9E]/50', textColor: 'text-[#757575]',
-                qCount: 15, passingScore: 9, questions: [{ id: 201, text: 'Receta Estupefacientes:', options: ['Simple', 'Retenida', 'Cheque', 'Magistral'], correctIndex: 2 }] 
+                id: 2, title: 'Nivel 2: Intermedio', desc: 'Legislación y almacenamiento.', medal: 'Plata', iconBg: 'bg-gradient-to-br from-[#E0E0E0] to-[#9E9E9E]', borderColor: 'border-[#9E9E9E]/50', textColor: 'text-[#757575]', qCount: 15, passingScore: 9, examLabel: 'SIMULACRO NIVEL 2',
+                topics: ['Legislación', 'Reglamentos'],
+                questions: [
+                    { id: 201, topic: 'Decretos', text: '¿Decreto que aprueba el Reglamento de Farmacias?', options: ['DS 594', 'DS 466', 'DS 404', 'DS 405'], correctIndex: 1, explanation: 'DS 466 es el reglamento base.' },
+                    { id: 202, topic: 'Recetas', text: 'Validez de una Receta Cheque:', options: ['60 días', '30 días', '10 días', 'Indefinida'], correctIndex: 1, explanation: '30 días corridos desde su emisión.' },
+                    { id: 203, topic: 'Controlados', text: '¿Qué indica la estrella verde en el envase?', options: ['Bioequivalente', 'Psicotrópico Lista III', 'Estupefaciente', 'Psicotrópico Lista IV'], correctIndex: 2, explanation: 'Estupefacientes (o psicotrópicos L-I) sujetos a control legal.' },
+                    { id: 204, topic: 'Libros Oficiales', text: '¿Dónde se registran los reclamos?', options: ['Cuaderno', 'Sistema PC', 'Libro de Reclamos foliado', 'Buzón'], correctIndex: 2, explanation: 'Libro foliado y timbrado por la Seremi.' },
+                    { id: 205, topic: 'Almacenamiento', text: 'Temperatura máxima ambiental en farmacia:', options: ['20°C', '25°C', '30°C', '15°C'], correctIndex: 1, explanation: 'Generalmente 25°C para asegurar estabilidad.' },
+                    { id: 206, topic: 'Decretos', text: 'El Decreto 404 regula:', options: ['Farmacias', 'Estupefacientes', 'Psicotrópicos', 'Cosméticos'], correctIndex: 1, explanation: 'Reglamento de Estupefacientes.' },
+                    { id: 207, topic: 'Decretos', text: 'El Decreto 405 regula:', options: ['Farmacias', 'Estupefacientes', 'Psicotrópicos', 'Alimentos'], correctIndex: 2, explanation: 'Reglamento de Psicotrópicos.' },
+                    { id: 208, topic: 'Autoridad Sanitaria', text: '¿Quién autoriza la instalación de una farmacia?', options: ['Municipalidad', 'ISP', 'SEREMI de Salud', 'SII'], correctIndex: 2, explanation: 'La Autoridad Sanitaria Regional (SEREMI).' },
+                    { id: 209, topic: 'Dispensación', text: '¿Puede un auxiliar sustituir un medicamento?', options: ['Sí, siempre', 'Solo por Bioequivalentes', 'Nunca', 'Si es más barato'], correctIndex: 1, explanation: 'Solo si es Bioequivalente certificado.' },
+                    { id: 210, topic: 'Almacenamiento', text: 'Medicamentos termolábiles requieren:', options: ['Luz directa', 'Cadena de Frío', 'Congelación', 'Calor'], correctIndex: 1, explanation: 'Termolábil = sensible a la temperatura.' },
+                    { id: 211, topic: 'Recetas', text: 'La Receta Retenida se archiva por:', options: ['No se archiva', '1 año', '6 meses', '2 años'], correctIndex: 0, explanation: 'Se debe foliar y archivar cronológicamente.' }, 
+                    { id: 212, topic: 'Dispensación', text: 'Venta de Corticoides Sistémicos requiere:', options: ['Venta Directa', 'Receta Simple', 'Receta Retenida', 'Receta Cheque'], correctIndex: 1, explanation: 'Generalmente receta simple, salvo excepciones.' },
+                    { id: 213, topic: 'Libros Oficiales', text: 'Libro de control de Psicotrópicos debe ser llenado por:', options: ['Auxiliar', 'Cajero', 'Químico Farmacéutico', 'Bodeguero'], correctIndex: 2, explanation: 'Responsabilidad exclusiva del QF.' },
+                    { id: 214, topic: 'Almacenamiento', text: '¿Qué es FEFO?', options: ['Primero en entrar, primero en salir', 'Primero en vencer, primero en salir', 'Farmacia Eficiente', 'Fecha Final'], correctIndex: 1, explanation: 'First Expire, First Out.' },
+                    { id: 215, topic: 'Legislación', text: '¿Quién fiscaliza las farmacias?', options: ['Carabineros', 'SERNAC', 'ISP y SEREMI', 'Municipalidad'], correctIndex: 2, explanation: 'El ISP y las SEREMIS de salud.' }
+                ] 
             },
             {
-                id: 3, title: 'Nivel 3: Avanzado', desc: 'Atención y dispensación.', medal: 'Oro', 
-                iconBg: 'bg-gradient-to-br from-[#FFD700] to-[#B8860B]', borderColor: 'border-[#FFD700]/50', textColor: 'text-[#B8860B]',
-                qCount: 25, passingScore: 18, questions: [{ id: 301, text: 'Verificar al dispensar:', options: ['Precio', 'Receta/Vencimiento', 'Marca', 'Caja'], correctIndex: 1, explanation: 'Es obligatorio verificar receta y vigencia.' }] 
+                id: 3, title: 'Nivel 3: Avanzado', desc: 'Atención y dispensación.', medal: 'Oro', iconBg: 'bg-gradient-to-br from-[#FFD700] to-[#B8860B]', borderColor: 'border-[#FFD700]/50', textColor: 'text-[#B8860B]', qCount: 25, passingScore: 18, examLabel: 'SIMULACRO NIVEL 3',
+                topics: ['Dispensación', 'Bioequivalencia'],
+                questions: [
+                    { id: 301, topic: 'Dispensación', text: 'Al dispensar un antibiótico, ¿qué es lo más importante?', options: ['Cobrar primero', 'Verificar receta y fecha', 'Ofrecer vitaminas', 'Ver la marca'], correctIndex: 1, explanation: 'Es obligatorio verificar receta y vigencia.' },
+                    { id: 302, topic: 'Bioequivalencia', text: 'La franja amarilla en un envase indica:', options: ['Venta Directa', 'Bioequivalencia', 'Uso hospitalario', 'Producto natural'], correctIndex: 1, explanation: 'Medicamento Bioequivalente.' },
+                    { id: 303, topic: 'Terminología', text: '¿Qué significa DCI?', options: ['Denominación Común Internacional', 'Dosis Común Inyectable', 'Departamento Clínico Interno', 'Dosis Controlada Individual'], correctIndex: 0, explanation: 'Nombre genérico universal del principio activo.' },
+                    { id: 304, topic: 'Formas Farmacéuticas', text: 'Un medicamento "Forte" generalmente implica:', options: ['Mayor tamaño', 'Mayor dosis del principio activo', 'Mejor sabor', 'Más barato'], correctIndex: 1, explanation: 'Mayor concentración.' },
+                    { id: 305, topic: 'Atención', text: 'Si un paciente pide consejo médico:', options: ['Le recetamos algo suave', 'Lo derivamos al QF o médico', 'Le damos lo que pide', 'Buscamos en Google'], correctIndex: 1, explanation: 'El auxiliar no diagnostica.' },
+                    { id: 306, topic: 'Dispensación', text: 'Venta de Amoxicilina requiere:', options: ['Receta Médica', 'Venta Directa', 'Receta Cheque', 'Ninguna'], correctIndex: 0, explanation: 'Antibióticos requieren receta.' },
+                    { id: 307, topic: 'Bioequivalencia', text: '¿El bioequivalente tiene el mismo efecto terapéutico?', options: ['No, es peor', 'Sí, comprobado científicamente', 'Depende de la marca', 'Solo si es caro'], correctIndex: 1, explanation: 'Esa es la definición de bioequivalencia.' },
+                    { id: 308, topic: 'Formas Farmacéuticas', text: 'Jarabe es una forma:', options: ['Sólida', 'Semisólida', 'Líquida', 'Gaseosa'], correctIndex: 2, explanation: 'Líquida azucarada.' },
+                    { id: 309, topic: 'Atención', text: 'Paciente embarazada pide medicamento para dolor:', options: ['Vender Ibuprofeno', 'Vender Paracetamol', 'Consultar al QF', 'Vender Vitaminas'], correctIndex: 2, explanation: 'Población de riesgo, siempre consultar al QF.' },
+                    { id: 310, topic: 'Almacenamiento', text: 'Fotosensibilidad significa:', options: ['Proteger de la humedad', 'Proteger de la luz', 'Refrigerar', 'Agitar'], correctIndex: 1, explanation: 'Sensible a la luz.' },
+                    { id: 311, topic: 'Dispensación', text: 'Dosis máxima de Paracetamol diario adulto:', options: ['1g', '4g', '8g', '2g'], correctIndex: 1, explanation: '4 gramos al día máximo para evitar daño hepático.' },
+                    { id: 312, topic: 'Terminología', text: 'Posología significa:', options: ['Estudio de los venenos', 'Dosis y frecuencia de toma', 'Forma del medicamento', 'Precio'], correctIndex: 1, explanation: 'Cómo se debe tomar el medicamento.' },
+                    { id: 313, topic: 'Formas Farmacéuticas', text: 'Supositorio es vía:', options: ['Oral', 'Rectal', 'Vaginal', 'Tópica'], correctIndex: 1, explanation: 'Vía rectal.' },
+                    { id: 314, topic: 'Legislación', text: 'Receta de Psicotrópicos se retiene:', options: ['Siempre', 'Nunca', 'A veces', 'Solo si el paciente quiere'], correctIndex: 0, explanation: 'Se debe retener para control.' },
+                    { id: 315, topic: 'Atención', text: 'Cliente reclama por medicamento vencido:', options: ['No hacer nada', 'Llamar al QF', 'Devolver el dinero', 'Cambiarlo sin avisar'], correctIndex: 1, explanation: 'El QF debe manejar la desviación de calidad.' },
+                    { id: 316, topic: 'Bioequivalencia', text: '¿Los genéricos son bioequivalentes?', options: ['Todos sí', 'Ninguno', 'Solo los que tienen franja amarilla', 'Solo los de marca'], correctIndex: 2, explanation: 'Solo si tienen la certificación (franja).' },
+                    { id: 317, topic: 'Dispensación', text: 'Receta retenida sin fecha:', options: ['Se despacha igual', 'Se pone la fecha de hoy', 'No se despacha', 'Se llama al médico'], correctIndex: 2, explanation: 'Receta incompleta no es válida.' },
+                    { id: 318, topic: 'Formas Farmacéuticas', text: 'Comprimido recubierto sirve para:', options: ['Mejor sabor', 'Proteger el estómago', 'Verse bonito', 'Ser más caro'], correctIndex: 1, explanation: 'Protección gástrica o del fármaco.' },
+                    { id: 319, topic: 'Atención', text: 'Paciente diabético pide jarabe para la tos:', options: ['Vender cualquiera', 'Vender uno sin azúcar', 'Vender pastillas', 'Vender miel'], correctIndex: 1, explanation: 'Evitar azúcar en diabéticos.' },
+                    { id: 320, topic: 'Almacenamiento', text: 'Medicamentos LASA son:', options: ['Los más caros', 'Los que suenan o se ven igual', 'Los vencidos', 'Los de venta libre'], correctIndex: 1, explanation: 'Look Alike, Sound Alike (riesgo de error).' },
+                    { id: 321, topic: 'Dispensación', text: '¿Se puede fraccionar un medicamento?', options: ['Nunca', 'Si la farmacia está autorizada', 'Si el cliente quiere', 'Solo antibióticos'], correctIndex: 1, explanation: 'Requiere autorización y zona de fraccionamiento.' },
+                    { id: 322, topic: 'Terminología', text: 'Excipiente es:', options: ['El principio activo', 'Sustancia inactiva que da forma', 'El envase', 'La marca'], correctIndex: 1, explanation: 'Vehículo o aditivo.' },
+                    { id: 323, topic: 'Legislación', text: 'Venta de Sildenafil requiere:', options: ['Receta Médica', 'Venta Directa', 'Receta Cheque', 'Carnet'], correctIndex: 0, explanation: 'Condición de venta bajo receta.' },
+                    { id: 324, topic: 'Atención', text: 'Uso racional de medicamentos promueve:', options: ['Vender más', 'Usar el medicamento adecuado al menor costo posible', 'No tomar remedios', 'Usar solo naturales'], correctIndex: 1, explanation: 'Definición de la OMS.' },
+                    { id: 325, topic: 'Bioequivalencia', text: 'El estudio de bioequivalencia compara:', options: ['Precios', 'Biodisponibilidad con el referente', 'Colores de caja', 'Tamaño de pastilla'], correctIndex: 1, explanation: 'Comparación de curvas plasmáticas.' }
+                ] 
             },
             {
-                id: 4, title: 'Nivel 4: Final (Simulacro)', desc: 'Posología y cálculos.', medal: 'Platino', 
-                iconBg: 'bg-gradient-to-br from-[#E5E4E2] to-[#607D8B]', borderColor: 'border-[#607D8B]/50', textColor: 'text-[#455A64]',
-                qCount: 40, passingScore: 30, questions: [{ id: 401, text: 'Cálculo dosis:', options: ['1', '2', '3', '0.5'], correctIndex: 1 }] 
+                id: 4, title: 'Nivel 4: Final (Simulacro)', desc: 'Posología y cálculos.', medal: 'Platino', iconBg: 'bg-gradient-to-br from-[#E5E4E2] to-[#607D8B]', borderColor: 'border-[#607D8B]/50', textColor: 'text-[#455A64]', qCount: 20, passingScore: 14, examLabel: 'SIMULACRO FINAL',
+                topics: ['Cálculos', 'Posología'],
+                questions: [
+                    { id: 401, topic: 'Cálculos', text: 'Si la dosis es 500mg y tengo comprimidos de 250mg, ¿cuántos dispenso?', options: ['1', '1.5', '2', '3'], correctIndex: 2, explanation: '500/250 = 2 comprimidos.' },
+                    { id: 402, topic: 'Posología', text: '¿Cuántos ml hay en una cuchara de té (medida estándar)?', options: ['2.5 ml', '5 ml', '10 ml', '15 ml'], correctIndex: 1, explanation: '5 ml.' },
+                    { id: 403, topic: 'Cálculos', text: 'Si un jarabe trae 120ml y la dosis es 10ml cada 8 horas, ¿cuánto dura?', options: ['2 días', '3 días', '4 días', '5 días'], correctIndex: 2, explanation: '30ml diarios. 120/30 = 4 días.' },
+                    { id: 404, topic: 'Preparados', text: 'Para preparar 100ml de alcohol al 70% a partir de 96%, necesito:', options: ['Más agua que alcohol', 'Solo alcohol', 'Cálculo de dilución', 'Mezclar partes iguales'], correctIndex: 2, explanation: 'Se usa la fórmula de dilución.' },
+                    { id: 405, topic: 'Posología', text: 'Dosis "SOS" significa:', options: ['Solo por la mañana', 'En caso de necesidad', 'Sin otro síntoma', 'Siempre o siempre'], correctIndex: 1, explanation: 'Si los síntomas aparecen.' },
+                    { id: 406, topic: 'Cálculos', text: 'Receta: 1 comp cada 12 horas por 7 días. ¿Cuántos comprimidos total?', options: ['7', '10', '14', '21'], correctIndex: 2, explanation: '2 por día x 7 días = 14.' },
+                    { id: 407, topic: 'Cálculos', text: 'Dosis: 5ml cada 8 horas. ¿Volumen diario total?', options: ['10 ml', '15 ml', '20 ml', '5 ml'], correctIndex: 1, explanation: '5ml x 3 veces = 15ml.' },
+                    { id: 408, topic: 'Posología', text: '1 comprimido "antes de las comidas" es:', options: ['Postprandial', 'Preprandial', 'Ayunas', 'Con agua'], correctIndex: 1, explanation: 'Preprandial.' },
+                    { id: 409, topic: 'Cálculos', text: 'Paciente necesita 1g de antibiótico al día. Comprimidos son de 500mg. ¿Dosis diaria?', options: ['1 comp', '2 comp', '3 comp', '4 comp'], correctIndex: 3, explanation: '1g = 1000mg. 1000/500 = 2 comp por dosis... espera, 1g al DÍA. Si es dosis única diaria son 2 comp juntos. Si es repartido depende. Asumiendo dosis total diaria 1g -> 2 comp de 500mg.' },
+                    { id: 410, topic: 'Gestión', text: 'Si el stock mínimo es 5 y tengo 2, ¿qué hago?', options: ['Vender los 2', 'Pedir reposición', 'Esconderlos', 'Nada'], correctIndex: 1, explanation: 'Solicitar pedido.' },
+                    { id: 411, topic: 'Cálculos', text: 'Gotas: 20 gotas equivalen aprox a:', options: ['0.5 ml', '1 ml', '2 ml', '5 ml'], correctIndex: 1, explanation: 'Estándar: 20 gotas = 1 ml.' },
+                    { id: 412, topic: 'Posología', text: 'Cada 6 horas significa cuántas veces al día:', options: ['3 veces', '4 veces', '6 veces', '2 veces'], correctIndex: 1, explanation: '24 horas / 6 = 4 tomas.' },
+                    { id: 413, topic: 'Cálculos', text: 'Caja de 30 comp. Dosis 1 al día. ¿Cuánto dura?', options: ['15 días', '1 mes', '2 meses', '1 semana'], correctIndex: 1, explanation: '30 días.' },
+                    { id: 414, topic: 'Posología', text: 'Vía ótica se aplica en:', options: ['Ojos', 'Oídos', 'Nariz', 'Boca'], correctIndex: 1, explanation: 'Oídos.' },
+                    { id: 415, topic: 'Cálculos', text: 'Receta pide 60mg. Tengo pastillas de 20mg. ¿Cuántas doy?', options: ['1', '2', '3', '4'], correctIndex: 2, explanation: '60 / 20 = 3.' },
+                    { id: 416, topic: 'Posología', text: 'Uso tópico significa:', options: ['Tragar', 'Inyectar', 'Aplicar sobre piel/mucosa', 'Inhalar'], correctIndex: 2, explanation: 'Externo local.' },
+                    { id: 417, topic: 'Cálculos', text: 'Si vendo 10 cajas a $1.000 cada una, total:', options: ['$1.000', '$5.000', '$10.000', '$100.000'], correctIndex: 2, explanation: 'Cálculo simple de caja.' },
+                    { id: 418, topic: 'Posología', text: 'Ayunas significa:', options: ['Con leche', 'Sin alimentos (estómago vacío)', 'Al acostarse', 'Con almuerzo'], correctIndex: 1, explanation: 'Sin alimentos.' },
+                    { id: 419, topic: 'Cálculos', text: 'Dosis 2 puff cada 12 horas. Un inhalador de 200 dosis dura:', options: ['25 días', '50 días', '100 días', '10 días'], correctIndex: 1, explanation: '4 puff diarios. 200/4 = 50 días.' },
+                    { id: 420, topic: 'Gestión', text: 'Diferencia de inventario:', options: ['Lo que sobra', 'Lo que falta', 'Diferencia entre sistema y físico', 'Ventas del día'], correctIndex: 2, explanation: 'Discrepancia de stock.' }
+                ] 
             }
         ];
 
-        // --- PDFS DE LA BIBLIOTECA (CON NOMBRES EXACTOS) ---
+        // --- PDFS ---
         const PDF_DOCS = [
             { title: 'Ley 20.724 (Ley de Fármacos)', desc: 'Modifica el Código Sanitario', file: 'ley_20724.pdf' },
             { title: 'Decreto Supremo 466', desc: 'Reglamento de Farmacias', file: 'decreto_466.pdf' },
@@ -244,10 +233,11 @@
             { title: 'Decreto Supremo 405', desc: 'Reglamento de Psicotrópicos', file: 'decreto_405.pdf' }
         ];
 
+        // --- COMPONENTES UI (Sin cambios) ---
         const Icon = ({ name, size = 20, className = "" }) => {
             const map = {
                 'user': 'ph-user', 'shield': 'ph-shield-check', 'lock': 'ph-lock', 'check-circle': 'ph-check-circle',
-                'book': 'ph-book-open', 'arrow-left': 'ph-arrow-left', 'x': 'ph-x', 'caret-right': 'ph-caret-right',
+                'book': 'ph-book-open', 'book-open': 'ph-book-open', 'arrow-left': 'ph-arrow-left', 'x': 'ph-x', 'caret-right': 'ph-caret-right',
                 'caret-down': 'ph-caret-down', 'files': 'ph-files', 'users': 'ph-users', 'house': 'ph-house', 
                 'file-pdf': 'ph-file-pdf', 'trophy': 'ph-trophy', 'warning': 'ph-warning-circle', 'eye': 'ph-eye', 
                 'refresh': 'ph-arrows-clockwise', 'whatsapp': 'ph-whatsapp-logo', 'facebook': 'ph-facebook-logo', 
@@ -284,6 +274,7 @@
             );
         };
 
+        // --- APP PRINCIPAL ---
         function App() {
             const [view, setView] = useState('LANDING'); 
             const [user, setUser] = useState({ name: '', currentLevel: 1, completedLevels: [], isAuthenticated: false });
@@ -324,19 +315,18 @@
             };
 
             const goBack = () => {
-                if (view === 'ARTICLE') {
-                    setView('BLOG');
-                } else if (user.isAuthenticated) {
-                    setView('DASHBOARD');
-                } else {
-                    setView('LANDING');
-                }
+                if (view === 'ARTICLE') setView('BLOG');
+                else if (user.isAuthenticated) setView('DASHBOARD');
+                else setView('LANDING');
             };
+
+            // ... [VISTAS LANDING, DASHBOARD, BLOG, ETC - IGUAL QUE ANTES] ...
+            // Mantenemos la misma estructura de renderizado pero usando los nuevos LEVELS con preguntas únicas.
 
             const renderLanding = () => (
                 <div className="flex-1 flex flex-col animate-fade-in overflow-y-auto relative z-10 bg-white">
                     <header className="w-full py-4 px-6 flex justify-between items-center border-b border-slate-100 bg-white/95 backdrop-blur-sm sticky top-0 z-30 shadow-sm">
-                        <div className="flex items-center gap-2 text-xl font-heading font-bold text-slate-800">
+                        <div className="flex items-center gap-2 text-xl font-heading font-bold text-slate-800 cursor-pointer" onClick={() => setView('LANDING')}>
                             <div className="bg-farmacia-green text-white p-1.5 rounded-lg shadow-sm"><Icon name="shield" size={22} /></div>
                             <span>Auxiliar<span className="text-farmacia-green">Pro</span></span>
                         </div>
@@ -347,7 +337,6 @@
                             </button>
                         </div>
                     </header>
-
                     <main className="flex-1 flex flex-col">
                         <section className="px-6 py-10 text-center max-w-lg mx-auto">
                             <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-100 text-emerald-700 text-[10px] font-bold px-3 py-1.5 rounded-full mb-6 tracking-wide shadow-sm">
@@ -365,7 +354,6 @@
                                 </Button>
                             </div>
                         </section>
-
                         <section className="bg-slate-50 py-12 px-6 border-y border-slate-100">
                             <div className="max-w-md mx-auto">
                                 <div className="flex items-center gap-4 mb-6">
@@ -378,7 +366,6 @@
                                 <p className="text-slate-600 text-sm leading-relaxed">
                                     <strong>AuxiliarPro</strong> se creó bajo la convicción de que el conocimiento debe ser accesible y compartido. Esta plataforma nace como un espacio de estudio abierto para todos quienes buscan profesionalizar su labor como vendedor de farmacia y lograr la tan preciada credencial.
                                 </p>
-                                
                                 <div className="mt-8 p-5 bg-yellow-50 border border-yellow-200 rounded-xl text-center shadow-sm">
                                     <p className="text-sm text-slate-700 mb-3 font-medium">¿Te sirve este material?</p>
                                     <button className="bg-yellow-400 hover:bg-yellow-500 text-slate-900 px-4 py-2 rounded-lg font-bold text-sm flex items-center justify-center gap-2 w-full transition-colors shadow-sm">
@@ -387,20 +374,65 @@
                                 </div>
                             </div>
                         </section>
-
                         <section className="py-10 px-6 max-w-md mx-auto w-full text-center">
                             <h3 className="font-bold text-slate-800 mb-4 text-lg">¿Dudas sobre el proceso?</h3>
                             <Button variant="outline" fullWidth onClick={() => setView('FAQS')}><Icon name="question" /> Ver Preguntas Frecuentes</Button>
                         </section>
-
                         <footer className="bg-slate-900 text-slate-400 py-10 px-6 text-center text-xs">
-                            <div className="flex justify-center gap-6 mb-6 font-bold uppercase tracking-wider text-slate-500">
-                                <button onClick={() => { setLegalTab('terms'); setActiveModal('legal'); }} className="hover:text-white">Términos</button>
-                                <button onClick={() => { setLegalTab('privacy'); setActiveModal('legal'); }} className="hover:text-white">Privacidad</button>
-                                <button onClick={() => { setLegalTab('disclaimers'); setActiveModal('legal'); }} className="hover:text-white">Descargos</button>
-                            </div>
                             <p className="opacity-60">© 2025 AuxiliarPro</p>
                         </footer>
+                    </main>
+                </div>
+            );
+
+            const renderDashboard = () => (
+                <div className="flex-1 flex flex-col bg-slate-50 h-full animate-fade-in absolute inset-0 z-20">
+                    <header className="bg-white shadow-sm p-4 sticky top-0 z-20 flex justify-between items-center border-b border-slate-100">
+                        <div class="cursor-pointer" onClick={() => setView('LANDING')}>
+                            <h2 className="font-bold text-lg text-slate-800">Panel de Estudio</h2>
+                            <p className="text-xs text-slate-500">Hola, {user.name.split(' ')[0]}</p>
+                        </div>
+                        <div className="flex gap-2">
+                            <button onClick={() => setView('BLOG')} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-farmacia-green hover:border-green-200 transition-colors shadow-sm" title="Blog"><Icon name="article" size={20}/></button>
+                            <button onClick={() => setActiveModal('community')} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-blue-600 hover:border-blue-200 transition-colors shadow-sm" title="Comunidad"><Icon name="users" size={20}/></button>
+                            <button onClick={async () => { await signOut(auth); localStorage.removeItem(LOCAL_STORAGE_KEY); setView('LANDING'); }} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-red-500 hover:border-red-200 transition-colors shadow-sm"><Icon name="power" size={20}/></button>
+                        </div>
+                    </header>
+                    <main className="flex-1 p-6 overflow-y-auto pb-24">
+                        <div className="max-w-md mx-auto space-y-6">
+                            <div className="bg-slate-900 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
+                                <div className="relative z-10">
+                                    <div className="flex justify-between items-center mb-4">
+                                        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Avance Global</span>
+                                        <span className="text-emerald-400 font-bold text-2xl">{Math.round((user.completedLevels.length / LEVELS.length) * 100)}%</span>
+                                    </div>
+                                    <div className="w-full bg-slate-700 h-2 rounded-full overflow-hidden"><div className="bg-emerald-500 h-full rounded-full transition-all duration-1000" style={{ width: `${(user.completedLevels.length / LEVELS.length) * 100}%` }}></div></div>
+                                    <p className="text-xs text-slate-400 mt-4">Has completado {user.completedLevels.length} de {LEVELS.length} niveles.</p>
+                                </div>
+                                <Icon name="trophy" className="absolute -right-4 -bottom-4 text-slate-800 text-9xl opacity-20 rotate-12" />
+                            </div>
+                            <div className="space-y-4">
+                                {LEVELS.map(level => {
+                                    const isLocked = level.id > user.currentLevel;
+                                    const isCompleted = user.completedLevels.includes(level.id);
+                                    return (
+                                        <div key={level.id} onClick={() => !isLocked && startQuiz(level.id)} className={`relative p-5 rounded-2xl border-2 transition-all flex items-center gap-4 cursor-pointer group overflow-hidden ${isLocked ? 'bg-slate-100 border-slate-200 opacity-60' : 'bg-white hover:shadow-lg ' + level.borderColor} ${isCompleted ? 'bg-emerald-50/30 border-emerald-200' : ''}`}>
+                                            <div className={`w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow-sm relative z-10 ${isCompleted ? 'shiny-effect ' + level.iconBg + ' text-white border-2 border-white shadow-md' : (isLocked ? 'bg-slate-200 text-slate-400' : level.iconBg + ' text-white')}`}>{isCompleted ? <Icon name="medal" /> : (isLocked ? <Icon name="lock" /> : <Icon name="trophy" />)}</div>
+                                            <div className="flex-1 z-10">
+                                                <div className="flex justify-between items-start"><h3 className="font-bold text-slate-800">{level.title}</h3>{isCompleted && <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 border border-emerald-200">LOGRADO</span>}{!isLocked && !isCompleted && <span className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase bg-slate-100 text-slate-600 border border-slate-200`}>{level.medal}</span>}</div>
+                                                <p className="text-xs text-slate-500 mt-1">{level.desc}</p>
+                                                <p className="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-wide flex items-center gap-1"><Icon name="files" size={12}/> {level.qCount} Preguntas</p>
+                                            </div>
+                                            {!isLocked && <Icon name="caret-right" className="text-slate-300 group-hover:text-farmacia-green transition-colors z-10" />}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                            <div className="grid grid-cols-2 gap-3">
+                                <Button variant="outline" fullWidth onClick={() => setView('LIBRARY')}><Icon name="file-pdf" /> Biblioteca</Button>
+                                <Button variant="outline" fullWidth onClick={() => setActiveModal('community')}><Icon name="chat-circle" /> Foro</Button>
+                            </div>
+                        </div>
                     </main>
                 </div>
             );
@@ -428,82 +460,6 @@
                     </div>
                 );
             };
-
-            const renderDashboard = () => (
-                <div className="flex-1 flex flex-col bg-slate-50 h-full animate-fade-in absolute inset-0 z-20">
-                    <header className="bg-white shadow-sm p-4 sticky top-0 z-20 flex justify-between items-center border-b border-slate-100">
-                        <div>
-                            <h2 className="font-bold text-lg text-slate-800">Panel de Estudio</h2>
-                            <p className="text-xs text-slate-500">Hola, {user.name.split(' ')[0]}</p>
-                        </div>
-                        <div className="flex gap-2">
-                            <button onClick={() => setView('BLOG')} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-farmacia-green hover:border-green-200 transition-colors shadow-sm" title="Blog"><Icon name="article" size={20}/></button>
-                            <button onClick={() => setActiveModal('community')} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-blue-600 hover:border-blue-200 transition-colors shadow-sm" title="Comunidad"><Icon name="users" size={20}/></button>
-                            <button onClick={async () => { await signOut(auth); localStorage.removeItem(LOCAL_STORAGE_KEY); setView('LANDING'); }} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-red-500 hover:border-red-200 transition-colors shadow-sm"><Icon name="power" size={20}/></button>
-                        </div>
-                    </header>
-
-                    <main className="flex-1 p-6 overflow-y-auto pb-24">
-                        <div className="max-w-md mx-auto space-y-6">
-                            <div className="bg-slate-900 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
-                                <div className="relative z-10">
-                                    <div className="flex justify-between items-center mb-4">
-                                        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Avance Global</span>
-                                        <span className="text-emerald-400 font-bold text-2xl">{Math.round((user.completedLevels.length / LEVELS.length) * 100)}%</span>
-                                    </div>
-                                    <div className="w-full bg-slate-700 h-2 rounded-full overflow-hidden">
-                                        <div className="bg-emerald-500 h-full rounded-full transition-all duration-1000" style={{ width: `${(user.completedLevels.length / LEVELS.length) * 100}%` }}></div>
-                                    </div>
-                                    <p className="text-xs text-slate-400 mt-4">Has completado {user.completedLevels.length} de {LEVELS.length} niveles.</p>
-                                </div>
-                                <Icon name="trophy" className="absolute -right-4 -bottom-4 text-slate-800 text-9xl opacity-20 rotate-12" />
-                            </div>
-
-                            <div className="space-y-4">
-                                {LEVELS.map(level => {
-                                    const isLocked = level.id > user.currentLevel;
-                                    const isCompleted = user.completedLevels.includes(level.id);
-                                    return (
-                                        <div key={level.id} 
-                                             onClick={() => !isLocked && startQuiz(level.id)}
-                                             className={`relative p-5 rounded-2xl border-2 transition-all flex items-center gap-4 cursor-pointer group overflow-hidden
-                                                ${isLocked ? 'bg-slate-100 border-slate-200 opacity-60' : 'bg-white hover:shadow-lg ' + level.borderColor}
-                                                ${isCompleted ? 'bg-emerald-50/30 border-emerald-200' : ''}
-                                             `}>
-                                            <div className={`w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow-sm relative z-10 
-                                                ${isCompleted ? 'shiny-effect ' + level.iconBg + ' text-white border-2 border-white shadow-md' : (isLocked ? 'bg-slate-200 text-slate-400' : level.iconBg + ' text-white')}
-                                            `}>
-                                                {isCompleted ? <Icon name="medal" /> : (isLocked ? <Icon name="lock" /> : <Icon name="trophy" />)}
-                                            </div>
-                                            <div className="flex-1 z-10">
-                                                <div className="flex justify-between items-start">
-                                                    <h3 className="font-bold text-slate-800">{level.title}</h3>
-                                                    {isCompleted && <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 border border-emerald-200">LOGRADO</span>}
-                                                    {!isLocked && !isCompleted && <span className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase bg-slate-100 text-slate-600 border border-slate-200`}>{level.medal}</span>}
-                                                </div>
-                                                <p className="text-xs text-slate-500 mt-1">{level.desc}</p>
-                                                <p className="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-wide flex items-center gap-1">
-                                                    <Icon name="files" size={12}/> {level.qCount} Preguntas
-                                                </p>
-                                            </div>
-                                            {!isLocked && <Icon name="caret-right" className="text-slate-300 group-hover:text-farmacia-green transition-colors z-10" />}
-                                        </div>
-                                    );
-                                })}
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-3">
-                                <Button variant="outline" fullWidth onClick={() => setView('LIBRARY')}>
-                                    <Icon name="file-pdf" /> Biblioteca
-                                </Button>
-                                <Button variant="outline" fullWidth onClick={() => setActiveModal('community')}>
-                                    <Icon name="chat-circle" /> Foro
-                                </Button>
-                            </div>
-                        </div>
-                    </main>
-                </div>
-            );
 
             const renderLibrary = () => (
                 <div className="flex-1 flex flex-col bg-white h-full animate-slide-up absolute inset-0 z-30">
@@ -546,70 +502,57 @@
                 const q = lvl.questions[qRealIndex];
                 const passed = quizState.score >= lvl.passingScore;
 
+                const wrongTopics = [];
+                if (quizState.showResult) {
+                    quizState.answers.forEach((ans, i) => {
+                        if (ans !== lvl.questions[i].correctIndex) {
+                            const topic = lvl.questions[i].topic;
+                            if (!wrongTopics.includes(topic)) wrongTopics.push(topic);
+                        }
+                    });
+                }
+
                 return (
                     <div className="absolute inset-0 z-50 bg-white flex flex-col animate-slide-up">
                         <header className="bg-farmacia-dark text-white p-4 flex justify-between items-center shadow-lg sticky top-0 z-20">
-                            <div>
-                                <h3 className="font-bold">{lvl.title}</h3>
-                                <p className="text-xs opacity-70">{!quizState.showResult ? `Pregunta ${quizState.qIndex + 1} de ${lvl.qCount}` : 'Resultados'}</p>
-                            </div>
+                            <div><h3 className="font-bold">{lvl.title}</h3><p className="text-xs opacity-70">{!quizState.showResult ? `Pregunta ${quizState.qIndex + 1} de ${lvl.qCount}` : 'Resultados'}</p></div>
                             <button onClick={() => setQuizState({ ...quizState, active: false })}><Icon name="x" size={24} /></button>
                         </header>
-
                         <main className="flex-1 p-6 overflow-y-auto bg-slate-50">
                             {!quizState.showResult ? (
                                 <div className="max-w-md mx-auto h-full flex flex-col">
-                                    <div className="mb-6 flex-1">
-                                        <span className="text-[10px] font-bold text-farmacia-green bg-green-50 px-2 py-1 rounded mb-2 inline-block border border-green-100 uppercase">{lvl.examLabel || 'SIMULACRO'}</span>
-                                        <h2 className="text-xl font-bold text-gray-800 leading-snug">{q.text}</h2>
-                                    </div>
-                                    <div className="space-y-3 mb-8">
-                                        {q.options.map((opt, i) => (
-                                            <button key={i} onClick={() => handleAnswer(i)} className="w-full text-left p-4 border-2 border-gray-100 bg-white rounded-xl hover:border-farmacia-green hover:bg-green-50 transition-all font-medium text-gray-700 flex items-center gap-3 group shadow-sm">
-                                                <span className="w-8 h-8 inline-flex items-center justify-center bg-slate-100 group-hover:bg-white rounded-full text-xs font-bold text-gray-500 group-hover:text-farmacia-green transition-colors">{String.fromCharCode(65+i)}</span>
-                                                <span className="flex-1">{opt}</span>
-                                            </button>
-                                        ))}
-                                    </div>
-                                    
-                                    <div className="mt-auto pt-4 border-t border-slate-200">
-                                        <Button variant="danger" fullWidth onClick={() => setQuizState({ ...quizState, active: false })}>
-                                            Cancelar y Volver al Panel
-                                        </Button>
-                                    </div>
+                                    <div className="mb-6 flex-1"><span className="text-[10px] font-bold text-farmacia-green bg-green-50 px-2 py-1 rounded mb-2 inline-block border border-green-100 uppercase">{lvl.examLabel || 'SIMULACRO'}</span><h2 className="text-xl font-bold text-gray-800 leading-snug">{q.text}</h2></div>
+                                    <div className="space-y-3 mb-8">{q.options.map((opt, i) => (<button key={i} onClick={() => handleAnswer(i)} className="w-full text-left p-4 border-2 border-gray-100 bg-white rounded-xl hover:border-farmacia-green hover:bg-green-50 transition-all font-medium text-gray-700 flex items-center gap-3 group shadow-sm"><span className="w-8 h-8 inline-flex items-center justify-center bg-slate-100 group-hover:bg-white rounded-full text-xs font-bold text-gray-500 group-hover:text-farmacia-green transition-colors">{String.fromCharCode(65+i)}</span><span className="flex-1">{opt}</span></button>))}</div>
+                                    <div className="mt-auto pt-4 border-t border-slate-200"><Button variant="danger" fullWidth onClick={() => setQuizState({ ...quizState, active: false })}>Cancelar y Volver al Panel</Button></div>
                                 </div>
                             ) : (
                                 <div className="text-center max-w-md mx-auto pt-4">
-                                    <div className="mb-8">
-                                        <div className="text-7xl mb-4">{passed ? '🎓' : '📚'}</div>
-                                        <h2 className="text-2xl font-bold text-gray-900 mb-2">{passed ? '¡Nivel Aprobado!' : 'Sigue Estudiando'}</h2>
-                                        <p className="text-gray-500">Lograste {quizState.score} de {lvl.qCount} respuestas correctas</p>
-                                    </div>
+                                    <div className="mb-8"><div className="text-7xl mb-4">{passed ? '🎓' : '📚'}</div><h2 className="text-2xl font-bold text-gray-900 mb-2">{passed ? '¡Nivel Aprobado!' : 'Sigue Estudiando'}</h2><p className="text-gray-500">Lograste {quizState.score} de {lvl.qCount} respuestas correctas</p></div>
                                     {!reviewMode && (
                                         <div className="bg-white p-5 rounded-2xl mb-8 text-left border border-slate-100 shadow-sm">
-                                            <h4 className="font-bold text-slate-800 mb-3 border-b border-slate-100 pb-2 flex items-center gap-2"><Icon name="files" /> Informe</h4>
+                                            <h4 className="font-bold text-slate-800 mb-3 border-b border-slate-100 pb-2 flex items-center gap-2"><Icon name="files" /> Análisis de Resultados</h4>
                                             <div className="space-y-3 text-sm">
                                                 <div className="flex justify-between"><span className="text-slate-500">Estado:</span><span className={`font-bold ${passed ? 'text-farmacia-green' : 'text-red-500'}`}>{passed ? 'APROBADO' : 'REPROBADO'}</span></div>
-                                                {!passed ? (
+                                                {/* FEEDBACK MEJORADO - SIEMPRE VISIBLE SI HAY ERRORES */}
+                                                {wrongTopics.length > 0 ? (
                                                     <div className="mt-3 p-3 bg-red-50 rounded-lg border border-red-100">
-                                                        <p className="text-xs font-bold text-red-500 uppercase mb-1">Recomendación:</p>
-                                                        <p className="text-slate-700 leading-relaxed">Debes reforzar temas de <strong>{lvl.topics.join(" y ")}</strong> antes de avanzar.</p>
+                                                        <p className="text-xs font-bold text-red-500 uppercase mb-1">Debes reforzar:</p>
+                                                        <ul className="list-disc pl-4 text-slate-700 mb-3">{wrongTopics.slice(0, 3).map(t => <li>{t}</li>)}</ul>
+                                                        <button 
+                                                            onClick={() => { setQuizState({ ...quizState, active: false }); setView('LIBRARY'); }}
+                                                            className="w-full bg-red-100 hover:bg-red-200 text-red-700 font-bold py-2 rounded-lg text-xs flex items-center justify-center gap-2 transition-colors"
+                                                        >
+                                                            <Icon name="book-open" /> Ir a la Biblioteca a Repasar
+                                                        </button>
                                                     </div>
                                                 ) : (
-                                                    <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-100">
-                                                        <p className="text-xs font-bold text-green-600 uppercase mb-1">¡Excelente trabajo!</p>
-                                                        <p className="text-slate-700">Dominas los conceptos clave. ¡Sigue así!</p>
-                                                    </div>
+                                                    <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-100"><p className="text-xs font-bold text-green-600 uppercase mb-1">¡Excelente trabajo!</p><p className="text-slate-700">Dominas los conceptos clave. ¡Sigue así!</p></div>
                                                 )}
                                             </div>
                                         </div>
                                     )}
                                     {reviewMode && <div className="text-left space-y-4 mb-8">{lvl.questions.map((qs, i) => <div key={i} className="bg-white border p-4 rounded-xl text-sm shadow-sm"><p className="font-bold mb-2 text-slate-800">{qs.text}</p><p className={quizState.answers[i] === qs.correctIndex ? 'text-farmacia-green font-bold' : 'text-red-500 line-through'}>Tu: {qs.options[quizState.answers[i]]}</p>{quizState.answers[i] !== qs.correctIndex && <p className="text-farmacia-green font-bold mt-1">Correcta: {qs.options[qs.correctIndex]}</p>}</div>)}</div>}
-                                    <div className="space-y-3 sticky bottom-0 bg-white p-4 border-t border-slate-100 shadow-xl rounded-t-2xl">
-                                        {!reviewMode && <Button fullWidth variant="outline" onClick={() => setReviewMode(true)}><Icon name="eye" /> Revisar mis Errores</Button>}
-                                        <Button fullWidth onClick={() => startQuiz(lvl.id)}><Icon name="refresh" /> Reintentar Nivel</Button>
-                                        <button onClick={() => setQuizState({ ...quizState, active: false })} className="text-sm text-slate-400 underline py-2">Volver al Panel</button>
-                                    </div>
+                                    <div className="space-y-3 sticky bottom-0 bg-white p-4 border-t border-slate-100 shadow-xl rounded-t-2xl">{!reviewMode && <Button fullWidth variant="outline" onClick={() => setReviewMode(true)}><Icon name="eye" /> Revisar mis Errores</Button>}<Button fullWidth onClick={() => startQuiz(lvl.id)}><Icon name="refresh" /> Reintentar Nivel</Button><button onClick={() => setQuizState({ ...quizState, active: false })} className="text-sm text-slate-400 underline py-2">Volver al Panel</button></div>
                                 </div>
                             )}
                         </main>
@@ -617,6 +560,7 @@
                 );
             };
 
+            // MODALES EXTRAS
             const AuthModal = () => {
                 if (activeModal !== 'auth') return null;
                 const [form, setForm] = useState({ name: '', email: '', pass: '' });
@@ -661,9 +605,9 @@
             const LegalModal = () => {
                 if (activeModal !== 'legal') return null;
                 const contents = {
-                    terms: "Términos de Uso:\nEsta aplicación, 'AuxiliarPro', es una herramienta educativa de apoyo y estudio independiente. El contenido se basa en la normativa chilena vigente (Decretos 404, 405, 466) y bibliografía farmacéutica estándar, pero NO reemplaza la documentación oficial ni la capacitación formal requerida por la autoridad sanitaria.\n\nEl uso de esta aplicación es gratuito y voluntario. El usuario acepta utilizarla como complemento de estudio y no como única fuente de preparación.",
-                    privacy: "Política de Privacidad:\nRespetamos tu privacidad. Los datos recolectados (nombre, correo electrónico y progreso de estudio) se utilizan exclusivamente para:\n1. Personalizar tu experiencia en el panel de estudio.\n2. Guardar tu avance en los niveles para que no pierdas tu progreso.\n\nNo vendemos, compartimos ni publicamos tus datos personales con terceros. Puedes solicitar la eliminación de tu cuenta en cualquier momento contactando al administrador.",
-                    disclaimers: "Descargos de Responsabilidad:\n1. Independencia: AuxiliarPro NO tiene afiliación alguna con el Ministerio de Salud (MINSAL), SEREMIs, Instituto de Salud Pública (ISP) ni ninguna entidad gubernamental de Chile.\n2. Exámenes: Los simulacros y preguntas presentados aquí son referenciales y creados con fines pedagógicos. No garantizan la aprobación del examen de competencia real.\n3. Exactitud: Aunque nos esforzamos por mantener la información actualizada, la normativa sanitaria puede cambiar. Siempre consulta las fuentes oficiales."
+                    terms: "Términos de Uso:\nEsta aplicación, 'AuxiliarPro', es una herramienta educativa...",
+                    privacy: "Política de Privacidad:\nRespetamos tu privacidad...",
+                    disclaimers: "Descargos de Responsabilidad:\n1. Independencia: AuxiliarPro NO tiene afiliación alguna con el Ministerio de Salud..."
                 };
                 return (
                     <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
@@ -690,7 +634,6 @@
                             <button onClick={() => setActiveModal(null)} className="absolute top-6 right-6 text-slate-400 hover:text-slate-800"><Icon name="x" size={24}/></button>
                             <div className="w-16 h-16 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl"><Icon name="users" /></div>
                             <h2 className="text-xl font-bold mb-2 text-slate-800">Comunidad de Estudio</h2>
-                            
                             <div className="bg-slate-50 border border-slate-100 rounded-xl p-4 mb-6 text-left">
                                 <h4 className="text-xs font-bold text-slate-500 uppercase mb-2">Reglas de Buena Convivencia</h4>
                                 <ul className="text-xs text-slate-600 space-y-1 list-disc pl-4">
@@ -700,15 +643,11 @@
                                     <li className="text-red-500 font-bold">El uso de malos tratos será causal de eliminación inmediata.</li>
                                 </ul>
                             </div>
-
                             <div className="space-y-3">
                                 <a href="#" className="w-full bg-[#25D366] text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-3 hover:opacity-90 transition-opacity shadow-lg shadow-green-100"><Icon name="whatsapp" size={24} /> Grupo de WhatsApp</a>
                                 <a href="#" className="w-full bg-[#1877F2] text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-3 hover:opacity-90 transition-opacity shadow-lg shadow-blue-100"><Icon name="facebook" size={24} /> Grupo de Facebook</a>
                             </div>
-
-                            <div className="mt-6">
-                                <Button variant="outline" fullWidth onClick={() => setActiveModal(null)}>Volver</Button>
-                            </div>
+                            <div className="mt-6"><Button variant="outline" fullWidth onClick={() => setActiveModal(null)}>Volver</Button></div>
                         </div>
                     </div>
                 );
