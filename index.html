@@ -6,10 +6,8 @@
     <meta name="description" content="Plataforma de estudio colaborativa para el examen de Auxiliar de Farmacia en Chile. Preparación para la credencial sanitaria 2026.">
     <title>Auxiliar Pro | Camino a la Credencial 2026</title>
 
-    <!-- ESPACIO PARA GOOGLE ADSENSE -->
-    <!-- 1. Regístrate en https://www.google.com/adsense -->
-    <!-- 2. Copia el script que te dan y pégalo aquí abajo: -->
-    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-TU_ID_DE_EDITOR" crossorigin="anonymous"></script> -->
+    <!-- GOOGLE ADSENSE -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5783669972264868" crossorigin="anonymous"></script>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -114,7 +112,7 @@
 
         const { useState, useEffect } = React;
 
-        const APP_VERSION = "5.6.0";
+        const APP_VERSION = "5.7.0 Ads Enabled";
         const LOCAL_STORAGE_KEY = 'auxiliar_pro_data';
 
         const BLOG_POSTS = [
@@ -229,10 +227,10 @@
             {
                 id: 3, title: 'Nivel 3: Avanzado', desc: 'Atención y dispensación.', medal: 'Oro', 
                 iconBg: 'bg-gradient-to-br from-[#FFD700] to-[#B8860B]', borderColor: 'border-[#FFD700]/50', textColor: 'text-[#B8860B]',
-                qCount: 25, passingScore: 18, questions: [{ id: 301, text: 'Verificar al dispensar:', options: ['Precio', 'Receta/Vencimiento', 'Marca', 'Caja'], correctIndex: 1 }] 
+                qCount: 25, passingScore: 18, questions: [{ id: 301, text: 'Verificar al dispensar:', options: ['Precio', 'Receta/Vencimiento', 'Marca', 'Caja'], correctIndex: 1, explanation: 'Es obligatorio verificar receta y vigencia.' }] 
             },
             {
-                id: 4, title: 'Nivel 4: Final (SEREMI)', desc: 'Posología y cálculos.', medal: 'Platino', 
+                id: 4, title: 'Nivel 4: Final (Simulacro)', desc: 'Posología y cálculos.', medal: 'Platino', 
                 iconBg: 'bg-gradient-to-br from-[#E5E4E2] to-[#607D8B]', borderColor: 'border-[#607D8B]/50', textColor: 'text-[#455A64]',
                 qCount: 40, passingScore: 30, questions: [{ id: 401, text: 'Cálculo dosis:', options: ['1', '2', '3', '0.5'], correctIndex: 1 }] 
             }
@@ -240,10 +238,10 @@
 
         // --- PDFS DE LA BIBLIOTECA (CON NOMBRES EXACTOS) ---
         const PDF_DOCS = [
-            { title: 'Decreto Supremo 404', desc: 'Reglamento de Estupefacientes', file: 'decreto_404.pdf' },
-            { title: 'Decreto Supremo 405', desc: 'Reglamento de Psicotrópicos', file: 'decreto_405.pdf' },
+            { title: 'Ley 20.724 (Ley de Fármacos)', desc: 'Modifica el Código Sanitario', file: 'ley_20724.pdf' },
             { title: 'Decreto Supremo 466', desc: 'Reglamento de Farmacias', file: 'decreto_466.pdf' },
-            { title: 'Ley 20.724 (Ley de Fármacos)', desc: 'Modifica el Código Sanitario', file: 'ley_20724.pdf' }
+            { title: 'Decreto Supremo 404', desc: 'Reglamento de Estupefacientes', file: 'decreto_404.pdf' },
+            { title: 'Decreto Supremo 405', desc: 'Reglamento de Psicotrópicos', file: 'decreto_405.pdf' }
         ];
 
         const Icon = ({ name, size = 20, className = "" }) => {
@@ -510,7 +508,7 @@
             const renderLibrary = () => (
                 <div className="flex-1 flex flex-col bg-white h-full animate-slide-up absolute inset-0 z-30">
                     <header className="p-4 border-b border-gray-100 flex items-center gap-3 bg-white sticky top-0 z-20"><button onClick={goBack}><Icon name="arrow-left" size={24} className="text-slate-600"/></button><h2 className="font-bold text-lg text-slate-800">Biblioteca Legal</h2></header>
-                    <main className="flex-1 p-6 overflow-y-auto"><div className="max-w-md mx-auto"><p className="text-sm text-gray-500 mb-6">Documentación oficial MINSAL.</p><div className="space-y-3">{PDF_DOCS.map((doc, i) => (<a key={i} href={doc.file} target="_blank" className="flex items-center gap-4 p-4 rounded-xl border border-gray-100 hover:border-red-200 hover:bg-red-50 transition-colors group cursor-pointer no-underline"><div className="bg-red-100 text-red-500 p-3 rounded-lg"><Icon name="file-pdf" size={24}/></div><div className="flex-1"><h4 className="font-bold text-gray-800 group-hover:text-red-600">{doc.title}</h4><p className="text-xs text-gray-500">{doc.desc}</p></div><Icon name="download" className="text-gray-300 group-hover:text-red-500" /></a>))}</div><div className="mt-8 pt-6 border-t border-slate-100 text-center"><Button variant="outline" fullWidth onClick={goBack}>Volver al Panel</Button></div></div></main>
+                    <main className="flex-1 p-6 overflow-y-auto"><div className="max-w-md mx-auto"><p className="text-sm text-gray-500 mb-6">Guías de estudio y resúmenes basados en los decretos del MINSAL.</p><div className="space-y-3">{PDF_DOCS.map((doc, i) => (<a key={i} href={doc.file} target="_blank" className="flex items-center gap-4 p-4 rounded-xl border border-gray-100 hover:border-red-200 hover:bg-red-50 transition-colors group cursor-pointer no-underline"><div className="bg-red-100 text-red-500 p-3 rounded-lg"><Icon name="file-pdf" size={24}/></div><div className="flex-1"><h4 className="font-bold text-gray-800 group-hover:text-red-600">{doc.title}</h4><p className="text-xs text-gray-500">{doc.desc}</p></div><Icon name="download" className="text-gray-300 group-hover:text-red-500" /></a>))}</div><div className="mt-8 pt-6 border-t border-slate-100 text-center"><Button variant="outline" fullWidth onClick={goBack}>Volver al Panel</Button></div></div></main>
                 </div>
             );
 
