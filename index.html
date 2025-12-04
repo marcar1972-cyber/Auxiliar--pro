@@ -112,7 +112,7 @@
 
         const { useState, useEffect } = React;
 
-        const APP_VERSION = "6.2.1 Final";
+        const APP_VERSION = "6.4.2 New Logo";
         const LOCAL_STORAGE_KEY = 'auxiliar_pro_data';
 
         const BLOG_POSTS = [
@@ -132,8 +132,17 @@
         // --- BANCO DE PREGUNTAS ---
         const LEVELS = [
             {
-                id: 1, title: 'Prueba de Conocimientos Básicos', desc: 'Fundamentos esenciales.', medal: 'Bronce', iconBg: 'bg-gradient-to-br from-[#cd7f32] to-[#8B4513]', borderColor: 'border-[#cd7f32]/50', textColor: 'text-[#8B4513]', qCount: 10, passingScore: 6, examLabel: 'DIAGNÓSTICO INICIAL', 
+                id: 1, 
+                title: 'Prueba de Conocimientos Básicos', 
+                desc: 'Fundamentos esenciales.', 
+                medal: 'Bronce',
+                iconBg: 'bg-gradient-to-br from-[#cd7f32] to-[#8B4513]',
+                borderColor: 'border-[#cd7f32]/50',
+                textColor: 'text-[#8B4513]',
+                qCount: 10, 
+                passingScore: 6, 
                 topics: ['Conceptos Básicos', 'Rol del Auxiliar'],
+                examLabel: 'PRUEBA DE CONOCIMIENTOS', 
                 questions: [ 
                     { id: 101, topic: 'Rol del Auxiliar', text: '¿Quién es el responsable técnico legal de la farmacia?', options: ['Dueño', 'Auxiliar', 'Químico Farmacéutico', 'Gerente'], correctIndex: 2, explanation: 'El QF es el único responsable legal ante la autoridad sanitaria.' },
                     { id: 102, topic: 'Almacenamiento', text: 'Rango de temperatura para cadena de frío:', options: ['0-5°C', '2-8°C', '8-15°C', 'Ambiente'], correctIndex: 1, explanation: 'El rango estricto es entre 2°C y 8°C.' },
@@ -148,8 +157,9 @@
                 ]
             },
             {
-                id: 2, title: 'Nivel 2: Intermedio', desc: 'Legislación y almacenamiento.', medal: 'Plata', iconBg: 'bg-gradient-to-br from-[#E0E0E0] to-[#9E9E9E]', borderColor: 'border-[#9E9E9E]/50', textColor: 'text-[#757575]', qCount: 15, passingScore: 9, examLabel: 'SIMULACRO NIVEL 2',
-                topics: ['Legislación', 'Reglamentos'],
+                id: 2, title: 'Nivel 2: Intermedio', desc: 'Legislación y almacenamiento.', medal: 'Plata', 
+                iconBg: 'bg-gradient-to-br from-[#E0E0E0] to-[#9E9E9E]', borderColor: 'border-[#9E9E9E]/50', textColor: 'text-[#757575]',
+                qCount: 15, passingScore: 9, examLabel: 'SIMULACRO NIVEL 2',
                 questions: [
                     { id: 201, topic: 'Decretos', text: '¿Decreto que aprueba el Reglamento de Farmacias?', options: ['DS 594', 'DS 466', 'DS 404', 'DS 405'], correctIndex: 1, explanation: 'DS 466 es el reglamento base.' },
                     { id: 202, topic: 'Recetas', text: 'Validez de una Receta Cheque:', options: ['60 días', '30 días', '10 días', 'Indefinida'], correctIndex: 1, explanation: '30 días corridos desde su emisión.' },
@@ -169,8 +179,9 @@
                 ] 
             },
             {
-                id: 3, title: 'Nivel 3: Avanzado', desc: 'Atención y dispensación.', medal: 'Oro', iconBg: 'bg-gradient-to-br from-[#FFD700] to-[#B8860B]', borderColor: 'border-[#FFD700]/50', textColor: 'text-[#B8860B]', qCount: 25, passingScore: 18, examLabel: 'SIMULACRO NIVEL 3',
-                topics: ['Dispensación', 'Bioequivalencia'],
+                id: 3, title: 'Nivel 3: Avanzado', desc: 'Atención y dispensación.', medal: 'Oro', 
+                iconBg: 'bg-gradient-to-br from-[#FFD700] to-[#B8860B]', borderColor: 'border-[#FFD700]/50', textColor: 'text-[#B8860B]',
+                qCount: 25, passingScore: 18, examLabel: 'SIMULACRO NIVEL 3',
                 questions: [
                     { id: 301, topic: 'Dispensación', text: 'Al dispensar un antibiótico, ¿qué es lo más importante?', options: ['Cobrar primero', 'Verificar receta y fecha', 'Ofrecer vitaminas', 'Ver la marca'], correctIndex: 1, explanation: 'Es obligatorio verificar receta y vigencia.' },
                     { id: 302, topic: 'Bioequivalencia', text: 'La franja amarilla en un envase indica:', options: ['Venta Directa', 'Bioequivalencia', 'Uso hospitalario', 'Producto natural'], correctIndex: 1, explanation: 'Medicamento Bioequivalente.' },
@@ -200,7 +211,9 @@
                 ] 
             },
             {
-                id: 4, title: 'Nivel 4: Final (Simulacro)', desc: 'Posología y cálculos.', medal: 'Platino', iconBg: 'bg-gradient-to-br from-[#E5E4E2] to-[#607D8B]', borderColor: 'border-[#607D8B]/50', textColor: 'text-[#455A64]', qCount: 20, passingScore: 14, topics: ['Cálculos', 'Posología'], examLabel: 'SIMULACRO FINAL',
+                id: 4, title: 'Nivel 4: Final (Simulacro)', desc: 'Posología y cálculos.', medal: 'Platino', 
+                iconBg: 'bg-gradient-to-br from-[#E5E4E2] to-[#607D8B]', borderColor: 'border-[#607D8B]/50', textColor: 'text-[#455A64]',
+                qCount: 20, passingScore: 14, topics: ['Cálculos', 'Posología'], examLabel: 'SIMULACRO FINAL',
                 questions: [
                     { id: 401, topic: 'Cálculos', text: 'Si la dosis es 500mg y tengo comprimidos de 250mg, ¿cuántos dispenso?', options: ['1', '1.5', '2', '3'], correctIndex: 2, explanation: '500/250 = 2 comprimidos.' },
                     { id: 402, topic: 'Posología', text: '¿Cuántos ml hay en una cuchara de té (medida estándar)?', options: ['2.5 ml', '5 ml', '10 ml', '15 ml'], correctIndex: 1, explanation: '5 ml.' },
@@ -235,7 +248,7 @@
         ];
 
         // --- COMPONENTES UI (Sin cambios) ---
-        const Icon = ({ name, size = 20, className = "" }) => {
+        const Icon = ({ name, size = 20, className = "", weight = "regular" }) => {
             const map = {
                 'user': 'ph-user', 'shield': 'ph-shield-check', 'lock': 'ph-lock', 'check-circle': 'ph-check-circle',
                 'book': 'ph-book-open', 'book-open': 'ph-book-open', 'arrow-left': 'ph-arrow-left', 'x': 'ph-x', 'caret-right': 'ph-caret-right',
@@ -245,7 +258,7 @@
                 'download': 'ph-download-simple', 'student': 'ph-student', 'question': 'ph-question', 'medal': 'ph-medal', 
                 'power': 'ph-power', 'coffee': 'ph-coffee', 'chat-circle': 'ph-chat-circle', 'article': 'ph-article'
             };
-            return <i className={`${map[name] || 'ph-circle'} ${className}`} style={{ fontSize: size }}></i>;
+            return <i className={`${map[name] || 'ph-circle'} ${className}`} style={{ fontSize: size, fontWeight: weight === 'fill' ? 'bold' : 'normal' }}></i>;
         };
 
         const Button = ({ onClick, children, variant = 'primary', className = '', fullWidth = false }) => {
@@ -316,9 +329,13 @@
             };
 
             const goBack = () => {
-                if (view === 'ARTICLE') setView('BLOG');
-                else if (user.isAuthenticated) setView('DASHBOARD');
-                else setView('LANDING');
+                if (view === 'ARTICLE') {
+                    setView('BLOG');
+                } else if (user.isAuthenticated) {
+                    setView('DASHBOARD');
+                } else {
+                    setView('LANDING');
+                }
             };
 
             // ... [VISTAS LANDING, DASHBOARD, BLOG, ETC - IGUAL QUE ANTES] ...
@@ -328,7 +345,7 @@
                 <div className="flex-1 flex flex-col animate-fade-in overflow-y-auto relative z-10 bg-white">
                     <header className="w-full py-4 px-6 flex justify-between items-center border-b border-slate-100 bg-white/95 backdrop-blur-sm sticky top-0 z-30 shadow-sm">
                         <div className="flex items-center gap-2 text-xl font-heading font-bold text-slate-800 cursor-pointer" onClick={() => setView('LANDING')}>
-                            <img src="logo_auxiliarpro_3_400x240.jpg" alt="Logo AuxiliarPro" className="h-10 object-contain" />
+                            <img src="https://raw.githubusercontent.com/marcar1972-cyber/Auxiliar--pro/34923cb127c2feede55ec712bdc0261f1b23da3c/logo_auxiliarpro_3_400x240_ajustado.png" alt="Logo AuxiliarPro" className="h-24 w-auto object-contain" />
                         </div>
                         <div className="flex items-center gap-2">
                             <button onClick={() => setView('BLOG')} className="text-sm font-bold text-slate-500 hover:text-farmacia-green transition-colors mr-2 hidden md:block">Blog</button>
@@ -610,9 +627,9 @@
             const LegalModal = () => {
                 if (activeModal !== 'legal') return null;
                 const contents = {
-                    terms: "Términos de Uso:\nEsta aplicación, 'AuxiliarPro', es una herramienta educativa de apoyo y estudio independiente. El contenido se basa en la normativa chilena vigente (Decretos 404, 405, 466) y bibliografía farmacéutica estándar, pero NO reemplaza la documentación oficial ni la capacitación formal requerida por la autoridad sanitaria.\n\nEl uso de esta aplicación es gratuito y voluntario. El usuario acepta utilizarla como complemento de estudio y no como única fuente de preparación.",
-                    privacy: "Política de Privacidad:\nRespetamos tu privacidad. Los datos recolectados (nombre, correo electrónico y progreso de estudio) se utilizan exclusivamente para:\n1. Personalizar tu experiencia en el panel de estudio.\n2. Guardar tu avance en los niveles para que no pierdas tu progreso.\n\nNo vendemos, compartimos ni publicamos tus datos personales con terceros. Puedes solicitar la eliminación de tu cuenta en cualquier momento contactando al administrador.",
-                    disclaimers: "Descargos de Responsabilidad:\n1. Independencia: AuxiliarPro NO tiene afiliación alguna con el Ministerio de Salud (MINSAL), SEREMIs, Instituto de Salud Pública (ISP) ni ninguna entidad gubernamental de Chile.\n2. Exámenes: Los simulacros y preguntas presentados aquí son referenciales y creados con fines pedagógicos. No garantizan la aprobación del examen de competencia real.\n3. Exactitud: Aunque nos esforzamos por mantener la información actualizada, la normativa sanitaria puede cambiar. Siempre consulta las fuentes oficiales."
+                    terms: "Términos de Uso:\nEsta aplicación, 'AuxiliarPro', es una herramienta educativa...",
+                    privacy: "Política de Privacidad:\nRespetamos tu privacidad...",
+                    disclaimers: "Descargos de Responsabilidad:\n1. Independencia: AuxiliarPro NO tiene afiliación alguna con el Ministerio de Salud..."
                 };
                 return (
                     <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
