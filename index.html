@@ -112,7 +112,7 @@
 
         const { useState, useEffect } = React;
 
-        const APP_VERSION = "6.6.5 Final Lock";
+        const APP_VERSION = "6.7.0 Final Request";
         const LOCAL_STORAGE_KEY = 'auxiliar_pro_data';
 
         const BLOG_POSTS = [
@@ -123,30 +123,12 @@
         const sourceLink = `<br/><a href='https://seremienlinea.minsal.cl' target='_blank' class='text-xs text-farmacia-green font-bold hover:underline mt-2 inline-block'>🔗 Revisar fuente oficial</a>`;
         
         const FAQS = [
-            { 
-                q: "Descripción del Trámite", 
-                a: "La certificación de competencias de Auxiliar de Farmacia consiste en la presentación de una solicitud ante la Secretaría Regional Ministerial de Salud, para someterse a una evaluación que permite verificar formalmente los conocimientos y capacidades de una persona para desempeñarse como Auxiliar de Farmacia bajo la supervisión de un Químico Farmacéutico. Este trámite podría requerir de una fiscalización o etapa presencial." + sourceLink 
-            },
-            { 
-                q: "¿Dónde y cómo hago el trámite?", 
-                a: "El trámite se encuentra disponible en línea ingresando con Clave Única en el portal de SEREMI en Línea. Existe un manual disponible en la plataforma que te explicará paso a paso cómo realizar el trámite digital." + sourceLink 
-            },
-            { 
-                q: "¿A quién va dirigido?", 
-                a: "Personas naturales que deseen optar a la certificación de competencias de Auxiliar de Farmacia y que cumplan los requisitos establecidos en la normativa vigente." + sourceLink 
-            },
-            { 
-                q: "¿Qué necesito para hacer el trámite?", 
-                a: "Para hacer el trámite, se solicitan los siguientes documentos:<ul><li>Certificado de enseñanza media.</li><li>Copia del contrato de trabajo o Certificado del empleador que acredite antigüedad laboral.</li><li>Certificado de desempeño laboral emitido por el Químico Farmacéutico que acredite a lo menos 1 año de desempeño efectivo.</li><li>Foto tipo carnet.</li></ul>" + sourceLink 
-            },
-            { 
-                q: "¿Cuál es el costo del trámite?", 
-                a: "El trámite tiene un costo diferenciado según el tipo de solicitud (valores referenciales sujetos a ajuste anual):<ul><li><strong>Derecho a Examen:</strong> $19.100</li><li><strong>Inscripción en el Registro (incluye primer certificado):</strong> $47.600</li><li><strong>Diploma o Carnet:</strong> $29.700</li><li><strong>Certificado (adicional):</strong> $29.700</li><li><strong>Validación de documentos:</strong> $19.100</li></ul>" + sourceLink 
-            },
-            { 
-                q: "Marco Legal", 
-                a: "Todo se rige bajo el <strong>Decreto Supremo Nº 466 de 1984</strong>." + sourceLink 
-            }
+            { q: "Descripción del Trámite", a: "La certificación de competencias de Auxiliar de Farmacia consiste en la presentación de una solicitud ante la Secretaría Regional Ministerial de Salud, para someterse a una evaluación que permite verificar formalmente los conocimientos y capacidades de una persona para desempeñarse como Auxiliar de Farmacia bajo la supervisión de un Químico Farmacéutico. Este trámite podría requerir de una fiscalización o etapa presencial." + sourceLink },
+            { q: "¿Dónde y cómo hago el trámite?", a: "El trámite se encuentra disponible en línea ingresando con Clave Única en el botón 'Ir al trámite' del portal SEREMI en Línea." + sourceLink },
+            { q: "¿A quién va dirigido?", a: "Personas naturales que deseen optar a la certificación de competecias de Auxiliar de Farmacia y que cumplan los requisitos establecidos en la normativa vigente." + sourceLink },
+            { q: "¿Qué necesito para hacer el trámite?", a: "Para hacer el trámite, se solicitan los siguientes documentos:<ul><li>Certificado de enseñanza media.</li><li>Copia del contrato de trabajo o Certificado del empleador que acredite antigüedad laboral.</li><li>Certificado de desempeño laboral emitido por el Químico Farmacéutico que acredite a lo menos 1 año de desempeño efectivo (Se incorpora certificado tipo descargable).</li><li>Foto tipo carnet.</li></ul>" + sourceLink },
+            { q: "¿Cuál es el costo del trámite?", a: "El trámite tiene un costo diferenciado según el tipo de solicitud:<ul><li>Derecho a Examen $19.100</li><li>Inscripción en el Registro (incluye primer certificado) $47.600</li><li>Diploma o Carnet $29.700</li><li>Certificado (adicional) $29.700</li><li>Validación de documentos (títulos o certificados) $19.100</li></ul>" + sourceLink },
+            { q: "Marco Legal", a: "Decreto Supremo Nº 466 de 1984." + sourceLink }
         ];
 
         // --- BANCO DE PREGUNTAS ---
@@ -242,7 +224,6 @@
                     { id: 418, topic: 'Posología', text: 'Ayunas significa:', options: ['Con leche', 'Sin alimentos (estómago vacío)', 'Al acostarse', 'Con almuerzo'], correctIndex: 1, explanation: 'Sin alimentos.' },
                     { id: 419, topic: 'Cálculos', text: 'Dosis 2 puff cada 12 horas. Un inhalador de 200 dosis dura:', options: ['25 días', '50 días', '100 días', '10 días'], correctIndex: 1, explanation: '4 puff diarios. 200/4 = 50 días.' },
                     { id: 420, topic: 'Gestión', text: 'Diferencia de inventario:', options: ['Lo que sobra', 'Lo que falta', 'Diferencia entre sistema y físico', 'Ventas del día'], correctIndex: 2, explanation: 'Discrepancia de stock.' },
-                    // --- PREGUNTAS ADICIONALES (DIFICIL) ---
                     { id: 421, topic: 'Cálculos', text: 'Receta: "Ibuprofeno 400mg, 1 comprimido cada 8 horas por 5 días". ¿Cuántos comprimidos en total?', options: ['10', '15', '20', '25'], correctIndex: 1, explanation: '3 tomas diarias x 5 días = 15 comprimidos.' },
                     { id: 422, topic: 'Posología', text: 'Una solución tiene una concentración de 2 mg/ml. Si el paciente necesita 10 mg, ¿cuántos ml debe tomar?', options: ['2 ml', '5 ml', '10 ml', '20 ml'], correctIndex: 1, explanation: '10 mg / (2 mg/ml) = 5 ml.' },
                     { id: 423, topic: 'Cálculos', text: 'Paciente de 20 kg necesita 15 mg/kg/día de Amoxicilina repartido en 3 tomas. La suspensión es de 250mg/5ml. ¿Cuántos ml por toma?', options: ['2 ml', '5 ml', '10 ml', '15 ml'], correctIndex: 0, explanation: 'Dosis diaria total: 20kg * 15mg/kg = 300mg. Por toma: 300mg / 3 = 100mg. Regla de tres: si 250mg son 5ml, 100mg son X. X = (100*5)/250 = 2ml.' },
@@ -377,7 +358,7 @@
                 <div className="flex-1 flex flex-col animate-fade-in overflow-y-auto relative z-10 bg-white">
                     <header className="w-full py-4 px-6 flex justify-between items-center border-b border-slate-100 bg-white/95 backdrop-blur-sm sticky top-0 z-30 shadow-sm">
                         <div className="flex items-center gap-2 text-xl font-heading font-bold text-slate-800 cursor-pointer" onClick={() => setView('LANDING')}>
-                            <img src="https://raw.githubusercontent.com/marcar1972-cyber/Auxiliar--pro/f61da2f53e2c942bcb59d7d119b4b167ad7fa7e4/logo_auxiliarpro_3_400x240_ajustado.png" alt="Logo AuxiliarPro" className="h-24 w-auto object-contain" />
+                            <img src="https://raw.githubusercontent.com/marcar1972-cyber/Auxiliar--pro/34923cb127c2feede55ec712bdc0261f1b23da3c/logo_auxiliarpro_3_400x240_ajustado.png" alt="Logo AuxiliarPro" className="h-24 w-auto object-contain" />
                         </div>
                         <div className="flex items-center gap-2">
                             <button onClick={() => setView('BLOG')} className="text-sm font-bold text-slate-500 hover:text-farmacia-green transition-colors mr-2 hidden md:block">Blog</button>
