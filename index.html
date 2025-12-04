@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Auxiliar Pro | Preparación 2026</title>
+    <meta name="description" content="Plataforma de estudio colaborativa para el examen de Auxiliar de Farmacia en Chile. Preparación para la credencial sanitaria.">
+    <title>Auxiliar Pro | Camino a la Credencial 2026</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -14,21 +15,28 @@
             colors: {
               'farmacia-green': '#00C853',
               'farmacia-dark': '#0d1b2a',
-              'metal-bronze': '#cd7f32',
-              'metal-silver': '#9e9e9e',
-              'metal-gold': '#ffd700',
+              'metal-bronze': '#CD7F32',
+              'metal-silver': '#C0C0C0',
+              'metal-gold': '#FFD700',
+              'metal-platinum': '#E5E4E2',
             },
             fontFamily: {
               sans: ['Inter', 'sans-serif'],
               heading: ['Roboto', 'sans-serif']
             },
             animation: {
-                'fade-in': 'fadeIn 0.4s ease-out forwards',
+                'fade-in': 'fadeIn 0.3s ease-out forwards',
                 'slide-up': 'slideUp 0.3s ease-out forwards',
+                'shine': 'shine 2.5s infinite linear',
             },
             keyframes: {
                 fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
-                slideUp: { '0%': { opacity: '0', transform: 'translateY(10px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } }
+                slideUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+                shine: {
+                    '0%': { transform: 'translateX(-150%) skewX(-15deg)' },
+                    '40%': { transform: 'translateX(150%) skewX(-15deg)' },
+                    '100%': { transform: 'translateX(150%) skewX(-15deg)' }
+                }
             }
           }
         }
@@ -36,194 +44,55 @@
     </script>
     
     <!-- Fuentes y Efectos -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <!-- Iconos Phosphor -->
+    
+    <!-- React y Babel -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Iconos -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <style>
       body { -webkit-tap-highlight-color: transparent; }
-      /* Ocultar scrollbar pero permitir scroll */
       .no-scrollbar::-webkit-scrollbar { display: none; }
       .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      
+      .shiny-effect { position: relative; overflow: hidden; }
+      .shiny-effect::after {
+          content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+          background: linear-gradient(to right, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%);
+          transform: translateX(-150%) skewX(-15deg);
+          animation: shine 3s infinite linear;
+      }
+
+      /* Estilos para el contenido HTML del blog/acordeón */
+      .html-content a { color: #00C853; text-decoration: none; font-weight: 600; }
+      .html-content a:hover { text-decoration: underline; }
+      .html-content ul { list-style-type: disc; padding-left: 1.2rem; margin-top: 0.5rem; margin-bottom: 0.5rem; }
+      .html-content li { margin-bottom: 0.25rem; }
+      .html-content strong { color: #0f172a; font-weight: 700; }
+      
+      .blog-content h1 { font-size: 1.5rem; font-weight: 800; color: #0d1b2a; margin-bottom: 1rem; line-height: 1.2; }
+      .blog-content h2 { font-size: 1.25rem; font-weight: 700; color: #059669; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+      .blog-content h3 { font-size: 1.1rem; font-weight: 600; color: #334155; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+      .blog-content p { margin-bottom: 1rem; line-height: 1.6; color: #475569; }
+      .blog-content ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; color: #475569; }
+      .blog-content li { margin-bottom: 0.5rem; }
+      .blog-content strong { color: #0f172a; font-weight: 700; }
+      .blog-content .cta-box { background-color: #ecfdf5; border: 1px solid #a7f3d0; padding: 1.5rem; border-radius: 0.75rem; margin-top: 2rem; text-align: center; }
     </style>
 </head>
-<body class="bg-gray-100 text-gray-800 antialiased min-h-screen flex flex-col items-center justify-center font-sans">
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col items-center justify-center font-sans">
 
-    <!-- APP CONTAINER -->
-    <div class="w-full max-w-md bg-white h-screen md:h-[90vh] md:rounded-3xl md:shadow-2xl overflow-hidden flex flex-col relative">
+    <div id="root" class="w-full h-full flex justify-center items-center"></div>
 
-        <!-- LOADING OVERLAY -->
-        <div id="loading-overlay" class="absolute inset-0 bg-white z-50 flex flex-col items-center justify-center">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-farmacia-green mb-4"></div>
-            <p class="text-sm text-gray-500 animate-pulse">Cargando AuxiliarPro...</p>
-        </div>
-
-        <!-- VISTA 1: LANDING -->
-        <div id="view-landing" class="flex-1 flex flex-col animate-fade-in overflow-y-auto relative z-10">
-            <header class="w-full py-4 px-6 flex justify-between items-center border-b border-gray-100 sticky top-0 bg-white/95 backdrop-blur-sm z-10">
-                <div class="flex items-center gap-2">
-                    <div class="bg-farmacia-green text-white p-1.5 rounded-md text-xl"><i class="ph-shield-check"></i></div>
-                    <span class="font-heading font-bold text-xl tracking-tight text-gray-900">Auxiliar<span class="text-farmacia-green">Pro</span></span>
-                </div>
-                <button onclick="checkAuthAndStart()" class="text-gray-500 hover:text-farmacia-green text-sm font-medium transition-colors">Ingresar</button>
-            </header>
-
-            <main class="flex-1 flex flex-col items-center text-center px-6 mt-10 pb-10">
-                <div class="inline-flex items-center gap-2 bg-green-50 border border-green-200 text-green-800 text-xs font-bold px-3 py-1 rounded-full mb-6 uppercase tracking-wide">
-                    <span class="w-2 h-2 rounded-full bg-farmacia-green animate-pulse"></span> Preparación 2026
-                </div>
-
-                <h1 class="font-heading text-4xl font-extrabold text-gray-900 leading-tight mb-6">
-                    Prepárate para tu examen de <br />
-                    <span class="text-farmacia-green">Auxiliar de Farmacia</span>
-                </h1>
-                
-                <p class="text-gray-500 text-lg mb-8 leading-relaxed max-w-xs mx-auto">
-                    Plataforma de estudio independiente. Regístrate para guardar tu progreso real.
-                </p>
-
-                <div class="w-full space-y-4 mb-12 max-w-sm mx-auto">
-                    <button onclick="checkAuthAndStart()" class="w-full bg-farmacia-dark hover:bg-slate-900 text-white font-bold py-4 px-6 rounded-xl flex items-center justify-center transition-all shadow-lg hover:shadow-xl active:scale-95 group">
-                        Comenzar Ahora <i class="ph-caret-right ml-2 group-hover:translate-x-1 transition-transform"></i>
-                    </button>
-                    
-                    <button onclick="switchView('view-blog')" class="w-full bg-white border-2 border-gray-200 text-gray-600 font-bold py-3 px-6 rounded-xl flex items-center justify-center hover:border-farmacia-green hover:text-farmacia-green transition-colors">
-                        <i class="ph-book-open mr-2 text-xl"></i> Leer Guías y Artículos
-                    </button>
-                </div>
-
-                <footer class="text-center border-t border-gray-200 pt-8 pb-4 w-full mt-auto">
-                    <p class="text-xs text-gray-400 mb-4">© 2025 AuxiliarPro</p>
-                    <div class="flex justify-center gap-4 text-[10px] text-gray-500 uppercase font-semibold">
-                        <button onclick="toggleModal('legal-modal')">Términos</button>
-                        <button onclick="toggleModal('legal-modal')">Privacidad</button>
-                    </div>
-                </footer>
-            </main>
-        </div>
-
-        <!-- VISTA 2: DASHBOARD -->
-        <div id="view-dashboard" class="flex-1 flex flex-col hidden bg-slate-50 animate-fade-in relative z-10 h-full">
-            <header class="bg-white shadow-sm py-4 px-6 flex justify-between items-center sticky top-0 z-20">
-                <div>
-                    <span class="font-heading font-bold text-gray-700 block">Panel de Estudio</span>
-                    <div class="flex items-center gap-2">
-                        <span class="text-xs text-gray-400" id="user-welcome">Hola, Estudiante</span>
-                        <span id="offline-badge" class="hidden flex items-center text-[10px] text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">
-                            <i class="ph-wifi-slash mr-1"></i> Offline
-                        </span>
-                    </div>
-                </div>
-                <button onclick="handleLogout()" class="text-gray-400 hover:text-red-500 transition-colors text-2xl"><i class="ph-sign-out"></i></button>
-            </header>
-
-            <main class="flex-1 p-6 w-full overflow-y-auto no-scrollbar pb-20">
-                <!-- Progress Card -->
-                <div class="bg-white rounded-2xl p-6 shadow-md border-t-4 border-farmacia-green mb-8">
-                    <div class="flex justify-between items-end mb-2">
-                        <span class="text-gray-500 text-xs font-bold uppercase tracking-wider">Tu Progreso</span>
-                        <span class="text-farmacia-green font-bold text-xl" id="progress-percent">0%</span>
-                    </div>
-                    <div class="w-full bg-gray-100 rounded-full h-2.5">
-                        <div id="progress-bar" class="bg-farmacia-green h-2.5 rounded-full transition-all duration-1000" style="width: 0%"></div>
-                    </div>
-                </div>
-
-                <!-- Levels Container -->
-                <div id="levels-container" class="space-y-4">
-                    <!-- Los niveles se renderizan con JS -->
-                </div>
-            </main>
-        </div>
-
-        <!-- VISTA 3: BLOG -->
-        <div id="view-blog" class="flex-1 flex flex-col hidden bg-white animate-slide-up z-20 h-full absolute inset-0">
-            <header class="bg-white shadow-sm py-4 px-6 flex items-center gap-3 sticky top-0 z-10">
-                <button onclick="switchView('view-landing')" class="text-2xl text-gray-600"><i class="ph-arrow-left"></i></button>
-                <span class="font-bold text-lg">Recursos</span>
-            </header>
-            <main class="flex-1 p-6 overflow-y-auto" id="blog-container">
-                <!-- Posts generados por JS -->
-            </main>
-        </div>
-
-        <!-- MODAL AUTH -->
-        <div id="auth-modal" class="absolute inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4 animate-fade-in">
-            <div class="bg-white rounded-2xl w-full max-w-sm shadow-2xl p-6 relative">
-                <button onclick="toggleModal('auth-modal')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-xl"><i class="ph-x"></i></button>
-                
-                <div class="text-center mb-6">
-                    <div class="bg-green-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3 text-farmacia-green text-2xl"><i class="ph-user"></i></div>
-                    <h2 class="text-2xl font-bold text-gray-900" id="auth-title">Crear Cuenta</h2>
-                    <p class="text-sm text-gray-500 mt-1">Ingresa tus datos para guardar tu progreso.</p>
-                </div>
-
-                <form onsubmit="handleAuth(event)" class="space-y-4">
-                    <div id="name-field">
-                        <div class="relative">
-                            <i class="ph-user absolute left-3 top-3.5 text-gray-400 text-lg"></i>
-                            <input type="text" id="input-name" placeholder="Tu Nombre" class="w-full pl-10 p-3 rounded-lg border border-gray-300 focus:border-farmacia-green focus:ring-1 focus:ring-farmacia-green outline-none transition-all">
-                        </div>
-                    </div>
-                    <div class="relative">
-                        <i class="ph-envelope absolute left-3 top-3.5 text-gray-400 text-lg"></i>
-                        <input type="email" id="input-email" placeholder="Correo Electrónico" required class="w-full pl-10 p-3 rounded-lg border border-gray-300 focus:border-farmacia-green focus:ring-1 focus:ring-farmacia-green outline-none transition-all">
-                    </div>
-                    <div class="relative">
-                        <i class="ph-key absolute left-3 top-3.5 text-gray-400 text-lg"></i>
-                        <input type="password" id="input-pass" placeholder="Contraseña" required minlength="6" class="w-full pl-10 p-3 rounded-lg border border-gray-300 focus:border-farmacia-green focus:ring-1 focus:ring-farmacia-green outline-none transition-all">
-                    </div>
-
-                    <div id="auth-error" class="hidden p-3 bg-red-50 text-red-600 text-xs rounded-lg flex items-center gap-2">
-                        <i class="ph-warning-circle"></i> <span id="auth-error-msg">Error</span>
-                    </div>
-
-                    <button type="submit" id="btn-auth-submit" class="w-full bg-farmacia-dark hover:bg-slate-900 text-white font-bold py-3 rounded-lg transition-colors">
-                        Registrarse
-                    </button>
-
-                    <div class="text-center mt-4">
-                        <button type="button" onclick="toggleAuthMode()" class="text-sm text-farmacia-green font-medium hover:underline" id="btn-auth-switch">
-                            ¿Ya tienes cuenta? Inicia Sesión
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- MODAL QUIZ -->
-        <div id="quiz-modal" class="absolute inset-0 z-50 bg-white hidden flex-col animate-slide-up">
-            <div class="bg-farmacia-dark p-6 text-white flex justify-between items-center shadow-md">
-                <div>
-                    <h3 class="font-bold text-lg" id="quiz-title">Nivel 1</h3>
-                    <p class="text-xs text-gray-400" id="quiz-progress">Pregunta 1 de 3</p>
-                </div>
-                <button onclick="closeQuiz()" class="text-white/80 hover:text-white text-2xl"><i class="ph-x"></i></button>
-            </div>
-            <div class="flex-1 p-6 overflow-y-auto" id="quiz-content">
-                <!-- Preguntas inyectadas por JS -->
-            </div>
-        </div>
-
-        <!-- MODAL LEGAL -->
-        <div id="legal-modal" class="absolute inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
-            <div class="bg-white p-6 rounded-xl max-w-sm">
-                <h3 class="font-bold mb-2 text-gray-900">Información Legal</h3>
-                <p class="text-sm text-gray-600 mb-4">Esta aplicación es una herramienta de estudio independiente y no tiene afiliación oficial con la entidad certificadora.</p>
-                <button onclick="toggleModal('legal-modal')" class="bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg text-sm font-bold text-gray-700 w-full">Cerrar</button>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- LOGICA JAVASCRIPT -->
-    <script type="module">
+    <script type="text/babel" data-type="module" data-presets="react">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
-        // --- CONFIGURACIÓN (TU API KEY) ---
         const firebaseConfig = {
             apiKey: "AIzaSyDNhuSBBhmmQSV0BHC8MOtLKgAUpvtfWfE",
             authDomain: "auxiliar-pro.firebaseapp.com",
@@ -233,333 +102,614 @@
             appId: "1:342196612566:web:c7f34365c4e10502e60877"
         };
 
-        // INICIALIZAR
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
         const appId = 'auxiliar-pro';
 
-        // --- ESTADO LOCAL ---
-        let appState = {
-            uid: null,
-            name: 'Estudiante',
-            email: '',
-            currentLevel: 1,
-            completedLevels: [],
-            isAuthenticated: false
-        };
+        const { useState, useEffect } = React;
 
-        let currentQuiz = { levelId: 0, qIndex: 0, score: 0, answers: [] };
-        let isLoginMode = false;
+        const APP_VERSION = "5.3.0 Restored";
+        const LOCAL_STORAGE_KEY = 'auxiliar_pro_data';
 
-        // --- DATOS ---
+        const BLOG_POSTS = [
+            { 
+                id: 'art1', 
+                date: '04 DIC', 
+                category: 'Legal', 
+                title: 'Decreto 466: La "Biblia" que define tu rol en la Farmacia', 
+                excerpt: 'Entender el Reglamento de Farmacias es la diferencia entre aprobar y reprobar. Aquí te explico los artículos claves.', 
+                content: `
+                    <h1>Decreto 466: La "Biblia" que define tu rol en la Farmacia</h1>
+                    <p>Colega, si hay un documento que debes tener bajo la almohada, es el <strong>Decreto Supremo 466</strong>. No es solo papeleo; es el reglamento que define qué puedes hacer, qué no, y quién manda en la farmacia.</p>
+                    <h2>1. ¿Quién es el Jefe? (Art. 12 y 14)</h2>
+                    <p>La normativa es tajante: <strong>La Dirección Técnica corresponde exclusivamente al Químico Farmacéutico (QF)</strong>. </p>
+                    <ul>
+                        <li>El QF debe estar <strong>siempre presente</strong> durante el horario de funcionamiento.</li>
+                        <li>Si el QF no está, la farmacia <strong>no puede funcionar</strong>.</li>
+                        <li>Tú, como auxiliar, eres su brazo derecho, pero legalmente actúas bajo su supervisión directa.</li>
+                    </ul>
+                    <h2>2. Condiciones Ambientales (Art. 28)</h2>
+                    <p>No es solo por comodidad. Los medicamentos se degradan.</p>
+                    <ul>
+                        <li><strong>Temperatura ambiente:</strong> Máximo 25°C.</li>
+                        <li><strong>Cadena de Frío:</strong> Estrictamente entre <strong>2°C y 8°C</strong>.</li>
+                    </ul>
+                    <div class="cta-box">
+                        <h3 class="text-farmacia-green">¿Te sientes seguro con la legislación?</h3>
+                        <p>Pon a prueba lo que acabas de leer en el <strong>Nivel 2: Intermedio</strong> del simulador.</p>
+                    </div>
+                ` 
+            },
+            { 
+                id: 'art2', 
+                date: '02 DIC', 
+                category: 'Técnico', 
+                title: 'Ley de Fármacos (Ley 20.724): Cambios que impactan tu trabajo', 
+                excerpt: 'Bioequivalencia, venta directa y fraccionamiento. Descubre cómo esta ley cambió la forma en que dispensamos.', 
+                content: `
+                    <h1>Ley de Fármacos (Ley 20.724)</h1>
+                    <p>Seguramente has escuchado hablar de la "Ley de Fármacos". Para nosotros, los auxiliares, esta ley cambió las reglas del juego.</p>
+                    <h2>1. La Bioequivalencia es Ley</h2>
+                    <p>Antes era opcional, hoy es obligación. La ley exige que la farmacia tenga disponibles los <strong>medicamentos bioequivalentes</strong> (los de la franja amarilla).</p>
+                    <p><strong>Tu deber:</strong> Debes informar al paciente que existe una alternativa bioequivalente si la receta lo permite.</p>
+                    <h2>2. Medicamentos de Venta Directa (OTC) en Góndolas</h2>
+                    <p>La ley permitió que ciertos medicamentos que no requieren receta puedan estar al alcance del público en estanterías.</p>
+                    <p><strong>Ojo:</strong> Aunque estén en góndola, la venta final siempre pasa por caja y debe haber asesoría disponible.</p>
+                    <div class="cta-box">
+                        <h3 class="text-farmacia-green">¡A practicar!</h3>
+                        <p>Revisa las preguntas sobre Bioequivalencia en la <strong>Prueba de Conocimientos Básicos</strong>.</p>
+                    </div>
+                ` 
+            }
+        ];
+
+        const FAQS = [
+            { 
+                q: "¿En qué consiste la Certificación de Competencias?", 
+                a: "Es una solicitud que se presenta ante la SEREMI de Salud para someterse a una evaluación. Esta evaluación verifica formalmente que tienes los conocimientos y capacidades para desempeñarte como Auxiliar de Farmacia bajo la supervisión de un Químico Farmacéutico. El trámite puede incluir una etapa presencial o de fiscalización." 
+            },
+            { 
+                q: "¿A quién va dirigido este trámite?", 
+                a: "A personas naturales que deseen optar a la certificación de competencias de Auxiliar de Farmacia y que cumplan los requisitos establecidos en la normativa vigente." 
+            },
+            { 
+                q: "¿Qué documentos necesito para postular?", 
+                a: "Para realizar el trámite, debes tener digitalizados los siguientes documentos:<ul><li><strong>Certificado de Enseñanza Media</strong> completa.</li><li>Copia del <strong>Contrato de Trabajo</strong> o Certificado del empleador que acredite antigüedad.</li><li><strong>Certificado de Desempeño Laboral</strong> emitido por el Químico Farmacéutico que acredite al menos <strong>1 año de desempeño efectivo</strong> (puedes descargar un formato tipo en la web del Minsal).</li><li>Foto tipo carnet.</li></ul>" 
+            },
+            { 
+                q: "¿Dónde y cómo hago el trámite?", 
+                a: "El trámite se encuentra disponible 100% en línea. Debes ingresar con tu <strong>Clave Única</strong> en el portal oficial: <a href='https://seremienlinea.minsal.cl' target='_blank' class='text-farmacia-green font-bold hover:underline block mt-2'>🔗 Ir a seremienlinea.minsal.cl</a>" 
+            },
+            { 
+                q: "¿Cuál es el costo del trámite?", 
+                a: "Los costos son diferenciados según la etapa (valores referenciales):<ul><li><strong>Derecho a Examen:</strong> $19.100</li><li><strong>Inscripción en el Registro:</strong> $47.600 (incluye primer certificado)</li><li><strong>Diploma o Carnet:</strong> $29.700</li><li><strong>Validación de documentos:</strong> $19.100</li></ul>" 
+            },
+            { 
+                q: "Marco Legal", 
+                a: "Todo este proceso se rige principalmente por el <strong>Decreto Supremo Nº 466 de 1984</strong>, que aprueba el Reglamento de Farmacias, Droguerías, Almacenes Farmacéuticos, Botiquines y Depósitos Autorizados." 
+            }
+        ];
+
         const LEVELS = [
-            { id: 1, title: 'Farmacología Básica', desc: 'Conceptos y vías de administración.', passing: 2, qs: [
-                { t: '¿Vía que evita paso hepático?', opts: ['Vía Oral', 'Vía Sublingual', 'Vía Rectal', 'Vía Tópica'], c: 1 },
-                { t: '¿Qué significa OTC?', opts: ['Receta Retenida', 'Venta Directa', 'Antibiótico', 'Psicotrópico'], c: 1 },
-                { t: '¿Forma farmacéutica sólida?', opts: ['Jarabe', 'Comprimido', 'Emulsión', 'Colirio'], c: 1 }
-            ]},
-            { id: 2, title: 'Legislación Sanitaria', desc: 'Código Sanitario y reglamentos.', passing: 2, qs: [
-                { t: '¿Receta para estupefacientes?', opts: ['Simple', 'Retenida', 'Cheque', 'Magistral'], c: 2 },
-                { t: '¿Responsable técnico?', opts: ['Dueño', 'Auxiliar', 'Químico Farmacéutico', 'Gerente'], c: 2 }
-            ]},
-            { id: 3, title: 'Atención y Dispensación', desc: 'Buenas prácticas.', passing: 1, qs: [
-                { t: '¿Qué verificar en antibióticos?', opts: ['Precio', 'Receta y Vencimiento', 'Marca', 'Caja'], c: 1 }
-            ]}
+            {
+                id: 1, 
+                title: 'Prueba de Conocimientos Básicos', 
+                desc: 'Fundamentos esenciales.', 
+                medal: 'Bronce',
+                iconBg: 'bg-gradient-to-br from-[#cd7f32] to-[#8B4513]',
+                borderColor: 'border-[#cd7f32]/50',
+                textColor: 'text-[#8B4513]',
+                qCount: 10, 
+                passingScore: 6, 
+                topics: ['Conceptos Básicos', 'Rol del Auxiliar'],
+                examLabel: 'PRUEBA DE CONOCIMIENTOS', 
+                questions: [ 
+                    { id: 101, text: '¿Quién es el responsable técnico legal de la farmacia?', options: ['Dueño', 'Auxiliar', 'Químico Farmacéutico', 'Gerente'], correctIndex: 2 },
+                    { id: 102, text: 'Rango de temperatura para cadena de frío:', options: ['0-5°C', '2-8°C', '8-15°C', 'Ambiente'], correctIndex: 1 },
+                    { id: 103, text: 'Vía de administración sublingual:', options: ['Debajo de la lengua', 'Sobre la lengua', 'Tragada', 'Masticada'], correctIndex: 0 },
+                    { id: 104, text: '¿Qué significa OTC?', options: ['Receta Retenida', 'Venta Directa', 'Uso Hospitalario', 'Controlado'], correctIndex: 1 },
+                    { id: 105, text: 'Función principal del Auxiliar:', options: ['Diagnosticar', 'Recetar', 'Dispensar e informar', 'Administrar local'], correctIndex: 2 },
+                    { id: 106, text: 'Medicamento Bioequivalente se identifica por:', options: ['Franja Amarilla', 'Estrella Verde', 'Caja Roja', 'Ninguna'], correctIndex: 0 },
+                    { id: 107, text: '¿Qué es un Placebo?', options: ['Sustancia inerte', 'Principio activo potente', 'Marca comercial', 'Genérico'], correctIndex: 0 },
+                    { id: 108, text: 'Vía Parenteral se refiere a:', options: ['Jarabes', 'Inyectables', 'Cremas', 'Supositorios'], correctIndex: 1 },
+                    { id: 109, text: 'Fecha de vencimiento indica:', options: ['Fecha de fabricación', 'Límite de uso seguro', 'Fecha de venta', 'Fecha de apertura'], correctIndex: 1 },
+                    { id: 110, text: 'La Receta Cheque se usa para:', options: ['Antibióticos', 'Corticoides', 'Estupefacientes', 'Vitaminas'], correctIndex: 2 }
+                ]
+            },
+            {
+                id: 2, title: 'Nivel 2: Intermedio', desc: 'Legislación y almacenamiento.', medal: 'Plata', 
+                iconBg: 'bg-gradient-to-br from-[#E0E0E0] to-[#9E9E9E]', borderColor: 'border-[#9E9E9E]/50', textColor: 'text-[#757575]',
+                qCount: 15, passingScore: 9, questions: [{ id: 201, text: 'Receta Estupefacientes:', options: ['Simple', 'Retenida', 'Cheque', 'Magistral'], correctIndex: 2 }] 
+            },
+            {
+                id: 3, title: 'Nivel 3: Avanzado', desc: 'Atención y dispensación.', medal: 'Oro', 
+                iconBg: 'bg-gradient-to-br from-[#FFD700] to-[#B8860B]', borderColor: 'border-[#FFD700]/50', textColor: 'text-[#B8860B]',
+                qCount: 25, passingScore: 18, questions: [{ id: 301, text: 'Verificar al dispensar:', options: ['Precio', 'Receta/Vencimiento', 'Marca', 'Caja'], correctIndex: 1 }] 
+            },
+            {
+                id: 4, title: 'Nivel 4: Final (SEREMI)', desc: 'Posología y cálculos.', medal: 'Platino', 
+                iconBg: 'bg-gradient-to-br from-[#E5E4E2] to-[#607D8B]', borderColor: 'border-[#607D8B]/50', textColor: 'text-[#455A64]',
+                qCount: 40, passingScore: 30, questions: [{ id: 401, text: 'Cálculo dosis:', options: ['1', '2', '3', '0.5'], correctIndex: 1 }] 
+            }
         ];
 
-        const POSTS = [
-            { t: 'Guía de Bioequivalentes', e: 'Diferencia entre genéricos y bioequivalentes.' },
-            { t: 'Cadena de Frío', e: 'Protocolos para vacunas e insulinas.' },
-            { t: 'Decreto Supremo 466', e: 'Reglamento esencial para el examen.' }
+        const PDF_DOCS = [
+            { title: 'Ley 20.724 (Ley de Fármacos)', desc: 'Modifica el Código Sanitario', file: 'ley_20724.pdf' },
+            { title: 'Decreto Supremo 466', desc: 'Reglamento de Farmacias', file: 'decreto_466.pdf' },
+            { title: 'Decreto Supremo 404', desc: 'Reglamento de Estupefacientes', file: 'decreto_404.pdf' },
+            { title: 'Decreto Supremo 405', desc: 'Reglamento de Psicotrópicos', file: 'decreto_405.pdf' }
         ];
 
-        // --- FUNCIONES UI ---
-        
-        window.switchView = (viewId) => {
-            ['view-landing', 'view-dashboard', 'view-blog'].forEach(id => document.getElementById(id).classList.add('hidden'));
-            document.getElementById(viewId).classList.remove('hidden');
+        const Icon = ({ name, size = 20, className = "" }) => {
+            const map = {
+                'user': 'ph-user', 'shield': 'ph-shield-check', 'lock': 'ph-lock', 'check-circle': 'ph-check-circle',
+                'book': 'ph-book-open', 'arrow-left': 'ph-arrow-left', 'x': 'ph-x', 'caret-right': 'ph-caret-right',
+                'caret-down': 'ph-caret-down', 'files': 'ph-files', 'users': 'ph-users', 'house': 'ph-house', 
+                'file-pdf': 'ph-file-pdf', 'trophy': 'ph-trophy', 'warning': 'ph-warning-circle', 'eye': 'ph-eye', 
+                'refresh': 'ph-arrows-clockwise', 'whatsapp': 'ph-whatsapp-logo', 'facebook': 'ph-facebook-logo', 
+                'download': 'ph-download-simple', 'student': 'ph-student', 'question': 'ph-question', 'medal': 'ph-medal', 
+                'power': 'ph-power', 'coffee': 'ph-coffee', 'chat-circle': 'ph-chat-circle'
+            };
+            return <i className={`${map[name] || 'ph-circle'} ${className}`} style={{ fontSize: size }}></i>;
         };
 
-        window.toggleModal = (modalId) => {
-            const el = document.getElementById(modalId);
-            if (el.classList.contains('hidden')) {
-                el.classList.remove('hidden');
-                el.classList.add('flex');
-            } else {
-                el.classList.add('hidden');
-                el.classList.remove('flex');
-            }
+        const Button = ({ onClick, children, variant = 'primary', className = '', fullWidth = false }) => {
+            const base = "flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-bold transition-all active:scale-95 text-sm md:text-base";
+            const variants = {
+                primary: "bg-slate-900 text-white hover:bg-slate-800 shadow-lg hover:shadow-xl",
+                secondary: "bg-farmacia-green text-white hover:bg-green-600 shadow-md",
+                outline: "bg-white border-2 border-slate-200 text-slate-600 hover:border-farmacia-green hover:text-farmacia-green",
+                ghost: "text-slate-500 hover:bg-slate-100",
+                danger: "bg-red-50 text-red-500 hover:bg-red-100 border border-red-100"
+            };
+            return <button onClick={onClick} className={`${base} ${variants[variant]} ${fullWidth ? 'w-full' : ''} ${className}`}>{children}</button>;
         };
 
-        // --- LÓGICA AUTH ---
-
-        window.checkAuthAndStart = () => {
-            if (appState.isAuthenticated) {
-                window.switchView('view-dashboard');
-            } else {
-                // Abrir registro por defecto
-                isLoginMode = false;
-                updateAuthModalUI();
-                window.toggleModal('auth-modal');
-            }
-        };
-
-        window.toggleAuthMode = () => {
-            isLoginMode = !isLoginMode;
-            updateAuthModalUI();
-        };
-
-        function updateAuthModalUI() {
-            const title = document.getElementById('auth-title');
-            const nameField = document.getElementById('name-field');
-            const btn = document.getElementById('btn-auth-submit');
-            const switchBtn = document.getElementById('btn-auth-switch');
-            
-            if (isLoginMode) {
-                title.innerText = 'Iniciar Sesión';
-                nameField.classList.add('hidden');
-                document.getElementById('input-name').removeAttribute('required');
-                btn.innerText = 'Entrar';
-                switchBtn.innerText = '¿No tienes cuenta? Regístrate';
-            } else {
-                title.innerText = 'Crear Cuenta';
-                nameField.classList.remove('hidden');
-                document.getElementById('input-name').setAttribute('required', 'true');
-                btn.innerText = 'Registrarse';
-                switchBtn.innerText = '¿Ya tienes cuenta? Inicia Sesión';
-            }
-            document.getElementById('auth-error').classList.add('hidden');
-        }
-
-        window.handleAuth = async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('input-email').value;
-            const pass = document.getElementById('input-pass').value;
-            const name = document.getElementById('input-name').value;
-            const btn = document.getElementById('btn-auth-submit');
-            const errorBox = document.getElementById('auth-error');
-            const errorMsg = document.getElementById('auth-error-msg');
-
-            btn.disabled = true;
-            btn.innerText = 'Procesando...';
-            errorBox.classList.add('hidden');
-
-            try {
-                if (isLoginMode) {
-                    await signInWithEmailAndPassword(auth, email, pass);
-                } else {
-                    const cred = await createUserWithEmailAndPassword(auth, email, pass);
-                    await updateProfile(cred.user, { displayName: name });
-                    // Crear documento inicial
-                    await setDoc(doc(db, 'artifacts', appId, 'users', cred.user.uid, 'data', 'progress'), {
-                        name: name, currentLevel: 1, completedLevels: [], lastUpdate: new Date()
-                    });
-                }
-                window.toggleModal('auth-modal');
-                window.switchView('view-dashboard');
-            } catch (err) {
-                console.error(err);
-                errorBox.classList.remove('hidden');
-                errorMsg.innerText = err.code === 'auth/wrong-password' ? 'Contraseña incorrecta' : 
-                                     err.code === 'auth/user-not-found' ? 'Usuario no encontrado' :
-                                     err.code === 'auth/email-already-in-use' ? 'Email ya registrado' :
-                                     'Error de conexión o datos inválidos';
-            } finally {
-                btn.disabled = false;
-                btn.innerText = isLoginMode ? 'Entrar' : 'Registrarse';
-            }
-        };
-
-        window.handleLogout = async () => {
-            await signOut(auth);
-            appState = { uid: null, name: 'Estudiante', email: '', currentLevel: 1, completedLevels: [], isAuthenticated: false };
-            localStorage.removeItem('auxiliar_pro_data');
-            window.switchView('view-landing');
-        };
-
-        // --- LÓGICA QUIZ ---
-
-        window.startLevel = (id) => {
-            currentQuiz = { levelId: id, qIndex: 0, score: 0, answers: [] };
-            renderQuiz();
-            window.toggleModal('quiz-modal');
-            document.getElementById('quiz-modal').classList.remove('hidden');
-            document.getElementById('quiz-modal').classList.add('flex');
-        };
-
-        window.closeQuiz = () => {
-            document.getElementById('quiz-modal').classList.add('hidden');
-            document.getElementById('quiz-modal').classList.remove('flex');
-        };
-
-        function renderQuiz() {
-            const level = LEVELS.find(l => l.id === currentQuiz.levelId);
-            const content = document.getElementById('quiz-content');
-            document.getElementById('quiz-title').innerText = level.title;
-            
-            if (currentQuiz.qIndex < level.qs.length) {
-                // Pregunta
-                const q = level.qs[currentQuiz.qIndex];
-                document.getElementById('quiz-progress').innerText = `Pregunta ${currentQuiz.qIndex + 1} de ${level.qs.length}`;
-                
-                content.innerHTML = `
-                    <h2 class="text-xl font-bold mb-6 text-gray-800">${q.t}</h2>
-                    <div class="space-y-3">
-                        ${q.opts.map((opt, i) => `
-                            <button onclick="handleAnswer(${i})" class="w-full text-left p-4 border border-gray-200 rounded-xl hover:bg-green-50 hover:border-farmacia-green transition-all text-gray-700 font-medium">
-                                ${opt}
-                            </button>
-                        `).join('')}
+        const Accordion = ({ title, content }) => {
+            const [isOpen, setIsOpen] = useState(false);
+            return (
+                <div className="border-b border-slate-100 last:border-0">
+                    <button onClick={() => setIsOpen(!isOpen)} className="w-full flex justify-between items-center py-4 text-left font-medium text-slate-700 hover:text-farmacia-green transition-colors">
+                        {title}
+                        <Icon name="caret-down" className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    <div className={`overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-96 pb-4' : 'max-h-0'}`}>
+                        <div className="text-sm text-slate-500 leading-relaxed html-content" dangerouslySetInnerHTML={{__html: content}}></div>
                     </div>
-                `;
-            } else {
-                // Resultados
-                const passed = currentQuiz.score >= level.passing;
-                document.getElementById('quiz-progress').innerText = 'Resultados';
-                
-                if (passed) {
-                    if (window.confetti) window.confetti();
-                    saveProgress(level.id);
-                }
-
-                content.innerHTML = `
-                    <div class="text-center pt-8">
-                        <div class="text-6xl mb-4">${passed ? '🎉' : '📚'}</div>
-                        <h2 class="text-2xl font-bold mb-2 text-gray-900">${passed ? '¡Aprobado!' : 'Sigue Intentando'}</h2>
-                        <p class="mb-8 text-gray-500">Obtuviste ${currentQuiz.score} de ${level.qs.length} puntos</p>
-                        
-                        <div class="space-y-3">
-                            <button onclick="startLevel(${level.id})" class="w-full bg-farmacia-green text-white font-bold py-3 rounded-lg flex justify-center items-center gap-2">
-                                <i class="ph-arrows-clockwise"></i> Reintentar
-                            </button>
-                            <button onclick="closeQuiz()" class="w-full text-gray-500 py-3 underline">Volver al Panel</button>
-                        </div>
-                    </div>
-                `;
-            }
-        }
-
-        window.handleAnswer = (idx) => {
-            const level = LEVELS.find(l => l.id === currentQuiz.levelId);
-            const q = level.qs[currentQuiz.qIndex];
-            if (idx === q.c) currentQuiz.score++;
-            currentQuiz.qIndex++;
-            renderQuiz();
-        };
-
-        async function saveProgress(id) {
-            if (!appState.completedLevels.includes(id)) {
-                appState.completedLevels.push(id);
-                if (id === appState.currentLevel) appState.currentLevel++;
-                
-                // Guardar local
-                localStorage.setItem('auxiliar_pro_data', JSON.stringify(appState));
-                renderDashboard();
-
-                // Guardar nube
-                if (appState.uid) {
-                    try {
-                        await setDoc(doc(db, 'artifacts', appId, 'users', appState.uid, 'data', 'progress'), {
-                            currentLevel: appState.currentLevel,
-                            completedLevels: appState.completedLevels,
-                            lastUpdate: new Date()
-                        }, { merge: true });
-                    } catch (e) {
-                        console.warn("Fallo guardado nube", e);
-                        document.getElementById('offline-badge').classList.remove('hidden');
-                    }
-                }
-            }
-        }
-
-        // --- RENDERIZADORES ---
-
-        function renderDashboard() {
-            // Progreso
-            const percent = Math.round((appState.completedLevels.length / LEVELS.length) * 100);
-            document.getElementById('progress-percent').innerText = `${percent}%`;
-            document.getElementById('progress-bar').style.width = `${percent}%`;
-            document.getElementById('user-welcome').innerText = `Hola, ${appState.name.split(' ')[0]}`;
-
-            // Niveles
-            const container = document.getElementById('levels-container');
-            container.innerHTML = LEVELS.map(l => {
-                const isLocked = l.id > appState.currentLevel;
-                const isCompleted = appState.completedLevels.includes(l.id);
-                const bgClass = isLocked ? 'bg-gray-50 opacity-60' : 'bg-white hover:shadow-md cursor-pointer hover:border-farmacia-green';
-                const borderClass = isCompleted ? 'border-green-200 bg-green-50/30' : 'border-gray-200';
-                const icon = isCompleted ? '<i class="ph-check-circle text-2xl text-white"></i>' : (isLocked ? '<i class="ph-lock text-xl text-gray-400"></i>' : `<span class="text-lg font-bold text-white">${l.id}</span>`);
-                const iconBg = isCompleted ? 'bg-farmacia-green' : (isLocked ? 'bg-gray-200' : 'bg-farmacia-dark');
-
-                return `
-                    <div onclick="${!isLocked ? `startLevel(${l.id})` : ''}" class="relative p-5 rounded-xl border transition-all flex items-center gap-4 ${bgClass} ${borderClass}">
-                        <div class="w-12 h-12 rounded-full flex items-center justify-center shrink-0 ${iconBg}">
-                            ${icon}
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="font-bold text-gray-800">${l.title}</h3>
-                            <p class="text-xs text-gray-500">${l.desc}</p>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function renderBlog() {
-            document.getElementById('blog-container').innerHTML = POSTS.map(p => `
-                <div class="border border-gray-200 p-4 rounded-xl mb-4 hover:border-farmacia-green transition-colors cursor-pointer">
-                    <h3 class="font-bold text-gray-800">${p.t}</h3>
-                    <p class="text-sm text-gray-500 mt-1">${p.e}</p>
                 </div>
-            `).join('');
+            );
+        };
+
+        function App() {
+            const [view, setView] = useState('LANDING'); 
+            const [user, setUser] = useState({ name: '', currentLevel: 1, completedLevels: [], isAuthenticated: false });
+            const [quizState, setQuizState] = useState({ active: false, levelId: null, qIndex: 0, score: 0, showResult: false, answers: [] });
+            const [reviewMode, setReviewMode] = useState(false);
+            const [activeModal, setActiveModal] = useState(null); 
+            const [authMode, setAuthMode] = useState('login');
+            const [legalTab, setLegalTab] = useState('terms');
+            const [selectedArticle, setSelectedArticle] = useState(null);
+
+            useEffect(() => {
+                const unsubscribe = onAuthStateChanged(auth, (u) => {
+                    if (u) {
+                        const ref = doc(db, 'artifacts', appId, 'users', u.uid, 'data', 'progress');
+                        onSnapshot(ref, (snap) => {
+                            if (snap.exists()) {
+                                const d = snap.data();
+                                setUser({ ...d, uid: u.uid, isAuthenticated: true });
+                            } else {
+                                setUser({ name: u.displayName || 'Colega', currentLevel: 1, completedLevels: [], isAuthenticated: true, uid: u.uid });
+                            }
+                        });
+                    } else {
+                        const local = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || '{}');
+                        if (local.isAuthenticated) setUser(local);
+                    }
+                });
+                return () => unsubscribe();
+            }, []);
+
+            const saveProgress = async (newLevel, newCompleted) => {
+                const updatedUser = { ...user, currentLevel: newLevel, completedLevels: newCompleted };
+                setUser(updatedUser);
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedUser));
+                if (user.uid) {
+                    try { await setDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'data', 'progress'), updatedUser, { merge: true }); } catch(e) {}
+                }
+            };
+
+            const goBack = () => {
+                if (view === 'ARTICLE') {
+                    setView('BLOG');
+                } else if (user.isAuthenticated) {
+                    setView('DASHBOARD');
+                } else {
+                    setView('LANDING');
+                }
+            };
+
+            const renderLanding = () => (
+                <div className="flex-1 flex flex-col animate-fade-in overflow-y-auto relative z-10 bg-white">
+                    <header className="w-full py-4 px-6 flex justify-between items-center border-b border-slate-100 bg-white/95 backdrop-blur-sm sticky top-0 z-30 shadow-sm">
+                        <div className="flex items-center gap-2 text-xl font-heading font-bold text-slate-800">
+                            <div className="bg-farmacia-green text-white p-1.5 rounded-lg shadow-sm"><Icon name="shield" size={22} /></div>
+                            <span>Auxiliar<span className="text-farmacia-green">Pro</span></span>
+                        </div>
+                        <button onClick={() => user.isAuthenticated ? setView('DASHBOARD') : setActiveModal('auth')} className="text-sm font-bold text-slate-500 hover:text-farmacia-green transition-colors">
+                            {user.isAuthenticated ? 'Ir a mi Panel' : 'Ingresar'}
+                        </button>
+                    </header>
+
+                    <main className="flex-1 flex flex-col">
+                        <section className="px-6 py-10 text-center max-w-lg mx-auto">
+                            <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-100 text-emerald-700 text-[10px] font-bold px-3 py-1.5 rounded-full mb-6 tracking-wide shadow-sm">
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> META: CREDENCIAL 2026
+                            </div>
+                            <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 leading-tight tracking-tight">
+                                Prepárate para tu <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-farmacia-green to-emerald-600">Examen de Auxiliar</span>
+                            </h1>
+                            <div className="space-y-3 w-full max-w-xs mx-auto">
+                                <Button fullWidth onClick={() => user.isAuthenticated ? setView('DASHBOARD') : setActiveModal('auth')}>
+                                    Comenzar Ahora <Icon name="caret-right" />
+                                </Button>
+                                <Button variant="outline" fullWidth onClick={() => setView('BLOG')}>
+                                    <Icon name="book" /> Ir al Blog de Estudio
+                                </Button>
+                            </div>
+                        </section>
+
+                        <section className="bg-slate-50 py-12 px-6 border-y border-slate-100">
+                            <div className="max-w-md mx-auto">
+                                <div className="flex items-center gap-4 mb-6">
+                                    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-slate-700 shadow-sm border border-slate-100 text-xl"><Icon name="student" /></div>
+                                    <div>
+                                        <h3 className="font-bold text-slate-800">Hola, soy Marcelo</h3>
+                                        <p className="text-xs text-slate-500 uppercase tracking-wider font-bold">Auxiliar Trainee</p>
+                                    </div>
+                                </div>
+                                <p className="text-slate-600 text-sm leading-relaxed">
+                                    <strong>AuxiliarPro</strong> se creó bajo la convicción de que el conocimiento debe ser accesible y compartido. Esta plataforma nace como un espacio de estudio abierto para todos quienes buscan profesionalizar su labor como vendedor de farmacia y lograr la tan preciada credencial.
+                                </p>
+                            </div>
+                        </section>
+
+                        <section className="py-10 px-6 max-w-md mx-auto w-full text-center">
+                            <h3 className="font-bold text-slate-800 mb-4 text-lg">¿Dudas sobre el proceso?</h3>
+                            <Button variant="outline" fullWidth onClick={() => setView('FAQS')}><Icon name="question" /> Ver Preguntas Frecuentes</Button>
+                        </section>
+
+                        <footer className="bg-slate-900 text-slate-400 py-10 px-6 text-center text-xs">
+                            <div className="flex justify-center gap-6 mb-6 font-bold uppercase tracking-wider text-slate-500">
+                                <button onClick={() => { setLegalTab('terms'); setActiveModal('legal'); }} className="hover:text-white">Términos</button>
+                                <button onClick={() => { setLegalTab('privacy'); setActiveModal('legal'); }} className="hover:text-white">Privacidad</button>
+                                <button onClick={() => { setLegalTab('disclaimers'); setActiveModal('legal'); }} className="hover:text-white">Descargos</button>
+                            </div>
+                            <p className="opacity-60">© 2025 AuxiliarPro</p>
+                        </footer>
+                    </main>
+                </div>
+            );
+
+            const renderFAQs = () => (
+                <div className="flex-1 flex flex-col bg-white h-full animate-slide-up absolute inset-0 z-30">
+                    <header className="bg-white shadow-sm py-4 px-6 flex items-center gap-3 sticky top-0 z-10 border-b border-slate-100"><button onClick={goBack} className="flex items-center gap-1 text-slate-600 font-medium hover:text-farmacia-green"><Icon name="arrow-left" size={20}/> Volver al Inicio</button><span className="font-bold text-lg text-slate-800 ml-auto">Preguntas Frecuentes</span></header>
+                    <main className="flex-1 p-6 overflow-y-auto bg-slate-50"><div className="max-w-md mx-auto bg-white p-6 rounded-2xl shadow-sm border border-slate-100"><h2 className="text-xl font-bold text-slate-800 mb-4">Proceso de Acreditación</h2><p className="text-sm text-slate-500 mb-6">Información clave sobre el examen y trámites ante la SEREMI.</p><div className="space-y-1">{FAQS.map((faq, i) => <Accordion key={i} title={faq.q} content={faq.a} />)}</div><div className="mt-8 pt-6 border-t border-slate-100 text-center"><Button variant="outline" fullWidth onClick={goBack}>Volver al Inicio</Button></div></div></main>
+                </div>
+            );
+
+            const renderBlog = () => (
+                <div className="flex-1 flex flex-col bg-white h-full animate-slide-up absolute inset-0 z-30">
+                    <header className="bg-white shadow-sm py-4 px-6 flex items-center gap-3 sticky top-0 z-10 border-b border-slate-100"><button onClick={goBack} className="flex items-center gap-1 text-slate-600 font-medium hover:text-farmacia-green"><Icon name="arrow-left" size={20}/> Volver al Inicio</button><span className="font-bold text-lg text-slate-800 ml-auto">Blog de Estudio</span></header>
+                    <main className="flex-1 p-6 overflow-y-auto bg-slate-50"><div className="space-y-4 max-w-md mx-auto">{BLOG_POSTS.map(post => (<article key={post.id} onClick={() => { setSelectedArticle(post); setView('ARTICLE'); }} className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all cursor-pointer transform hover:-translate-y-1 duration-200"><div className="flex justify-between items-start mb-3"><span className="text-[10px] font-bold text-farmacia-green bg-green-50 px-2 py-1 rounded uppercase tracking-wide">{post.category}</span><span className="text-xs text-slate-400 font-medium">{post.date}</span></div><h3 className="font-bold text-slate-800 text-lg mb-2 leading-snug">{post.title}</h3><p className="text-sm text-slate-500 leading-relaxed line-clamp-3">{post.excerpt}</p><button className="mt-4 text-sm text-farmacia-green font-bold flex items-center gap-1 hover:gap-2 transition-all">Leer Artículo <Icon name="caret-right" size={14} /></button></article>))}</div></main>
+                </div>
+            );
+
+            const renderArticle = () => {
+                if (!selectedArticle) return null;
+                return (
+                    <div className="flex-1 flex flex-col bg-white h-full animate-slide-up absolute inset-0 z-40">
+                        <header className="bg-white shadow-sm py-4 px-6 flex items-center gap-3 sticky top-0 z-10 border-b border-slate-100"><button onClick={goBack} className="flex items-center gap-1 text-slate-600 font-medium hover:text-farmacia-green"><Icon name="arrow-left" size={20}/> Volver al Blog</button></header>
+                        <main className="flex-1 p-6 overflow-y-auto"><div className="max-w-2xl mx-auto blog-content"><span className="text-xs font-bold text-farmacia-green bg-green-50 px-2 py-1 rounded uppercase tracking-wide mb-4 inline-block">{selectedArticle.category}</span><div dangerouslySetInnerHTML={{__html: selectedArticle.content}}></div><div className="mt-8 pt-6 border-t border-slate-100 text-center"><Button variant="outline" fullWidth onClick={goBack}>Volver a Artículos</Button></div></div></main>
+                    </div>
+                );
+            };
+
+            const renderDashboard = () => (
+                <div className="flex-1 flex flex-col bg-slate-50 h-full animate-fade-in absolute inset-0 z-20">
+                    <header className="bg-white shadow-sm p-4 sticky top-0 z-20 flex justify-between items-center border-b border-slate-100">
+                        <div>
+                            <h2 className="font-bold text-lg text-slate-800">Panel de Estudio</h2>
+                            <p className="text-xs text-slate-500">Hola, {user.name.split(' ')[0]}</p>
+                        </div>
+                        <div className="flex gap-2">
+                            <button onClick={() => setView('LANDING')} className="p-2 bg-slate-100 rounded-lg text-slate-600 hover:text-farmacia-green transition-colors flex items-center gap-1 text-xs font-bold shadow-sm border border-slate-200" title="Volver al Inicio"><Icon name="arrow-left" size={16}/> Inicio</button>
+                            <button onClick={() => setActiveModal('community')} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-blue-600 hover:border-blue-200 transition-colors shadow-sm" title="Comunidad"><Icon name="users" size={20}/></button>
+                            <button onClick={async () => { await signOut(auth); localStorage.removeItem(LOCAL_STORAGE_KEY); setView('LANDING'); }} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-red-500 hover:border-red-200 transition-colors shadow-sm"><Icon name="power" size={20}/></button>
+                        </div>
+                    </header>
+
+                    <main className="flex-1 p-6 overflow-y-auto pb-24">
+                        <div className="max-w-md mx-auto space-y-6">
+                            <div className="bg-slate-900 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
+                                <div className="relative z-10">
+                                    <div className="flex justify-between items-center mb-4">
+                                        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Avance Global</span>
+                                        <span className="text-emerald-400 font-bold text-2xl">{Math.round((user.completedLevels.length / LEVELS.length) * 100)}%</span>
+                                    </div>
+                                    <div className="w-full bg-slate-700 h-2 rounded-full overflow-hidden">
+                                        <div className="bg-emerald-500 h-full rounded-full transition-all duration-1000" style={{ width: `${(user.completedLevels.length / LEVELS.length) * 100}%` }}></div>
+                                    </div>
+                                    <p className="text-xs text-slate-400 mt-4">Has completado {user.completedLevels.length} de {LEVELS.length} niveles.</p>
+                                </div>
+                                <Icon name="trophy" className="absolute -right-4 -bottom-4 text-slate-800 text-9xl opacity-20 rotate-12" />
+                            </div>
+
+                            <div className="space-y-4">
+                                {LEVELS.map(level => {
+                                    const isLocked = level.id > user.currentLevel;
+                                    const isCompleted = user.completedLevels.includes(level.id);
+                                    return (
+                                        <div key={level.id} 
+                                             onClick={() => !isLocked && startQuiz(level.id)}
+                                             className={`relative p-5 rounded-2xl border-2 transition-all flex items-center gap-4 cursor-pointer group overflow-hidden
+                                                ${isLocked ? 'bg-slate-100 border-slate-200 opacity-60' : 'bg-white hover:shadow-lg ' + level.borderColor}
+                                                ${isCompleted ? 'bg-emerald-50/30 border-emerald-200' : ''}
+                                             `}>
+                                            
+                                            <div className={`w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow-sm relative z-10 
+                                                ${isCompleted ? 'shiny-effect ' + level.iconBg + ' text-white border-2 border-white shadow-md' : (isLocked ? 'bg-slate-200 text-slate-400' : level.iconBg + ' text-white')}
+                                            `}>
+                                                {isCompleted ? <Icon name="medal" /> : (isLocked ? <Icon name="lock" /> : <Icon name="trophy" />)}
+                                            </div>
+
+                                            <div className="flex-1 z-10">
+                                                <div className="flex justify-between items-start">
+                                                    <h3 className="font-bold text-slate-800">{level.title}</h3>
+                                                    {isCompleted && <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 border border-emerald-200">LOGRADO</span>}
+                                                    {!isLocked && !isCompleted && <span className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase bg-slate-100 text-slate-600 border border-slate-200`}>{level.medal}</span>}
+                                                </div>
+                                                <p className="text-xs text-slate-500 mt-1">{level.desc}</p>
+                                                <p className="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-wide flex items-center gap-1">
+                                                    <Icon name="files" size={12}/> {level.qCount} Preguntas
+                                                </p>
+                                            </div>
+                                            {!isLocked && <Icon name="caret-right" className="text-slate-300 group-hover:text-farmacia-green transition-colors z-10" />}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-3">
+                                <Button variant="outline" fullWidth onClick={() => setView('LIBRARY')}><Icon name="file-pdf" /> Biblioteca</Button>
+                                <Button variant="outline" fullWidth onClick={() => setActiveModal('community')}><Icon name="chat-circle" /> Foro</Button>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            );
+
+            const startQuiz = (lvlId) => {
+                const level = LEVELS.find(l => l.id === lvlId);
+                setQuizState({ active: true, levelId: lvlId, qIndex: 0, score: 0, showResult: false, answers: [] });
+                setReviewMode(false);
+            };
+
+            const handleAnswer = (idx) => {
+                const lvl = LEVELS.find(l => l.id === quizState.levelId);
+                const q = lvl.questions[quizState.qIndex % lvl.questions.length];
+                const isCorrect = idx === q.correctIndex;
+                const newScore = isCorrect ? quizState.score + 1 : quizState.score;
+                const newAnswers = [...quizState.answers, idx];
+
+                if (quizState.qIndex + 1 < lvl.qCount) {
+                    setQuizState({ ...quizState, qIndex: quizState.qIndex + 1, score: newScore, answers: newAnswers });
+                } else {
+                    const passed = newScore >= lvl.passingScore;
+                    if (passed) {
+                        if (window.confetti) window.confetti();
+                        const nextLvl = lvl.id === user.currentLevel ? user.currentLevel + 1 : user.currentLevel;
+                        const nextCompleted = user.completedLevels.includes(lvl.id) ? user.completedLevels : [...user.completedLevels, lvl.id];
+                        saveProgress(nextLvl, nextCompleted);
+                    }
+                    setQuizState({ ...quizState, showResult: true, score: newScore, answers: newAnswers });
+                }
+            };
+
+            const renderQuizModal = () => {
+                if (!quizState.active) return null;
+                const lvl = LEVELS.find(l => l.id === quizState.levelId);
+                const qRealIndex = quizState.qIndex % lvl.questions.length;
+                const q = lvl.questions[qRealIndex];
+                const passed = quizState.score >= lvl.passingScore;
+
+                return (
+                    <div className="absolute inset-0 z-50 bg-white flex flex-col animate-slide-up">
+                        <header className="bg-farmacia-dark text-white p-4 flex justify-between items-center shadow-lg sticky top-0 z-20">
+                            <div>
+                                <h3 className="font-bold">{lvl.title}</h3>
+                                <p className="text-xs opacity-70">{!quizState.showResult ? `Pregunta ${quizState.qIndex + 1} de ${lvl.qCount}` : 'Resultados'}</p>
+                            </div>
+                            <button onClick={() => setQuizState({ ...quizState, active: false })}><Icon name="x" size={24} /></button>
+                        </header>
+
+                        <main className="flex-1 p-6 overflow-y-auto bg-slate-50">
+                            {!quizState.showResult ? (
+                                <div className="max-w-md mx-auto h-full flex flex-col">
+                                    <div className="mb-6 flex-1">
+                                        <span className="text-[10px] font-bold text-farmacia-green bg-green-50 px-2 py-1 rounded mb-2 inline-block border border-green-100 uppercase">{lvl.examLabel || 'SIMULACRO'}</span>
+                                        <h2 className="text-xl font-bold text-gray-800 leading-snug">{q.text}</h2>
+                                    </div>
+                                    <div className="space-y-3 mb-8">
+                                        {q.options.map((opt, i) => (
+                                            <button key={i} onClick={() => handleAnswer(i)} className="w-full text-left p-4 border-2 border-gray-100 bg-white rounded-xl hover:border-farmacia-green hover:bg-green-50 transition-all font-medium text-gray-700 flex items-center gap-3 group shadow-sm">
+                                                <span className="w-8 h-8 inline-flex items-center justify-center bg-slate-100 group-hover:bg-white rounded-full text-xs font-bold text-gray-500 group-hover:text-farmacia-green transition-colors">{String.fromCharCode(65+i)}</span>
+                                                <span className="flex-1">{opt}</span>
+                                            </button>
+                                        ))}
+                                    </div>
+                                    
+                                    <div className="mt-auto pt-4 border-t border-slate-200">
+                                        <Button variant="danger" fullWidth onClick={() => setQuizState({ ...quizState, active: false })}>
+                                            Cancelar y Volver al Panel
+                                        </Button>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="text-center max-w-md mx-auto pt-4">
+                                    <div className="mb-8">
+                                        <div className="text-7xl mb-4">{passed ? '🎓' : '📚'}</div>
+                                        <h2 className="text-2xl font-bold text-gray-900 mb-2">{passed ? '¡Nivel Aprobado!' : 'Sigue Estudiando'}</h2>
+                                        <p className="text-gray-500">Lograste {quizState.score} de {lvl.qCount} respuestas correctas</p>
+                                    </div>
+                                    {!reviewMode && (
+                                        <div className="bg-white p-5 rounded-2xl mb-8 text-left border border-slate-100 shadow-sm">
+                                            <h4 className="font-bold text-slate-800 mb-3 border-b border-slate-100 pb-2 flex items-center gap-2"><Icon name="files" /> Informe</h4>
+                                            <div className="space-y-3 text-sm">
+                                                <div className="flex justify-between"><span className="text-slate-500">Estado:</span><span className={`font-bold ${passed ? 'text-farmacia-green' : 'text-red-500'}`}>{passed ? 'APROBADO' : 'REPROBADO'}</span></div>
+                                                {!passed ? (
+                                                    <div className="mt-3 p-3 bg-red-50 rounded-lg border border-red-100">
+                                                        <p className="text-xs font-bold text-red-500 uppercase mb-1">Recomendación:</p>
+                                                        <p className="text-slate-700 leading-relaxed">Debes reforzar temas de <strong>{lvl.topics.join(" y ")}</strong> antes de avanzar.</p>
+                                                    </div>
+                                                ) : (
+                                                    <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-100">
+                                                        <p className="text-xs font-bold text-green-600 uppercase mb-1">¡Excelente trabajo!</p>
+                                                        <p className="text-slate-700">Dominas los conceptos clave. ¡Sigue así!</p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+                                    {reviewMode && <div className="text-left space-y-4 mb-8">{lvl.questions.map((qs, i) => <div key={i} className="bg-white border p-4 rounded-xl text-sm shadow-sm"><p className="font-bold mb-2 text-slate-800">{qs.text}</p><p className={quizState.answers[i] === qs.correctIndex ? 'text-farmacia-green font-bold' : 'text-red-500 line-through'}>Tu: {qs.options[quizState.answers[i]]}</p>{quizState.answers[i] !== qs.correctIndex && <p className="text-farmacia-green font-bold mt-1">Correcta: {qs.options[qs.correctIndex]}</p>}</div>)}</div>}
+                                    <div className="space-y-3 sticky bottom-0 bg-white p-4 border-t border-slate-100 shadow-xl rounded-t-2xl">
+                                        {!reviewMode && <Button fullWidth variant="outline" onClick={() => setReviewMode(true)}><Icon name="eye" /> Revisar mis Errores</Button>}
+                                        <Button fullWidth onClick={() => startQuiz(lvl.id)}><Icon name="refresh" /> Reintentar Nivel</Button>
+                                        <button onClick={() => setQuizState({ ...quizState, active: false })} className="text-sm text-slate-400 underline py-2">Volver al Panel</button>
+                                    </div>
+                                </div>
+                            )}
+                        </main>
+                    </div>
+                );
+            };
+
+            const AuthModal = () => {
+                if (activeModal !== 'auth') return null;
+                const [form, setForm] = useState({ name: '', email: '', pass: '' });
+                const [error, setError] = useState('');
+                const handleSubmit = async (e) => {
+                    e.preventDefault();
+                    setError('');
+                    try {
+                        if (authMode === 'register') {
+                            const cred = await createUserWithEmailAndPassword(auth, form.email, form.pass);
+                            await updateProfile(cred.user, { displayName: form.name });
+                            await setDoc(doc(db, 'artifacts', appId, 'users', cred.user.uid, 'data', 'progress'), { name: form.name, currentLevel: 1, completedLevels: [], lastUpdate: new Date() });
+                        } else {
+                            await signInWithEmailAndPassword(auth, form.email, form.pass);
+                        }
+                        setActiveModal(null);
+                        setView('DASHBOARD');
+                    } catch (err) { setError(err.code === 'auth/wrong-password' ? 'Contraseña incorrecta' : 'Error en los datos'); }
+                };
+                return (
+                    <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+                        <div className="bg-white rounded-3xl w-full max-w-sm p-8 relative shadow-2xl">
+                            <button onClick={() => setActiveModal(null)} className="absolute top-6 right-6 text-slate-300 hover:text-slate-600"><Icon name="x" size={24}/></button>
+                            <div className="text-center mb-8">
+                                <div className="bg-emerald-100 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 text-emerald-600 text-3xl shadow-sm"><Icon name="user" /></div>
+                                <h2 className="text-2xl font-bold text-slate-800">{authMode === 'register' ? 'Crear Cuenta' : 'Bienvenido'}</h2>
+                                <p className="text-sm text-slate-500 mt-2">Únete a la comunidad de AuxiliarPro.</p>
+                            </div>
+                            <form onSubmit={handleSubmit} className="space-y-4">
+                                {authMode === 'register' && <input type="text" placeholder="Tu Nombre" className="w-full p-4 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none transition-all" required onChange={e => setForm({...form, name: e.target.value})} />}
+                                <input type="email" placeholder="Correo Electrónico" className="w-full p-4 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none transition-all" required onChange={e => setForm({...form, email: e.target.value})} />
+                                <input type="password" placeholder="Contraseña" className="w-full p-4 bg-slate-50 border-none rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none transition-all" required onChange={e => setForm({...form, pass: e.target.value})} />
+                                {error && <p className="text-red-500 text-xs text-center font-bold">{error}</p>}
+                                <Button fullWidth type="submit" className="py-4 shadow-xl shadow-emerald-200">{authMode === 'register' ? 'Registrarse Gratis' : 'Entrar'}</Button>
+                            </form>
+                            <button onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')} className="block w-full text-center mt-6 text-sm text-slate-500 font-medium hover:text-farmacia-green transition-colors">{authMode === 'login' ? '¿No tienes cuenta? Regístrate aquí' : '¿Ya tienes cuenta? Inicia Sesión'}</button>
+                        </div>
+                    </div>
+                );
+            };
+
+            const LegalModal = () => {
+                if (activeModal !== 'legal') return null;
+                const contents = {
+                    terms: "Términos de Uso:\nEsta aplicación, 'AuxiliarPro', es una herramienta educativa de apoyo y estudio independiente. El contenido se basa en la normativa chilena vigente (Decretos 404, 405, 466) y bibliografía farmacéutica estándar, pero NO reemplaza la documentación oficial ni la capacitación formal requerida por la autoridad sanitaria.\n\nEl uso de esta aplicación es gratuito y voluntario. El usuario acepta utilizarla como complemento de estudio y no como única fuente de preparación.",
+                    privacy: "Política de Privacidad:\nRespetamos tu privacidad. Los datos recolectados (nombre, correo electrónico y progreso de estudio) se utilizan exclusivamente para:\n1. Personalizar tu experiencia en el panel de estudio.\n2. Guardar tu avance en los niveles para que no pierdas tu progreso.\n\nNo vendemos, compartimos ni publicamos tus datos personales con terceros. Puedes solicitar la eliminación de tu cuenta en cualquier momento contactando al administrador.",
+                    disclaimers: "Descargos de Responsabilidad:\n1. Independencia: AuxiliarPro NO tiene afiliación alguna con el Ministerio de Salud (MINSAL), SEREMIs, Instituto de Salud Pública (ISP) ni ninguna entidad gubernamental de Chile.\n2. Exámenes: Los simulacros y preguntas presentados aquí son referenciales y creados con fines pedagógicos. No garantizan la aprobación del examen de competencia real.\n3. Exactitud: Aunque nos esforzamos por mantener la información actualizada, la normativa sanitaria puede cambiar. Siempre consulta las fuentes oficiales."
+                };
+                return (
+                    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+                        <div className="bg-white rounded-3xl w-full max-w-lg p-8 relative shadow-2xl flex flex-col max-h-[85vh]">
+                            <button onClick={() => setActiveModal(null)} className="absolute top-6 right-6 text-slate-400 hover:text-slate-800 transition-colors"><Icon name="x" size={24}/></button>
+                            <h2 className="text-2xl font-bold text-slate-800 mb-6">Información Legal</h2>
+                            <div className="flex gap-2 mb-6 border-b border-slate-100 pb-1 overflow-x-auto">
+                                <button onClick={() => setLegalTab('terms')} className={`px-4 py-2 font-bold text-sm rounded-t-lg transition-colors whitespace-nowrap ${legalTab === 'terms' ? 'text-farmacia-green bg-green-50' : 'text-slate-400 hover:text-slate-600'}`}>Términos</button>
+                                <button onClick={() => setLegalTab('privacy')} className={`px-4 py-2 font-bold text-sm rounded-t-lg transition-colors whitespace-nowrap ${legalTab === 'privacy' ? 'text-farmacia-green bg-green-50' : 'text-slate-400 hover:text-slate-600'}`}>Privacidad</button>
+                                <button onClick={() => setLegalTab('disclaimers')} className={`px-4 py-2 font-bold text-sm rounded-t-lg transition-colors whitespace-nowrap ${legalTab === 'disclaimers' ? 'text-farmacia-green bg-green-50' : 'text-slate-400 hover:text-slate-600'}`}>Descargos</button>
+                            </div>
+                            <div className="overflow-y-auto flex-1 text-sm text-slate-600 leading-relaxed pr-2 whitespace-pre-line">{contents[legalTab]}</div>
+                            <Button className="mt-8" variant="outline" onClick={() => setActiveModal(null)}>Entendido</Button>
+                        </div>
+                    </div>
+                );
+            };
+
+            const CommunityModal = () => {
+                if (activeModal !== 'community') return null;
+                return (
+                    <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+                        <div className="bg-white rounded-3xl w-full max-w-sm p-8 relative shadow-2xl text-center">
+                            <button onClick={() => setActiveModal(null)} className="absolute top-6 right-6 text-slate-400 hover:text-slate-800"><Icon name="x" size={24}/></button>
+                            <div className="w-16 h-16 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl"><Icon name="users" /></div>
+                            <h2 className="text-xl font-bold mb-2 text-slate-800">Comunidad de Estudio</h2>
+                            
+                            <div className="bg-slate-50 border border-slate-100 rounded-xl p-4 mb-6 text-left">
+                                <h4 className="text-xs font-bold text-slate-500 uppercase mb-2">Reglas de Buena Convivencia</h4>
+                                <ul className="text-xs text-slate-600 space-y-1 list-disc pl-4">
+                                    <li>Tratar con respeto a todos los colegas.</li>
+                                    <li>No compartir publicidad ni spam.</li>
+                                    <li>Enfocarse en temas de estudio y trabajo.</li>
+                                    <li className="text-red-500 font-bold">El uso de malos tratos será causal de eliminación inmediata.</li>
+                                </ul>
+                            </div>
+
+                            <div className="space-y-3">
+                                <a href="#" className="w-full bg-[#25D366] text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-3 hover:opacity-90 transition-opacity shadow-lg shadow-green-100"><Icon name="whatsapp" size={24} /> Grupo de WhatsApp</a>
+                                <a href="#" className="w-full bg-[#1877F2] text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-3 hover:opacity-90 transition-opacity shadow-lg shadow-blue-100"><Icon name="facebook" size={24} /> Grupo de Facebook</a>
+                            </div>
+
+                            <div className="mt-6">
+                                <Button variant="outline" fullWidth onClick={() => setActiveModal(null)}>Volver</Button>
+                            </div>
+                        </div>
+                    </div>
+                );
+            };
+
+            return (
+                <div className="w-full max-w-md bg-white h-screen md:h-[90vh] md:rounded-3xl md:shadow-2xl overflow-hidden flex flex-col relative">
+                    {view === 'LANDING' && renderLanding()}
+                    {view === 'DASHBOARD' && renderDashboard()}
+                    {view === 'LIBRARY' && renderLibrary()}
+                    {view === 'FAQS' && renderFAQs()}
+                    {view === 'BLOG' && renderBlog()}
+                    {view === 'ARTICLE' && renderArticle()}
+                    {renderQuizModal()}
+                    <AuthModal />
+                    <LegalModal />
+                    <CommunityModal />
+                </div>
+            );
         }
 
-        // --- INIT ---
-        
-        // Listener Auth
-        onAuthStateChanged(auth, (user) => {
-            document.getElementById('loading-overlay').classList.add('hidden');
-            if (user) {
-                // Usuario Cloud
-                appState.uid = user.uid;
-                appState.isAuthenticated = true;
-                
-                // Cargar datos
-                const userRef = doc(db, 'artifacts', appId, 'users', user.uid, 'data', 'progress');
-                onSnapshot(userRef, (doc) => {
-                    if (doc.exists()) {
-                        const data = doc.data();
-                        appState.name = data.name || user.displayName || 'Estudiante';
-                        appState.currentLevel = data.currentLevel || 1;
-                        appState.completedLevels = data.completedLevels || [];
-                        renderDashboard();
-                    } else {
-                        appState.name = user.displayName || 'Estudiante';
-                        renderDashboard();
-                    }
-                }, (err) => {
-                    console.warn("Offline", err);
-                    document.getElementById('offline-badge').classList.remove('hidden');
-                });
-                
-            } else {
-                // Usuario Local (Fallback)
-                const local = localStorage.getItem('auxiliar_pro_data');
-                if (local) {
-                    const data = JSON.parse(local);
-                    if (data.isAuthenticated) {
-                        appState = data;
-                        document.getElementById('offline-badge').classList.remove('hidden');
-                        renderDashboard();
-                    }
-                }
-            }
-        });
-
-        // Init Blog
-        renderBlog();
-
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
     </script>
 </body>
 </html>
