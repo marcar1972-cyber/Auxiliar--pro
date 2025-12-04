@@ -112,7 +112,7 @@
 
         const { useState, useEffect } = React;
 
-        const APP_VERSION = "6.6.1 WA Fix";
+        const APP_VERSION = "6.6.5 Final Lock";
         const LOCAL_STORAGE_KEY = 'auxiliar_pro_data';
 
         const BLOG_POSTS = [
@@ -200,7 +200,7 @@
                 ] 
             },
             {
-                id: 4, title: 'Nivel 4: Final (Simulacro)', desc: 'Posología y cálculos.', medal: 'Platino', iconBg: 'bg-gradient-to-br from-[#E5E4E2] to-[#607D8B]', borderColor: 'border-[#607D8B]/50', textColor: 'text-[#455A64]', qCount: 20, passingScore: 14, topics: ['Cálculos', 'Posología'], examLabel: 'SIMULACRO FINAL',
+                id: 4, title: 'Nivel 4: Final (Simulacro)', desc: 'Posología y cálculos.', medal: 'Platino', iconBg: 'bg-gradient-to-br from-[#E5E4E2] to-[#607D8B]', borderColor: 'border-[#607D8B]/50', textColor: 'text-[#455A64]', qCount: 40, passingScore: 28, topics: ['Cálculos', 'Posología'], examLabel: 'SIMULACRO FINAL',
                 questions: [
                     { id: 401, topic: 'Cálculos', text: 'Si la dosis es 500mg y tengo comprimidos de 250mg, ¿cuántos dispenso?', options: ['1', '1.5', '2', '3'], correctIndex: 2, explanation: '500/250 = 2 comprimidos.' },
                     { id: 402, topic: 'Posología', text: '¿Cuántos ml hay en una cuchara de té (medida estándar)?', options: ['2.5 ml', '5 ml', '10 ml', '15 ml'], correctIndex: 1, explanation: '5 ml.' },
@@ -221,7 +221,28 @@
                     { id: 417, topic: 'Cálculos', text: 'Si vendo 10 cajas a $1.000 cada una, total:', options: ['$1.000', '$5.000', '$10.000', '$100.000'], correctIndex: 2, explanation: 'Cálculo simple de caja.' },
                     { id: 418, topic: 'Posología', text: 'Ayunas significa:', options: ['Con leche', 'Sin alimentos (estómago vacío)', 'Al acostarse', 'Con almuerzo'], correctIndex: 1, explanation: 'Sin alimentos.' },
                     { id: 419, topic: 'Cálculos', text: 'Dosis 2 puff cada 12 horas. Un inhalador de 200 dosis dura:', options: ['25 días', '50 días', '100 días', '10 días'], correctIndex: 1, explanation: '4 puff diarios. 200/4 = 50 días.' },
-                    { id: 420, topic: 'Gestión', text: 'Diferencia de inventario:', options: ['Lo que sobra', 'Lo que falta', 'Diferencia entre sistema y físico', 'Ventas del día'], correctIndex: 2, explanation: 'Discrepancia de stock.' }
+                    { id: 420, topic: 'Gestión', text: 'Diferencia de inventario:', options: ['Lo que sobra', 'Lo que falta', 'Diferencia entre sistema y físico', 'Ventas del día'], correctIndex: 2, explanation: 'Discrepancia de stock.' },
+                    // --- PREGUNTAS ADICIONALES (DIFICIL) ---
+                    { id: 421, topic: 'Cálculos', text: 'Receta: "Ibuprofeno 400mg, 1 comprimido cada 8 horas por 5 días". ¿Cuántos comprimidos en total?', options: ['10', '15', '20', '25'], correctIndex: 1, explanation: '3 tomas diarias x 5 días = 15 comprimidos.' },
+                    { id: 422, topic: 'Posología', text: 'Una solución tiene una concentración de 2 mg/ml. Si el paciente necesita 10 mg, ¿cuántos ml debe tomar?', options: ['2 ml', '5 ml', '10 ml', '20 ml'], correctIndex: 1, explanation: '10 mg / (2 mg/ml) = 5 ml.' },
+                    { id: 423, topic: 'Cálculos', text: 'Paciente de 20 kg necesita 15 mg/kg/día de Amoxicilina repartido en 3 tomas. La suspensión es de 250mg/5ml. ¿Cuántos ml por toma?', options: ['2 ml', '5 ml', '10 ml', '15 ml'], correctIndex: 0, explanation: 'Dosis diaria total: 20kg * 15mg/kg = 300mg. Por toma: 300mg / 3 = 100mg. Regla de tres: si 250mg son 5ml, 100mg son X. X = (100*5)/250 = 2ml.' },
+                    { id: 424, topic: 'Posología', text: 'Dosis de "1 cucharada sopera" equivale a:', options: ['5 ml', '10 ml', '15 ml', '20 ml'], correctIndex: 2, explanation: 'Estándar: 1 cucharada sopera = 15 ml.' },
+                    { id: 425, topic: 'Cálculos', text: 'Un frasco de 60ml de jarabe debe durar 5 días. ¿Cuál es la dosis diaria?', options: ['10 ml', '12 ml', '15 ml', '20 ml'], correctIndex: 1, explanation: '60 ml / 5 días = 12 ml/día.' },
+                    { id: 426, topic: 'Posología', text: 'Cada 4 horas significa:', options: ['4 veces al día', '5 veces al día', '6 veces al día', '8 veces al día'], correctIndex: 2, explanation: '24 horas / 4 = 6 tomas diarias.' },
+                    { id: 427, topic: 'Cálculos', text: 'Si la dosis es 75mg y tengo comprimidos de 50mg que se pueden fraccionar, ¿cuántos dispenso?', options: ['1', '1.5', '2', '2.5'], correctIndex: 1, explanation: '75mg / 50mg = 1.5 comprimidos.' },
+                    { id: 428, topic: 'Posología', text: 'Inyección Intramuscular (IM) se aplica en:', options: ['Vena', 'Músculo', 'Piel', 'Grasa'], correctIndex: 1, explanation: 'Directo al tejido muscular.' },
+                    { id: 429, topic: 'Cálculos', text: 'Receta: 2 comprimidos juntos al acostarse por 10 días. Total:', options: ['10', '20', '30', '40'], correctIndex: 1, explanation: '2 comp/día x 10 días = 20 comprimidos.' },
+                    { id: 430, topic: 'Gestión', text: 'El porcentaje de margen de ganancia se calcula sobre:', options: ['El costo', 'El precio de venta', 'El impuesto', 'La receta'], correctIndex: 1, explanation: 'Comúnmente el margen se calcula sobre el precio de venta final neto.' },
+                    { id: 431, topic: 'Cálculos', text: 'Dosis pediátrica: 1 gota por kilo de peso por dosis. Niño de 15kg, jarabe de 30ml. Cada 8 horas. ¿Cuánto dura el frasco? (1ml = 20 gotas)', options: ['5 días', '10 días', '13 días', '20 días'], correctIndex: 2, explanation: 'Dosis: 15 gotas. 15 gotas / 20 gotas/ml = 0.75 ml por toma. 3 tomas diarias = 2.25 ml/día. 30ml / 2.25 ml/día = 13.33 días. Aprox 13 días.' },
+                    { id: 432, topic: 'Posología', text: 'Vía Subcutánea (SC) se aplica en:', options: ['Músculo', 'Tejido adiposo', 'Dermis', 'Vena'], correctIndex: 1, explanation: 'Bajo la piel, en la grasa.' },
+                    { id: 433, topic: 'Cálculos', text: 'Si un medicamento al 1% tiene 1g en 100ml, ¿cuántos mg hay en 5ml?', options: ['5 mg', '10 mg', '50 mg', '100 mg'], correctIndex: 2, explanation: '1% = 1g/100ml = 1000mg/100ml = 10mg/ml. En 5ml hay 5 * 10mg = 50mg.' },
+                    { id: 434, topic: 'Posología', text: 'Uso Oftálmico se aplica en:', options: ['Oídos', 'Ojos', 'Nariz', 'Boca'], correctIndex: 1, explanation: 'Gotas o ungüentos para los ojos.' },
+                    { id: 435, topic: 'Cálculos', text: 'Receta: 500mg cada 6 horas por 7 días. Presentación: 500mg x 20 comprimidos. ¿Cuántas cajas necesita?', options: ['1', '2', '3', '4'], correctIndex: 1, explanation: 'Dosis diaria: 4 comp. Total: 4 comp/día x 7 días = 28 comprimidos. Necesita 2 cajas de 20.' },
+                    { id: 436, topic: 'Posología', text: 'Comprimido de Liberación Prolongada:', options: ['Acción rápida', 'Se puede moler', 'Se absorbe lentamente', 'Dosis doble'], correctIndex: 2, explanation: 'No se debe triturar, libera el fármaco de a poco.' },
+                    { id: 437, topic: 'Cálculos', text: 'Si vendo $100.000 y mi costo fue $70.000, mi margen bruto es:', options: ['20%', '30%', '40%', '70%'], correctIndex: 1, explanation: 'Margen = (Venta - Costo) / Venta. (100000 - 70000) / 100000 = 30000 / 100000 = 0.3 = 30%.' },
+                    { id: 438, topic: 'Posología', text: 'Vía Tópica Nasal se aplica en:', options: ['Ojos', 'Oídos', 'Nariz', 'Piel'], correctIndex: 2, explanation: 'Fosas nasales.' },
+                    { id: 439, topic: 'Cálculos', text: 'Dosis 10ml. Frasco de 200ml. Precio $5.000. Costo por dosis:', options: ['$100', '$200', '$250', '$500'], correctIndex: 2, explanation: 'Total dosis por frasco: 200ml / 10ml = 20 dosis. Costo por dosis: $5.000 / 20 = $250.' },
+                    { id: 440, topic: 'Gestión', text: 'Inventario valorizado es:', options: ['Cantidad de productos', 'Suma del costo de todos los productos', 'Suma del precio de venta', 'Productos por vencer'], correctIndex: 1, explanation: 'Valor total del stock a precio de costo.' }
                 ] 
             }
         ];
@@ -316,11 +337,15 @@
             };
 
             const goBack = () => {
+                // Lógica unificada: Siempre vuelve a LANDING desde todas las vistas públicas (Blog, FAQs, Library)
+                // Desde el Panel de Estudio, si es que hubiera sub-navegación, volvería al Panel.
                 if (view === 'ARTICLE') {
                     setView('BLOG');
-                } else if (user.isAuthenticated) {
-                    setView('DASHBOARD');
+                } else if (view === 'DASHBOARD') {
+                    // Si estás en el Dashboard y quieres "volver" (lógica rara, pero por seguridad), vas a Landing
+                    setView('LANDING');
                 } else {
+                    // Desde FAQs, Library, Blog -> Siempre a Landing
                     setView('LANDING');
                 }
             };
@@ -402,9 +427,9 @@
                             <p className="text-xs text-slate-500">Hola, {user.name.split(' ')[0]}</p>
                         </div>
                         <div className="flex gap-2">
-                            <button onClick={() => setView('BLOG')} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-farmacia-green hover:border-green-200 transition-colors shadow-sm" title="Blog"><Icon name="article" size={20}/></button>
-                            <button onClick={() => setActiveModal('community')} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-blue-600 hover:border-blue-200 transition-colors shadow-sm" title="Comunidad"><Icon name="users" size={20}/></button>
-                            <button onClick={async () => { await signOut(auth); localStorage.removeItem(LOCAL_STORAGE_KEY); setView('LANDING'); }} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-red-500 hover:border-red-200 transition-colors shadow-sm"><Icon name="power" size={20}/></button>
+                            <button onClick={() => setView('BLOG')} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-farmacia-green hover:border-green-200 transition-colors shadow-sm flex items-center gap-2 text-xs font-bold" title="Blog"><Icon name="article" size={20}/><span className="hidden md:inline">Blog</span></button>
+                            <button onClick={() => setActiveModal('community')} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-blue-600 hover:border-blue-200 transition-colors shadow-sm flex items-center gap-2 text-xs font-bold" title="Comunidad"><Icon name="users" size={20}/><span className="hidden md:inline">Comunidad</span></button>
+                            <button onClick={async () => { await signOut(auth); localStorage.removeItem(LOCAL_STORAGE_KEY); setView('LANDING'); }} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-red-500 hover:border-red-200 transition-colors shadow-sm flex items-center gap-2 text-xs font-bold"><Icon name="power" size={20}/><span className="hidden md:inline">Salir</span></button>
                         </div>
                     </header>
                     <main className="flex-1 p-6 overflow-y-auto pb-24">
@@ -448,14 +473,14 @@
 
             const renderFAQs = () => (
                 <div className="flex-1 flex flex-col bg-white h-full animate-slide-up absolute inset-0 z-30">
-                    <header className="bg-white shadow-sm py-4 px-6 flex items-center gap-3 sticky top-0 z-10 border-b border-slate-100"><button onClick={goBack} className="flex items-center gap-1 text-slate-600 font-medium hover:text-farmacia-green"><Icon name="arrow-left" size={20}/> Volver al Inicio</button><span className="font-bold text-lg text-slate-800 ml-auto">Preguntas Frecuentes</span></header>
-                    <main className="flex-1 p-6 overflow-y-auto bg-slate-50"><div className="max-w-md mx-auto bg-white p-6 rounded-2xl shadow-sm border border-slate-100"><h2 className="text-xl font-bold text-slate-800 mb-4">Proceso de Acreditación</h2><p className="text-sm text-slate-500 mb-6">Información clave sobre el examen y trámites ante la SEREMI.</p><div className="space-y-1">{FAQS.map((faq, i) => <Accordion key={i} title={faq.q} content={faq.a} />)}</div><div className="mt-8 pt-6 border-t border-slate-100 text-center"><Button variant="outline" fullWidth onClick={goBack}>Volver al Inicio</Button></div></div></main>
+                    <header className="bg-white shadow-sm py-4 px-6 flex items-center gap-3 sticky top-0 z-10 border-b border-slate-100"><button onClick={() => setView('LANDING')} className="flex items-center gap-1 text-slate-600 font-medium hover:text-farmacia-green"><Icon name="arrow-left" size={20}/> Volver al Inicio</button><span className="font-bold text-lg text-slate-800 ml-auto">Preguntas Frecuentes</span></header>
+                    <main className="flex-1 p-6 overflow-y-auto bg-slate-50"><div className="max-w-md mx-auto bg-white p-6 rounded-2xl shadow-sm border border-slate-100"><h2 className="text-xl font-bold text-slate-800 mb-4">Proceso de Acreditación</h2><p className="text-sm text-slate-500 mb-6">Información clave sobre el examen y trámites ante la SEREMI.</p><div className="space-y-1">{FAQS.map((faq, i) => <Accordion key={i} title={faq.q} content={faq.a} />)}</div><div className="mt-8 pt-6 border-t border-slate-100 text-center"><Button variant="outline" fullWidth onClick={() => setView('LANDING')}>Volver al Inicio</Button></div></div></main>
                 </div>
             );
 
             const renderBlog = () => (
                 <div className="flex-1 flex flex-col bg-white h-full animate-slide-up absolute inset-0 z-30">
-                    <header className="bg-white shadow-sm py-4 px-6 flex items-center gap-3 sticky top-0 z-10 border-b border-slate-100"><button onClick={goBack} className="flex items-center gap-1 text-slate-600 font-medium hover:text-farmacia-green"><Icon name="arrow-left" size={20}/> Volver al Inicio</button><span className="font-bold text-lg text-slate-800 ml-auto">Blog de Estudio</span></header>
+                    <header className="bg-white shadow-sm py-4 px-6 flex items-center gap-3 sticky top-0 z-10 border-b border-slate-100"><button onClick={() => setView('LANDING')} className="flex items-center gap-1 text-slate-600 font-medium hover:text-farmacia-green"><Icon name="arrow-left" size={20}/> Volver al Inicio</button><span className="font-bold text-lg text-slate-800 ml-auto">Blog de Estudio</span></header>
                     <main className="flex-1 p-6 overflow-y-auto bg-slate-50"><div className="space-y-4 max-w-md mx-auto">{BLOG_POSTS.map(post => (<article key={post.id} onClick={() => { setSelectedArticle(post); setView('ARTICLE'); }} className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all cursor-pointer transform hover:-translate-y-1 duration-200"><div className="flex justify-between items-start mb-3"><span className="text-[10px] font-bold text-farmacia-green bg-green-50 px-2 py-1 rounded uppercase tracking-wide">{post.category}</span><span className="text-xs text-slate-400 font-medium">{post.date}</span></div><h3 className="font-bold text-slate-800 text-lg mb-2 leading-snug">{post.title}</h3><p className="text-sm text-slate-500 leading-relaxed line-clamp-3">{post.excerpt}</p><button className="mt-4 text-sm text-farmacia-green font-bold flex items-center gap-1 hover:gap-2 transition-all">Leer Artículo <Icon name="caret-right" size={14} /></button></article>))}</div></main>
                 </div>
             );
@@ -464,16 +489,16 @@
                 if (!selectedArticle) return null;
                 return (
                     <div className="flex-1 flex flex-col bg-white h-full animate-slide-up absolute inset-0 z-40">
-                        <header className="bg-white shadow-sm py-4 px-6 flex items-center gap-3 sticky top-0 z-10 border-b border-slate-100"><button onClick={goBack} className="flex items-center gap-1 text-slate-600 font-medium hover:text-farmacia-green"><Icon name="arrow-left" size={20}/> Volver al Blog</button></header>
-                        <main className="flex-1 p-6 overflow-y-auto"><div className="max-w-2xl mx-auto blog-content"><span className="text-xs font-bold text-farmacia-green bg-green-50 px-2 py-1 rounded uppercase tracking-wide mb-4 inline-block">{selectedArticle.category}</span><div dangerouslySetInnerHTML={{__html: selectedArticle.content}}></div><div className="mt-8 pt-6 border-t border-slate-100 text-center"><Button variant="outline" fullWidth onClick={goBack}>Volver a Artículos</Button></div></div></main>
+                        <header className="bg-white shadow-sm py-4 px-6 flex items-center gap-3 sticky top-0 z-10 border-b border-slate-100"><button onClick={() => setView('BLOG')} className="flex items-center gap-1 text-slate-600 font-medium hover:text-farmacia-green"><Icon name="arrow-left" size={20}/> Volver al Blog</button></header>
+                        <main className="flex-1 p-6 overflow-y-auto"><div className="max-w-2xl mx-auto blog-content"><span className="text-xs font-bold text-farmacia-green bg-green-50 px-2 py-1 rounded uppercase tracking-wide mb-4 inline-block">{selectedArticle.category}</span><div dangerouslySetInnerHTML={{__html: selectedArticle.content}}></div><div className="mt-8 pt-6 border-t border-slate-100 text-center"><Button variant="outline" fullWidth onClick={() => setView('BLOG')}>Volver a Artículos</Button></div></div></main>
                     </div>
                 );
             };
 
             const renderLibrary = () => (
                 <div className="flex-1 flex flex-col bg-white h-full animate-slide-up absolute inset-0 z-30">
-                    <header className="p-4 border-b border-gray-100 flex items-center gap-3 bg-white sticky top-0 z-20"><button onClick={goBack}><Icon name="arrow-left" size={24} className="text-slate-600"/></button><h2 className="font-bold text-lg text-slate-800">Biblioteca Legal</h2></header>
-                    <main className="flex-1 p-6 overflow-y-auto"><div className="max-w-md mx-auto"><p className="text-sm text-gray-500 mb-6">Guías de estudio y resúmenes basados en los decretos del MINSAL.</p><div className="space-y-3">{PDF_DOCS.map((doc, i) => (<a key={i} href={doc.file} target="_blank" className="flex items-center gap-4 p-4 rounded-xl border border-gray-100 hover:border-red-200 hover:bg-red-50 transition-colors group cursor-pointer no-underline"><div className="bg-red-100 text-red-500 p-3 rounded-lg"><Icon name="file-pdf" size={24}/></div><div className="flex-1"><h4 className="font-bold text-gray-800 group-hover:text-red-600">{doc.title}</h4><p className="text-xs text-gray-500">{doc.desc}</p></div><Icon name="download" className="text-gray-300 group-hover:text-red-500" /></a>))}</div><div className="mt-8 pt-6 border-t border-slate-100 text-center"><Button variant="outline" fullWidth onClick={goBack}>Volver al Panel</Button></div></div></main>
+                    <header className="p-4 border-b border-gray-100 flex items-center gap-3 bg-white sticky top-0 z-20"><button onClick={() => setView(user.isAuthenticated ? 'DASHBOARD' : 'LANDING')}><Icon name="arrow-left" size={24} className="text-slate-600"/></button><h2 className="font-bold text-lg text-slate-800">Biblioteca Legal</h2></header>
+                    <main className="flex-1 p-6 overflow-y-auto"><div className="max-w-md mx-auto"><p className="text-sm text-gray-500 mb-6">Guías de estudio y resúmenes basados en los decretos del MINSAL.</p><div className="space-y-3">{PDF_DOCS.map((doc, i) => (<a key={i} href={doc.file} target="_blank" className="flex items-center gap-4 p-4 rounded-xl border border-gray-100 hover:border-red-200 hover:bg-red-50 transition-colors group cursor-pointer no-underline"><div className="bg-red-100 text-red-500 p-3 rounded-lg"><Icon name="file-pdf" size={24}/></div><div className="flex-1"><h4 className="font-bold text-gray-800 group-hover:text-red-600">{doc.title}</h4><p className="text-xs text-gray-500">{doc.desc}</p></div><Icon name="download" className="text-gray-300 group-hover:text-red-500" /></a>))}</div><div className="mt-8 pt-6 border-t border-slate-100 text-center"><Button variant="outline" fullWidth onClick={() => setView(user.isAuthenticated ? 'DASHBOARD' : 'LANDING')}>Volver al Panel</Button></div></div></main>
                 </div>
             );
 
@@ -614,9 +639,10 @@
             const LegalModal = () => {
                 if (activeModal !== 'legal') return null;
                 const contents = {
-                    terms: "Términos de Uso:\nEsta aplicación, 'AuxiliarPro', es una herramienta educativa...",
-                    privacy: "Política de Privacidad:\nRespetamos tu privacidad...",
-                    disclaimers: "Descargos de Responsabilidad:\n1. Independencia: AuxiliarPro NO tiene afiliación alguna con el Ministerio de Salud..."
+                    // --- TEXTOS LEGALES (NO MODIFICAR SIN AUTORIZACIÓN) ---
+                    terms: "Términos de Uso:\nEsta aplicación, 'AuxiliarPro', es una herramienta educativa diseñada para asistir en la preparación del examen de Auxiliar de Farmacia. El uso de esta plataforma implica la aceptación de los siguientes términos y condiciones. El contenido proporcionado es con fines informativos y educativos, y no sustituye el consejo profesional o la información oficial otorgada por las autoridades sanitarias. Los usuarios son responsables de verificar la información y utilizarla de manera ética y legal. AuxiliarPro se reserva el derecho de modificar, suspender o cancelar el servicio en cualquier momento, así como de actualizar estos términos sin previo aviso. El acceso a ciertas funciones puede requerir registro, siendo el usuario responsable de mantener la confidencialidad de sus credenciales. Queda prohibido el uso de la plataforma para fines ilegales o no autorizados, incluyendo pero no limitado a la distribución de contenido con derechos de autor, spam o malware. AuxiliarPro no se hace responsable por daños o perjuicios derivados del uso de la aplicación, incluyendo pérdida de datos o interrupciones del servicio. Al utilizar AuxiliarPro, el usuario acepta someterse a la jurisdicción de los tribunales chilenos para cualquier disputa que pueda surgir.",
+                    privacy: "Política de Privacidad:\nEn AuxiliarPro, respetamos tu privacidad y nos comprometemos a proteger tus datos personales. Esta política describe cómo recopilamos, usamos y compartimos tu información. Al utilizar nuestra aplicación, aceptas las prácticas descritas en esta política. Recopilamos información que nos proporcionas directamente, como tu nombre, correo electrónico y progreso en los cuestionarios, con el fin de personalizar tu experiencia y mejorar nuestro servicio. También podemos recopilar información técnica automáticamente, como tu dirección IP y tipo de dispositivo, para fines de análisis y seguridad. No compartimos tu información personal con terceros, excepto cuando sea necesario para cumplir con la ley, proteger nuestros derechos o proporcionar servicios esenciales (como el alojamiento de la aplicación). Utilizamos cookies y tecnologías similares para mejorar la funcionalidad y el rendimiento de la plataforma. Puedes configurar tu navegador para rechazar las cookies, pero esto puede afectar tu experiencia de usuario. Implementamos medidas de seguridad para proteger tus datos, pero no podemos garantizar la seguridad absoluta de la información transmitida a través de Internet. Esta política puede actualizarse periódicamente, por lo que te recomendamos revisarla regularmente.",
+                    disclaimers: "Descargos de Responsabilidad:\n1. Independencia: AuxiliarPro es una iniciativa independiente y NO tiene afiliación, respaldo ni patrocinio alguno por parte del Ministerio de Salud (MINSAL), el Instituto de Salud Pública (ISP), las SEREMIS de Salud o cualquier otra entidad gubernamental o autoridad sanitaria de Chile. La información y los materiales proporcionados en esta plataforma se basan en fuentes públicas y en el conocimiento general sobre el examen de Auxiliar de Farmacia, pero no constituyen información oficial.\n\n2. Exactitud de la Información: Aunque nos esforzamos por mantener la información actualizada y precisa, AuxiliarPro no garantiza la exactitud, integridad o vigencia del contenido. La legislación y las normativas sanitarias pueden cambiar, y es responsabilidad del usuario verificar la información con las fuentes oficiales correspondientes antes de tomar decisiones basadas en ella.\n\n3. Propósito Educativo: El contenido de AuxiliarPro tiene fines exclusivamente educativos e informativos. No debe considerarse como asesoramiento profesional, médico, legal o de cualquier otra índole. El uso de la plataforma y la confianza en su contenido son bajo el propio riesgo del usuario.\n\n4. Resultados del Examen: El uso de AuxiliarPro no garantiza la aprobación del examen de Auxiliar de Farmacia ni la obtención de la credencial sanitaria. El éxito en el examen depende del estudio individual, la preparación y otros factores ajenos a la plataforma.\n\n5. Enlaces Externos: AuxiliarPro puede contener enlaces a sitios web de terceros. No nos hacemos responsables por el contenido, las políticas de privacidad o las prácticas de estos sitios externos.\n\n6. Limitación de Responsabilidad: En ningún caso AuxiliarPro será responsable por daños directos, indirectos, incidentales, especiales o consecuentes que surjan del uso o la imposibilidad de uso de la plataforma, incluso si se ha advertido sobre la posibilidad de tales daños."
                 };
                 return (
                     <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
