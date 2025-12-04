@@ -1,68 +1,443 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Auxiliar Pro | Preparación 2026</title>
+    
+    <!-- 1. Estilos (Tailwind CSS) -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
           extend: {
             colors: {
-              'farmacia-green': '#00C853',
-              'farmacia-dark': '#0d1b2a',
-              'metal-bronze': '#cd7f32',
-              'metal-silver': '#9e9e9e',
-              'metal-gold': '#ffd700',
+              'emerald': { 50:'#ecfdf5', 100:'#d1fae5', 200:'#a7f3d0', 600:'#059669', 700:'#047857' },
+              'slate': { 800:'#1e293b', 900:'#0f172a' },
+              'amber': { 50:'#fffbeb', 200:'#fde68a', 600:'#d97706' },
+              'red': { 50:'#fef2f2', 100:'#fee2e2', 500:'#ef4444', 600:'#dc2626' }
             },
             fontFamily: {
               sans: ['Inter', 'sans-serif'],
               heading: ['Roboto', 'sans-serif']
-            },
-            animation: {
-              'fade-in': 'fadeIn 0.4s ease-out forwards',
-              'slide-up': 'slideUp 0.3s ease-out forwards',
-            },
-            keyframes: {
-              fadeIn: {
-                '0%': { opacity: '0' },
-                '100%': { opacity: '1' },
-              },
-              slideUp: {
-                '0%': { opacity: '0', transform: 'translateY(10px)' },
-                '100%': { opacity: '1', transform: 'translateY(0)' },
-              }
             }
           }
         }
       }
     </script>
+    
+    <!-- 2. Fuentes y Efectos -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <!-- 3. React y Babel (Para ejecutar el código sin instalar nada) -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- 4. Iconos (Phosphor Icons - funciona directo en HTML) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
     <style>
-      /* Custom Scrollbar for inner containers */
+      /* Scrollbar personalizada */
       .custom-scrollbar::-webkit-scrollbar { width: 4px; }
       .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
       .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+      
+      /* Animaciones */
+      @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+      .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+      
+      @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+      .animate-slide-up { animation: slideUp 0.3s ease-out forwards; }
     </style>
-  <script type="importmap">
-{
-  "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.2.1/",
-    "react": "https://aistudiocdn.com/react@^19.2.1",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
-    "react-dom": "https://aistudiocdn.com/react-dom@^19.2.1",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
-    "firebase/app": "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js",
-    "firebase/auth": "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js",
-    "firebase/firestore": "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js",
-    "firebase/": "https://aistudiocdn.com/firebase@^12.6.0/"
-  }
-}
-</script>
 </head>
-  <body class="bg-gray-100 text-gray-800 antialiased min-h-screen flex flex-col items-center justify-center">
+<body class="bg-gray-100 text-gray-800 antialiased min-h-screen flex flex-col items-center justify-center">
+    
     <div id="root" class="w-full h-full flex justify-center items-center"></div>
-  </body>
+
+    <!-- 5. LÓGICA DE LA APLICACIÓN -->
+    <script type="text/babel" data-type="module">
+        // Importamos Firebase directamente desde Google CDN
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+
+        // --- CONFIGURACIÓN DE TU PROYECTO ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyDNhuSBBhmmQSV0BHC8MOtLKgAUpvtfWfE",
+            authDomain: "auxiliar-pro.firebaseapp.com",
+            projectId: "auxiliar-pro",
+            storageBucket: "auxiliar-pro.firebasestorage.app",
+            messagingSenderId: "342196612566",
+            appId: "1:342196612566:web:c7f34365c4e10502e60877"
+        };
+
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const appId = 'auxiliar-pro';
+
+        const { useState, useEffect } = React;
+
+        // --- DATOS FIJOS ---
+        const APP_VERSION = "3.0.0 Web";
+        const BLOG_POSTS = [
+            { id: 'art1', date: '15 NOV', title: 'Guía de Medicamentos Bioequivalentes', excerpt: 'Diferencia entre genéricos, bioequivalentes y originales.', content: '<p>Los medicamentos bioequivalentes son aquellos que han demostrado científicamente tener la misma eficacia y seguridad que el medicamento original...</p>' },
+            { id: 'art2', date: '20 NOV', title: 'Almacenamiento y Cadena de Frío', excerpt: 'Protocolos para insulinas y vacunas.', content: '<p>La cadena de frío es fundamental para mantener la estabilidad de ciertos fármacos termolábiles...</p>' },
+            { id: 'art3', date: '01 DIC', title: 'Legislación: DS 466 Explicado', excerpt: 'Reglamento de farmacias para el examen.', content: '<p>El Decreto Supremo 466 aprueba el reglamento de farmacias, droguerías, almacenes farmacéuticos, botiquines y depósitos autorizados...</p>' }
+        ];
+
+        const LEVELS = [
+            {
+                id: 1, title: 'Nivel 1: Farmacología Básica', description: 'Conceptos fundamentales y vías de administración.', passingScore: 2,
+                questions: [
+                    { id: 101, text: '¿Vía de administración que evita el paso hepático?', options: ['Vía Oral', 'Vía Sublingual', 'Vía Rectal', 'Vía Tópica'], correctIndex: 1 },
+                    { id: 102, text: '¿Qué significa OTC?', options: ['Receta Retenida', 'Venta Directa', 'Antibiótico', 'Psicotrópico'], correctIndex: 1 },
+                    { id: 103, text: '¿Forma farmacéutica sólida?', options: ['Jarabe', 'Comprimido', 'Emulsión', 'Colirio'], correctIndex: 1 }
+                ]
+            },
+            {
+                id: 2, title: 'Nivel 2: Legislación Sanitaria', description: 'Código Sanitario y reglamentos.', passingScore: 2,
+                questions: [
+                    { id: 201, text: '¿Receta para estupefacientes?', options: ['Simple', 'Retenida', 'Cheque', 'Magistral'], correctIndex: 2 },
+                    { id: 202, text: '¿Responsable técnico de farmacia?', options: ['Dueño', 'Auxiliar', 'Químico Farmacéutico', 'Gerente'], correctIndex: 2 }
+                ]
+            },
+            {
+                id: 3, title: 'Nivel 3: Atención y Dispensación', description: 'Buenas prácticas e información al paciente.', passingScore: 1,
+                questions: [
+                    { id: 301, text: '¿Qué verificar al dispensar antibióticos?', options: ['Precio', 'Receta y Vencimiento', 'Marca', 'Caja'], correctIndex: 1 }
+                ]
+            }
+        ];
+
+        const LOCAL_STORAGE_KEY = 'auxiliar_pro_data';
+        const getLocalData = () => { try { return JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || 'null'); } catch(e) { return null; } };
+        const saveLocalData = (data) => { try { localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data)); } catch(e) {} };
+
+        // --- COMPONENTES ---
+
+        const Button = ({ onClick, children, variant = 'primary', className = '', disabled = false, fullWidth = false }) => {
+            const baseStyles = "flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed";
+            const variants = {
+                primary: "bg-slate-900 text-white hover:bg-slate-800 shadow-lg",
+                secondary: "bg-emerald-600 text-white hover:bg-emerald-700 shadow-md",
+                outline: "bg-white border-2 border-gray-200 text-gray-700 hover:border-emerald-600 hover:text-emerald-600",
+                ghost: "bg-transparent text-gray-500 hover:text-emerald-600 hover:bg-emerald-50",
+            };
+            return <button onClick={onClick} disabled={disabled} className={`${baseStyles} ${variants[variant]} ${fullWidth ? 'w-full' : ''} ${className}`}>{children}</button>;
+        };
+
+        const Icon = ({ name, size = 20, className = "" }) => {
+            // Mapeo simple de iconos Phosphor a nombres Lucide (para compatibilidad)
+            const iconMap = {
+                'shield': 'ph-shield-check', 'user': 'ph-user', 'logout': 'ph-sign-out', 'chevron-right': 'ph-caret-right',
+                'book-open': 'ph-book-open', 'lock': 'ph-lock', 'check-circle': 'ph-check-circle', 'trophy': 'ph-trophy',
+                'arrow-left': 'ph-arrow-left', 'file-text': 'ph-file-text', 'message-circle': 'ph-whatsapp-logo', 'x': 'ph-x',
+                'refresh-ccw': 'ph-arrows-clockwise', 'eye': 'ph-eye', 'alert-circle': 'ph-warning-circle', 'mail': 'ph-envelope',
+                'key': 'ph-key', 'wifi-off': 'ph-wifi-slash'
+            };
+            return <i className={`${iconMap[name] || 'ph-circle'} ${className}`} style={{ fontSize: size }}></i>;
+        };
+
+        // --- APP PRINCIPAL ---
+
+        function App() {
+            const [view, setView] = useState('LANDING');
+            const [user, setUser] = useState({ uid: '', name: '', email: '', currentLevel: 1, completedLevels: [], isAuthenticated: false, isOfflineMode: false });
+            const [quizState, setQuizState] = useState({ isActive: false, levelId: null, currentQuestionIndex: 0, score: 0, showResult: false, answers: [] });
+            const [selectedArticleId, setSelectedArticleId] = useState(null);
+            
+            const [showAuthModal, setShowAuthModal] = useState(false);
+            const [authMode, setAuthMode] = useState('login');
+            const [showLegalModal, setShowLegalModal] = useState(false);
+            const [showForumModal, setShowForumModal] = useState(false);
+            
+            const [reviewMode, setReviewMode] = useState(false);
+            const [loading, setLoading] = useState(true);
+
+            // AUTH & FIRESTORE
+            useEffect(() => {
+                const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+                    if (currentUser) {
+                        const userRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'data', 'progress');
+                        const unsubDoc = onSnapshot(userRef, (docSnap) => {
+                            if (docSnap.exists()) {
+                                const data = docSnap.data();
+                                setUser({
+                                    uid: currentUser.uid, name: currentUser.displayName || data.name || 'Estudiante', email: currentUser.email || '',
+                                    currentLevel: data.currentLevel || 1, completedLevels: data.completedLevels || [],
+                                    isAuthenticated: true, isOfflineMode: false
+                                });
+                            } else {
+                                setUser({
+                                    uid: currentUser.uid, name: currentUser.displayName || 'Estudiante', email: currentUser.email || '',
+                                    currentLevel: 1, completedLevels: [],
+                                    isAuthenticated: true, isOfflineMode: false
+                                });
+                            }
+                            setLoading(false);
+                        }, (error) => {
+                            console.warn("Modo Offline (Permisos):", error.message);
+                            fallbackToLocal(currentUser);
+                        });
+                        return () => unsubDoc();
+                    } else {
+                        const local = getLocalData();
+                        if (local && local.isAuthenticated) setUser(local);
+                        else setUser(prev => ({ ...prev, isAuthenticated: false }));
+                        setLoading(false);
+                    }
+                });
+                return () => unsubscribe();
+            }, []);
+
+            const fallbackToLocal = (currentUser) => {
+                const local = getLocalData();
+                const userData = {
+                    uid: currentUser.uid, name: currentUser.displayName || 'Estudiante', email: currentUser.email || '',
+                    isAuthenticated: true, isOfflineMode: true,
+                    currentLevel: local?.currentLevel || 1, completedLevels: local?.completedLevels || []
+                };
+                setUser(userData);
+                saveLocalData(userData);
+                setLoading(false);
+            };
+
+            const handleLogout = async () => {
+                await signOut(auth);
+                localStorage.removeItem(LOCAL_STORAGE_KEY);
+                setUser({ uid: '', name: '', email: '', currentLevel: 1, completedLevels: [], isAuthenticated: false });
+                setView('LANDING');
+            };
+
+            // NAVEGACIÓN MANUAL (NO AUTOMÁTICA)
+            const handleMainButtonClick = () => {
+                if (user.isAuthenticated) {
+                    setView('DASHBOARD');
+                } else {
+                    setAuthMode('register'); 
+                    setShowAuthModal(true);
+                }
+            };
+
+            const openLogin = () => { setAuthMode('login'); setShowAuthModal(true); };
+
+            // QUIZ LOGIC
+            const startLevel = (levelId) => {
+                setQuizState({ isActive: true, levelId, currentQuestionIndex: 0, score: 0, showResult: false, answers: [] });
+                setReviewMode(false);
+            };
+
+            const handleAnswer = (idx) => {
+                const level = LEVELS.find(l => l.id === quizState.levelId);
+                const isCorrect = idx === level.questions[quizState.currentQuestionIndex].correctIndex;
+                const newAnswers = [...quizState.answers, idx];
+                const newScore = isCorrect ? quizState.score + 1 : quizState.score;
+
+                if (quizState.currentQuestionIndex + 1 < level.questions.length) {
+                    setQuizState(prev => ({ ...prev, answers: newAnswers, score: newScore, currentQuestionIndex: prev.currentQuestionIndex + 1 }));
+                } else {
+                    setQuizState(prev => ({ ...prev, answers: newAnswers, score: newScore, showResult: true }));
+                    if (newScore >= level.passingScore) {
+                        if (window.confetti) window.confetti();
+                        saveProgress(level.id);
+                    }
+                }
+            };
+
+            const saveProgress = async (completedId) => {
+                const newCompleted = user.completedLevels.includes(completedId) ? user.completedLevels : [...user.completedLevels, completedId];
+                const newCurrent = completedId + 1 > user.currentLevel ? completedId + 1 : user.currentLevel;
+                const newData = { ...user, currentLevel: newCurrent, completedLevels: newCompleted };
+                setUser(newData);
+
+                if (user.isOfflineMode) {
+                    saveLocalData(newData);
+                } else {
+                    try {
+                        await setDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'data', 'progress'), {
+                            currentLevel: newCurrent, completedLevels: newCompleted, lastUpdate: new Date()
+                        }, { merge: true });
+                    } catch (e) {
+                        saveLocalData({ ...newData, isOfflineMode: true });
+                        setUser(prev => ({ ...prev, isOfflineMode: true }));
+                    }
+                }
+            };
+
+            // --- VISTAS ---
+
+            const AuthModalComponent = () => {
+                const [isRegistering, setIsRegistering] = useState(authMode === 'register');
+                const [formData, setFormData] = useState({ name: '', email: '', password: '' });
+                const [error, setError] = useState('');
+                const [loadingAuth, setLoadingAuth] = useState(false);
+
+                useEffect(() => setIsRegistering(authMode === 'register'), [authMode]);
+
+                const handleSubmit = async (e) => {
+                    e.preventDefault();
+                    setError('');
+                    setLoadingAuth(true);
+                    try {
+                        if (isRegistering) {
+                            const userCred = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+                            await updateProfile(userCred.user, { displayName: formData.name });
+                            await setDoc(doc(db, 'artifacts', appId, 'users', userCred.user.uid, 'data', 'progress'), {
+                                name: formData.name, currentLevel: 1, completedLevels: [], createdAt: new Date()
+                            });
+                            setShowAuthModal(false);
+                            setView('DASHBOARD');
+                        } else {
+                            await signInWithEmailAndPassword(auth, formData.email, formData.password);
+                            setShowAuthModal(false);
+                            setView('DASHBOARD');
+                        }
+                    } catch (err) {
+                        setError('Error: Verifica tus datos o conexión.');
+                        console.error(err);
+                    } finally {
+                        setLoadingAuth(false);
+                    }
+                };
+
+                if (!showAuthModal) return null;
+
+                return (
+                    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+                        <div className="bg-white rounded-2xl w-full max-w-sm shadow-2xl p-6 relative">
+                            <button onClick={() => setShowAuthModal(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><Icon name="x" /></button>
+                            <div className="text-center mb-6">
+                                <div className="bg-emerald-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3 text-emerald-600 text-2xl"><Icon name="user" /></div>
+                                <h2 className="text-2xl font-bold text-gray-900">{isRegistering ? 'Crear Cuenta' : 'Iniciar Sesión'}</h2>
+                            </div>
+                            <form onSubmit={handleSubmit} className="space-y-4">
+                                {isRegistering && <input type="text" placeholder="Tu Nombre" required value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="w-full p-3 rounded-lg border border-gray-300 focus:border-emerald-600 outline-none" />}
+                                <input type="email" placeholder="Correo" required value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="w-full p-3 rounded-lg border border-gray-300 focus:border-emerald-600 outline-none" />
+                                <input type="password" placeholder="Contraseña" required value={formData.password} onChange={e => setFormData({...formData, password: e.target.value})} className="w-full p-3 rounded-lg border border-gray-300 focus:border-emerald-600 outline-none" />
+                                {error && <div className="p-3 bg-red-50 text-red-600 text-xs rounded-lg flex items-center gap-2"><Icon name="alert-circle" /> {error}</div>}
+                                <Button type="submit" fullWidth disabled={loadingAuth}>{loadingAuth ? 'Procesando...' : (isRegistering ? 'Registrarse' : 'Entrar')}</Button>
+                                <div className="text-center mt-4">
+                                    <button type="button" onClick={() => { setIsRegistering(!isRegistering); setError(''); }} className="text-sm text-emerald-600 font-medium hover:underline">
+                                        {isRegistering ? '¿Ya tienes cuenta? Inicia Sesión' : '¿No tienes cuenta? Regístrate'}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                );
+            };
+
+            const LandingPage = () => (
+                <div className="flex-1 flex flex-col relative animate-fade-in overflow-y-auto">
+                    <header className="w-full py-4 px-6 flex justify-between items-center border-b border-gray-100 bg-white/95 sticky top-0 z-10 backdrop-blur-md">
+                        <div className="flex items-center gap-2">
+                            <div className="bg-emerald-600 text-white p-1.5 rounded-md flex items-center"><Icon name="shield" size={24} /></div>
+                            <span className="font-heading font-bold text-xl text-gray-900">Auxiliar<span className="text-emerald-600">Pro</span></span>
+                        </div>
+                        <Button variant="ghost" onClick={user.isAuthenticated ? () => setView('DASHBOARD') : openLogin} className="!px-3 !py-1 text-xs">
+                            {user.isAuthenticated ? 'Ir al Panel' : 'Entrar'}
+                        </Button>
+                    </header>
+                    <main className="flex-1 flex flex-col items-center text-center px-6 mt-10 pb-10">
+                        <div className="inline-flex items-center gap-2 bg-emerald-100 border border-emerald-200 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full mb-6 uppercase tracking-wide">
+                            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Preparación 2026
+                        </div>
+                        <h1 className="font-heading text-4xl font-extrabold text-gray-900 leading-tight mb-4">Prepárate para tu examen de <br /><span className="text-emerald-600">Auxiliar de Farmacia</span></h1>
+                        <p className="text-gray-500 text-lg mb-8 leading-relaxed max-w-xs mx-auto">Plataforma de estudio independiente. Regístrate para guardar tu progreso.</p>
+                        <div className="w-full space-y-4 mb-12 max-w-sm mx-auto">
+                            <Button fullWidth onClick={handleMainButtonClick}>
+                                Comenzar Ahora <Icon name="chevron-right" className="inline ml-1" />
+                            </Button>
+                            <Button fullWidth variant="outline" onClick={() => setView('BLOG')}><Icon name="book-open" size={18} /> Leer Guías y Artículos</Button>
+                        </div>
+                        <footer className="text-center border-t border-gray-200 pt-8 pb-4 w-full mt-auto">
+                            <p className="text-xs text-gray-400 mb-4">© 2025 AuxiliarPro. v{APP_VERSION}</p>
+                            <div className="flex justify-center gap-4 text-[10px] text-gray-500 uppercase font-semibold"><button onClick={() => setShowLegalModal(true)}>Términos</button><button onClick={() => setShowLegalModal(true)}>Privacidad</button></div>
+                        </footer>
+                    </main>
+                </div>
+            );
+
+            const Dashboard = () => {
+                const progress = (user.completedLevels.length / LEVELS.length) * 100;
+                return (
+                    <div className="flex-1 flex flex-col bg-slate-50 h-full animate-fade-in relative">
+                        <header className="bg-white shadow-sm py-4 px-6 flex justify-between items-center sticky top-0 z-10">
+                            <div>
+                                <span className="font-heading font-bold text-gray-700 block">Panel de Estudio</span>
+                                <div className="flex items-center gap-2"><span className="text-xs text-gray-400">Hola, {user.name.split(' ')[0]}</span>{user.isOfflineMode && <span className="flex items-center text-[10px] text-amber-600 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200"><Icon name="wifi-off" size={12} className="mr-1" /> Offline</span>}</div>
+                            </div>
+                            <button onClick={handleLogout} className="text-gray-400 hover:text-red-500 transition-colors text-2xl"><Icon name="logout" /></button>
+                        </header>
+                        <main className="flex-1 p-6 w-full pb-20 overflow-y-auto custom-scrollbar">
+                            <div className="bg-white rounded-2xl p-6 shadow-md border-t-4 border-emerald-600 mb-8">
+                                <div className="flex justify-between items-end mb-2"><span className="text-gray-500 text-xs font-bold uppercase tracking-wider">Tu Progreso</span><span className="text-emerald-600 font-bold text-xl">{Math.round(progress)}%</span></div>
+                                <div className="w-full bg-gray-100 rounded-full h-2.5"><div className="bg-emerald-600 h-2.5 rounded-full transition-all duration-1000 ease-out" style={{ width: `${progress}%` }}></div></div>
+                            </div>
+                            <div className="space-y-4">
+                                {LEVELS.map((level) => {
+                                    const isLocked = level.id > user.currentLevel;
+                                    const isCompleted = user.completedLevels.includes(level.id);
+                                    return (
+                                        <div key={level.id} onClick={() => !isLocked && startLevel(level.id)} className={`relative p-5 rounded-xl border transition-all ${isLocked ? 'bg-gray-50 opacity-60 cursor-not-allowed' : 'bg-white shadow-sm cursor-pointer hover:shadow-md hover:border-emerald-300'} ${isCompleted ? 'border-green-200 bg-green-50/30' : ''}`}>
+                                            <div className="flex items-center gap-4">
+                                                <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg text-white ${isCompleted ? 'bg-green-500' : isLocked ? 'bg-gray-300' : 'bg-slate-900'}`}>{isCompleted ? <Icon name="check-circle" size={24} /> : isLocked ? <Icon name="lock" size={20} /> : level.id}</div>
+                                                <div className="flex-1"><h3 className="font-bold text-gray-800">{level.title}</h3><p className="text-xs text-gray-500">{level.description}</p></div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </main>
+                    </div>
+                );
+            };
+
+            const QuizModal = () => (
+                <div className="absolute inset-0 z-50 bg-white flex flex-col animate-slide-up">
+                    <div className="bg-slate-900 p-6 text-white flex justify-between items-center"><h3>Pregunta {quizState.currentQuestionIndex + 1}</h3><button onClick={() => setQuizState(prev => ({...prev, isActive: false}))} className="text-2xl"><Icon name="x" /></button></div>
+                    <div className="flex-1 p-6 overflow-y-auto">
+                        {!quizState.showResult ? (
+                            <>
+                                <h2 className="text-xl font-bold mb-6">{LEVELS.find(l=>l.id===quizState.levelId)?.questions[quizState.currentQuestionIndex].text}</h2>
+                                <div className="space-y-3">{LEVELS.find(l=>l.id===quizState.levelId)?.questions[quizState.currentQuestionIndex].options.map((opt, i) => <button key={i} onClick={() => handleAnswer(i)} className="w-full text-left p-4 border rounded-xl hover:bg-emerald-50 hover:border-emerald-600 transition-all">{opt}</button>)}</div>
+                            </>
+                        ) : (
+                            <div className="text-center pt-10">
+                                <div className="text-6xl mb-4">{quizState.score >= (LEVELS.find(l=>l.id===quizState.levelId)?.passingScore || 0) ? '🎉' : '📚'}</div>
+                                <h2 className="text-2xl font-bold mb-2">{quizState.score >= (LEVELS.find(l=>l.id===quizState.levelId)?.passingScore || 0) ? '¡Aprobado!' : 'Sigue Intentando'}</h2>
+                                <p className="mb-8">Puntaje: {quizState.score}</p>
+                                <div className="space-y-3">
+                                    <Button fullWidth onClick={() => startLevel(quizState.levelId)}><Icon name="refresh-ccw" /> Reintentar</Button>
+                                    <button onClick={() => setQuizState(prev => ({...prev, isActive: false}))} className="text-sm text-gray-500 underline mt-4">Volver</button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+
+            if (loading) return <div className="h-screen w-full flex items-center justify-center bg-white"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-600"></div></div>;
+
+            return (
+                <div className="w-full max-w-md bg-white h-screen md:h-[90vh] md:rounded-3xl md:shadow-2xl overflow-hidden flex flex-col relative font-sans mx-auto border border-gray-100">
+                    {view === 'LANDING' && <LandingPage />}
+                    {view === 'DASHBOARD' && <Dashboard />}
+                    {view === 'BLOG' && <div className="flex-1 flex flex-col bg-white h-full animate-slide-up"><header className="bg-white shadow-sm py-4 px-6 flex items-center gap-3"><button onClick={() => setView('LANDING')}><Icon name="arrow-left" size={24} /></button><span className="font-bold text-lg">Recursos</span></header><main className="flex-1 p-6 overflow-y-auto">{BLOG_POSTS.map(post => <div key={post.id} onClick={() => {setSelectedArticleId(post.id); setView('ARTICLE');}} className="border p-4 rounded-xl mb-4 cursor-pointer hover:border-emerald-600"><h3 className="font-bold">{post.title}</h3><p className="text-sm text-gray-500">{post.excerpt}</p></div>)}</main></div>}
+                    {view === 'ARTICLE' && <div className="flex-1 flex flex-col bg-white h-full animate-fade-in"><header className="bg-white shadow-sm py-4 px-6 flex items-center gap-3"><button onClick={() => setView('BLOG')}><Icon name="arrow-left" size={24} /></button><span className="font-bold text-lg">Artículo</span></header><main className="flex-1 p-6 overflow-y-auto"><h1 className="text-2xl font-bold mb-4">{BLOG_POSTS.find(p=>p.id===selectedArticleId)?.title}</h1><div dangerouslySetInnerHTML={{__html: BLOG_POSTS.find(p=>p.id===selectedArticleId)?.content || ''}} /></main></div>}
+                    {quizState.isActive && <QuizModal />}
+                    <AuthModalComponent />
+                    {showLegalModal && <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4"><div className="bg-white p-6 rounded-xl max-w-sm"><h3 className="font-bold mb-2">Legal</h3><p className="text-sm text-gray-600 mb-4">Esta es una aplicación de demostración.</p><Button onClick={() => setShowLegalModal(false)}>Cerrar</Button></div></div>}
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
 </html>
