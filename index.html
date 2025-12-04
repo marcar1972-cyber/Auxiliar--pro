@@ -112,7 +112,7 @@
 
         const { useState, useEffect } = React;
 
-        const APP_VERSION = "6.5.1 WA Link Added";
+        const APP_VERSION = "6.6.1 WA Fix";
         const LOCAL_STORAGE_KEY = 'auxiliar_pro_data';
 
         const BLOG_POSTS = [
@@ -243,7 +243,7 @@
                 'file-pdf': 'ph-file-pdf', 'trophy': 'ph-trophy', 'warning': 'ph-warning-circle', 'eye': 'ph-eye', 
                 'refresh': 'ph-arrows-clockwise', 'whatsapp': 'ph-whatsapp-logo', 'facebook': 'ph-facebook-logo', 
                 'download': 'ph-download-simple', 'student': 'ph-student', 'question': 'ph-question', 'medal': 'ph-medal', 
-                'power': 'ph-power', 'coffee': 'ph-coffee', 'chat-circle': 'ph-chat-circle', 'article': 'ph-article', 'brain': 'ph-brain'
+                'power': 'ph-power', 'coffee': 'ph-coffee', 'chat-circle': 'ph-chat-circle', 'article': 'ph-article'
             };
             return <i className={`${map[name] || 'ph-circle'} ${className}`} style={{ fontSize: size, fontWeight: weight === 'fill' ? 'bold' : 'normal' }}></i>;
         };
@@ -402,9 +402,9 @@
                             <p className="text-xs text-slate-500">Hola, {user.name.split(' ')[0]}</p>
                         </div>
                         <div className="flex gap-2">
-                            <button onClick={() => setView('BLOG')} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-farmacia-green hover:border-green-200 transition-colors shadow-sm flex items-center gap-2 text-xs font-bold" title="Blog"><Icon name="article" size={20}/><span className="hidden md:inline">Blog</span></button>
-                            <button onClick={() => setActiveModal('community')} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-blue-600 hover:border-blue-200 transition-colors shadow-sm flex items-center gap-2 text-xs font-bold" title="Comunidad"><Icon name="users" size={20}/><span className="hidden md:inline">Comunidad</span></button>
-                            <button onClick={async () => { await signOut(auth); localStorage.removeItem(LOCAL_STORAGE_KEY); setView('LANDING'); }} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-red-500 hover:border-red-200 transition-colors shadow-sm flex items-center gap-2 text-xs font-bold"><Icon name="power" size={20}/><span className="hidden md:inline">Salir</span></button>
+                            <button onClick={() => setView('BLOG')} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-farmacia-green hover:border-green-200 transition-colors shadow-sm" title="Blog"><Icon name="article" size={20}/></button>
+                            <button onClick={() => setActiveModal('community')} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-blue-600 hover:border-blue-200 transition-colors shadow-sm" title="Comunidad"><Icon name="users" size={20}/></button>
+                            <button onClick={async () => { await signOut(auth); localStorage.removeItem(LOCAL_STORAGE_KEY); setView('LANDING'); }} className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-red-500 hover:border-red-200 transition-colors shadow-sm"><Icon name="power" size={20}/></button>
                         </div>
                     </header>
                     <main className="flex-1 p-6 overflow-y-auto pb-24">
@@ -448,14 +448,14 @@
 
             const renderFAQs = () => (
                 <div className="flex-1 flex flex-col bg-white h-full animate-slide-up absolute inset-0 z-30">
-                    <header className="bg-white shadow-sm py-4 px-6 flex items-center gap-3 sticky top-0 z-10 border-b border-slate-100"><button onClick={() => setView('LANDING')} className="flex items-center gap-1 text-slate-600 font-medium hover:text-farmacia-green"><Icon name="arrow-left" size={20}/> Volver al Inicio</button><span className="font-bold text-lg text-slate-800 ml-auto">Preguntas Frecuentes</span></header>
-                    <main className="flex-1 p-6 overflow-y-auto bg-slate-50"><div className="max-w-md mx-auto bg-white p-6 rounded-2xl shadow-sm border border-slate-100"><h2 className="text-xl font-bold text-slate-800 mb-4">Proceso de Acreditación</h2><p className="text-sm text-slate-500 mb-6">Información clave sobre el examen y trámites ante la SEREMI.</p><div className="space-y-1">{FAQS.map((faq, i) => <Accordion key={i} title={faq.q} content={faq.a} />)}</div><div className="mt-8 pt-6 border-t border-slate-100 text-center"><Button variant="outline" fullWidth onClick={() => setView('LANDING')}>Volver al Inicio</Button></div></div></main>
+                    <header className="bg-white shadow-sm py-4 px-6 flex items-center gap-3 sticky top-0 z-10 border-b border-slate-100"><button onClick={goBack} className="flex items-center gap-1 text-slate-600 font-medium hover:text-farmacia-green"><Icon name="arrow-left" size={20}/> Volver al Inicio</button><span className="font-bold text-lg text-slate-800 ml-auto">Preguntas Frecuentes</span></header>
+                    <main className="flex-1 p-6 overflow-y-auto bg-slate-50"><div className="max-w-md mx-auto bg-white p-6 rounded-2xl shadow-sm border border-slate-100"><h2 className="text-xl font-bold text-slate-800 mb-4">Proceso de Acreditación</h2><p className="text-sm text-slate-500 mb-6">Información clave sobre el examen y trámites ante la SEREMI.</p><div className="space-y-1">{FAQS.map((faq, i) => <Accordion key={i} title={faq.q} content={faq.a} />)}</div><div className="mt-8 pt-6 border-t border-slate-100 text-center"><Button variant="outline" fullWidth onClick={goBack}>Volver al Inicio</Button></div></div></main>
                 </div>
             );
 
             const renderBlog = () => (
                 <div className="flex-1 flex flex-col bg-white h-full animate-slide-up absolute inset-0 z-30">
-                    <header className="bg-white shadow-sm py-4 px-6 flex items-center gap-3 sticky top-0 z-10 border-b border-slate-100"><button onClick={() => setView('LANDING')} className="flex items-center gap-1 text-slate-600 font-medium hover:text-farmacia-green"><Icon name="arrow-left" size={20}/> Volver al Inicio</button><span className="font-bold text-lg text-slate-800 ml-auto">Blog de Estudio</span></header>
+                    <header className="bg-white shadow-sm py-4 px-6 flex items-center gap-3 sticky top-0 z-10 border-b border-slate-100"><button onClick={goBack} className="flex items-center gap-1 text-slate-600 font-medium hover:text-farmacia-green"><Icon name="arrow-left" size={20}/> Volver al Inicio</button><span className="font-bold text-lg text-slate-800 ml-auto">Blog de Estudio</span></header>
                     <main className="flex-1 p-6 overflow-y-auto bg-slate-50"><div className="space-y-4 max-w-md mx-auto">{BLOG_POSTS.map(post => (<article key={post.id} onClick={() => { setSelectedArticle(post); setView('ARTICLE'); }} className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all cursor-pointer transform hover:-translate-y-1 duration-200"><div className="flex justify-between items-start mb-3"><span className="text-[10px] font-bold text-farmacia-green bg-green-50 px-2 py-1 rounded uppercase tracking-wide">{post.category}</span><span className="text-xs text-slate-400 font-medium">{post.date}</span></div><h3 className="font-bold text-slate-800 text-lg mb-2 leading-snug">{post.title}</h3><p className="text-sm text-slate-500 leading-relaxed line-clamp-3">{post.excerpt}</p><button className="mt-4 text-sm text-farmacia-green font-bold flex items-center gap-1 hover:gap-2 transition-all">Leer Artículo <Icon name="caret-right" size={14} /></button></article>))}</div></main>
                 </div>
             );
@@ -464,16 +464,16 @@
                 if (!selectedArticle) return null;
                 return (
                     <div className="flex-1 flex flex-col bg-white h-full animate-slide-up absolute inset-0 z-40">
-                        <header className="bg-white shadow-sm py-4 px-6 flex items-center gap-3 sticky top-0 z-10 border-b border-slate-100"><button onClick={() => setView('BLOG')} className="flex items-center gap-1 text-slate-600 font-medium hover:text-farmacia-green"><Icon name="arrow-left" size={20}/> Volver al Blog</button></header>
-                        <main className="flex-1 p-6 overflow-y-auto"><div className="max-w-2xl mx-auto blog-content"><span className="text-xs font-bold text-farmacia-green bg-green-50 px-2 py-1 rounded uppercase tracking-wide mb-4 inline-block">{selectedArticle.category}</span><div dangerouslySetInnerHTML={{__html: selectedArticle.content}}></div><div className="mt-8 pt-6 border-t border-slate-100 text-center"><Button variant="outline" fullWidth onClick={() => setView('BLOG')}>Volver a Artículos</Button></div></div></main>
+                        <header className="bg-white shadow-sm py-4 px-6 flex items-center gap-3 sticky top-0 z-10 border-b border-slate-100"><button onClick={goBack} className="flex items-center gap-1 text-slate-600 font-medium hover:text-farmacia-green"><Icon name="arrow-left" size={20}/> Volver al Blog</button></header>
+                        <main className="flex-1 p-6 overflow-y-auto"><div className="max-w-2xl mx-auto blog-content"><span className="text-xs font-bold text-farmacia-green bg-green-50 px-2 py-1 rounded uppercase tracking-wide mb-4 inline-block">{selectedArticle.category}</span><div dangerouslySetInnerHTML={{__html: selectedArticle.content}}></div><div className="mt-8 pt-6 border-t border-slate-100 text-center"><Button variant="outline" fullWidth onClick={goBack}>Volver a Artículos</Button></div></div></main>
                     </div>
                 );
             };
 
             const renderLibrary = () => (
                 <div className="flex-1 flex flex-col bg-white h-full animate-slide-up absolute inset-0 z-30">
-                    <header className="p-4 border-b border-gray-100 flex items-center gap-3 bg-white sticky top-0 z-20"><button onClick={() => setView(user.isAuthenticated ? 'DASHBOARD' : 'LANDING')}><Icon name="arrow-left" size={24} className="text-slate-600"/></button><h2 className="font-bold text-lg text-slate-800">Biblioteca Legal</h2></header>
-                    <main className="flex-1 p-6 overflow-y-auto"><div className="max-w-md mx-auto"><p className="text-sm text-gray-500 mb-6">Guías de estudio y resúmenes basados en los decretos del MINSAL.</p><div className="space-y-3">{PDF_DOCS.map((doc, i) => (<a key={i} href={doc.file} target="_blank" className="flex items-center gap-4 p-4 rounded-xl border border-gray-100 hover:border-red-200 hover:bg-red-50 transition-colors group cursor-pointer no-underline"><div className="bg-red-100 text-red-500 p-3 rounded-lg"><Icon name="file-pdf" size={24}/></div><div className="flex-1"><h4 className="font-bold text-gray-800 group-hover:text-red-600">{doc.title}</h4><p className="text-xs text-gray-500">{doc.desc}</p></div><Icon name="download" className="text-gray-300 group-hover:text-red-500" /></a>))}</div><div className="mt-8 pt-6 border-t border-slate-100 text-center"><Button variant="outline" fullWidth onClick={() => setView(user.isAuthenticated ? 'DASHBOARD' : 'LANDING')}>Volver al Panel</Button></div></div></main>
+                    <header className="p-4 border-b border-gray-100 flex items-center gap-3 bg-white sticky top-0 z-20"><button onClick={goBack}><Icon name="arrow-left" size={24} className="text-slate-600"/></button><h2 className="font-bold text-lg text-slate-800">Biblioteca Legal</h2></header>
+                    <main className="flex-1 p-6 overflow-y-auto"><div className="max-w-md mx-auto"><p className="text-sm text-gray-500 mb-6">Guías de estudio y resúmenes basados en los decretos del MINSAL.</p><div className="space-y-3">{PDF_DOCS.map((doc, i) => (<a key={i} href={doc.file} target="_blank" className="flex items-center gap-4 p-4 rounded-xl border border-gray-100 hover:border-red-200 hover:bg-red-50 transition-colors group cursor-pointer no-underline"><div className="bg-red-100 text-red-500 p-3 rounded-lg"><Icon name="file-pdf" size={24}/></div><div className="flex-1"><h4 className="font-bold text-gray-800 group-hover:text-red-600">{doc.title}</h4><p className="text-xs text-gray-500">{doc.desc}</p></div><Icon name="download" className="text-gray-300 group-hover:text-red-500" /></a>))}</div><div className="mt-8 pt-6 border-t border-slate-100 text-center"><Button variant="outline" fullWidth onClick={goBack}>Volver al Panel</Button></div></div></main>
                 </div>
             );
 
@@ -643,6 +643,7 @@
                             <button onClick={() => setActiveModal(null)} className="absolute top-6 right-6 text-slate-400 hover:text-slate-800"><Icon name="x" size={24}/></button>
                             <div className="w-16 h-16 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl"><Icon name="users" /></div>
                             <h2 className="text-xl font-bold mb-2 text-slate-800">Comunidad de Estudio</h2>
+                            
                             <div className="bg-slate-50 border border-slate-100 rounded-xl p-4 mb-6 text-left">
                                 <h4 className="text-xs font-bold text-slate-500 uppercase mb-2">Reglas de Buena Convivencia</h4>
                                 <ul className="text-xs text-slate-600 space-y-1 list-disc pl-4">
@@ -652,11 +653,15 @@
                                     <li className="text-red-500 font-bold">El uso de malos tratos será causal de eliminación inmediata.</li>
                                 </ul>
                             </div>
+
                             <div className="space-y-3">
-                                <a href="#" className="w-full bg-[#25D366] text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-3 hover:opacity-90 transition-opacity shadow-lg shadow-green-100"><Icon name="whatsapp" size={24} /> Grupo de WhatsApp</a>
+                                <a href="https://chat.whatsapp.com/IPvHmnNGWYmH61FrdV56g1" className="w-full bg-[#25D366] text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-3 hover:opacity-90 transition-opacity shadow-lg shadow-green-100"><Icon name="whatsapp" size={24} /> Grupo de WhatsApp</a>
                                 <a href="https://www.facebook.com/share/g/1AFb8riMpT/" className="w-full bg-[#1877F2] text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-3 hover:opacity-90 transition-opacity shadow-lg shadow-blue-100"><Icon name="facebook" size={24} /> Grupo de Facebook</a>
                             </div>
-                            <div className="mt-6"><Button variant="outline" fullWidth onClick={() => setActiveModal(null)}>Volver</Button></div>
+
+                            <div className="mt-6">
+                                <Button variant="outline" fullWidth onClick={() => setActiveModal(null)}>Volver</Button>
+                            </div>
                         </div>
                     </div>
                 );
