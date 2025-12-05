@@ -47,7 +47,7 @@
     </script>
     
     <!-- Fuentes y Efectos -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <!-- React y Babel -->
@@ -112,7 +112,7 @@
 
         const { useState, useEffect } = React;
 
-        const APP_VERSION = "6.7.0 Final Request";
+        const APP_VERSION = "6.7.4 Read More Update";
         const LOCAL_STORAGE_KEY = 'auxiliar_pro_data';
 
         const BLOG_POSTS = [
@@ -307,6 +307,7 @@
             const [authMode, setAuthMode] = useState('login');
             const [legalTab, setLegalTab] = useState('terms');
             const [selectedArticle, setSelectedArticle] = useState(null);
+            const [showIntro, setShowIntro] = useState(false);
 
             useEffect(() => {
                 const unsubscribe = onAuthStateChanged(auth, (u) => {
@@ -338,15 +339,11 @@
             };
 
             const goBack = () => {
-                // Lógica unificada: Siempre vuelve a LANDING desde todas las vistas públicas (Blog, FAQs, Library)
-                // Desde el Panel de Estudio, si es que hubiera sub-navegación, volvería al Panel.
                 if (view === 'ARTICLE') {
                     setView('BLOG');
                 } else if (view === 'DASHBOARD') {
-                    // Si estás en el Dashboard y quieres "volver" (lógica rara, pero por seguridad), vas a Landing
                     setView('LANDING');
                 } else {
-                    // Desde FAQs, Library, Blog -> Siempre a Landing
                     setView('LANDING');
                 }
             };
@@ -358,7 +355,7 @@
                 <div className="flex-1 flex flex-col animate-fade-in overflow-y-auto relative z-10 bg-white">
                     <header className="w-full py-4 px-6 flex justify-between items-center border-b border-slate-100 bg-white/95 backdrop-blur-sm sticky top-0 z-30 shadow-sm">
                         <div className="flex items-center gap-2 text-xl font-heading font-bold text-slate-800 cursor-pointer" onClick={() => setView('LANDING')}>
-                            <img src="https://raw.githubusercontent.com/marcar1972-cyber/Auxiliar--pro/34923cb127c2feede55ec712bdc0261f1b23da3c/logo_auxiliarpro_3_400x240_ajustado.png" alt="Logo AuxiliarPro" className="h-24 w-auto object-contain" />
+                            <img src="https://raw.githubusercontent.com/marcar1972-cyber/Auxiliar--pro/f61da2f53e2c942bcb59d7d119b4b167ad7fa7e4/logo_auxiliarpro_3_400x240_ajustado.png" alt="Logo AuxiliarPro" className="h-24 w-auto object-contain" />
                         </div>
                         <div className="flex items-center gap-2">
                             <button onClick={() => setView('BLOG')} className="text-sm font-bold text-slate-500 hover:text-farmacia-green transition-colors mr-2 hidden md:block">Blog</button>
@@ -386,16 +383,30 @@
                         </section>
                         <section className="bg-slate-50 py-12 px-6 border-y border-slate-100">
                             <div className="max-w-md mx-auto">
-                                <div className="flex items-center gap-4 mb-6">
-                                    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-slate-700 shadow-sm border border-slate-100 text-xl"><Icon name="student" /></div>
-                                    <div>
-                                        <h3 className="font-bold text-slate-800">Hola, soy Marcelo</h3>
-                                        <p className="text-xs text-slate-500 uppercase tracking-wider font-bold">Auxiliar Trainee</p>
-                                    </div>
+                                <div className="space-y-4 text-slate-600 text-sm leading-relaxed">
+                                    <p>
+                                        Creé <strong>AuxiliarPro</strong> como un espacio de apoyo para quienes, al igual que yo, estamos estudiando para obtener la credencial de Auxiliar de Farmacia en Chile, según el Decreto 466. Aquí comparto material gratuito de estudio, como PDFs, ensayos de pruebas con alternativas y resúmenes, pensados para ayudar a ordenar el contenido y practicar.
+                                    </p>
+                                    
+                                    {showIntro && (
+                                        <div className="space-y-4 animate-fade-in">
+                                            <p>
+                                                Es importante que sepas que todo lo que encontrarás en esta página es solo material de apoyo, y siempre te recomiendo verificar cada contenido con las fuentes oficiales. Ese ejercicio también es parte fundamental del aprendizaje y te ayudará a prepararte mucho mejor para el examen real.
+                                            </p>
+                                            <p>
+                                                Este proyecto nace desde la experiencia de alguien que también está en proceso de estudio, con ganas reales de compartir, aprender y avanzar junto a otros.
+                                            </p>
+                                        </div>
+                                    )}
+                                    
+                                    <button 
+                                        onClick={() => setShowIntro(!showIntro)} 
+                                        className="text-farmacia-green font-bold flex items-center gap-1 hover:underline focus:outline-none text-xs uppercase tracking-wide"
+                                    >
+                                        {showIntro ? 'Leer menos' : 'Leer más'} 
+                                        <Icon name={showIntro ? "caret-up" : "caret-down"} />
+                                    </button>
                                 </div>
-                                <p className="text-slate-600 text-sm leading-relaxed">
-                                    <strong>AuxiliarPro</strong> se creó bajo la convicción de que el conocimiento debe ser accesible y compartido. Esta plataforma nace como un espacio de estudio abierto para todos quienes buscan profesionalizar su labor como vendedor de farmacia y lograr la tan preciada credencial.
-                                </p>
                                 <div className="mt-8 p-5 bg-yellow-50 border border-yellow-200 rounded-xl text-center shadow-sm">
                                     <p className="text-sm text-slate-700 mb-3 font-medium">¿Te sirve este material?</p>
                                     <a href="https://app.reveniu.com/checkout-custom-link/HvM4DkkkUpBnILnQv4abrZl5qYX7faqU" target="_blank" rel="noopener noreferrer" className="bg-yellow-400 hover:bg-yellow-500 text-slate-900 px-4 py-2 rounded-lg font-bold text-sm flex items-center justify-center gap-2 w-full transition-colors shadow-sm no-underline">
@@ -670,7 +681,6 @@
                             <button onClick={() => setActiveModal(null)} className="absolute top-6 right-6 text-slate-400 hover:text-slate-800"><Icon name="x" size={24}/></button>
                             <div className="w-16 h-16 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl"><Icon name="users" /></div>
                             <h2 className="text-xl font-bold mb-2 text-slate-800">Comunidad de Estudio</h2>
-                            
                             <div className="bg-slate-50 border border-slate-100 rounded-xl p-4 mb-6 text-left">
                                 <h4 className="text-xs font-bold text-slate-500 uppercase mb-2">Reglas de Buena Convivencia</h4>
                                 <ul className="text-xs text-slate-600 space-y-1 list-disc pl-4">
@@ -680,15 +690,11 @@
                                     <li className="text-red-500 font-bold">El uso de malos tratos será causal de eliminación inmediata.</li>
                                 </ul>
                             </div>
-
                             <div className="space-y-3">
                                 <a href="https://chat.whatsapp.com/IPvHmnNGWYmH61FrdV56g1" className="w-full bg-[#25D366] text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-3 hover:opacity-90 transition-opacity shadow-lg shadow-green-100"><Icon name="whatsapp" size={24} /> Grupo de WhatsApp</a>
                                 <a href="https://www.facebook.com/share/g/1AFb8riMpT/" className="w-full bg-[#1877F2] text-white py-3.5 rounded-xl font-bold flex items-center justify-center gap-3 hover:opacity-90 transition-opacity shadow-lg shadow-blue-100"><Icon name="facebook" size={24} /> Grupo de Facebook</a>
                             </div>
-
-                            <div className="mt-6">
-                                <Button variant="outline" fullWidth onClick={() => setActiveModal(null)}>Volver</Button>
-                            </div>
+                            <div className="mt-6"><Button variant="outline" fullWidth onClick={() => setActiveModal(null)}>Volver</Button></div>
                         </div>
                     </div>
                 );
