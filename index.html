@@ -88,9 +88,9 @@
         const { useState, useEffect } = React;
         const LOCAL_STORAGE_KEY = 'auxiliar_pro_data';
         
-        // --- URLs ---
-        // LOGO ACTUALIZADO A LA NUEVA RUTA SOLICITADA
-        const LOGO_URL = "https://raw.githubusercontent.com/marcar1972-cyber/Auxiliar--pro/main/logo_auxiliarpro.png";
+        // --- URLS ---
+        // CORRECCIÓN: Se elimina la extensión .png porque en tu repositorio el archivo no la tiene en el nombre
+        const LOGO_URL = "https://raw.githubusercontent.com/marcar1972-cyber/Auxiliar--pro/main/logo_auxiliarpro";
         const DERMO_URL = "https://auxiliar-dermocheck.vercel.app";
 
         // --- DATOS ---
@@ -193,25 +193,20 @@
             );
         };
 
-        // --- HEADER CORREGIDO: LOGO GRANDE / MENÚ PEQUEÑO Y LIMPIO ---
+        // --- HEADER ---
         const Header = ({ setView, user, setActiveModal }) => (
-            <header className="bg-white shadow-sm h-24 px-6 flex justify-between items-center sticky top-0 z-50">
-                
-                {/* LADO IZQUIERDO: LOGOTIPO GRANDE */}
+            <header className="bg-white shadow-sm h-20 px-6 flex justify-between items-center sticky top-0 z-50">
                 <div onClick={() => setView('LANDING')} className="cursor-pointer flex items-center h-full">
-                    {/* Aumentado a h-20 (80px) para que se vea bien grande */}
-                    <img src={LOGO_URL} alt="AuxiliarPro" className="h-16 md:h-20 w-auto object-contain hover:opacity-90 transition-opacity" />
+                    {/* URL del logo corregida según tu repositorio */}
+                    <img src={LOGO_URL} alt="AuxiliarPro" className="h-12 md:h-16 object-contain" />
                 </div>
-
-                {/* LADO DERECHO: MENÚ SUTIL */}
-                <div className="flex gap-4 items-center">
-                    {/* Botón BLOG: Texto pequeño (xs), mayúsculas y espaciado */}
-                    <button onClick={() => setView('BLOG')} className="text-xs font-bold text-slate-500 hover:text-aux-green uppercase tracking-wider hidden md:block">Blog</button>
+                <div className="flex gap-6 items-center">
+                    <button onClick={() => setView('BLOG')} className="text-sm font-bold text-slate-600 hover:text-aux-green hidden md:block">Blog</button>
                     
-                    {/* Botón PANEL DE ESTUDIO: Siempre oscuro (bg-aux-dark) */}
+                    {/* BOTÓN UNIFICADO: Siempre dice "Panel de Estudio" y siempre es oscuro */}
                     {user.isAuthenticated ? 
-                        <button onClick={() => setView('DASHBOARD')} className="bg-aux-dark text-white px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider hover:bg-slate-800 transition-colors shadow-md">Panel de Estudio</button> :
-                        <button onClick={() => setActiveModal('auth')} className="bg-aux-dark text-white px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider hover:bg-slate-800 transition-colors shadow-md">Panel de Estudio</button>
+                        <button onClick={() => setView('DASHBOARD')} className="bg-aux-dark text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button> :
+                        <button onClick={() => setActiveModal('auth')} className="bg-aux-dark text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button>
                     }
                 </div>
             </header>
