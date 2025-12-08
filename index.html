@@ -14,7 +14,7 @@
         theme: {
           extend: {
             colors: {
-              'aux-dark': '#0E172A',   // Azul Oscuro
+              'aux-dark': '#0E172A',   // Azul Oscuro Profundo
               'aux-green': '#2A9974',  // Verde Teal
               'aux-gray': '#BDC3C1',
               'aux-light': '#F8FAFC',
@@ -59,6 +59,10 @@
       .html-content a { color: #2A9974; text-decoration: none; font-weight: 600; }
       .html-content ul { list-style-type: disc; padding-left: 1.2rem; margin-top: 0.5rem; }
       .html-content li { margin-bottom: 0.25rem; }
+      .blog-content h1 { font-size: 1.5rem; font-weight: 800; color: #0E172A; margin-bottom: 1rem; }
+      .blog-content h2 { font-size: 1.25rem; font-weight: 700; color: #2A9974; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+      .blog-content p { margin-bottom: 1rem; line-height: 1.6; color: #334155; }
+      .blog-content strong { color: #0E172A; font-weight: 700; }
     </style>
 </head>
 <body class="bg-white text-aux-dark antialiased min-h-screen flex flex-col items-center justify-center font-sans">
@@ -92,8 +96,65 @@
         const LOGO_URL = "https://raw.githubusercontent.com/marcar1972-cyber/Auxiliar--pro/34923cb127c2feede55ec712bdc0261f1b23da3c/logo_auxiliarpro_3_400x240_ajustado.png";
         const DERMO_URL = "https://auxiliar-dermocheck.vercel.app";
 
-        // --- DATOS ---
+        // --- DATOS BLOG (ARTÍCULO NUEVO INSERTADO) ---
         const BLOG_POSTS = [
+            { 
+                id: 'art_req_2026', 
+                date: '08 DIC', 
+                category: 'Guía', 
+                title: 'Requisitos para ser Auxiliar de Farmacia en Chile (Actualizado 2026)', 
+                excerpt: 'Si estás pensando en trabajar en farmacia, conoce los requisitos, la experiencia necesaria y el proceso ante la SEREMI para obtener tu credencial.', 
+                content: `
+                    <h1>Requisitos para ser Auxiliar de Farmacia en Chile (Actualizado 2026)</h1>
+                    <p>Si estás pensando en trabajar en farmacia, uno de los primeros pasos es conocer los requisitos para ser Auxiliar de Farmacia en Chile. Esta es una de las búsquedas más comunes en Google, y con razón: es una puerta de entrada real al rubro de la salud. Aquí te lo explico simple, claro y sin enredos.</p>
+                    
+                    <h2>🩺 ¿Qué es un Auxiliar de Farmacia?</h2>
+                    <p>El Auxiliar de Farmacia es la persona que apoya al Químico Farmacéutico en la atención de público, manejo de medicamentos, control de stock, revisión de vencimientos y orientación básica al paciente, siempre bajo supervisión profesional.</p>
+                    
+                    <h2>📋 Requisitos para Rendir el Examen</h2>
+                    <p>De acuerdo al <strong>Decreto Supremo N° 466</strong>, para poder rendir el Examen de Auxiliar de Farmacia debes cumplir con el siguiente requisito principal:</p>
+                    <div class="bg-emerald-50 p-4 rounded-lg border-l-4 border-aux-green my-4">
+                        <strong>✅ Mínimo 1 año de experiencia laboral comprobable en farmacia, realizando labores como:</strong>
+                        <ul class="list-disc pl-5 mt-2 space-y-1">
+                            <li>Bodegaje</li>
+                            <li>Reposición de medicamentos</li>
+                            <li>Dispensación bajo supervisión</li>
+                            <li>Manejo de productos farmacéuticos</li>
+                        </ul>
+                    </div>
+                    <p>Toda esta experiencia debe estar certificada por el <strong>Químico Farmacéutico Director Técnico</strong> del establecimiento.</p>
+                    <p>El trámite oficial se realiza únicamente a través del portal del Ministerio de Salud en <a href="https://seremienlinea.minsal.cl/asdigital/" target="_blank" class="text-aux-green font-bold underline">SEREMI en Línea</a>, donde podrás revisar requisitos actualizados, costos y disponibilidad.</p>
+                    <p>Este proceso es fundamental para obtener la credencial oficial de Auxiliar de Farmacia en Chile y poder trabajar legalmente en farmacias comunitarias.</p>
+
+                    <h2>📋 Requisitos Generales (2026)</h2>
+                    <p>Según la normativa vigente del Ministerio de Salud y el Decreto 466, estos son los requisitos generales:</p>
+                    <ul class="space-y-3 mt-2">
+                        <li><strong>✅ 1. Ser mayor de 18 años:</strong> Debes ser legalmente mayor de edad.</li>
+                        <li><strong>✅ 2. Enseñanza media completa:</strong> Debes contar con tu licencia de cuarto medio aprobada.</li>
+                        <li><strong>✅ 3. Haber trabajado en farmacia:</strong> Debes acreditar experiencia práctica en una farmacia, bajo supervisión de un Químico Farmacéutico. <br/><em>👉 Importante: El tiempo exacto y forma de acreditación lo revisa directamente la SEREMI de Salud de tu región.</em></li>
+                        <li><strong>✅ 4. Rendir y aprobar el examen:</strong> Evalúa Farmacología básica, Recetas médicas, Cadena de frío, Fechas de vencimiento, Legislación sanitaria y Buenas prácticas.</li>
+                        <li><strong>✅ 5. Obtener la credencial:</strong> Una vez aprobado el examen, la SEREMI entrega la credencial oficial que te habilita legalmente.</li>
+                    </ul>
+
+                    <h2>🏥 ¿Dónde se realiza el trámite?</h2>
+                    <p>Todo el proceso se gestiona a través de la SEREMI de Salud de tu región. Cada región puede variar levemente en exigencias de documentos, pero la base legal es la misma en todo Chile.</p>
+
+                    <h2>📚 ¿Puedo prepararme sin instituto?</h2>
+                    <p><strong>Sí.</strong> Puedes estudiar de forma independiente, usar material online y prepararte con guías, PDFs, ensayos y contenido práctico. Muchos auxiliares actuales se han preparado así. Lo importante es dominar bien los contenidos del examen.</p>
+
+                    <div class="mt-6 p-4 bg-slate-100 rounded-lg">
+                        <h3 class="font-bold text-aux-dark mb-2">🎯 Conclusión clara</h3>
+                        <p>Si quieres ser Auxiliar de Farmacia en Chile el 2026, necesitas:</p>
+                        <ul class="list-none space-y-1 mt-2">
+                            <li>✔ Cuarto medio</li>
+                            <li>✔ Mínimo 1 año de experiencia en farmacia</li>
+                            <li>✔ Aprobar el examen</li>
+                            <li>✔ Obtener tu credencial SEREMI</li>
+                        </ul>
+                        <p class="mt-2">No es imposible, pero sí requiere constancia, práctica real y estudio enfocado.</p>
+                    </div>
+                `
+            },
             { id: 'art1', date: '04 DIC', category: 'Legal', title: 'Decreto 466: La "Biblia" de la Farmacia', excerpt: 'Reglamento fundamental para aprobar.', content: '<h1>Decreto 466</h1><p>Define roles, temperaturas y leyes...</p>' },
             { id: 'art2', date: '02 DIC', category: 'Técnico', title: 'Ley de Fármacos y Bioequivalencia', excerpt: 'Lo que debes saber de la Ley 20.724.', content: '<h1>Ley 20.724</h1><p>Cambios en bioequivalencia y venta directa...</p>' }
         ];
@@ -147,7 +208,7 @@
             );
         };
 
-        // --- HEADER SIMPLIFICADO & PEQUEÑO ---
+        // --- HEADER SIMPLIFICADO ---
         const Header = ({ setView, user, setActiveModal }) => (
             <header className="bg-white shadow-sm h-20 px-6 flex justify-between items-center sticky top-0 z-50">
                 {/* LOGO A LA IZQUIERDA */}
@@ -155,13 +216,13 @@
                     <img src={LOGO_URL} alt="AuxiliarPro" className="h-12 md:h-16 object-contain" />
                 </div>
 
-                {/* MENÚ DERECHA: Solo Blog y Login, más pequeños */}
-                <div className="flex gap-4 items-center">
-                    <button onClick={() => setView('BLOG')} className="text-xs font-bold text-slate-600 hover:text-aux-green hidden md:block">Blog</button>
+                {/* MENÚ A LA DERECHA (Sin DermoCheck) */}
+                <div className="flex gap-6 items-center">
+                    <button onClick={() => setView('BLOG')} className="text-sm font-bold text-slate-600 hover:text-aux-green hidden md:block">Blog</button>
                     
                     {user.isAuthenticated ? 
-                        <button onClick={() => setView('DASHBOARD')} className="bg-aux-dark text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-slate-800 transition-colors">Panel</button> :
-                        <button onClick={() => setActiveModal('auth')} className="bg-aux-green text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-emerald-600 transition-colors">Ingresar</button>
+                        <button onClick={() => setView('DASHBOARD')} className="bg-aux-dark text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors">Panel</button> :
+                        <button onClick={() => setActiveModal('auth')} className="bg-aux-green text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-emerald-600 transition-colors">Ingresar</button>
                     }
                 </div>
             </header>
@@ -404,7 +465,8 @@
                     {view === 'DERMOCHECK' && renderDermoCheck()}
                     {view === 'LIBRARY' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="p-6"><h2 className="font-bold text-xl mb-4 text-aux-dark">Biblioteca</h2>{PDF_DOCS.map((d,i)=><div key={i} className="p-4 border border-slate-100 rounded-xl mb-3 bg-slate-50 hover:bg-white hover:shadow-sm transition-all flex items-center gap-3"><div className="bg-red-100 p-2 rounded-lg text-red-500"><Icon name="file-pdf" size={24}/></div><a href={d.file} target="_blank" className="text-slate-700 font-bold hover:text-aux-green transition-colors flex-1">{d.title}</a></div>)}<button onClick={()=>setView('DASHBOARD')} className="mt-4 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
                     {view === 'FAQS' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4 text-aux-dark">Preguntas Frecuentes</h2>{FAQS.map((f,i)=><Accordion key={i} title={f.q} content={f.a}/>)}<button onClick={()=>setView('LANDING')} className="mt-4 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
-                    {view === 'BLOG' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4 text-aux-dark">Blog</h2>{BLOG_POSTS.map(p=><div key={p.id} className="border border-slate-100 p-5 mb-4 rounded-xl bg-white shadow-sm hover:shadow-md transition-all cursor-pointer"><div className="flex justify-between items-center mb-2"><span className="text-xs font-bold text-aux-green bg-emerald-50 px-2 py-1 rounded-full uppercase">{p.category}</span><span className="text-xs text-slate-400">{p.date}</span></div><h3 className="font-bold text-lg text-aux-dark mb-2">{p.title}</h3><p className="text-sm text-slate-500 leading-relaxed">{p.excerpt}</p></div>)}<button onClick={()=>setView('LANDING')} className="mt-4 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
+                    {view === 'BLOG' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4 text-aux-dark">Blog</h2><div className="space-y-4">{BLOG_POSTS.map(p=><div key={p.id} onClick={()=>setSelectedArticle(p) || setView('ARTICLE')} className="border border-slate-100 p-5 rounded-xl bg-white shadow-sm hover:shadow-md transition-all cursor-pointer"><div className="flex justify-between items-center mb-2"><span className="text-xs font-bold text-aux-green bg-emerald-50 px-2 py-1 rounded-full uppercase">{p.category}</span><span className="text-xs text-slate-400">{p.date}</span></div><h3 className="font-bold text-lg text-aux-dark mb-2">{p.title}</h3><p className="text-sm text-slate-500 leading-relaxed line-clamp-3">{p.excerpt}</p></div>)}</div><button onClick={()=>setView('LANDING')} className="mt-6 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
+                    {view === 'ARTICLE' && <div className="flex-1 flex flex-col bg-white z-50 animate-fade-in"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="p-6 overflow-y-auto"><button onClick={()=>setView('BLOG')} className="mb-4 text-slate-400 flex items-center gap-1 hover:text-aux-green"><Icon name="arrow-left"/> Volver</button><div className="max-w-2xl mx-auto blog-content"><span className="text-xs font-bold text-aux-green bg-emerald-50 px-2 py-1 rounded-full uppercase mb-4 inline-block">{selectedArticle?.category}</span><div dangerouslySetInnerHTML={{__html: selectedArticle?.content}}></div></div></div></div>}
                     
                     {quizState.active && (
                         <div className="absolute inset-0 bg-white z-50 flex flex-col animate-fade-in">
