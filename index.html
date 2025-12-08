@@ -14,9 +14,10 @@
         theme: {
           extend: {
             colors: {
-              'farmacia-green': '#00C853',
-              'farmacia-dark': '#0d1b2a',
-              'farmacia-fuchsia': '#d946ef',
+              // Nueva paleta basada en image_12.png
+              'farmacia-emerald': '#10b981', // Verde esmeralda vibrante para botones y acentos
+              'farmacia-dark': '#1f2937', // Gris oscuro/azulado para textos principales y botones oscuros
+              'farmacia-fuchsia': '#d946ef', // Mantenemos el fucsia para DermoCheck
               'metal-gold': '#FFD700',
             },
             fontFamily: { sans: ['Inter', 'sans-serif'] },
@@ -46,14 +47,14 @@
           border: 1px solid #d1fae5;
       }
       /* Estilos HTML renderizado */
-      .html-content a { color: #00C853; text-decoration: none; font-weight: 600; }
+      .html-content a { color: #10b981; text-decoration: none; font-weight: 600; }
       .html-content ul { list-style-type: disc; padding-left: 1.2rem; }
-      .blog-content h1 { font-size: 1.5rem; font-weight: 800; color: #0d1b2a; margin-bottom: 1rem; }
+      .blog-content h1 { font-size: 1.5rem; font-weight: 800; color: #1f2937; margin-bottom: 1rem; }
       .blog-content h2 { font-size: 1.25rem; font-weight: 700; color: #059669; margin-top: 1.5rem; margin-bottom: 0.5rem; }
-      .blog-content p { margin-bottom: 1rem; line-height: 1.6; color: #475569; }
+      .blog-content p { margin-bottom: 1rem; line-height: 1.6; color: #4b5563; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col items-center justify-center font-sans">
+<body class="bg-white text-gray-800 antialiased min-h-screen flex flex-col items-center justify-center font-sans">
 
     <div id="root" class="w-full h-full flex justify-center items-center"></div>
 
@@ -115,8 +116,9 @@
         const Button = ({ onClick, children, variant = 'primary', className = '', fullWidth = false, type = 'button' }) => {
             const base = "flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold transition-all active:scale-95 text-sm";
             const variants = {
-                primary: "bg-slate-900 text-white hover:bg-slate-800 shadow-lg",
-                secondary: "bg-white border-2 border-slate-200 text-slate-600 hover:border-farmacia-green hover:text-farmacia-green",
+                primary: "bg-farmacia-dark text-white hover:bg-gray-800 shadow-lg", // Botón oscuro
+                emerald: "bg-farmacia-emerald text-white hover:bg-emerald-600 shadow-lg", // Nuevo botón esmeralda
+                secondary: "bg-white border-2 border-gray-200 text-gray-600 hover:border-farmacia-emerald hover:text-farmacia-emerald",
                 fuchsia: "bg-farmacia-fuchsia text-white hover:bg-fuchsia-600 shadow-md",
                 danger: "bg-red-50 text-red-500 border border-red-100"
             };
@@ -126,13 +128,13 @@
         const Accordion = ({ title, content }) => {
             const [isOpen, setIsOpen] = useState(false);
             return (
-                <div className="border-b border-slate-100 last:border-0">
-                    <button onClick={() => setIsOpen(!isOpen)} className="w-full flex justify-between items-center py-4 text-left font-medium text-slate-700 hover:text-farmacia-green transition-colors">
+                <div className="border-b border-gray-100 last:border-0">
+                    <button onClick={() => setIsOpen(!isOpen)} className="w-full flex justify-between items-center py-4 text-left font-medium text-gray-700 hover:text-farmacia-emerald transition-colors">
                         {title}
                         <Icon name="caret-down" className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
                     </button>
                     <div className={`overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-96 pb-4' : 'max-h-0'}`}>
-                        <div className="text-sm text-slate-500 leading-relaxed html-content" dangerouslySetInnerHTML={{__html: content}}></div>
+                        <div className="text-sm text-gray-500 leading-relaxed html-content" dangerouslySetInnerHTML={{__html: content}}></div>
                     </div>
                 </div>
             );
@@ -141,17 +143,17 @@
         const Header = ({ setView, user, setActiveModal }) => (
             <header className="bg-white shadow-sm py-3 px-4 flex justify-between items-center sticky top-0 z-40">
                 <div onClick={() => setView('LANDING')} className="cursor-pointer flex items-center">
-                    <img src={LOGO_URL} alt="AuxiliarPro" className="h-10 object-contain" onError={(e) => {e.target.onerror=null; e.target.style.display='none';}} />
-                    <span className="font-bold text-slate-800 ml-2 hidden md:inline">AuxiliarPro</span>
+                    {/* CORRECCIÓN LOGO: Se elimina el texto de fallback para evitar superposición */}
+                    <img src={LOGO_URL} alt="AuxiliarPro" className="h-10 object-contain" />
                 </div>
                 <div className="flex gap-2 items-center">
-                    <button onClick={() => setView('DASHBOARD')} className="text-sm font-bold text-slate-600 px-2 hidden md:block">Estudio</button>
+                    <button onClick={() => setView('DASHBOARD')} className="text-sm font-bold text-gray-600 hover:text-farmacia-emerald px-2 hidden md:block">Estudio</button>
                     <button onClick={() => setView('DERMOCHECK')} className="text-sm font-bold text-farmacia-fuchsia px-2 hidden md:block">DermoCheck</button>
-                    <button onClick={() => setView('BLOG')} className="text-sm font-bold text-slate-600 px-2 hidden md:block">Blog</button>
+                    <button onClick={() => setView('BLOG')} className="text-sm font-bold text-gray-600 hover:text-farmacia-emerald px-2 hidden md:block">Blog</button>
                     
                     {user.isAuthenticated ? 
-                        <button onClick={() => setView('DASHBOARD')} className="bg-slate-900 text-white px-3 py-1.5 rounded-lg text-xs font-bold">Panel</button> :
-                        <button onClick={() => setActiveModal('auth')} className="bg-farmacia-green text-white px-3 py-1.5 rounded-lg text-xs font-bold">Ingresar</button>
+                        <button onClick={() => setView('DASHBOARD')} className="bg-farmacia-dark text-white px-3 py-1.5 rounded-lg text-xs font-bold">Panel</button> :
+                        <button onClick={() => setActiveModal('auth')} className="bg-farmacia-emerald text-white px-3 py-1.5 rounded-lg text-xs font-bold hover:bg-emerald-600 transition-colors">Ingresar</button>
                     }
                 </div>
             </header>
@@ -165,7 +167,7 @@
             const [reviewMode, setReviewMode] = useState(false);
             const [activeModal, setActiveModal] = useState(null);
             
-            // ESTADO DE AUTENTICACIÓN (Recuperado)
+            // ESTADO DE AUTENTICACIÓN
             const [authMode, setAuthMode] = useState('login'); 
             
             const [legalTab, setLegalTab] = useState('terms');
@@ -224,25 +226,25 @@
             };
 
             const Footer = () => (
-                <footer className="bg-slate-900 text-slate-400 py-10 px-6 text-center text-xs mt-auto">
+                <footer className="bg-farmacia-dark text-gray-400 py-10 px-6 text-center text-xs mt-auto">
                     <div className="max-w-md mx-auto">
-                        <div className="border border-slate-700 bg-slate-800/50 p-6 rounded-xl mb-8">
+                        <div className="border border-gray-700 bg-gray-800/50 p-6 rounded-xl mb-8">
                             <h4 className="font-bold text-white uppercase mb-2">Comentarios y Sugerencias</h4>
                             <p className="mb-4">¿Encontraste un error? Escríbeme:</p>
-                            <a href="mailto:auxiliarprofarma@gmail.com" className="bg-white text-slate-900 px-4 py-2 rounded-full font-bold hover:bg-emerald-400">auxiliarprofarma@gmail.com</a>
+                            <a href="mailto:auxiliarprofarma@gmail.com" className="bg-white text-farmacia-dark px-4 py-2 rounded-full font-bold hover:bg-farmacia-emerald hover:text-white transition-colors">auxiliarprofarma@gmail.com</a>
                             <p className="mt-4 italic opacity-50">Sitio construido con asistencia de IA. Validar con fuentes oficiales.</p>
                         </div>
                         <div className="flex justify-center gap-4 uppercase font-bold text-[10px]">
-                            <button onClick={() => {setLegalTab('terms'); setActiveModal('legal');}}>Términos</button>
-                            <button onClick={() => {setLegalTab('privacy'); setActiveModal('legal');}}>Privacidad</button>
-                            <button onClick={() => {setLegalTab('disclaimers'); setActiveModal('legal');}}>Descargos</button>
+                            <button onClick={() => {setLegalTab('terms'); setActiveModal('legal');}} className="hover:text-white transition-colors">Términos</button>
+                            <button onClick={() => {setLegalTab('privacy'); setActiveModal('legal');}} className="hover:text-white transition-colors">Privacidad</button>
+                            <button onClick={() => {setLegalTab('disclaimers'); setActiveModal('legal');}} className="hover:text-white transition-colors">Descargos</button>
                         </div>
                         <p className="mt-4 opacity-30">© 2026 AuxiliarPro</p>
                     </div>
                 </footer>
             );
 
-            // --- AUTH MODAL RESTAURADO (Con Email/Pass) ---
+            // --- AUTH MODAL ---
             const AuthModal = () => {
                 if (activeModal !== 'auth') return null;
                 const [form, setForm] = useState({ name: '', email: '', pass: '' });
@@ -267,25 +269,25 @@
                 return (
                     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 animate-fade-in">
                         <div className="bg-white p-8 rounded-3xl w-full max-w-sm relative shadow-2xl">
-                            <button onClick={() => setActiveModal(null)} className="absolute top-4 right-4 text-slate-300 hover:text-slate-600"><Icon name="x" className="text-xl"/></button>
+                            <button onClick={() => setActiveModal(null)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"><Icon name="x" className="text-xl"/></button>
                             
                             <div className="text-center mb-6">
-                                <div className="bg-emerald-100 w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 text-emerald-600 text-2xl"><Icon name="user" /></div>
-                                <h2 className="text-2xl font-bold text-slate-800">{authMode === 'register' ? 'Crear Cuenta' : 'Bienvenido'}</h2>
-                                <p className="text-xs text-slate-500 mt-1">Únete a la comunidad de AuxiliarPro.</p>
+                                <div className="bg-emerald-100 w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 text-farmacia-emerald text-2xl"><Icon name="user" /></div>
+                                <h2 className="text-2xl font-bold text-farmacia-dark">{authMode === 'register' ? 'Crear Cuenta' : 'Bienvenido'}</h2>
+                                <p className="text-xs text-gray-500 mt-1">Únete a la comunidad de AuxiliarPro.</p>
                             </div>
 
                             <form onSubmit={handleSubmit} className="space-y-3">
-                                {authMode === 'register' && <input type="text" placeholder="Tu Nombre" className="w-full p-3 bg-slate-50 border rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500" required onChange={e => setForm({...form, name: e.target.value})} />}
-                                <input type="email" placeholder="Correo Electrónico" className="w-full p-3 bg-slate-50 border rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500" required onChange={e => setForm({...form, email: e.target.value})} />
-                                <input type="password" placeholder="Contraseña" className="w-full p-3 bg-slate-50 border rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500" required onChange={e => setForm({...form, pass: e.target.value})} />
+                                {authMode === 'register' && <input type="text" placeholder="Tu Nombre" className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-farmacia-emerald" required onChange={e => setForm({...form, name: e.target.value})} />}
+                                <input type="email" placeholder="Correo Electrónico" className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-farmacia-emerald" required onChange={e => setForm({...form, email: e.target.value})} />
+                                <input type="password" placeholder="Contraseña" className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-farmacia-emerald" required onChange={e => setForm({...form, pass: e.target.value})} />
                                 
                                 {error && <p className="text-red-500 text-xs text-center font-bold">{error}</p>}
                                 
-                                <Button fullWidth type="submit">{authMode === 'register' ? 'Registrarse Gratis' : 'Entrar'}</Button>
+                                <Button fullWidth variant="emerald" type="submit">{authMode === 'register' ? 'Registrarse Gratis' : 'Entrar'}</Button>
                             </form>
 
-                            <button onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')} className="block w-full text-center mt-4 text-sm text-slate-500 hover:text-farmacia-green underline">
+                            <button onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')} className="block w-full text-center mt-4 text-sm text-gray-500 hover:text-farmacia-emerald underline transition-colors">
                                 {authMode === 'login' ? '¿No tienes cuenta? Regístrate aquí' : '¿Ya tienes cuenta? Inicia Sesión'}
                             </button>
                         </div>
@@ -298,16 +300,17 @@
                 <div className="flex-1 flex flex-col bg-white overflow-y-auto w-full">
                     <Header setView={setView} user={user} setActiveModal={setActiveModal} />
                     <div className="p-6 text-center max-w-md mx-auto">
-                        <div className="inline-block bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-[10px] font-bold border border-emerald-100 mb-6">META: CREDENCIAL 2026</div>
-                        <h1 className="text-4xl font-extrabold text-slate-900 mb-8 leading-tight">PREPÁRATE PARA TU <span className="text-farmacia-green">EXAMEN DE AUXILIAR</span></h1>
+                        <div className="inline-block bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full text-[10px] font-bold mb-6">CERTIFICACIÓN 2026</div>
+                        <h1 className="text-4xl font-extrabold text-farmacia-dark mb-6 leading-tight">PREPÁRATE PARA TU <br/><span className="text-farmacia-emerald">EXAMEN DE AUXILIAR</span></h1>
+                        <p className="text-gray-500 mb-8 leading-relaxed">Una iniciativa independiente hecha por colegas para colegas. Estudia a tu ritmo, supera niveles y asegura tu conocimiento.</p>
                         
                         <div className="flex flex-col gap-3 mb-12">
-                            <Button onClick={() => user.isAuthenticated ? setView('DASHBOARD') : setActiveModal('auth')}>COMENZAR AHORA</Button>
+                            <Button variant="primary" onClick={() => user.isAuthenticated ? setView('DASHBOARD') : setActiveModal('auth')}>COMENZAR AHORA</Button>
                             <Button variant="secondary" onClick={() => setView('BLOG')}>LEER ARTÍCULOS</Button>
                             <Button variant="fuchsia" onClick={() => setView('DERMOCHECK')}><Icon name="calculator"/> DERMOCHECK</Button>
                         </div>
 
-                        <div className="sticky-note p-6 text-left mx-4 mb-12 relative">
+                        <div className="sticky-note p-6 text-left mx-4 mb-12 relative bg-emerald-50 border-emerald-100">
                             <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-20 h-6 bg-yellow-200/50 rotate-2"></div>
                             <h3 className="font-bold text-emerald-800 mb-2 flex items-center gap-2"><Icon name="student"/> Quién soy</h3>
                             <p className="text-sm text-emerald-900 font-medium leading-relaxed">
@@ -320,16 +323,16 @@
             );
 
             const renderDashboard = () => (
-                <div className="flex-1 flex flex-col bg-slate-50 w-full overflow-hidden">
+                <div className="flex-1 flex flex-col bg-gray-50 w-full overflow-hidden">
                     <Header setView={setView} user={user} setActiveModal={setActiveModal} />
                     <div className="flex-1 overflow-y-auto p-4 pb-20">
                         <div className="max-w-md mx-auto space-y-4">
-                            <div className="bg-slate-900 text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
+                            <div className="bg-farmacia-dark text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
                                 <div className="flex justify-between items-center mb-2">
-                                    <span className="text-xs font-bold text-slate-400 uppercase">Tu Progreso</span>
-                                    <span className="text-2xl font-bold text-farmacia-green">{Math.round((user.completedLevels.length / LEVELS.length) * 100)}%</span>
+                                    <span className="text-xs font-bold text-gray-400 uppercase">Tu Progreso</span>
+                                    <span className="text-2xl font-bold text-farmacia-emerald">{Math.round((user.completedLevels.length / LEVELS.length) * 100)}%</span>
                                 </div>
-                                <div className="w-full bg-slate-700 h-2 rounded-full"><div className="bg-farmacia-green h-full rounded-full" style={{width: `${(user.completedLevels.length / LEVELS.length) * 100}%`}}></div></div>
+                                <div className="w-full bg-gray-700 h-2 rounded-full"><div className="bg-farmacia-emerald h-full rounded-full transition-all duration-1000" style={{width: `${(user.completedLevels.length / LEVELS.length) * 100}%`}}></div></div>
                                 <Icon name="trophy" className="absolute -bottom-2 -right-2 text-8xl opacity-10 rotate-12" />
                             </div>
 
@@ -338,13 +341,16 @@
                                     const locked = l.id > user.currentLevel;
                                     const done = user.completedLevels.includes(l.id);
                                     return (
-                                        <div key={l.id} onClick={() => !locked && startQuiz(l.id)} className={`bg-white p-4 rounded-xl border-2 flex items-center gap-4 ${locked ? 'border-slate-100 opacity-60' : 'border-slate-100 hover:border-farmacia-green cursor-pointer'}`}>
-                                            <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white ${locked ? 'bg-slate-300' : (done ? 'bg-farmacia-green' : l.iconBg)}`}>
+                                        <div key={l.id} onClick={() => !locked && startQuiz(l.id)} className={`bg-white p-4 rounded-xl border-2 flex items-center gap-4 transition-all ${locked ? 'border-gray-100 opacity-60' : 'border-gray-100 hover:border-farmacia-emerald cursor-pointer hover:shadow-md'}`}>
+                                            <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white shadow-sm ${locked ? 'bg-gray-300' : (done ? 'bg-farmacia-emerald' : l.iconBg)}`}>
                                                 {locked ? <Icon name="lock"/> : (done ? <Icon name="check"/> : <Icon name="play"/>)}
                                             </div>
                                             <div className="flex-1">
-                                                <h4 className="font-bold text-slate-800">{l.title}</h4>
-                                                <p className="text-xs text-slate-500">{l.desc}</p>
+                                                <div className="flex justify-between items-center">
+                                                    <h4 className="font-bold text-gray-800">{l.title}</h4>
+                                                    {done && <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-700">LOGRADO</span>}
+                                                </div>
+                                                <p className="text-xs text-gray-500 mt-1">{l.desc}</p>
                                             </div>
                                         </div>
                                     )
@@ -365,10 +371,10 @@
             );
 
             const renderDermoCheck = () => (
-                <div className="flex-1 flex flex-col bg-slate-900 w-full h-full absolute inset-0 z-50">
-                    <div className="bg-slate-900 text-white p-3 flex justify-between items-center shadow-md z-10">
+                <div className="flex-1 flex flex-col bg-farmacia-dark w-full h-full absolute inset-0 z-50">
+                    <div className="bg-farmacia-dark text-white p-3 flex justify-between items-center shadow-md z-10">
                         <span className="font-bold flex items-center gap-2"><Icon name="calculator" className="text-farmacia-fuchsia"/> DermoCheck</span>
-                        <button onClick={() => setView('LANDING')} className="text-xs bg-white/10 px-3 py-1 rounded-full">Salir</button>
+                        <button onClick={() => setView('LANDING')} className="text-xs bg-white/10 px-3 py-1 rounded-full hover:bg-white/20 transition-colors">Salir</button>
                     </div>
                     <div className="flex-1 bg-black relative">
                         <iframe src={DERMO_URL} className="w-full h-full border-0" title="Calculadora DermoCheck"></iframe>
@@ -376,7 +382,7 @@
                 </div>
             );
 
-            // Modales Legales, Blog, Faqs, etc. se renderizan igual
+            // Modales Legales, Blog, Faqs, etc.
             const LegalModal = () => {
                 if (activeModal !== 'legal') return null;
                 const texts = {
@@ -385,11 +391,11 @@
                     disclaimers: "Descargos: AuxiliarPro NO representa al MINSAL. Iniciativa independiente."
                 };
                 return (
-                    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-                        <div className="bg-white rounded-2xl p-6 max-w-sm w-full">
-                            <h3 className="font-bold text-lg mb-4 capitalize">{legalTab}</h3>
-                            <p className="text-sm text-slate-600 mb-6">{texts[legalTab]}</p>
-                            <Button fullWidth onClick={() => setActiveModal(null)}>Entendido</Button>
+                    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 animate-fade-in">
+                        <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl">
+                            <h3 className="font-bold text-lg mb-4 capitalize text-farmacia-dark">{legalTab}</h3>
+                            <p className="text-sm text-gray-600 mb-6 leading-relaxed">{texts[legalTab]}</p>
+                            <Button fullWidth variant="emerald" onClick={() => setActiveModal(null)}>Entendido</Button>
                         </div>
                     </div>
                 );
@@ -398,16 +404,16 @@
             const CommunityModal = () => {
                 if (activeModal !== 'community') return null;
                 return (
-                    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-                        <div className="bg-white rounded-2xl p-6 max-w-sm text-center">
-                            <Icon name="users" className="text-4xl text-blue-500 mb-2"/>
-                            <h3 className="font-bold mb-2">Comunidad</h3>
-                            <p className="text-sm mb-4">Únete a nuestros grupos de estudio.</p>
-                            <div className="space-y-2">
-                                <a href="https://chat.whatsapp.com/IPvHmnNGWYmH61FrdV56g1" target="_blank" className="block w-full bg-green-500 text-white py-2 rounded-lg font-bold">WhatsApp</a>
-                                <a href="https://www.facebook.com/share/g/1AFb8riMpT/" target="_blank" className="block w-full bg-blue-600 text-white py-2 rounded-lg font-bold">Facebook</a>
+                    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 animate-fade-in">
+                        <div className="bg-white rounded-2xl p-6 max-w-sm text-center shadow-xl">
+                            <Icon name="users" className="text-4xl text-blue-500 mb-4"/>
+                            <h3 className="font-bold mb-2 text-farmacia-dark">Comunidad</h3>
+                            <p className="text-sm mb-6 text-gray-600">Únete a nuestros grupos de estudio.</p>
+                            <div className="space-y-3">
+                                <a href="https://chat.whatsapp.com/IPvHmnNGWYmH61FrdV56g1" target="_blank" className="block w-full bg-[#25D366] text-white py-3 rounded-xl font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2"><Icon name="whatsapp-logo" size={20} />WhatsApp</a>
+                                <a href="https://www.facebook.com/share/g/1AFb8riMpT/" target="_blank" className="block w-full bg-[#1877F2] text-white py-3 rounded-xl font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2"><Icon name="facebook-logo" size={20} />Facebook</a>
                             </div>
-                            <button onClick={()=>setActiveModal(null)} className="mt-4 text-slate-400 text-sm">Cerrar</button>
+                            <button onClick={()=>setActiveModal(null)} className="mt-6 text-gray-400 text-sm hover:text-gray-600 transition-colors">Cerrar</button>
                         </div>
                     </div>
                 );
@@ -418,31 +424,35 @@
                     {view === 'LANDING' && renderLanding()}
                     {view === 'DASHBOARD' && renderDashboard()}
                     {view === 'DERMOCHECK' && renderDermoCheck()}
-                    {view === 'LIBRARY' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="p-6"><h2 className="font-bold text-xl mb-4">Biblioteca</h2>{PDF_DOCS.map((d,i)=><div key={i} className="p-3 border rounded mb-2 bg-slate-50">📄 <a href={d.file} target="_blank" className="text-blue-600 font-bold">{d.title}</a></div>)}<button onClick={()=>setView('DASHBOARD')} className="mt-4 text-slate-400">Volver</button></div></div>}
-                    {view === 'FAQS' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4">Preguntas Frecuentes</h2>{FAQS.map((f,i)=><Accordion key={i} title={f.q} content={f.a}/>)}<button onClick={()=>setView('LANDING')} className="mt-4 text-slate-400">Volver</button></div></div>}
-                    {view === 'BLOG' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4">Blog</h2>{BLOG_POSTS.map(p=><div key={p.id} className="border p-4 mb-3 rounded-xl bg-white shadow-sm"><h3 className="font-bold">{p.title}</h3><p className="text-xs text-slate-500 mt-1">{p.excerpt}</p></div>)}<button onClick={()=>setView('LANDING')} className="mt-4 text-slate-400">Volver</button></div></div>}
+                    {view === 'LIBRARY' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="p-6"><h2 className="font-bold text-xl mb-4 text-farmacia-dark">Biblioteca</h2>{PDF_DOCS.map((d,i)=><div key={i} className="p-4 border border-gray-100 rounded-xl mb-3 bg-gray-50 hover:bg-white hover:shadow-sm transition-all flex items-center gap-3"><div className="bg-red-100 p-2 rounded-lg text-red-500"><Icon name="file-pdf" size={24}/></div><a href={d.file} target="_blank" className="text-gray-700 font-bold hover:text-farmacia-emerald transition-colors flex-1">{d.title}</a></div>)}<button onClick={()=>setView('DASHBOARD')} className="mt-4 text-gray-400 hover:text-gray-600 transition-colors">Volver</button></div></div>}
+                    {view === 'FAQS' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4 text-farmacia-dark">Preguntas Frecuentes</h2>{FAQS.map((f,i)=><Accordion key={i} title={f.q} content={f.a}/>)}<button onClick={()=>setView('LANDING')} className="mt-4 text-gray-400 hover:text-gray-600 transition-colors">Volver</button></div></div>}
+                    {view === 'BLOG' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4 text-farmacia-dark">Blog</h2>{BLOG_POSTS.map(p=><div key={p.id} className="border border-gray-100 p-5 mb-4 rounded-xl bg-white shadow-sm hover:shadow-md transition-all cursor-pointer"><div className="flex justify-between items-center mb-2"><span className="text-xs font-bold text-farmacia-emerald bg-emerald-50 px-2 py-1 rounded-full uppercase">{p.category}</span><span className="text-xs text-gray-400">{p.date}</span></div><h3 className="font-bold text-lg text-gray-800 mb-2">{p.title}</h3><p className="text-sm text-gray-500 leading-relaxed">{p.excerpt}</p></div>)}<button onClick={()=>setView('LANDING')} className="mt-4 text-gray-400 hover:text-gray-600 transition-colors">Volver</button></div></div>}
                     
                     {quizState.active && (
                         <div className="absolute inset-0 bg-white z-50 flex flex-col animate-fade-in">
-                            <div className="bg-slate-900 text-white p-4 flex justify-between">
-                                <span>P {quizState.qIndex + 1}</span>
-                                <button onClick={()=>setQuizState({active:false, score:0, qIndex:0, showResult:false})}>X</button>
+                            <div className="bg-farmacia-dark text-white p-4 flex justify-between items-center shadow-md">
+                                <span className="font-medium">Pregunta {quizState.qIndex + 1} / {LEVELS.find(l=>l.id===quizState.levelId).qCount}</span>
+                                <button onClick={()=>setQuizState({active:false, score:0, qIndex:0, showResult:false})} className="text-gray-400 hover:text-white transition-colors"><Icon name="x" size={20}/></button>
                             </div>
-                            <div className="flex-1 p-6 flex flex-col justify-center">
+                            <div className="flex-1 p-6 flex flex-col justify-center overflow-y-auto bg-gray-50">
                                 {!quizState.showResult ? (
-                                    <>
-                                        <h3 className="text-xl font-bold mb-8">{LEVELS.find(l=>l.id===quizState.levelId).questions[quizState.qIndex].text}</h3>
+                                    <div className="max-w-md mx-auto w-full">
+                                        <div className="mb-8 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                                            <span className="text-xs font-bold text-farmacia-emerald bg-emerald-50 px-2 py-1 rounded-full uppercase mb-3 inline-block">Pregunta</span>
+                                            <h3 className="text-xl font-bold text-gray-900 leading-snug">{LEVELS.find(l=>l.id===quizState.levelId).questions[quizState.qIndex].text}</h3>
+                                        </div>
                                         <div className="space-y-3">
                                             {LEVELS.find(l=>l.id===quizState.levelId).questions[quizState.qIndex].options.map((opt,i) => (
-                                                <button key={i} onClick={()=>handleAnswer(i)} className="w-full p-4 border rounded-xl text-left hover:bg-slate-50">{opt}</button>
+                                                <button key={i} onClick={()=>handleAnswer(i)} className="w-full p-4 border-2 border-gray-100 rounded-xl text-left hover:bg-emerald-50 hover:border-farmacia-emerald transition-all bg-white font-medium text-gray-700 flex items-center group"><span className="w-8 h-8 rounded-full bg-gray-100 text-gray-500 flex items-center justify-center mr-3 font-bold text-sm group-hover:bg-farmacia-emerald group-hover:text-white transition-colors">{String.fromCharCode(65+i)}</span>{opt}</button>
                                             ))}
                                         </div>
-                                    </>
+                                    </div>
                                 ) : (
-                                    <div className="text-center">
-                                        <h2 className="text-2xl font-bold mb-2">{quizState.score >= LEVELS.find(l=>l.id===quizState.levelId).passingScore ? '¡Aprobado! 🎉' : 'Sigue Intentando'}</h2>
-                                        <p className="mb-6">Puntaje: {quizState.score}</p>
-                                        <Button onClick={()=>setQuizState({active:false, score:0, qIndex:0, showResult:false})}>Volver al Panel</Button>
+                                    <div className="text-center max-w-md mx-auto w-full bg-white p-8 rounded-2xl shadow-lg">
+                                        <div className="text-6xl mb-4">{quizState.score >= LEVELS.find(l=>l.id===quizState.levelId).passingScore ? '🎉' : '💪'}</div>
+                                        <h2 className="text-2xl font-bold mb-2 text-farmacia-dark">{quizState.score >= LEVELS.find(l=>l.id===quizState.levelId).passingScore ? '¡Nivel Aprobado!' : '¡Sigue Practicando!'}</h2>
+                                        <p className="mb-8 text-gray-500">Obtuviste {quizState.score} de {LEVELS.find(l=>l.id===quizState.levelId).qCount} respuestas correctas.</p>
+                                        <Button variant="emerald" fullWidth onClick={()=>setQuizState({active:false, score:0, qIndex:0, showResult:false})}>Volver al Panel</Button>
                                     </div>
                                 )}
                             </div>
