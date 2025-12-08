@@ -192,29 +192,26 @@
             );
         };
 
-        // --- HEADER AJUSTADO PARA PC (MENOS SEPARACIÓN) ---
+        // --- HEADER AJUSTADO (Logo más pequeño, Menú más separado) ---
         const Header = ({ setView, user, setActiveModal }) => (
-            <header className="bg-white shadow-sm h-20 px-6 flex items-center sticky top-0 z-50">
-                {/* LOGO */}
-                <div onClick={() => setView('LANDING')} className="cursor-pointer flex items-center h-full mr-4">
-                    <img src={LOGO_URL} alt="AuxiliarPro" className="h-10 md:h-12 object-contain" />
-                </div>
-
-                {/* MENÚ (Empujado a la izquierda por 'justify-start' implícito y gap reducido) */}
-                <div className="flex gap-4 items-center">
-                    
-                    {/* Botón BLOG: Estilo Pastilla Verde */}
-                    <button onClick={() => setView('BLOG')} className="bg-aux-green text-white px-4 py-2 rounded-lg text-xs font-medium hover:bg-emerald-600 transition-colors whitespace-nowrap">Blog</button>
-                    
-                    {/* Botón PANEL DE ESTUDIO: Estilo Oscuro */}
-                    {user.isAuthenticated ? 
-                        <button onClick={() => setView('DASHBOARD')} className="bg-aux-dark text-white px-4 py-2 rounded-lg text-xs font-medium hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button> :
-                        <button onClick={() => setActiveModal('auth')} className="bg-aux-dark text-white px-4 py-2 rounded-lg text-xs font-medium hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button>
-                    }
+            <header className="bg-white shadow-sm h-20 px-6 flex justify-between items-center sticky top-0 z-50">
+                <div onClick={() => setView('LANDING')} className="cursor-pointer flex items-center h-full flex-shrink-0">
+                    {/* LOGO: Reducido a h-8 (móvil) y h-12 (escritorio) para más aire */}
+                    <img src={LOGO_URL} alt="AuxiliarPro" className="h-8 md:h-12 object-contain" />
                 </div>
                 
-                {/* Espaciador flexible para empujar el menú hamburguesa a la derecha en móvil si fuera necesario, 
-                    pero en este diseño limpio no hace falta ya que los botones se ven siempre */}
+                {/* MENÚ: Aumentamos gap y nos aseguramos que esté alineado al final */}
+                <div className="flex gap-4 md:gap-6 items-center ml-auto">
+                    
+                    {/* Botón BLOG: Visible siempre */}
+                    <button onClick={() => setView('BLOG')} className="text-sm font-bold text-slate-600 hover:text-aux-green uppercase tracking-wide">Blog</button>
+                    
+                    {/* Botón PANEL DE ESTUDIO: Botón oscuro */}
+                    {user.isAuthenticated ? 
+                        <button onClick={() => setView('DASHBOARD')} className="bg-aux-dark text-white px-5 py-2 rounded-lg text-xs md:text-sm font-bold hover:bg-slate-800 transition-colors whitespace-nowrap uppercase tracking-wider">Panel de Estudio</button> :
+                        <button onClick={() => setActiveModal('auth')} className="bg-aux-dark text-white px-5 py-2 rounded-lg text-xs md:text-sm font-bold hover:bg-slate-800 transition-colors whitespace-nowrap uppercase tracking-wider">Panel de Estudio</button>
+                    }
+                </div>
             </header>
         );
 
