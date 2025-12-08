@@ -14,10 +14,10 @@
         theme: {
           extend: {
             colors: {
-              // PALETA VIBRANTE (Oscuro + Verde Esmeralda)
+              // PALETA VIBRANTE
               'preferred-dark': '#0E172A',
               'preferred-green': '#10b981',
-              'preferred-green-light': '#d1fae5', // Para fondos suaves
+              'preferred-green-light': '#d1fae5',
               'metal-gold': '#FFD700',
             },
             fontFamily: { sans: ['Inter', 'sans-serif'] },
@@ -86,7 +86,6 @@
             { id: 'art2', date: '02 DIC', category: 'Técnico', title: 'Ley de Fármacos y Bioequivalencia', excerpt: 'Lo que debes saber de la Ley 20.724.', content: '<h1>Ley 20.724</h1><p>Cambios en bioequivalencia y venta directa...</p>' }
         ];
 
-        // FAQS RECUPERADAS
         const FAQS = [
             { q: "Descripción del Trámite", a: "La certificación de competencias consiste en una solicitud ante la SEREMI de Salud para someterse a una evaluación que verifica conocimientos para desempeñarse como Auxiliar bajo supervisión de un QF." },
             { q: "¿Dónde y cómo hago el trámite?", a: "Disponible en línea en el portal <strong>SEREMI en Línea</strong> ingresando con Clave Única." },
@@ -140,15 +139,15 @@
             );
         };
 
-        // HEADER MEJORADO: LOGO GRANDE / TEXTO PEQUEÑO
+        // HEADER CORREGIDO: LOGO REALMENTE GIGANTE Y DOMINANTE
         const Header = ({ setView, user, setActiveModal }) => (
-            <header className="bg-white shadow-sm py-4 px-4 flex justify-between items-center sticky top-0 z-40 h-24">
-                <div onClick={() => setView('LANDING')} className="cursor-pointer flex items-center h-full">
-                    {/* LOGO GIGANTE (h-40 en md, h-20 en móvil) */}
-                    <img src={LOGO_URL} alt="AuxiliarPro" className="h-20 md:h-40 object-contain -ml-2 md:-ml-4" />
+            <header className="bg-white/95 backdrop-blur-sm shadow-sm py-8 px-6 flex justify-between items-center sticky top-0 z-40">
+                <div onClick={() => setView('LANDING')} className="cursor-pointer flex items-center">
+                    {/* LOGO MASIVO: h-32 (128px) móvil, h-56 (224px) escritorio */}
+                    <img src={LOGO_URL} alt="AuxiliarPro" className="h-32 md:h-56 object-contain -ml-4" />
                 </div>
                 <div className="flex gap-4 items-center">
-                    {/* MENÚ CON LETRA CHICA (text-xs) Y MAYÚSCULAS */}
+                    {/* Menú pequeño (text-xs) en comparación */}
                     <button onClick={() => setView('DASHBOARD')} className="text-xs font-bold text-slate-500 hover:text-preferred-green uppercase tracking-wide hidden md:block">Estudio</button>
                     <button onClick={() => setView('DERMOCHECK')} className="text-xs font-bold text-preferred-green uppercase tracking-wide hidden md:block border border-preferred-green/30 px-3 py-1 rounded-full bg-green-50">DermoCheck</button>
                     <button onClick={() => setView('BLOG')} className="text-xs font-bold text-slate-500 hover:text-preferred-green uppercase tracking-wide hidden md:block">Blog</button>
@@ -307,12 +306,8 @@
                             <Button variant="green" onClick={() => setView('DERMOCHECK')}><Icon name="calculator"/> DERMOCHECK</Button>
                         </div>
 
-                        {/* QUIÉN SOY - REDISEÑADO CON SIGNO DE EXCLAMACIÓN GIGANTE DIFUMINADO */}
                         <div className="relative p-8 mx-4 mb-12 rounded-3xl overflow-hidden bg-[rgba(16,185,129,0.03)] border border-[rgba(16,185,129,0.1)]">
-                            {/* MARCA DE AGUA GIGANTE "!" */}
                             <span className="absolute -top-12 -right-8 text-[15rem] leading-none text-preferred-green opacity-[0.05] font-black select-none pointer-events-none transform rotate-12">!</span>
-
-                            {/* Contenido en Z-Index superior */}
                             <div className="relative z-10 text-left">
                                  <h3 className="font-bold text-xl text-preferred-dark mb-3 flex items-center gap-3">
                                     <Icon name="student" className="text-preferred-green text-2xl" weight="fill"/> Quién soy
@@ -323,7 +318,6 @@
                             </div>
                         </div>
 
-                        {/* SECCIÓN PREGUNTAS FRECUENTES (RECUPERADA) */}
                         <div className="border-t border-slate-100 pt-8 mt-4">
                             <h3 className="font-bold text-slate-800 mb-4">¿Dudas sobre el proceso?</h3>
                             <Button variant="secondary" onClick={() => setView('FAQS')}><Icon name="question"/> Ver Preguntas Frecuentes</Button>
@@ -435,7 +429,6 @@
                     {view === 'DASHBOARD' && renderDashboard()}
                     {view === 'DERMOCHECK' && renderDermoCheck()}
                     {view === 'LIBRARY' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="p-6"><h2 className="font-bold text-xl mb-4 text-preferred-dark">Biblioteca</h2>{PDF_DOCS.map((d,i)=><div key={i} className="p-4 border border-slate-100 rounded-xl mb-3 bg-slate-50 hover:bg-white hover:shadow-sm transition-all flex items-center gap-3"><div className="bg-red-100 p-2 rounded-lg text-red-500"><Icon name="file-pdf" size={24}/></div><a href={d.file} target="_blank" className="text-slate-700 font-bold hover:text-preferred-green transition-colors flex-1">{d.title}</a></div>)}<button onClick={()=>setView('DASHBOARD')} className="mt-4 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
-                    {/* VISTA FAQS RECUPERADA Y CONECTADA */}
                     {view === 'FAQS' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4 text-preferred-dark">Preguntas Frecuentes</h2>{FAQS.map((f,i)=><Accordion key={i} title={f.q} content={f.a}/>)}<button onClick={()=>setView('LANDING')} className="mt-4 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
                     {view === 'BLOG' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4 text-preferred-dark">Blog</h2>{BLOG_POSTS.map(p=><div key={p.id} className="border border-slate-100 p-5 mb-4 rounded-xl bg-white shadow-sm hover:shadow-md transition-all cursor-pointer"><div className="flex justify-between items-center mb-2"><span className="text-xs font-bold text-preferred-green bg-[rgba(16,185,129,0.1)] px-2 py-1 rounded-full uppercase">{p.category}</span><span className="text-xs text-slate-400">{p.date}</span></div><h3 className="font-bold text-lg text-preferred-dark mb-2">{p.title}</h3><p className="text-sm text-slate-500 leading-relaxed">{p.excerpt}</p></div>)}<button onClick={()=>setView('LANDING')} className="mt-4 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
                     
