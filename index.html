@@ -1,504 +1,506 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="description" content="Plataforma de estudio para el Examen de Auxiliar de Farmacia en Chile.">
-    <title>Auxiliar Pro | Credencial 2026</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="description" content="Plataforma de estudio para el Examen de Auxiliar de Farmacia en Chile.">
+    <title>Auxiliar Pro | Credencial 2026</title>
 
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5783669972264868" crossorigin="anonymous"></script>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              'aux-dark': '#0E172A',   // Azul Oscuro
-              'aux-green': '#2A9974',  // Verde Teal
-              'aux-gray': '#BDC3C1',
-              'aux-light': '#F8FAFC',
-            },
-            fontFamily: { sans: ['Inter', 'sans-serif'] },
-            animation: { 'fade-in': 'fadeIn 0.3s ease-out forwards' },
-            keyframes: { fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } } }
-          }
-        }
-      }
-    </script>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5783669972264868" crossorigin="anonymous"></script>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'aux-dark': '#0E172A',   // Azul Oscuro
+              'aux-green': '#2A9974',  // Verde Teal
+              'aux-gray': '#BDC3C1',
+              'aux-light': '#F8FAFC',
+            },
+            fontFamily: { sans: ['Inter', 'sans-serif'] },
+            animation: { 'fade-in': 'fadeIn 0.3s ease-out forwards' },
+            keyframes: { fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } } }
+          }
+        }
+      }
+    </script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <style>
-      body { -webkit-tap-highlight-color: transparent; }
-      .no-scrollbar::-webkit-scrollbar { display: none; }
-      
-      /* Estilo Sello de Agua */
-      .watermark-container {
-          position: relative;
-          overflow: hidden;
-          background-color: rgba(42, 153, 116, 0.03);
-          border: 1px solid rgba(42, 153, 116, 0.1);
-      }
-      .watermark-icon {
-          position: absolute;
-          font-weight: 900;
-          opacity: 0.06;
-          color: #2A9974;
-          z-index: 0;
-          pointer-events: none;
-      }
-      
-      /* Estilos HTML renderizado */
-      .html-content a { color: #2A9974; text-decoration: none; font-weight: 600; }
-      .html-content ul { list-style-type: disc; padding-left: 1.2rem; margin-top: 0.5rem; }
-      .html-content li { margin-bottom: 0.25rem; }
-    </style>
+    <style>
+      body { -webkit-tap-highlight-color: transparent; }
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      
+      /* Estilo Sello de Agua */
+      .watermark-container {
+          position: relative;
+          overflow: hidden;
+          background-color: rgba(42, 153, 116, 0.03);
+          border: 1px solid rgba(42, 153, 116, 0.1);
+      }
+      .watermark-icon {
+          position: absolute;
+          font-weight: 900;
+          opacity: 0.06;
+          color: #2A9974;
+          z-index: 0;
+          pointer-events: none;
+      }
+      
+      /* Estilos HTML renderizado */
+      .html-content a { color: #2A9974; text-decoration: none; font-weight: 600; }
+      .html-content ul { list-style-type: disc; padding-left: 1.2rem; margin-top: 0.5rem; }
+      .html-content li { margin-bottom: 0.25rem; }
+    </style>
 </head>
 <body class="bg-white text-aux-dark antialiased min-h-screen flex flex-col items-center justify-center font-sans">
 
-    <div id="root" class="w-full h-full flex justify-center items-center"></div>
+    <div id="root" class="w-full h-full flex justify-center items-center"></div>
 
-    <script type="text/babel" data-type="module" data-presets="react">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
+    <script type="text/babel" data-type="module" data-presets="react">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
-        // CONFIGURACIÓN FIREBASE
-        const firebaseConfig = {
-            apiKey: "AIzaSyDNhuSBBhmmQSV0BHC8MOtLKgAUpvtfWfE",
-            authDomain: "auxiliar-pro.firebaseapp.com",
-            projectId: "auxiliar-pro",
-            storageBucket: "auxiliar-pro.firebasestorage.app",
-            messagingSenderId: "342196612566",
-            appId: "1:342196612566:web:c7f34365c4e10502e60877"
-        };
+        // CONFIGURACIÓN FIREBASE
+        const firebaseConfig = {
+            apiKey: "AIzaSyDNhuSBBhmmQSV0BHC8MOtLKgAUpvtfWfE",
+            authDomain: "auxiliar-pro.firebaseapp.com",
+            projectId: "auxiliar-pro",
+            storageBucket: "auxiliar-pro.firebasestorage.app",
+            messagingSenderId: "342196612566",
+            appId: "1:342196612566:web:c7f34365c4e10502e60877"
+        };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const appId = 'auxiliar-pro';
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const appId = 'auxiliar-pro';
 
-        const { useState, useEffect } = React;
-        const LOCAL_STORAGE_KEY = 'auxiliar_pro_data';
-        
-        // --- URLs ---
-        const LOGO_URL = "https://raw.githubusercontent.com/marcar1972-cyber/Auxiliar--pro/main/logo_auxiliarpro";
-        const DERMO_URL = "https://auxiliar-dermocheck.vercel.app";
+        const { useState, useEffect } = React;
+        const LOCAL_STORAGE_KEY = 'auxiliar_pro_data';
+        
+        // --- URLs ---
+        const LOGO_URL = "https://raw.githubusercontent.com/marcar1972-cyber/Auxiliar--pro/main/logo_auxiliarpro";
+        const DERMO_URL = "https://auxiliar-dermocheck.vercel.app";
 
-        // --- DATOS ---
-        const BLOG_POSTS = [
-            { 
-                id: 'art_req_2026', 
-                date: '08 DIC', 
-                category: 'Guía', 
-                title: 'Requisitos para ser Auxiliar de Farmacia en Chile (Actualizado 2026)', 
-                excerpt: 'Si estás pensando en trabajar en farmacia, conoce los requisitos, la experiencia necesaria y el proceso ante la SEREMI para obtener tu credencial.', 
-                content: `
-                    <h1>Requisitos para ser Auxiliar de Farmacia en Chile (Actualizado 2026)</h1>
-                    <p>Si estás pensando en trabajar en farmacia, uno de los primeros pasos es conocer los requisitos para ser Auxiliar de Farmacia en Chile. Esta es una de las búsquedas más comunes en Google, y con razón: es una puerta de entrada real al rubro de la salud. Aquí te lo explico simple, claro y sin enredos.</p>
-                    
-                    <h2>🩺 ¿Qué es un Auxiliar de Farmacia?</h2>
-                    <p>El Auxiliar de Farmacia es la persona que apoya al Químico Farmacéutico en la atención de público, manejo de medicamentos, control de stock, revisión de vencimientos y orientación básica al paciente, siempre bajo supervisión profesional.</p>
-                    
-                    <h2>📋 Requisitos para Rendir el Examen</h2>
-                    <p>De acuerdo al <strong>Decreto Supremo N° 466</strong>, para poder rendir el Examen de Auxiliar de Farmacia debes cumplir con el siguiente requisito principal:</p>
-                    <div class="bg-emerald-50 p-4 rounded-lg border-l-4 border-aux-green my-4">
-                        <strong>✅ Mínimo 1 año de experiencia laboral comprobable en farmacia, realizando labores como:</strong>
-                        <ul class="list-disc pl-5 mt-2 space-y-1">
-                            <li>Bodegaje</li>
-                            <li>Reposición de medicamentos</li>
-                            <li>Dispensación bajo supervisión</li>
-                            <li>Manejo de productos farmacéuticos</li>
-                        </ul>
-                    </div>
-                    <p>Toda esta experiencia debe estar certificada por el <strong>Químico Farmacéutico Director Técnico</strong> del establecimiento.</p>
-                    <p>El trámite oficial se realiza únicamente a través del portal del Ministerio de Salud en <a href="https://seremienlinea.minsal.cl/asdigital/" target="_blank" class="text-aux-green font-bold underline">SEREMI en Línea</a>, donde podrás revisar requisitos actualizados, costos y disponibilidad.</p>
-                    
-                    <h2>📋 Requisitos Generales (2026)</h2>
-                    <ul class="space-y-3 mt-2">
-                        <li><strong>✅ 1. Ser mayor de 18 años</strong></li>
-                        <li><strong>✅ 2. Enseñanza media completa</strong></li>
-                        <li><strong>✅ 3. Haber trabajado en farmacia</strong> (Acreditar experiencia)</li>
-                        <li><strong>✅ 4. Rendir y aprobar el examen</strong></li>
-                        <li><strong>✅ 5. Obtener la credencial</strong></li>
-                    </ul>
+        // --- DATOS ---
+        const BLOG_POSTS = [
+            { 
+                id: 'art_req_2026', 
+                date: '08 DIC', 
+                category: 'Guía', 
+                title: 'Requisitos para ser Auxiliar de Farmacia en Chile (Actualizado 2026)', 
+                excerpt: 'Si estás pensando en trabajar en farmacia, conoce los requisitos, la experiencia necesaria y el proceso ante la SEREMI para obtener tu credencial.', 
+                content: `
+                    <h1>Requisitos para ser Auxiliar de Farmacia en Chile (Actualizado 2026)</h1>
+                    <p>Si estás pensando en trabajar en farmacia, uno de los primeros pasos es conocer los requisitos para ser Auxiliar de Farmacia en Chile. Esta es una de las búsquedas más comunes en Google, y con razón: es una puerta de entrada real al rubro de la salud. Aquí te lo explico simple, claro y sin enredos.</p>
+                    
+                    <h2>🩺 ¿Qué es un Auxiliar de Farmacia?</h2>
+                    <p>El Auxiliar de Farmacia es la persona que apoya al Químico Farmacéutico en la atención de público, manejo de medicamentos, control de stock, revisión de vencimientos y orientación básica al paciente, siempre bajo supervisión profesional.</p>
+                    
+                    <h2>📋 Requisitos para Rendir el Examen</h2>
+                    <p>De acuerdo al <strong>Decreto Supremo N° 466</strong>, para poder rendir el Examen de Auxiliar de Farmacia debes cumplir con el siguiente requisito principal:</p>
+                    <div class="bg-emerald-50 p-4 rounded-lg border-l-4 border-aux-green my-4">
+                        <strong>✅ Mínimo 1 año de experiencia laboral comprobable en farmacia, realizando labores como:</strong>
+                        <ul class="list-disc pl-5 mt-2 space-y-1">
+                            <li>Bodegaje</li>
+                            <li>Reposición de medicamentos</li>
+                            <li>Dispensación bajo supervisión</li>
+                            <li>Manejo de productos farmacéuticos</li>
+                        </ul>
+                    </div>
+                    <p>Toda esta experiencia debe estar certificada por el <strong>Químico Farmacéutico Director Técnico</strong> del establecimiento.</p>
+                    <p>El trámite oficial se realiza únicamente a través del portal del Ministerio de Salud en <a href="https://seremienlinea.minsal.cl/asdigital/" target="_blank" class="text-aux-green font-bold underline">SEREMI en Línea</a>, donde podrás revisar requisitos actualizados, costos y disponibilidad.</p>
+                    
+                    <h2>📋 Requisitos Generales (2026)</h2>
+                    <ul class="space-y-3 mt-2">
+                        <li><strong>✅ 1. Ser mayor de 18 años</strong></li>
+                        <li><strong>✅ 2. Enseñanza media completa</strong></li>
+                        <li><strong>✅ 3. Haber trabajado en farmacia</strong> (Acreditar experiencia)</li>
+                        <li><strong>✅ 4. Rendir y aprobar el examen</strong></li>
+                        <li><strong>✅ 5. Obtener la credencial</strong></li>
+                    </ul>
 
-                    <h2>🏥 ¿Dónde se realiza el trámite?</h2>
-                    <p>Todo el proceso se gestiona a través de la SEREMI de Salud de tu región.</p>
+                    <h2>🏥 ¿Dónde se realiza el trámite?</h2>
+                    <p>Todo el proceso se gestiona a través de la SEREMI de Salud de tu región.</p>
 
-                    <div class="mt-6 p-4 bg-slate-100 rounded-lg">
-                        <h3 class="font-bold text-aux-dark mb-2">🎯 Conclusión clara</h3>
-                        <p>Si quieres ser Auxiliar de Farmacia en Chile el 2026, necesitas constancia, práctica real y estudio enfocado.</p>
-                    </div>
-                `
-            },
-            { id: 'art1', date: '04 DIC', category: 'Legal', title: 'Decreto 466: La "Biblia" de la Farmacia', excerpt: 'Reglamento fundamental para aprobar.', content: '<h1>Decreto 466</h1><p>Define roles, temperaturas y leyes...</p>' },
-            { id: 'art2', date: '02 DIC', category: 'Técnico', title: 'Ley de Fármacos y Bioequivalencia', excerpt: 'Lo que debes saber de la Ley 20.724.', content: '<h1>Ley 20.724</h1><p>Cambios en bioequivalencia y venta directa...</p>' }
-        ];
+                    <div class="mt-6 p-4 bg-slate-100 rounded-lg">
+                        <h3 class="font-bold text-aux-dark mb-2">🎯 Conclusión clara</h3>
+                        <p>Si quieres ser Auxiliar de Farmacia en Chile el 2026, necesitas constancia, práctica real y estudio enfocado.</p>
+                    </div>
+                `
+            },
+            { id: 'art1', date: '04 DIC', category: 'Legal', title: 'Decreto 466: La "Biblia" de la Farmacia', excerpt: 'Reglamento fundamental para aprobar.', content: '<h1>Decreto 466</h1><p>Define roles, temperaturas y leyes...</p>' },
+            { id: 'art2', date: '02 DIC', category: 'Técnico', title: 'Ley de Fármacos y Bioequivalencia', excerpt: 'Lo que debes saber de la Ley 20.724.', content: '<h1>Ley 20.724</h1><p>Cambios en bioequivalencia y venta directa...</p>' }
+        ];
 
-        const FAQS = [
-            { q: "Descripción del Trámite", a: "La certificación de competencias consiste en una solicitud ante la SEREMI de Salud." },
-            { q: "¿Dónde hago el trámite?", a: "Disponible en línea en el portal <strong>SEREMI en Línea</strong>." },
-            { q: "Requisitos", a: "Licencia de enseñanza media, certificado laboral de 1 año y foto carnet." },
-            { q: "Costos", a: "Examen: ~$19.100, Inscripción: ~$47.600." }
-        ];
+        const FAQS = [
+            { q: "Descripción del Trámite", a: "La certificación de competencias consiste en una solicitud ante la SEREMI de Salud." },
+            { q: "¿Dónde hago el trámite?", a: "Disponible en línea en el portal <strong>SEREMI en Línea</strong>." },
+            { q: "Requisitos", a: "Licencia de enseñanza media, certificado laboral de 1 año y foto carnet." },
+            { q: "Costos", a: "Examen: ~$19.100, Inscripción: ~$47.600." }
+        ];
 
-        const PDF_DOCS = [
-            { title: 'Ley 20.724 (Fármacos)', file: 'ley_20724.pdf' },
-            { title: 'Decreto 466 (Farmacias)', file: 'decreto_466.pdf' },
-            { title: 'Decreto 404 (Estupefacientes)', file: 'decreto_404.pdf' }
-        ];
+        const PDF_DOCS = [
+            { title: 'Ley 20.724 (Fármacos)', file: 'ley_20724.pdf' },
+            { title: 'Decreto 466 (Farmacias)', file: 'decreto_466.pdf' },
+            { title: 'Decreto 404 (Estupefacientes)', file: 'decreto_404.pdf' }
+        ];
 
-        const LEVELS = [
-            { id: 1, title: 'Prueba Diagnóstico', desc: 'Conceptos básicos.', iconBg: 'bg-orange-500', qCount: 10, passingScore: 6, questions: [{ id: 101, text: '¿Quién es el responsable técnico?', options: ['Dueño', 'Auxiliar', 'QF', 'Gerente'], correctIndex: 2 }, { id: 102, text: 'Rango frío:', options: ['0-5', '2-8', '8-15', 'Ambiente'], correctIndex: 1 }] },
-            { id: 2, title: 'Nivel Intermedio', desc: 'Legislación.', iconBg: 'bg-slate-400', qCount: 15, passingScore: 9, questions: Array(15).fill({ id: 200, text: 'Pregunta N2', options: ['A', 'B', 'C', 'D'], correctIndex: 0 }) },
-            { id: 3, title: 'Nivel Avanzado', desc: 'Farmacología.', iconBg: 'bg-yellow-500', qCount: 25, passingScore: 18, questions: Array(25).fill({ id: 300, text: 'Pregunta N3', options: ['A', 'B', 'C', 'D'], correctIndex: 0 }) },
-            { id: 4, title: 'Simulacro Final', desc: 'Examen Seremi.', iconBg: 'bg-aux-dark', qCount: 40, passingScore: 28, questions: Array(40).fill({ id: 400, text: 'Pregunta N4', options: ['A', 'B', 'C', 'D'], correctIndex: 0 }) }
-        ];
+        const LEVELS = [
+            { id: 1, title: 'Prueba Diagnóstico', desc: 'Conceptos básicos.', iconBg: 'bg-orange-500', qCount: 10, passingScore: 6, questions: [{ id: 101, text: '¿Quién es el responsable técnico?', options: ['Dueño', 'Auxiliar', 'QF', 'Gerente'], correctIndex: 2 }, { id: 102, text: 'Rango frío:', options: ['0-5', '2-8', '8-15', 'Ambiente'], correctIndex: 1 }] },
+            { id: 2, title: 'Nivel Intermedio', desc: 'Legislación.', iconBg: 'bg-slate-400', qCount: 15, passingScore: 9, questions: Array(15).fill({ id: 200, text: 'Pregunta N2', options: ['A', 'B', 'C', 'D'], correctIndex: 0 }) },
+            { id: 3, title: 'Nivel Avanzado', desc: 'Farmacología.', iconBg: 'bg-yellow-500', qCount: 25, passingScore: 18, questions: Array(25).fill({ id: 300, text: 'Pregunta N3', options: ['A', 'B', 'C', 'D'], correctIndex: 0 }) },
+            { id: 4, title: 'Simulacro Final', desc: 'Examen Seremi.', iconBg: 'bg-aux-dark', qCount: 40, passingScore: 28, questions: Array(40).fill({ id: 400, text: 'Pregunta N4', options: ['A', 'B', 'C', 'D'], correctIndex: 0 }) }
+        ];
 
-        // --- COMPONENTES UI ---
-        const Icon = ({ name, className }) => <i className={`ph-${name} ${className || ''} text-lg`}></i>;
-        
-        const Button = ({ onClick, children, variant = 'primary', className = '', fullWidth = false, type = 'button' }) => {
-            const base = "flex items-center justify-center gap-2 rounded-xl font-bold transition-all active:scale-95 text-sm shadow-sm";
-            const variants = {
-                primary: "bg-aux-dark text-white hover:bg-slate-800 py-3 px-6",
-                green: "bg-aux-green text-white hover:bg-emerald-600 py-3 px-6",
-                secondary: "bg-white border-2 border-slate-200 text-slate-600 hover:border-aux-green hover:text-aux-green py-3 px-6",
-                danger: "bg-red-50 text-red-500 border border-red-100 py-3 px-6"
-            };
-            return <button type={type} onClick={onClick} className={`${base} ${variants[variant]} ${fullWidth ? 'w-full' : ''} ${className}`}>{children}</button>;
-        };
+        // --- COMPONENTES UI ---
+        const Icon = ({ name, className }) => <i className={`ph-${name} ${className || ''} text-lg`}></i>;
+        
+        const Button = ({ onClick, children, variant = 'primary', className = '', fullWidth = false, type = 'button' }) => {
+            const base = "flex items-center justify-center gap-2 rounded-xl font-bold transition-all active:scale-95 text-sm shadow-sm";
+            const variants = {
+                primary: "bg-aux-dark text-white hover:bg-slate-800 py-3 px-6",
+                green: "bg-aux-green text-white hover:bg-emerald-600 py-3 px-6",
+                secondary: "bg-white border-2 border-slate-200 text-slate-600 hover:border-aux-green hover:text-aux-green py-3 px-6",
+                danger: "bg-red-50 text-red-500 border border-red-100 py-3 px-6"
+            };
+            return <button type={type} onClick={onClick} className={`${base} ${variants[variant]} ${fullWidth ? 'w-full' : ''} ${className}`}>{children}</button>;
+        };
 
-        const Accordion = ({ title, content }) => {
-            const [isOpen, setIsOpen] = useState(false);
-            return (
-                <div className="border-b border-slate-100 last:border-0">
-                    <button onClick={() => setIsOpen(!isOpen)} className="w-full flex justify-between items-center py-4 text-left font-medium text-slate-700 hover:text-aux-green transition-colors">
-                        {title}
-                        <Icon name="caret-down" className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
-                    </button>
-                    <div className={`overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-96 pb-4' : 'max-h-0'}`}>
-                        <div className="text-sm text-slate-500 leading-relaxed html-content" dangerouslySetInnerHTML={{__html: content}}></div>
-                    </div>
-                </div>
-            );
-        };
+        const Accordion = ({ title, content }) => {
+            const [isOpen, setIsOpen] = useState(false);
+            return (
+                <div className="border-b border-slate-100 last:border-0">
+                    <button onClick={() => setIsOpen(!isOpen)} className="w-full flex justify-between items-center py-4 text-left font-medium text-slate-700 hover:text-aux-green transition-colors">
+                        {title}
+                        <Icon name="caret-down" className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    <div className={`overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-96 pb-4' : 'max-h-0'}`}>
+                        <div className="text-sm text-slate-500 leading-relaxed html-content" dangerouslySetInnerHTML={{__html: content}}></div>
+                    </div>
+                </div>
+            );
+        };
 
-        // --- HEADER AJUSTADO PARA PC (MENOS SEPARACIÓN) ---
-        const Header = ({ setView, user, setActiveModal }) => (
-            <header className="bg-white shadow-sm h-20 px-6 flex items-center sticky top-0 z-50">
-                {/* LOGO */}
-                <div onClick={() => setView('LANDING')} className="cursor-pointer flex items-center h-full mr-4">
-                    <img src={LOGO_URL} alt="AuxiliarPro" className="h-10 md:h-12 object-contain" />
-                </div>
+        // --- HEADER AJUSTADO PARA PC (MENOS SEPARACIÓN) ---
+        const Header = ({ setView, user, setActiveModal }) => (
+            <header className="bg-white shadow-sm h-20 px-6 flex items-center sticky top-0 z-50">
+                {/* LOGO */}
+                <div onClick={() => setView('LANDING')} className="cursor-pointer flex items-center h-full mr-4">
+                    <img src={LOGO_URL} alt="AuxiliarPro" className="h-10 md:h-12 object-contain" />
+                </div>
 
-                {/* MENÚ (Empujado a la izquierda por 'justify-start' implícito y gap reducido) */}
-                <div className="flex gap-4 items-center">
-                    
-                    {/* Botón BLOG: Estilo Pastilla Verde */}
-                    <button onClick={() => setView('BLOG')} className="bg-aux-green text-white px-4 py-2 rounded-lg text-xs font-medium hover:bg-emerald-600 transition-colors whitespace-nowrap">Blog</button>
-                    
-                    {/* Botón PANEL DE ESTUDIO: Estilo Oscuro */}
-                    {user.isAuthenticated ? 
-                        <button onClick={() => setView('DASHBOARD')} className="bg-aux-dark text-white px-4 py-2 rounded-lg text-xs font-medium hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button> :
-                        <button onClick={() => setActiveModal('auth')} className="bg-aux-dark text-white px-4 py-2 rounded-lg text-xs font-medium hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button>
-                    }
-                </div>
-                
-                {/* Espaciador flexible para empujar el menú hamburguesa a la derecha en móvil si fuera necesario, 
-                    pero en este diseño limpio no hace falta ya que los botones se ven siempre */}
-            </header>
-        );
+                {/* MENÚ (Empujado a la izquierda por 'justify-start' implícito y gap reducido) */}
+                <div className="flex gap-4 items-center">
+                    
+                    {/* Botón BLOG: Estilo Pastilla Verde */}
+                    <button onClick={() => setView('BLOG')} className="bg-aux-green text-white px-4 py-2 rounded-lg text-xs font-medium hover:bg-emerald-600 transition-colors whitespace-nowrap">Blog</button>
+                    
+                    {/* Botón PANEL DE ESTUDIO: Estilo Oscuro */}
+                    {user.isAuthenticated ? 
+                        <button onClick={() => setView('DASHBOARD')} className="bg-aux-dark text-white px-4 py-2 rounded-lg text-xs font-medium hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button> :
+                        <button onClick={() => setActiveModal('auth')} className="bg-aux-dark text-white px-4 py-2 rounded-lg text-xs font-medium hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button>
+                    }
+                </div>
+                
+                {/* Espaciador flexible para empujar el menú hamburguesa a la derecha en móvil si fuera necesario, 
+                    pero en este diseño limpio no hace falta ya que los botones se ven siempre */}
+            </header>
+        );
 
-        // --- APP ---
-        function App() {
-            const [view, setView] = useState('LANDING');
-            const [user, setUser] = useState({ name: '', isAuthenticated: false, completedLevels: [] });
-            const [quizState, setQuizState] = useState({ active: false, levelId: null, qIndex: 0, score: 0 });
-            const [activeModal, setActiveModal] = useState(null);
-            const [authMode, setAuthMode] = useState('login'); 
-            const [legalTab, setLegalTab] = useState('terms');
-            const [selectedArticle, setSelectedArticle] = useState(null);
+        // --- APP ---
+        function App() {
+            const [view, setView] = useState('LANDING');
+            const [user, setUser] = useState({ name: '', isAuthenticated: false, completedLevels: [] });
+            const [quizState, setQuizState] = useState({ active: false, levelId: null, qIndex: 0, score: 0 });
+            const [activeModal, setActiveModal] = useState(null);
+            const [authMode, setAuthMode] = useState('login'); 
+            const [legalTab, setLegalTab] = useState('terms');
+            const [selectedArticle, setSelectedArticle] = useState(null);
 
-            // Auth Logic
-            useEffect(() => {
-                const unsubscribe = onAuthStateChanged(auth, (u) => {
-                    if (u) {
-                        const ref = doc(db, 'artifacts', appId, 'users', u.uid, 'data', 'progress');
-                        onSnapshot(ref, (snap) => {
-                            if (snap.exists()) setUser({ ...snap.data(), uid: u.uid, isAuthenticated: true });
-                            else setUser({ name: u.displayName || 'Colega', currentLevel: 1, completedLevels: [], isAuthenticated: true, uid: u.uid });
-                        });
-                    } else {
-                        const local = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || '{}');
-                        if (local.isAuthenticated) setUser(local);
-                    }
-                });
-                return () => unsubscribe();
-            }, []);
+            // Auth Logic
+            useEffect(() => {
+                const unsubscribe = onAuthStateChanged(auth, (u) => {
+                    if (u) {
+                        const ref = doc(db, 'artifacts', appId, 'users', u.uid, 'data', 'progress');
+                        onSnapshot(ref, (snap) => {
+                            if (snap.exists()) setUser({ ...snap.data(), uid: u.uid, isAuthenticated: true });
+                            else setUser({ name: u.displayName || 'Colega', currentLevel: 1, completedLevels: [], isAuthenticated: true, uid: u.uid });
+                        });
+                    } else {
+                        const local = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || '{}');
+                        if (local.isAuthenticated) setUser(local);
+                    }
+                });
+                return () => unsubscribe();
+            }, []);
 
-            const saveProgress = (newLevel, newCompleted) => {
-                const updated = { ...user, currentLevel: newLevel, completedLevels: newCompleted };
-                setUser(updated);
-                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
-                if (user.uid) {
-                    try { setDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'data', 'progress'), updated, { merge: true }); } catch(e) {}
-                }
-            };
+            const saveProgress = (newLevel, newCompleted) => {
+                const updated = { ...user, currentLevel: newLevel, completedLevels: newCompleted };
+                setUser(updated);
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+                if (user.uid) {
+                    try { setDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'data', 'progress'), updated, { merge: true }); } catch(e) {}
+                }
+            };
 
-            const startQuiz = (lvlId) => setQuizState({ active: true, levelId: lvlId, qIndex: 0, score: 0, showResult: false });
-            
-            const handleAnswer = (idx) => {
-                const lvl = LEVELS.find(l => l.id === quizState.levelId);
-                const q = lvl.questions[quizState.qIndex];
-                const isCorrect = idx === q.correctIndex;
-                const nextScore = isCorrect ? quizState.score + 1 : quizState.score;
-                
-                if (quizState.qIndex + 1 < lvl.qCount) {
-                    setQuizState({ ...quizState, qIndex: quizState.qIndex + 1, score: nextScore });
-                } else {
-                    const passed = nextScore >= lvl.passingScore;
-                    if (passed) {
-                        const nextLvl = lvl.id === user.currentLevel ? user.currentLevel + 1 : user.currentLevel;
-                        const compl = user.completedLevels.includes(lvl.id) ? user.completedLevels : [...user.completedLevels, lvl.id];
-                        saveProgress(nextLvl, compl);
-                        if(window.confetti) window.confetti();
-                    }
-                    setQuizState({ ...quizState, showResult: true, score: nextScore });
-                }
-            };
+            const startQuiz = (lvlId) => setQuizState({ active: true, levelId: lvlId, qIndex: 0, score: 0, showResult: false });
+            
+            const handleAnswer = (idx) => {
+                const lvl = LEVELS.find(l => l.id === quizState.levelId);
+                const q = lvl.questions[quizState.qIndex];
+                const isCorrect = idx === q.correctIndex;
+                const nextScore = isCorrect ? quizState.score + 1 : quizState.score;
+                
+                if (quizState.qIndex + 1 < lvl.qCount) {
+                    setQuizState({ ...quizState, qIndex: quizState.qIndex + 1, score: nextScore });
+                } else {
+                    const passed = nextScore >= lvl.passingScore;
+                    if (passed) {
+                        const nextLvl = lvl.id === user.currentLevel ? user.currentLevel + 1 : user.currentLevel;
+                        const compl = user.completedLevels.includes(lvl.id) ? user.completedLevels : [...user.completedLevels, lvl.id];
+                        saveProgress(nextLvl, compl);
+                        if(window.confetti) window.confetti();
+                    }
+                    setQuizState({ ...quizState, showResult: true, score: nextScore });
+                }
+            };
 
-            const Footer = () => (
-                <footer className="bg-aux-dark text-slate-400 py-10 px-6 text-center text-xs mt-auto">
-                    <div className="max-w-md mx-auto">
-                        <div className="border border-slate-700 bg-slate-800/50 p-6 rounded-xl mb-8">
-                            <h4 className="font-bold text-white uppercase mb-2">Comentarios</h4>
-                            <p className="mb-4">¿Errores o sugerencias?</p>
-                            <a href="mailto:auxiliarprofarma@gmail.com" className="bg-white text-aux-dark px-4 py-2 rounded-full font-bold">auxiliarprofarma@gmail.com</a>
-                            <p className="mt-4 italic opacity-50">Sitio construido con asistencia de IA. Validar información.</p>
-                        </div>
-                        <div className="flex justify-center gap-4 uppercase font-bold text-[10px]">
-                            <button onClick={() => {setLegalTab('terms'); setActiveModal('legal');}}>Términos</button>
-                            <button onClick={() => {setLegalTab('privacy'); setActiveModal('legal');}}>Privacidad</button>
-                            <button onClick={() => {setLegalTab('disclaimers'); setActiveModal('legal');}}>Descargos</button>
-                        </div>
-                        <p className="mt-4 opacity-30">© 2026 AuxiliarPro</p>
-                    </div>
-                </footer>
-            );
+            const Footer = () => (
+                <footer className="bg-aux-dark text-slate-400 py-10 px-6 text-center text-xs mt-auto">
+                    <div className="max-w-md mx-auto">
+                        <div className="border border-slate-700 bg-slate-800/50 p-6 rounded-xl mb-8">
+                            <h4 className="font-bold text-white uppercase mb-2">Comentarios</h4>
+                            <p className="mb-4">¿Errores o sugerencias?</p>
+                            <a href="mailto:auxiliarprofarma@gmail.com" className="bg-white text-aux-dark px-4 py-2 rounded-full font-bold">auxiliarprofarma@gmail.com</a>
+                            <p className="mt-4 italic opacity-50">Sitio construido con asistencia de IA. Validar información.</p>
+                        </div>
+                        <div className="flex justify-center gap-4 uppercase font-bold text-[10px]">
+                            <button onClick={() => {setLegalTab('terms'); setActiveModal('legal');}}>Términos</button>
+                            <button onClick={() => {setLegalTab('privacy'); setActiveModal('legal');}}>Privacidad</button>
+                            <button onClick={() => {setLegalTab('disclaimers'); setActiveModal('legal');}}>Descargos</button>
+                        </div>
+                        <p className="mt-4 opacity-30">© 2026 AuxiliarPro</p>
+                    </div>
+                </footer>
+            );
 
-            // AUTH MODAL COMPLETO (Recuperado)
-            const AuthModal = () => {
-                if (activeModal !== 'auth') return null;
-                const [form, setForm] = useState({ name: '', email: '', pass: '' });
-                const [error, setError] = useState('');
+            // AUTH MODAL COMPLETO (Recuperado)
+            const AuthModal = () => {
+                if (activeModal !== 'auth') return null;
+                const [form, setForm] = useState({ name: '', email: '', pass: '' });
+                const [error, setError] = useState('');
 
-                const handleSubmit = async (e) => {
-                    e.preventDefault();
-                    setError('');
-                    try {
-                        if (authMode === 'register') {
-                            const cred = await createUserWithEmailAndPassword(auth, form.email, form.pass);
-                            await updateProfile(cred.user, { displayName: form.name });
-                            await setDoc(doc(db, 'artifacts', appId, 'users', cred.user.uid, 'data', 'progress'), { name: form.name, currentLevel: 1, completedLevels: [], lastUpdate: new Date() });
-                        } else {
-                            await signInWithEmailAndPassword(auth, form.email, form.pass);
-                        }
-                        setActiveModal(null);
-                        setView('DASHBOARD');
-                    } catch (err) { setError(err.code === 'auth/wrong-password' ? 'Contraseña incorrecta' : 'Error en los datos'); }
-                };
+                const handleSubmit = async (e) => {
+                    e.preventDefault();
+                    setError('');
+                    try {
+                        if (authMode === 'register') {
+                            const cred = await createUserWithEmailAndPassword(auth, form.email, form.pass);
+                            await updateProfile(cred.user, { displayName: form.name });
+                            await setDoc(doc(db, 'artifacts', appId, 'users', cred.user.uid, 'data', 'progress'), { name: form.name, currentLevel: 1, completedLevels: [], lastUpdate: new Date() });
+                        } else {
+                            await signInWithEmailAndPassword(auth, form.email, form.pass);
+                        }
+                        setActiveModal(null);
+                        setView('DASHBOARD');
+                    } catch (err) { setError(err.code === 'auth/wrong-password' ? 'Contraseña incorrecta' : 'Error en los datos'); }
+                };
 
-                return (
-                    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 animate-fade-in">
-                        <div className="bg-white p-8 rounded-3xl w-full max-w-sm relative shadow-2xl">
-                            <button onClick={() => setActiveModal(null)} className="absolute top-4 right-4 text-slate-300 hover:text-slate-600"><Icon name="x" className="text-xl"/></button>
-                            <div className="text-center mb-6">
-                                <div className="bg-emerald-100 w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 text-emerald-600 text-2xl"><Icon name="user" /></div>
-                                <h2 className="text-2xl font-bold text-slate-800">{authMode === 'register' ? 'Crear Cuenta' : 'Bienvenido'}</h2>
-                            </div>
-                            <form onSubmit={handleSubmit} className="space-y-3">
-                                {authMode === 'register' && <input type="text" placeholder="Tu Nombre" className="w-full p-3 bg-slate-50 border rounded-xl" required onChange={e => setForm({...form, name: e.target.value})} />}
-                                <input type="email" placeholder="Correo Electrónico" className="w-full p-3 bg-slate-50 border rounded-xl" required onChange={e => setForm({...form, email: e.target.value})} />
-                                <input type="password" placeholder="Contraseña" className="w-full p-3 bg-slate-50 border rounded-xl" required onChange={e => setForm({...form, pass: e.target.value})} />
-                                {error && <p className="text-red-500 text-xs text-center font-bold">{error}</p>}
-                                <Button fullWidth variant="green" type="submit">{authMode === 'register' ? 'Registrarse Gratis' : 'Entrar'}</Button>
-                            </form>
-                            <button onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')} className="block w-full text-center mt-4 text-sm text-slate-500 hover:text-aux-green underline">
-                                {authMode === 'login' ? '¿No tienes cuenta? Regístrate aquí' : '¿Ya tienes cuenta? Inicia Sesión'}
-                            </button>
-                        </div>
-                    </div>
-                );
-            };
+                return (
+                    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 animate-fade-in">
+                        <div className="bg-white p-8 rounded-3xl w-full max-w-sm relative shadow-2xl">
+                            <button onClick={() => setActiveModal(null)} className="absolute top-4 right-4 text-slate-300 hover:text-slate-600"><Icon name="x" className="text-xl"/></button>
+                            <div className="text-center mb-6">
+                                <div className="bg-emerald-100 w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 text-emerald-600 text-2xl"><Icon name="user" /></div>
+                                <h2 className="text-2xl font-bold text-slate-800">{authMode === 'register' ? 'Crear Cuenta' : 'Bienvenido'}</h2>
+                            </div>
+                            <form onSubmit={handleSubmit} className="space-y-3">
+                                {authMode === 'register' && <input type="text" placeholder="Tu Nombre" className="w-full p-3 bg-slate-50 border rounded-xl" required onChange={e => setForm({...form, name: e.target.value})} />}
+                                <input type="email" placeholder="Correo Electrónico" className="w-full p-3 bg-slate-50 border rounded-xl" required onChange={e => setForm({...form, email: e.target.value})} />
+                                <input type="password" placeholder="Contraseña" className="w-full p-3 bg-slate-50 border rounded-xl" required onChange={e => setForm({...form, pass: e.target.value})} />
+                                {error && <p className="text-red-500 text-xs text-center font-bold">{error}</p>}
+                                <Button fullWidth variant="green" type="submit">{authMode === 'register' ? 'Registrarse Gratis' : 'Entrar'}</Button>
+                            </form>
+                            <button onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')} className="block w-full text-center mt-4 text-sm text-slate-500 hover:text-aux-green underline">
+                                {authMode === 'login' ? '¿No tienes cuenta? Regístrate aquí' : '¿Ya tienes cuenta? Inicia Sesión'}
+                            </button>
+                        </div>
+                    </div>
+                );
+            };
 
-            // VISTAS
-            const renderLanding = () => (
-                <div className="flex-1 flex flex-col bg-white w-full h-full overflow-hidden">
-                    <Header setView={setView} user={user} setActiveModal={setActiveModal} />
-                    <div className="flex-1 overflow-y-auto">
-                        <div className="p-6 text-center max-w-md mx-auto mt-8">
-                            <div className="inline-block bg-emerald-50 text-aux-green px-3 py-1 rounded-full text-[10px] font-bold mb-6">META: CREDENCIAL 2026</div>
-                            <h1 className="text-4xl font-extrabold text-aux-dark mb-6 leading-tight">PREPÁRATE PARA TU <br/><span className="text-aux-green">EXAMEN DE AUXILIAR</span></h1>
-                            
-                            <div className="flex flex-col gap-3 mb-12">
-                                <Button variant="primary" onClick={() => user.isAuthenticated ? setView('DASHBOARD') : setActiveModal('auth')}>COMENZAR AHORA</Button>
-                                <Button variant="secondary" onClick={() => setView('BLOG')}>LEER ARTÍCULOS</Button>
-                                <Button variant="green" onClick={() => setView('DERMOCHECK')}><Icon name="calculator"/> DERMOCHECK</Button>
-                            </div>
+            // VISTAS
+            const renderLanding = () => (
+                <div className="flex-1 flex flex-col bg-white w-full h-full overflow-hidden">
+                    <Header setView={setView} user={user} setActiveModal={setActiveModal} />
+                    <div className="flex-1 overflow-y-auto">
+                        <div className="p-6 text-center max-w-md mx-auto mt-8">
+                            <div className="inline-block bg-emerald-50 text-aux-green px-3 py-1 rounded-full text-[10px] font-bold mb-6">META: CREDENCIAL 2026</div>
+                            <h1 className="font-extrabold mb-6 leading-tight">
+                                <span className="text-2xl text-aux-dark">PREPARATE PARA TU EXAMEN DE</span> <br/>
+                                <span className="text-4xl text-aux-green">AUXILIAR DE FARMACIA</span>
+                            </h1>
+                            
+                            <div className="flex flex-col gap-3 mb-12">
+                                <Button variant="primary" onClick={() => user.isAuthenticated ? setView('DASHBOARD') : setActiveModal('auth')}>COMENZAR AHORA</Button>
+                                <Button variant="secondary" onClick={() => setView('BLOG')}>LEER ARTÍCULOS</Button>
+                                <Button variant="green" onClick={() => setView('DERMOCHECK')}><Icon name="calculator"/> DERMOCHECK</Button>
+                            </div>
 
-                            <div className="watermark-container p-8 mx-4 mb-12 rounded-3xl text-left">
-                                <span className="watermark-icon -top-8 -right-4 text-[12rem] rotate-12">!</span>
-                                <h3 className="font-bold text-xl text-aux-dark mb-3 flex items-center gap-3 relative z-10"><Icon name="student" className="text-aux-green text-2xl"/> Quién soy</h3>
-                                <p className="text-slate-600 font-medium leading-relaxed relative z-10">"Auxiliar en preparación, esta web es mi cuaderno de estudio. Aquí encontrarás lo que estoy aprendiendo para el examen de 2026. ¡Vamos por ese logro juntos!"</p>
-                            </div>
+                            <div className="watermark-container p-8 mx-4 mb-12 rounded-3xl text-left">
+                                <span className="watermark-icon -top-8 -right-4 text-[12rem] rotate-12">!</span>
+                                <h3 className="font-bold text-xl text-aux-dark mb-3 flex items-center gap-3 relative z-10"><Icon name="student" className="text-aux-green text-2xl"/> Quién soy</h3>
+                                <p className="text-slate-600 font-medium leading-relaxed relative z-10">"Auxiliar en preparación, esta web es mi cuaderno de estudio. Aquí encontrarás lo que estoy aprendiendo para el examen de 2026. ¡Vamos por ese logro juntos!"</p>
+                            </div>
 
-                            <div className="border-t border-slate-100 pt-8 mt-4 pb-8">
-                                <h3 className="font-bold text-slate-800 mb-4">¿Dudas sobre el proceso?</h3>
-                                <Button variant="secondary" onClick={() => setView('FAQS')}><Icon name="question"/> Ver Preguntas Frecuentes</Button>
-                            </div>
-                        </div>
-                        <Footer />
-                    </div>
-                </div>
-            );
+                            <div className="border-t border-slate-100 pt-8 mt-4 pb-8">
+                                <h3 className="font-bold text-slate-800 mb-4">¿Dudas sobre el proceso?</h3>
+                                <Button variant="secondary" onClick={() => setView('FAQS')}><Icon name="question"/> Ver Preguntas Frecuentes</Button>
+                            </div>
+                        </div>
+                        <Footer />
+                    </div>
+                </div>
+            );
 
-            const renderDashboard = () => (
-                <div className="flex-1 flex flex-col bg-slate-50 w-full h-full overflow-hidden">
-                    <Header setView={setView} user={user} setActiveModal={setActiveModal} />
-                    <div className="flex-1 overflow-y-auto p-4 pb-20">
-                        <div className="max-w-md mx-auto space-y-4">
-                            <div className="bg-aux-dark text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
-                                <div className="flex justify-between items-center mb-2">
-                                    <span className="text-xs font-bold text-slate-400 uppercase">Tu Progreso</span>
-                                    <span className="text-2xl font-bold text-aux-green">{Math.round((user.completedLevels.length / LEVELS.length) * 100)}%</span>
-                                </div>
-                                <div className="w-full bg-slate-700 h-2 rounded-full"><div className="bg-aux-green h-full rounded-full" style={{width: `${(user.completedLevels.length / LEVELS.length) * 100}%`}}></div></div>
-                            </div>
-                            <div className="space-y-3">
-                                {LEVELS.map(l => (
-                                    <div key={l.id} onClick={() => !(l.id > user.currentLevel) && startQuiz(l.id)} className={`bg-white p-4 rounded-xl border-2 flex items-center gap-4 ${l.id > user.currentLevel ? 'opacity-60' : 'hover:border-aux-green cursor-pointer'}`}>
-                                        <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white ${l.id > user.currentLevel ? 'bg-slate-300' : l.iconBg}`}><Icon name={l.id > user.currentLevel ? "lock" : "play"}/></div>
-                                        <div className="flex-1"><h4 className="font-bold text-aux-dark">{l.title}</h4><p className="text-xs text-slate-500">{l.desc}</p></div>
-                                    </div>
-                                ))}
-                            </div>
-                            <div className="grid grid-cols-2 gap-3 mt-4">
-                                <Button variant="secondary" onClick={() => setView('LIBRARY')}><Icon name="book"/> Biblioteca</Button>
-                                <Button variant="secondary" onClick={() => setActiveModal('community')}><Icon name="users"/> Foro</Button>
-                            </div>
-                            <div className="pt-6"><Button variant="danger" fullWidth onClick={() => {signOut(auth); localStorage.removeItem(LOCAL_STORAGE_KEY); setView('LANDING');}}>Cerrar Sesión</Button></div>
-                        </div>
-                    </div>
-                </div>
-            );
+            const renderDashboard = () => (
+                <div className="flex-1 flex flex-col bg-slate-50 w-full h-full overflow-hidden">
+                    <Header setView={setView} user={user} setActiveModal={setActiveModal} />
+                    <div className="flex-1 overflow-y-auto p-4 pb-20">
+                        <div className="max-w-md mx-auto space-y-4">
+                            <div className="bg-aux-dark text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
+                                <div className="flex justify-between items-center mb-2">
+                                    <span className="text-xs font-bold text-slate-400 uppercase">Tu Progreso</span>
+                                    <span className="text-2xl font-bold text-aux-green">{Math.round((user.completedLevels.length / LEVELS.length) * 100)}%</span>
+                                </div>
+                                <div className="w-full bg-slate-700 h-2 rounded-full"><div className="bg-aux-green h-full rounded-full" style={{width: `${(user.completedLevels.length / LEVELS.length) * 100}%`}}></div></div>
+                            </div>
+                            <div className="space-y-3">
+                                {LEVELS.map(l => (
+                                    <div key={l.id} onClick={() => !(l.id > user.currentLevel) && startQuiz(l.id)} className={`bg-white p-4 rounded-xl border-2 flex items-center gap-4 ${l.id > user.currentLevel ? 'opacity-60' : 'hover:border-aux-green cursor-pointer'}`}>
+                                        <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white ${l.id > user.currentLevel ? 'bg-slate-300' : l.iconBg}`}><Icon name={l.id > user.currentLevel ? "lock" : "play"}/></div>
+                                        <div className="flex-1"><h4 className="font-bold text-aux-dark">{l.title}</h4><p className="text-xs text-slate-500">{l.desc}</p></div>
+                                    </div>
+                                ))}
+                            </div>
+                            <div className="grid grid-cols-2 gap-3 mt-4">
+                                <Button variant="secondary" onClick={() => setView('LIBRARY')}><Icon name="book"/> Biblioteca</Button>
+                                <Button variant="secondary" onClick={() => setActiveModal('community')}><Icon name="users"/> Foro</Button>
+                            </div>
+                            <div className="pt-6"><Button variant="danger" fullWidth onClick={() => {signOut(auth); localStorage.removeItem(LOCAL_STORAGE_KEY); setView('LANDING');}}>Cerrar Sesión</Button></div>
+                        </div>
+                    </div>
+                </div>
+            );
 
-            const renderDermoCheck = () => (
-                <div className="flex-1 flex flex-col bg-aux-dark w-full h-screen absolute inset-0 z-50">
-                    <div className="bg-aux-dark text-white p-3 flex justify-between items-center shadow-md z-10">
-                        <span className="font-bold flex items-center gap-2"><Icon name="calculator" className="text-aux-green"/> DermoCheck</span>
-                        <button onClick={() => setView('LANDING')} className="text-xs bg-white/10 px-3 py-1 rounded-full hover:bg-white/20 transition-colors">Salir</button>
-                    </div>
-                    <div className="flex-1 bg-black relative"><iframe src={DERMO_URL} className="w-full h-full border-0"></iframe></div>
-                </div>
-            );
+            const renderDermoCheck = () => (
+                <div className="flex-1 flex flex-col bg-aux-dark w-full h-screen absolute inset-0 z-50">
+                    <div className="bg-aux-dark text-white p-3 flex justify-between items-center shadow-md z-10">
+                        <span className="font-bold flex items-center gap-2"><Icon name="calculator" className="text-aux-green"/> DermoCheck</span>
+                        <button onClick={() => setView('LANDING')} className="text-xs bg-white/10 px-3 py-1 rounded-full hover:bg-white/20 transition-colors">Salir</button>
+                    </div>
+                    <div className="flex-1 bg-black relative"><iframe src={DERMO_URL} className="w-full h-full border-0"></iframe></div>
+                </div>
+            );
 
-            // Modales Legales, Blog, Faqs, etc.
-            const LegalModal = () => {
-                if (activeModal !== 'legal') return null;
-                const texts = {
-                    terms: "Términos de Uso: Esta plataforma es educativa. El uso es responsabilidad del usuario.",
-                    privacy: "Privacidad: Solo almacenamos tu progreso localmente o en Firebase para mejorar tu experiencia.",
-                    disclaimers: "Descargos: AuxiliarPro NO representa al MINSAL. Iniciativa independiente."
-                };
-                return (
-                    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-                        <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl">
-                            <h3 className="font-bold text-lg mb-4 capitalize text-aux-dark">{legalTab}</h3>
-                            <p className="text-sm text-slate-600 mb-6 leading-relaxed">{texts[legalTab]}</p>
-                            <Button fullWidth variant="green" onClick={() => setActiveModal(null)}>Entendido</Button>
-                        </div>
-                    </div>
-                );
-            };
+            // Modales Legales, Blog, Faqs, etc.
+            const LegalModal = () => {
+                if (activeModal !== 'legal') return null;
+                const texts = {
+                    terms: "Términos de Uso: Esta plataforma es educativa. El uso es responsabilidad del usuario.",
+                    privacy: "Privacidad: Solo almacenamos tu progreso localmente o en Firebase para mejorar tu experiencia.",
+                    disclaimers: "Descargos: AuxiliarPro NO representa al MINSAL. Iniciativa independiente."
+                };
+                return (
+                    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+                        <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl">
+                            <h3 className="font-bold text-lg mb-4 capitalize text-aux-dark">{legalTab}</h3>
+                            <p className="text-sm text-slate-600 mb-6 leading-relaxed">{texts[legalTab]}</p>
+                            <Button fullWidth variant="green" onClick={() => setActiveModal(null)}>Entendido</Button>
+                        </div>
+                    </div>
+                );
+            };
 
-            const CommunityModal = () => {
-                if (activeModal !== 'community') return null;
-                return (
-                    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-                        <div className="bg-white rounded-2xl p-6 max-w-sm text-center shadow-xl">
-                            <Icon name="users" className="text-4xl text-blue-500 mb-4"/>
-                            <h3 className="font-bold mb-2 text-aux-dark">Comunidad</h3>
-                            <p className="text-sm mb-6 text-slate-600">Únete a nuestros grupos de estudio.</p>
-                            <div className="space-y-3">
-                                <a href="https://chat.whatsapp.com/IPvHmnNGWYmH61FrdV56g1" target="_blank" className="block w-full bg-[#25D366] text-white py-3 rounded-xl font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2"><Icon name="whatsapp-logo" size={20} />WhatsApp</a>
-                                <a href="https://www.facebook.com/share/g/1AFb8riMpT/" target="_blank" className="block w-full bg-[#1877F2] text-white py-3 rounded-xl font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2"><Icon name="facebook-logo" size={20} />Facebook</a>
-                            </div>
-                            <button onClick={()=>setActiveModal(null)} className="mt-6 text-slate-400 text-sm hover:text-slate-600 transition-colors">Cerrar</button>
-                        </div>
-                    </div>
-                );
-            };
+            const CommunityModal = () => {
+                if (activeModal !== 'community') return null;
+                return (
+                    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+                        <div className="bg-white rounded-2xl p-6 max-w-sm text-center shadow-xl">
+                            <Icon name="users" className="text-4xl text-blue-500 mb-4"/>
+                            <h3 className="font-bold mb-2 text-aux-dark">Comunidad</h3>
+                            <p className="text-sm mb-6 text-slate-600">Únete a nuestros grupos de estudio.</p>
+                            <div className="space-y-3">
+                                <a href="https://chat.whatsapp.com/IPvHmnNGWYmH61FrdV56g1" target="_blank" className="block w-full bg-[#25D366] text-white py-3 rounded-xl font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2"><Icon name="whatsapp-logo" size={20} />WhatsApp</a>
+                                <a href="https://www.facebook.com/share/g/1AFb8riMpT/" target="_blank" className="block w-full bg-[#1877F2] text-white py-3 rounded-xl font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2"><Icon name="facebook-logo" size={20} />Facebook</a>
+                            </div>
+                            <button onClick={()=>setActiveModal(null)} className="mt-6 text-slate-400 text-sm hover:text-slate-600 transition-colors">Cerrar</button>
+                        </div>
+                    </div>
+                );
+            };
 
-            return (
-                <div className="w-full max-w-md bg-white h-screen md:h-[90vh] md:rounded-3xl md:shadow-2xl overflow-hidden flex flex-col relative mx-auto">
-                    {view === 'LANDING' && renderLanding()}
-                    {view === 'DASHBOARD' && renderDashboard()}
-                    {view === 'DERMOCHECK' && renderDermoCheck()}
-                    {view === 'LIBRARY' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="flex-1 p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4 text-aux-dark">Biblioteca</h2>{PDF_DOCS.map((d,i)=><div key={i} className="p-4 border border-slate-100 rounded-xl mb-3 bg-slate-50 hover:bg-white hover:shadow-sm transition-all flex items-center gap-3"><div className="bg-red-100 p-2 rounded-lg text-red-500"><Icon name="file-pdf" size={24}/></div><a href={d.file} target="_blank" className="text-slate-700 font-bold hover:text-aux-green transition-colors flex-1">{d.title}</a></div>)}<button onClick={()=>setView('DASHBOARD')} className="mt-4 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
-                    {view === 'FAQS' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="flex-1 p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4 text-aux-dark">Preguntas Frecuentes</h2>{FAQS.map((f,i)=><Accordion key={i} title={f.q} content={f.a}/>)}<button onClick={()=>setView('LANDING')} className="mt-4 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
-                    {view === 'BLOG' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="flex-1 p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4 text-aux-dark">Blog</h2><div className="space-y-4">{BLOG_POSTS.map(p=><div key={p.id} onClick={()=>setSelectedArticle(p) || setView('ARTICLE')} className="border border-slate-100 p-5 rounded-xl bg-white shadow-sm hover:shadow-md transition-all cursor-pointer"><div className="flex justify-between items-center mb-2"><span className="text-xs font-bold text-aux-green bg-emerald-50 px-2 py-1 rounded-full uppercase">{p.category}</span><span className="text-xs text-slate-400">{p.date}</span></div><h3 className="font-bold text-lg text-aux-dark mb-2">{p.title}</h3><p className="text-sm text-slate-500 leading-relaxed line-clamp-3">{p.excerpt}</p></div>)}</div><button onClick={()=>setView('LANDING')} className="mt-6 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
-                    {view === 'ARTICLE' && <div className="flex-1 flex flex-col bg-white z-50 animate-fade-in h-full"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="flex-1 p-6 overflow-y-auto min-h-0"><button onClick={()=>setView('BLOG')} className="mb-4 text-slate-400 flex items-center gap-1 hover:text-aux-green"><Icon name="arrow-left"/> Volver</button><div className="max-w-2xl mx-auto blog-content"><span className="text-xs font-bold text-aux-green bg-emerald-50 px-2 py-1 rounded-full uppercase mb-4 inline-block">{selectedArticle?.category}</span><div dangerouslySetInnerHTML={{__html: selectedArticle?.content}}></div></div></div></div>}
-                    
-                    {quizState.active && (
-                        <div className="absolute inset-0 bg-white z-50 flex flex-col animate-fade-in h-full">
-                            <div className="bg-aux-dark text-white p-4 flex justify-between items-center shadow-md">
-                                <span className="font-medium">Pregunta {quizState.qIndex + 1} / {LEVELS.find(l=>l.id===quizState.levelId).qCount}</span>
-                                <button onClick={()=>setQuizState({active:false, score:0, qIndex:0, showResult:false})} className="text-slate-400 hover:text-white transition-colors"><Icon name="x" size={20}/></button>
-                            </div>
-                            <div className="flex-1 p-6 flex flex-col justify-center overflow-y-auto bg-slate-50 min-h-0">
-                                {!quizState.showResult ? (
-                                    <div className="max-w-md mx-auto w-full">
-                                        <div className="mb-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                                            <span className="text-xs font-bold text-aux-green bg-emerald-50 px-2 py-1 rounded-full uppercase mb-3 inline-block">Pregunta</span>
-                                            <h3 className="text-xl font-bold text-aux-dark leading-snug">{LEVELS.find(l=>l.id===quizState.levelId).questions[quizState.qIndex].text}</h3>
-                                        </div>
-                                        <div className="space-y-3">
-                                            {LEVELS.find(l=>l.id===quizState.levelId).questions[quizState.qIndex].options.map((opt,i) => (
-                                                <button key={i} onClick={()=>handleAnswer(i)} className="w-full p-4 border-2 border-slate-100 rounded-xl text-left hover:bg-emerald-50 hover:border-aux-green transition-all bg-white font-medium text-slate-700 flex items-center group"><span className="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center mr-3 font-bold text-sm group-hover:bg-aux-green group-hover:text-white transition-colors">{String.fromCharCode(65+i)}</span>{opt}</button>
-                                            ))}
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div className="text-center max-w-md mx-auto w-full bg-white p-8 rounded-2xl shadow-lg">
-                                        <div className="text-6xl mb-4">{quizState.score >= LEVELS.find(l=>l.id===quizState.levelId).passingScore ? '🎉' : '💪'}</div>
-                                        <h2 className="text-2xl font-bold mb-2 text-aux-dark">{quizState.score >= LEVELS.find(l=>l.id===quizState.levelId).passingScore ? '¡Nivel Aprobado!' : '¡Sigue Practicando!'}</h2>
-                                        <p className="mb-8 text-slate-500">Obtuviste {quizState.score} de {LEVELS.find(l=>l.id===quizState.levelId).qCount} respuestas correctas.</p>
-                                        <Button variant="green" fullWidth onClick={()=>setQuizState({active:false, score:0, qIndex:0, showResult:false})}>Volver al Panel</Button>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    )}
+            return (
+                <div className="w-full max-w-md bg-white h-screen md:h-[90vh] md:rounded-3xl md:shadow-2xl overflow-hidden flex flex-col relative mx-auto">
+                    {view === 'LANDING' && renderLanding()}
+                    {view === 'DASHBOARD' && renderDashboard()}
+                    {view === 'DERMOCHECK' && renderDermoCheck()}
+                    {view === 'LIBRARY' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="flex-1 p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4 text-aux-dark">Biblioteca</h2>{PDF_DOCS.map((d,i)=><div key={i} className="p-4 border border-slate-100 rounded-xl mb-3 bg-slate-50 hover:bg-white hover:shadow-sm transition-all flex items-center gap-3"><div className="bg-red-100 p-2 rounded-lg text-red-500"><Icon name="file-pdf" size={24}/></div><a href={d.file} target="_blank" className="text-slate-700 font-bold hover:text-aux-green transition-colors flex-1">{d.title}</a></div>)}<button onClick={()=>setView('DASHBOARD')} className="mt-4 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
+                    {view === 'FAQS' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="flex-1 p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4 text-aux-dark">Preguntas Frecuentes</h2>{FAQS.map((f,i)=><Accordion key={i} title={f.q} content={f.a}/>)}<button onClick={()=>setView('LANDING')} className="mt-4 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
+                    {view === 'BLOG' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="flex-1 p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4 text-aux-dark">Blog</h2><div className="space-y-4">{BLOG_POSTS.map(p=><div key={p.id} onClick={()=>setSelectedArticle(p) || setView('ARTICLE')} className="border border-slate-100 p-5 rounded-xl bg-white shadow-sm hover:shadow-md transition-all cursor-pointer"><div className="flex justify-between items-center mb-2"><span className="text-xs font-bold text-aux-green bg-emerald-50 px-2 py-1 rounded-full uppercase">{p.category}</span><span className="text-xs text-slate-400">{p.date}</span></div><h3 className="font-bold text-lg text-aux-dark mb-2">{p.title}</h3><p className="text-sm text-slate-500 leading-relaxed line-clamp-3">{p.excerpt}</p></div>)}</div><button onClick={()=>setView('LANDING')} className="mt-6 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
+                    {view === 'ARTICLE' && <div className="flex-1 flex flex-col bg-white z-50 animate-fade-in h-full"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="flex-1 p-6 overflow-y-auto min-h-0"><button onClick={()=>setView('BLOG')} className="mb-4 text-slate-400 flex items-center gap-1 hover:text-aux-green"><Icon name="arrow-left"/> Volver</button><div className="max-w-2xl mx-auto blog-content"><span className="text-xs font-bold text-aux-green bg-emerald-50 px-2 py-1 rounded-full uppercase mb-4 inline-block">{selectedArticle?.category}</span><div dangerouslySetInnerHTML={{__html: selectedArticle?.content}}></div></div></div></div>}
+                    
+                    {quizState.active && (
+                        <div className="absolute inset-0 bg-white z-50 flex flex-col animate-fade-in h-full">
+                            <div className="bg-aux-dark text-white p-4 flex justify-between items-center shadow-md">
+                                <span className="font-medium">Pregunta {quizState.qIndex + 1} / {LEVELS.find(l=>l.id===quizState.levelId).qCount}</span>
+                                <button onClick={()=>setQuizState({active:false, score:0, qIndex:0, showResult:false})} className="text-slate-400 hover:text-white transition-colors"><Icon name="x" size={20}/></button>
+                            </div>
+                            <div className="flex-1 p-6 flex flex-col justify-center overflow-y-auto bg-slate-50 min-h-0">
+                                {!quizState.showResult ? (
+                                    <div className="max-w-md mx-auto w-full">
+                                        <div className="mb-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                                            <span className="text-xs font-bold text-aux-green bg-emerald-50 px-2 py-1 rounded-full uppercase mb-3 inline-block">Pregunta</span>
+                                            <h3 className="text-xl font-bold text-aux-dark leading-snug">{LEVELS.find(l=>l.id===quizState.levelId).questions[quizState.qIndex].text}</h3>
+                                        </div>
+                                        <div className="space-y-3">
+                                            {LEVELS.find(l=>l.id===quizState.levelId).questions[quizState.qIndex].options.map((opt,i) => (
+                                                <button key={i} onClick={()=>handleAnswer(i)} className="w-full p-4 border-2 border-slate-100 rounded-xl text-left hover:bg-emerald-50 hover:border-aux-green transition-all bg-white font-medium text-slate-700 flex items-center group"><span className="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center mr-3 font-bold text-sm group-hover:bg-aux-green group-hover:text-white transition-colors">{String.fromCharCode(65+i)}</span>{opt}</button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="text-center max-w-md mx-auto w-full bg-white p-8 rounded-2xl shadow-lg">
+                                        <div className="text-6xl mb-4">{quizState.score >= LEVELS.find(l=>l.id===quizState.levelId).passingScore ? '🎉' : '💪'}</div>
+                                        <h2 className="text-2xl font-bold mb-2 text-aux-dark">{quizState.score >= LEVELS.find(l=>l.id===quizState.levelId).passingScore ? '¡Nivel Aprobado!' : '¡Sigue Practicando!'}</h2>
+                                        <p className="mb-8 text-slate-500">Obtuviste {quizState.score} de {LEVELS.find(l=>l.id===quizState.levelId).qCount} respuestas correctas.</p>
+                                        <Button variant="green" fullWidth onClick={()=>setQuizState({active:false, score:0, qIndex:0, showResult:false})}>Volver al Panel</Button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
 
-                    <AuthModal />
-                    <LegalModal />
-                    <CommunityModal />
-                </div>
-            );
-        }
+                    <AuthModal />
+                    <LegalModal />
+                    <CommunityModal />
+                </div>
+            );
+        }
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
 </body>
 </html>
-
