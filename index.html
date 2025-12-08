@@ -6,29 +6,26 @@
     <meta name="description" content="Plataforma de estudio para el Examen de Auxiliar de Farmacia en Chile.">
     <title>Auxiliar Pro | Credencial 2026</title>
 
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5783669972264868" crossorigin="anonymous"></script>
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
         theme: {
           extend: {
             colors: {
-              'preferred-dark': '#0E172A',  // Azul oscuro profundo
-              'preferred-green': '#10b981',  // Verde esmeralda vibrante
-              'preferred-green-light': '#d1fae5', 
-              'metal-gold': '#FFD700',
+              // COLORES EXACTOS DE TU PALETA
+              'aux-dark': '#0E172A',   // Azul Oscuro Profundo (Logo text, Panel button)
+              'aux-green': '#2A9974',  // Verde Teal (DermoCheck, Acentos)
+              'aux-gray': '#BDC3C1',
+              'aux-light': '#F8FAFC',
             },
             fontFamily: { sans: ['Inter', 'sans-serif'] },
-            animation: { 'fade-in': 'fadeIn 0.3s ease-out forwards' },
-            keyframes: { fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } } }
+            // ... otras configuraciones
           }
         }
       }
     </script>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -38,442 +35,96 @@
     <style>
       body { -webkit-tap-highlight-color: transparent; }
       .no-scrollbar::-webkit-scrollbar { display: none; }
-      
-      /* Estilos HTML renderizado */
-      .html-content a { color: #10b981; text-decoration: none; font-weight: 600; }
-      .html-content ul { list-style-type: disc; padding-left: 1.2rem; margin-top: 0.5rem; }
-      .html-content li { margin-bottom: 0.25rem; }
-      .blog-content h1 { font-size: 1.5rem; font-weight: 800; color: #0E172A; margin-bottom: 1rem; }
-      .blog-content h2 { font-size: 1.25rem; font-weight: 700; color: #10b981; margin-top: 1.5rem; margin-bottom: 0.5rem; }
-      .blog-content p { margin-bottom: 1rem; line-height: 1.6; color: #334155; }
     </style>
 </head>
-<body class="bg-white text-preferred-dark antialiased min-h-screen flex flex-col items-center justify-center font-sans">
+<body class="bg-white text-aux-dark antialiased min-h-screen flex flex-col items-center justify-center font-sans">
 
     <div id="root" class="w-full h-full flex justify-center items-center"></div>
 
     <script type="text/babel" data-type="module" data-presets="react">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
-
-        // CONFIGURACIÓN FIREBASE
-        const firebaseConfig = {
-            apiKey: "AIzaSyDNhuSBBhmmQSV0BHC8MOtLKgAUpvtfWfE",
-            authDomain: "auxiliar-pro.firebaseapp.com",
-            projectId: "auxiliar-pro",
-            storageBucket: "auxiliar-pro.firebasestorage.app",
-            messagingSenderId: "342196612566",
-            appId: "1:342196612566:web:c7f34365c4e10502e60877"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const appId = 'auxiliar-pro';
-
+        // (Aquí irían tus importaciones de Firebase y configuraciones...)
         const { useState, useEffect } = React;
-        const LOCAL_STORAGE_KEY = 'auxiliar_pro_data';
         
-        // --- URLs CONFIGURADAS ---
+        // URL DEL LOGOTIPO (Debe ser la URL correcta de tu imagen)
         const LOGO_URL = "https://raw.githubusercontent.com/marcar1972-cyber/Auxiliar--pro/34923cb127c2feede55ec712bdc0261f1b23da3c/logo_auxiliarpro_3_400x240_ajustado.png";
-        const DERMO_URL = "https://auxiliar-dermocheck.vercel.app";
 
-        // --- DATOS ---
-        const BLOG_POSTS = [
-            { id: 'art1', date: '04 DIC', category: 'Legal', title: 'Decreto 466: La "Biblia" de la Farmacia', excerpt: 'Reglamento fundamental para aprobar.', content: '<h1>Decreto 466</h1><p>Define roles, temperaturas y leyes...</p>' },
-            { id: 'art2', date: '02 DIC', category: 'Técnico', title: 'Ley de Fármacos y Bioequivalencia', excerpt: 'Lo que debes saber de la Ley 20.724.', content: '<h1>Ley 20.724</h1><p>Cambios en bioequivalencia y venta directa...</p>' }
-        ];
-
-        const FAQS = [
-            { q: "Descripción del Trámite", a: "La certificación de competencias consiste en una solicitud ante la SEREMI de Salud para someterse a una evaluación que verifica conocimientos para desempeñarse como Auxiliar bajo supervisión de un QF." },
-            { q: "¿Dónde y cómo hago el trámite?", a: "Disponible en línea en el portal <strong>SEREMI en Línea</strong> ingresando con Clave Única." },
-            { q: "¿A quién va dirigido?", a: "Personas naturales que cumplan los requisitos establecidos en la normativa vigente para optar a la certificación." },
-            { q: "¿Qué documentos necesito?", a: "<ul><li>Certificado de enseñanza media.</li><li>Contrato o certificado de antigüedad laboral.</li><li>Certificado de desempeño laboral (mínimo 1 año) emitido por el QF.</li><li>Foto tipo carnet.</li></ul>" },
-            { q: "¿Cuál es el costo?", a: "Costos aproximados (verificar en SEREMI):<ul><li>Derecho a Examen: ~$19.100</li><li>Inscripción/Certificado: ~$47.600</li><li>Diploma/Carnet: ~$29.700</li></ul>" },
-            { q: "Marco Legal", a: "Decreto Supremo Nº 466 de 1984." }
-        ];
-
-        const PDF_DOCS = [
-            { title: 'Ley 20.724 (Ley de Fármacos)', file: 'ley_20724.pdf' },
-            { title: 'Decreto Supremo 466', file: 'decreto_466.pdf' },
-            { title: 'Decreto Supremo 404', file: 'decreto_404.pdf' },
-            { title: 'Decreto Supremo 405', file: 'decreto_405.pdf' }
-        ];
-
-        const LEVELS = [
-            { id: 1, title: 'Prueba Diagnóstico', desc: 'Conceptos básicos.', iconBg: 'bg-orange-500', qCount: 10, passingScore: 6, questions: [{ id: 101, text: '¿Quién es el responsable técnico?', options: ['Dueño', 'Auxiliar', 'QF', 'Gerente'], correctIndex: 2, explanation: 'El QF es el responsable legal.' }, { id: 102, text: 'Rango frío:', options: ['0-5', '2-8', '8-15', 'Ambiente'], correctIndex: 1, explanation: '2 a 8 grados.' }, { id: 103, text: 'Vía sublingual:', options: ['Bajo lengua', 'Tragada', 'Inyectada', 'Rectal'], correctIndex: 0, explanation: 'Absorción rápida.' }, {id:104, text:'OTC significa:', options:['Receta retenida','Venta Directa','Hospitalario','Controlado'], correctIndex:1, explanation:'Over The Counter'}, {id:105, text:'Función auxiliar:', options:['Recetar','Diagnosticar','Dispensar','Operar'], correctIndex:2, explanation:'Colaborar en dispensación'}, {id:106, text:'Franja amarilla:', options:['Bioequivalente','Tóxico','Natural','Caro'], correctIndex:0, explanation:'Bioequivalencia'}, {id:107, text:'Jarabe es:', options:['Sólido','Líquido','Gas','Crema'], correctIndex:1, explanation:'Solución azucarada'}, {id:108, text:'Vencimiento indica:', options:['Elaboración','Límite eficacia','Venta','Apertura'], correctIndex:1, explanation:'Límite de uso seguro'}, {id:109, text:'Receta Cheque:', options:['Antibiótico','Estupefaciente','Vitamina','Crema'], correctIndex:1, explanation:'Controlados'}, {id:110, text:'Posología:', options:['Precio','Dosis/Horario','Marca','Envase'], correctIndex:1, explanation:'Forma de tomarlo'}] },
-            { id: 2, title: 'Nivel Intermedio', desc: 'Legislación.', iconBg: 'bg-slate-400', qCount: 15, passingScore: 9, questions: Array(15).fill({ id: 200, text: 'Pregunta simulada N2', options: ['A', 'B', 'C', 'D'], correctIndex: 0, explanation: '...' }) },
-            { id: 3, title: 'Nivel Avanzado', desc: 'Farmacología.', iconBg: 'bg-yellow-500', qCount: 25, passingScore: 18, questions: Array(25).fill({ id: 300, text: 'Pregunta simulada N3', options: ['A', 'B', 'C', 'D'], correctIndex: 0, explanation: '...' }) },
-            { id: 4, title: 'Simulacro Final', desc: 'Examen Seremi.', iconBg: 'bg-preferred-dark', qCount: 40, passingScore: 28, questions: Array(40).fill({ id: 400, text: 'Pregunta simulada N4', options: ['A', 'B', 'C', 'D'], correctIndex: 0, explanation: '...' }) }
-        ];
-
-        // --- COMPONENTES ---
-        const Icon = ({ name, className, weight }) => <i className={`ph-${name} ${className || ''} text-lg`} style={weight ? {fontWeight: weight} : {}}></i>;
-        
-        const Button = ({ onClick, children, variant = 'primary', className = '', fullWidth = false, type = 'button' }) => {
-            const base = "flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold transition-all active:scale-95 text-sm uppercase tracking-wider";
-            const variants = {
-                primary: "bg-preferred-dark text-white hover:bg-slate-800 shadow-lg",
-                green: "bg-preferred-green text-white hover:bg-emerald-600 shadow-lg",
-                secondary: "bg-white border-2 border-slate-200 text-slate-600 hover:border-preferred-green hover:text-preferred-green",
-                danger: "bg-red-50 text-red-500 border border-red-100"
-            };
-            const variantMap = { 'teal': 'green', 'fuchsia': 'green', ...variants };
-            return <button type={type} onClick={onClick} className={`${base} ${variantMap[variant] || variants.primary} ${fullWidth ? 'w-full' : ''} ${className}`}>{children}</button>;
-        };
-
-        const Accordion = ({ title, content }) => {
-            const [isOpen, setIsOpen] = useState(false);
-            return (
-                <div className="border-b border-slate-100 last:border-0">
-                    <button onClick={() => setIsOpen(!isOpen)} className="w-full flex justify-between items-center py-4 text-left font-medium text-slate-700 hover:text-preferred-green transition-colors">
-                        {title}
-                        <Icon name="caret-down" className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
-                    </button>
-                    <div className={`overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-96 pb-4' : 'max-h-0'}`}>
-                        <div className="text-sm text-slate-500 leading-relaxed html-content" dangerouslySetInnerHTML={{__html: content}}></div>
-                    </div>
-                </div>
-            );
-        };
-
-        // --- HEADER EXACTO SEGÚN EXTRACCIÓN DE DATOS ---
+        // --- COMPONENTE HEADER CORREGIDO ---
         const Header = ({ setView, user, setActiveModal }) => (
-            <header className="bg-white shadow-sm py-4 px-4 flex justify-between items-center sticky top-0 z-40">
-                <div onClick={() => setView('LANDING')} className="cursor-pointer flex items-center">
-                    {/* LOGOTIPO: h-24 en móvil, h-28 en escritorio, object-contain */}
-                    <img src={LOGO_URL} alt="AuxiliarPro" className="h-24 md:h-28 object-contain" />
+            // Aumentamos la altura del header a h-24 y el padding horizontal a px-8 para dar aire
+            <header className="bg-white shadow-sm h-24 px-6 md:px-8 flex justify-between items-center sticky top-0 z-50 transition-all">
+                
+                {/* --- SECCIÓN IZQUIERDA: LOGOTIPO GIGANTE --- */}
+                <div onClick={() => setView('LANDING')} className="cursor-pointer flex items-center h-full py-2">
+                    {/* FORZAMOS ALTURA GRANDE: h-16 en móvil, h-20 en escritorio. Object-contain evita que se deforme */}
+                    <img src={LOGO_URL} alt="AuxiliarPro" className="h-16 md:h-20 w-auto object-contain hover:opacity-90 transition-opacity" />
                 </div>
-                <div className="flex gap-4 items-center">
-                    {/* BOTONERA: Oculta en móvil (hidden), visible en escritorio (md:block) */}
-                    <button onClick={() => setView('DASHBOARD')} className="text-xs font-bold uppercase tracking-wide text-slate-500 hover:text-preferred-green hidden md:block">Estudio</button>
+
+                {/* --- SECCIÓN DERECHA: MENÚ MINÚSCULO Y BOTONES --- */}
+                {/* Usamos un gap grande (gap-8) para separar los elementos */}
+                <nav className="hidden md:flex items-center gap-8 font-bold">
                     
-                    {/* DermoCheck: Estilo píldora, borde verde suave, fondo verde claro */}
-                    <button onClick={() => setView('DERMOCHECK')} className="text-xs font-bold uppercase tracking-wide text-preferred-green border border-preferred-green/30 bg-green-50/50 rounded-full px-4 py-1.5 hidden md:block">DermoCheck</button>
+                    {/* ENLACES DE TEXTO: Tamaño muy pequeño (text-[11px]), Mayúsculas, Espaciado amplio (tracking-[0.2em]) */}
+                    <button onClick={() => setView('DASHBOARD')} className="text-[11px] uppercase tracking-[0.2em] text-slate-500 hover:text-aux-green transition-colors">
+                        Estudio
+                    </button>
                     
-                    <button onClick={() => setView('BLOG')} className="text-xs font-bold uppercase tracking-wide text-slate-500 hover:text-preferred-green hidden md:block">Blog</button>
+                    {/* BOTÓN DERMOCHECK TIPO "PASTILLA": Pequeño, bordes totalmente redondos, borde verde fino */}
+                    <button onClick={() => setView('DERMOCHECK')} className="text-[11px] uppercase tracking-[0.2em] text-aux-green border border-aux-green/50 bg-emerald-50/30 px-5 py-2 rounded-full hover:bg-aux-green hover:text-white transition-all">
+                        DermoCheck
+                    </button>
                     
-                    {/* Botón de Acción (Visible siempre): Bordes redondeados (rounded-lg) */}
-                    {user.isAuthenticated ? 
-                        <button onClick={() => setView('DASHBOARD')} className="bg-preferred-dark text-white px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide">Panel</button> :
-                        <button onClick={() => setActiveModal('auth')} className="bg-preferred-green text-white px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide hover:bg-emerald-600 transition-colors">Ingresar</button>
+                    <button onClick={() => setView('BLOG')} className="text-[11px] uppercase tracking-[0.2em] text-slate-500 hover:text-aux-green transition-colors">
+                        Blog
+                    </button>
+                    
+                    {/* BOTÓN PRINCIPAL (PANEL/INGRESAR): Sólido, oscuro, más grande y pesado visualmente que el resto del menú */}
+                    {user && user.isAuthenticated ? 
+                        <button onClick={() => setView('DASHBOARD')} className="bg-aux-dark text-white text-xs uppercase tracking-widest px-8 py-3 rounded-xl shadow-md hover:bg-slate-800 hover:shadow-lg transition-all transform active:scale-95">
+                            Panel
+                        </button> :
+                        <button onClick={() => setActiveModal('auth')} className="bg-aux-dark text-white text-xs uppercase tracking-widest px-8 py-3 rounded-xl shadow-md hover:bg-slate-800 hover:shadow-lg transition-all transform active:scale-95">
+                            Ingresar
+                        </button>
                     }
-                </div>
+                </nav>
+                
+                {/* Botón menú móvil (Hamburguesa) - Visible solo en móvil */}
+                <button className="md:hidden text-aux-dark text-2xl">
+                    <i className="ph-list"></i>
+                </button>
             </header>
         );
 
-        // --- APP ---
+        // --- APP DE EJEMPLO PARA VISUALIZAR ---
         function App() {
             const [view, setView] = useState('LANDING');
-            const [user, setUser] = useState({ name: '', currentLevel: 1, completedLevels: [], isAuthenticated: false });
-            const [quizState, setQuizState] = useState({ active: false, levelId: null, qIndex: 0, score: 0, showResult: false });
-            const [reviewMode, setReviewMode] = useState(false);
-            const [activeModal, setActiveModal] = useState(null);
-            const [authMode, setAuthMode] = useState('login'); 
-            const [legalTab, setLegalTab] = useState('terms');
-            const [selectedArticle, setSelectedArticle] = useState(null);
-
-            useEffect(() => {
-                const unsubscribe = onAuthStateChanged(auth, (u) => {
-                    if (u) {
-                        const ref = doc(db, 'artifacts', appId, 'users', u.uid, 'data', 'progress');
-                        onSnapshot(ref, (snap) => {
-                            if (snap.exists()) {
-                                const d = snap.data();
-                                setUser({ ...d, uid: u.uid, isAuthenticated: true });
-                            } else {
-                                setUser({ name: u.displayName || 'Colega', currentLevel: 1, completedLevels: [], isAuthenticated: true, uid: u.uid });
-                            }
-                        });
-                    } else {
-                        const local = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || '{}');
-                        if (local.isAuthenticated) setUser(local);
-                    }
-                });
-                return () => unsubscribe();
-            }, []);
-
-            const saveProgress = (newLevel, newCompleted) => {
-                const updated = { ...user, currentLevel: newLevel, completedLevels: newCompleted };
-                setUser(updated);
-                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
-                if (user.uid) {
-                    try { setDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'data', 'progress'), updated, { merge: true }); } catch(e) {}
-                }
-            };
-
-            const startQuiz = (lvlId) => setQuizState({ active: true, levelId: lvlId, qIndex: 0, score: 0, showResult: false });
-            
-            const handleAnswer = (idx) => {
-                const lvl = LEVELS.find(l => l.id === quizState.levelId);
-                const q = lvl.questions[quizState.qIndex];
-                const isCorrect = idx === q.correctIndex;
-                const nextScore = isCorrect ? quizState.score + 1 : quizState.score;
-                
-                if (quizState.qIndex + 1 < lvl.qCount) {
-                    setQuizState({ ...quizState, qIndex: quizState.qIndex + 1, score: nextScore });
-                } else {
-                    const passed = nextScore >= lvl.passingScore;
-                    if (passed) {
-                        const nextLvl = lvl.id === user.currentLevel ? user.currentLevel + 1 : user.currentLevel;
-                        const compl = user.completedLevels.includes(lvl.id) ? user.completedLevels : [...user.completedLevels, lvl.id];
-                        saveProgress(nextLvl, compl);
-                        if(window.confetti) window.confetti();
-                    }
-                    setQuizState({ ...quizState, showResult: true, score: nextScore });
-                }
-            };
-
-            const Footer = () => (
-                <footer className="bg-preferred-dark text-slate-400 py-10 px-6 text-center text-xs mt-auto">
-                    <div className="max-w-md mx-auto">
-                        <div className="border border-slate-700 bg-slate-800/50 p-6 rounded-xl mb-8">
-                            <h4 className="font-bold text-white uppercase mb-2">Comentarios y Sugerencias</h4>
-                            <p className="mb-4">¿Encontraste un error? Escríbeme:</p>
-                            <a href="mailto:auxiliarprofarma@gmail.com" className="bg-white text-preferred-dark px-4 py-2 rounded-full font-bold hover:bg-preferred-green hover:text-white transition-colors">auxiliarprofarma@gmail.com</a>
-                            <p className="mt-4 italic opacity-50">Sitio construido con asistencia de IA. Validar con fuentes oficiales.</p>
-                        </div>
-                        <div className="flex justify-center gap-4 uppercase font-bold text-[10px]">
-                            <button onClick={() => {setLegalTab('terms'); setActiveModal('legal');}} className="hover:text-white transition-colors">Términos</button>
-                            <button onClick={() => {setLegalTab('privacy'); setActiveModal('legal');}} className="hover:text-white transition-colors">Privacidad</button>
-                            <button onClick={() => {setLegalTab('disclaimers'); setActiveModal('legal');}} className="hover:text-white transition-colors">Descargos</button>
-                        </div>
-                        <p className="mt-4 opacity-30">© 2026 AuxiliarPro</p>
-                    </div>
-                </footer>
-            );
-
-            const AuthModal = () => {
-                if (activeModal !== 'auth') return null;
-                const [form, setForm] = useState({ name: '', email: '', pass: '' });
-                const [error, setError] = useState('');
-
-                const handleSubmit = async (e) => {
-                    e.preventDefault();
-                    setError('');
-                    try {
-                        if (authMode === 'register') {
-                            const cred = await createUserWithEmailAndPassword(auth, form.email, form.pass);
-                            await updateProfile(cred.user, { displayName: form.name });
-                            await setDoc(doc(db, 'artifacts', appId, 'users', cred.user.uid, 'data', 'progress'), { name: form.name, currentLevel: 1, completedLevels: [], lastUpdate: new Date() });
-                        } else {
-                            await signInWithEmailAndPassword(auth, form.email, form.pass);
-                        }
-                        setActiveModal(null);
-                        setView('DASHBOARD');
-                    } catch (err) { setError(err.code === 'auth/wrong-password' ? 'Contraseña incorrecta' : 'Error en los datos'); }
-                };
-
-                return (
-                    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 animate-fade-in">
-                        <div className="bg-white p-8 rounded-3xl w-full max-w-sm relative shadow-2xl">
-                            <button onClick={() => setActiveModal(null)} className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"><Icon name="x" className="text-xl"/></button>
-                            
-                            <div className="text-center mb-6">
-                                <div className="bg-[rgba(16,185,129,0.1)] w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 text-preferred-green text-2xl"><Icon name="user" /></div>
-                                <h2 className="text-2xl font-bold text-preferred-dark">{authMode === 'register' ? 'Crear Cuenta' : 'Bienvenido'}</h2>
-                                <p className="text-xs text-slate-500 mt-1">Únete a la comunidad de AuxiliarPro.</p>
-                            </div>
-
-                            <form onSubmit={handleSubmit} className="space-y-3">
-                                {authMode === 'register' && <input type="text" placeholder="Tu Nombre" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-preferred-green" required onChange={e => setForm({...form, name: e.target.value})} />}
-                                <input type="email" placeholder="Correo Electrónico" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-preferred-green" required onChange={e => setForm({...form, email: e.target.value})} />
-                                <input type="password" placeholder="Contraseña" className="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-preferred-green" required onChange={e => setForm({...form, pass: e.target.value})} />
-                                
-                                {error && <p className="text-red-500 text-xs text-center font-bold">{error}</p>}
-                                
-                                <Button fullWidth variant="green" type="submit">{authMode === 'register' ? 'Registrarse Gratis' : 'Entrar'}</Button>
-                            </form>
-
-                            <button onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')} className="block w-full text-center mt-4 text-sm text-slate-500 hover:text-preferred-green underline transition-colors">
-                                {authMode === 'login' ? '¿No tienes cuenta? Regístrate aquí' : '¿Ya tienes cuenta? Inicia Sesión'}
-                            </button>
-                        </div>
-                    </div>
-                );
-            };
-
-            // VISTAS
-            const renderLanding = () => (
-                <div className="flex-1 flex flex-col bg-white overflow-y-auto w-full">
-                    <Header setView={setView} user={user} setActiveModal={setActiveModal} />
-                    <div className="p-6 text-center max-w-md mx-auto">
-                        <div className="inline-block bg-[rgba(16,185,129,0.1)] text-preferred-green px-3 py-1 rounded-full text-[10px] font-bold mb-6">CERTIFICACIÓN 2026</div>
-                        <h1 className="text-4xl font-extrabold text-preferred-dark mb-6 leading-tight">PREPÁRATE PARA TU <br/><span className="text-preferred-green">EXAMEN DE AUXILIAR</span></h1>
-                        <p className="text-slate-500 mb-8 leading-relaxed">Una iniciativa independiente hecha por colegas para colegas. Estudia a tu ritmo, supera niveles y asegura tu conocimiento.</p>
-                        
-                        <div className="flex flex-col gap-3 mb-12">
-                            <Button variant="primary" onClick={() => user.isAuthenticated ? setView('DASHBOARD') : setActiveModal('auth')}>COMENZAR AHORA</Button>
-                            <Button variant="secondary" onClick={() => setView('BLOG')}>LEER ARTÍCULOS</Button>
-                            <Button variant="green" onClick={() => setView('DERMOCHECK')}><Icon name="calculator"/> DERMOCHECK</Button>
-                        </div>
-
-                        {/* QUIÉN SOY - REDISEÑADO CON SIGNO DE EXCLAMACIÓN GIGANTE DIFUMINADO */}
-                        <div className="relative p-8 mx-4 mb-12 rounded-3xl overflow-hidden bg-[rgba(16,185,129,0.03)] border border-[rgba(16,185,129,0.1)]">
-                            {/* MARCA DE AGUA GIGANTE "!" */}
-                            <span className="absolute -top-12 -right-8 text-[15rem] leading-none text-preferred-green opacity-[0.05] font-black select-none pointer-events-none transform rotate-12">!</span>
-
-                            {/* Contenido en Z-Index superior */}
-                            <div className="relative z-10 text-left">
-                                 <h3 className="font-bold text-xl text-preferred-dark mb-3 flex items-center gap-3">
-                                    <Icon name="student" className="text-preferred-green text-2xl" weight="fill"/> Quién soy
-                                </h3>
-                                <p className="text-slate-600 font-medium leading-relaxed text-base italic">
-                                    "Auxiliar en preparación, esta web es mi cuaderno de estudio. Aquí encontrarás lo que estoy aprendiendo para el examen de 2026. ¡Vamos por ese logro juntos!"
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* SECCIÓN PREGUNTAS FRECUENTES */}
-                        <div className="border-t border-slate-100 pt-8 mt-4">
-                            <h3 className="font-bold text-slate-800 mb-4">¿Dudas sobre el proceso?</h3>
-                            <Button variant="secondary" onClick={() => setView('FAQS')}><Icon name="question"/> Ver Preguntas Frecuentes</Button>
-                        </div>
-                    </div>
-                    <Footer />
-                </div>
-            );
-
-            const renderDashboard = () => (
-                <div className="flex-1 flex flex-col bg-slate-50 w-full overflow-hidden">
-                    <Header setView={setView} user={user} setActiveModal={setActiveModal} />
-                    <div className="flex-1 overflow-y-auto p-4 pb-20">
-                        <div className="max-w-md mx-auto space-y-4">
-                            <div className="bg-preferred-dark text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
-                                <div className="flex justify-between items-center mb-2">
-                                    <span className="text-xs font-bold text-slate-400 uppercase">Tu Progreso</span>
-                                    <span className="text-2xl font-bold text-preferred-green">{Math.round((user.completedLevels.length / LEVELS.length) * 100)}%</span>
-                                </div>
-                                <div className="w-full bg-slate-700 h-2 rounded-full"><div className="bg-preferred-green h-full rounded-full transition-all duration-1000" style={{width: `${(user.completedLevels.length / LEVELS.length) * 100}%`}}></div></div>
-                                <Icon name="trophy" className="absolute -bottom-2 -right-2 text-8xl opacity-10 rotate-12" />
-                            </div>
-
-                            <div className="space-y-3">
-                                {LEVELS.map(l => {
-                                    const locked = l.id > user.currentLevel;
-                                    const done = user.completedLevels.includes(l.id);
-                                    return (
-                                        <div key={l.id} onClick={() => !locked && startQuiz(l.id)} className={`bg-white p-4 rounded-xl border-2 flex items-center gap-4 transition-all ${locked ? 'border-slate-100 opacity-60' : 'border-slate-100 hover:border-preferred-green cursor-pointer hover:shadow-md'}`}>
-                                            <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white shadow-sm ${locked ? 'bg-slate-300' : (done ? 'bg-preferred-green' : l.iconBg)}`}>
-                                                {locked ? <Icon name="lock"/> : (done ? <Icon name="check"/> : <Icon name="play"/>)}
-                                            </div>
-                                            <div className="flex-1">
-                                                <div className="flex justify-between items-center">
-                                                    <h4 className="font-bold text-preferred-dark">{l.title}</h4>
-                                                    {done && <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[rgba(16,185,129,0.1)] text-preferred-green">LOGRADO</span>}
-                                                </div>
-                                                <p className="text-xs text-slate-500 mt-1">{l.desc}</p>
-                                            </div>
-                                        </div>
-                                    )
-                                })}
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-3 mt-4">
-                                <Button variant="secondary" onClick={() => setView('LIBRARY')}><Icon name="book"/> Biblioteca</Button>
-                                <Button variant="secondary" onClick={() => setActiveModal('community')}><Icon name="users"/> Foro</Button>
-                            </div>
-
-                            <div className="pt-6">
-                                <Button variant="danger" fullWidth onClick={() => {signOut(auth); localStorage.removeItem(LOCAL_STORAGE_KEY); setView('LANDING');}}>Cerrar Sesión</Button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            );
-
-            const renderDermoCheck = () => (
-                <div className="flex-1 flex flex-col bg-preferred-dark w-full h-full absolute inset-0 z-50">
-                    <div className="bg-preferred-dark text-white p-3 flex justify-between items-center shadow-md z-10">
-                        <span className="font-bold flex items-center gap-2"><Icon name="calculator" className="text-preferred-green"/> DermoCheck</span>
-                        <button onClick={() => setView('LANDING')} className="text-xs bg-white/10 px-3 py-1 rounded-full hover:bg-white/20 transition-colors">Salir</button>
-                    </div>
-                    <div className="flex-1 bg-black relative">
-                        <iframe src={DERMO_URL} className="w-full h-full border-0" title="Calculadora DermoCheck"></iframe>
-                    </div>
-                </div>
-            );
-
-            const LegalModal = () => {
-                if (activeModal !== 'legal') return null;
-                const texts = {
-                    terms: "Términos de Uso: Esta plataforma es educativa. El uso es responsabilidad del usuario.",
-                    privacy: "Privacidad: Solo almacenamos tu progreso localmente o en Firebase para mejorar tu experiencia.",
-                    disclaimers: "Descargos: AuxiliarPro NO representa al MINSAL. Iniciativa independiente."
-                };
-                return (
-                    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 animate-fade-in">
-                        <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl">
-                            <h3 className="font-bold text-lg mb-4 capitalize text-preferred-dark">{legalTab}</h3>
-                            <p className="text-sm text-slate-600 mb-6 leading-relaxed">{texts[legalTab]}</p>
-                            <Button fullWidth variant="green" onClick={() => setActiveModal(null)}>Entendido</Button>
-                        </div>
-                    </div>
-                );
-            };
-
-            const CommunityModal = () => {
-                if (activeModal !== 'community') return null;
-                return (
-                    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 animate-fade-in">
-                        <div className="bg-white rounded-2xl p-6 max-w-sm text-center shadow-xl">
-                            <Icon name="users" className="text-4xl text-blue-500 mb-4"/>
-                            <h3 className="font-bold mb-2 text-preferred-dark">Comunidad</h3>
-                            <p className="text-sm mb-6 text-slate-600">Únete a nuestros grupos de estudio.</p>
-                            <div className="space-y-3">
-                                <a href="https://chat.whatsapp.com/IPvHmnNGWYmH61FrdV56g1" target="_blank" className="block w-full bg-[#25D366] text-white py-3 rounded-xl font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2"><Icon name="whatsapp-logo" size={20} />WhatsApp</a>
-                                <a href="https://www.facebook.com/share/g/1AFb8riMpT/" target="_blank" className="block w-full bg-[#1877F2] text-white py-3 rounded-xl font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2"><Icon name="facebook-logo" size={20} />Facebook</a>
-                            </div>
-                            <button onClick={()=>setActiveModal(null)} className="mt-6 text-slate-400 text-sm hover:text-slate-600 transition-colors">Cerrar</button>
-                        </div>
-                    </div>
-                );
-            };
+            // Simulación de usuario (cambiar isAuthenticated a true para ver el botón "Panel")
+            const [user, setUser] = useState({ isAuthenticated: false }); 
+            const setActiveModal = (modal) => console.log("Abrir modal:", modal);
 
             return (
-                <div className="w-full max-w-md bg-white h-screen md:h-[90vh] md:rounded-3xl md:shadow-2xl overflow-hidden flex flex-col relative mx-auto">
-                    {view === 'LANDING' && renderLanding()}
-                    {view === 'DASHBOARD' && renderDashboard()}
-                    {view === 'DERMOCHECK' && renderDermoCheck()}
-                    {view === 'LIBRARY' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="p-6"><h2 className="font-bold text-xl mb-4 text-preferred-dark">Biblioteca</h2>{PDF_DOCS.map((d,i)=><div key={i} className="p-4 border border-slate-100 rounded-xl mb-3 bg-slate-50 hover:bg-white hover:shadow-sm transition-all flex items-center gap-3"><div className="bg-red-100 p-2 rounded-lg text-red-500"><Icon name="file-pdf" size={24}/></div><a href={d.file} target="_blank" className="text-slate-700 font-bold hover:text-preferred-green transition-colors flex-1">{d.title}</a></div>)}<button onClick={()=>setView('DASHBOARD')} className="mt-4 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
-                    {view === 'FAQS' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4 text-preferred-dark">Preguntas Frecuentes</h2>{FAQS.map((f,i)=><Accordion key={i} title={f.q} content={f.a}/>)}<button onClick={()=>setView('LANDING')} className="mt-4 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
-                    {view === 'BLOG' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4 text-preferred-dark">Blog</h2>{BLOG_POSTS.map(p=><div key={p.id} className="border border-slate-100 p-5 mb-4 rounded-xl bg-white shadow-sm hover:shadow-md transition-all cursor-pointer"><div className="flex justify-between items-center mb-2"><span className="text-xs font-bold text-preferred-green bg-[rgba(16,185,129,0.1)] px-2 py-1 rounded-full uppercase">{p.category}</span><span className="text-xs text-slate-400">{p.date}</span></div><h3 className="font-bold text-lg text-preferred-dark mb-2">{p.title}</h3><p className="text-sm text-slate-500 leading-relaxed">{p.excerpt}</p></div>)}<button onClick={()=>setView('LANDING')} className="mt-4 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
+                // Contenedor principal para simular la vista
+                <div className="w-full max-w-[1200px] bg-white min-h-screen shadow-2xl mx-auto relative overflow-x-hidden">
+                    {/* INSERTAMOS EL HEADER CORREGIDO AQUÍ */}
+                    <Header setView={setView} user={user} setActiveModal={setActiveModal} />
                     
-                    {quizState.active && (
-                        <div className="absolute inset-0 bg-white z-50 flex flex-col animate-fade-in">
-                            <div className="bg-preferred-dark text-white p-4 flex justify-between items-center shadow-md">
-                                <span className="font-medium">Pregunta {quizState.qIndex + 1} / {LEVELS.find(l=>l.id===quizState.levelId).qCount}</span>
-                                <button onClick={()=>setQuizState({active:false, score:0, qIndex:0, showResult:false})} className="text-slate-400 hover:text-white transition-colors"><Icon name="x" size={20}/></button>
-                            </div>
-                            <div className="flex-1 p-6 flex flex-col justify-center overflow-y-auto bg-slate-50">
-                                {!quizState.showResult ? (
-                                    <div className="max-w-md mx-auto w-full">
-                                        <div className="mb-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                                            <span className="text-xs font-bold text-preferred-green bg-[rgba(16,185,129,0.1)] px-2 py-1 rounded-full uppercase mb-3 inline-block">Pregunta</span>
-                                            <h3 className="text-xl font-bold text-preferred-dark leading-snug">{LEVELS.find(l=>l.id===quizState.levelId).questions[quizState.qIndex].text}</h3>
-                                        </div>
-                                        <div className="space-y-3">
-                                            {LEVELS.find(l=>l.id===quizState.levelId).questions[quizState.qIndex].options.map((opt,i) => (
-                                                <button key={i} onClick={()=>handleAnswer(i)} className="w-full p-4 border-2 border-slate-100 rounded-xl text-left hover:bg-[rgba(16,185,129,0.05)] hover:border-preferred-green transition-all bg-white font-medium text-slate-700 flex items-center group"><span className="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center mr-3 font-bold text-sm group-hover:bg-preferred-green group-hover:text-white transition-colors">{String.fromCharCode(65+i)}</span>{opt}</button>
-                                            ))}
-                                        </div>
-                                    </div>
-                                ) : (
-                                    <div className="text-center max-w-md mx-auto w-full bg-white p-8 rounded-2xl shadow-lg">
-                                        <div className="text-6xl mb-4">{quizState.score >= LEVELS.find(l=>l.id===quizState.levelId).passingScore ? '🎉' : '💪'}</div>
-                                        <h2 className="text-2xl font-bold mb-2 text-preferred-dark">{quizState.score >= LEVELS.find(l=>l.id===quizState.levelId).passingScore ? '¡Nivel Aprobado!' : '¡Sigue Practicando!'}</h2>
-                                        <p className="mb-8 text-slate-500">Obtuviste {quizState.score} de {LEVELS.find(l=>l.id===quizState.levelId).qCount} respuestas correctas.</p>
-                                        <Button variant="green" fullWidth onClick={()=>setQuizState({active:false, score:0, qIndex:0, showResult:false})}>Volver al Panel</Button>
-                                    </div>
-                                )}
+                    {/* Contenido de relleno para dar contexto */}
+                    <main className="p-8 text-center text-slate-400 mt-20">
+                        <h1 className="text-3xl font-bold text-aux-dark mb-4">Contenido de la Página</h1>
+                        <p>El header superior ahora debería tener las proporciones exactas de la imagen de referencia.</p>
+                        <div className="mt-8 p-4 border-2 border-dashed border-slate-200 rounded-xl inline-block">
+                            <p className="text-sm font-bold mb-2">Referencia Visual:</p>
+                            <div className="flex items-center justify-center gap-4 bg-slate-50 p-4 rounded-lg pointer-events-none select-none grayscale opacity-50">
+                                <img src={LOGO_URL} className="h-16 object-contain" />
+                                <div className="flex gap-4 items-center scale-75 origin-left">
+                                     <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">Estudio</span>
+                                     <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-aux-green border border-aux-green rounded-full px-4 py-1">DermoCheck</span>
+                                     <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500">Blog</span>
+                                     <span className="bg-aux-dark text-white text-xs uppercase tracking-widest px-6 py-2 rounded-xl">Panel</span>
+                                </div>
                             </div>
                         </div>
-                    )}
-
-                    <AuthModal />
-                    <LegalModal />
-                    <CommunityModal />
+                    </main>
                 </div>
             );
         }
