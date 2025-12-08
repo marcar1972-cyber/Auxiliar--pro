@@ -15,9 +15,9 @@
           extend: {
             colors: {
               // PALETA EXACTA SEGÚN REFERENCIA
-              'aux-dark': '#0E172A',   // Azul Oscuro Profundo
-              'aux-green': '#2A9974',  // Verde Teal Específico
-              'aux-gray': '#BDC3C1',   // Gris Plateado
+              'aux-dark': '#0E172A',   // Azul Oscuro Profundo (Texto principal, Botones oscuros)
+              'aux-green': '#2A9974',  // Verde Teal Específico (Acentos, DermoCheck)
+              'aux-gray': '#BDC3C1',   // Gris Plateado (Bordes suaves)
               'aux-light': '#F8FAFC',  // Fondo muy claro
             },
             fontFamily: { sans: ['Inter', 'sans-serif'] },
@@ -113,11 +113,12 @@
         // --- COMPONENTES ---
         const Icon = ({ name, className, weight }) => <i className={`ph-${name} ${className || ''} text-lg`} style={weight ? {fontWeight: weight} : {}}></i>;
         
+        // Botones actualizados con la nueva paleta y estilos
         const Button = ({ onClick, children, variant = 'primary', className = '', fullWidth = false, type = 'button' }) => {
-            const base = "flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold transition-all active:scale-95 text-sm uppercase tracking-wider";
+            const base = "flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold transition-all active:scale-95 text-sm uppercase tracking-wider shadow-sm";
             const variants = {
-                primary: "bg-aux-dark text-white hover:bg-slate-800 shadow-lg",
-                green: "bg-aux-green text-white hover:bg-emerald-600 shadow-lg",
+                primary: "bg-aux-dark text-white hover:bg-slate-800", // Oscuro
+                green: "bg-aux-green text-white hover:bg-emerald-600", // Verde
                 secondary: "bg-white border-2 border-slate-200 text-slate-600 hover:border-aux-green hover:text-aux-green",
                 danger: "bg-red-50 text-red-500 border border-red-100"
             };
@@ -140,25 +141,28 @@
             );
         };
 
-        // HEADER REPROPORCIONADO: LOGO GRANDE vs MENU PEQUEÑO
+        // HEADER CORREGIDO: LOGO IZQUIERDA - MENU DERECHA (PROPORCIÓN CORRECTA)
         const Header = ({ setView, user, setActiveModal }) => (
-            <header className="bg-white shadow-sm h-28 px-6 flex justify-between items-center sticky top-0 z-40">
+            <header className="bg-white shadow-sm h-20 px-6 md:px-10 flex justify-between items-center sticky top-0 z-40">
+                {/* LADO IZQUIERDO: LOGOTIPO CON BUENA PRESENCIA Y PROPORCIÓN */}
                 <div onClick={() => setView('LANDING')} className="cursor-pointer flex items-center h-full">
-                    {/* LOGO MÁS GRANDE */}
-                    <img src={LOGO_URL} alt="AuxiliarPro" className="h-20 md:h-24 object-contain" />
+                    <img src={LOGO_URL} alt="AuxiliarPro" className="h-12 md:h-16 object-contain" />
                 </div>
-                <div className="flex gap-6 items-center">
-                    {/* MENU: Texto pequeño (text-xs), Mayúsculas, Bold */}
-                    <button onClick={() => setView('DASHBOARD')} className="text-xs font-bold text-slate-500 hover:text-aux-green uppercase tracking-widest hidden md:block">Estudio</button>
-                    
-                    {/* Botón DermoCheck estilo 'Pastilla' (Pill) */}
-                    <button onClick={() => setView('DERMOCHECK')} className="text-xs font-bold text-aux-green uppercase tracking-widest hidden md:block border border-aux-green/30 px-4 py-1.5 rounded-full bg-emerald-50/50 hover:bg-emerald-100 transition-colors">DermoCheck</button>
-                    
-                    <button onClick={() => setView('BLOG')} className="text-xs font-bold text-slate-500 hover:text-aux-green uppercase tracking-widest hidden md:block">Blog</button>
-                    
+
+                {/* LADO DERECHO: BOTONERA ESTILO REFERENCIA (MAYÚSCULAS, BOLD) */}
+                <div className="flex gap-4 md:gap-8 items-center">
+                    {/* Enlaces de texto */}
+                    <button onClick={() => setView('DASHBOARD')} className="text-sm font-bold text-aux-dark hover:text-aux-green uppercase tracking-wider transition-colors hidden md:block">Estudio</button>
+
+                    {/* DermoCheck con estilo "Pastilla" (Pill) verde y borde */}
+                    <button onClick={() => setView('DERMOCHECK')} className="text-sm font-bold text-aux-green uppercase tracking-wider border-2 border-aux-green rounded-full px-5 py-1.5 hover:bg-emerald-50 transition-colors hidden md:block">DermoCheck</button>
+
+                    <button onClick={() => setView('BLOG')} className="text-sm font-bold text-aux-dark hover:text-aux-green uppercase tracking-wider transition-colors hidden md:block">Blog</button>
+
+                    {/* Botón de Acción Principal (Oscuro) */}
                     {user.isAuthenticated ? 
-                        <button onClick={() => setView('DASHBOARD')} className="bg-aux-dark text-white px-6 py-2 rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-slate-800 transition-colors">Panel</button> :
-                        <button onClick={() => setActiveModal('auth')} className="bg-aux-dark text-white px-6 py-2 rounded-lg text-xs font-bold uppercase tracking-widest hover:bg-slate-800 transition-colors">Ingresar</button>
+                        <button onClick={() => setView('DASHBOARD')} className="bg-aux-dark text-white px-6 py-2.5 rounded-lg text-sm font-bold uppercase tracking-wider hover:bg-slate-800 transition-colors shadow-md">Panel</button> :
+                        <button onClick={() => setActiveModal('auth')} className="bg-aux-dark text-white px-6 py-2.5 rounded-lg text-sm font-bold uppercase tracking-wider hover:bg-slate-800 transition-colors shadow-md">Ingresar</button>
                     }
                 </div>
             </header>
