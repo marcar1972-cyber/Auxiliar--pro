@@ -147,7 +147,7 @@
             );
         };
 
-        // --- HEADER SIMPLIFICADO ---
+        // --- HEADER SIMPLIFICADO & PEQUEÑO ---
         const Header = ({ setView, user, setActiveModal }) => (
             <header className="bg-white shadow-sm h-20 px-6 flex justify-between items-center sticky top-0 z-50">
                 {/* LOGO A LA IZQUIERDA */}
@@ -155,14 +155,13 @@
                     <img src={LOGO_URL} alt="AuxiliarPro" className="h-12 md:h-16 object-contain" />
                 </div>
 
-                {/* MENÚ A LA DERECHA (Sin DermoCheck) */}
-                <div className="flex gap-6 items-center">
-                    <button onClick={() => setView('DASHBOARD')} className="text-sm font-bold text-slate-600 hover:text-aux-green hidden md:block">Estudio</button>
-                    <button onClick={() => setView('BLOG')} className="text-sm font-bold text-slate-600 hover:text-aux-green hidden md:block">Blog</button>
+                {/* MENÚ DERECHA: Solo Blog y Login, más pequeños */}
+                <div className="flex gap-4 items-center">
+                    <button onClick={() => setView('BLOG')} className="text-xs font-bold text-slate-600 hover:text-aux-green hidden md:block">Blog</button>
                     
                     {user.isAuthenticated ? 
-                        <button onClick={() => setView('DASHBOARD')} className="bg-aux-dark text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors">Panel</button> :
-                        <button onClick={() => setActiveModal('auth')} className="bg-aux-green text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-emerald-600 transition-colors">Ingresar</button>
+                        <button onClick={() => setView('DASHBOARD')} className="bg-aux-dark text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-slate-800 transition-colors">Panel</button> :
+                        <button onClick={() => setActiveModal('auth')} className="bg-aux-green text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-emerald-600 transition-colors">Ingresar</button>
                     }
                 </div>
             </header>
