@@ -200,10 +200,10 @@
                     <img src={LOGO_URL} alt="AuxiliarPro" className="h-10 md:h-14 object-contain" />
                 </div>
                 <div className="flex gap-4 items-center">
-                    {/* BOTÓN BLOG: Ahora es un botón verde sólido */}
+                    {/* BOTÓN BLOG */}
                     <button onClick={() => setView('BLOG')} className="bg-aux-green text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-emerald-600 transition-colors whitespace-nowrap hidden md:block">Blog</button>
                     
-                    {/* BOTÓN PANEL DE ESTUDIO: Botón oscuro sólido */}
+                    {/* BOTÓN PANEL DE ESTUDIO */}
                     {user.isAuthenticated ? 
                         <button onClick={() => setView('DASHBOARD')} className="bg-aux-dark text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button> :
                         <button onClick={() => setActiveModal('auth')} className="bg-aux-dark text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button>
@@ -341,8 +341,10 @@
                     <div className="flex-1 overflow-y-auto">
                         <div className="p-6 text-center max-w-md mx-auto mt-8">
                             <div className="inline-block bg-emerald-50 text-aux-green px-3 py-1 rounded-full text-[10px] font-bold mb-6">META: CREDENCIAL 2026</div>
+                            
+                            {/* TÍTULO MODIFICADO PARA SEO Y JERARQUÍA */}
                             <h1 className="mb-8 leading-tight text-aux-dark">
-                                <span className="text-lg md:text-xl font-bold block mb-2">PREPÁRATE PARA TU</span>
+                                <span className="text-lg md:text-xl font-bold block mb-2 text-slate-500 uppercase tracking-wide">PREPÁRATE PARA TU</span>
                                 <span className="text-3xl md:text-5xl font-extrabold text-aux-green">EXAMEN DE AUXILIAR DE FARMACIA</span>
                             </h1>
                             
