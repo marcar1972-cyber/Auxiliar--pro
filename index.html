@@ -89,6 +89,7 @@
         const LOCAL_STORAGE_KEY = 'auxiliar_pro_data';
         
         // --- URLs ---
+        // LOGO ACTUALIZADO A LA NUEVA RUTA SOLICITADA
         const LOGO_URL = "https://raw.githubusercontent.com/marcar1972-cyber/Auxiliar--pro/main/logo_auxiliarpro.png";
         const DERMO_URL = "https://auxiliar-dermocheck.vercel.app";
 
@@ -192,17 +193,25 @@
             );
         };
 
-        // --- HEADER ---
+        // --- HEADER CORREGIDO: LOGO GRANDE / MENÚ PEQUEÑO Y LIMPIO ---
         const Header = ({ setView, user, setActiveModal }) => (
-            <header className="bg-white shadow-sm h-20 px-6 flex justify-between items-center sticky top-0 z-50">
+            <header className="bg-white shadow-sm h-24 px-6 flex justify-between items-center sticky top-0 z-50">
+                
+                {/* LADO IZQUIERDO: LOGOTIPO GRANDE */}
                 <div onClick={() => setView('LANDING')} className="cursor-pointer flex items-center h-full">
-                    <img src={LOGO_URL} alt="AuxiliarPro" className="h-12 md:h-16 object-contain" />
+                    {/* Aumentado a h-20 (80px) para que se vea bien grande */}
+                    <img src={LOGO_URL} alt="AuxiliarPro" className="h-16 md:h-20 w-auto object-contain hover:opacity-90 transition-opacity" />
                 </div>
-                <div className="flex gap-6 items-center">
-                    <button onClick={() => setView('BLOG')} className="text-sm font-bold text-slate-600 hover:text-aux-green hidden md:block">Blog</button>
+
+                {/* LADO DERECHO: MENÚ SUTIL */}
+                <div className="flex gap-4 items-center">
+                    {/* Botón BLOG: Texto pequeño (xs), mayúsculas y espaciado */}
+                    <button onClick={() => setView('BLOG')} className="text-xs font-bold text-slate-500 hover:text-aux-green uppercase tracking-wider hidden md:block">Blog</button>
+                    
+                    {/* Botón PANEL DE ESTUDIO: Siempre oscuro (bg-aux-dark) */}
                     {user.isAuthenticated ? 
-                        <button onClick={() => setView('DASHBOARD')} className="bg-aux-dark text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button> :
-                        <button onClick={() => setActiveModal('auth')} className="bg-aux-dark text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button>
+                        <button onClick={() => setView('DASHBOARD')} className="bg-aux-dark text-white px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider hover:bg-slate-800 transition-colors shadow-md">Panel de Estudio</button> :
+                        <button onClick={() => setActiveModal('auth')} className="bg-aux-dark text-white px-5 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider hover:bg-slate-800 transition-colors shadow-md">Panel de Estudio</button>
                     }
                 </div>
             </header>
@@ -443,9 +452,9 @@
                     {view === 'LANDING' && renderLanding()}
                     {view === 'DASHBOARD' && renderDashboard()}
                     {view === 'DERMOCHECK' && renderDermoCheck()}
-                    {view === 'LIBRARY' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="p-6"><h2 className="font-bold text-xl mb-4 text-aux-dark">Biblioteca</h2>{PDF_DOCS.map((d,i)=><div key={i} className="p-4 border border-slate-100 rounded-xl mb-3 bg-slate-50 hover:bg-white hover:shadow-sm transition-all flex items-center gap-3"><div className="bg-red-100 p-2 rounded-lg text-red-500"><Icon name="file-pdf" size={24}/></div><a href={d.file} target="_blank" className="text-slate-700 font-bold hover:text-aux-green transition-colors flex-1">{d.title}</a></div>)}<button onClick={()=>setView('DASHBOARD')} className="mt-4 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
-                    {view === 'FAQS' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4 text-aux-dark">Preguntas Frecuentes</h2>{FAQS.map((f,i)=><Accordion key={i} title={f.q} content={f.a}/>)}<button onClick={()=>setView('LANDING')} className="mt-4 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
-                    {view === 'BLOG' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4 text-aux-dark">Blog</h2><div className="space-y-4">{BLOG_POSTS.map(p=><div key={p.id} onClick={()=>setSelectedArticle(p) || setView('ARTICLE')} className="border border-slate-100 p-5 rounded-xl bg-white shadow-sm hover:shadow-md transition-all cursor-pointer"><div className="flex justify-between items-center mb-2"><span className="text-xs font-bold text-aux-green bg-emerald-50 px-2 py-1 rounded-full uppercase">{p.category}</span><span className="text-xs text-slate-400">{p.date}</span></div><h3 className="font-bold text-lg text-aux-dark mb-2">{p.title}</h3><p className="text-sm text-slate-500 leading-relaxed line-clamp-3">{p.excerpt}</p></div>)}</div><button onClick={()=>setView('LANDING')} className="mt-6 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
+                    {view === 'LIBRARY' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="flex-1 p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4 text-aux-dark">Biblioteca</h2>{PDF_DOCS.map((d,i)=><div key={i} className="p-4 border border-slate-100 rounded-xl mb-3 bg-slate-50 hover:bg-white hover:shadow-sm transition-all flex items-center gap-3"><div className="bg-red-100 p-2 rounded-lg text-red-500"><Icon name="file-pdf" size={24}/></div><a href={d.file} target="_blank" className="text-slate-700 font-bold hover:text-aux-green transition-colors flex-1">{d.title}</a></div>)}<button onClick={()=>setView('DASHBOARD')} className="mt-4 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
+                    {view === 'FAQS' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="flex-1 p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4 text-aux-dark">Preguntas Frecuentes</h2>{FAQS.map((f,i)=><Accordion key={i} title={f.q} content={f.a}/>)}<button onClick={()=>setView('LANDING')} className="mt-4 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
+                    {view === 'BLOG' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="flex-1 p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4 text-aux-dark">Blog</h2><div className="space-y-4">{BLOG_POSTS.map(p=><div key={p.id} onClick={()=>setSelectedArticle(p) || setView('ARTICLE')} className="border border-slate-100 p-5 rounded-xl bg-white shadow-sm hover:shadow-md transition-all cursor-pointer"><div className="flex justify-between items-center mb-2"><span className="text-xs font-bold text-aux-green bg-emerald-50 px-2 py-1 rounded-full uppercase">{p.category}</span><span className="text-xs text-slate-400">{p.date}</span></div><h3 className="font-bold text-lg text-aux-dark mb-2">{p.title}</h3><p className="text-sm text-slate-500 leading-relaxed line-clamp-3">{p.excerpt}</p></div>)}</div><button onClick={()=>setView('LANDING')} className="mt-6 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
                     {view === 'ARTICLE' && <div className="flex-1 flex flex-col bg-white z-50 animate-fade-in h-full"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="flex-1 p-6 overflow-y-auto min-h-0"><button onClick={()=>setView('BLOG')} className="mb-4 text-slate-400 flex items-center gap-1 hover:text-aux-green"><Icon name="arrow-left"/> Volver</button><div className="max-w-2xl mx-auto blog-content"><span className="text-xs font-bold text-aux-green bg-emerald-50 px-2 py-1 rounded-full uppercase mb-4 inline-block">{selectedArticle?.category}</span><div dangerouslySetInnerHTML={{__html: selectedArticle?.content}}></div></div></div></div>}
                     
                     {quizState.active && (
