@@ -192,23 +192,29 @@
             );
         };
 
-        // --- HEADER ---
+        // --- HEADER AJUSTADO PARA PC (MENOS SEPARACIÓN) ---
         const Header = ({ setView, user, setActiveModal }) => (
-            <header className="bg-white shadow-sm h-20 px-6 flex justify-between items-center sticky top-0 z-50">
-                <div onClick={() => setView('LANDING')} className="cursor-pointer flex items-center h-full">
-                    {/* URL del logo corregida según tu repositorio */}
-                    <img src={LOGO_URL} alt="AuxiliarPro" className="h-10 md:h-14 object-contain" />
+            <header className="bg-white shadow-sm h-20 px-6 flex items-center sticky top-0 z-50">
+                {/* LOGO */}
+                <div onClick={() => setView('LANDING')} className="cursor-pointer flex items-center h-full mr-4">
+                    <img src={LOGO_URL} alt="AuxiliarPro" className="h-10 md:h-12 object-contain" />
                 </div>
+
+                {/* MENÚ (Empujado a la izquierda por 'justify-start' implícito y gap reducido) */}
                 <div className="flex gap-4 items-center">
-                    {/* BOTÓN BLOG: Ahora es un botón verde sólido */}
-                    <button onClick={() => setView('BLOG')} className="bg-aux-green text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-emerald-600 transition-colors whitespace-nowrap hidden md:block">Blog</button>
                     
-                    {/* BOTÓN PANEL DE ESTUDIO: Botón oscuro sólido */}
+                    {/* Botón BLOG: Estilo Pastilla Verde */}
+                    <button onClick={() => setView('BLOG')} className="bg-aux-green text-white px-4 py-2 rounded-lg text-xs font-medium hover:bg-emerald-600 transition-colors whitespace-nowrap">Blog</button>
+                    
+                    {/* Botón PANEL DE ESTUDIO: Estilo Oscuro */}
                     {user.isAuthenticated ? 
-                        <button onClick={() => setView('DASHBOARD')} className="bg-aux-dark text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button> :
-                        <button onClick={() => setActiveModal('auth')} className="bg-aux-dark text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button>
+                        <button onClick={() => setView('DASHBOARD')} className="bg-aux-dark text-white px-4 py-2 rounded-lg text-xs font-medium hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button> :
+                        <button onClick={() => setActiveModal('auth')} className="bg-aux-dark text-white px-4 py-2 rounded-lg text-xs font-medium hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button>
                     }
                 </div>
+                
+                {/* Espaciador flexible para empujar el menú hamburguesa a la derecha en móvil si fuera necesario, 
+                    pero en este diseño limpio no hace falta ya que los botones se ven siempre */}
             </header>
         );
 
@@ -341,10 +347,7 @@
                     <div className="flex-1 overflow-y-auto">
                         <div className="p-6 text-center max-w-md mx-auto mt-8">
                             <div className="inline-block bg-emerald-50 text-aux-green px-3 py-1 rounded-full text-[10px] font-bold mb-6">META: CREDENCIAL 2026</div>
-                            <h1 className="mb-8 leading-tight text-aux-dark">
-                                <span className="text-lg md:text-xl font-bold block mb-2">PREPÁRATE PARA TU</span>
-                                <span className="text-3xl md:text-5xl font-extrabold text-aux-green">EXAMEN DE AUXILIAR DE FARMACIA</span>
-                            </h1>
+                            <h1 className="text-4xl font-extrabold text-aux-dark mb-6 leading-tight">PREPÁRATE PARA TU <br/><span className="text-aux-green">EXAMEN DE AUXILIAR</span></h1>
                             
                             <div className="flex flex-col gap-3 mb-12">
                                 <Button variant="primary" onClick={() => user.isAuthenticated ? setView('DASHBOARD') : setActiveModal('auth')}>COMENZAR AHORA</Button>
