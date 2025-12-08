@@ -6,14 +6,16 @@
     <meta name="description" content="Plataforma de estudio para el Examen de Auxiliar de Farmacia en Chile.">
     <title>Auxiliar Pro | Credencial 2026</title>
 
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5783669972264868" crossorigin="anonymous"></script>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
         theme: {
           extend: {
             colors: {
-              'aux-dark': '#0E172A',   
-              'aux-green': '#2A9974',  
+              'aux-dark': '#0E172A',   // Azul Oscuro
+              'aux-green': '#2A9974',  // Verde Teal
               'aux-gray': '#BDC3C1',
               'aux-light': '#F8FAFC',
             },
@@ -24,6 +26,7 @@
         }
       }
     </script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -51,30 +54,45 @@
           z-index: 0;
           pointer-events: none;
       }
-      /* HTML content styles */
+      
+      /* Estilos HTML renderizado */
       .html-content a { color: #2A9974; text-decoration: none; font-weight: 600; }
       .html-content ul { list-style-type: disc; padding-left: 1.2rem; margin-top: 0.5rem; }
+      .html-content li { margin-bottom: 0.25rem; }
     </style>
 </head>
 <body class="bg-white text-aux-dark antialiased min-h-screen flex flex-col items-center justify-center font-sans">
 
     <div id="root" class="w-full h-full flex justify-center items-center"></div>
 
-    <script>
-        window.onerror = function(message, source, lineno, colno, error) {
-            document.body.innerHTML = '<div style="padding:20px; color:red; text-align:center;"><h2>Ups! Algo falló al cargar.</h2><p>'+message+'</p></div>';
-        };
-    </script>
+    <script type="text/babel" data-type="module" data-presets="react">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
-    <script type="text/babel">
+        // CONFIGURACIÓN FIREBASE
+        const firebaseConfig = {
+            apiKey: "AIzaSyDNhuSBBhmmQSV0BHC8MOtLKgAUpvtfWfE",
+            authDomain: "auxiliar-pro.firebaseapp.com",
+            projectId: "auxiliar-pro",
+            storageBucket: "auxiliar-pro.firebasestorage.app",
+            messagingSenderId: "342196612566",
+            appId: "1:342196612566:web:c7f34365c4e10502e60877"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const appId = 'auxiliar-pro';
+
         const { useState, useEffect } = React;
         const LOCAL_STORAGE_KEY = 'auxiliar_pro_data';
         
-        // --- URLs CONFIGURADAS ---
+        // --- URLs ---
         const LOGO_URL = "https://raw.githubusercontent.com/marcar1972-cyber/Auxiliar--pro/34923cb127c2feede55ec712bdc0261f1b23da3c/logo_auxiliarpro_3_400x240_ajustado.png";
         const DERMO_URL = "https://auxiliar-dermocheck.vercel.app";
 
-        // --- DATOS ESTÁTICOS ---
+        // --- DATOS ---
         const BLOG_POSTS = [
             { id: 'art1', date: '04 DIC', category: 'Legal', title: 'Decreto 466: La "Biblia" de la Farmacia', excerpt: 'Reglamento fundamental para aprobar.', content: '<h1>Decreto 466</h1><p>Define roles, temperaturas y leyes...</p>' },
             { id: 'art2', date: '02 DIC', category: 'Técnico', title: 'Ley de Fármacos y Bioequivalencia', excerpt: 'Lo que debes saber de la Ley 20.724.', content: '<h1>Ley 20.724</h1><p>Cambios en bioequivalencia y venta directa...</p>' }
@@ -83,12 +101,14 @@
         const FAQS = [
             { q: "Descripción del Trámite", a: "La certificación de competencias consiste en una solicitud ante la SEREMI de Salud." },
             { q: "¿Dónde hago el trámite?", a: "Disponible en línea en el portal <strong>SEREMI en Línea</strong>." },
-            { q: "Requisitos", a: "Licencia de enseñanza media, certificado laboral de 1 año y foto carnet." }
+            { q: "Requisitos", a: "Licencia de enseñanza media, certificado laboral de 1 año y foto carnet." },
+            { q: "Costos", a: "Examen: ~$19.100, Inscripción: ~$47.600." }
         ];
 
         const PDF_DOCS = [
             { title: 'Ley 20.724 (Fármacos)', file: 'ley_20724.pdf' },
-            { title: 'Decreto 466 (Farmacias)', file: 'decreto_466.pdf' }
+            { title: 'Decreto 466 (Farmacias)', file: 'decreto_466.pdf' },
+            { title: 'Decreto 404 (Estupefacientes)', file: 'decreto_404.pdf' }
         ];
 
         const LEVELS = [
@@ -101,15 +121,15 @@
         // --- COMPONENTES UI ---
         const Icon = ({ name, className }) => <i className={`ph-${name} ${className || ''} text-lg`}></i>;
         
-        const Button = ({ onClick, children, variant = 'primary', className = '', fullWidth = false }) => {
-            const base = "flex items-center justify-center gap-2 rounded-xl font-bold transition-all active:scale-95 text-sm";
+        const Button = ({ onClick, children, variant = 'primary', className = '', fullWidth = false, type = 'button' }) => {
+            const base = "flex items-center justify-center gap-2 rounded-xl font-bold transition-all active:scale-95 text-sm shadow-sm";
             const variants = {
-                primary: "bg-aux-dark text-white hover:bg-slate-800 shadow-md py-3 px-6",
-                green: "bg-aux-green text-white hover:bg-emerald-600 shadow-md py-3 px-6",
+                primary: "bg-aux-dark text-white hover:bg-slate-800 py-3 px-6",
+                green: "bg-aux-green text-white hover:bg-emerald-600 py-3 px-6",
                 secondary: "bg-white border-2 border-slate-200 text-slate-600 hover:border-aux-green hover:text-aux-green py-3 px-6",
                 danger: "bg-red-50 text-red-500 border border-red-100 py-3 px-6"
             };
-            return <button onClick={onClick} className={`${base} ${variants[variant]} ${fullWidth ? 'w-full' : ''} ${className}`}>{children}</button>;
+            return <button type={type} onClick={onClick} className={`${base} ${variants[variant]} ${fullWidth ? 'w-full' : ''} ${className}`}>{children}</button>;
         };
 
         const Accordion = ({ title, content }) => {
@@ -127,31 +147,28 @@
             );
         };
 
-        // --- HEADER CON MEDIDAS EXACTAS ---
+        // --- HEADER SIMPLIFICADO ---
         const Header = ({ setView, user, setActiveModal }) => (
-            <header className="bg-white shadow-sm h-[80px] px-4 md:px-12 flex justify-between items-center sticky top-0 z-50 transition-all">
-                {/* LOGO: Altura exacta 52px */}
+            <header className="bg-white shadow-sm h-20 px-6 flex justify-between items-center sticky top-0 z-50">
+                {/* LOGO A LA IZQUIERDA */}
                 <div onClick={() => setView('LANDING')} className="cursor-pointer flex items-center h-full">
-                    <img src={LOGO_URL} alt="AuxiliarPro" className="h-[40px] md:h-[52px] w-auto object-contain hover:opacity-90 transition-opacity" />
+                    <img src={LOGO_URL} alt="AuxiliarPro" className="h-12 md:h-16 object-contain" />
                 </div>
 
-                {/* MENÚ DERECHA: Estilo profesional */}
-                <nav className="hidden md:flex items-center gap-2">
-                    <button onClick={() => setView('DASHBOARD')} className="text-[14px] font-medium text-slate-600 hover:text-aux-green py-[10px] px-[14px] transition-colors">Estudio</button>
-                    <button onClick={() => setView('DERMOCHECK')} className="text-[14px] font-medium text-aux-green border border-aux-green bg-white rounded-full py-[8px] px-[18px] hover:bg-emerald-50 transition-all mx-2">DermoCheck</button>
-                    <button onClick={() => setView('BLOG')} className="text-[14px] font-medium text-slate-600 hover:text-aux-green py-[10px] px-[14px] transition-colors">Blog</button>
+                {/* MENÚ A LA DERECHA (Sin DermoCheck) */}
+                <div className="flex gap-6 items-center">
+                    <button onClick={() => setView('DASHBOARD')} className="text-sm font-bold text-slate-600 hover:text-aux-green hidden md:block">Estudio</button>
+                    <button onClick={() => setView('BLOG')} className="text-sm font-bold text-slate-600 hover:text-aux-green hidden md:block">Blog</button>
                     
-                    {/* Botón Acción */}
                     {user.isAuthenticated ? 
-                        <button onClick={() => setView('DASHBOARD')} className="ml-4 bg-aux-dark text-white text-[14px] font-bold py-[10px] px-[24px] rounded-lg shadow-md hover:bg-slate-800 transition-all transform active:scale-95">Panel</button> :
-                        <button onClick={() => setActiveModal('auth')} className="ml-4 bg-aux-dark text-white text-[14px] font-bold py-[10px] px-[24px] rounded-lg shadow-md hover:bg-slate-800 transition-all transform active:scale-95">Ingresar</button>
+                        <button onClick={() => setView('DASHBOARD')} className="bg-aux-dark text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors">Panel</button> :
+                        <button onClick={() => setActiveModal('auth')} className="bg-aux-green text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-emerald-600 transition-colors">Ingresar</button>
                     }
-                </nav>
-                <button className="md:hidden text-aux-dark text-2xl" onClick={()=>alert('Menú móvil')}><Icon name="list" /></button>
+                </div>
             </header>
         );
 
-        // --- APP PRINCIPAL ---
+        // --- APP ---
         function App() {
             const [view, setView] = useState('LANDING');
             const [user, setUser] = useState({ name: '', isAuthenticated: false, completedLevels: [] });
@@ -159,31 +176,121 @@
             const [activeModal, setActiveModal] = useState(null);
             const [authMode, setAuthMode] = useState('login'); 
             const [legalTab, setLegalTab] = useState('terms');
+            const [selectedArticle, setSelectedArticle] = useState(null);
 
-            // Carga inicial (Simulada para estabilidad)
+            // Auth Logic
             useEffect(() => {
-                const local = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || '{}');
-                if (local.isAuthenticated) setUser(local);
+                const unsubscribe = onAuthStateChanged(auth, (u) => {
+                    if (u) {
+                        const ref = doc(db, 'artifacts', appId, 'users', u.uid, 'data', 'progress');
+                        onSnapshot(ref, (snap) => {
+                            if (snap.exists()) setUser({ ...snap.data(), uid: u.uid, isAuthenticated: true });
+                            else setUser({ name: u.displayName || 'Colega', currentLevel: 1, completedLevels: [], isAuthenticated: true, uid: u.uid });
+                        });
+                    } else {
+                        const local = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || '{}');
+                        if (local.isAuthenticated) setUser(local);
+                    }
+                });
+                return () => unsubscribe();
             }, []);
 
-            // Login Simulado (Para evitar errores de módulo ahora mismo)
-            const handleLogin = (e) => {
-                e.preventDefault();
-                // Aquí simulamos que el login fue exitoso
-                const newUser = { name: 'Colega', isAuthenticated: true, completedLevels: [] };
-                setUser(newUser);
-                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newUser));
-                setActiveModal(null);
-                setView('DASHBOARD');
+            const saveProgress = (newLevel, newCompleted) => {
+                const updated = { ...user, currentLevel: newLevel, completedLevels: newCompleted };
+                setUser(updated);
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+                if (user.uid) {
+                    try { setDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'data', 'progress'), updated, { merge: true }); } catch(e) {}
+                }
             };
 
-            const logout = () => {
-                setUser({ name: '', isAuthenticated: false, completedLevels: [] });
-                localStorage.removeItem(LOCAL_STORAGE_KEY);
-                setView('LANDING');
+            const startQuiz = (lvlId) => setQuizState({ active: true, levelId: lvlId, qIndex: 0, score: 0, showResult: false });
+            
+            const handleAnswer = (idx) => {
+                const lvl = LEVELS.find(l => l.id === quizState.levelId);
+                const q = lvl.questions[quizState.qIndex];
+                const isCorrect = idx === q.correctIndex;
+                const nextScore = isCorrect ? quizState.score + 1 : quizState.score;
+                
+                if (quizState.qIndex + 1 < lvl.qCount) {
+                    setQuizState({ ...quizState, qIndex: quizState.qIndex + 1, score: nextScore });
+                } else {
+                    const passed = nextScore >= lvl.passingScore;
+                    if (passed) {
+                        const nextLvl = lvl.id === user.currentLevel ? user.currentLevel + 1 : user.currentLevel;
+                        const compl = user.completedLevels.includes(lvl.id) ? user.completedLevels : [...user.completedLevels, lvl.id];
+                        saveProgress(nextLvl, compl);
+                        if(window.confetti) window.confetti();
+                    }
+                    setQuizState({ ...quizState, showResult: true, score: nextScore });
+                }
             };
 
-            // VISTA LANDING
+            const Footer = () => (
+                <footer className="bg-aux-dark text-slate-400 py-10 px-6 text-center text-xs mt-auto">
+                    <div className="max-w-md mx-auto">
+                        <div className="border border-slate-700 bg-slate-800/50 p-6 rounded-xl mb-8">
+                            <h4 className="font-bold text-white uppercase mb-2">Comentarios</h4>
+                            <p className="mb-4">¿Errores o sugerencias?</p>
+                            <a href="mailto:auxiliarprofarma@gmail.com" className="bg-white text-aux-dark px-4 py-2 rounded-full font-bold">auxiliarprofarma@gmail.com</a>
+                            <p className="mt-4 italic opacity-50">Sitio construido con asistencia de IA. Validar información.</p>
+                        </div>
+                        <div className="flex justify-center gap-4 uppercase font-bold text-[10px]">
+                            <button onClick={() => {setLegalTab('terms'); setActiveModal('legal');}}>Términos</button>
+                            <button onClick={() => {setLegalTab('privacy'); setActiveModal('legal');}}>Privacidad</button>
+                            <button onClick={() => {setLegalTab('disclaimers'); setActiveModal('legal');}}>Descargos</button>
+                        </div>
+                        <p className="mt-4 opacity-30">© 2026 AuxiliarPro</p>
+                    </div>
+                </footer>
+            );
+
+            // AUTH MODAL COMPLETO (Recuperado)
+            const AuthModal = () => {
+                if (activeModal !== 'auth') return null;
+                const [form, setForm] = useState({ name: '', email: '', pass: '' });
+                const [error, setError] = useState('');
+
+                const handleSubmit = async (e) => {
+                    e.preventDefault();
+                    setError('');
+                    try {
+                        if (authMode === 'register') {
+                            const cred = await createUserWithEmailAndPassword(auth, form.email, form.pass);
+                            await updateProfile(cred.user, { displayName: form.name });
+                            await setDoc(doc(db, 'artifacts', appId, 'users', cred.user.uid, 'data', 'progress'), { name: form.name, currentLevel: 1, completedLevels: [], lastUpdate: new Date() });
+                        } else {
+                            await signInWithEmailAndPassword(auth, form.email, form.pass);
+                        }
+                        setActiveModal(null);
+                        setView('DASHBOARD');
+                    } catch (err) { setError(err.code === 'auth/wrong-password' ? 'Contraseña incorrecta' : 'Error en los datos'); }
+                };
+
+                return (
+                    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 animate-fade-in">
+                        <div className="bg-white p-8 rounded-3xl w-full max-w-sm relative shadow-2xl">
+                            <button onClick={() => setActiveModal(null)} className="absolute top-4 right-4 text-slate-300 hover:text-slate-600"><Icon name="x" className="text-xl"/></button>
+                            <div className="text-center mb-6">
+                                <div className="bg-emerald-100 w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 text-emerald-600 text-2xl"><Icon name="user" /></div>
+                                <h2 className="text-2xl font-bold text-slate-800">{authMode === 'register' ? 'Crear Cuenta' : 'Bienvenido'}</h2>
+                            </div>
+                            <form onSubmit={handleSubmit} className="space-y-3">
+                                {authMode === 'register' && <input type="text" placeholder="Tu Nombre" className="w-full p-3 bg-slate-50 border rounded-xl" required onChange={e => setForm({...form, name: e.target.value})} />}
+                                <input type="email" placeholder="Correo Electrónico" className="w-full p-3 bg-slate-50 border rounded-xl" required onChange={e => setForm({...form, email: e.target.value})} />
+                                <input type="password" placeholder="Contraseña" className="w-full p-3 bg-slate-50 border rounded-xl" required onChange={e => setForm({...form, pass: e.target.value})} />
+                                {error && <p className="text-red-500 text-xs text-center font-bold">{error}</p>}
+                                <Button fullWidth variant="green" type="submit">{authMode === 'register' ? 'Registrarse Gratis' : 'Entrar'}</Button>
+                            </form>
+                            <button onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')} className="block w-full text-center mt-4 text-sm text-slate-500 hover:text-aux-green underline">
+                                {authMode === 'login' ? '¿No tienes cuenta? Regístrate aquí' : '¿Ya tienes cuenta? Inicia Sesión'}
+                            </button>
+                        </div>
+                    </div>
+                );
+            };
+
+            // VISTAS
             const renderLanding = () => (
                 <div className="flex-1 flex flex-col bg-white w-full h-full overflow-hidden">
                     <Header setView={setView} user={user} setActiveModal={setActiveModal} />
@@ -204,7 +311,7 @@
                                 <p className="text-slate-600 font-medium leading-relaxed relative z-10">"Auxiliar en preparación, esta web es mi cuaderno de estudio. Aquí encontrarás lo que estoy aprendiendo para el examen de 2026. ¡Vamos por ese logro juntos!"</p>
                             </div>
 
-                            <div className="border-t border-slate-100 pt-8 mt-4">
+                            <div className="border-t border-slate-100 pt-8 mt-4 pb-8">
                                 <h3 className="font-bold text-slate-800 mb-4">¿Dudas sobre el proceso?</h3>
                                 <Button variant="secondary" onClick={() => setView('FAQS')}><Icon name="question"/> Ver Preguntas Frecuentes</Button>
                             </div>
@@ -214,7 +321,6 @@
                 </div>
             );
 
-            // VISTA DASHBOARD
             const renderDashboard = () => (
                 <div className="flex-1 flex flex-col bg-slate-50 w-full h-full overflow-hidden">
                     <Header setView={setView} user={user} setActiveModal={setActiveModal} />
@@ -223,14 +329,14 @@
                             <div className="bg-aux-dark text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
                                 <div className="flex justify-between items-center mb-2">
                                     <span className="text-xs font-bold text-slate-400 uppercase">Tu Progreso</span>
-                                    <span className="text-2xl font-bold text-aux-green">0%</span>
+                                    <span className="text-2xl font-bold text-aux-green">{Math.round((user.completedLevels.length / LEVELS.length) * 100)}%</span>
                                 </div>
-                                <div className="w-full bg-slate-700 h-2 rounded-full"><div className="bg-aux-green h-full rounded-full" style={{width: '0%'}}></div></div>
+                                <div className="w-full bg-slate-700 h-2 rounded-full"><div className="bg-aux-green h-full rounded-full" style={{width: `${(user.completedLevels.length / LEVELS.length) * 100}%`}}></div></div>
                             </div>
                             <div className="space-y-3">
                                 {LEVELS.map(l => (
-                                    <div key={l.id} className="bg-white p-4 rounded-xl border-2 border-slate-100 flex items-center gap-4 hover:border-aux-green cursor-pointer" onClick={()=>alert('Próximamente')}>
-                                        <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white ${l.iconBg}`}><Icon name="play"/></div>
+                                    <div key={l.id} onClick={() => !(l.id > user.currentLevel) && startQuiz(l.id)} className={`bg-white p-4 rounded-xl border-2 flex items-center gap-4 ${l.id > user.currentLevel ? 'opacity-60' : 'hover:border-aux-green cursor-pointer'}`}>
+                                        <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white ${l.id > user.currentLevel ? 'bg-slate-300' : l.iconBg}`}><Icon name={l.id > user.currentLevel ? "lock" : "play"}/></div>
                                         <div className="flex-1"><h4 className="font-bold text-aux-dark">{l.title}</h4><p className="text-xs text-slate-500">{l.desc}</p></div>
                                     </div>
                                 ))}
@@ -239,64 +345,102 @@
                                 <Button variant="secondary" onClick={() => setView('LIBRARY')}><Icon name="book"/> Biblioteca</Button>
                                 <Button variant="secondary" onClick={() => setActiveModal('community')}><Icon name="users"/> Foro</Button>
                             </div>
-                            <div className="pt-6"><Button variant="danger" fullWidth onClick={logout}>Cerrar Sesión</Button></div>
+                            <div className="pt-6"><Button variant="danger" fullWidth onClick={() => {signOut(auth); localStorage.removeItem(LOCAL_STORAGE_KEY); setView('LANDING');}}>Cerrar Sesión</Button></div>
                         </div>
                     </div>
                 </div>
             );
 
-            // OTRAS VISTAS SIMPLIFICADAS
             const renderDermoCheck = () => (
-                <div className="flex-1 flex flex-col bg-aux-dark w-full h-full absolute inset-0 z-50">
+                <div className="flex-1 flex flex-col bg-aux-dark w-full h-screen absolute inset-0 z-50">
                     <div className="bg-aux-dark text-white p-3 flex justify-between items-center shadow-md z-10">
                         <span className="font-bold flex items-center gap-2"><Icon name="calculator" className="text-aux-green"/> DermoCheck</span>
-                        <button onClick={() => setView('LANDING')} className="text-xs bg-white/10 px-3 py-1 rounded-full">Salir</button>
+                        <button onClick={() => setView('LANDING')} className="text-xs bg-white/10 px-3 py-1 rounded-full hover:bg-white/20 transition-colors">Salir</button>
                     </div>
                     <div className="flex-1 bg-black relative"><iframe src={DERMO_URL} className="w-full h-full border-0"></iframe></div>
                 </div>
             );
 
-            const Footer = () => (
-                <footer className="bg-aux-dark text-slate-400 py-10 px-6 text-center text-xs mt-auto">
-                    <div className="max-w-md mx-auto">
-                        <div className="border border-slate-700 bg-slate-800/50 p-6 rounded-xl mb-8">
-                            <h4 className="font-bold text-white uppercase mb-2">Comentarios</h4>
-                            <p className="mb-4">¿Errores o sugerencias?</p>
-                            <a href="mailto:auxiliarprofarma@gmail.com" className="bg-white text-aux-dark px-4 py-2 rounded-full font-bold">auxiliarprofarma@gmail.com</a>
-                            <p className="mt-4 italic opacity-50">Sitio construido con asistencia de IA. Validar información.</p>
-                        </div>
-                        <p>© 2026 AuxiliarPro</p>
-                    </div>
-                </footer>
-            );
-
-            const AuthModal = () => {
-                if (activeModal !== 'auth') return null;
+            // Modales Legales, Blog, Faqs, etc.
+            const LegalModal = () => {
+                if (activeModal !== 'legal') return null;
+                const texts = {
+                    terms: "Términos de Uso: Esta plataforma es educativa. El uso es responsabilidad del usuario.",
+                    privacy: "Privacidad: Solo almacenamos tu progreso localmente o en Firebase para mejorar tu experiencia.",
+                    disclaimers: "Descargos: AuxiliarPro NO representa al MINSAL. Iniciativa independiente."
+                };
                 return (
                     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-                        <div className="bg-white p-8 rounded-3xl w-full max-w-sm relative">
-                            <button onClick={()=>setActiveModal(null)} className="absolute top-4 right-4 text-slate-400"><Icon name="x"/></button>
-                            <h2 className="text-2xl font-bold text-center mb-6 text-aux-dark">Bienvenido</h2>
-                            <form onSubmit={handleLogin} className="space-y-4">
-                                <input type="email" placeholder="Correo" className="w-full p-3 border rounded-xl" required />
-                                <input type="password" placeholder="Contraseña" className="w-full p-3 border rounded-xl" required />
-                                <Button fullWidth type="submit">Ingresar (Simulado)</Button>
-                            </form>
+                        <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl">
+                            <h3 className="font-bold text-lg mb-4 capitalize text-aux-dark">{legalTab}</h3>
+                            <p className="text-sm text-slate-600 mb-6 leading-relaxed">{texts[legalTab]}</p>
+                            <Button fullWidth variant="green" onClick={() => setActiveModal(null)}>Entendido</Button>
                         </div>
                     </div>
                 );
             };
 
-            // Ruteo
+            const CommunityModal = () => {
+                if (activeModal !== 'community') return null;
+                return (
+                    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+                        <div className="bg-white rounded-2xl p-6 max-w-sm text-center shadow-xl">
+                            <Icon name="users" className="text-4xl text-blue-500 mb-4"/>
+                            <h3 className="font-bold mb-2 text-aux-dark">Comunidad</h3>
+                            <p className="text-sm mb-6 text-slate-600">Únete a nuestros grupos de estudio.</p>
+                            <div className="space-y-3">
+                                <a href="https://chat.whatsapp.com/IPvHmnNGWYmH61FrdV56g1" target="_blank" className="block w-full bg-[#25D366] text-white py-3 rounded-xl font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2"><Icon name="whatsapp-logo" size={20} />WhatsApp</a>
+                                <a href="https://www.facebook.com/share/g/1AFb8riMpT/" target="_blank" className="block w-full bg-[#1877F2] text-white py-3 rounded-xl font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2"><Icon name="facebook-logo" size={20} />Facebook</a>
+                            </div>
+                            <button onClick={()=>setActiveModal(null)} className="mt-6 text-slate-400 text-sm hover:text-slate-600 transition-colors">Cerrar</button>
+                        </div>
+                    </div>
+                );
+            };
+
             return (
                 <div className="w-full max-w-md bg-white h-screen md:h-[90vh] md:rounded-3xl md:shadow-2xl overflow-hidden flex flex-col relative mx-auto">
                     {view === 'LANDING' && renderLanding()}
                     {view === 'DASHBOARD' && renderDashboard()}
                     {view === 'DERMOCHECK' && renderDermoCheck()}
-                    {view === 'BLOG' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="p-6"><h2 className="font-bold text-xl">Blog</h2>{BLOG_POSTS.map(p=><div key={p.id} className="border p-4 my-2"><h3>{p.title}</h3></div>)}</div></div>}
-                    {view === 'FAQS' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4">Preguntas</h2>{FAQS.map((f,i)=><Accordion key={i} title={f.q} content={f.a}/>)}</div></div>}
+                    {view === 'LIBRARY' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="p-6"><h2 className="font-bold text-xl mb-4 text-aux-dark">Biblioteca</h2>{PDF_DOCS.map((d,i)=><div key={i} className="p-4 border border-slate-100 rounded-xl mb-3 bg-slate-50 hover:bg-white hover:shadow-sm transition-all flex items-center gap-3"><div className="bg-red-100 p-2 rounded-lg text-red-500"><Icon name="file-pdf" size={24}/></div><a href={d.file} target="_blank" className="text-slate-700 font-bold hover:text-aux-green transition-colors flex-1">{d.title}</a></div>)}<button onClick={()=>setView('DASHBOARD')} className="mt-4 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
+                    {view === 'FAQS' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4 text-aux-dark">Preguntas Frecuentes</h2>{FAQS.map((f,i)=><Accordion key={i} title={f.q} content={f.a}/>)}<button onClick={()=>setView('LANDING')} className="mt-4 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
+                    {view === 'BLOG' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4 text-aux-dark">Blog</h2>{BLOG_POSTS.map(p=><div key={p.id} className="border border-slate-100 p-5 mb-4 rounded-xl bg-white shadow-sm hover:shadow-md transition-all cursor-pointer"><div className="flex justify-between items-center mb-2"><span className="text-xs font-bold text-aux-green bg-emerald-50 px-2 py-1 rounded-full uppercase">{p.category}</span><span className="text-xs text-slate-400">{p.date}</span></div><h3 className="font-bold text-lg text-aux-dark mb-2">{p.title}</h3><p className="text-sm text-slate-500 leading-relaxed">{p.excerpt}</p></div>)}<button onClick={()=>setView('LANDING')} className="mt-4 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
                     
+                    {quizState.active && (
+                        <div className="absolute inset-0 bg-white z-50 flex flex-col animate-fade-in">
+                            <div className="bg-aux-dark text-white p-4 flex justify-between items-center shadow-md">
+                                <span className="font-medium">Pregunta {quizState.qIndex + 1} / {LEVELS.find(l=>l.id===quizState.levelId).qCount}</span>
+                                <button onClick={()=>setQuizState({active:false, score:0, qIndex:0, showResult:false})} className="text-slate-400 hover:text-white transition-colors"><Icon name="x" size={20}/></button>
+                            </div>
+                            <div className="flex-1 p-6 flex flex-col justify-center overflow-y-auto bg-slate-50">
+                                {!quizState.showResult ? (
+                                    <div className="max-w-md mx-auto w-full">
+                                        <div className="mb-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+                                            <span className="text-xs font-bold text-aux-green bg-emerald-50 px-2 py-1 rounded-full uppercase mb-3 inline-block">Pregunta</span>
+                                            <h3 className="text-xl font-bold text-aux-dark leading-snug">{LEVELS.find(l=>l.id===quizState.levelId).questions[quizState.qIndex].text}</h3>
+                                        </div>
+                                        <div className="space-y-3">
+                                            {LEVELS.find(l=>l.id===quizState.levelId).questions[quizState.qIndex].options.map((opt,i) => (
+                                                <button key={i} onClick={()=>handleAnswer(i)} className="w-full p-4 border-2 border-slate-100 rounded-xl text-left hover:bg-emerald-50 hover:border-aux-green transition-all bg-white font-medium text-slate-700 flex items-center group"><span className="w-8 h-8 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center mr-3 font-bold text-sm group-hover:bg-aux-green group-hover:text-white transition-colors">{String.fromCharCode(65+i)}</span>{opt}</button>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="text-center max-w-md mx-auto w-full bg-white p-8 rounded-2xl shadow-lg">
+                                        <div className="text-6xl mb-4">{quizState.score >= LEVELS.find(l=>l.id===quizState.levelId).passingScore ? '🎉' : '💪'}</div>
+                                        <h2 className="text-2xl font-bold mb-2 text-aux-dark">{quizState.score >= LEVELS.find(l=>l.id===quizState.levelId).passingScore ? '¡Nivel Aprobado!' : '¡Sigue Practicando!'}</h2>
+                                        <p className="mb-8 text-slate-500">Obtuviste {quizState.score} de {LEVELS.find(l=>l.id===quizState.levelId).qCount} respuestas correctas.</p>
+                                        <Button variant="green" fullWidth onClick={()=>setQuizState({active:false, score:0, qIndex:0, showResult:false})}>Volver al Panel</Button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
                     <AuthModal />
+                    <LegalModal />
+                    <CommunityModal />
                 </div>
             );
         }
