@@ -192,21 +192,24 @@
             );
         };
 
-        // --- HEADER (MODIFICADO: BOTÓN BLOG AHORA ES UN BOTÓN VERDE) ---
+        // --- HEADER AJUSTADO (FUENTE REGULAR Y SEPARACIÓN) ---
         const Header = ({ setView, user, setActiveModal }) => (
             <header className="bg-white shadow-sm h-20 px-6 flex justify-between items-center sticky top-0 z-50">
                 <div onClick={() => setView('LANDING')} className="cursor-pointer flex items-center h-full">
-                    {/* URL del logo corregida según tu repositorio */}
+                    {/* LOGO: Se mantiene h-10/h-14, buena proporción */}
                     <img src={LOGO_URL} alt="AuxiliarPro" className="h-10 md:h-14 object-contain" />
                 </div>
-                <div className="flex gap-4 items-center">
-                    {/* BOTÓN BLOG: Ahora es un botón verde sólido, simétrico al de Panel */}
-                    <button onClick={() => setView('BLOG')} className="bg-aux-green text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-emerald-600 transition-colors whitespace-nowrap hidden md:block">Blog</button>
+                
+                {/* BOTONERA: Gap 8 para separar más del logo */}
+                <div className="flex gap-8 items-center">
                     
-                    {/* BOTÓN PANEL DE ESTUDIO: Botón oscuro sólido */}
+                    {/* Botón BLOG: Texto regular (font-medium), pequeño (text-xs) */}
+                    <button onClick={() => setView('BLOG')} className="bg-aux-green text-white px-4 py-2 rounded-lg text-xs font-medium hover:bg-emerald-600 transition-colors whitespace-nowrap hidden md:block">Blog</button>
+                    
+                    {/* Botón PANEL DE ESTUDIO: Texto regular (font-medium), pequeño (text-xs), botón oscuro */}
                     {user.isAuthenticated ? 
-                        <button onClick={() => setView('DASHBOARD')} className="bg-aux-dark text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button> :
-                        <button onClick={() => setActiveModal('auth')} className="bg-aux-dark text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button>
+                        <button onClick={() => setView('DASHBOARD')} className="bg-aux-dark text-white px-4 py-2 rounded-lg text-xs font-medium hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button> :
+                        <button onClick={() => setActiveModal('auth')} className="bg-aux-dark text-white px-4 py-2 rounded-lg text-xs font-medium hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button>
                     }
                 </div>
             </header>
