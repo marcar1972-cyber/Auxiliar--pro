@@ -203,12 +203,12 @@
                     
                     {/* BOTÓN UNIFICADO: Siempre dice "Panel de Estudio" y siempre es oscuro */}
                     {user.isAuthenticated ? 
-                        <button onClick={() => setView('DASHBOARD')} className="bg-aux-dark text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button> :
-                        <button onClick={() => setActiveModal('auth')} className="bg-aux-dark text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button>
+                        <button onClick={() => setView('DASHBOARD')} className="bg-aux-dark text-white px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button> :
+                        <button onClick={() => setActiveModal('auth')} className="bg-aux-dark text-white px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button>
                     }
 
                     {/* Botón Blog ahora a la DERECHA */}
-                    <button onClick={() => setView('BLOG')} className="text-sm font-bold text-slate-600 hover:text-aux-green hidden md:block">Blog</button>
+                    <button onClick={() => setView('BLOG')} className="text-xs font-bold text-slate-600 hover:text-aux-green hidden md:block">Blog</button>
                 </div>
             </header>
         );
