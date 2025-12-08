@@ -192,21 +192,23 @@
             );
         };
 
-        // --- HEADER (MODIFICADO: Blog a la izquierda) ---
+        // --- HEADER (MODIFICADO: Logo más chico, Blog a la derecha) ---
         const Header = ({ setView, user, setActiveModal }) => (
             <header className="bg-white shadow-sm h-20 px-6 flex justify-between items-center sticky top-0 z-50">
                 <div onClick={() => setView('LANDING')} className="cursor-pointer flex items-center h-full">
-                    <img src={LOGO_URL} alt="AuxiliarPro" className="h-12 md:h-16 object-contain" />
+                    {/* Se reduce el tamaño del logo: h-10 en móvil, h-14 en escritorio */}
+                    <img src={LOGO_URL} alt="AuxiliarPro" className="h-10 md:h-14 object-contain" />
                 </div>
                 <div className="flex gap-6 items-center">
-                    {/* Botón Blog ahora a la IZQUIERDA del panel */}
-                    <button onClick={() => setView('BLOG')} className="text-sm font-bold text-slate-600 hover:text-aux-green hidden md:block">Blog</button>
                     
-                    {/* Botón Panel de Estudio (Derecha) */}
+                    {/* Botón Panel de Estudio (Primero) */}
                     {user.isAuthenticated ? 
                         <button onClick={() => setView('DASHBOARD')} className="bg-aux-dark text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button> :
                         <button onClick={() => setActiveModal('auth')} className="bg-aux-dark text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button>
                     }
+
+                    {/* Botón Blog (Después/Derecha) */}
+                    <button onClick={() => setView('BLOG')} className="text-sm font-bold text-slate-600 hover:text-aux-green hidden md:block">Blog</button>
                 </div>
             </header>
         );
