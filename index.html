@@ -192,23 +192,24 @@
             );
         };
 
-        // --- HEADER ---
+        // --- HEADER AJUSTADO: LOGO MÁS PEQUEÑO Y MÁS SEPARACIÓN ---
         const Header = ({ setView, user, setActiveModal }) => (
             <header className="bg-white shadow-sm h-20 px-6 flex justify-between items-center sticky top-0 z-50">
-                <div onClick={() => setView('LANDING')} className="cursor-pointer flex items-center h-full">
-                    {/* URL del logo corregida según tu repositorio */}
-                    <img src={LOGO_URL} alt="AuxiliarPro" className="h-12 md:h-16 object-contain" />
+                
+                {/* LADO IZQUIERDO: LOGO REDUCIDO (h-10 móvil, h-16 escritorio) */}
+                <div onClick={() => setView('LANDING')} className="cursor-pointer flex items-center h-full mr-8">
+                    <img src={LOGO_URL} alt="AuxiliarPro" className="h-10 md:h-16 object-contain" />
                 </div>
-                <div className="flex gap-6 items-center">
-                    
-                    {/* BOTÓN UNIFICADO: Siempre dice "Panel de Estudio" y siempre es oscuro */}
-                    {user.isAuthenticated ? 
-                        <button onClick={() => setView('DASHBOARD')} className="bg-aux-dark text-white px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button> :
-                        <button onClick={() => setActiveModal('auth')} className="bg-aux-dark text-white px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button>
-                    }
 
-                    {/* Botón Blog ahora a la DERECHA */}
-                    <button onClick={() => setView('BLOG')} className="text-xs font-bold text-slate-600 hover:text-aux-green hidden md:block">Blog</button>
+                {/* LADO DERECHO: MENÚ CON MAYOR SEPARACIÓN */}
+                <div className="flex gap-8 items-center">
+                    <button onClick={() => setView('BLOG')} className="text-sm font-bold text-slate-600 hover:text-aux-green hidden md:block">Blog</button>
+                    
+                    {/* BOTÓN UNIFICADO */}
+                    {user.isAuthenticated ? 
+                        <button onClick={() => setView('DASHBOARD')} className="bg-aux-dark text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button> :
+                        <button onClick={() => setActiveModal('auth')} className="bg-aux-dark text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button>
+                    }
                 </div>
             </header>
         );
