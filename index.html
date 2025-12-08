@@ -14,8 +14,8 @@
         theme: {
           extend: {
             colors: {
-              'aux-dark': '#0E172A',   // Azul Oscuro Profundo
-              'aux-green': '#2A9974',  // Verde Teal
+              'aux-dark': '#0E172A',   
+              'aux-green': '#2A9974',  
               'aux-gray': '#BDC3C1',
               'aux-light': '#F8FAFC',
             },
@@ -36,10 +36,13 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
-      body { -webkit-tap-highlight-color: transparent; }
+      /* Fix para scroll suave en móviles */
+      html, body { 
+          height: 100%; 
+          overscroll-behavior-y: none; /* Evita el rebote de la página completa */
+      }
       .no-scrollbar::-webkit-scrollbar { display: none; }
       
-      /* Estilo Sello de Agua */
       .watermark-container {
           position: relative;
           overflow: hidden;
@@ -55,17 +58,12 @@
           pointer-events: none;
       }
       
-      /* Estilos HTML renderizado */
       .html-content a { color: #2A9974; text-decoration: none; font-weight: 600; }
       .html-content ul { list-style-type: disc; padding-left: 1.2rem; margin-top: 0.5rem; }
       .html-content li { margin-bottom: 0.25rem; }
-      .blog-content h1 { font-size: 1.5rem; font-weight: 800; color: #0E172A; margin-bottom: 1rem; }
-      .blog-content h2 { font-size: 1.25rem; font-weight: 700; color: #2A9974; margin-top: 1.5rem; margin-bottom: 0.5rem; }
-      .blog-content p { margin-bottom: 1rem; line-height: 1.6; color: #334155; }
-      .blog-content strong { color: #0E172A; font-weight: 700; }
     </style>
 </head>
-<body class="bg-white text-aux-dark antialiased min-h-screen flex flex-col items-center justify-center font-sans">
+<body class="bg-white text-aux-dark antialiased h-full flex flex-col items-center justify-center font-sans">
 
     <div id="root" class="w-full h-full flex justify-center items-center"></div>
 
@@ -96,7 +94,7 @@
         const LOGO_URL = "https://raw.githubusercontent.com/marcar1972-cyber/Auxiliar--pro/34923cb127c2feede55ec712bdc0261f1b23da3c/logo_auxiliarpro_3_400x240_ajustado.png";
         const DERMO_URL = "https://auxiliar-dermocheck.vercel.app";
 
-        // --- DATOS BLOG ---
+        // --- DATOS ---
         const BLOG_POSTS = [
             { 
                 id: 'art_req_2026', 
@@ -124,34 +122,22 @@
                     </div>
                     <p>Toda esta experiencia debe estar certificada por el <strong>Químico Farmacéutico Director Técnico</strong> del establecimiento.</p>
                     <p>El trámite oficial se realiza únicamente a través del portal del Ministerio de Salud en <a href="https://seremienlinea.minsal.cl/asdigital/" target="_blank" class="text-aux-green font-bold underline">SEREMI en Línea</a>, donde podrás revisar requisitos actualizados, costos y disponibilidad.</p>
-                    <p>Este proceso es fundamental para obtener la credencial oficial de Auxiliar de Farmacia en Chile y poder trabajar legalmente en farmacias comunitarias.</p>
-
+                    
                     <h2>📋 Requisitos Generales (2026)</h2>
-                    <p>Según la normativa vigente del Ministerio de Salud y el Decreto 466, estos son los requisitos generales:</p>
                     <ul class="space-y-3 mt-2">
-                        <li><strong>✅ 1. Ser mayor de 18 años:</strong> Debes ser legalmente mayor de edad.</li>
-                        <li><strong>✅ 2. Enseñanza media completa:</strong> Debes contar con tu licencia de cuarto medio aprobada.</li>
-                        <li><strong>✅ 3. Haber trabajado en farmacia:</strong> Debes acreditar experiencia práctica en una farmacia, bajo supervisión de un Químico Farmacéutico. <br/><em>👉 Importante: El tiempo exacto y forma de acreditación lo revisa directamente la SEREMI de Salud de tu región.</em></li>
-                        <li><strong>✅ 4. Rendir y aprobar el examen:</strong> Evalúa Farmacología básica, Recetas médicas, Cadena de frío, Fechas de vencimiento, Legislación sanitaria y Buenas prácticas.</li>
-                        <li><strong>✅ 5. Obtener la credencial:</strong> Una vez aprobado el examen, la SEREMI entrega la credencial oficial que te habilita legalmente.</li>
+                        <li><strong>✅ 1. Ser mayor de 18 años</strong></li>
+                        <li><strong>✅ 2. Enseñanza media completa</strong></li>
+                        <li><strong>✅ 3. Haber trabajado en farmacia</strong> (Acreditar experiencia)</li>
+                        <li><strong>✅ 4. Rendir y aprobar el examen</strong></li>
+                        <li><strong>✅ 5. Obtener la credencial</strong></li>
                     </ul>
 
                     <h2>🏥 ¿Dónde se realiza el trámite?</h2>
-                    <p>Todo el proceso se gestiona a través de la SEREMI de Salud de tu región. Cada región puede variar levemente en exigencias de documentos, pero la base legal es la misma en todo Chile.</p>
-
-                    <h2>📚 ¿Puedo prepararme sin instituto?</h2>
-                    <p><strong>Sí.</strong> Puedes estudiar de forma independiente, usar material online y prepararte con guías, PDFs, ensayos y contenido práctico. Muchos auxiliares actuales se han preparado así. Lo importante es dominar bien los contenidos del examen.</p>
+                    <p>Todo el proceso se gestiona a través de la SEREMI de Salud de tu región.</p>
 
                     <div class="mt-6 p-4 bg-slate-100 rounded-lg">
                         <h3 class="font-bold text-aux-dark mb-2">🎯 Conclusión clara</h3>
-                        <p>Si quieres ser Auxiliar de Farmacia en Chile el 2026, necesitas:</p>
-                        <ul class="list-none space-y-1 mt-2">
-                            <li>✔ Cuarto medio</li>
-                            <li>✔ Mínimo 1 año de experiencia en farmacia</li>
-                            <li>✔ Aprobar el examen</li>
-                            <li>✔ Obtener tu credencial SEREMI</li>
-                        </ul>
-                        <p class="mt-2">No es imposible, pero sí requiere constancia, práctica real y estudio enfocado.</p>
+                        <p>Si quieres ser Auxiliar de Farmacia en Chile el 2026, necesitas constancia, práctica real y estudio enfocado.</p>
                     </div>
                 `
             },
@@ -208,18 +194,14 @@
             );
         };
 
-        // --- HEADER SIMPLIFICADO ---
+        // --- HEADER ---
         const Header = ({ setView, user, setActiveModal }) => (
             <header className="bg-white shadow-sm h-20 px-6 flex justify-between items-center sticky top-0 z-50">
-                {/* LOGO A LA IZQUIERDA */}
                 <div onClick={() => setView('LANDING')} className="cursor-pointer flex items-center h-full">
                     <img src={LOGO_URL} alt="AuxiliarPro" className="h-12 md:h-16 object-contain" />
                 </div>
-
-                {/* MENÚ A LA DERECHA (Sin DermoCheck) */}
                 <div className="flex gap-6 items-center">
                     <button onClick={() => setView('BLOG')} className="text-sm font-bold text-slate-600 hover:text-aux-green hidden md:block">Blog</button>
-                    
                     {user.isAuthenticated ? 
                         <button onClick={() => setView('DASHBOARD')} className="bg-aux-dark text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors">Panel</button> :
                         <button onClick={() => setActiveModal('auth')} className="bg-aux-green text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-emerald-600 transition-colors">Ingresar</button>
@@ -287,7 +269,7 @@
             };
 
             const Footer = () => (
-                <footer className="bg-aux-dark text-slate-400 py-10 px-6 text-center text-xs mt-auto">
+                <footer className="bg-aux-dark text-slate-400 py-10 px-6 text-center text-xs mt-auto w-full">
                     <div className="max-w-md mx-auto">
                         <div className="border border-slate-700 bg-slate-800/50 p-6 rounded-xl mb-8">
                             <h4 className="font-bold text-white uppercase mb-2">Comentarios</h4>
@@ -305,7 +287,6 @@
                 </footer>
             );
 
-            // AUTH MODAL COMPLETO (Recuperado)
             const AuthModal = () => {
                 if (activeModal !== 'auth') return null;
                 const [form, setForm] = useState({ name: '', email: '', pass: '' });
@@ -350,11 +331,11 @@
                 );
             };
 
-            // VISTAS
+            // --- VISTAS CORREGIDAS (SCROLL FIX) ---
             const renderLanding = () => (
                 <div className="flex-1 flex flex-col bg-white w-full h-full overflow-hidden">
                     <Header setView={setView} user={user} setActiveModal={setActiveModal} />
-                    <div className="flex-1 overflow-y-auto">
+                    <div className="flex-1 overflow-y-auto min-h-0"> {/* SCROLL FIX */}
                         <div className="p-6 text-center max-w-md mx-auto mt-8">
                             <div className="inline-block bg-emerald-50 text-aux-green px-3 py-1 rounded-full text-[10px] font-bold mb-6">META: CREDENCIAL 2026</div>
                             <h1 className="text-4xl font-extrabold text-aux-dark mb-6 leading-tight">PREPÁRATE PARA TU <br/><span className="text-aux-green">EXAMEN DE AUXILIAR</span></h1>
@@ -384,7 +365,7 @@
             const renderDashboard = () => (
                 <div className="flex-1 flex flex-col bg-slate-50 w-full h-full overflow-hidden">
                     <Header setView={setView} user={user} setActiveModal={setActiveModal} />
-                    <div className="flex-1 overflow-y-auto p-4 pb-20">
+                    <div className="flex-1 overflow-y-auto p-4 pb-20 min-h-0"> {/* SCROLL FIX */}
                         <div className="max-w-md mx-auto space-y-4">
                             <div className="bg-aux-dark text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
                                 <div className="flex justify-between items-center mb-2">
@@ -412,7 +393,7 @@
             );
 
             const renderDermoCheck = () => (
-                <div className="flex-1 flex flex-col bg-aux-dark w-full h-screen absolute inset-0 z-50">
+                <div className="flex-1 flex flex-col bg-aux-dark w-full h-full absolute inset-0 z-50">
                     <div className="bg-aux-dark text-white p-3 flex justify-between items-center shadow-md z-10">
                         <span className="font-bold flex items-center gap-2"><Icon name="calculator" className="text-aux-green"/> DermoCheck</span>
                         <button onClick={() => setView('LANDING')} className="text-xs bg-white/10 px-3 py-1 rounded-full hover:bg-white/20 transition-colors">Salir</button>
@@ -459,22 +440,22 @@
             };
 
             return (
-                <div className="w-full max-w-md bg-white h-screen md:h-[90vh] md:rounded-3xl md:shadow-2xl overflow-hidden flex flex-col relative mx-auto">
+                <div className="w-full max-w-md bg-white h-[100dvh] md:rounded-3xl md:shadow-2xl overflow-hidden flex flex-col relative mx-auto">
                     {view === 'LANDING' && renderLanding()}
                     {view === 'DASHBOARD' && renderDashboard()}
                     {view === 'DERMOCHECK' && renderDermoCheck()}
-                    {view === 'LIBRARY' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="flex-1 p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4 text-aux-dark">Biblioteca</h2>{PDF_DOCS.map((d,i)=><div key={i} className="p-4 border border-slate-100 rounded-xl mb-3 bg-slate-50 hover:bg-white hover:shadow-sm transition-all flex items-center gap-3"><div className="bg-red-100 p-2 rounded-lg text-red-500"><Icon name="file-pdf" size={24}/></div><a href={d.file} target="_blank" className="text-slate-700 font-bold hover:text-aux-green transition-colors flex-1">{d.title}</a></div>)}<button onClick={()=>setView('DASHBOARD')} className="mt-4 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
-                    {view === 'FAQS' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="flex-1 p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4 text-aux-dark">Preguntas Frecuentes</h2>{FAQS.map((f,i)=><Accordion key={i} title={f.q} content={f.a}/>)}<button onClick={()=>setView('LANDING')} className="mt-4 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
-                    {view === 'BLOG' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="flex-1 p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4 text-aux-dark">Blog</h2><div className="space-y-4">{BLOG_POSTS.map(p=><div key={p.id} onClick={()=>setSelectedArticle(p) || setView('ARTICLE')} className="border border-slate-100 p-5 rounded-xl bg-white shadow-sm hover:shadow-md transition-all cursor-pointer"><div className="flex justify-between items-center mb-2"><span className="text-xs font-bold text-aux-green bg-emerald-50 px-2 py-1 rounded-full uppercase">{p.category}</span><span className="text-xs text-slate-400">{p.date}</span></div><h3 className="font-bold text-lg text-aux-dark mb-2">{p.title}</h3><p className="text-sm text-slate-500 leading-relaxed line-clamp-3">{p.excerpt}</p></div>)}</div><button onClick={()=>setView('LANDING')} className="mt-6 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
-                    {view === 'ARTICLE' && <div className="flex-1 flex flex-col bg-white z-50 animate-fade-in"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="flex-1 p-6 overflow-y-auto"><button onClick={()=>setView('BLOG')} className="mb-4 text-slate-400 flex items-center gap-1 hover:text-aux-green"><Icon name="arrow-left"/> Volver</button><div className="max-w-2xl mx-auto blog-content"><span className="text-xs font-bold text-aux-green bg-emerald-50 px-2 py-1 rounded-full uppercase mb-4 inline-block">{selectedArticle?.category}</span><div dangerouslySetInnerHTML={{__html: selectedArticle?.content}}></div></div></div></div>}
+                    {view === 'LIBRARY' && <div className="flex-1 flex flex-col h-full"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="flex-1 p-6 overflow-y-auto min-h-0"><h2 className="font-bold text-xl mb-4 text-aux-dark">Biblioteca</h2>{PDF_DOCS.map((d,i)=><div key={i} className="p-4 border border-slate-100 rounded-xl mb-3 bg-slate-50 hover:bg-white hover:shadow-sm transition-all flex items-center gap-3"><div className="bg-red-100 p-2 rounded-lg text-red-500"><Icon name="file-pdf" size={24}/></div><a href={d.file} target="_blank" className="text-slate-700 font-bold hover:text-aux-green transition-colors flex-1">{d.title}</a></div>)}<button onClick={()=>setView('DASHBOARD')} className="mt-4 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
+                    {view === 'FAQS' && <div className="flex-1 flex flex-col h-full"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="flex-1 p-6 overflow-y-auto min-h-0"><h2 className="font-bold text-xl mb-4 text-aux-dark">Preguntas Frecuentes</h2>{FAQS.map((f,i)=><Accordion key={i} title={f.q} content={f.a}/>)}<button onClick={()=>setView('LANDING')} className="mt-4 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
+                    {view === 'BLOG' && <div className="flex-1 flex flex-col h-full"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="flex-1 p-6 overflow-y-auto min-h-0"><h2 className="font-bold text-xl mb-4 text-aux-dark">Blog</h2><div className="space-y-4">{BLOG_POSTS.map(p=><div key={p.id} onClick={()=>setSelectedArticle(p) || setView('ARTICLE')} className="border border-slate-100 p-5 rounded-xl bg-white shadow-sm hover:shadow-md transition-all cursor-pointer"><div className="flex justify-between items-center mb-2"><span className="text-xs font-bold text-aux-green bg-emerald-50 px-2 py-1 rounded-full uppercase">{p.category}</span><span className="text-xs text-slate-400">{p.date}</span></div><h3 className="font-bold text-lg text-aux-dark mb-2">{p.title}</h3><p className="text-sm text-slate-500 leading-relaxed line-clamp-3">{p.excerpt}</p></div>)}</div><button onClick={()=>setView('LANDING')} className="mt-6 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
+                    {view === 'ARTICLE' && <div className="flex-1 flex flex-col bg-white z-50 animate-fade-in h-full"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="flex-1 p-6 overflow-y-auto min-h-0"><button onClick={()=>setView('BLOG')} className="mb-4 text-slate-400 flex items-center gap-1 hover:text-aux-green"><Icon name="arrow-left"/> Volver</button><div className="max-w-2xl mx-auto blog-content"><span className="text-xs font-bold text-aux-green bg-emerald-50 px-2 py-1 rounded-full uppercase mb-4 inline-block">{selectedArticle?.category}</span><div dangerouslySetInnerHTML={{__html: selectedArticle?.content}}></div></div></div></div>}
                     
                     {quizState.active && (
-                        <div className="absolute inset-0 bg-white z-50 flex flex-col animate-fade-in">
+                        <div className="absolute inset-0 bg-white z-50 flex flex-col animate-fade-in h-full">
                             <div className="bg-aux-dark text-white p-4 flex justify-between items-center shadow-md">
                                 <span className="font-medium">Pregunta {quizState.qIndex + 1} / {LEVELS.find(l=>l.id===quizState.levelId).qCount}</span>
                                 <button onClick={()=>setQuizState({active:false, score:0, qIndex:0, showResult:false})} className="text-slate-400 hover:text-white transition-colors"><Icon name="x" size={20}/></button>
                             </div>
-                            <div className="flex-1 p-6 flex flex-col justify-center overflow-y-auto bg-slate-50">
+                            <div className="flex-1 p-6 flex flex-col justify-center overflow-y-auto bg-slate-50 min-h-0">
                                 {!quizState.showResult ? (
                                     <div className="max-w-md mx-auto w-full">
                                         <div className="mb-8 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
