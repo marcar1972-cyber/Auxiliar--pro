@@ -192,16 +192,16 @@
             );
         };
 
-        // --- HEADER AJUSTADO (BOTONES AGRUPADOS) ---
+        // --- HEADER AJUSTADO (Blog más cerca del Panel) ---
         const Header = ({ setView, user, setActiveModal }) => (
             <header className="bg-white shadow-sm h-20 px-6 flex justify-between items-center sticky top-0 z-50">
                 <div onClick={() => setView('LANDING')} className="cursor-pointer flex items-center h-full">
-                    {/* LOGO: Se mantiene h-10/h-14, buena proporción */}
+                    {/* URL del logo corregida según tu repositorio */}
                     <img src={LOGO_URL} alt="AuxiliarPro" className="h-10 md:h-14 object-contain" />
                 </div>
                 
-                {/* BOTONERA: Gap reducido a 4 para agrupar los botones */}
-                <div className="flex gap-4 items-center">
+                {/* BOTONERA: Gap reducido a 2 para agrupar los botones aún más cerca */}
+                <div className="flex gap-2 items-center">
                     
                     {/* Botón BLOG: Texto regular (font-medium), pequeño (text-xs) */}
                     <button onClick={() => setView('BLOG')} className="bg-aux-green text-white px-4 py-2 rounded-lg text-xs font-medium hover:bg-emerald-600 transition-colors whitespace-nowrap hidden md:block">Blog</button>
@@ -486,7 +486,6 @@
                         </div>
                     )}
 
-                    
                     <AuthModal />
                     <LegalModal />
                     <CommunityModal />
