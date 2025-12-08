@@ -45,6 +45,12 @@
           box-shadow: 2px 4px 6px rgba(0,0,0,0.1);
           border: 1px solid #d1fae5;
       }
+      /* Estilos HTML renderizado */
+      .html-content a { color: #00C853; text-decoration: none; font-weight: 600; }
+      .html-content ul { list-style-type: disc; padding-left: 1.2rem; }
+      .blog-content h1 { font-size: 1.5rem; font-weight: 800; color: #0d1b2a; margin-bottom: 1rem; }
+      .blog-content h2 { font-size: 1.25rem; font-weight: 700; color: #059669; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+      .blog-content p { margin-bottom: 1rem; line-height: 1.6; color: #475569; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col items-center justify-center font-sans">
@@ -56,7 +62,7 @@
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
-        // CONFIGURACIÓN (Rellena con tus datos reales de Firebase si es necesario, dejo los del código anterior)
+        // CONFIGURACIÓN FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyDNhuSBBhmmQSV0BHC8MOtLKgAUpvtfWfE",
             authDomain: "auxiliar-pro.firebaseapp.com",
@@ -78,7 +84,7 @@
         const LOGO_URL = "https://raw.githubusercontent.com/marcar1972-cyber/Auxiliar--pro/34923cb127c2feede55ec712bdc0261f1b23da3c/logo_auxiliarpro_3_400x240_ajustado.png";
         const DERMO_URL = "https://auxiliar-dermocheck.vercel.app";
 
-        // --- DATOS DUROS ---
+        // --- DATOS ---
         const BLOG_POSTS = [
             { id: 'art1', date: '04 DIC', category: 'Legal', title: 'Decreto 466: La "Biblia" de la Farmacia', excerpt: 'Reglamento fundamental para aprobar.', content: '<h1>Decreto 466</h1><p>Define roles, temperaturas y leyes...</p>' },
             { id: 'art2', date: '02 DIC', category: 'Técnico', title: 'Ley de Fármacos y Bioequivalencia', excerpt: 'Lo que debes saber de la Ley 20.724.', content: '<h1>Ley 20.724</h1><p>Cambios en bioequivalencia y venta directa...</p>' }
@@ -87,6 +93,13 @@
         const FAQS = [
             { q: "¿Cómo inscribirme al examen?", a: "En seremitramites.minsal.cl con Clave Única." },
             { q: "Requisitos Auxiliar", a: "Licencia media y certificado de experiencia de 1 año." }
+        ];
+
+        const PDF_DOCS = [
+            { title: 'Ley 20.724 (Ley de Fármacos)', file: 'ley_20724.pdf' },
+            { title: 'Decreto Supremo 466', file: 'decreto_466.pdf' },
+            { title: 'Decreto Supremo 404', file: 'decreto_404.pdf' },
+            { title: 'Decreto Supremo 405', file: 'decreto_405.pdf' }
         ];
 
         const LEVELS = [
@@ -99,7 +112,7 @@
         // --- COMPONENTES ---
         const Icon = ({ name, className }) => <i className={`ph-${name} ${className || ''} text-lg`}></i>;
         
-        const Button = ({ onClick, children, variant = 'primary', className = '', fullWidth = false }) => {
+        const Button = ({ onClick, children, variant = 'primary', className = '', fullWidth = false, type = 'button' }) => {
             const base = "flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold transition-all active:scale-95 text-sm";
             const variants = {
                 primary: "bg-slate-900 text-white hover:bg-slate-800 shadow-lg",
@@ -107,15 +120,54 @@
                 fuchsia: "bg-farmacia-fuchsia text-white hover:bg-fuchsia-600 shadow-md",
                 danger: "bg-red-50 text-red-500 border border-red-100"
             };
-            return <button onClick={onClick} className={`${base} ${variants[variant]} ${fullWidth ? 'w-full' : ''} ${className}`}>{children}</button>;
+            return <button type={type} onClick={onClick} className={`${base} ${variants[variant]} ${fullWidth ? 'w-full' : ''} ${className}`}>{children}</button>;
         };
+
+        const Accordion = ({ title, content }) => {
+            const [isOpen, setIsOpen] = useState(false);
+            return (
+                <div className="border-b border-slate-100 last:border-0">
+                    <button onClick={() => setIsOpen(!isOpen)} className="w-full flex justify-between items-center py-4 text-left font-medium text-slate-700 hover:text-farmacia-green transition-colors">
+                        {title}
+                        <Icon name="caret-down" className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    <div className={`overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-96 pb-4' : 'max-h-0'}`}>
+                        <div className="text-sm text-slate-500 leading-relaxed html-content" dangerouslySetInnerHTML={{__html: content}}></div>
+                    </div>
+                </div>
+            );
+        };
+
+        const Header = ({ setView, user, setActiveModal }) => (
+            <header className="bg-white shadow-sm py-3 px-4 flex justify-between items-center sticky top-0 z-40">
+                <div onClick={() => setView('LANDING')} className="cursor-pointer flex items-center">
+                    <img src={LOGO_URL} alt="AuxiliarPro" className="h-10 object-contain" onError={(e) => {e.target.onerror=null; e.target.style.display='none';}} />
+                    <span className="font-bold text-slate-800 ml-2 hidden md:inline">AuxiliarPro</span>
+                </div>
+                <div className="flex gap-2 items-center">
+                    <button onClick={() => setView('DASHBOARD')} className="text-sm font-bold text-slate-600 px-2 hidden md:block">Estudio</button>
+                    <button onClick={() => setView('DERMOCHECK')} className="text-sm font-bold text-farmacia-fuchsia px-2 hidden md:block">DermoCheck</button>
+                    <button onClick={() => setView('BLOG')} className="text-sm font-bold text-slate-600 px-2 hidden md:block">Blog</button>
+                    
+                    {user.isAuthenticated ? 
+                        <button onClick={() => setView('DASHBOARD')} className="bg-slate-900 text-white px-3 py-1.5 rounded-lg text-xs font-bold">Panel</button> :
+                        <button onClick={() => setActiveModal('auth')} className="bg-farmacia-green text-white px-3 py-1.5 rounded-lg text-xs font-bold">Ingresar</button>
+                    }
+                </div>
+            </header>
+        );
 
         // --- APP ---
         function App() {
             const [view, setView] = useState('LANDING');
             const [user, setUser] = useState({ name: '', currentLevel: 1, completedLevels: [], isAuthenticated: false });
             const [quizState, setQuizState] = useState({ active: false, levelId: null, qIndex: 0, score: 0, showResult: false });
+            const [reviewMode, setReviewMode] = useState(false);
             const [activeModal, setActiveModal] = useState(null);
+            
+            // ESTADO DE AUTENTICACIÓN (Recuperado)
+            const [authMode, setAuthMode] = useState('login'); 
+            
             const [legalTab, setLegalTab] = useState('terms');
             const [selectedArticle, setSelectedArticle] = useState(null);
 
@@ -123,8 +175,15 @@
             useEffect(() => {
                 const unsubscribe = onAuthStateChanged(auth, (u) => {
                     if (u) {
-                        // Cargar datos de usuario
-                        setUser({ name: u.displayName || 'Colega', currentLevel: 1, completedLevels: [], isAuthenticated: true, uid: u.uid });
+                        const ref = doc(db, 'artifacts', appId, 'users', u.uid, 'data', 'progress');
+                        onSnapshot(ref, (snap) => {
+                            if (snap.exists()) {
+                                const d = snap.data();
+                                setUser({ ...d, uid: u.uid, isAuthenticated: true });
+                            } else {
+                                setUser({ name: u.displayName || 'Colega', currentLevel: 1, completedLevels: [], isAuthenticated: true, uid: u.uid });
+                            }
+                        });
                     } else {
                         const local = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || '{}');
                         if (local.isAuthenticated) setUser(local);
@@ -133,15 +192,17 @@
                 return () => unsubscribe();
             }, []);
 
-            // Guardar Progreso
             const saveProgress = (newLevel, newCompleted) => {
                 const updated = { ...user, currentLevel: newLevel, completedLevels: newCompleted };
                 setUser(updated);
                 localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
+                if (user.uid) {
+                    try { setDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'data', 'progress'), updated, { merge: true }); } catch(e) {}
+                }
             };
 
-            // Quiz Logic
             const startQuiz = (lvlId) => setQuizState({ active: true, levelId: lvlId, qIndex: 0, score: 0, showResult: false });
+            
             const handleAnswer = (idx) => {
                 const lvl = LEVELS.find(l => l.id === quizState.levelId);
                 const q = lvl.questions[quizState.qIndex];
@@ -162,26 +223,6 @@
                 }
             };
 
-            // Header Component (Persistente)
-            const Header = () => (
-                <header className="bg-white shadow-sm py-3 px-4 flex justify-between items-center sticky top-0 z-40">
-                    <div onClick={() => setView('LANDING')} className="cursor-pointer">
-                        <img src={LOGO_URL} alt="AuxiliarPro" className="h-10 object-contain" onError={(e) => e.target.style.display='none'} />
-                        <span className="font-bold text-slate-800 ml-2 hidden md:inline">AuxiliarPro</span>
-                    </div>
-                    <div className="flex gap-2 items-center">
-                        <button onClick={() => setView('DASHBOARD')} className="text-sm font-bold text-slate-600 px-2">Estudio</button>
-                        <button onClick={() => setView('DERMOCHECK')} className="text-sm font-bold text-farmacia-fuchsia px-2">DermoCheck</button>
-                        <button onClick={() => setView('BLOG')} className="text-sm font-bold text-slate-600 px-2">Blog</button>
-                        {user.isAuthenticated ? 
-                            <button onClick={() => setView('DASHBOARD')} className="bg-slate-900 text-white px-3 py-1.5 rounded-lg text-xs font-bold">Panel</button> :
-                            <button onClick={() => setActiveModal('auth')} className="bg-farmacia-green text-white px-3 py-1.5 rounded-lg text-xs font-bold">Ingresar</button>
-                        }
-                    </div>
-                </header>
-            );
-
-            // Footer Component
             const Footer = () => (
                 <footer className="bg-slate-900 text-slate-400 py-10 px-6 text-center text-xs mt-auto">
                     <div className="max-w-md mx-auto">
@@ -201,10 +242,61 @@
                 </footer>
             );
 
+            // --- AUTH MODAL RESTAURADO (Con Email/Pass) ---
+            const AuthModal = () => {
+                if (activeModal !== 'auth') return null;
+                const [form, setForm] = useState({ name: '', email: '', pass: '' });
+                const [error, setError] = useState('');
+
+                const handleSubmit = async (e) => {
+                    e.preventDefault();
+                    setError('');
+                    try {
+                        if (authMode === 'register') {
+                            const cred = await createUserWithEmailAndPassword(auth, form.email, form.pass);
+                            await updateProfile(cred.user, { displayName: form.name });
+                            await setDoc(doc(db, 'artifacts', appId, 'users', cred.user.uid, 'data', 'progress'), { name: form.name, currentLevel: 1, completedLevels: [], lastUpdate: new Date() });
+                        } else {
+                            await signInWithEmailAndPassword(auth, form.email, form.pass);
+                        }
+                        setActiveModal(null);
+                        setView('DASHBOARD');
+                    } catch (err) { setError(err.code === 'auth/wrong-password' ? 'Contraseña incorrecta' : 'Error en los datos'); }
+                };
+
+                return (
+                    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 animate-fade-in">
+                        <div className="bg-white p-8 rounded-3xl w-full max-w-sm relative shadow-2xl">
+                            <button onClick={() => setActiveModal(null)} className="absolute top-4 right-4 text-slate-300 hover:text-slate-600"><Icon name="x" className="text-xl"/></button>
+                            
+                            <div className="text-center mb-6">
+                                <div className="bg-emerald-100 w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 text-emerald-600 text-2xl"><Icon name="user" /></div>
+                                <h2 className="text-2xl font-bold text-slate-800">{authMode === 'register' ? 'Crear Cuenta' : 'Bienvenido'}</h2>
+                                <p className="text-xs text-slate-500 mt-1">Únete a la comunidad de AuxiliarPro.</p>
+                            </div>
+
+                            <form onSubmit={handleSubmit} className="space-y-3">
+                                {authMode === 'register' && <input type="text" placeholder="Tu Nombre" className="w-full p-3 bg-slate-50 border rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500" required onChange={e => setForm({...form, name: e.target.value})} />}
+                                <input type="email" placeholder="Correo Electrónico" className="w-full p-3 bg-slate-50 border rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500" required onChange={e => setForm({...form, email: e.target.value})} />
+                                <input type="password" placeholder="Contraseña" className="w-full p-3 bg-slate-50 border rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500" required onChange={e => setForm({...form, pass: e.target.value})} />
+                                
+                                {error && <p className="text-red-500 text-xs text-center font-bold">{error}</p>}
+                                
+                                <Button fullWidth type="submit">{authMode === 'register' ? 'Registrarse Gratis' : 'Entrar'}</Button>
+                            </form>
+
+                            <button onClick={() => setAuthMode(authMode === 'login' ? 'register' : 'login')} className="block w-full text-center mt-4 text-sm text-slate-500 hover:text-farmacia-green underline">
+                                {authMode === 'login' ? '¿No tienes cuenta? Regístrate aquí' : '¿Ya tienes cuenta? Inicia Sesión'}
+                            </button>
+                        </div>
+                    </div>
+                );
+            };
+
             // VISTAS
             const renderLanding = () => (
                 <div className="flex-1 flex flex-col bg-white overflow-y-auto w-full">
-                    <Header />
+                    <Header setView={setView} user={user} setActiveModal={setActiveModal} />
                     <div className="p-6 text-center max-w-md mx-auto">
                         <div className="inline-block bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-[10px] font-bold border border-emerald-100 mb-6">META: CREDENCIAL 2026</div>
                         <h1 className="text-4xl font-extrabold text-slate-900 mb-8 leading-tight">PREPÁRATE PARA TU <span className="text-farmacia-green">EXAMEN DE AUXILIAR</span></h1>
@@ -229,7 +321,7 @@
 
             const renderDashboard = () => (
                 <div className="flex-1 flex flex-col bg-slate-50 w-full overflow-hidden">
-                    <Header />
+                    <Header setView={setView} user={user} setActiveModal={setActiveModal} />
                     <div className="flex-1 overflow-y-auto p-4 pb-20">
                         <div className="max-w-md mx-auto space-y-4">
                             <div className="bg-slate-900 text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
@@ -259,7 +351,6 @@
                                 })}
                             </div>
 
-                            {/* BOTONES DE BIBLIOTECA Y FORO RECUPERADOS */}
                             <div className="grid grid-cols-2 gap-3 mt-4">
                                 <Button variant="secondary" onClick={() => setView('LIBRARY')}><Icon name="book"/> Biblioteca</Button>
                                 <Button variant="secondary" onClick={() => setActiveModal('community')}><Icon name="users"/> Foro</Button>
@@ -273,7 +364,6 @@
                 </div>
             );
 
-            // VISTA DERMOCHECK CON IFRAME REAL
             const renderDermoCheck = () => (
                 <div className="flex-1 flex flex-col bg-slate-900 w-full h-full absolute inset-0 z-50">
                     <div className="bg-slate-900 text-white p-3 flex justify-between items-center shadow-md z-10">
@@ -286,39 +376,56 @@
                 </div>
             );
 
-            // MODALES LEGALES CON TEXTO REAL
+            // Modales Legales, Blog, Faqs, etc. se renderizan igual
             const LegalModal = () => {
                 if (activeModal !== 'legal') return null;
                 const texts = {
-                    terms: "Términos de Uso: Esta plataforma es una herramienta educativa independiente. El uso de la información es responsabilidad del usuario. No reemplaza fuentes oficiales.",
-                    privacy: "Privacidad: Respetamos tus datos. Solo almacenamos tu progreso localmente o en Firebase para mejorar tu experiencia. No vendemos datos a terceros.",
-                    disclaimers: "Descargos: AuxiliarPro NO representa al MINSAL ni al ISP. Es una iniciativa de estudiantes. Verifica siempre con el Decreto 466 oficial."
+                    terms: "Términos de Uso: Esta plataforma es educativa. El uso es responsabilidad del usuario.",
+                    privacy: "Privacidad: Solo almacenamos tu progreso localmente o en Firebase para mejorar tu experiencia.",
+                    disclaimers: "Descargos: AuxiliarPro NO representa al MINSAL. Iniciativa independiente."
                 };
                 return (
                     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
                         <div className="bg-white rounded-2xl p-6 max-w-sm w-full">
-                            <h3 className="font-bold text-lg mb-4 capitalize">{legalTab === 'disclaimers' ? 'Descargos' : (legalTab === 'terms' ? 'Términos' : 'Privacidad')}</h3>
-                            <p className="text-sm text-slate-600 mb-6 leading-relaxed">{texts[legalTab]}</p>
+                            <h3 className="font-bold text-lg mb-4 capitalize">{legalTab}</h3>
+                            <p className="text-sm text-slate-600 mb-6">{texts[legalTab]}</p>
                             <Button fullWidth onClick={() => setActiveModal(null)}>Entendido</Button>
                         </div>
                     </div>
                 );
             };
 
-            // RENDERIZADO CONDICIONAL
+            const CommunityModal = () => {
+                if (activeModal !== 'community') return null;
+                return (
+                    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+                        <div className="bg-white rounded-2xl p-6 max-w-sm text-center">
+                            <Icon name="users" className="text-4xl text-blue-500 mb-2"/>
+                            <h3 className="font-bold mb-2">Comunidad</h3>
+                            <p className="text-sm mb-4">Únete a nuestros grupos de estudio.</p>
+                            <div className="space-y-2">
+                                <a href="https://chat.whatsapp.com/IPvHmnNGWYmH61FrdV56g1" target="_blank" className="block w-full bg-green-500 text-white py-2 rounded-lg font-bold">WhatsApp</a>
+                                <a href="https://www.facebook.com/share/g/1AFb8riMpT/" target="_blank" className="block w-full bg-blue-600 text-white py-2 rounded-lg font-bold">Facebook</a>
+                            </div>
+                            <button onClick={()=>setActiveModal(null)} className="mt-4 text-slate-400 text-sm">Cerrar</button>
+                        </div>
+                    </div>
+                );
+            };
+
             return (
                 <div className="w-full max-w-md bg-white h-screen md:h-[90vh] md:rounded-3xl md:shadow-2xl overflow-hidden flex flex-col relative mx-auto">
                     {view === 'LANDING' && renderLanding()}
                     {view === 'DASHBOARD' && renderDashboard()}
                     {view === 'DERMOCHECK' && renderDermoCheck()}
-                    {view === 'BLOG' && <div className="flex-1 flex flex-col"><Header/><div className="p-6"><h2 className="font-bold text-xl">Blog</h2>{BLOG_POSTS.map(p=><div key={p.id} className="border p-4 my-2 rounded-xl"><h3>{p.title}</h3></div>)}</div><Footer/></div>}
-                    {view === 'LIBRARY' && <div className="flex-1 flex flex-col"><Header/><div className="p-6"><h2 className="font-bold text-xl mb-4">Biblioteca Legal</h2><p className="text-sm mb-4">Documentos oficiales:</p><ul className="space-y-2 text-sm">{PDF_DOCS.map((d,i)=><li key={i} className="p-3 bg-slate-50 rounded-lg border">📄 {d.title}</li>)}</ul><button onClick={()=>setView('DASHBOARD')} className="mt-6 text-blue-600 font-bold">Volver</button></div></div>}
-                    {view === 'FAQS' && <div className="flex-1 flex flex-col"><Header/><div className="p-6"><h2 className="font-bold text-xl mb-4">Preguntas Frecuentes</h2>{FAQS.map((f,i)=><div key={i} className="mb-4"><p className="font-bold text-sm">{f.q}</p><p className="text-xs text-slate-500">{f.a}</p></div>)}<button onClick={()=>setView('LANDING')} className="mt-6 text-blue-600 font-bold">Volver</button></div></div>}
+                    {view === 'LIBRARY' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="p-6"><h2 className="font-bold text-xl mb-4">Biblioteca</h2>{PDF_DOCS.map((d,i)=><div key={i} className="p-3 border rounded mb-2 bg-slate-50">📄 <a href={d.file} target="_blank" className="text-blue-600 font-bold">{d.title}</a></div>)}<button onClick={()=>setView('DASHBOARD')} className="mt-4 text-slate-400">Volver</button></div></div>}
+                    {view === 'FAQS' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4">Preguntas Frecuentes</h2>{FAQS.map((f,i)=><Accordion key={i} title={f.q} content={f.a}/>)}<button onClick={()=>setView('LANDING')} className="mt-4 text-slate-400">Volver</button></div></div>}
+                    {view === 'BLOG' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4">Blog</h2>{BLOG_POSTS.map(p=><div key={p.id} className="border p-4 mb-3 rounded-xl bg-white shadow-sm"><h3 className="font-bold">{p.title}</h3><p className="text-xs text-slate-500 mt-1">{p.excerpt}</p></div>)}<button onClick={()=>setView('LANDING')} className="mt-4 text-slate-400">Volver</button></div></div>}
                     
                     {quizState.active && (
                         <div className="absolute inset-0 bg-white z-50 flex flex-col animate-fade-in">
                             <div className="bg-slate-900 text-white p-4 flex justify-between">
-                                <span>Pregunta {quizState.qIndex + 1}</span>
+                                <span>P {quizState.qIndex + 1}</span>
                                 <button onClick={()=>setQuizState({active:false, score:0, qIndex:0, showResult:false})}>X</button>
                             </div>
                             <div className="flex-1 p-6 flex flex-col justify-center">
@@ -342,18 +449,9 @@
                         </div>
                     )}
 
+                    <AuthModal />
                     <LegalModal />
-                    {activeModal === 'auth' && (
-                        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-                            <div className="bg-white p-6 rounded-2xl w-full max-w-sm">
-                                <h2 className="font-bold text-xl mb-4">Ingresar</h2>
-                                <p className="text-sm mb-4">Simulación de Login (Firebase configurado en código)</p>
-                                <Button fullWidth onClick={()=>{setUser({...user, isAuthenticated:true}); setActiveModal(null); setView('DASHBOARD');}}>Ingresar como Invitado</Button>
-                                <button onClick={()=>setActiveModal(null)} className="mt-4 text-sm text-slate-400 w-full">Cancelar</button>
-                            </div>
-                        </div>
-                    )}
-                    {activeModal === 'community' && <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"><div className="bg-white p-6 rounded-2xl text-center"><Icon name="users" className="text-4xl text-blue-500 mb-2"/><h3 className="font-bold">Comunidad</h3><p className="text-sm mb-4">Únete a nuestros grupos.</p><Button fullWidth variant="secondary" onClick={()=>setActiveModal(null)}>Cerrar</Button></div></div>}
+                    <CommunityModal />
                 </div>
             );
         }
