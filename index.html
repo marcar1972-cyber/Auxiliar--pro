@@ -192,24 +192,27 @@
             );
         };
 
-        // --- HEADER AJUSTADO: LOGO MÁS PEQUEÑO Y MÁS SEPARACIÓN ---
+        // --- HEADER CON ORDEN Y PROPORCIÓN AJUSTADA PARA MÓVIL ---
         const Header = ({ setView, user, setActiveModal }) => (
             <header className="bg-white shadow-sm h-20 px-6 flex justify-between items-center sticky top-0 z-50">
-                
-                {/* LADO IZQUIERDO: LOGO REDUCIDO (h-10 móvil, h-16 escritorio) */}
-                <div onClick={() => setView('LANDING')} className="cursor-pointer flex items-center h-full mr-8">
-                    <img src={LOGO_URL} alt="AuxiliarPro" className="h-10 md:h-16 object-contain" />
+                <div onClick={() => setView('LANDING')} className="cursor-pointer flex items-center h-full">
+                    {/* URL del logo corregida */}
+                    <img src={LOGO_URL} alt="AuxiliarPro" className="h-12 md:h-16 object-contain" />
                 </div>
-
-                {/* LADO DERECHO: MENÚ CON MAYOR SEPARACIÓN */}
-                <div className="flex gap-8 items-center">
-                    <button onClick={() => setView('BLOG')} className="text-sm font-bold text-slate-600 hover:text-aux-green hidden md:block">Blog</button>
+                
+                {/* MENÚ DERECHA: Gap reducido en móvil (gap-3) para que quepan */}
+                <div className="flex gap-3 md:gap-6 items-center">
                     
-                    {/* BOTÓN UNIFICADO */}
+                    {/* 1. Botón "Panel de Estudio" (Ahora va PRIMERO) */}
+                    {/* En móvil: px-3 text-xs. En escritorio: px-5 text-sm. Mantiene el color oscuro siempre. */}
                     {user.isAuthenticated ? 
-                        <button onClick={() => setView('DASHBOARD')} className="bg-aux-dark text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button> :
-                        <button onClick={() => setActiveModal('auth')} className="bg-aux-dark text-white px-5 py-2 rounded-lg text-sm font-bold hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button>
+                        <button onClick={() => setView('DASHBOARD')} className="bg-aux-dark text-white px-3 md:px-5 py-2 rounded-lg text-xs md:text-sm font-bold hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button> :
+                        <button onClick={() => setActiveModal('auth')} className="bg-aux-dark text-white px-3 md:px-5 py-2 rounded-lg text-xs md:text-sm font-bold hover:bg-slate-800 transition-colors whitespace-nowrap">Panel de Estudio</button>
                     }
+
+                    {/* 2. Botón "Blog" (Ahora va DESPUÉS del Panel) */}
+                    {/* Quitamos 'hidden' para que se vea en móvil. Ajustamos estilo para que sea coherente. */}
+                    <button onClick={() => setView('BLOG')} className="text-xs md:text-sm font-bold text-slate-600 hover:text-aux-green uppercase tracking-wide">Blog</button>
                 </div>
             </header>
         );
