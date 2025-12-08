@@ -192,7 +192,7 @@
             );
         };
 
-        // --- HEADER AJUSTADO (FUENTE REGULAR Y SEPARACIÓN) ---
+        // --- HEADER AJUSTADO (BOTONES AGRUPADOS) ---
         const Header = ({ setView, user, setActiveModal }) => (
             <header className="bg-white shadow-sm h-20 px-6 flex justify-between items-center sticky top-0 z-50">
                 <div onClick={() => setView('LANDING')} className="cursor-pointer flex items-center h-full">
@@ -200,8 +200,8 @@
                     <img src={LOGO_URL} alt="AuxiliarPro" className="h-10 md:h-14 object-contain" />
                 </div>
                 
-                {/* BOTONERA: Gap 8 para separar más del logo */}
-                <div className="flex gap-8 items-center">
+                {/* BOTONERA: Gap reducido a 4 para agrupar los botones */}
+                <div className="flex gap-4 items-center">
                     
                     {/* Botón BLOG: Texto regular (font-medium), pequeño (text-xs) */}
                     <button onClick={() => setView('BLOG')} className="bg-aux-green text-white px-4 py-2 rounded-lg text-xs font-medium hover:bg-emerald-600 transition-colors whitespace-nowrap hidden md:block">Blog</button>
@@ -486,6 +486,7 @@
                         </div>
                     )}
 
+                    
                     <AuthModal />
                     <LegalModal />
                     <CommunityModal />
