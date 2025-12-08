@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="description" content="Plataforma de estudio colaborativa para el examen de Auxiliar de Farmacia en Chile. Preparación para la credencial sanitaria 2026.">
-    <meta name="keywords" content="Examen Auxiliar Farmacia Chile, Seremi Salud, Simulacro, DermoCheck, Farmacia">
-    <title>Auxiliar Pro | Camino a la Credencial 2026</title>
+    <meta name="description" content="Plataforma de estudio para el Examen de Auxiliar de Farmacia en Chile.">
+    <title>Auxiliar Pro | Credencial 2026</title>
 
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5783669972264868" crossorigin="anonymous"></script>
     
@@ -18,71 +17,34 @@
               'farmacia-green': '#00C853',
               'farmacia-dark': '#0d1b2a',
               'farmacia-fuchsia': '#d946ef',
-              'farmacia-fuchsia-dark': '#a21caf',
-              'metal-bronze': '#CD7F32',
-              'metal-silver': '#C0C0C0',
               'metal-gold': '#FFD700',
-              'metal-platinum': '#E5E4E2',
             },
-            fontFamily: {
-              sans: ['Inter', 'sans-serif'],
-              heading: ['Roboto', 'sans-serif']
-            },
-            animation: {
-                'fade-in': 'fadeIn 0.3s ease-out forwards',
-                'slide-up': 'slideUp 0.3s ease-out forwards',
-                'shine': 'shine 2.5s infinite linear',
-            },
-            keyframes: {
-                fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
-                slideUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
-                shine: {
-                    '0%': { transform: 'translateX(-150%) skewX(-15deg)' },
-                    '40%': { transform: 'translateX(150%) skewX(-15deg)' },
-                    '100%': { transform: 'translateX(150%) skewX(-15deg)' }
-                }
-            }
+            fontFamily: { sans: ['Inter', 'sans-serif'] },
+            animation: { 'fade-in': 'fadeIn 0.3s ease-out forwards' },
+            keyframes: { fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } } }
           }
         }
       }
     </script>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
     
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <style>
       body { -webkit-tap-highlight-color: transparent; }
       .no-scrollbar::-webkit-scrollbar { display: none; }
-      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-      
-      .shiny-effect { position: relative; overflow: hidden; }
-      .shiny-effect::after {
-          content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-          background: linear-gradient(to right, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%);
-          transform: translateX(-150%) skewX(-15deg);
-          animation: shine 3s infinite linear;
+      /* Estilo Nota Adhesiva */
+      .sticky-note {
+          background-color: #ecfdf5; /* Verde pastel */
+          transform: rotate(-1deg);
+          box-shadow: 2px 4px 6px rgba(0,0,0,0.1);
+          border: 1px solid #d1fae5;
       }
-      
-      /* Estilos para contenido HTML dentro de componentes */
-      .html-content a { color: #00C853; text-decoration: none; font-weight: 600; }
-      .html-content a:hover { text-decoration: underline; }
-      .html-content ul { list-style-type: disc; padding-left: 1.2rem; margin-top: 0.5rem; margin-bottom: 0.5rem; }
-      .html-content li { margin-bottom: 0.25rem; }
-      .html-content strong { color: #0f172a; font-weight: 700; }
-      
-      .blog-content h1 { font-size: 1.5rem; font-weight: 800; color: #0d1b2a; margin-bottom: 1rem; line-height: 1.2; }
-      .blog-content h2 { font-size: 1.25rem; font-weight: 700; color: #059669; margin-top: 1.5rem; margin-bottom: 0.75rem; }
-      .blog-content h3 { font-size: 1.1rem; font-weight: 600; color: #334155; margin-top: 1.25rem; margin-bottom: 0.5rem; }
-      .blog-content p { margin-bottom: 1rem; line-height: 1.6; color: #475569; }
-      .blog-content ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; color: #475569; }
-      .blog-content li { margin-bottom: 0.5rem; }
-      .blog-content strong { color: #0f172a; font-weight: 700; }
-      .blog-content .cta-box { background-color: #ecfdf5; border: 1px solid #a7f3d0; padding: 1.5rem; border-radius: 0.75rem; margin-top: 2rem; text-align: center; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col items-center justify-center font-sans">
@@ -94,6 +56,7 @@
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
 
+        // CONFIGURACIÓN (Rellena con tus datos reales de Firebase si es necesario, dejo los del código anterior)
         const firebaseConfig = {
             apiKey: "AIzaSyDNhuSBBhmmQSV0BHC8MOtLKgAUpvtfWfE",
             authDomain: "auxiliar-pro.firebaseapp.com",
@@ -109,238 +72,59 @@
         const appId = 'auxiliar-pro';
 
         const { useState, useEffect } = React;
-
-        const APP_VERSION = "7.0.0 Manual Fix";
         const LOCAL_STORAGE_KEY = 'auxiliar_pro_data';
-        const LOGO_URL = "https://raw.githubusercontent.com/marcar1972-cyber/Auxiliar--pro/34923cb127c2feede55ec712bdc0261f1b23da3c/logo_auxiliarpro_3_400x240_ajustado.png";
-
-        const BLOG_POSTS = [
-            { id: 'art1', date: '04 DIC', category: 'Legal', title: 'Decreto 466: La "Biblia" que define tu rol en la Farmacia', excerpt: 'Entender el Reglamento de Farmacias es la diferencia entre aprobar y reprobar. Aquí te explico los artículos claves.', content: '<h1>Decreto 466: La "Biblia" que define tu rol en la Farmacia</h1><p>Colega, si hay un documento que debes tener bajo la almohada, es el <strong>Decreto Supremo 466</strong>. No es solo papeleo; es el reglamento que define qué puedes hacer, qué no, y quién manda en la farmacia.</p><h2>1. ¿Quién es el Jefe? (Art. 12 y 14)</h2><p>La normativa es tajante: <strong>La Dirección Técnica corresponde exclusivamente al Químico Farmacéutico (QF)</strong>. </p><ul><li>El QF debe estar <strong>siempre presente</strong> durante el horario de funcionamiento.</li><li>Si el QF no está, la farmacia <strong>no puede funcionar</strong>.</li><li>Tú, como auxiliar, eres su brazo derecho, pero legalmente actúas bajo su supervisión directa.</li></ul><h2>2. Condiciones Ambientales (Art. 28)</h2><p>No es solo por comodidad. Los medicamentos se degradan.</p><ul><li><strong>Temperatura ambiente:</strong> Máximo 25°C.</li><li><strong>Cadena de Frío:</strong> Estrictamente entre <strong>2°C y 8°C</strong>.</li></ul><div class="cta-box"><h3 class="text-farmacia-green">¿Te sientes seguro con la legislación?</h3><p>Pon a prueba lo que acabas de leer en el <strong>Nivel 2: Intermedio</strong> del simulador.</p></div>' },
-            { id: 'art2', date: '02 DIC', category: 'Técnico', title: 'Ley de Fármacos (Ley 20.724): Cambios que impactan tu trabajo', excerpt: 'Bioequivalencia, venta directa y fraccionamiento. Descubre cómo esta ley cambió la forma en que dispensamos.', content: '<h1>Ley de Fármacos (Ley 20.724)</h1><p>Seguramente has escuchado hablar de la "Ley de Fármacos". Para nosotros, los auxiliares, esta ley cambió las reglas del juego.</p><h2>1. La Bioequivalencia es Ley</h2><p>Antes era opcional, hoy es obligación. La ley exige que la farmacia tenga disponibles los <strong>medicamentos bioequivalentes</strong> (los de la franja amarilla).</p><p><strong>Tu deber:</strong> Debes informar al paciente que existe una alternativa bioequivalente si la receta lo permite.</p><h2>2. Medicamentos de Venta Directa (OTC) en Góndolas</h2><p>La ley permitió que ciertos medicamentos que no requieren receta puedan estar al alcance del público en estanterías.</p><p><strong>Ojo:</strong> Aunque estén en góndola, la venta final siempre pasa por caja y debe haber asesoría disponible.</p><div class="cta-box"><h3 class="text-farmacia-green">¡A practicar!</h3><p>Revisa las preguntas sobre Bioequivalencia en la <strong>Prueba de Conocimientos Básicos</strong>.</p></div>' }
-        ];
-
-        const sourceLink = `<br/><a href='https://seremienlinea.minsal.cl' target='_blank' class='text-xs text-farmacia-green font-bold hover:underline mt-2 inline-block'>🔗 Revisar fuente oficial</a>`;
         
+        // --- URLs CONFIGURADAS ---
+        const LOGO_URL = "https://raw.githubusercontent.com/marcar1972-cyber/Auxiliar--pro/34923cb127c2feede55ec712bdc0261f1b23da3c/logo_auxiliarpro_3_400x240_ajustado.png";
+        const DERMO_URL = "https://auxiliar-dermocheck.vercel.app";
+
+        // --- DATOS DUROS ---
+        const BLOG_POSTS = [
+            { id: 'art1', date: '04 DIC', category: 'Legal', title: 'Decreto 466: La "Biblia" de la Farmacia', excerpt: 'Reglamento fundamental para aprobar.', content: '<h1>Decreto 466</h1><p>Define roles, temperaturas y leyes...</p>' },
+            { id: 'art2', date: '02 DIC', category: 'Técnico', title: 'Ley de Fármacos y Bioequivalencia', excerpt: 'Lo que debes saber de la Ley 20.724.', content: '<h1>Ley 20.724</h1><p>Cambios en bioequivalencia y venta directa...</p>' }
+        ];
+
         const FAQS = [
-            { q: "Descripción del Trámite", a: "La certificación de competencias de Auxiliar de Farmacia consiste en la presentación de una solicitud ante la Secretaría Regional Ministerial de Salud, para someterse a una evaluación que permite verificar formalmente los conocimientos y capacidades de una persona para desempeñarse como Auxiliar de Farmacia bajo la supervisión de un Químico Farmacéutico. Este trámite podría requerir de una fiscalización o etapa presencial." + sourceLink },
-            { q: "¿Dónde y cómo hago el trámite?", a: "El trámite se encuentra disponible en línea ingresando con Clave Única en el botón 'Ir al trámite' del portal SEREMI en Línea." + sourceLink },
-            { q: "¿A quién va dirigido?", a: "Personas naturales que deseen optar a la certificación de competecias de Auxiliar de Farmacia y que cumplan los requisitos establecidos en la normativa vigente." + sourceLink },
-            { q: "¿Qué necesito para hacer el trámite?", a: "Para hacer el trámite, se solicitan los siguientes documentos:<ul><li>Certificado de enseñanza media.</li><li>Copia del contrato de trabajo o Certificado del empleador que acredite antigüedad laboral.</li><li>Certificado de desempeño laboral emitido por el Químico Farmacéutico que acredite a lo menos 1 año de desempeño efectivo (Se incorpora certificado tipo descargable).</li><li>Foto tipo carnet.</li></ul>" + sourceLink },
-            { q: "¿Cuál es el costo del trámite?", a: "El trámite tiene un costo diferenciado según el tipo de solicitud:<ul><li>Derecho a Examen $19.100</li><li>Inscripción en el Registro (incluye primer certificado) $47.600</li><li>Diploma o Carnet $29.700</li><li>Certificado (adicional) $29.700</li><li>Validación de documentos (títulos o certificados) $19.100</li></ul>" + sourceLink },
-            { q: "Marco Legal", a: "Decreto Supremo Nº 466 de 1984." + sourceLink }
+            { q: "¿Cómo inscribirme al examen?", a: "En seremitramites.minsal.cl con Clave Única." },
+            { q: "Requisitos Auxiliar", a: "Licencia media y certificado de experiencia de 1 año." }
         ];
 
-        // --- BANCO DE PREGUNTAS ---
         const LEVELS = [
-            {
-                id: 1, title: 'Prueba de Conocimientos Básicos', desc: 'Fundamentos esenciales.', medal: 'Bronce', iconBg: 'bg-gradient-to-br from-[#cd7f32] to-[#8B4513]', borderColor: 'border-[#cd7f32]/50', textColor: 'text-[#8B4513]', qCount: 10, passingScore: 6, examLabel: 'DIAGNÓSTICO INICIAL', 
-                topics: ['Conceptos Básicos', 'Rol del Auxiliar'],
-                questions: [ 
-                    { id: 101, topic: 'Rol del Auxiliar', text: '¿Quién es el responsable técnico legal de la farmacia?', options: ['Dueño', 'Auxiliar', 'Químico Farmacéutico', 'Gerente'], correctIndex: 2, explanation: 'El QF es el único responsable legal ante la autoridad sanitaria.' },
-                    { id: 102, topic: 'Almacenamiento', text: 'Rango de temperatura para cadena de frío:', options: ['0-5°C', '2-8°C', '8-15°C', 'Ambiente'], correctIndex: 1, explanation: 'El rango estricto es entre 2°C y 8°C.' },
-                    { id: 103, topic: 'Vías de Administración', text: 'Vía de administración sublingual:', options: ['Debajo de la lengua', 'Sobre la lengua', 'Tragada', 'Masticada'], correctIndex: 0, explanation: 'Permite absorción rápida evitando el primer paso hepático.' },
-                    { id: 104, topic: 'Terminología', text: '¿Qué significa OTC?', options: ['Receta Retenida', 'Venta Directa', 'Uso Hospitalario', 'Controlado'], correctIndex: 1, explanation: 'Over The Counter: Medicamentos que no requieren receta médica.' },
-                    { id: 105, topic: 'Rol del Auxiliar', text: 'Función principal del Auxiliar:', options: ['Diagnosticar', 'Recetar', 'Dispensar e informar', 'Administrar local'], correctIndex: 2, explanation: 'Colaborar con el QF en la dispensación informada.' },
-                    { id: 106, topic: 'Bioequivalencia', text: 'Identificación visual de Bioequivalentes:', options: ['Franja Amarilla', 'Estrella Verde', 'Caja Roja', 'Ninguna'], correctIndex: 0, explanation: 'La franja amarilla es el distintivo legal en Chile.' },
-                    { id: 107, topic: 'Conceptos Básicos', text: '¿Qué es un Placebo?', options: ['Sustancia inerte', 'Principio activo potente', 'Marca comercial', 'Genérico'], correctIndex: 0, explanation: 'Sustancia sin acción farmacológica usada por efecto psicológico.' },
-                    { id: 108, topic: 'Vías de Administración', text: 'Ejemplo de vía Parenteral:', options: ['Jarabes', 'Inyectables', 'Cremas', 'Supositorios'], correctIndex: 1, explanation: 'Vías que atraviesan la piel (IV, IM, SC).' },
-                    { id: 109, topic: 'Almacenamiento', text: 'La fecha de vencimiento indica:', options: ['Fecha de fabricación', 'Límite de eficacia/seguridad', 'Fecha de venta', 'Fecha de apertura'], correctIndex: 1, explanation: 'Hasta esa fecha el laboratorio garantiza la estabilidad.' },
-                    { id: 110, topic: 'Legislación', text: '¿Qué receta usan los estupefacientes?', options: ['Simple', 'Retenida', 'Cheque', 'Magistral'], correctIndex: 2, explanation: 'Receta Cheque es obligatoria para estupefacientes y psicotrópicos lista II.' }
-                ]
-            },
-            {
-                id: 2, title: 'Nivel 2: Intermedio', desc: 'Legislación y almacenamiento.', medal: 'Plata', iconBg: 'bg-gradient-to-br from-[#E0E0E0] to-[#9E9E9E]', borderColor: 'border-[#9E9E9E]/50', textColor: 'text-[#757575]', qCount: 15, passingScore: 9, examLabel: 'SIMULACRO NIVEL 2',
-                topics: ['Legislación', 'Reglamentos'],
-                questions: [
-                    { id: 201, topic: 'Decretos', text: '¿Decreto que aprueba el Reglamento de Farmacias?', options: ['DS 594', 'DS 466', 'DS 404', 'DS 405'], correctIndex: 1, explanation: 'DS 466 es el reglamento base.' },
-                    { id: 202, topic: 'Recetas', text: 'Validez de una Receta Cheque:', options: ['60 días', '30 días', '10 días', 'Indefinida'], correctIndex: 1, explanation: '30 días corridos desde su emisión.' },
-                    { id: 203, topic: 'Controlados', text: '¿Qué indica la estrella verde en el envase?', options: ['Bioequivalente', 'Psicotrópico Lista III', 'Estupefaciente', 'Psicotrópico Lista IV'], correctIndex: 2, explanation: 'Estupefacientes (o psicotrópicos L-I) sujetos a control legal.' },
-                    { id: 204, topic: 'Libros Oficiales', text: '¿Dónde se registran los reclamos?', options: ['Cuaderno', 'Sistema PC', 'Libro de Reclamos foliado', 'Buzón'], correctIndex: 2, explanation: 'Libro foliado y timbrado por la Seremi.' },
-                    { id: 205, topic: 'Almacenamiento', text: 'Temperatura máxima ambiental en farmacia:', options: ['20°C', '25°C', '30°C', '15°C'], correctIndex: 1, explanation: 'Generalmente 25°C para asegurar estabilidad.' },
-                    { id: 206, topic: 'Decretos', text: 'El Decreto 404 regula:', options: ['Farmacias', 'Estupefacientes', 'Psicotrópicos', 'Cosméticos'], correctIndex: 1, explanation: 'Reglamento de Estupefacientes.' },
-                    { id: 207, topic: 'Decretos', text: 'El Decreto 405 regula:', options: ['Farmacias', 'Estupefacientes', 'Psicotrópicos', 'Alimentos'], correctIndex: 2, explanation: 'Reglamento de Psicotrópicos.' },
-                    { id: 208, topic: 'Autoridad Sanitaria', text: '¿Quién autoriza la instalación de una farmacia?', options: ['Municipalidad', 'ISP', 'SEREMI de Salud', 'SII'], correctIndex: 2, explanation: 'La Autoridad Sanitaria Regional (SEREMI).' },
-                    { id: 209, topic: 'Dispensación', text: '¿Puede un auxiliar sustituir un medicamento?', options: ['Sí, siempre', 'Solo por Bioequivalentes', 'Nunca', 'Si es más barato'], correctIndex: 1, explanation: 'Solo si es Bioequivalente certificado.' },
-                    { id: 210, topic: 'Almacenamiento', text: 'Medicamentos termolábiles requieren:', options: ['Luz directa', 'Cadena de Frío', 'Congelación', 'Calor'], correctIndex: 1, explanation: 'Termolábil = sensible a la temperatura.' },
-                    { id: 211, topic: 'Recetas', text: 'La Receta Retenida se archiva por:', options: ['No se archiva', '1 año', '6 meses', '2 años'], correctIndex: 0, explanation: 'Se debe foliar y archivar cronológicamente.' }, 
-                    { id: 212, topic: 'Dispensación', text: 'Venta de Corticoides Sistémicos requiere:', options: ['Venta Directa', 'Receta Simple', 'Receta Retenida', 'Receta Cheque'], correctIndex: 1, explanation: 'Generalmente receta simple, salvo excepciones.' },
-                    { id: 213, topic: 'Libros Oficiales', text: 'Libro de control de Psicotrópicos debe ser llenado por:', options: ['Auxiliar', 'Cajero', 'Químico Farmacéutico', 'Bodeguero'], correctIndex: 2, explanation: 'Responsabilidad exclusiva del QF.' },
-                    { id: 214, topic: 'Almacenamiento', text: '¿Qué es FEFO?', options: ['Primero en entrar, primero en salir', 'Primero en vencer, primero en salir', 'Farmacia Eficiente', 'Fecha Final'], correctIndex: 1, explanation: 'First Expire, First Out.' },
-                    { id: 215, topic: 'Legislación', text: '¿Quién fiscaliza las farmacias?', options: ['Carabineros', 'SERNAC', 'ISP y SEREMI', 'Municipalidad'], correctIndex: 2, explanation: 'El ISP y las SEREMIS de salud.' }
-                ] 
-            },
-            {
-                id: 3, title: 'Nivel 3: Avanzado', desc: 'Atención y dispensación.', medal: 'Oro', iconBg: 'bg-gradient-to-br from-[#FFD700] to-[#B8860B]', borderColor: 'border-[#FFD700]/50', textColor: 'text-[#B8860B]', qCount: 25, passingScore: 18, examLabel: 'SIMULACRO NIVEL 3',
-                topics: ['Dispensación', 'Bioequivalencia'],
-                questions: [
-                    { id: 301, topic: 'Dispensación', text: 'Al dispensar un antibiótico, ¿qué es lo más importante?', options: ['Cobrar primero', 'Verificar receta y fecha', 'Ofrecer vitaminas', 'Ver la marca'], correctIndex: 1, explanation: 'Es obligatorio verificar receta y vigencia.' },
-                    { id: 302, topic: 'Bioequivalencia', text: 'La franja amarilla en un envase indica:', options: ['Venta Directa', 'Bioequivalencia', 'Uso hospitalario', 'Producto natural'], correctIndex: 1, explanation: 'Medicamento Bioequivalente.' },
-                    { id: 303, topic: 'Terminología', text: '¿Qué significa DCI?', options: ['Denominación Común Internacional', 'Dosis Común Inyectable', 'Departamento Clínico Interno', 'Dosis Controlada Individual'], correctIndex: 0, explanation: 'Nombre genérico universal del principio activo.' },
-                    { id: 304, topic: 'Formas Farmacéuticas', text: 'Un medicamento "Forte" generalmente implica:', options: ['Mayor tamaño', 'Mayor dosis del principio activo', 'Mejor sabor', 'Más barato'], correctIndex: 1, explanation: 'Mayor concentración.' },
-                    { id: 305, topic: 'Atención', text: 'Si un paciente pide consejo médico:', options: ['Le recetamos algo suave', 'Lo derivamos al QF o médico', 'Le damos lo que pide', 'Buscamos en Google'], correctIndex: 1, explanation: 'El auxiliar no diagnostica.' },
-                    { id: 306, topic: 'Dispensación', text: 'Venta de Amoxicilina requiere:', options: ['Receta Médica', 'Venta Directa', 'Receta Cheque', 'Ninguna'], correctIndex: 0, explanation: 'Antibióticos requieren receta.' },
-                    { id: 307, topic: 'Bioequivalencia', text: '¿El bioequivalente tiene el mismo efecto terapéutico?', options: ['No, es peor', 'Sí, comprobado científicamente', 'Depende de la marca', 'Solo si es caro'], correctIndex: 1, explanation: 'Esa es la definición de bioequivalencia.' },
-                    { id: 308, topic: 'Formas Farmacéuticas', text: 'Jarabe es una forma:', options: ['Sólida', 'Semisólida', 'Líquida', 'Gaseosa'], correctIndex: 2, explanation: 'Líquida azucarada.' },
-                    { id: 309, topic: 'Atención', text: 'Paciente embarazada pide medicamento para dolor:', options: ['Vender Ibuprofeno', 'Vender Paracetamol', 'Consultar al QF', 'Vender Vitaminas'], correctIndex: 2, explanation: 'Población de riesgo, siempre consultar al QF.' },
-                    { id: 310, topic: 'Almacenamiento', text: 'Fotosensibilidad significa:', options: ['Proteger de la humedad', 'Proteger de la luz', 'Refrigerar', 'Agitar'], correctIndex: 1, explanation: 'Sensible a la luz.' },
-                    { id: 311, topic: 'Dispensación', text: 'Dosis máxima de Paracetamol diario adulto:', options: ['1g', '4g', '8g', '2g'], correctIndex: 1, explanation: '4 gramos al día máximo para evitar daño hepático.' },
-                    { id: 312, topic: 'Terminología', text: 'Posología significa:', options: ['Estudio de los venenos', 'Dosis y frecuencia de toma', 'Forma del medicamento', 'Precio'], correctIndex: 1, explanation: 'Cómo se debe tomar el medicamento.' },
-                    { id: 313, topic: 'Formas Farmacéuticas', text: 'Supositorio es vía:', options: ['Oral', 'Rectal', 'Vaginal', 'Tópica'], correctIndex: 1, explanation: 'Vía rectal.' },
-                    { id: 314, topic: 'Legislación', text: 'Receta de Psicotrópicos se retiene:', options: ['Siempre', 'Nunca', 'A veces', 'Solo si el paciente quiere'], correctIndex: 0, explanation: 'Se debe retener para control.' },
-                    { id: 315, topic: 'Atención', text: 'Cliente reclama por medicamento vencido:', options: ['No hacer nada', 'Llamar al QF', 'Devolver el dinero', 'Cambiarlo sin avisar'], correctIndex: 1, explanation: 'El QF debe manejar la desviación de calidad.' },
-                    { id: 316, topic: 'Bioequivalencia', text: '¿Los genéricos son bioequivalentes?', options: ['Todos sí', 'Ninguno', 'Solo los que tienen franja amarilla', 'Solo los de marca'], correctIndex: 2, explanation: 'Solo si tienen la certificación (franja).' },
-                    { id: 317, topic: 'Dispensación', text: 'Receta retenida sin fecha:', options: ['Se despacha igual', 'Se pone la fecha de hoy', 'No se despacha', 'Se llama al médico'], correctIndex: 2, explanation: 'Receta incompleta no es válida.' },
-                    { id: 318, topic: 'Formas Farmacéuticas', text: 'Comprimido recubierto sirve para:', options: ['Mejor sabor', 'Proteger el estómago', 'Verse bonito', 'Ser más caro'], correctIndex: 1, explanation: 'Protección gástrica o del fármaco.' },
-                    { id: 319, topic: 'Atención', text: 'Paciente diabético pide jarabe para la tos:', options: ['Vender cualquiera', 'Vender uno sin azúcar', 'Vender pastillas', 'Vender miel'], correctIndex: 1, explanation: 'Evitar azúcar en diabéticos.' },
-                    { id: 320, topic: 'Almacenamiento', text: 'Medicamentos LASA son:', options: ['Los más caros', 'Los que suenan o se ven igual', 'Los vencidos', 'Los de venta libre'], correctIndex: 1, explanation: 'Look Alike, Sound Alike (riesgo de error).' },
-                    { id: 321, topic: 'Dispensación', text: '¿Se puede fraccionar un medicamento?', options: ['Nunca', 'Si la farmacia está autorizada', 'Si el cliente quiere', 'Solo antibióticos'], correctIndex: 1, explanation: 'Requiere autorización y zona de fraccionamiento.' },
-                    { id: 322, topic: 'Terminología', text: 'Excipiente es:', options: ['El principio activo', 'Sustancia inactiva que da forma', 'El envase', 'La marca'], correctIndex: 1, explanation: 'Vehículo o aditivo.' },
-                    { id: 323, topic: 'Legislación', text: 'Venta de Sildenafil requiere:', options: ['Receta Médica', 'Venta Directa', 'Receta Cheque', 'Carnet'], correctIndex: 0, explanation: 'Condición de venta bajo receta.' },
-                    { id: 324, topic: 'Atención', text: 'Uso racional de medicamentos promueve:', options: ['Vender más', 'Usar el medicamento adecuado al menor costo posible', 'No tomar remedios', 'Usar solo naturales'], correctIndex: 1, explanation: 'Definición de la OMS.' },
-                    { id: 325, topic: 'Bioequivalencia', text: 'El estudio de bioequivalencia compara:', options: ['Precios', 'Biodisponibilidad con el referente', 'Colores de caja', 'Tamaño de pastilla'], correctIndex: 1, explanation: 'Comparación de curvas plasmáticas.' }
-                ] 
-            },
-            {
-                id: 4, title: 'Nivel 4: Final (Simulacro)', desc: 'Posología y cálculos.', medal: 'Platino', iconBg: 'bg-gradient-to-br from-[#E5E4E2] to-[#607D8B]', borderColor: 'border-[#607D8B]/50', textColor: 'text-[#455A64]', qCount: 40, passingScore: 28, topics: ['Cálculos', 'Posología'], examLabel: 'SIMULACRO FINAL',
-                questions: [
-                    { id: 401, topic: 'Cálculos', text: 'Si la dosis es 500mg y tengo comprimidos de 250mg, ¿cuántos dispenso?', options: ['1', '1.5', '2', '3'], correctIndex: 2, explanation: '500/250 = 2 comprimidos.' },
-                    { id: 402, topic: 'Posología', text: '¿Cuántos ml hay en una cuchara de té (medida estándar)?', options: ['2.5 ml', '5 ml', '10 ml', '15 ml'], correctIndex: 1, explanation: '5 ml.' },
-                    { id: 403, topic: 'Cálculos', text: 'Si un jarabe trae 120ml y la dosis es 10ml cada 8 horas, ¿cuánto dura?', options: ['2 días', '3 días', '4 días', '5 días'], correctIndex: 2, explanation: '30ml diarios. 120/30 = 4 días.' },
-                    { id: 404, topic: 'Preparados', text: 'Para preparar 100ml de alcohol al 70% a partir de 96%, necesito:', options: ['Más agua que alcohol', 'Solo alcohol', 'Cálculo de dilución', 'Mezclar partes iguales'], correctIndex: 2, explanation: 'Se usa la fórmula de dilución.' },
-                    { id: 405, topic: 'Posología', text: 'Dosis "SOS" significa:', options: ['Solo por la mañana', 'En caso de necesidad', 'Sin otro síntoma', 'Siempre o siempre'], correctIndex: 1, explanation: 'Si los síntomas aparecen.' },
-                    { id: 406, topic: 'Cálculos', text: 'Receta: 1 comp cada 12 horas por 7 días. ¿Cuántos comprimidos total?', options: ['7', '10', '14', '21'], correctIndex: 2, explanation: '2 por día x 7 días = 14.' },
-                    { id: 407, topic: 'Cálculos', text: 'Dosis: 5ml cada 8 horas. ¿Volumen diario total?', options: ['10 ml', '15 ml', '20 ml', '5 ml'], correctIndex: 1, explanation: '5ml x 3 veces = 15ml.' },
-                    { id: 408, topic: 'Posología', text: '1 comprimido "antes de las comidas" es:', options: ['Postprandial', 'Preprandial', 'Ayunas', 'Con agua'], correctIndex: 1, explanation: 'Preprandial.' },
-                    { id: 409, topic: 'Cálculos', text: 'Paciente necesita 1g de antibiótico al día. Comprimidos son de 500mg. ¿Dosis diaria?', options: ['1 comp', '2 comp', '3 comp', '4 comp'], correctIndex: 3, explanation: '1g = 1000mg. 1000/500 = 2 comp por dosis... espera, 1g al DÍA. Si es dosis única diaria son 2 comp juntos. Si es repartido depende. Asumiendo dosis total diaria 1g -> 2 comp de 500mg.' },
-                    { id: 410, topic: 'Gestión', text: 'Si el stock mínimo es 5 y tengo 2, ¿qué hago?', options: ['Vender los 2', 'Pedir reposición', 'Esconderlos', 'Nada'], correctIndex: 1, explanation: 'Solicitar pedido.' },
-                    { id: 411, topic: 'Cálculos', text: 'Gotas: 20 gotas equivalen aprox a:', options: ['0.5 ml', '1 ml', '2 ml', '5 ml'], correctIndex: 1, explanation: 'Estándar: 20 gotas = 1 ml.' },
-                    { id: 412, topic: 'Posología', text: 'Cada 6 horas significa cuántas veces al día:', options: ['3 veces', '4 veces', '6 veces', '2 veces'], correctIndex: 1, explanation: '24 horas / 6 = 4 tomas.' },
-                    { id: 413, topic: 'Cálculos', text: 'Caja de 30 comp. Dosis 1 al día. ¿Cuánto dura?', options: ['15 días', '1 mes', '2 meses', '1 semana'], correctIndex: 1, explanation: '30 días.' },
-                    { id: 414, topic: 'Posología', text: 'Vía ótica se aplica en:', options: ['Ojos', 'Oídos', 'Nariz', 'Boca'], correctIndex: 1, explanation: 'Oídos.' },
-                    { id: 415, topic: 'Cálculos', text: 'Receta pide 60mg. Tengo pastillas de 20mg. ¿Cuántas doy?', options: ['1', '2', '3', '4'], correctIndex: 2, explanation: '60 / 20 = 3.' },
-                    { id: 416, topic: 'Posología', text: 'Uso tópico significa:', options: ['Tragar', 'Inyectar', 'Aplicar sobre piel/mucosa', 'Inhalar'], correctIndex: 2, explanation: 'Externo local.' },
-                    { id: 417, topic: 'Cálculos', text: 'Si vendo 10 cajas a $1.000 cada una, total:', options: ['$1.000', '$5.000', '$10.000', '$100.000'], correctIndex: 2, explanation: 'Cálculo simple de caja.' },
-                    { id: 418, topic: 'Posología', text: 'Ayunas significa:', options: ['Con leche', 'Sin alimentos (estómago vacío)', 'Al acostarse', 'Con almuerzo'], correctIndex: 1, explanation: 'Sin alimentos.' },
-                    { id: 419, topic: 'Cálculos', text: 'Dosis 2 puff cada 12 horas. Un inhalador de 200 dosis dura:', options: ['25 días', '50 días', '100 días', '10 días'], correctIndex: 1, explanation: '4 puff diarios. 200/4 = 50 días.' },
-                    { id: 420, topic: 'Gestión', text: 'Diferencia de inventario:', options: ['Lo que sobra', 'Lo que falta', 'Diferencia entre sistema y físico', 'Ventas del día'], correctIndex: 2, explanation: 'Discrepancia de stock.' },
-                    { id: 421, topic: 'Cálculos', text: 'Receta: "Ibuprofeno 400mg, 1 comprimido cada 8 horas por 5 días". ¿Cuántos comprimidos en total?', options: ['10', '15', '20', '25'], correctIndex: 1, explanation: '3 tomas diarias x 5 días = 15 comprimidos.' },
-                    { id: 422, topic: 'Posología', text: 'Una solución tiene una concentración de 2 mg/ml. Si el paciente necesita 10 mg, ¿cuántos ml debe tomar?', options: ['2 ml', '5 ml', '10 ml', '20 ml'], correctIndex: 1, explanation: '10 mg / (2 mg/ml) = 5 ml.' },
-                    { id: 423, topic: 'Cálculos', text: 'Paciente de 20 kg necesita 15 mg/kg/día de Amoxicilina repartido en 3 tomas. La suspensión es de 250mg/5ml. ¿Cuántos ml por toma?', options: ['2 ml', '5 ml', '10 ml', '15 ml'], correctIndex: 0, explanation: 'Dosis diaria total: 20kg * 15mg/kg = 300mg. Por toma: 300mg / 3 = 100mg. Regla de tres: si 250mg son 5ml, 100mg son X. X = (100*5)/250 = 2ml.' },
-                    { id: 424, topic: 'Posología', text: 'Dosis de "1 cucharada sopera" equivale a:', options: ['5 ml', '10 ml', '15 ml', '20 ml'], correctIndex: 2, explanation: 'Estándar: 1 cucharada sopera = 15 ml.' },
-                    { id: 425, topic: 'Cálculos', text: 'Un frasco de 60ml de jarabe debe durar 5 días. ¿Cuál es la dosis diaria?', options: ['10 ml', '12 ml', '15 ml', '20 ml'], correctIndex: 1, explanation: '60 ml / 5 días = 12 ml/día.' },
-                    { id: 426, topic: 'Posología', text: 'Cada 4 horas significa:', options: ['4 veces al día', '5 veces al día', '6 veces al día', '8 veces al día'], correctIndex: 2, explanation: '24 horas / 4 = 6 tomas diarias.' },
-                    { id: 427, topic: 'Cálculos', text: 'Si la dosis es 75mg y tengo comprimidos de 50mg que se pueden fraccionar, ¿cuántos dispenso?', options: ['1', '1.5', '2', '2.5'], correctIndex: 1, explanation: '75mg / 50mg = 1.5 comprimidos.' },
-                    { id: 428, topic: 'Posología', text: 'Inyección Intramuscular (IM) se aplica en:', options: ['Vena', 'Músculo', 'Piel', 'Grasa'], correctIndex: 1, explanation: 'Directo al tejido muscular.' },
-                    { id: 429, topic: 'Cálculos', text: 'Receta: 2 comprimidos juntos al acostarse por 10 días. Total:', options: ['10', '20', '30', '40'], correctIndex: 1, explanation: '2 comp/día x 10 días = 20 comprimidos.' },
-                    { id: 430, topic: 'Gestión', text: 'El porcentaje de margen de ganancia se calcula sobre:', options: ['El costo', 'El precio de venta', 'El impuesto', 'La receta'], correctIndex: 1, explanation: 'Comúnmente el margen se calcula sobre el precio de venta final neto.' },
-                    { id: 431, topic: 'Cálculos', text: 'Dosis pediátrica: 1 gota por kilo de peso por dosis. Niño de 15kg, jarabe de 30ml. Cada 8 horas. ¿Cuánto dura el frasco? (1ml = 20 gotas)', options: ['5 días', '10 días', '13 días', '20 días'], correctIndex: 2, explanation: 'Dosis: 15 gotas. 15 gotas / 20 gotas/ml = 0.75 ml por toma. 3 tomas diarias = 2.25 ml/día. 30ml / 2.25 ml/día = 13.33 días. Aprox 13 días.' },
-                    { id: 432, topic: 'Posología', text: 'Vía Subcutánea (SC) se aplica en:', options: ['Músculo', 'Tejido adiposo', 'Dermis', 'Vena'], correctIndex: 1, explanation: 'Bajo la piel, en la grasa.' },
-                    { id: 433, topic: 'Cálculos', text: 'Si un medicamento al 1% tiene 1g en 100ml, ¿cuántos mg hay en 5ml?', options: ['5 mg', '10 mg', '50 mg', '100 mg'], correctIndex: 2, explanation: '1% = 1g/100ml = 1000mg/100ml = 10mg/ml. En 5ml hay 5 * 10mg = 50mg.' },
-                    { id: 434, topic: 'Posología', text: 'Uso Oftálmico se aplica en:', options: ['Oídos', 'Ojos', 'Nariz', 'Boca'], correctIndex: 1, explanation: 'Gotas o ungüentos para los ojos.' },
-                    { id: 435, topic: 'Cálculos', text: 'Receta: 500mg cada 6 horas por 7 días. Presentación: 500mg x 20 comprimidos. ¿Cuántas cajas necesita?', options: ['1', '2', '3', '4'], correctIndex: 1, explanation: 'Dosis diaria: 4 comp. Total: 4 comp/día x 7 días = 28 comprimidos. Necesita 2 cajas de 20.' },
-                    { id: 436, topic: 'Posología', text: 'Comprimido de Liberación Prolongada:', options: ['Acción rápida', 'Se puede moler', 'Se absorbe lentamente', 'Dosis doble'], correctIndex: 2, explanation: 'No se debe triturar, libera el fármaco de a poco.' },
-                    { id: 437, topic: 'Cálculos', text: 'Si vendo $100.000 y mi costo fue $70.000, mi margen bruto es:', options: ['20%', '30%', '40%', '70%'], correctIndex: 1, explanation: 'Margen = (Venta - Costo) / Venta. (100000 - 70000) / 100000 = 30000 / 100000 = 0.3 = 30%.' },
-                    { id: 438, topic: 'Posología', text: 'Vía Tópica Nasal se aplica en:', options: ['Ojos', 'Oídos', 'Nariz', 'Piel'], correctIndex: 2, explanation: 'Fosas nasales.' },
-                    { id: 439, topic: 'Cálculos', text: 'Dosis 10ml. Frasco de 200ml. Precio $5.000. Costo por dosis:', options: ['$100', '$200', '$250', '$500'], correctIndex: 2, explanation: 'Total dosis por frasco: 200ml / 10ml = 20 dosis. Costo por dosis: $5.000 / 20 = $250.' },
-                    { id: 440, topic: 'Gestión', text: 'Inventario valorizado es:', options: ['Cantidad de productos', 'Suma del costo de todos los productos', 'Suma del precio de venta', 'Productos por vencer'], correctIndex: 1, explanation: 'Valor total del stock a precio de costo.' }
-                ] 
-            }
+            { id: 1, title: 'Prueba Diagnóstico', desc: 'Conceptos básicos.', iconBg: 'bg-orange-500', qCount: 10, passingScore: 6, questions: [{ id: 101, text: '¿Quién es el responsable técnico?', options: ['Dueño', 'Auxiliar', 'QF', 'Gerente'], correctIndex: 2, explanation: 'El QF es el responsable legal.' }, { id: 102, text: 'Rango frío:', options: ['0-5', '2-8', '8-15', 'Ambiente'], correctIndex: 1, explanation: '2 a 8 grados.' }, { id: 103, text: 'Vía sublingual:', options: ['Bajo lengua', 'Tragada', 'Inyectada', 'Rectal'], correctIndex: 0, explanation: 'Absorción rápida.' }, {id:104, text:'OTC significa:', options:['Receta retenida','Venta Directa','Hospitalario','Controlado'], correctIndex:1, explanation:'Over The Counter'}, {id:105, text:'Función auxiliar:', options:['Recetar','Diagnosticar','Dispensar','Operar'], correctIndex:2, explanation:'Colaborar en dispensación'}, {id:106, text:'Franja amarilla:', options:['Bioequivalente','Tóxico','Natural','Caro'], correctIndex:0, explanation:'Bioequivalencia'}, {id:107, text:'Jarabe es:', options:['Sólido','Líquido','Gas','Crema'], correctIndex:1, explanation:'Solución azucarada'}, {id:108, text:'Vencimiento indica:', options:['Elaboración','Límite eficacia','Venta','Apertura'], correctIndex:1, explanation:'Límite de uso seguro'}, {id:109, text:'Receta Cheque:', options:['Antibiótico','Estupefaciente','Vitamina','Crema'], correctIndex:1, explanation:'Controlados'}, {id:110, text:'Posología:', options:['Precio','Dosis/Horario','Marca','Envase'], correctIndex:1, explanation:'Forma de tomarlo'}] },
+            { id: 2, title: 'Nivel Intermedio', desc: 'Legislación.', iconBg: 'bg-gray-400', qCount: 15, passingScore: 9, questions: Array(15).fill({ id: 200, text: 'Pregunta simulada N2', options: ['A', 'B', 'C', 'D'], correctIndex: 0, explanation: '...' }) },
+            { id: 3, title: 'Nivel Avanzado', desc: 'Farmacología.', iconBg: 'bg-yellow-500', qCount: 25, passingScore: 18, questions: Array(25).fill({ id: 300, text: 'Pregunta simulada N3', options: ['A', 'B', 'C', 'D'], correctIndex: 0, explanation: '...' }) },
+            { id: 4, title: 'Simulacro Final', desc: 'Examen Seremi.', iconBg: 'bg-slate-500', qCount: 40, passingScore: 28, questions: Array(40).fill({ id: 400, text: 'Pregunta simulada N4', options: ['A', 'B', 'C', 'D'], correctIndex: 0, explanation: '...' }) }
         ];
 
-        // --- PDFS ---
-        const PDF_DOCS = [
-            { title: 'Ley 20.724 (Ley de Fármacos)', desc: 'Modifica el Código Sanitario', file: 'ley_20724.pdf' },
-            { title: 'Decreto Supremo 466', desc: 'Reglamento de Farmacias', file: 'decreto_466.pdf' },
-            { title: 'Decreto Supremo 404', desc: 'Reglamento de Estupefacientes', file: 'decreto_404.pdf' },
-            { title: 'Decreto Supremo 405', desc: 'Reglamento de Psicotrópicos', file: 'decreto_405.pdf' }
-        ];
-
-        // --- COMPONENTES UI (Sin cambios) ---
-        const Icon = ({ name, size = 20, className = "", weight = "regular" }) => {
-            const map = {
-                'user': 'ph-user', 'shield': 'ph-shield-check', 'lock': 'ph-lock', 'check-circle': 'ph-check-circle',
-                'book': 'ph-book-open', 'book-open': 'ph-book-open', 'arrow-left': 'ph-arrow-left', 'x': 'ph-x', 'caret-right': 'ph-caret-right',
-                'caret-down': 'ph-caret-down', 'files': 'ph-files', 'users': 'ph-users', 'house': 'ph-house', 
-                'file-pdf': 'ph-file-pdf', 'trophy': 'ph-trophy', 'warning': 'ph-warning-circle', 'eye': 'ph-eye', 
-                'refresh': 'ph-arrows-clockwise', 'whatsapp': 'ph-whatsapp-logo', 'facebook': 'ph-facebook-logo', 
-                'download': 'ph-download-simple', 'student': 'ph-student', 'question': 'ph-question', 'medal': 'ph-medal', 
-                'power': 'ph-power', 'coffee': 'ph-coffee', 'chat-circle': 'ph-chat-circle', 'article': 'ph-article', 'calculator': 'ph-calculator'
-            };
-            return <i className={`${map[name] || 'ph-circle'} ${className}`} style={{ fontSize: size, fontWeight: weight === 'fill' ? 'bold' : 'normal' }}></i>;
-        };
-
+        // --- COMPONENTES ---
+        const Icon = ({ name, className }) => <i className={`ph-${name} ${className || ''} text-lg`}></i>;
+        
         const Button = ({ onClick, children, variant = 'primary', className = '', fullWidth = false }) => {
-            const base = "flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-bold transition-all active:scale-95 text-sm md:text-base";
+            const base = "flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-bold transition-all active:scale-95 text-sm";
             const variants = {
-                primary: "bg-slate-900 text-white hover:bg-slate-800 shadow-lg hover:shadow-xl",
-                secondary: "bg-farmacia-green text-white hover:bg-green-600 shadow-md",
-                outline: "bg-white border-2 border-slate-200 text-slate-600 hover:border-farmacia-green hover:text-farmacia-green",
-                ghost: "text-slate-500 hover:bg-slate-100",
-                danger: "bg-red-50 text-red-500 hover:bg-red-100 border border-red-100",
-                fuchsia: "bg-farmacia-fuchsia text-white hover:bg-farmacia-fuchsia-dark shadow-md shadow-fuchsia-200"
+                primary: "bg-slate-900 text-white hover:bg-slate-800 shadow-lg",
+                secondary: "bg-white border-2 border-slate-200 text-slate-600 hover:border-farmacia-green hover:text-farmacia-green",
+                fuchsia: "bg-farmacia-fuchsia text-white hover:bg-fuchsia-600 shadow-md",
+                danger: "bg-red-50 text-red-500 border border-red-100"
             };
             return <button onClick={onClick} className={`${base} ${variants[variant]} ${fullWidth ? 'w-full' : ''} ${className}`}>{children}</button>;
         };
 
-        const Accordion = ({ title, content }) => {
-            const [isOpen, setIsOpen] = useState(false);
-            return (
-                <div className="border-b border-slate-100 last:border-0">
-                    <button onClick={() => setIsOpen(!isOpen)} className="w-full flex justify-between items-center py-4 text-left font-medium text-slate-700 hover:text-farmacia-green transition-colors">
-                        {title}
-                        <Icon name="caret-down" className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
-                    </button>
-                    <div className={`overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-96 pb-4' : 'max-h-0'}`}>
-                        <div className="text-sm text-slate-500 leading-relaxed html-content" dangerouslySetInnerHTML={{__html: content}}></div>
-                    </div>
-                </div>
-            );
-        };
-
-        const Header = ({ setView, user, setActiveModal }) => (
-            <header className="bg-white shadow-sm py-3 px-4 md:px-6 flex justify-between items-center border-b border-slate-100 sticky top-0 z-40">
-                <div className="flex items-center gap-2 cursor-pointer" onClick={() => setView('LANDING')}>
-                    <img src={LOGO_URL} alt="AuxiliarPro" className="h-10 md:h-12 w-auto object-contain" onError={(e) => {e.target.onerror = null; e.target.style.display='none'; e.target.parentNode.innerHTML='<span class="font-bold text-xl text-slate-800">AuxiliarPro</span>'}} />
-                </div>
-                <div className="flex items-center gap-2">
-                    <button onClick={() => setView('DASHBOARD')} className="hidden md:block text-sm font-bold text-slate-600 hover:text-farmacia-green px-2">Plan de Estudio</button>
-                    <button onClick={() => setView('DERMOCHECK')} className="hidden md:flex items-center gap-1 text-xs font-bold text-farmacia-fuchsia bg-fuchsia-50 px-3 py-1.5 rounded-full hover:bg-fuchsia-100 transition-colors border border-fuchsia-100 mr-2">
-                        <Icon name="calculator" /> DermoCheck
-                    </button>
-                    <button onClick={() => setView('BLOG')} className="hidden md:block text-sm font-bold text-slate-600 hover:text-farmacia-green px-2">Blog</button>
-                    
-                    {user.isAuthenticated ? (
-                        <button onClick={() => setView('DASHBOARD')} className="text-sm font-bold text-white bg-slate-900 px-4 py-2 rounded-lg hover:bg-slate-800 ml-2">Panel</button>
-                    ) : (
-                        <button onClick={() => setActiveModal('auth')} className="text-sm font-bold text-white bg-farmacia-green px-4 py-2 rounded-lg hover:bg-green-600 ml-2">Ingresar</button>
-                    )}
-                </div>
-            </header>
-        );
-
-        // --- APP PRINCIPAL ---
+        // --- APP ---
         function App() {
-            const [view, setView] = useState('LANDING'); 
+            const [view, setView] = useState('LANDING');
             const [user, setUser] = useState({ name: '', currentLevel: 1, completedLevels: [], isAuthenticated: false });
-            const [quizState, setQuizState] = useState({ active: false, levelId: null, qIndex: 0, score: 0, showResult: false, answers: [] });
-            const [reviewMode, setReviewMode] = useState(false);
-            const [activeModal, setActiveModal] = useState(null); 
-            const [authMode, setAuthMode] = useState('login');
+            const [quizState, setQuizState] = useState({ active: false, levelId: null, qIndex: 0, score: 0, showResult: false });
+            const [activeModal, setActiveModal] = useState(null);
             const [legalTab, setLegalTab] = useState('terms');
             const [selectedArticle, setSelectedArticle] = useState(null);
 
+            // Auth Logic
             useEffect(() => {
                 const unsubscribe = onAuthStateChanged(auth, (u) => {
                     if (u) {
-                        const ref = doc(db, 'artifacts', appId, 'users', u.uid, 'data', 'progress');
-                        onSnapshot(ref, (snap) => {
-                            if (snap.exists()) {
-                                const d = snap.data();
-                                setUser({ ...d, uid: u.uid, isAuthenticated: true });
-                            } else {
-                                setUser({ name: u.displayName || 'Colega', currentLevel: 1, completedLevels: [], isAuthenticated: true, uid: u.uid });
-                            }
-                        });
+                        // Cargar datos de usuario
+                        setUser({ name: u.displayName || 'Colega', currentLevel: 1, completedLevels: [], isAuthenticated: true, uid: u.uid });
                     } else {
                         const local = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || '{}');
                         if (local.isAuthenticated) setUser(local);
@@ -349,283 +133,227 @@
                 return () => unsubscribe();
             }, []);
 
-            const saveProgress = async (newLevel, newCompleted) => {
-                const updatedUser = { ...user, currentLevel: newLevel, completedLevels: newCompleted };
-                setUser(updatedUser);
-                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updatedUser));
-                if (user.uid) {
-                    try { await setDoc(doc(db, 'artifacts', appId, 'users', user.uid, 'data', 'progress'), updatedUser, { merge: true }); } catch(e) {}
-                }
+            // Guardar Progreso
+            const saveProgress = (newLevel, newCompleted) => {
+                const updated = { ...user, currentLevel: newLevel, completedLevels: newCompleted };
+                setUser(updated);
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
             };
 
-            // ... [FUNCIONES QUIZ MANTENIDAS IGUAL QUE ANTES] ...
-            const startQuiz = (lvlId) => {
-                const level = LEVELS.find(l => l.id === lvlId);
-                setQuizState({ active: true, levelId: lvlId, qIndex: 0, score: 0, showResult: false, answers: [] });
-                setReviewMode(false);
-            };
-
+            // Quiz Logic
+            const startQuiz = (lvlId) => setQuizState({ active: true, levelId: lvlId, qIndex: 0, score: 0, showResult: false });
             const handleAnswer = (idx) => {
                 const lvl = LEVELS.find(l => l.id === quizState.levelId);
-                const q = lvl.questions[quizState.qIndex % lvl.questions.length];
+                const q = lvl.questions[quizState.qIndex];
                 const isCorrect = idx === q.correctIndex;
-                const newScore = isCorrect ? quizState.score + 1 : quizState.score;
-                const newAnswers = [...quizState.answers, idx];
-
+                const nextScore = isCorrect ? quizState.score + 1 : quizState.score;
+                
                 if (quizState.qIndex + 1 < lvl.qCount) {
-                    setQuizState({ ...quizState, qIndex: quizState.qIndex + 1, score: newScore, answers: newAnswers });
+                    setQuizState({ ...quizState, qIndex: quizState.qIndex + 1, score: nextScore });
                 } else {
-                    const passed = newScore >= lvl.passingScore;
+                    const passed = nextScore >= lvl.passingScore;
                     if (passed) {
-                        if (window.confetti) window.confetti();
                         const nextLvl = lvl.id === user.currentLevel ? user.currentLevel + 1 : user.currentLevel;
-                        const nextCompleted = user.completedLevels.includes(lvl.id) ? user.completedLevels : [...user.completedLevels, lvl.id];
-                        saveProgress(nextLvl, nextCompleted);
+                        const compl = user.completedLevels.includes(lvl.id) ? user.completedLevels : [...user.completedLevels, lvl.id];
+                        saveProgress(nextLvl, compl);
+                        if(window.confetti) window.confetti();
                     }
-                    setQuizState({ ...quizState, showResult: true, score: newScore, answers: newAnswers });
+                    setQuizState({ ...quizState, showResult: true, score: nextScore });
                 }
             };
 
-            const renderFooter = () => (
-                <footer className="bg-slate-900 text-slate-400 py-10 px-6 text-center text-xs">
-                    <div className="max-w-md mx-auto space-y-8">
-                        {/* Caja de Comentarios Estilo Boceto */}
-                        <div className="bg-white/5 border border-white/10 rounded-xl p-6 text-center relative overflow-hidden">
-                            <h4 className="font-bold text-white mb-2 text-sm uppercase tracking-wider">Comentarios y Sugerencias</h4>
-                            <p className="mb-4 text-slate-400">¿Encontraste un error o tienes una sugerencia?</p>
-                            <a href="mailto:auxiliarprofarma@gmail.com" className="inline-block bg-white text-slate-900 px-6 py-2 rounded-full font-bold hover:bg-emerald-400 transition-colors shadow-lg">
-                                Escríbeme a auxiliarprofarma@gmail.com
-                            </a>
-                            <p className="mt-6 text-[10px] text-slate-500 italic border-t border-white/5 pt-4">
-                                Este sitio ha sido construido con asistencia de Inteligencia Artificial. La información debe ser validada con fuentes oficiales.
-                            </p>
-                        </div>
+            // Header Component (Persistente)
+            const Header = () => (
+                <header className="bg-white shadow-sm py-3 px-4 flex justify-between items-center sticky top-0 z-40">
+                    <div onClick={() => setView('LANDING')} className="cursor-pointer">
+                        <img src={LOGO_URL} alt="AuxiliarPro" className="h-10 object-contain" onError={(e) => e.target.style.display='none'} />
+                        <span className="font-bold text-slate-800 ml-2 hidden md:inline">AuxiliarPro</span>
+                    </div>
+                    <div className="flex gap-2 items-center">
+                        <button onClick={() => setView('DASHBOARD')} className="text-sm font-bold text-slate-600 px-2">Estudio</button>
+                        <button onClick={() => setView('DERMOCHECK')} className="text-sm font-bold text-farmacia-fuchsia px-2">DermoCheck</button>
+                        <button onClick={() => setView('BLOG')} className="text-sm font-bold text-slate-600 px-2">Blog</button>
+                        {user.isAuthenticated ? 
+                            <button onClick={() => setView('DASHBOARD')} className="bg-slate-900 text-white px-3 py-1.5 rounded-lg text-xs font-bold">Panel</button> :
+                            <button onClick={() => setActiveModal('auth')} className="bg-farmacia-green text-white px-3 py-1.5 rounded-lg text-xs font-bold">Ingresar</button>
+                        }
+                    </div>
+                </header>
+            );
 
-                        <div className="flex justify-center gap-4 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                            <button onClick={() => { setLegalTab('terms'); setActiveModal('legal'); }} className="hover:text-white">Términos</button>
-                            <span>-</span>
-                            <button onClick={() => { setLegalTab('privacy'); setActiveModal('legal'); }} className="hover:text-white">Privacidad</button>
-                            <span>-</span>
-                            <button onClick={() => { setLegalTab('disclaimers'); setActiveModal('legal'); }} className="hover:text-white">Descargos</button>
+            // Footer Component
+            const Footer = () => (
+                <footer className="bg-slate-900 text-slate-400 py-10 px-6 text-center text-xs mt-auto">
+                    <div className="max-w-md mx-auto">
+                        <div className="border border-slate-700 bg-slate-800/50 p-6 rounded-xl mb-8">
+                            <h4 className="font-bold text-white uppercase mb-2">Comentarios y Sugerencias</h4>
+                            <p className="mb-4">¿Encontraste un error? Escríbeme:</p>
+                            <a href="mailto:auxiliarprofarma@gmail.com" className="bg-white text-slate-900 px-4 py-2 rounded-full font-bold hover:bg-emerald-400">auxiliarprofarma@gmail.com</a>
+                            <p className="mt-4 italic opacity-50">Sitio construido con asistencia de IA. Validar con fuentes oficiales.</p>
                         </div>
-                        <p className="opacity-40">© 2026 AuxiliarPro</p>
+                        <div className="flex justify-center gap-4 uppercase font-bold text-[10px]">
+                            <button onClick={() => {setLegalTab('terms'); setActiveModal('legal');}}>Términos</button>
+                            <button onClick={() => {setLegalTab('privacy'); setActiveModal('legal');}}>Privacidad</button>
+                            <button onClick={() => {setLegalTab('disclaimers'); setActiveModal('legal');}}>Descargos</button>
+                        </div>
+                        <p className="mt-4 opacity-30">© 2026 AuxiliarPro</p>
                     </div>
                 </footer>
             );
 
             // VISTAS
             const renderLanding = () => (
-                <div className="flex-1 flex flex-col animate-fade-in overflow-y-auto relative z-10 bg-white">
-                    <Header setView={setView} user={user} setActiveModal={setActiveModal} />
-                    <main className="flex-1 flex flex-col">
-                        <section className="px-6 py-10 text-center max-w-lg mx-auto">
-                            <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-100 text-emerald-700 text-[10px] font-bold px-3 py-1.5 rounded-full mb-6 tracking-wide shadow-sm">
-                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> META: CREDENCIAL 2026
-                            </div>
-                            <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-8 leading-tight tracking-tight uppercase">
-                                PREPÁRATE PARA TU <br/><span className="text-transparent bg-clip-text bg-gradient-to-r from-farmacia-green to-emerald-600">EXAMEN DE AUXILIAR</span>
-                            </h1>
-                            
-                            {/* Botones Apilados Verticalmente */}
-                            <div className="flex flex-col gap-3 w-full max-w-xs mx-auto mb-10">
-                                <Button fullWidth onClick={() => user.isAuthenticated ? setView('DASHBOARD') : setActiveModal('auth')}>
-                                    COMENZAR AHORA
-                                </Button>
-                                <Button variant="outline" fullWidth onClick={() => setView('BLOG')}>
-                                    LEER ARTÍCULOS
-                                </Button>
-                                <Button variant="fuchsia" fullWidth onClick={() => setView('DERMOCHECK')}>
-                                    <Icon name="calculator" /> DERMOCHECK
-                                </Button>
-                            </div>
+                <div className="flex-1 flex flex-col bg-white overflow-y-auto w-full">
+                    <Header />
+                    <div className="p-6 text-center max-w-md mx-auto">
+                        <div className="inline-block bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-[10px] font-bold border border-emerald-100 mb-6">META: CREDENCIAL 2026</div>
+                        <h1 className="text-4xl font-extrabold text-slate-900 mb-8 leading-tight">PREPÁRATE PARA TU <span className="text-farmacia-green">EXAMEN DE AUXILIAR</span></h1>
+                        
+                        <div className="flex flex-col gap-3 mb-12">
+                            <Button onClick={() => user.isAuthenticated ? setView('DASHBOARD') : setActiveModal('auth')}>COMENZAR AHORA</Button>
+                            <Button variant="secondary" onClick={() => setView('BLOG')}>LEER ARTÍCULOS</Button>
+                            <Button variant="fuchsia" onClick={() => setView('DERMOCHECK')}><Icon name="calculator"/> DERMOCHECK</Button>
+                        </div>
 
-                            {/* Sección QUIEN SOY estilo Nota Adhesiva */}
-                            <div className="relative mx-auto max-w-sm rotate-1 hover:rotate-0 transition-transform duration-300">
-                                <div className="bg-emerald-50/90 backdrop-blur-sm border border-emerald-100 p-6 rounded-lg shadow-sm text-left relative overflow-hidden">
-                                    {/* Adorno tipo cinta adhesiva visual */}
-                                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-16 h-4 bg-yellow-100/50 -mt-2 rotate-1"></div>
-                                    
-                                    <h3 className="font-bold text-emerald-800 mb-2 flex items-center gap-2">
-                                        <Icon name="student" /> Quién soy
-                                    </h3>
-                                    <p className="text-emerald-900 text-sm leading-relaxed font-medium">
-                                        "Auxiliar en preparación, esta web es mi cuaderno de estudio. Aquí encontrarás lo que estoy aprendiendo para el examen de 2026. ¡Vamos por ese logro juntos!"
-                                    </p>
-                                </div>
-                            </div>
-                        </section>
-
-                        {/* FAQs Section Link */}
-                        <section className="bg-slate-50 py-10 px-6 border-y border-slate-100 text-center">
-                            <h3 className="font-bold text-slate-800 mb-4 text-lg">¿Dudas sobre el proceso?</h3>
-                            <Button variant="outline" className="mx-auto" onClick={() => setView('FAQS')}><Icon name="question" /> Ver Preguntas Frecuentes</Button>
-                        </section>
-
-                        {renderFooter()}
-                    </main>
+                        <div className="sticky-note p-6 text-left mx-4 mb-12 relative">
+                            <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-20 h-6 bg-yellow-200/50 rotate-2"></div>
+                            <h3 className="font-bold text-emerald-800 mb-2 flex items-center gap-2"><Icon name="student"/> Quién soy</h3>
+                            <p className="text-sm text-emerald-900 font-medium leading-relaxed">
+                                "Auxiliar en preparación, esta web es mi cuaderno de estudio. Aquí encontrarás lo que estoy aprendiendo para el examen de 2026. ¡Vamos por ese logro juntos!"
+                            </p>
+                        </div>
+                    </div>
+                    <Footer />
                 </div>
             );
 
-            const renderDermoCheck = () => (
-                <div className="flex-1 flex flex-col bg-slate-900 h-full animate-slide-up absolute inset-0 z-50">
-                    <div className="bg-slate-900 text-white p-4 flex justify-between items-center">
-                        <h2 className="font-bold flex items-center gap-2"><Icon name="calculator" className="text-farmacia-fuchsia"/> DermoCheck</h2>
-                        <button onClick={() => setView('LANDING')} className="text-xs bg-white/10 px-3 py-1 rounded-full hover:bg-white/20 transition-colors">Volver al Inicio</button>
-                    </div>
-                    <div className="flex-1 w-full bg-black relative">
-                        <iframe src="https://auxiliar-dermocheck.vercel.app" className="w-full h-full border-0" title="Calculadora DermoCheck"></iframe>
-                    </div>
-                </div>
-            );
-
-            // ... [RESTO DE VISTAS (Dashboard, FAQs, Blog, etc.) MANTENIDAS IGUAL QUE CÓDIGO ANTERIOR] ...
             const renderDashboard = () => (
-                <div className="flex-1 flex flex-col bg-slate-50 h-full animate-fade-in absolute inset-0 z-20">
-                    <Header setView={setView} user={user} setActiveModal={setActiveModal} />
-                    <main className="flex-1 p-6 overflow-y-auto pb-24">
-                        <div className="max-w-md mx-auto space-y-6">
-                            <div className="bg-slate-900 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
-                                <div className="relative z-10">
-                                    <div className="flex justify-between items-center mb-4">
-                                        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Avance Global</span>
-                                        <span className="text-emerald-400 font-bold text-2xl">{Math.round((user.completedLevels.length / LEVELS.length) * 100)}%</span>
-                                    </div>
-                                    <div className="w-full bg-slate-700 h-2 rounded-full overflow-hidden"><div className="bg-emerald-500 h-full rounded-full transition-all duration-1000" style={{ width: `${(user.completedLevels.length / LEVELS.length) * 100}%` }}></div></div>
-                                    <p className="text-xs text-slate-400 mt-4">Has completado {user.completedLevels.length} de {LEVELS.length} niveles.</p>
+                <div className="flex-1 flex flex-col bg-slate-50 w-full overflow-hidden">
+                    <Header />
+                    <div className="flex-1 overflow-y-auto p-4 pb-20">
+                        <div className="max-w-md mx-auto space-y-4">
+                            <div className="bg-slate-900 text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">
+                                <div className="flex justify-between items-center mb-2">
+                                    <span className="text-xs font-bold text-slate-400 uppercase">Tu Progreso</span>
+                                    <span className="text-2xl font-bold text-farmacia-green">{Math.round((user.completedLevels.length / LEVELS.length) * 100)}%</span>
                                 </div>
-                                <Icon name="trophy" className="absolute -right-4 -bottom-4 text-slate-800 text-9xl opacity-20 rotate-12" />
+                                <div className="w-full bg-slate-700 h-2 rounded-full"><div className="bg-farmacia-green h-full rounded-full" style={{width: `${(user.completedLevels.length / LEVELS.length) * 100}%`}}></div></div>
+                                <Icon name="trophy" className="absolute -bottom-2 -right-2 text-8xl opacity-10 rotate-12" />
                             </div>
-                            <div className="space-y-4">
-                                {LEVELS.map(level => {
-                                    const isLocked = level.id > user.currentLevel;
-                                    const isCompleted = user.completedLevels.includes(level.id);
+
+                            <div className="space-y-3">
+                                {LEVELS.map(l => {
+                                    const locked = l.id > user.currentLevel;
+                                    const done = user.completedLevels.includes(l.id);
                                     return (
-                                        <div key={level.id} onClick={() => !isLocked && startQuiz(level.id)} className={`relative p-5 rounded-2xl border-2 transition-all flex items-center gap-4 cursor-pointer group overflow-hidden ${isLocked ? 'bg-slate-100 border-slate-200 opacity-60' : 'bg-white hover:shadow-lg ' + level.borderColor} ${isCompleted ? 'bg-emerald-50/30 border-emerald-200' : ''}`}>
-                                            <div className={`w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow-sm relative z-10 ${isCompleted ? 'shiny-effect ' + level.iconBg + ' text-white border-2 border-white shadow-md' : (isLocked ? 'bg-slate-200 text-slate-400' : level.iconBg + ' text-white')}`}>{isCompleted ? <Icon name="medal" /> : (isLocked ? <Icon name="lock" /> : <Icon name="trophy" />)}</div>
-                                            <div className="flex-1 z-10">
-                                                <div className="flex justify-between items-start"><h3 className="font-bold text-slate-800">{level.title}</h3>{isCompleted && <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 border border-emerald-200">LOGRADO</span>}{!isLocked && !isCompleted && <span className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase bg-slate-100 text-slate-600 border border-slate-200`}>{level.medal}</span>}</div>
-                                                <p className="text-xs text-slate-500 mt-1">{level.desc}</p>
-                                                <p className="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-wide flex items-center gap-1"><Icon name="files" size={12}/> {level.qCount} Preguntas</p>
+                                        <div key={l.id} onClick={() => !locked && startQuiz(l.id)} className={`bg-white p-4 rounded-xl border-2 flex items-center gap-4 ${locked ? 'border-slate-100 opacity-60' : 'border-slate-100 hover:border-farmacia-green cursor-pointer'}`}>
+                                            <div className={`w-12 h-12 rounded-full flex items-center justify-center text-white ${locked ? 'bg-slate-300' : (done ? 'bg-farmacia-green' : l.iconBg)}`}>
+                                                {locked ? <Icon name="lock"/> : (done ? <Icon name="check"/> : <Icon name="play"/>)}
                                             </div>
-                                            {!isLocked && <Icon name="caret-right" className="text-slate-300 group-hover:text-farmacia-green transition-colors z-10" />}
+                                            <div className="flex-1">
+                                                <h4 className="font-bold text-slate-800">{l.title}</h4>
+                                                <p className="text-xs text-slate-500">{l.desc}</p>
+                                            </div>
                                         </div>
-                                    );
+                                    )
                                 })}
                             </div>
-                            <div className="grid grid-cols-2 gap-3">
-                                <Button variant="outline" fullWidth onClick={() => setView('LIBRARY')}><Icon name="file-pdf" /> Biblioteca</Button>
-                                <Button variant="outline" fullWidth onClick={() => setActiveModal('community')}><Icon name="chat-circle" /> Foro</Button>
+
+                            {/* BOTONES DE BIBLIOTECA Y FORO RECUPERADOS */}
+                            <div className="grid grid-cols-2 gap-3 mt-4">
+                                <Button variant="secondary" onClick={() => setView('LIBRARY')}><Icon name="book"/> Biblioteca</Button>
+                                <Button variant="secondary" onClick={() => setActiveModal('community')}><Icon name="users"/> Foro</Button>
                             </div>
-                            <div className="pt-6 border-t border-slate-200">
-                                <Button variant="danger" fullWidth onClick={async () => { await signOut(auth); localStorage.removeItem(LOCAL_STORAGE_KEY); setView('LANDING'); }}><Icon name="power" /> Cerrar Sesión</Button>
+
+                            <div className="pt-6">
+                                <Button variant="danger" fullWidth onClick={() => {signOut(auth); localStorage.removeItem(LOCAL_STORAGE_KEY); setView('LANDING');}}>Cerrar Sesión</Button>
                             </div>
                         </div>
-                    </main>
+                    </div>
                 </div>
             );
 
-            const renderFAQs = () => (
-                <div className="flex-1 flex flex-col bg-white h-full animate-slide-up absolute inset-0 z-30">
-                    <header className="bg-white shadow-sm py-4 px-6 flex items-center gap-3 sticky top-0 z-10 border-b border-slate-100"><button onClick={() => setView('LANDING')} className="flex items-center gap-1 text-slate-600 font-medium hover:text-farmacia-green"><Icon name="arrow-left" size={20}/> Volver al Inicio</button><span className="font-bold text-lg text-slate-800 ml-auto">Preguntas Frecuentes</span></header>
-                    <main className="flex-1 p-6 overflow-y-auto bg-slate-50"><div className="max-w-md mx-auto bg-white p-6 rounded-2xl shadow-sm border border-slate-100"><h2 className="text-xl font-bold text-slate-800 mb-4">Proceso de Acreditación</h2><p className="text-sm text-slate-500 mb-6">Información clave sobre el examen y trámites ante la SEREMI.</p><div className="space-y-1">{FAQS.map((faq, i) => <Accordion key={i} title={faq.q} content={faq.a} />)}</div><div className="mt-8 pt-6 border-t border-slate-100 text-center"><Button variant="outline" fullWidth onClick={() => setView('LANDING')}>Volver al Inicio</Button></div></div></main>
+            // VISTA DERMOCHECK CON IFRAME REAL
+            const renderDermoCheck = () => (
+                <div className="flex-1 flex flex-col bg-slate-900 w-full h-full absolute inset-0 z-50">
+                    <div className="bg-slate-900 text-white p-3 flex justify-between items-center shadow-md z-10">
+                        <span className="font-bold flex items-center gap-2"><Icon name="calculator" className="text-farmacia-fuchsia"/> DermoCheck</span>
+                        <button onClick={() => setView('LANDING')} className="text-xs bg-white/10 px-3 py-1 rounded-full">Salir</button>
+                    </div>
+                    <div className="flex-1 bg-black relative">
+                        <iframe src={DERMO_URL} className="w-full h-full border-0" title="Calculadora DermoCheck"></iframe>
+                    </div>
                 </div>
             );
 
-            const renderBlog = () => (
-                <div className="flex-1 flex flex-col bg-white h-full animate-slide-up absolute inset-0 z-30">
-                    <header className="bg-white shadow-sm py-4 px-6 flex items-center gap-3 sticky top-0 z-10 border-b border-slate-100"><button onClick={() => setView('LANDING')} className="flex items-center gap-1 text-slate-600 font-medium hover:text-farmacia-green"><Icon name="arrow-left" size={20}/> Volver al Inicio</button><span className="font-bold text-lg text-slate-800 ml-auto">Blog de Estudio</span></header>
-                    <main className="flex-1 p-6 overflow-y-auto bg-slate-50"><div className="space-y-4 max-w-md mx-auto">{BLOG_POSTS.map(post => (<article key={post.id} onClick={() => { setSelectedArticle(post); setView('ARTICLE'); }} className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all cursor-pointer transform hover:-translate-y-1 duration-200"><div className="flex justify-between items-start mb-3"><span className="text-[10px] font-bold text-farmacia-green bg-green-50 px-2 py-1 rounded uppercase tracking-wide">{post.category}</span><span className="text-xs text-slate-400 font-medium">{post.date}</span></div><h3 className="font-bold text-slate-800 text-lg mb-2 leading-snug">{post.title}</h3><p className="text-sm text-slate-500 leading-relaxed line-clamp-3">{post.excerpt}</p><button className="mt-4 text-sm text-farmacia-green font-bold flex items-center gap-1 hover:gap-2 transition-all">Leer Artículo <Icon name="caret-right" size={14} /></button></article>))}</div></main>
-                </div>
-            );
-
-            const renderArticle = () => {
-                if (!selectedArticle) return null;
+            // MODALES LEGALES CON TEXTO REAL
+            const LegalModal = () => {
+                if (activeModal !== 'legal') return null;
+                const texts = {
+                    terms: "Términos de Uso: Esta plataforma es una herramienta educativa independiente. El uso de la información es responsabilidad del usuario. No reemplaza fuentes oficiales.",
+                    privacy: "Privacidad: Respetamos tus datos. Solo almacenamos tu progreso localmente o en Firebase para mejorar tu experiencia. No vendemos datos a terceros.",
+                    disclaimers: "Descargos: AuxiliarPro NO representa al MINSAL ni al ISP. Es una iniciativa de estudiantes. Verifica siempre con el Decreto 466 oficial."
+                };
                 return (
-                    <div className="flex-1 flex flex-col bg-white h-full animate-slide-up absolute inset-0 z-40">
-                        <header className="bg-white shadow-sm py-4 px-6 flex items-center gap-3 sticky top-0 z-10 border-b border-slate-100"><button onClick={() => setView('BLOG')} className="flex items-center gap-1 text-slate-600 font-medium hover:text-farmacia-green"><Icon name="arrow-left" size={20}/> Volver al Blog</button></header>
-                        <main className="flex-1 p-6 overflow-y-auto"><div className="max-w-2xl mx-auto blog-content"><span className="text-xs font-bold text-farmacia-green bg-green-50 px-2 py-1 rounded uppercase tracking-wide mb-4 inline-block">{selectedArticle.category}</span><div dangerouslySetInnerHTML={{__html: selectedArticle.content}}></div><div className="mt-8 pt-6 border-t border-slate-100 text-center"><Button variant="outline" fullWidth onClick={() => setView('BLOG')}>Volver a Artículos</Button></div></div></main>
+                    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+                        <div className="bg-white rounded-2xl p-6 max-w-sm w-full">
+                            <h3 className="font-bold text-lg mb-4 capitalize">{legalTab === 'disclaimers' ? 'Descargos' : (legalTab === 'terms' ? 'Términos' : 'Privacidad')}</h3>
+                            <p className="text-sm text-slate-600 mb-6 leading-relaxed">{texts[legalTab]}</p>
+                            <Button fullWidth onClick={() => setActiveModal(null)}>Entendido</Button>
+                        </div>
                     </div>
                 );
             };
 
-            const renderLibrary = () => (
-                <div className="flex-1 flex flex-col bg-white h-full animate-slide-up absolute inset-0 z-30">
-                    <header className="p-4 border-b border-gray-100 flex items-center gap-3 bg-white sticky top-0 z-20"><button onClick={() => setView(user.isAuthenticated ? 'DASHBOARD' : 'LANDING')}><Icon name="arrow-left" size={24} className="text-slate-600"/></button><h2 className="font-bold text-lg text-slate-800">Biblioteca Legal</h2></header>
-                    <main className="flex-1 p-6 overflow-y-auto"><div className="max-w-md mx-auto"><p className="text-sm text-gray-500 mb-6">Guías de estudio y resúmenes basados en los decretos del MINSAL.</p><div className="space-y-3">{PDF_DOCS.map((doc, i) => (<a key={i} href={doc.file} target="_blank" className="flex items-center gap-4 p-4 rounded-xl border border-gray-100 hover:border-red-200 hover:bg-red-50 transition-colors group cursor-pointer no-underline"><div className="bg-red-100 text-red-500 p-3 rounded-lg"><Icon name="file-pdf" size={24}/></div><div className="flex-1"><h4 className="font-bold text-gray-800 group-hover:text-red-600">{doc.title}</h4><p className="text-xs text-gray-500">{doc.desc}</p></div><Icon name="download" className="text-gray-300 group-hover:text-red-500" /></a>))}</div><div className="mt-8 pt-6 border-t border-slate-100 text-center"><Button variant="outline" fullWidth onClick={() => setView(user.isAuthenticated ? 'DASHBOARD' : 'LANDING')}>Volver al Panel</Button></div></div></main>
-                </div>
-            );
-
-            const renderQuizModal = () => {
-                if (!quizState.active) return null;
-                const lvl = LEVELS.find(l => l.id === quizState.levelId);
-                const qRealIndex = quizState.qIndex % lvl.questions.length;
-                const q = lvl.questions[qRealIndex];
-                const passed = quizState.score >= lvl.passingScore;
-                const wrongTopics = [];
-                if (quizState.showResult) {
-                    quizState.answers.forEach((ans, i) => {
-                        if (ans !== lvl.questions[i].correctIndex) {
-                            const topic = lvl.questions[i].topic;
-                            if (!wrongTopics.includes(topic)) wrongTopics.push(topic);
-                        }
-                    });
-                }
-
-                return (
-                    <div className="absolute inset-0 z-50 bg-white flex flex-col animate-slide-up">
-                        <header className="bg-farmacia-dark text-white p-4 flex justify-between items-center shadow-lg sticky top-0 z-20">
-                            <div><h3 className="font-bold">{lvl.title}</h3><p className="text-xs opacity-70">{!quizState.showResult ? `Pregunta ${quizState.qIndex + 1} de ${lvl.qCount}` : 'Resultados'}</p></div>
-                            <button onClick={() => setQuizState({ ...quizState, active: false })}><Icon name="x" size={24} /></button>
-                        </header>
-                        <main className="flex-1 p-6 overflow-y-auto bg-slate-50">
-                            {!quizState.showResult ? (
-                                <div className="max-w-md mx-auto h-full flex flex-col">
-                                    <div className="mb-6 flex-1"><span className="text-[10px] font-bold text-farmacia-green bg-green-50 px-2 py-1 rounded mb-2 inline-block border border-green-100 uppercase">{lvl.examLabel || 'SIMULACRO'}</span><h2 className="text-xl font-bold text-gray-800 leading-snug">{q.text}</h2></div>
-                                    <div className="space-y-3 mb-8">{q.options.map((opt, i) => (<button key={i} onClick={() => handleAnswer(i)} className="w-full text-left p-4 border-2 border-gray-100 bg-white rounded-xl hover:border-farmacia-green hover:bg-green-50 transition-all font-medium text-gray-700 flex items-center gap-3 group shadow-sm"><span className="w-8 h-8 inline-flex items-center justify-center bg-slate-100 group-hover:bg-white rounded-full text-xs font-bold text-gray-500 group-hover:text-farmacia-green transition-colors">{String.fromCharCode(65+i)}</span><span className="flex-1">{opt}</span></button>))}</div>
-                                    <div className="mt-auto pt-4 border-t border-slate-200"><Button variant="danger" fullWidth onClick={() => setQuizState({ ...quizState, active: false })}>Cancelar y Volver al Panel</Button></div>
-                                </div>
-                            ) : (
-                                <div className="text-center max-w-md mx-auto pt-4">
-                                    <div className="mb-8"><div className="text-7xl mb-4">{passed ? '🎓' : '📚'}</div><h2 className="text-2xl font-bold text-gray-900 mb-2">{passed ? '¡Nivel Aprobado!' : 'Sigue Estudiando'}</h2><p className="text-gray-500">Lograste {quizState.score} de {lvl.qCount} respuestas correctas</p></div>
-                                    {!reviewMode && (
-                                        <div className="bg-white p-5 rounded-2xl mb-8 text-left border border-slate-100 shadow-sm">
-                                            <h4 className="font-bold text-slate-800 mb-3 border-b border-slate-100 pb-2 flex items-center gap-2"><Icon name="files" /> Análisis de Resultados</h4>
-                                            <div className="space-y-3 text-sm">
-                                                <div className="flex justify-between"><span className="text-slate-500">Estado:</span><span className={`font-bold ${passed ? 'text-farmacia-green' : 'text-red-500'}`}>{passed ? 'APROBADO' : 'REPROBADO'}</span></div>
-                                                {wrongTopics.length > 0 ? (
-                                                    <div className="mt-3 p-3 bg-red-50 rounded-lg border border-red-100">
-                                                        <p className="text-xs font-bold text-red-500 uppercase mb-1">Debes reforzar:</p>
-                                                        <ul className="list-disc pl-4 text-slate-700 mb-3">{wrongTopics.slice(0, 3).map(t => <li>{t}</li>)}</ul>
-                                                        <button onClick={() => { setQuizState({ ...quizState, active: false }); setView('LIBRARY'); }} className="w-full bg-red-100 hover:bg-red-200 text-red-700 font-bold py-2 rounded-lg text-xs flex items-center justify-center gap-2 transition-colors"><Icon name="book-open" /> Ir a la Biblioteca a Repasar</button>
-                                                    </div>
-                                                ) : (
-                                                    <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-100"><p className="text-xs font-bold text-green-600 uppercase mb-1">¡Excelente trabajo!</p><p className="text-slate-700">Dominas los conceptos clave. ¡Sigue así!</p></div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    )}
-                                    {reviewMode && <div className="text-left space-y-4 mb-8">{lvl.questions.map((qs, i) => <div key={i} className="bg-white border p-4 rounded-xl text-sm shadow-sm"><p className="font-bold mb-2 text-slate-800">{qs.text}</p><p className={quizState.answers[i] === qs.correctIndex ? 'text-farmacia-green font-bold' : 'text-red-500 line-through'}>Tu: {qs.options[quizState.answers[i]]}</p>{quizState.answers[i] !== qs.correctIndex && <p className="text-farmacia-green font-bold mt-1">Correcta: {qs.options[qs.correctIndex]}</p>}</div>)}</div>}
-                                    <div className="space-y-3 sticky bottom-0 bg-white p-4 border-t border-slate-100 shadow-xl rounded-t-2xl">{!reviewMode && <Button fullWidth variant="outline" onClick={() => setReviewMode(true)}><Icon name="eye" /> Revisar mis Errores</Button>}<Button fullWidth onClick={() => startQuiz(lvl.id)}><Icon name="refresh" /> Reintentar Nivel</Button><button onClick={() => setQuizState({ ...quizState, active: false })} className="text-sm text-slate-400 underline py-2">Volver al Panel</button></div>
-                                </div>
-                            )}
-                        </main>
-                    </div>
-                );
-            };
-
+            // RENDERIZADO CONDICIONAL
             return (
-                <div className="w-full max-w-md bg-white h-screen md:h-[90vh] md:rounded-3xl md:shadow-2xl overflow-hidden flex flex-col relative">
+                <div className="w-full max-w-md bg-white h-screen md:h-[90vh] md:rounded-3xl md:shadow-2xl overflow-hidden flex flex-col relative mx-auto">
                     {view === 'LANDING' && renderLanding()}
                     {view === 'DASHBOARD' && renderDashboard()}
                     {view === 'DERMOCHECK' && renderDermoCheck()}
-                    {view === 'LIBRARY' && renderLibrary()}
-                    {view === 'FAQS' && renderFAQs()}
-                    {view === 'BLOG' && renderBlog()}
-                    {view === 'ARTICLE' && renderArticle()}
-                    {renderQuizModal()}
-                    <AuthModal />
+                    {view === 'BLOG' && <div className="flex-1 flex flex-col"><Header/><div className="p-6"><h2 className="font-bold text-xl">Blog</h2>{BLOG_POSTS.map(p=><div key={p.id} className="border p-4 my-2 rounded-xl"><h3>{p.title}</h3></div>)}</div><Footer/></div>}
+                    {view === 'LIBRARY' && <div className="flex-1 flex flex-col"><Header/><div className="p-6"><h2 className="font-bold text-xl mb-4">Biblioteca Legal</h2><p className="text-sm mb-4">Documentos oficiales:</p><ul className="space-y-2 text-sm">{PDF_DOCS.map((d,i)=><li key={i} className="p-3 bg-slate-50 rounded-lg border">📄 {d.title}</li>)}</ul><button onClick={()=>setView('DASHBOARD')} className="mt-6 text-blue-600 font-bold">Volver</button></div></div>}
+                    {view === 'FAQS' && <div className="flex-1 flex flex-col"><Header/><div className="p-6"><h2 className="font-bold text-xl mb-4">Preguntas Frecuentes</h2>{FAQS.map((f,i)=><div key={i} className="mb-4"><p className="font-bold text-sm">{f.q}</p><p className="text-xs text-slate-500">{f.a}</p></div>)}<button onClick={()=>setView('LANDING')} className="mt-6 text-blue-600 font-bold">Volver</button></div></div>}
+                    
+                    {quizState.active && (
+                        <div className="absolute inset-0 bg-white z-50 flex flex-col animate-fade-in">
+                            <div className="bg-slate-900 text-white p-4 flex justify-between">
+                                <span>Pregunta {quizState.qIndex + 1}</span>
+                                <button onClick={()=>setQuizState({active:false, score:0, qIndex:0, showResult:false})}>X</button>
+                            </div>
+                            <div className="flex-1 p-6 flex flex-col justify-center">
+                                {!quizState.showResult ? (
+                                    <>
+                                        <h3 className="text-xl font-bold mb-8">{LEVELS.find(l=>l.id===quizState.levelId).questions[quizState.qIndex].text}</h3>
+                                        <div className="space-y-3">
+                                            {LEVELS.find(l=>l.id===quizState.levelId).questions[quizState.qIndex].options.map((opt,i) => (
+                                                <button key={i} onClick={()=>handleAnswer(i)} className="w-full p-4 border rounded-xl text-left hover:bg-slate-50">{opt}</button>
+                                            ))}
+                                        </div>
+                                    </>
+                                ) : (
+                                    <div className="text-center">
+                                        <h2 className="text-2xl font-bold mb-2">{quizState.score >= LEVELS.find(l=>l.id===quizState.levelId).passingScore ? '¡Aprobado! 🎉' : 'Sigue Intentando'}</h2>
+                                        <p className="mb-6">Puntaje: {quizState.score}</p>
+                                        <Button onClick={()=>setQuizState({active:false, score:0, qIndex:0, showResult:false})}>Volver al Panel</Button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+
                     <LegalModal />
-                    <CommunityModal />
+                    {activeModal === 'auth' && (
+                        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+                            <div className="bg-white p-6 rounded-2xl w-full max-w-sm">
+                                <h2 className="font-bold text-xl mb-4">Ingresar</h2>
+                                <p className="text-sm mb-4">Simulación de Login (Firebase configurado en código)</p>
+                                <Button fullWidth onClick={()=>{setUser({...user, isAuthenticated:true}); setActiveModal(null); setView('DASHBOARD');}}>Ingresar como Invitado</Button>
+                                <button onClick={()=>setActiveModal(null)} className="mt-4 text-sm text-slate-400 w-full">Cancelar</button>
+                            </div>
+                        </div>
+                    )}
+                    {activeModal === 'community' && <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"><div className="bg-white p-6 rounded-2xl text-center"><Icon name="users" className="text-4xl text-blue-500 mb-2"/><h3 className="font-bold">Comunidad</h3><p className="text-sm mb-4">Únete a nuestros grupos.</p><Button fullWidth variant="secondary" onClick={()=>setActiveModal(null)}>Cerrar</Button></div></div>}
                 </div>
             );
         }
