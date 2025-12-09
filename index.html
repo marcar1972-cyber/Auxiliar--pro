@@ -59,6 +59,9 @@
       .html-content a { color: #2A9974; text-decoration: none; font-weight: 600; }
       .html-content ul { list-style-type: disc; padding-left: 1.2rem; margin-top: 0.5rem; }
       .html-content li { margin-bottom: 0.25rem; }
+      .html-content h1 { font-size: 1.5rem; font-weight: 800; color: #0E172A; margin-bottom: 1rem; line-height: 1.2; }
+      .html-content h2 { font-size: 1.25rem; font-weight: 700; color: #0E172A; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+      .html-content p { margin-bottom: 1rem; color: #475569; }
     </style>
 </head>
 <body class="bg-white text-aux-dark antialiased min-h-screen flex flex-col items-center justify-center font-sans">
@@ -96,7 +99,7 @@
         const BLOG_POSTS = [
             { 
                 id: 'art_req_2026', 
-                date: '08 DIC', 
+                date: '09 DIC', 
                 category: 'Guía', 
                 title: 'Requisitos para ser Auxiliar de Farmacia en Chile (Actualizado 2026)', 
                 excerpt: 'Si estás pensando en trabajar en farmacia, conoce los requisitos, la experiencia necesaria y el proceso ante la SEREMI para obtener tu credencial.', 
@@ -109,38 +112,119 @@
                     
                     <h2>📋 Requisitos para Rendir el Examen</h2>
                     <p>De acuerdo al <strong>Decreto Supremo N° 466</strong>, para poder rendir el Examen de Auxiliar de Farmacia debes cumplir con el siguiente requisito principal:</p>
+                    
                     <div class="bg-emerald-50 p-4 rounded-lg border-l-4 border-aux-green my-4">
                         <strong>✅ Mínimo 1 año de experiencia laboral comprobable en farmacia, realizando labores como:</strong>
-                        <ul class="list-disc pl-5 mt-2 space-y-1">
+                        <ul class="list-disc pl-5 mt-2 space-y-1 text-slate-700">
                             <li>Bodegaje</li>
                             <li>Reposición de medicamentos</li>
                             <li>Dispensación bajo supervisión</li>
                             <li>Manejo de productos farmacéuticos</li>
                         </ul>
                     </div>
+                    
                     <p>Toda esta experiencia debe estar certificada por el <strong>Químico Farmacéutico Director Técnico</strong> del establecimiento.</p>
                     <p>El trámite oficial se realiza únicamente a través del portal del Ministerio de Salud en <a href="https://seremienlinea.minsal.cl/asdigital/" target="_blank" class="text-aux-green font-bold underline">SEREMI en Línea</a>, donde podrás revisar requisitos actualizados, costos y disponibilidad.</p>
+                    <p>Este proceso es fundamental para obtener la credencial oficial de Auxiliar de Farmacia en Chile y poder trabajar legalmente en farmacias comunitarias.</p>
                     
                     <h2>📋 Requisitos Generales (2026)</h2>
+                    <p>Según la normativa vigente del Ministerio de Salud y el Decreto 466, estos son los requisitos generales:</p>
                     <ul class="space-y-3 mt-2">
-                        <li><strong>✅ 1. Ser mayor de 18 años</strong></li>
-                        <li><strong>✅ 2. Enseñanza media completa</strong></li>
-                        <li><strong>✅ 3. Haber trabajado en farmacia</strong> (Acreditar experiencia)</li>
-                        <li><strong>✅ 4. Rendir y aprobar el examen</strong></li>
-                        <li><strong>✅ 5. Obtener la credencial</strong></li>
+                        <li><strong>✅ 1. Ser mayor de 18 años</strong>: Debes ser legalmente mayor de edad.</li>
+                        <li><strong>✅ 2. Enseñanza media completa</strong>: Debes contar con tu licencia de cuarto medio aprobada.</li>
+                        <li><strong>✅ 3. Haber trabajado en farmacia</strong>: Debes acreditar experiencia práctica en una farmacia, bajo supervisión de un Químico Farmacéutico.</li>
+                        <li><strong>✅ 4. Rendir y aprobar el examen</strong>: Evalúa conocimientos como Farmacología básica, Recetas médicas, Cadena de frío, etc.</li>
+                        <li><strong>✅ 5. Obtener la credencial</strong>: Una vez aprobado el examen, la SEREMI entrega la credencial oficial.</li>
                     </ul>
 
                     <h2>🏥 ¿Dónde se realiza el trámite?</h2>
-                    <p>Todo el proceso se gestiona a través de la SEREMI de Salud de tu región.</p>
+                    <p>Todo el proceso se gestiona a través de la SEREMI de Salud de tu región. Cada región puede variar levemente en exigencias de documentos, pero la base legal es la misma en todo Chile.</p>
+
+                    <h2>📚 ¿Puedo prepararme sin instituto?</h2>
+                    <p>Sí. Puedes estudiar de forma independiente, usar material online y prepararte con guías y ensayos. Muchos auxiliares actuales se han preparado así.</p>
 
                     <div class="mt-6 p-4 bg-slate-100 rounded-lg">
                         <h3 class="font-bold text-aux-dark mb-2">🎯 Conclusión clara</h3>
-                        <p>Si quieres ser Auxiliar de Farmacia en Chile el 2026, necesitas constancia, práctica real y estudio enfocado.</p>
+                        <p>Si quieres ser Auxiliar de Farmacia en Chile el 2026, necesitas:</p>
+                        <ul class="list-disc pl-5 mt-2 space-y-1 text-slate-700">
+                            <li>Cuarto medio</li>
+                            <li>Mínimo 1 año de experiencia en farmacia</li>
+                            <li>Aprobar el examen</li>
+                            <li>Obtener tu credencial SEREMI</li>
+                        </ul>
+                        <p class="mt-2 text-sm font-medium">No es imposible, pero sí requiere constancia, práctica real y estudio enfocado.</p>
                     </div>
                 `
             },
-            { id: 'art1', date: '04 DIC', category: 'Legal', title: 'Decreto 466: La "Biblia" de la Farmacia', excerpt: 'Reglamento fundamental para aprobar.', content: '<h1>Decreto 466</h1><p>Define roles, temperaturas y leyes...</p>' },
-            { id: 'art2', date: '02 DIC', category: 'Técnico', title: 'Ley de Fármacos y Bioequivalencia', excerpt: 'Lo que debes saber de la Ley 20.724.', content: '<h1>Ley 20.724</h1><p>Cambios en bioequivalencia y venta directa...</p>' }
+            { 
+                id: 'art_dif_tecnico', 
+                date: '09 DIC', 
+                category: 'Orientación', 
+                title: 'Diferencia entre Auxiliar de Farmacia y Técnico en Farmacia (Explicado Fácil)', 
+                excerpt: 'Aunque ambos trabajan en farmacias, no son lo mismo. Descubre las diferencias en funciones, estudios y responsabilidades legales.', 
+                content: `
+                    <h1>Diferencia entre Auxiliar de Farmacia y Técnico en Farmacia</h1>
+                    <p>Una de las dudas más comunes entre quienes quieren trabajar en farmacia es esta: <strong>¿Cuál es la diferencia entre Auxiliar de Farmacia y Técnico en Farmacia?</strong></p>
+                    <p>Aunque ambos trabajan en farmacias, no son lo mismo, tienen distintas funciones, formación y responsabilidades legales. Aquí te lo explico claro y sin enredos.</p>
+                    
+                    <h2>🩺 ¿Qué es un Auxiliar de Farmacia?</h2>
+                    <p>El Auxiliar de Farmacia es la persona que trabaja en farmacia apoyando al Químico Farmacéutico, principalmente en:</p>
+                    <ul class="list-disc pl-5 mt-2 space-y-1 text-slate-700">
+                        <li>Atención de público</li>
+                        <li>Dispensación de medicamentos bajo supervisión</li>
+                        <li>Reposición y bodegaje</li>
+                        <li>Revisión de fechas de vencimiento</li>
+                        <li>Manejo de stock y orientación básica al paciente</li>
+                    </ul>
+                    
+                    <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500 my-4">
+                        <strong>👉 Dato Clave:</strong>
+                        <p class="mt-1 text-sm">En Chile, el Auxiliar no necesita estudiar en instituto, pero sí debe tener 1 año de experiencia y aprobar el examen de la SEREMI (Decreto 466).</p>
+                    </div>
+
+                    <h2>🎓 ¿Qué es un Técnico en Farmacia?</h2>
+                    <p>El Técnico en Farmacia es un profesional que sí estudia una carrera formal, generalmente en institutos profesionales durante 2 a 3 años, con título técnico.</p>
+                    <p class="mt-2">Sus funciones incluyen:</p>
+                    <ul class="list-disc pl-5 mt-2 space-y-1 text-slate-700">
+                        <li>Apoyo técnico directo al Químico Farmacéutico</li>
+                        <li>Preparación de medicamentos</li>
+                        <li>Control de bodegas e inventarios</li>
+                        <li>Atención clínica básica</li>
+                    </ul>
+                    <p class="mt-2 text-sm font-bold text-aux-dark">👉 El Técnico NO rinde examen en la SEREMI, su título lo habilita directamente.</p>
+
+                    <h2>📋 Diferencias Claves</h2>
+                    <div class="overflow-x-auto my-4 border rounded-lg">
+                        <table class="w-full text-sm text-left">
+                            <thead class="bg-aux-dark text-white">
+                                <tr>
+                                    <th class="p-3">Auxiliar</th>
+                                    <th class="p-3">Técnico</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200">
+                                <tr><td class="p-3">No estudia carrera formal</td><td class="p-3">Estudia 2-3 años</td></tr>
+                                <tr><td class="p-3">Aprende trabajando</td><td class="p-3">Formación académica</td></tr>
+                                <tr><td class="p-3">Rinde examen SEREMI</td><td class="p-3">No rinde examen</td></tr>
+                                <tr><td class="p-3">Funciones básicas</td><td class="p-3">Funciones técnicas</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h2>💬 ¿Cuál es mejor?</h2>
+                    <p>No es que uno sea “mejor” que otro. Todo depende de tu situación:</p>
+                    <ul class="space-y-2 mt-2">
+                        <li>👉 <strong>Si quieres entrar rápido:</strong> El camino de Auxiliar es más directo (experiencia + examen).</li>
+                        <li>👉 <strong>Si buscas formación académica:</strong> El camino es el Técnico (instituto + título).</li>
+                    </ul>
+
+                    <div class="mt-6 p-4 bg-slate-100 rounded-lg">
+                        <h3 class="font-bold text-aux-dark mb-2">🎯 Conclusión Clara</h3>
+                        <p>Ambos son fundamentales para el funcionamiento de la farmacia y ambos trabajan bajo la supervisión del Químico Farmacéutico.</p>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-6 italic">Palabras clave: Auxiliar de Farmacia en Chile, Técnico en Farmacia Chile, diferencia entre auxiliar y técnico, examen auxiliar de farmacia, credencial auxiliar.</p>
+                `
+            }
         ];
 
         const FAQS = [
@@ -227,6 +311,7 @@
             const [authMode, setAuthMode] = useState('login'); 
             const [legalTab, setLegalTab] = useState('terms');
             const [selectedArticle, setSelectedArticle] = useState(null);
+            const [expandIntro, setExpandIntro] = useState(false);
 
             // Auth Logic
             useEffect(() => {
@@ -362,7 +447,20 @@
                             <div className="watermark-container p-8 mx-4 mb-12 rounded-3xl text-left">
                                 <span className="watermark-icon -top-8 -right-4 text-[12rem] rotate-12">!</span>
                                 <h3 className="font-bold text-xl text-aux-dark mb-3 flex items-center gap-3 relative z-10"><Icon name="student" className="text-aux-green text-2xl"/> Quién soy</h3>
-                                <p className="text-slate-600 font-medium leading-relaxed relative z-10">"Auxiliar en preparación, esta web es mi cuaderno de estudio. Aquí encontrarás lo que estoy aprendiendo para el examen de 2026. ¡Vamos por ese logro juntos!"</p>
+                                <div className="relative z-10 text-slate-600 font-medium leading-relaxed">
+                                    <p>¡Hola! Estás en AuxiliaresPro. Te lo cuento de colega a colega: estoy preparándome con todo para ser Auxiliar de Farmacia. Esta web es el resultado de mi propia investigación en los decretos sanitarios, usando la IA para organizar y resumir tanta información compleja.</p>
+                                    {expandIntro && (
+                                        <p className="mt-3 animate-fade-in">
+                                            Han sido semanas de ensayo, error y mucho estudio para crear este sitio. Es mi cuaderno de preparación para el examen 2026 y está disponible para ti. Úsalo, critícalo si encuentras fallos y ¡vamos por ese logro juntos!
+                                        </p>
+                                    )}
+                                    <button 
+                                        onClick={() => setExpandIntro(!expandIntro)} 
+                                        className="text-aux-green font-bold text-sm mt-2 hover:underline focus:outline-none"
+                                    >
+                                        {expandIntro ? "Leer menos" : "Leer más"}
+                                    </button>
+                                </div>
                             </div>
 
                             <div className="border-t border-slate-100 pt-8 mt-4 pb-8">
@@ -419,15 +517,49 @@
             const LegalModal = () => {
                 if (activeModal !== 'legal') return null;
                 const texts = {
-                    terms: "Términos de Uso: Esta plataforma es educativa. El uso es responsabilidad del usuario.",
-                    privacy: "Privacidad: Solo almacenamos tu progreso localmente o en Firebase para mejorar tu experiencia.",
-                    disclaimers: "Descargos: AuxiliarPro NO representa al MINSAL. Iniciativa independiente."
+                    terms: `AuxiliarPro es una aplicación de apoyo educativo pensada para acompañarte en la preparación del examen de Auxiliar de Farmacia. Al usarla, aceptas estos términos de forma simple y transparente.
+
+Todo el contenido tiene fines informativos y de apoyo al estudio, y no reemplaza la información oficial ni la orientación de profesionales del área de la salud. Te recomendamos siempre contrastar la información con fuentes confiables.
+
+AuxiliarPro puede actualizar, modificar o pausar funciones cuando sea necesario, siempre buscando mejorar la experiencia de uso.
+
+Algunas funciones pueden requerir registro. En ese caso, tú eres responsable de cuidar tus datos de acceso.
+
+No está permitido usar la aplicación para fines indebidos, como compartir contenido con derechos de autor, enviar spam o distribuir archivos dañinos.
+
+Hacemos nuestro mejor esfuerzo por mantener la app disponible y segura, pero no podemos garantizar un funcionamiento perfecto en todo momento, ya que pueden ocurrir interrupciones técnicas.`,
+                    privacy: `En AuxiliarPro valoramos y respetamos tu privacidad. Nuestro compromiso es cuidar tus datos y ser transparentes con el uso que les damos.
+
+Recopilamos solo la información que tú nos entregas, como tu nombre, correo electrónico y avance en los cuestionarios. Esto nos permite personalizar tu experiencia y mejorar la app para ti.
+
+También podemos recoger algunos datos técnicos de forma automática, como el tipo de dispositivo o dirección IP, únicamente con fines de análisis, funcionamiento y seguridad.
+
+Tu información no se comparte con terceros, salvo cuando sea estrictamente necesario para el funcionamiento del servicio (por ejemplo, el alojamiento de la app) o por requerimientos legales.
+
+Utilizamos cookies y tecnologías similares para que la aplicación funcione mejor. Puedes desactivarlas desde tu navegador, aunque esto podría afectar algunas funciones.
+
+Tomamos medidas para proteger tus datos, aunque es importante considerar que ninguna transmisión por Internet es 100% segura.
+
+Esta política puede actualizarse con el tiempo, por lo que te recomendamos revisarla de vez en cuando.`,
+                    disclaimers: `1. Independencia: AuxiliarPro es una iniciativa independiente y NO tiene afiliación, respaldo ni patrocinio alguno por parte del Ministerio de Salud (MINSAL), el Instituto de Salud Pública (ISP), las SEREMIS de Salud o cualquier otra entidad gubernamental o autoridad sanitaria de Chile. La información y los materiales proporcionados en esta plataforma se basan en fuentes públicas y en el conocimiento general sobre el examen de Auxiliar de Farmacia, pero no constituyen información oficial.
+
+2. Exactitud de la Información: Aunque nos esforzamos por mantener la información actualizada y precisa, AuxiliarPro no garantiza la exactitud, integridad o vigencia del contenido. La legislación y las normativas sanitarias pueden cambiar, y es responsabilidad del usuario verificar la información con las fuentes oficiales correspondientes antes de tomar decisiones basadas en ella.
+
+3. Propósito Educativo: El contenido de AuxiliarPro tiene fines exclusivamente educativos e informativos. No debe considerarse como asesoramiento profesional, médico, legal o de cualquier otra índole. El uso de la plataforma y la confianza en su contenido son bajo el propio riesgo del usuario.
+
+4. Resultados del Examen: El uso de AuxiliarPro no garantiza la aprobación del examen de Auxiliar de Farmacia ni la obtención de la credencial sanitaria. El éxito en el examen depende del estudio individual, la preparación y otros factores ajenos a la plataforma.
+
+5. Enlaces Externos: AuxiliarPro puede contener enlaces a sitios web de terceros. No nos hacemos responsables por el contenido, las políticas de privacidad o las prácticas de estos sitios externos.
+
+6. Limitación de Responsabilidad: En ningún caso AuxiliarPro será responsable por daños directos, indirectos, incidentales, especiales o consecuentes que surjan del uso o la imposibilidad de uso de la plataforma, incluso si se ha advertido sobre la posibilidad de tales daños.`
                 };
                 return (
                     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
                         <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-xl">
                             <h3 className="font-bold text-lg mb-4 capitalize text-aux-dark">{legalTab}</h3>
-                            <p className="text-sm text-slate-600 mb-6 leading-relaxed">{texts[legalTab]}</p>
+                            <div className="text-sm text-slate-600 mb-6 leading-relaxed whitespace-pre-line overflow-y-auto max-h-[60vh] pr-2">
+                                {texts[legalTab]}
+                            </div>
                             <Button fullWidth variant="green" onClick={() => setActiveModal(null)}>Entendido</Button>
                         </div>
                     </div>
@@ -443,9 +575,10 @@
                             <h3 className="font-bold mb-2 text-aux-dark">Comunidad</h3>
                             <p className="text-sm mb-6 text-slate-600">Únete a nuestros grupos de estudio.</p>
                             <div className="space-y-3">
-                                <a href="https://chat.whatsapp.com/IPvHmnNGWYmH61FrdV56g1" target="_blank" className="block w-full bg-[#25D366] text-white py-3 rounded-xl font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2"><Icon name="whatsapp-logo" size={20} />WhatsApp</a>
-                                <a href="https://www.facebook.com/share/g/1AFb8riMpT/" target="_blank" className="block w-full bg-[#1877F2] text-white py-3 rounded-xl font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2"><Icon name="facebook-logo" size={20} />Facebook</a>
+                                <a href="https://chat.whatsapp.com/J4VkI8mzTTs9UrzvGqBbdz" target="_blank" className="block w-full bg-[#25D366] text-white py-3 rounded-xl font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2"><Icon name="whatsapp-logo" size={20} />WhatsApp</a>
+                                <a href="https://www.facebook.com/profile.php?id=61584679565188" target="_blank" className="block w-full bg-[#1877F2] text-white py-3 rounded-xl font-bold hover:opacity-90 transition-opacity flex items-center justify-center gap-2"><Icon name="facebook-logo" size={20} />Facebook</a>
                             </div>
+                            <p className="mt-4 text-xs text-red-600 font-bold leading-snug">*Se requiere buen comportamiento y buena convivencia. El incumplimiento resultará en la eliminación del grupo.</p>
                             <button onClick={()=>setActiveModal(null)} className="mt-6 text-slate-400 text-sm hover:text-slate-600 transition-colors">Cerrar</button>
                         </div>
                     </div>
@@ -457,10 +590,10 @@
                     {view === 'LANDING' && renderLanding()}
                     {view === 'DASHBOARD' && renderDashboard()}
                     {view === 'DERMOCHECK' && renderDermoCheck()}
-                    {view === 'LIBRARY' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="flex-1 p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4 text-aux-dark">Biblioteca</h2>{PDF_DOCS.map((d,i)=><div key={i} className="p-4 border border-slate-100 rounded-xl mb-3 bg-slate-50 hover:bg-white hover:shadow-sm transition-all flex items-center gap-3"><div className="bg-red-100 p-2 rounded-lg text-red-500"><Icon name="file-pdf" size={24}/></div><a href={d.file} target="_blank" className="text-slate-700 font-bold hover:text-aux-green transition-colors flex-1">{d.title}</a></div>)}<button onClick={()=>setView('DASHBOARD')} className="mt-4 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
-                    {view === 'FAQS' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="flex-1 p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4 text-aux-dark">Preguntas Frecuentes</h2>{FAQS.map((f,i)=><Accordion key={i} title={f.q} content={f.a}/>)}<button onClick={()=>setView('LANDING')} className="mt-4 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
-                    {view === 'BLOG' && <div className="flex-1 flex flex-col"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="flex-1 p-6 overflow-y-auto"><h2 className="font-bold text-xl mb-4 text-aux-dark">Blog</h2><div className="space-y-4">{BLOG_POSTS.map(p=><div key={p.id} onClick={()=>setSelectedArticle(p) || setView('ARTICLE')} className="border border-slate-100 p-5 rounded-xl bg-white shadow-sm hover:shadow-md transition-all cursor-pointer"><div className="flex justify-between items-center mb-2"><span className="text-xs font-bold text-aux-green bg-emerald-50 px-2 py-1 rounded-full uppercase">{p.category}</span><span className="text-xs text-slate-400">{p.date}</span></div><h3 className="font-bold text-lg text-aux-dark mb-2">{p.title}</h3><p className="text-sm text-slate-500 leading-relaxed line-clamp-3">{p.excerpt}</p></div>)}</div><button onClick={()=>setView('LANDING')} className="mt-6 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
-                    {view === 'ARTICLE' && <div className="flex-1 flex flex-col bg-white z-50 animate-fade-in h-full"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="flex-1 p-6 overflow-y-auto min-h-0"><button onClick={()=>setView('BLOG')} className="mb-4 text-slate-400 flex items-center gap-1 hover:text-aux-green"><Icon name="arrow-left"/> Volver</button><div className="max-w-2xl mx-auto blog-content"><span className="text-xs font-bold text-aux-green bg-emerald-50 px-2 py-1 rounded-full uppercase mb-4 inline-block">{selectedArticle?.category}</span><div dangerouslySetInnerHTML={{__html: selectedArticle?.content}}></div></div></div></div>}
+                    {view === 'LIBRARY' && <div className="flex-1 flex flex-col h-full overflow-hidden"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="flex-1 p-6 overflow-y-auto min-h-0"><h2 className="font-bold text-xl mb-4 text-aux-dark">Biblioteca</h2>{PDF_DOCS.map((d,i)=><div key={i} className="p-4 border border-slate-100 rounded-xl mb-3 bg-slate-50 hover:bg-white hover:shadow-sm transition-all flex items-center gap-3"><div className="bg-red-100 p-2 rounded-lg text-red-500"><Icon name="file-pdf" size={24}/></div><a href={d.file} target="_blank" className="text-slate-700 font-bold hover:text-aux-green transition-colors flex-1">{d.title}</a></div>)}<button onClick={()=>setView('DASHBOARD')} className="mt-4 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
+                    {view === 'FAQS' && <div className="flex-1 flex flex-col h-full overflow-hidden"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="flex-1 p-6 overflow-y-auto min-h-0"><h2 className="font-bold text-xl mb-4 text-aux-dark">Preguntas Frecuentes</h2>{FAQS.map((f,i)=><Accordion key={i} title={f.q} content={f.a}/>)}<button onClick={()=>setView('LANDING')} className="mt-4 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
+                    {view === 'BLOG' && <div className="flex-1 flex flex-col h-full overflow-hidden"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="flex-1 p-6 overflow-y-auto min-h-0"><h2 className="font-bold text-xl mb-4 text-aux-dark">Blog</h2><div className="space-y-4">{BLOG_POSTS.map(p=><div key={p.id} onClick={()=>setSelectedArticle(p) || setView('ARTICLE')} className="border border-slate-100 p-5 rounded-xl bg-white shadow-sm hover:shadow-md transition-all cursor-pointer"><div className="flex justify-between items-center mb-2"><span className="text-xs font-bold text-aux-green bg-emerald-50 px-2 py-1 rounded-full uppercase">{p.category}</span><span className="text-xs text-slate-400">{p.date}</span></div><h3 className="font-bold text-lg text-aux-dark mb-2">{p.title}</h3><p className="text-sm text-slate-500 leading-relaxed line-clamp-3">{p.excerpt}</p></div>)}</div><button onClick={()=>setView('LANDING')} className="mt-6 text-slate-400 hover:text-slate-600 transition-colors">Volver</button></div></div>}
+                    {view === 'ARTICLE' && <div className="flex-1 flex flex-col bg-white z-50 animate-fade-in h-full overflow-hidden"><Header setView={setView} user={user} setActiveModal={setActiveModal}/><div className="flex-1 p-6 overflow-y-auto min-h-0"><button onClick={()=>setView('BLOG')} className="mb-4 text-slate-400 flex items-center gap-1 hover:text-aux-green"><Icon name="arrow-left"/> Volver</button><div className="max-w-2xl mx-auto blog-content"><span className="text-xs font-bold text-aux-green bg-emerald-50 px-2 py-1 rounded-full uppercase mb-4 inline-block">{selectedArticle?.category}</span><div dangerouslySetInnerHTML={{__html: selectedArticle?.content}}></div></div></div></div>}
                     
                     {quizState.active && (
                         <div className="absolute inset-0 bg-white z-50 flex flex-col animate-fade-in h-full">
