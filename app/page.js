@@ -1,49 +1,81 @@
-import { Wrench, HardHat } from "lucide-react"; // Iconos de construcción
+import Link from "next/link";
+import { User, BookOpen, Search } from "lucide-react";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-6 bg-aux-light text-center relative overflow-hidden">
+    <main className="flex min-h-screen flex-col bg-white font-sans">
       
-      {/* Fondo Decorativo sutil */}
-      <div className="absolute inset-0 watermark-bg opacity-20 pointer-events-none"></div>
-
-      <div className="z-10 bg-white p-8 md:p-12 rounded-3xl shadow-xl border border-slate-100 max-w-lg w-full">
-        
-        {/* Ícono animado */}
-        <div className="flex justify-center mb-6">
-          <div className="bg-blue-50 p-4 rounded-full animate-bounce">
-            <Wrench className="w-12 h-12 text-aux-green" />
-          </div>
+      {/* 1. NAVBAR SUPERIOR */}
+      <nav className="w-full p-4 flex justify-between items-center bg-white shadow-sm sticky top-0 z-50">
+        {/* Logo */}
+        <div className="flex items-center gap-1">
+            <span className="text-xl font-black text-aux-dark tracking-tighter">
+                Auxiliar<span className="text-aux-green">Pro</span>
+            </span>
         </div>
 
-        {/* Marca */}
-        <h2 className="text-sm font-bold tracking-widest text-slate-400 uppercase mb-2">
-          AuxiliarPro Chile
-        </h2>
+        {/* Menú Herramientas */}
+        <div className="flex items-center gap-4">
+            {/* Dermocheck (Discreto en el menú) */}
+            <Link href="https://auxiliar-dermocheck.vercel.app" target="_blank" className="group flex flex-col items-center">
+                <Search size={20} className="text-slate-400 group-hover:text-aux-green transition-colors" />
+                <span className="text-[10px] font-bold text-slate-400 group-hover:text-aux-green hidden md:block">DERMOCHECK</span>
+            </Link>
 
-        {/* Título Principal */}
-        <h1 className="text-3xl md:text-4xl font-black text-aux-dark mb-4 leading-tight">
-          Estamos mejorando <br/>
-          <span className="text-aux-green">tu plataforma</span>
+            {/* Icono Usuario */}
+            <button className="bg-slate-50 text-aux-dark p-2 rounded-full hover:bg-aux-green hover:text-white transition-colors border border-slate-100">
+                <User size={20} />
+            </button>
+        </div>
+      </nav>
+
+      {/* 2. HERO SECTION (CENTRO) */}
+      <div className="flex-1 flex flex-col items-center justify-center p-6 text-center max-w-md mx-auto w-full mt-[-40px]">
+        
+        {/* Etiqueta Gancho */}
+        <span className="bg-emerald-50 text-aux-green text-[11px] font-black px-3 py-1 rounded-full mb-6 tracking-widest border border-emerald-100 uppercase">
+            Meta: Credencial 2026
+        </span>
+
+        {/* H1 SEO Optimizado */}
+        <h1 className="text-4xl md:text-5xl font-black text-aux-dark leading-[1.1] mb-8 tracking-tight">
+            PREPÁRATE PARA TU EXAMEN DE <br/>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-aux-green to-teal-400">
+                AUXILIAR DE FARMACIA
+            </span>
         </h1>
 
-        {/* Mensaje Explicativo */}
-        <p className="text-slate-600 mb-8 text-lg">
-          Estamos actualizando nuestros servidores y contenidos para el <strong>Proceso de Certificación 2026</strong>.
-        </p>
+        {/* Botones de Acción */}
+        <div className="w-full space-y-3">
+            
+            {/* Botón Principal (El Héroe) */}
+            <Link href="/quiz" className="block w-full bg-aux-dark text-white font-bold text-lg py-4 rounded-xl shadow-lg shadow-blue-900/10 hover:scale-[1.02] active:scale-[0.98] transition-all">
+                COMENZAR AHORA
+            </Link>
 
-        {/* Caja de Estado */}
-        <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 flex items-center justify-center gap-3">
-            <div className="relative flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-orange-500"></span>
-            </div>
-            <span className="font-mono text-sm font-medium text-slate-700">Estado: Actualizando...</span>
+            {/* Botón Secundario (Outline) */}
+            <Link href="/blog" className="group block w-full bg-white text-slate-600 border-2 border-slate-100 font-bold text-lg py-4 rounded-xl hover:border-aux-green hover:text-aux-green transition-all flex items-center justify-center gap-2">
+                <BookOpen size={20} className="text-slate-400 group-hover:text-aux-green" />
+                LEER ARTÍCULOS
+            </Link>
+
         </div>
 
-        <p className="text-xs text-slate-400 mt-8">
-          Volvemos en breve. Gracias por tu paciencia, colega.
-        </p>
+        {/* 3. SECCIÓN CONFIANZA (Marcelo) */}
+        <div className="mt-12 bg-slate-50 p-5 rounded-2xl border border-slate-100 text-left w-full flex gap-4 items-start relative overflow-hidden">
+            {/* Adorno de fondo */}
+            <div className="absolute top-0 right-0 watermark-bg w-full h-full opacity-50"></div>
+            
+            <div className="relative z-10 w-10 h-10 min-w-[40px] bg-white border border-slate-200 rounded-full flex items-center justify-center text-aux-green font-black shadow-sm">
+                M
+            </div>
+            <div className="relative z-10">
+                <p className="text-xs font-bold text-aux-dark uppercase tracking-wider mb-1">Marcelo dice:</p>
+                <p className="text-slate-600 text-sm italic leading-relaxed">
+                    "Auxiliar en preparación, esta web es mi cuaderno de estudio abierto. No vendemos cursos, compartimos conocimiento real."
+                </p>
+            </div>
+        </div>
 
       </div>
     </main>
