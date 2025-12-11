@@ -38,7 +38,7 @@ export default function Home() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-3 w-3 bg-orange-500"></span>
             </div>
-            <span className="font-mono text-sm font-medium text-slate-700">Estado: Migrando Datos...</span>
+            <span className="font-mono text-sm font-medium text-slate-700">Estado: Actualizando...</span>
         </div>
 
         <p className="text-xs text-slate-400 mt-8">
