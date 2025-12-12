@@ -15,6 +15,8 @@ export default function QuizPage() {
   const [selectedOption, setSelectedOption] = useState(null); 
   const [isAnswered, setIsAnswered] = useState(false);       
 
+  // --- LÓGICA ---
+
   const startLevel = (levelId) => {
     if (unlockedLevels.includes(levelId)) {
       setActiveLevelId(levelId);
@@ -30,6 +32,15 @@ export default function QuizPage() {
     setIsAnswered(false);
   };
 
+  // NUEVA FUNCIÓN: VOLVER AL MENÚ LIMPIAMENTE
+  const returnToMenu = () => {
+    setShowResult(false);      // 1. Apagar pantalla de resultados
+    setActiveLevelId(null);    // 2. Salir del nivel
+    setScore(0);               // 3. Reiniciar puntaje
+    setCurrentQIndex(0);       // 4. Reiniciar preguntas
+    setIsAnswered(false);      // 5. Reiniciar estado de respuesta
+  };
+
   const handleAnswer = (optionIndex, correctIndex) => {
     if (isAnswered) return; 
 
@@ -41,7 +52,6 @@ export default function QuizPage() {
     }
 
     setTimeout(() => {
-      // SEGURIDAD: Verificamos que el nivel exista antes de pedir su largo
       const currentLevel = getCurrentLevel();
       if (currentLevel && currentQIndex + 1 < currentLevel.questions.length) {
         setCurrentQIndex((prev) => prev + 1);
@@ -59,14 +69,15 @@ export default function QuizPage() {
   useEffect(() => {
     if (showResult && activeLevelId) {
         const level = getCurrentLevel();
-        if (level && score >= level.passingScore) { // SEGURIDAD: Chequeamos que level exista
+        if (level && score >= level.passingScore) {
             const nextLevel = activeLevelId + 1;
+            // Verificamos si existe el siguiente nivel y si no está desbloqueado
             if (LEVELS.find(l => l.id === nextLevel) && !unlockedLevels.includes(nextLevel)) {
                 setUnlockedLevels(prev => [...prev, nextLevel]);
             }
         }
     }
-  }, [showResult, score, activeLevelId]); // Agregué activeLevelId a dependencias
+  }, [showResult, score, activeLevelId]);
 
   // --- VISTAS ---
 
@@ -74,7 +85,7 @@ export default function QuizPage() {
   if (activeLevelId && !showResult) {
     const level = getCurrentLevel();
     
-    // --- 🛡️ BLOQUE DE SEGURIDAD (AQUÍ ESTÁ EL FIX) ---
+    // SEGURIDAD: Si el nivel no existe o no tiene preguntas
     if (!level) return <div className="p-10 text-center">Error: No encuentro el Nivel {activeLevelId}</div>;
     
     const question = level.questions ? level.questions[currentQIndex] : null;
@@ -85,14 +96,13 @@ export default function QuizPage() {
                 <div className="bg-white p-6 rounded-xl shadow-lg border-l-4 border-red-500 text-left max-w-md">
                     <h3 className="font-bold text-red-600 text-lg mb-2">⚠️ Error de Datos</h3>
                     <p className="text-slate-600 mb-4">
-                        El código funciona, pero <strong>no hay preguntas cargadas</strong> para el Nivel {activeLevelId} en el archivo <code>data.js</code>.
+                        No hay preguntas cargadas para el Nivel {activeLevelId} en <code>data.js</code>.
                     </p>
-                    <button onClick={() => setActiveLevelId(null)} className="text-sm underline text-slate-500">Volver al menú</button>
+                    <button onClick={returnToMenu} className="text-sm underline text-slate-500">Volver al menú</button>
                 </div>
             </div>
         );
     }
-    // --- FIN BLOQUE SEGURIDAD ---
 
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
@@ -155,7 +165,7 @@ export default function QuizPage() {
             </div>
         </div>
         
-        <button onClick={() => setActiveLevelId(null)} className="mt-6 text-slate-400 text-sm hover:text-red-500 underline">
+        <button onClick={returnToMenu} className="mt-6 text-slate-400 text-sm hover:text-red-500 underline">
             Cancelar y Salir
         </button>
       </div>
@@ -164,9 +174,12 @@ export default function QuizPage() {
 
   // VISTA B: RESULTADOS
   if (showResult) {
+    // Si llegamos aquí sin un nivel activo, volvemos al menú para evitar error
     const level = getCurrentLevel();
-    // SEGURIDAD: Si no hay nivel al mostrar resultados, volvemos
-    if (!level) return <div onClick={() => setActiveLevelId(null)}>Error al cargar resultados. Volver.</div>;
+    if (!level) {
+        returnToMenu(); // Auto-corrección
+        return null;
+    }
 
     const passed = score >= level.passingScore;
 
@@ -191,7 +204,7 @@ export default function QuizPage() {
                 <div className="space-y-3">
                     {passed ? (
                          <button 
-                         onClick={() => setActiveLevelId(null)}
+                         onClick={returnToMenu} // <--- AQUÍ ESTABA LA MAGIA QUE FALTABA
                          className="w-full bg-aux-dark text-white font-bold py-3 rounded-xl shadow-lg hover:scale-105 transition-transform flex items-center justify-center gap-2"
                      >
                          VOLVER AL MENÚ <ArrowRight size={18} />
@@ -207,7 +220,7 @@ export default function QuizPage() {
                    
                    {!passed && (
                         <button 
-                            onClick={() => setActiveLevelId(null)}
+                            onClick={returnToMenu}
                             className="w-full bg-white text-slate-500 font-bold py-3 rounded-xl border border-slate-200 hover:bg-slate-50"
                         >
                             Volver al Menú
