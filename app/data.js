@@ -54,16 +54,16 @@ export const FAQS = [
     }
 ];
 
-// 3. NIVELES DEL QUIZ (Tu sistema de juego)
+// 3. NIVELES DEL QUIZ (CORREGIDO)
 export const LEVELS = [
     { 
         id: 1, 
         title: 'Prueba Diagnóstico', 
         desc: 'Conceptos básicos de farmacia.', 
         icon: '💊', 
-        qCount: 10, 
-        passingScore: 6,
-        timeLimit: 0, // 0 = Sin tiempo
+        qCount: 5, // <--- CORREGIDO: Ahora coincide con las preguntas reales
+        passingScore: 3, // <--- CORREGIDO: Apruebas con 3 de 5
+        timeLimit: 0, 
         questions: [
             { id: 101, text: '¿Quién es el responsable técnico de una farmacia?', options: ['El Dueño', 'El Auxiliar', 'El Químico Farmacéutico', 'El Gerente'], correctIndex: 2 }, 
             { id: 102, text: '¿Rango de temperatura para cadena de frío?', options: ['0°C a 5°C', '2°C a 8°C', '8°C a 15°C', 'Ambiente'], correctIndex: 1 },
@@ -79,7 +79,7 @@ export const LEVELS = [
         icon: '⚖️', 
         qCount: 10, 
         passingScore: 7,
-        timeLimit: 90, // 90 segundos por pregunta
+        timeLimit: 90, 
         questions: [
             { id: 201, text: 'Según D.S. 466, la dirección técnica corresponde a:', options: ['Auxiliar', 'Enfermera', 'Químico Farmacéutico', 'Médico'], correctIndex: 2 },
             { id: 202, text: '¿Temperatura máxima ambiental en sala de ventas?', options: ['20°C', '25°C', '30°C', '18°C'], correctIndex: 1 }
