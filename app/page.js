@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { User, BookOpen, Search, Calculator, Mail } from "lucide-react"; 
-// NOTA: He quitado temporalmente la importación de FAQS para arreglar el error primero
 
 export default function Home() {
   return (
@@ -10,10 +9,10 @@ export default function Home() {
       {/* 1. NAVBAR SUPERIOR */}
       <nav className="w-full p-4 flex justify-between items-center bg-white shadow-sm sticky top-0 z-50">
         
-        {/* LOGO: Verificando nombre exacto */}
+        {/* LOGO: Ahora sí apunta a tu archivo renombrado */}
         <Link href="/" className="flex items-center">
             <Image 
-                src="/logo_auxiliarpro_3_400x240_ajustado.png" 
+                src="/logo.png" 
                 alt="Logo AuxiliarPro Chile" 
                 width={150} 
                 height={90} 
