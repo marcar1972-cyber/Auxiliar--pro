@@ -1,6 +1,6 @@
 // app/data.js
 
-// 1. ARTÍCULOS DEL BLOG (SEO y Contenido)
+// 1. ARTÍCULOS DEL BLOG (SEO)
 export const BLOG_POSTS = [
     {
         id: 'art_req_2026',
@@ -42,47 +42,4 @@ export const BLOG_POSTS = [
 export const FAQS = [
     {
         q: "¿Dónde hago el trámite?",
-        a: "En <a href='https://seremienlinea.minsal.cl' target='_blank' class='font-bold text-aux-green'>seremienlinea.minsal.cl</a> con tu ClaveÚnica."
-    },
-    {
-        q: "Requisitos Obligatorios",
-        a: "Mayor de 18 años, 4to medio rendido y 1 año de experiencia en farmacia firmado por un Químico Farmacéutico."
-    },
-    {
-        q: "¿Cuánto cuesta el examen?",
-        a: "Aproximadamente $19.100 por el derecho a examen y $47.600 por la credencial (valores referenciales UTM)."
-    }
-];
-
-// 3. NIVELES DEL QUIZ (CORREGIDO)
-export const LEVELS = [
-    { 
-        id: 1, 
-        title: 'Prueba Diagnóstico', 
-        desc: 'Conceptos básicos de farmacia.', 
-        icon: '💊', 
-        qCount: 5, // <--- CORREGIDO: Ahora coincide con las preguntas reales
-        passingScore: 3, // <--- CORREGIDO: Apruebas con 3 de 5
-        timeLimit: 0, 
-        questions: [
-            { id: 101, text: '¿Quién es el responsable técnico de una farmacia?', options: ['El Dueño', 'El Auxiliar', 'El Químico Farmacéutico', 'El Gerente'], correctIndex: 2 }, 
-            { id: 102, text: '¿Rango de temperatura para cadena de frío?', options: ['0°C a 5°C', '2°C a 8°C', '8°C a 15°C', 'Ambiente'], correctIndex: 1 },
-            { id: 103, text: '¿Qué significa OTC?', options: ['Con receta', 'Venta directa', 'Controlado', 'Uso hospitalario'], correctIndex: 1 },
-            { id: 104, text: 'El auxiliar trabaja bajo supervisión de:', options: ['El cliente', 'El Q.F.', 'El cajero', 'Nadie'], correctIndex: 1 },
-            { id: 105, text: '¿Qué es el ISP?', options: ['Instituto de Salud Pública', 'Institución Privada', 'Inspección Pública', 'Ninguna'], correctIndex: 0 }
-        ] 
-    },
-    { 
-        id: 2, 
-        title: 'Legislación (D.S. 466)', 
-        desc: 'Normativa sanitaria vigente.', 
-        icon: '⚖️', 
-        qCount: 10, 
-        passingScore: 7,
-        timeLimit: 90, 
-        questions: [
-            { id: 201, text: 'Según D.S. 466, la dirección técnica corresponde a:', options: ['Auxiliar', 'Enfermera', 'Químico Farmacéutico', 'Médico'], correctIndex: 2 },
-            { id: 202, text: '¿Temperatura máxima ambiental en sala de ventas?', options: ['20°C', '25°C', '30°C', '18°C'], correctIndex: 1 }
-        ] 
-    }
-];
+        a: "En <a href='https://seremienlinea.minsal.cl' target='_blank' class='font-bold text-aux-green'>seremienlinea.minsal.cl</a> con tu Cl
