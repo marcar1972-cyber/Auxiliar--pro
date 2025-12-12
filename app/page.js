@@ -10,23 +10,25 @@ export default function Home() {
       {/* 1. NAVBAR SUPERIOR */}
       <nav className="w-full p-4 flex justify-between items-center bg-white shadow-sm sticky top-0 z-50">
         
-        {/* LOGO: Aquí está la magia. El nombre debe ser EXACTO */}
+        {/* LOGO: Nombre exacto de tu archivo */}
         <Link href="/" className="flex items-center">
             <Image 
                 src="/logo_auxiliarpro_3_400x240_ajustado.png" 
                 alt="Logo AuxiliarPro Chile" 
-                width={140} 
-                height={84} 
+                width={160} 
+                height={96} 
                 priority
                 className="object-contain"
             />
         </Link>
 
         <div className="flex items-center gap-3 md:gap-4">
+            {/* Buscador (Lupa) */}
             <button className="p-2 text-slate-400 hover:text-aux-dark transition-colors" aria-label="Buscar">
                 <Search size={20} />
             </button>
 
+            {/* Dermocheck (Calculadora) */}
             <Link href="https://auxiliar-dermocheck.vercel.app" target="_blank" className="group flex flex-col items-center">
                 <Calculator size={20} className="text-slate-400 group-hover:text-aux-green transition-colors" />
                 <span className="text-[10px] font-bold text-slate-400 group-hover:text-aux-green hidden md:block">DERMOCHECK</span>
@@ -34,6 +36,7 @@ export default function Home() {
 
             <div className="h-6 w-px bg-slate-200 mx-1"></div>
 
+            {/* Usuario */}
             <button className="bg-slate-50 text-aux-dark p-2 rounded-full hover:bg-aux-green hover:text-white transition-colors border border-slate-100">
                 <User size={20} />
             </button>
@@ -99,29 +102,4 @@ export default function Home() {
       </div>
 
       {/* 4. FOOTER */}
-      <footer className="w-full bg-slate-50 border-t border-slate-100 py-8 px-4 mt-auto">
-        <div className="max-w-md mx-auto text-center space-y-4">
-            
-            <div className="flex justify-center gap-4 text-xs font-medium text-slate-500">
-                <Link href="/legal/terminos" className="hover:text-aux-green transition-colors">Términos de Uso</Link>
-                <span className="text-slate-300">•</span>
-                <Link href="/legal/descargos" className="hover:text-aux-green transition-colors">Descargos Legales</Link>
-            </div>
-
-            <a href="mailto:contacto@auxiliaresdefarmacia.cl" className="inline-flex items-center gap-2 text-xs text-slate-400 hover:text-aux-green transition-colors bg-white px-3 py-1.5 rounded-full border border-slate-200 shadow-sm">
-                <Mail size={12} />
-                ¿Encontraste un error? Escríbenos
-            </a>
-
-            <div className="pt-4 border-t border-slate-200/50">
-                <p className="text-[10px] text-slate-400 leading-tight">
-                    © 2025 AuxiliarPro Chile. Proyecto independiente.<br/>
-                    Esta web no tiene afiliación con el MINSAL ni SEREMI.
-                </p>
-            </div>
-        </div>
-      </footer>
-
-    </main>
-  );
-}
+      <footer className="w-full bg-slate-50 border-t border-slate-100 py-8 px-
