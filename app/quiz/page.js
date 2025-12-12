@@ -1,25 +1,20 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { LEVELS } from "../data"; // Importamos tus preguntas
+import { LEVELS } from "../data"; 
 import Link from "next/link";
 import { Lock, Play, CheckCircle, XCircle, ChevronLeft, RefreshCcw, ArrowRight } from "lucide-react";
 
 export default function QuizPage() {
-  // --- ESTADOS DEL JUEGO ---
-  const [unlockedLevels, setUnlockedLevels] = useState([1]); // Niveles desbloqueados
-  const [activeLevelId, setActiveLevelId] = useState(null);  // ¿Qué nivel estamos jugando?
+  const [unlockedLevels, setUnlockedLevels] = useState([1]); 
+  const [activeLevelId, setActiveLevelId] = useState(null);  
   
-  // Estados de la Partida Actual
-  const [currentQIndex, setCurrentQIndex] = useState(0);     // Índice de pregunta actual
-  const [score, setScore] = useState(0);                     // Puntaje acumulado
-  const [showResult, setShowResult] = useState(false);       // ¿Mostramos el resultado final?
-  const [selectedOption, setSelectedOption] = useState(null); // Opción seleccionada (para feedback visual)
-  const [isAnswered, setIsAnswered] = useState(false);       // ¿Ya respondió la actual?
+  const [currentQIndex, setCurrentQIndex] = useState(0);     
+  const [score, setScore] = useState(0);                     
+  const [showResult, setShowResult] = useState(false);       
+  const [selectedOption, setSelectedOption] = useState(null); 
+  const [isAnswered, setIsAnswered] = useState(false);       
 
-  // --- LÓGICA ---
-
-  // 1. Iniciar Nivel
   const startLevel = (levelId) => {
     if (unlockedLevels.includes(levelId)) {
       setActiveLevelId(levelId);
@@ -27,7 +22,6 @@ export default function QuizPage() {
     }
   };
 
-  // 2. Reiniciar variables para nueva partida
   const resetGame = () => {
     setCurrentQIndex(0);
     setScore(0);
@@ -36,9 +30,8 @@ export default function QuizPage() {
     setIsAnswered(false);
   };
 
-  // 3. Manejar Clic en Respuesta
   const handleAnswer = (optionIndex, correctIndex) => {
-    if (isAnswered) return; // Evita doble clic
+    if (isAnswered) return; 
 
     setSelectedOption(optionIndex);
     setIsAnswered(true);
@@ -47,57 +40,64 @@ export default function QuizPage() {
       setScore((prev) => prev + 1);
     }
 
-    // Esperar 1 segundo y pasar a la siguiente (o terminar)
     setTimeout(() => {
-      if (currentQIndex + 1 < getCurrentLevel().questions.length) {
+      // SEGURIDAD: Verificamos que el nivel exista antes de pedir su largo
+      const currentLevel = getCurrentLevel();
+      if (currentLevel && currentQIndex + 1 < currentLevel.questions.length) {
         setCurrentQIndex((prev) => prev + 1);
         setIsAnswered(false);
         setSelectedOption(null);
       } else {
         setShowResult(true);
-        handleLevelCompletion(); // Verificar si desbloquea el siguiente
       }
     }, 1000); 
   };
 
-  // 4. Verificar si aprobó y desbloquear siguiente
   const getCurrentLevel = () => LEVELS.find((l) => l.id === activeLevelId);
 
-  const handleLevelCompletion = () => {
-    // Nota: El estado score puede no haberse actualizado visualmente aún, 
-    // pero calculamos con la lógica local o esperamos el render. 
-    // Para asegurar, recalculamos en el render del resultado.
-    // Aquí solo actualizamos desbloqueos.
-  };
-
-  // Efecto para desbloquear nivel cuando se muestra el resultado y es aprobado
+  // Efecto para desbloquear nivel
   useEffect(() => {
     if (showResult && activeLevelId) {
         const level = getCurrentLevel();
-        // Si aprobó (score >= passingScore)
-        // Nota: score ya está actualizado aquí
-        if (score >= level.passingScore) {
+        if (level && score >= level.passingScore) { // SEGURIDAD: Chequeamos que level exista
             const nextLevel = activeLevelId + 1;
-            // Si el siguiente nivel existe y no está desbloqueado aún
             if (LEVELS.find(l => l.id === nextLevel) && !unlockedLevels.includes(nextLevel)) {
                 setUnlockedLevels(prev => [...prev, nextLevel]);
             }
         }
     }
-  }, [showResult, score]); // Se ejecuta cuando sale el resultado
+  }, [showResult, score, activeLevelId]); // Agregué activeLevelId a dependencias
 
   // --- VISTAS ---
 
-  // VISTA A: JUGANDO (PREGUNTAS)
+  // VISTA A: JUGANDO
   if (activeLevelId && !showResult) {
     const level = getCurrentLevel();
-    const question = level.questions[currentQIndex];
+    
+    // --- 🛡️ BLOQUE DE SEGURIDAD (AQUÍ ESTÁ EL FIX) ---
+    if (!level) return <div className="p-10 text-center">Error: No encuentro el Nivel {activeLevelId}</div>;
+    
+    const question = level.questions ? level.questions[currentQIndex] : null;
+    
+    if (!question) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-slate-50 p-6">
+                <div className="bg-white p-6 rounded-xl shadow-lg border-l-4 border-red-500 text-left max-w-md">
+                    <h3 className="font-bold text-red-600 text-lg mb-2">⚠️ Error de Datos</h3>
+                    <p className="text-slate-600 mb-4">
+                        El código funciona, pero <strong>no hay preguntas cargadas</strong> para el Nivel {activeLevelId} en el archivo <code>data.js</code>.
+                    </p>
+                    <button onClick={() => setActiveLevelId(null)} className="text-sm underline text-slate-500">Volver al menú</button>
+                </div>
+            </div>
+        );
+    }
+    // --- FIN BLOQUE SEGURIDAD ---
 
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
         <div className="w-full max-w-lg bg-white rounded-2xl shadow-xl overflow-hidden">
             
-            {/* Barra de Progreso */}
             <div className="w-full bg-slate-100 h-2">
                 <div 
                     className="bg-aux-green h-2 transition-all duration-500" 
@@ -106,7 +106,6 @@ export default function QuizPage() {
             </div>
 
             <div className="p-6 md:p-8">
-                {/* Encabezado Pregunta */}
                 <div className="flex justify-between items-center mb-6">
                     <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
                         Pregunta {currentQIndex + 1} de {level.questions.length}
@@ -116,24 +115,21 @@ export default function QuizPage() {
                     </span>
                 </div>
 
-                {/* Texto Pregunta */}
                 <h2 className="text-xl font-black text-aux-dark mb-8 leading-tight">
                     {question.text}
                 </h2>
 
-                {/* Opciones */}
                 <div className="space-y-3">
                     {question.options.map((opt, idx) => {
-                        // Lógica de colores al responder
-                        let btnColor = "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"; // Normal
+                        let btnColor = "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100";
                         
                         if (isAnswered) {
                             if (idx === question.correctIndex) {
-                                btnColor = "bg-green-100 border-green-500 text-green-800"; // Correcta
+                                btnColor = "bg-green-100 border-green-500 text-green-800";
                             } else if (idx === selectedOption) {
-                                btnColor = "bg-red-100 border-red-500 text-red-800"; // Incorrecta elegida
+                                btnColor = "bg-red-100 border-red-500 text-red-800"; 
                             } else {
-                                btnColor = "opacity-50 grayscale"; // Las demás
+                                btnColor = "opacity-50 grayscale";
                             }
                         }
 
@@ -159,7 +155,6 @@ export default function QuizPage() {
             </div>
         </div>
         
-        {/* Botón Salir de Emergencia */}
         <button onClick={() => setActiveLevelId(null)} className="mt-6 text-slate-400 text-sm hover:text-red-500 underline">
             Cancelar y Salir
         </button>
@@ -170,6 +165,9 @@ export default function QuizPage() {
   // VISTA B: RESULTADOS
   if (showResult) {
     const level = getCurrentLevel();
+    // SEGURIDAD: Si no hay nivel al mostrar resultados, volvemos
+    if (!level) return <div onClick={() => setActiveLevelId(null)}>Error al cargar resultados. Volver.</div>;
+
     const passed = score >= level.passingScore;
 
     return (
@@ -221,11 +219,9 @@ export default function QuizPage() {
     );
   }
 
-  // VISTA C: MENÚ PRINCIPAL (TABLERO)
+  // VISTA C: MENÚ PRINCIPAL
   return (
     <main className="min-h-screen bg-slate-50 font-sans pb-20">
-      
-      {/* Header */}
       <div className="bg-white p-4 shadow-sm sticky top-0 z-10 flex items-center gap-4">
         <Link href="/" className="text-slate-400 hover:text-aux-dark">
             <ChevronLeft size={24} />
@@ -234,8 +230,6 @@ export default function QuizPage() {
       </div>
 
       <div className="p-6 max-w-md mx-auto space-y-6 mt-4">
-        
-        {/* Mensaje Dinámico */}
         <div className="bg-blue-50 border border-blue-100 p-4 rounded-xl mb-6">
             <p className="text-sm text-blue-800 font-medium">
                 {unlockedLevels.length === 1 
@@ -244,10 +238,8 @@ export default function QuizPage() {
             </p>
         </div>
 
-        {/* MAPA DE NIVELES */}
         {LEVELS.map((level) => {
             const isUnlocked = unlockedLevels.includes(level.id);
-            const isCompleted = unlockedLevels.includes(level.id + 1) || (level.id === LEVELS.length && unlockedLevels.includes(level.id)); // Lógica simple de completado
             
             return (
                 <div 
