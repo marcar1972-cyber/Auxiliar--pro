@@ -1,108 +1,290 @@
-import Image from "next/image";
+"use client";
+
+import { useState, useEffect } from "react";
+import { LEVELS } from "../data"; // Importamos tus preguntas
 import Link from "next/link";
-import { User, BookOpen, Search, Calculator, Mail } from "lucide-react"; 
+import { Lock, Play, CheckCircle, XCircle, ChevronLeft, RefreshCcw, ArrowRight } from "lucide-react";
 
-export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col bg-white font-sans">
-      
-      {/* 1. NAVBAR SUPERIOR */}
-      <nav className="w-full p-4 flex justify-between items-center bg-white shadow-sm sticky top-0 z-50">
-        
-        {/* LOGO: Ahora sí apunta a tu archivo renombrado */}
-        <Link href="/" className="flex items-center">
-            <Image 
-                src="/logo.png" 
-                alt="Logo AuxiliarPro Chile" 
-                width={150} 
-                height={90} 
-                priority
-                className="object-contain"
-            />
-        </Link>
+export default function QuizPage() {
+  // --- ESTADOS DEL JUEGO ---
+  const [unlockedLevels, setUnlockedLevels] = useState([1]); // Niveles desbloqueados
+  const [activeLevelId, setActiveLevelId] = useState(null);  // ¿Qué nivel estamos jugando?
+  
+  // Estados de la Partida Actual
+  const [currentQIndex, setCurrentQIndex] = useState(0);     // Índice de pregunta actual
+  const [score, setScore] = useState(0);                     // Puntaje acumulado
+  const [showResult, setShowResult] = useState(false);       // ¿Mostramos el resultado final?
+  const [selectedOption, setSelectedOption] = useState(null); // Opción seleccionada (para feedback visual)
+  const [isAnswered, setIsAnswered] = useState(false);       // ¿Ya respondió la actual?
 
-        <div className="flex items-center gap-3 md:gap-4">
-            <button className="p-2 text-slate-400 hover:text-aux-dark transition-colors" aria-label="Buscar">
-                <Search size={20} />
-            </button>
+  // --- LÓGICA ---
 
-            <Link href="https://auxiliar-dermocheck.vercel.app" target="_blank" className="group flex flex-col items-center">
-                <Calculator size={20} className="text-slate-400 group-hover:text-aux-green transition-colors" />
-                <span className="text-[10px] font-bold text-slate-400 group-hover:text-aux-green hidden md:block">DERMOCHECK</span>
-            </Link>
+  // 1. Iniciar Nivel
+  const startLevel = (levelId) => {
+    if (unlockedLevels.includes(levelId)) {
+      setActiveLevelId(levelId);
+      resetGame();
+    }
+  };
 
-            <div className="h-6 w-px bg-slate-200 mx-1"></div>
+  // 2. Reiniciar variables para nueva partida
+  const resetGame = () => {
+    setCurrentQIndex(0);
+    setScore(0);
+    setShowResult(false);
+    setSelectedOption(null);
+    setIsAnswered(false);
+  };
 
-            <button className="bg-slate-50 text-aux-dark p-2 rounded-full hover:bg-aux-green hover:text-white transition-colors border border-slate-100">
-                <User size={20} />
-            </button>
-        </div>
-      </nav>
+  // 3. Manejar Clic en Respuesta
+  const handleAnswer = (optionIndex, correctIndex) => {
+    if (isAnswered) return; // Evita doble clic
 
-      {/* 2. CONTENIDO PRINCIPAL */}
-      <div className="flex-1 flex flex-col items-center justify-center p-6 text-center max-w-md mx-auto w-full mt-[-20px] mb-10">
-        
-        <span className="bg-emerald-50 text-aux-green text-[11px] font-black px-3 py-1 rounded-full mb-6 tracking-widest border border-emerald-100 uppercase">
-            Meta: Credencial 2026
-        </span>
+    setSelectedOption(optionIndex);
+    setIsAnswered(true);
 
-        <h1 className="text-4xl md:text-5xl font-black text-aux-dark leading-[1.1] mb-8 tracking-tight">
-            PREPÁRATE PARA TU EXAMEN DE <br/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-aux-green to-teal-400">
-                AUXILIAR DE FARMACIA
-            </span>
-        </h1>
+    if (optionIndex === correctIndex) {
+      setScore((prev) => prev + 1);
+    }
 
-        <div className="w-full space-y-3">
-            <Link href="/quiz" className="block w-full bg-aux-dark text-white font-bold text-lg py-4 rounded-xl shadow-lg shadow-blue-900/10 hover:scale-[1.02] active:scale-[0.98] transition-all">
-                COMENZAR AHORA
-            </Link>
+    // Esperar 1 segundo y pasar a la siguiente (o terminar)
+    setTimeout(() => {
+      if (currentQIndex + 1 < getCurrentLevel().questions.length) {
+        setCurrentQIndex((prev) => prev + 1);
+        setIsAnswered(false);
+        setSelectedOption(null);
+      } else {
+        setShowResult(true);
+        handleLevelCompletion(); // Verificar si desbloquea el siguiente
+      }
+    }, 1000); 
+  };
 
-            <Link href="/blog" className="group block w-full bg-white text-slate-600 border-2 border-slate-100 font-bold text-lg py-4 rounded-xl hover:border-aux-green hover:text-aux-green transition-all flex items-center justify-center gap-2">
-                <BookOpen size={20} className="text-slate-400 group-hover:text-aux-green" />
-                LEER ARTÍCULOS
-            </Link>
-        </div>
+  // 4. Verificar si aprobó y desbloquear siguiente
+  const getCurrentLevel = () => LEVELS.find((l) => l.id === activeLevelId);
 
-        <div className="mt-12 bg-slate-50 p-5 rounded-2xl border border-slate-100 text-left w-full flex gap-4 items-start relative overflow-hidden">
-            <div className="absolute top-0 right-0 watermark-bg w-full h-full opacity-50"></div>
-            <div className="relative z-10 w-10 h-10 min-w-[40px] bg-white border border-slate-200 rounded-full flex items-center justify-center text-aux-green font-black shadow-sm">
-                M
+  const handleLevelCompletion = () => {
+    // Nota: El estado score puede no haberse actualizado visualmente aún, 
+    // pero calculamos con la lógica local o esperamos el render. 
+    // Para asegurar, recalculamos en el render del resultado.
+    // Aquí solo actualizamos desbloqueos.
+  };
+
+  // Efecto para desbloquear nivel cuando se muestra el resultado y es aprobado
+  useEffect(() => {
+    if (showResult && activeLevelId) {
+        const level = getCurrentLevel();
+        // Si aprobó (score >= passingScore)
+        // Nota: score ya está actualizado aquí
+        if (score >= level.passingScore) {
+            const nextLevel = activeLevelId + 1;
+            // Si el siguiente nivel existe y no está desbloqueado aún
+            if (LEVELS.find(l => l.id === nextLevel) && !unlockedLevels.includes(nextLevel)) {
+                setUnlockedLevels(prev => [...prev, nextLevel]);
+            }
+        }
+    }
+  }, [showResult, score]); // Se ejecuta cuando sale el resultado
+
+  // --- VISTAS ---
+
+  // VISTA A: JUGANDO (PREGUNTAS)
+  if (activeLevelId && !showResult) {
+    const level = getCurrentLevel();
+    const question = level.questions[currentQIndex];
+
+    return (
+      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
+        <div className="w-full max-w-lg bg-white rounded-2xl shadow-xl overflow-hidden">
+            
+            {/* Barra de Progreso */}
+            <div className="w-full bg-slate-100 h-2">
+                <div 
+                    className="bg-aux-green h-2 transition-all duration-500" 
+                    style={{ width: `${((currentQIndex + 1) / level.questions.length) * 100}%` }}
+                ></div>
             </div>
-            <div className="relative z-10">
-                <p className="text-xs font-bold text-aux-dark uppercase tracking-wider mb-1">Marcelo dice:</p>
-                <p className="text-slate-600 text-sm italic leading-relaxed">
-                    "Auxiliar de farmacia en preparación, esta web es mi cuaderno de estudio abierto. No vendemos cursos, compartimos conocimiento real basado en la normativa vigente."
+
+            <div className="p-6 md:p-8">
+                {/* Encabezado Pregunta */}
+                <div className="flex justify-between items-center mb-6">
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                        Pregunta {currentQIndex + 1} de {level.questions.length}
+                    </span>
+                    <span className="bg-slate-100 text-slate-600 text-xs font-bold px-2 py-1 rounded">
+                        Nivel {activeLevelId}
+                    </span>
+                </div>
+
+                {/* Texto Pregunta */}
+                <h2 className="text-xl font-black text-aux-dark mb-8 leading-tight">
+                    {question.text}
+                </h2>
+
+                {/* Opciones */}
+                <div className="space-y-3">
+                    {question.options.map((opt, idx) => {
+                        // Lógica de colores al responder
+                        let btnColor = "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"; // Normal
+                        
+                        if (isAnswered) {
+                            if (idx === question.correctIndex) {
+                                btnColor = "bg-green-100 border-green-500 text-green-800"; // Correcta
+                            } else if (idx === selectedOption) {
+                                btnColor = "bg-red-100 border-red-500 text-red-800"; // Incorrecta elegida
+                            } else {
+                                btnColor = "opacity-50 grayscale"; // Las demás
+                            }
+                        }
+
+                        return (
+                            <button
+                                key={idx}
+                                onClick={() => handleAnswer(idx, question.correctIndex)}
+                                disabled={isAnswered}
+                                className={`w-full text-left p-4 rounded-xl border-2 font-medium transition-all duration-200 ${btnColor}`}
+                            >
+                                <div className="flex items-center gap-3">
+                                    <div className={`w-6 h-6 rounded-full border flex items-center justify-center text-xs font-bold
+                                        ${idx === question.correctIndex && isAnswered ? 'bg-green-500 border-green-500 text-white' : 'border-slate-300'}
+                                    `}>
+                                        {["A", "B", "C", "D"][idx]}
+                                    </div>
+                                    {opt}
+                                </div>
+                            </button>
+                        )
+                    })}
+                </div>
+            </div>
+        </div>
+        
+        {/* Botón Salir de Emergencia */}
+        <button onClick={() => setActiveLevelId(null)} className="mt-6 text-slate-400 text-sm hover:text-red-500 underline">
+            Cancelar y Salir
+        </button>
+      </div>
+    );
+  }
+
+  // VISTA B: RESULTADOS
+  if (showResult) {
+    const level = getCurrentLevel();
+    const passed = score >= level.passingScore;
+
+    return (
+        <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6">
+            <div className="bg-white p-8 rounded-3xl shadow-2xl text-center max-w-sm w-full">
+                
+                <div className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl shadow-sm
+                    ${passed ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"}
+                `}>
+                    {passed ? <CheckCircle size={40} /> : <XCircle size={40} />}
+                </div>
+
+                <h2 className="text-2xl font-black text-aux-dark mb-2">
+                    {passed ? "¡APROBADO!" : "Sigue Intentando"}
+                </h2>
+                
+                <p className="text-slate-500 mb-6">
+                    Acertaste <strong className={passed ? "text-green-600" : "text-red-600"}>{score}</strong> de <strong>{level.questions.length}</strong> preguntas.
                 </p>
+
+                <div className="space-y-3">
+                    {passed ? (
+                         <button 
+                         onClick={() => setActiveLevelId(null)}
+                         className="w-full bg-aux-dark text-white font-bold py-3 rounded-xl shadow-lg hover:scale-105 transition-transform flex items-center justify-center gap-2"
+                     >
+                         VOLVER AL MENÚ <ArrowRight size={18} />
+                     </button>
+                    ) : (
+                        <button 
+                            onClick={resetGame}
+                            className="w-full bg-aux-green text-white font-bold py-3 rounded-xl shadow-lg hover:bg-emerald-600 transition-colors flex items-center justify-center gap-2"
+                        >
+                            <RefreshCcw size={18} /> INTENTAR DE NUEVO
+                        </button>
+                    )}
+                   
+                   {!passed && (
+                        <button 
+                            onClick={() => setActiveLevelId(null)}
+                            className="w-full bg-white text-slate-500 font-bold py-3 rounded-xl border border-slate-200 hover:bg-slate-50"
+                        >
+                            Volver al Menú
+                        </button>
+                   )}
+                </div>
             </div>
         </div>
+    );
+  }
 
+  // VISTA C: MENÚ PRINCIPAL (TABLERO)
+  return (
+    <main className="min-h-screen bg-slate-50 font-sans pb-20">
+      
+      {/* Header */}
+      <div className="bg-white p-4 shadow-sm sticky top-0 z-10 flex items-center gap-4">
+        <Link href="/" className="text-slate-400 hover:text-aux-dark">
+            <ChevronLeft size={24} />
+        </Link>
+        <h1 className="text-lg font-black text-aux-dark">Tu Ruta de Aprendizaje</h1>
       </div>
 
-      {/* 3. FOOTER */}
-      <footer className="w-full bg-slate-50 border-t border-slate-100 py-8 px-4 mt-auto">
-        <div className="max-w-md mx-auto text-center space-y-4">
-            
-            <div className="flex justify-center gap-4 text-xs font-medium text-slate-500">
-                <Link href="/legal/terminos" className="hover:text-aux-green transition-colors">Términos de Uso</Link>
-                <span className="text-slate-300">•</span>
-                <Link href="/legal/descargos" className="hover:text-aux-green transition-colors">Descargos Legales</Link>
-            </div>
-
-            <a href="mailto:contacto@auxiliaresdefarmacia.cl" className="inline-flex items-center gap-2 text-xs text-slate-400 hover:text-aux-green transition-colors bg-white px-3 py-1.5 rounded-full border border-slate-200 shadow-sm">
-                <Mail size={12} />
-                ¿Encontraste un error? Escríbenos
-            </a>
-
-            <div className="pt-4 border-t border-slate-200/50">
-                <p className="text-[10px] text-slate-400 leading-tight">
-                    © 2025 AuxiliarPro Chile. Proyecto independiente.<br/>
-                    Esta web no tiene afiliación con el MINSAL ni SEREMI.
-                </p>
-            </div>
+      <div className="p-6 max-w-md mx-auto space-y-6 mt-4">
+        
+        {/* Mensaje Dinámico */}
+        <div className="bg-blue-50 border border-blue-100 p-4 rounded-xl mb-6">
+            <p className="text-sm text-blue-800 font-medium">
+                {unlockedLevels.length === 1 
+                    ? "👋 Hola Colega: Completa el Nivel 1 para desbloquear el siguiente." 
+                    : `🔥 ¡Llevas ${unlockedLevels.length - 1} niveles desbloqueados! Sigue así.`}
+            </p>
         </div>
-      </footer>
 
+        {/* MAPA DE NIVELES */}
+        {LEVELS.map((level) => {
+            const isUnlocked = unlockedLevels.includes(level.id);
+            const isCompleted = unlockedLevels.includes(level.id + 1) || (level.id === LEVELS.length && unlockedLevels.includes(level.id)); // Lógica simple de completado
+            
+            return (
+                <div 
+                    key={level.id} 
+                    onClick={() => startLevel(level.id)}
+                    className={`relative overflow-hidden rounded-2xl border-2 transition-all duration-300 ${
+                        isUnlocked 
+                            ? "bg-white border-aux-green/20 shadow-lg cursor-pointer hover:scale-[1.02] active:scale-[0.98]" 
+                            : "bg-slate-100 border-slate-200 opacity-80 cursor-not-allowed grayscale"
+                    }`}
+                >
+                    <div className="p-6 flex items-center gap-4">
+                        <div className={`w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow-sm ${
+                            isUnlocked ? "bg-emerald-100" : "bg-slate-200"
+                        }`}>
+                            {isUnlocked ? level.icon : "🔒"}
+                        </div>
+
+                        <div className="flex-1">
+                            <h3 className={`font-black text-lg ${isUnlocked ? "text-aux-dark" : "text-slate-400"}`}>
+                                {level.title}
+                            </h3>
+                            <p className="text-xs text-slate-500 font-medium mt-1">
+                                {level.qCount} Preguntas • {level.timeLimit === 0 ? "Sin Tiempo" : `${level.timeLimit} seg/preg`}
+                            </p>
+                        </div>
+
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                            isUnlocked ? "bg-aux-dark text-white" : "bg-slate-300 text-white"
+                        }`}>
+                            {isUnlocked ? <Play size={20} className="ml-1" /> : <Lock size={18} />}
+                        </div>
+                    </div>
+                </div>
+            );
+        })}
+      </div>
     </main>
   );
 }
