@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import { User, BookOpen, Search, Calculator, Mail, ChevronDown } from "lucide-react"; 
-import { FAQS } from "./data"; 
+import { User, BookOpen, Search, Calculator, Mail } from "lucide-react"; 
+// NOTA: He quitado temporalmente la importación de FAQS para arreglar el error primero
 
 export default function Home() {
   return (
@@ -10,25 +10,23 @@ export default function Home() {
       {/* 1. NAVBAR SUPERIOR */}
       <nav className="w-full p-4 flex justify-between items-center bg-white shadow-sm sticky top-0 z-50">
         
-        {/* LOGO: Nombre exacto de tu archivo */}
+        {/* LOGO: Verificando nombre exacto */}
         <Link href="/" className="flex items-center">
             <Image 
                 src="/logo_auxiliarpro_3_400x240_ajustado.png" 
                 alt="Logo AuxiliarPro Chile" 
-                width={160} 
-                height={96} 
+                width={150} 
+                height={90} 
                 priority
                 className="object-contain"
             />
         </Link>
 
         <div className="flex items-center gap-3 md:gap-4">
-            {/* Buscador (Lupa) */}
             <button className="p-2 text-slate-400 hover:text-aux-dark transition-colors" aria-label="Buscar">
                 <Search size={20} />
             </button>
 
-            {/* Dermocheck (Calculadora) */}
             <Link href="https://auxiliar-dermocheck.vercel.app" target="_blank" className="group flex flex-col items-center">
                 <Calculator size={20} className="text-slate-400 group-hover:text-aux-green transition-colors" />
                 <span className="text-[10px] font-bold text-slate-400 group-hover:text-aux-green hidden md:block">DERMOCHECK</span>
@@ -36,7 +34,6 @@ export default function Home() {
 
             <div className="h-6 w-px bg-slate-200 mx-1"></div>
 
-            {/* Usuario */}
             <button className="bg-slate-50 text-aux-dark p-2 rounded-full hover:bg-aux-green hover:text-white transition-colors border border-slate-100">
                 <User size={20} />
             </button>
@@ -81,25 +78,32 @@ export default function Home() {
             </div>
         </div>
 
-        {/* 3. SECCIÓN FAQs */}
-        <div className="w-full mt-16 text-left">
-            <h3 className="text-xl font-black text-aux-dark mb-6 px-2">Preguntas Frecuentes</h3>
-            <div className="space-y-3">
-                {FAQS.map((faq, index) => (
-                    <details key={index} className="group bg-white border border-slate-100 rounded-xl overflow-hidden shadow-sm open:shadow-md transition-all">
-                        <summary className="flex justify-between items-center cursor-pointer p-4 font-bold text-slate-700 list-none select-none hover:bg-slate-50 transition-colors">
-                            <span className="text-sm">{faq.q}</span>
-                            <ChevronDown size={18} className="text-slate-400 group-open:rotate-180 transition-transform" />
-                        </summary>
-                        <div className="px-4 pb-4 pt-0 text-sm text-slate-500 leading-relaxed border-t border-slate-50 mt-2">
-                            <div dangerouslySetInnerHTML={{ __html: faq.a }} />
-                        </div>
-                    </details>
-                ))}
-            </div>
-        </div>
-
       </div>
 
-      {/* 4. FOOTER */}
-      <footer className="w-full bg-slate-50 border-t border-slate-100 py-8 px-
+      {/* 3. FOOTER */}
+      <footer className="w-full bg-slate-50 border-t border-slate-100 py-8 px-4 mt-auto">
+        <div className="max-w-md mx-auto text-center space-y-4">
+            
+            <div className="flex justify-center gap-4 text-xs font-medium text-slate-500">
+                <Link href="/legal/terminos" className="hover:text-aux-green transition-colors">Términos de Uso</Link>
+                <span className="text-slate-300">•</span>
+                <Link href="/legal/descargos" className="hover:text-aux-green transition-colors">Descargos Legales</Link>
+            </div>
+
+            <a href="mailto:contacto@auxiliaresdefarmacia.cl" className="inline-flex items-center gap-2 text-xs text-slate-400 hover:text-aux-green transition-colors bg-white px-3 py-1.5 rounded-full border border-slate-200 shadow-sm">
+                <Mail size={12} />
+                ¿Encontraste un error? Escríbenos
+            </a>
+
+            <div className="pt-4 border-t border-slate-200/50">
+                <p className="text-[10px] text-slate-400 leading-tight">
+                    © 2025 AuxiliarPro Chile. Proyecto independiente.<br/>
+                    Esta web no tiene afiliación con el MINSAL ni SEREMI.
+                </p>
+            </div>
+        </div>
+      </footer>
+
+    </main>
+  );
+}
