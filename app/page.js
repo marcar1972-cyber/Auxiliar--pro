@@ -1,8 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-// Importamos todos los iconos necesarios, incluida la Calculadora y ChevronDown
 import { User, BookOpen, Search, Calculator, Mail, ChevronDown } from "lucide-react"; 
-import { FAQS } from "./data"; // Importamos las preguntas que acabamos de restaurar
+import { FAQS } from "./data"; 
 
 export default function Home() {
   return (
@@ -11,9 +10,9 @@ export default function Home() {
       {/* 1. NAVBAR SUPERIOR */}
       <nav className="w-full p-4 flex justify-between items-center bg-white shadow-sm sticky top-0 z-50">
         <Link href="/" className="flex items-center">
-            {/* Logo cargado desde carpeta public */}
+            {/* CORREGIDO: Usamos el nombre corto 'logo.png' que ya tienes en public */}
             <Image 
-                src="/logo_auxiliarpro_3_400x240_ajustado.png" 
+                src="/logo.png" 
                 alt="Logo AuxiliarPro Chile" 
                 width={140} 
                 height={84} 
@@ -23,12 +22,10 @@ export default function Home() {
         </Link>
 
         <div className="flex items-center gap-3 md:gap-4">
-            {/* Buscador (Lupa) */}
             <button className="p-2 text-slate-400 hover:text-aux-dark transition-colors" aria-label="Buscar">
                 <Search size={20} />
             </button>
 
-            {/* Dermocheck (Calculadora) */}
             <Link href="https://auxiliar-dermocheck.vercel.app" target="_blank" className="group flex flex-col items-center">
                 <Calculator size={20} className="text-slate-400 group-hover:text-aux-green transition-colors" />
                 <span className="text-[10px] font-bold text-slate-400 group-hover:text-aux-green hidden md:block">DERMOCHECK</span>
@@ -36,7 +33,6 @@ export default function Home() {
 
             <div className="h-6 w-px bg-slate-200 mx-1"></div>
 
-            {/* Usuario */}
             <button className="bg-slate-50 text-aux-dark p-2 rounded-full hover:bg-aux-green hover:text-white transition-colors border border-slate-100">
                 <User size={20} />
             </button>
@@ -68,7 +64,6 @@ export default function Home() {
             </Link>
         </div>
 
-        {/* Sección de Confianza (E-E-A-T) */}
         <div className="mt-12 bg-slate-50 p-5 rounded-2xl border border-slate-100 text-left w-full flex gap-4 items-start relative overflow-hidden">
             <div className="absolute top-0 right-0 watermark-bg w-full h-full opacity-50"></div>
             <div className="relative z-10 w-10 h-10 min-w-[40px] bg-white border border-slate-200 rounded-full flex items-center justify-center text-aux-green font-black shadow-sm">
@@ -82,7 +77,7 @@ export default function Home() {
             </div>
         </div>
 
-        {/* 3. SECCIÓN FAQs (Acordeón Automático) */}
+        {/* 3. SECCIÓN FAQs */}
         <div className="w-full mt-16 text-left">
             <h3 className="text-xl font-black text-aux-dark mb-6 px-2">Preguntas Frecuentes</h3>
             <div className="space-y-3">
