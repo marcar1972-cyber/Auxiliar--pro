@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import { LEVELS } from "../data"; 
 import Link from "next/link";
-import { Lock, Play, CheckCircle, XCircle, ChevronLeft, RefreshCcw, ArrowRight, AlertCircle, FileText } from "lucide-react";
+// Importamos iconos nuevos: Library (Biblioteca) y MessageCircle (Foro)
+import { Lock, Play, CheckCircle, XCircle, ChevronLeft, RefreshCcw, ArrowRight, AlertCircle, FileText, Library, MessageCircle } from "lucide-react";
 
 export default function QuizPage() {
   const [unlockedLevels, setUnlockedLevels] = useState([1]); 
@@ -41,7 +42,6 @@ export default function QuizPage() {
     setMistakes([]);     
   };
 
-  // CAPTURAMOS LA GUÍA DE ESTUDIO AQUÍ
   const handleAnswer = (optionIndex, correctIndex, questionText, options, studyGuide) => {
     if (isAnswered) return; 
 
@@ -56,7 +56,7 @@ export default function QuizPage() {
         question: questionText,
         yourAnswer: options[optionIndex],
         correctAnswer: options[correctIndex],
-        studyGuide: studyGuide // Guardamos el nombre del PDF
+        studyGuide: studyGuide 
       }]);
     }
 
@@ -161,7 +161,6 @@ export default function QuizPage() {
                                         <p className="text-red-500 flex items-center gap-1"><XCircle size={12} /> Tu respuesta: <span className="font-medium">{mistake.yourAnswer}</span></p>
                                         <p className="text-green-600 flex items-center gap-1"><CheckCircle size={12} /> Correcta: <span className="font-bold">{mistake.correctAnswer}</span></p>
                                     </div>
-                                    {/* BOTÓN MÁGICO AL PDF */}
                                     {mistake.studyGuide && (
                                         <Link href={`/${mistake.studyGuide}`} target="_blank" className="block w-full bg-slate-50 border border-slate-200 text-slate-600 text-center py-2 rounded hover:bg-aux-green hover:text-white hover:border-aux-green transition-colors font-bold flex items-center justify-center gap-2">
                                             <FileText size={14} /> Repasar Material de Estudio
@@ -186,17 +185,40 @@ export default function QuizPage() {
     );
   }
 
-  // VISTA C: MENÚ
+  // VISTA C: MENÚ (TABLERO PRINCIPAL)
   return (
     <main className="min-h-screen bg-slate-50 font-sans pb-20">
       <div className="bg-white p-4 shadow-sm sticky top-0 z-10 flex items-center gap-4">
         <Link href="/" className="text-slate-400 hover:text-aux-dark"><ChevronLeft size={24} /></Link>
         <h1 className="text-lg font-black text-aux-dark">Tu Ruta de Aprendizaje</h1>
       </div>
+
       <div className="p-6 max-w-md mx-auto space-y-6 mt-4">
+        
+        {/* --- NUEVA BARRA DE HERRAMIENTAS (BIBLIOTECA Y FORO) --- */}
+        <div className="grid grid-cols-2 gap-4">
+            <Link href="/biblioteca" className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:border-aux-green hover:shadow-md transition-all flex flex-col items-center gap-2 text-center group">
+                <div className="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center group-hover:bg-aux-green group-hover:text-white transition-colors">
+                    <Library size={20} />
+                </div>
+                <span className="text-sm font-bold text-slate-600 group-hover:text-aux-dark">Biblioteca</span>
+            </Link>
+
+            {/* Este botón puede llevar a WhatsApp, Discord o una página interna */}
+            <Link href="https://chat.whatsapp.com/" target="_blank" className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:border-aux-green hover:shadow-md transition-all flex flex-col items-center gap-2 text-center group">
+                <div className="w-10 h-10 bg-pink-50 text-pink-600 rounded-full flex items-center justify-center group-hover:bg-aux-green group-hover:text-white transition-colors">
+                    <MessageCircle size={20} />
+                </div>
+                <span className="text-sm font-bold text-slate-600 group-hover:text-aux-dark">Foro de Dudas</span>
+            </Link>
+        </div>
+        
+        {/* Mensaje de Bienvenida */}
         <div className="bg-blue-50 border border-blue-100 p-4 rounded-xl mb-6">
             <p className="text-sm text-blue-800 font-medium">{unlockedLevels.length === 1 ? "👋 Hola Colega: Completa el Nivel 1 para desbloquear el siguiente." : `🔥 ¡Llevas ${unlockedLevels.length - 1} niveles desbloqueados! Sigue así.`}</p>
         </div>
+
+        {/* Mapa de Niveles */}
         {LEVELS.map((level) => {
             const isUnlocked = unlockedLevels.includes(level.id);
             return (
