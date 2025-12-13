@@ -3,8 +3,7 @@
 import { useState, useEffect } from "react";
 import { LEVELS } from "../data"; 
 import Link from "next/link";
-// Importamos iconos nuevos: Library (Biblioteca) y MessageCircle (Foro)
-import { Lock, Play, CheckCircle, XCircle, ChevronLeft, RefreshCcw, ArrowRight, AlertCircle, FileText, Library, MessageCircle } from "lucide-react";
+import { Lock, Play, CheckCircle, XCircle, ChevronLeft, RefreshCcw, ArrowRight, AlertCircle, FileText, Library, MessageCircle, HelpCircle } from "lucide-react";
 
 export default function QuizPage() {
   const [unlockedLevels, setUnlockedLevels] = useState([1]); 
@@ -195,30 +194,12 @@ export default function QuizPage() {
 
       <div className="p-6 max-w-md mx-auto space-y-6 mt-4">
         
-        {/* --- NUEVA BARRA DE HERRAMIENTAS (BIBLIOTECA Y FORO) --- */}
-        <div className="grid grid-cols-2 gap-4">
-            <Link href="/biblioteca" className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:border-aux-green hover:shadow-md transition-all flex flex-col items-center gap-2 text-center group">
-                <div className="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center group-hover:bg-aux-green group-hover:text-white transition-colors">
-                    <Library size={20} />
-                </div>
-                <span className="text-sm font-bold text-slate-600 group-hover:text-aux-dark">Biblioteca</span>
-            </Link>
-
-            {/* Este botón puede llevar a WhatsApp, Discord o una página interna */}
-            <Link href="https://chat.whatsapp.com/" target="_blank" className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:border-aux-green hover:shadow-md transition-all flex flex-col items-center gap-2 text-center group">
-                <div className="w-10 h-10 bg-pink-50 text-pink-600 rounded-full flex items-center justify-center group-hover:bg-aux-green group-hover:text-white transition-colors">
-                    <MessageCircle size={20} />
-                </div>
-                <span className="text-sm font-bold text-slate-600 group-hover:text-aux-dark">Foro de Dudas</span>
-            </Link>
-        </div>
-        
         {/* Mensaje de Bienvenida */}
         <div className="bg-blue-50 border border-blue-100 p-4 rounded-xl mb-6">
             <p className="text-sm text-blue-800 font-medium">{unlockedLevels.length === 1 ? "👋 Hola Colega: Completa el Nivel 1 para desbloquear el siguiente." : `🔥 ¡Llevas ${unlockedLevels.length - 1} niveles desbloqueados! Sigue así.`}</p>
         </div>
 
-        {/* Mapa de Niveles */}
+        {/* Mapa de Niveles (PRIORIDAD ALTA) */}
         {LEVELS.map((level) => {
             const isUnlocked = unlockedLevels.includes(level.id);
             return (
@@ -231,6 +212,29 @@ export default function QuizPage() {
                 </div>
             );
         })}
+
+        {/* --- SECCIÓN DE AYUDA (PRIORIDAD BAJA / ABAJO) --- */}
+        <div className="mt-8 pt-8 border-t border-slate-100">
+            <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 text-center flex items-center justify-center gap-2">
+                <HelpCircle size={16} /> Herramientas de Apoyo
+            </h3>
+            <div className="grid grid-cols-2 gap-4">
+                <Link href="/biblioteca" className="bg-white p-3 rounded-xl border border-slate-200 shadow-sm hover:border-aux-green hover:shadow-md transition-all flex items-center gap-3 group">
+                    <div className="w-8 h-8 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center group-hover:bg-aux-green group-hover:text-white transition-colors">
+                        <Library size={18} />
+                    </div>
+                    <span className="text-xs font-bold text-slate-600 group-hover:text-aux-dark text-left leading-tight">Biblioteca<br/>Digital</span>
+                </Link>
+
+                <Link href="https://chat.whatsapp.com/" target="_blank" className="bg-white p-3 rounded-xl border border-slate-200 shadow-sm hover:border-aux-green hover:shadow-md transition-all flex items-center gap-3 group">
+                    <div className="w-8 h-8 bg-pink-50 text-pink-600 rounded-lg flex items-center justify-center group-hover:bg-aux-green group-hover:text-white transition-colors">
+                        <MessageCircle size={18} />
+                    </div>
+                    <span className="text-xs font-bold text-slate-600 group-hover:text-aux-dark text-left leading-tight">Foro de<br/>Consultas</span>
+                </Link>
+            </div>
+        </div>
+
       </div>
     </main>
   );
