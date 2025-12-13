@@ -54,7 +54,7 @@ export const FAQS = [
     },
     {
         q: "¿Qué pasa si repruebo?",
-        a: "No te preocupes. Puedes volver a inscribirte para rendir el examen nuevamente pagando el arancel correspondiente. ¡Por eso es importante estudiar!"
+        a: "Según el <strong>Artículo 71 del Decreto 466</strong>, si repruebas, la normativa establece que debes esperar un plazo (históricamente 1 año) para rendirlo nuevamente. Además, al ser un nuevo trámite administrativo, deberás <strong>volver a pagar el arancel</strong> de derecho a examen."
     }
 ];
 
