@@ -213,7 +213,7 @@ export default function QuizPage() {
             );
         })}
 
-        {/* --- SECCIÓN DE AYUDA (PRIORIDAD BAJA / ABAJO) --- */}
+        {/* --- SECCIÓN DE AYUDA (ABAJO) --- */}
         <div className="mt-8 pt-8 border-t border-slate-100">
             <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 text-center flex items-center justify-center gap-2">
                 <HelpCircle size={16} /> Herramientas de Apoyo
@@ -226,7 +226,8 @@ export default function QuizPage() {
                     <span className="text-xs font-bold text-slate-600 group-hover:text-aux-dark text-left leading-tight">Biblioteca<br/>Digital</span>
                 </Link>
 
-                <Link href="https://chat.whatsapp.com/" target="_blank" className="bg-white p-3 rounded-xl border border-slate-200 shadow-sm hover:border-aux-green hover:shadow-md transition-all flex items-center gap-3 group">
+                {/* ENLACE DE WHATSAPP ACTUALIZADO */}
+                <Link href="https://chat.whatsapp.com/J4VkI8mzTTs9UrzvGqBbdz" target="_blank" className="bg-white p-3 rounded-xl border border-slate-200 shadow-sm hover:border-aux-green hover:shadow-md transition-all flex items-center gap-3 group">
                     <div className="w-8 h-8 bg-pink-50 text-pink-600 rounded-lg flex items-center justify-center group-hover:bg-aux-green group-hover:text-white transition-colors">
                         <MessageCircle size={18} />
                     </div>
