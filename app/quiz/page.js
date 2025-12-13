@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { LEVELS } from "../data"; 
 import Link from "next/link";
-import { Lock, Play, CheckCircle, XCircle, ChevronLeft, RefreshCcw, ArrowRight } from "lucide-react";
+import { Lock, Play, CheckCircle, XCircle, ChevronLeft, RefreshCcw, ArrowRight, AlertCircle } from "lucide-react";
 
 export default function QuizPage() {
   const [unlockedLevels, setUnlockedLevels] = useState([1]); 
@@ -14,6 +14,9 @@ export default function QuizPage() {
   const [showResult, setShowResult] = useState(false);       
   const [selectedOption, setSelectedOption] = useState(null); 
   const [isAnswered, setIsAnswered] = useState(false);       
+  
+  // NUEVO: Estado para guardar los errores
+  const [mistakes, setMistakes] = useState([]); 
 
   // --- LÓGICA ---
 
@@ -30,18 +33,19 @@ export default function QuizPage() {
     setShowResult(false);
     setSelectedOption(null);
     setIsAnswered(false);
+    setMistakes([]); // Limpiamos los errores al empezar
   };
 
-  // NUEVA FUNCIÓN: VOLVER AL MENÚ LIMPIAMENTE
   const returnToMenu = () => {
-    setShowResult(false);      // 1. Apagar pantalla de resultados
-    setActiveLevelId(null);    // 2. Salir del nivel
-    setScore(0);               // 3. Reiniciar puntaje
-    setCurrentQIndex(0);       // 4. Reiniciar preguntas
-    setIsAnswered(false);      // 5. Reiniciar estado de respuesta
+    setShowResult(false);      
+    setActiveLevelId(null);    
+    setScore(0);               
+    setCurrentQIndex(0);       
+    setIsAnswered(false); 
+    setMistakes([]);     
   };
 
-  const handleAnswer = (optionIndex, correctIndex) => {
+  const handleAnswer = (optionIndex, correctIndex, questionText, options) => {
     if (isAnswered) return; 
 
     setSelectedOption(optionIndex);
@@ -49,6 +53,14 @@ export default function QuizPage() {
 
     if (optionIndex === correctIndex) {
       setScore((prev) => prev + 1);
+    } else {
+      // SI SE EQUIVOCA: Guardamos el detalle para el reporte final
+      setMistakes(prev => [...prev, {
+        id: currentQIndex,
+        question: questionText,
+        yourAnswer: options[optionIndex],
+        correctAnswer: options[correctIndex]
+      }]);
     }
 
     setTimeout(() => {
@@ -60,18 +72,16 @@ export default function QuizPage() {
       } else {
         setShowResult(true);
       }
-    }, 1000); 
+    }, 1500); // Le damos un poquito más de tiempo (1.5s) para ver el color
   };
 
   const getCurrentLevel = () => LEVELS.find((l) => l.id === activeLevelId);
 
-  // Efecto para desbloquear nivel
   useEffect(() => {
     if (showResult && activeLevelId) {
         const level = getCurrentLevel();
         if (level && score >= level.passingScore) {
             const nextLevel = activeLevelId + 1;
-            // Verificamos si existe el siguiente nivel y si no está desbloqueado
             if (LEVELS.find(l => l.id === nextLevel) && !unlockedLevels.includes(nextLevel)) {
                 setUnlockedLevels(prev => [...prev, nextLevel]);
             }
@@ -84,8 +94,6 @@ export default function QuizPage() {
   // VISTA A: JUGANDO
   if (activeLevelId && !showResult) {
     const level = getCurrentLevel();
-    
-    // SEGURIDAD: Si el nivel no existe o no tiene preguntas
     if (!level) return <div className="p-10 text-center">Error: No encuentro el Nivel {activeLevelId}</div>;
     
     const question = level.questions ? level.questions[currentQIndex] : null;
@@ -93,12 +101,9 @@ export default function QuizPage() {
     if (!question) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-slate-50 p-6">
-                <div className="bg-white p-6 rounded-xl shadow-lg border-l-4 border-red-500 text-left max-w-md">
-                    <h3 className="font-bold text-red-600 text-lg mb-2">⚠️ Error de Datos</h3>
-                    <p className="text-slate-600 mb-4">
-                        No hay preguntas cargadas para el Nivel {activeLevelId} en <code>data.js</code>.
-                    </p>
-                    <button onClick={returnToMenu} className="text-sm underline text-slate-500">Volver al menú</button>
+                <div className="bg-white p-6 rounded-xl shadow-lg text-center">
+                    <p>Error de datos. Volviendo...</p>
+                    <button onClick={returnToMenu} className="mt-4 underline">Volver</button>
                 </div>
             </div>
         );
@@ -132,7 +137,6 @@ export default function QuizPage() {
                 <div className="space-y-3">
                     {question.options.map((opt, idx) => {
                         let btnColor = "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100";
-                        
                         if (isAnswered) {
                             if (idx === question.correctIndex) {
                                 btnColor = "bg-green-100 border-green-500 text-green-800";
@@ -146,7 +150,8 @@ export default function QuizPage() {
                         return (
                             <button
                                 key={idx}
-                                onClick={() => handleAnswer(idx, question.correctIndex)}
+                                // Pasamos los datos extra a handleAnswer para guardar el error
+                                onClick={() => handleAnswer(idx, question.correctIndex, question.text, question.options)}
                                 disabled={isAnswered}
                                 className={`w-full text-left p-4 rounded-xl border-2 font-medium transition-all duration-200 ${btnColor}`}
                             >
@@ -164,28 +169,20 @@ export default function QuizPage() {
                 </div>
             </div>
         </div>
-        
-        <button onClick={returnToMenu} className="mt-6 text-slate-400 text-sm hover:text-red-500 underline">
-            Cancelar y Salir
-        </button>
+        <button onClick={returnToMenu} className="mt-6 text-slate-400 text-sm hover:text-red-500 underline">Cancelar y Salir</button>
       </div>
     );
   }
 
-  // VISTA B: RESULTADOS
+  // VISTA B: RESULTADOS (CON FEEDBACK)
   if (showResult) {
-    // Si llegamos aquí sin un nivel activo, volvemos al menú para evitar error
     const level = getCurrentLevel();
-    if (!level) {
-        returnToMenu(); // Auto-corrección
-        return null;
-    }
-
+    if (!level) { returnToMenu(); return null; }
     const passed = score >= level.passingScore;
 
     return (
-        <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6">
-            <div className="bg-white p-8 rounded-3xl shadow-2xl text-center max-w-sm w-full">
+        <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 py-12">
+            <div className="bg-white p-8 rounded-3xl shadow-2xl text-center max-w-md w-full">
                 
                 <div className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl shadow-sm
                     ${passed ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"}
@@ -194,35 +191,53 @@ export default function QuizPage() {
                 </div>
 
                 <h2 className="text-2xl font-black text-aux-dark mb-2">
-                    {passed ? "¡APROBADO!" : "Sigue Intentando"}
+                    {passed ? "¡APROBADO!" : "Sigue Practicando"}
                 </h2>
                 
                 <p className="text-slate-500 mb-6">
-                    Acertaste <strong className={passed ? "text-green-600" : "text-red-600"}>{score}</strong> de <strong>{level.questions.length}</strong> preguntas.
+                    Obtuviste <strong className={passed ? "text-green-600" : "text-red-600"}>{score}</strong> de <strong>{level.questions.length}</strong> puntos.
                 </p>
+
+                {/* --- SECCIÓN DE ERRORES (Solo si hay fallos) --- */}
+                {mistakes.length > 0 && (
+                    <div className="mb-8 text-left bg-red-50 p-4 rounded-xl border border-red-100">
+                        <h3 className="text-sm font-bold text-red-800 mb-3 flex items-center gap-2">
+                            <AlertCircle size={16} /> Revisa tus errores ({mistakes.length}):
+                        </h3>
+                        <div className="space-y-4 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+                            {mistakes.map((mistake, i) => (
+                                <div key={i} className="bg-white p-3 rounded-lg border border-red-100 shadow-sm text-xs">
+                                    <p className="font-bold text-slate-700 mb-2">{mistake.question}</p>
+                                    <div className="space-y-1">
+                                        <p className="text-red-500 flex items-center gap-1">
+                                            <XCircle size={12} /> Tu respuesta: <span className="font-medium">{mistake.yourAnswer}</span>
+                                        </p>
+                                        <p className="text-green-600 flex items-center gap-1">
+                                            <CheckCircle size={12} /> Correcta: <span className="font-bold">{mistake.correctAnswer}</span>
+                                        </p>
+                                    </div>
+                                    <p className="mt-2 text-slate-400 italic">
+                                        💡 Tip: Repasa el contenido del {level.title}.
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
 
                 <div className="space-y-3">
                     {passed ? (
-                         <button 
-                         onClick={returnToMenu} // <--- AQUÍ ESTABA LA MAGIA QUE FALTABA
-                         className="w-full bg-aux-dark text-white font-bold py-3 rounded-xl shadow-lg hover:scale-105 transition-transform flex items-center justify-center gap-2"
-                     >
-                         VOLVER AL MENÚ <ArrowRight size={18} />
-                     </button>
+                         <button onClick={returnToMenu} className="w-full bg-aux-dark text-white font-bold py-3 rounded-xl shadow-lg hover:scale-105 transition-transform flex items-center justify-center gap-2">
+                             VOLVER AL MENÚ <ArrowRight size={18} />
+                         </button>
                     ) : (
-                        <button 
-                            onClick={resetGame}
-                            className="w-full bg-aux-green text-white font-bold py-3 rounded-xl shadow-lg hover:bg-emerald-600 transition-colors flex items-center justify-center gap-2"
-                        >
+                        <button onClick={resetGame} className="w-full bg-aux-green text-white font-bold py-3 rounded-xl shadow-lg hover:bg-emerald-600 transition-colors flex items-center justify-center gap-2">
                             <RefreshCcw size={18} /> INTENTAR DE NUEVO
                         </button>
                     )}
                    
                    {!passed && (
-                        <button 
-                            onClick={returnToMenu}
-                            className="w-full bg-white text-slate-500 font-bold py-3 rounded-xl border border-slate-200 hover:bg-slate-50"
-                        >
+                        <button onClick={returnToMenu} className="w-full bg-white text-slate-500 font-bold py-3 rounded-xl border border-slate-200 hover:bg-slate-50">
                             Volver al Menú
                         </button>
                    )}
@@ -253,7 +268,6 @@ export default function QuizPage() {
 
         {LEVELS.map((level) => {
             const isUnlocked = unlockedLevels.includes(level.id);
-            
             return (
                 <div 
                     key={level.id} 
