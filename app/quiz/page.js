@@ -20,6 +20,18 @@ export default function QuizPage() {
   const [timeLeft, setTimeLeft] = useState(0); 
   const [showGrandFinale, setShowGrandFinale] = useState(false); 
 
+  // ESTADO PARA LA ANIMACIÓN (Solo 3 segundos)
+  const [showBounce, setShowBounce] = useState(true);
+
+  // --- EFECTO DE ANIMACIÓN DE LA ADVERTENCIA ---
+  useEffect(() => {
+    // A los 3 segundos (3000ms), apagamos el rebote
+    const timer = setTimeout(() => {
+        setShowBounce(false);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
   // --- CRONÓMETRO GLOBAL ---
   useEffect(() => {
     if (activeLevelId && !showResult && timeLeft > 0) {
@@ -303,8 +315,8 @@ export default function QuizPage() {
             <p className="text-sm text-blue-800 font-medium">{unlockedLevels.length === 1 ? "👋 Hola Colega: Completa el Nivel 1 para desbloquear el siguiente." : `🔥 ¡Llevas ${unlockedLevels.length - 1} niveles desbloqueados! Sigue así.`}</p>
         </div>
 
-        {/* AVISO DE SEGURIDAD (CON MOVIMIENTO EN EL CUADRO COMPLETO) */}
-        <div className="bg-amber-50 border border-amber-200 p-4 rounded-xl mb-6 flex gap-3 items-start animate-bounce">
+        {/* AVISO DE SEGURIDAD (Se mueve 3 segs y se queda quieto) */}
+        <div className={`bg-amber-50 border border-amber-200 p-4 rounded-xl mb-6 flex gap-3 items-start ${showBounce ? 'animate-bounce' : ''}`}>
             <div className="mt-0.5 text-amber-600 shrink-0">
                 <AlertTriangle size={20} />
             </div>
