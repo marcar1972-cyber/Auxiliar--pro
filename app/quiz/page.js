@@ -24,7 +24,7 @@ export default function QuizPage() {
 
   // --- LÓGICA DEL CRONÓMETRO GLOBAL ---
   useEffect(() => {
-    // Corre si hay nivel activo, no estamos en resultados y hay tiempo > 0
+    // El reloj corre SOLO si hay nivel activo, no estamos en resultados y queda tiempo
     if (activeLevelId && !showResult && timeLeft > 0) {
         const timerId = setInterval(() => {
             setTimeLeft((prev) => {
@@ -38,7 +38,7 @@ export default function QuizPage() {
         }, 1000);
         return () => clearInterval(timerId);
     }
-  }, [activeLevelId, showResult]); // Quitamos timeLeft de dependencia para evitar loops raros, usamos callback
+  }, [activeLevelId, showResult]); // IMPORTANTE: No depende de 'isAnswered', así que no para al responder
 
   const handleGlobalTimeOut = () => {
     // Si se acaba el tiempo global, terminamos el examen inmediatamente
@@ -58,7 +58,8 @@ export default function QuizPage() {
     if (unlockedLevels.includes(levelId)) {
       const level = LEVELS.find(l => l.id === levelId);
       setActiveLevelId(levelId);
-      resetGame(level.timeLimit); // Cargamos el tiempo TOTAL del nivel
+      // CORRECCIÓN: Cargamos el tiempo SOLO AQUÍ (al principio)
+      resetGame(level.timeLimit); 
     }
   };
 
@@ -88,7 +89,8 @@ export default function QuizPage() {
         setCurrentQIndex(prev => prev + 1);
         setIsAnswered(false);
         setSelectedOption(null);
-        // NOTA: YA NO REINICIAMOS EL TIEMPO AQUÍ
+        // CORRECCIÓN CRÍTICA: ¡Aquí borramos la línea que reiniciaba el tiempo!
+        // El reloj sigue corriendo solito desde el useEffect.
     } else {
         setShowResult(true);
     }
@@ -112,7 +114,7 @@ export default function QuizPage() {
       }]);
     }
 
-    setTimeout(nextQuestion, 1000); // Avanzamos más rápido (1s) para no perder tiempo
+    setTimeout(nextQuestion, 1000); 
   };
 
   const getCurrentLevel = () => LEVELS.find((l) => l.id === activeLevelId);
