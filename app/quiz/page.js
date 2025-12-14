@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { LEVELS } from "../data"; 
 import Link from "next/link";
-// Agregamos AlertTriangle a los imports
 import { Lock, Play, CheckCircle, XCircle, ChevronLeft, RefreshCcw, ArrowRight, AlertCircle, FileText, Library, MessageCircle, HelpCircle, Clock, Award, Star, ShieldCheck, Trophy, AlertTriangle } from "lucide-react";
 
 export default function QuizPage() {
@@ -299,10 +298,15 @@ export default function QuizPage() {
       </div>
       <div className="p-6 max-w-md mx-auto space-y-6 mt-4">
         
-        {/* AVISO DE SEGURIDAD (LocalStorage) */}
+        {/* SALUDO DE BIENVENIDA */}
+        <div className="bg-blue-50 border border-blue-100 p-4 rounded-xl mb-6">
+            <p className="text-sm text-blue-800 font-medium">{unlockedLevels.length === 1 ? "👋 Hola Colega: Completa el Nivel 1 para desbloquear el siguiente." : `🔥 ¡Llevas ${unlockedLevels.length - 1} niveles desbloqueados! Sigue así.`}</p>
+        </div>
+
+        {/* AVISO DE SEGURIDAD (Con ícono saltarín) */}
         <div className="bg-amber-50 border border-amber-200 p-4 rounded-xl mb-6 flex gap-3 items-start">
             <div className="mt-0.5 text-amber-600 shrink-0">
-                <AlertTriangle size={20} />
+                <AlertTriangle size={20} className="animate-bounce" />
             </div>
             <div className="text-xs text-amber-800 leading-relaxed">
                 <p className="font-bold mb-1">Aviso Importante sobre tu Progreso</p>
@@ -312,10 +316,6 @@ export default function QuizPage() {
                     ¡Ten cuidado al limpiar tu equipo!
                 </p>
             </div>
-        </div>
-
-        <div className="bg-blue-50 border border-blue-100 p-4 rounded-xl mb-6">
-            <p className="text-sm text-blue-800 font-medium">{unlockedLevels.length === 1 ? "👋 Hola Colega: Completa el Nivel 1 para desbloquear el siguiente." : `🔥 ¡Llevas ${unlockedLevels.length - 1} niveles desbloqueados! Sigue así.`}</p>
         </div>
         
         {LEVELS.map((level) => {
