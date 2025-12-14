@@ -18,53 +18,47 @@ export default function QuizPage() {
   const [isAnswered, setIsAnswered] = useState(false);       
   const [mistakes, setMistakes] = useState([]); 
   
-  // NUEVOS ESTADOS (CRONÓMETRO Y PREMIACIÓN)
-  const [timeLeft, setTimeLeft] = useState(0); // Tiempo restante por pregunta
-  const [showGrandFinale, setShowGrandFinale] = useState(false); // Pantalla final
+  // NUEVOS ESTADOS (CRONÓMETRO GLOBAL)
+  const [timeLeft, setTimeLeft] = useState(0); 
+  const [showGrandFinale, setShowGrandFinale] = useState(false); 
 
-  // --- LÓGICA DEL CRONÓMETRO ---
+  // --- LÓGICA DEL CRONÓMETRO GLOBAL ---
   useEffect(() => {
-    // Solo corre si estamos jugando, no hay resultado aún, no se ha respondido y hay tiempo límite
-    if (activeLevelId && !showResult && !isAnswered) {
-        const level = getCurrentLevel();
-        if (level && level.timeLimit > 0) {
-            if (timeLeft > 0) {
-                const timerId = setTimeout(() => setTimeLeft(prev => prev - 1), 1000);
-                return () => clearTimeout(timerId);
-            } else if (timeLeft === 0) {
-                // TIEMPO AGOTADO: Marcar como mala automáticamente
-                handleTimeOut();
-            }
-        }
+    // Corre si hay nivel activo, no estamos en resultados y hay tiempo > 0
+    if (activeLevelId && !showResult && timeLeft > 0) {
+        const timerId = setInterval(() => {
+            setTimeLeft((prev) => {
+                if (prev <= 1) {
+                    clearInterval(timerId);
+                    handleGlobalTimeOut(); // Se acabó el tiempo global
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+        return () => clearInterval(timerId);
     }
-  }, [timeLeft, activeLevelId, showResult, isAnswered]);
+  }, [activeLevelId, showResult]); // Quitamos timeLeft de dependencia para evitar loops raros, usamos callback
 
-  const handleTimeOut = () => {
-    setIsAnswered(true);
-    const level = getCurrentLevel();
-    const question = level.questions[currentQIndex];
-    
-    // Guardamos el error por tiempo
-    setMistakes(prev => [...prev, {
-        id: currentQIndex,
-        question: question.text,
-        yourAnswer: "⏳ Tiempo Agotado",
-        correctAnswer: question.options[question.correctIndex],
-        studyGuide: question.studyGuide
-    }]);
+  const handleGlobalTimeOut = () => {
+    // Si se acaba el tiempo global, terminamos el examen inmediatamente
+    setShowResult(true);
+  };
 
-    // Esperamos un poco y avanzamos
-    setTimeout(nextQuestion, 2000);
+  // Función para formatear segundos a MM:SS
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
   // --- LÓGICA DEL JUEGO ---
 
   const startLevel = (levelId) => {
     if (unlockedLevels.includes(levelId)) {
-      setActiveLevelId(levelId);
       const level = LEVELS.find(l => l.id === levelId);
-      // Iniciamos el timer con el tiempo del nivel
-      resetGame(level.timeLimit);
+      setActiveLevelId(levelId);
+      resetGame(level.timeLimit); // Cargamos el tiempo TOTAL del nivel
     }
   };
 
@@ -75,7 +69,7 @@ export default function QuizPage() {
     setSelectedOption(null);
     setIsAnswered(false);
     setMistakes([]);
-    setTimeLeft(initialTime); // Reseteamos el reloj
+    setTimeLeft(initialTime); 
   };
 
   const returnToMenu = () => {
@@ -94,7 +88,7 @@ export default function QuizPage() {
         setCurrentQIndex(prev => prev + 1);
         setIsAnswered(false);
         setSelectedOption(null);
-        setTimeLeft(level.timeLimit); // Reiniciamos reloj para la siguiente
+        // NOTA: YA NO REINICIAMOS EL TIEMPO AQUÍ
     } else {
         setShowResult(true);
     }
@@ -118,23 +112,20 @@ export default function QuizPage() {
       }]);
     }
 
-    setTimeout(nextQuestion, 1500);
+    setTimeout(nextQuestion, 1000); // Avanzamos más rápido (1s) para no perder tiempo
   };
 
   const getCurrentLevel = () => LEVELS.find((l) => l.id === activeLevelId);
 
-  // DESBLOQUEO DE NIVELES Y GRAN FINAL
+  // DESBLOQUEO DE NIVELES
   useEffect(() => {
     if (showResult && activeLevelId) {
         const level = getCurrentLevel();
         if (level && score >= level.passingScore) {
             const nextLevel = activeLevelId + 1;
-            
-            // Si pasamos el último nivel (Nivel 4), mostramos la GRAN FINAL
             if (activeLevelId === 4) {
                 setTimeout(() => setShowGrandFinale(true), 1000);
             } 
-            // Si no, desbloqueamos el siguiente
             else if (LEVELS.find(l => l.id === nextLevel) && !unlockedLevels.includes(nextLevel)) {
                 setUnlockedLevels(prev => [...prev, nextLevel]);
             }
@@ -144,34 +135,25 @@ export default function QuizPage() {
 
   // --- VISTAS ---
 
-  // VISTA ESPECIAL: GRAN FINAL (Felicitaciones)
   if (showGrandFinale) {
       return (
         <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 text-center">
             <div className="bg-white p-10 rounded-3xl shadow-2xl max-w-md w-full border-4 border-aux-green relative overflow-hidden">
-                {/* Confeti decorativo (simulado con círculos) */}
                 <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-yellow-400 via-red-500 to-blue-500"></div>
-                
                 <div className="w-24 h-24 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner animate-bounce">
                     <Award size={60} className="text-yellow-600" />
                 </div>
-
                 <h1 className="text-3xl font-black text-aux-dark mb-2">¡FELICITACIONES!</h1>
                 <p className="text-lg font-bold text-aux-green mb-6">Has completado el entrenamiento</p>
-
                 <p className="text-slate-600 mb-8 leading-relaxed">
                     Has demostrado dominio en normativa, gestión y farmacología. Estás listo para enfrentar el desafío real ante la SEREMI.
                 </p>
-
                 <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 mb-8">
                     <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mb-1">CONDECORACIÓN</p>
                     <p className="text-xl font-black text-slate-800 flex items-center justify-center gap-2">
-                        <Star className="text-yellow-400 fill-yellow-400" /> 
-                        AUXILIAR PRO 
-                        <Star className="text-yellow-400 fill-yellow-400" />
+                        <Star className="text-yellow-400 fill-yellow-400" /> AUXILIAR PRO <Star className="text-yellow-400 fill-yellow-400" />
                     </p>
                 </div>
-
                 <button onClick={returnToMenu} className="w-full bg-aux-dark text-white font-bold py-4 rounded-xl shadow-lg hover:scale-105 transition-transform">
                     VOLVER AL INICIO
                 </button>
@@ -188,10 +170,9 @@ export default function QuizPage() {
     const question = level.questions ? level.questions[currentQIndex] : null;
     if (!question) return <div className="p-10 text-center">Error de Datos. <button onClick={returnToMenu}>Volver</button></div>;
 
-    // Colores del Timer
-    let timerColor = "text-slate-400";
-    if (timeLeft <= 10) timerColor = "text-orange-500";
-    if (timeLeft <= 5) timerColor = "text-red-600 animate-pulse";
+    let timerColor = "text-slate-500";
+    if (timeLeft <= 60) timerColor = "text-orange-500"; // Último minuto
+    if (timeLeft <= 10) timerColor = "text-red-600 animate-pulse"; // Últimos 10 seg
 
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
@@ -207,11 +188,15 @@ export default function QuizPage() {
                             <span className="bg-slate-100 text-slate-600 text-xs font-bold px-2 py-1 rounded">Nivel {activeLevelId}</span>
                         </div>
                     </div>
-                    {/* RELOJ VISUAL */}
-                    {level.timeLimit > 0 && (
+                    {/* RELOJ GLOBAL MM:SS */}
+                    {level.timeLimit > 0 ? (
                         <div className={`flex items-center gap-1 font-mono font-bold text-xl ${timerColor}`}>
                             <Clock size={20} />
-                            <span>{timeLeft}s</span>
+                            <span>{formatTime(timeLeft)}</span>
+                        </div>
+                    ) : (
+                        <div className="text-slate-300 text-xs font-bold flex items-center gap-1">
+                            <Clock size={14} /> Sin tiempo
                         </div>
                     )}
                 </div>
@@ -251,10 +236,19 @@ export default function QuizPage() {
     const level = getCurrentLevel();
     if (!level) { returnToMenu(); return null; }
     const passed = score >= level.passingScore;
+    const isTimeout = timeLeft === 0 && level.timeLimit > 0;
 
     return (
         <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 py-12">
             <div className="bg-white p-8 rounded-3xl shadow-2xl text-center max-w-md w-full">
+                
+                {/* Mensaje especial si se acabó el tiempo */}
+                {isTimeout && (
+                    <div className="mb-4 bg-orange-100 text-orange-700 px-4 py-2 rounded-lg font-bold text-sm inline-flex items-center gap-2">
+                        <Clock size={16} /> ¡Se acabó el tiempo!
+                    </div>
+                )}
+
                 <div className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl shadow-sm ${passed ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"}`}>
                     {passed ? <CheckCircle size={40} /> : <XCircle size={40} />}
                 </div>
@@ -285,7 +279,6 @@ export default function QuizPage() {
 
                 <div className="space-y-3">
                     {passed ? (
-                        // Si es el último nivel, el botón indicará ver el premio, si no, ir al menú
                          <button onClick={returnToMenu} className="w-full bg-aux-dark text-white font-bold py-3 rounded-xl shadow-lg hover:scale-105 transition-transform flex items-center justify-center gap-2">CONTINUAR <ArrowRight size={18} /></button>
                     ) : (
                         <button onClick={() => resetGame(level.timeLimit)} className="w-full bg-aux-green text-white font-bold py-3 rounded-xl shadow-lg hover:bg-emerald-600 transition-colors flex items-center justify-center gap-2"><RefreshCcw size={18} /> INTENTAR DE NUEVO</button>
@@ -306,78 +299,48 @@ export default function QuizPage() {
       </div>
 
       <div className="p-6 max-w-md mx-auto space-y-6 mt-4">
-        
         <div className="bg-blue-50 border border-blue-100 p-4 rounded-xl mb-6">
             <p className="text-sm text-blue-800 font-medium">{unlockedLevels.length === 1 ? "👋 Hola Colega: Completa el Nivel 1 para desbloquear el siguiente." : `🔥 ¡Llevas ${unlockedLevels.length - 1} niveles desbloqueados! Sigue así.`}</p>
         </div>
 
         {LEVELS.map((level) => {
             const isUnlocked = unlockedLevels.includes(level.id);
-            // Calculamos si este nivel ya fue APROBADO (Si el siguiente está desbloqueado, o si es el último y ya lo pasamos)
-            const isPassed = unlockedLevels.includes(level.id + 1) || (level.id === 4 && showGrandFinale); 
-            // Nota: Para la visualización simple en el menú, asumimos que si el siguiente está abierto, este está aprobado.
+            const isPassed = unlockedLevels.includes(level.id + 1) || (level.id === 4 && showGrandFinale);
 
             return (
-                <div key={level.id} 
-                    onClick={() => startLevel(level.id)} 
-                    className={`relative overflow-hidden rounded-2xl border-2 transition-all duration-300 ${
-                        isPassed 
-                            ? "bg-emerald-50 border-emerald-200 cursor-pointer" // Estilo Aprobado
-                            : isUnlocked 
-                                ? "bg-white border-aux-green/20 shadow-lg cursor-pointer hover:scale-[1.02]" // Estilo Disponible
-                                : "bg-slate-100 border-slate-200 opacity-80 cursor-not-allowed grayscale" // Estilo Bloqueado
-                    }`}
-                >
+                <div key={level.id} onClick={() => startLevel(level.id)} className={`relative overflow-hidden rounded-2xl border-2 transition-all duration-300 ${isPassed ? "bg-emerald-50 border-emerald-200 cursor-pointer" : isUnlocked ? "bg-white border-aux-green/20 shadow-lg cursor-pointer hover:scale-[1.02] active:scale-[0.98]" : "bg-slate-100 border-slate-200 opacity-80 cursor-not-allowed grayscale"}`}>
                     <div className="p-6 flex items-center gap-4">
-                        <div className={`w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow-sm ${
-                            isPassed ? "bg-emerald-500 text-white" : (isUnlocked ? "bg-emerald-100" : "bg-slate-200")
-                        }`}>
+                        <div className={`w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow-sm ${isPassed ? "bg-emerald-500 text-white" : (isUnlocked ? "bg-emerald-100" : "bg-slate-200")}`}>
                             {isPassed ? <CheckCircle size={28} /> : (isUnlocked ? level.icon : "🔒")}
                         </div>
-
                         <div className="flex-1">
-                            <h3 className={`font-black text-lg ${isPassed ? "text-emerald-800" : (isUnlocked ? "text-aux-dark" : "text-slate-400")}`}>
-                                {level.title}
-                            </h3>
+                            <h3 className={`font-black text-lg ${isPassed ? "text-emerald-800" : (isUnlocked ? "text-aux-dark" : "text-slate-400")}`}>{level.title}</h3>
                             <div className="flex items-center gap-2 mt-1">
                                 {isPassed && <span className="bg-emerald-200 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full">APROBADO</span>}
                                 <p className="text-xs text-slate-500 font-medium">
-                                    {level.qCount} Pregs • {level.timeLimit === 0 ? "Sin Tiempo" : `${level.timeLimit} seg`}
+                                    {level.qCount} Pregs • {level.timeLimit === 0 ? "Sin Tiempo" : `${Math.floor(level.timeLimit / 60)} min`}
                                 </p>
                             </div>
                         </div>
-
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                            isPassed ? "bg-emerald-200 text-emerald-700" : (isUnlocked ? "bg-aux-dark text-white" : "bg-slate-300 text-white")
-                        }`}>
-                            {isUnlocked ? <Play size={20} className="ml-1" /> : <Lock size={18} />}
-                        </div>
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isPassed ? "bg-emerald-200 text-emerald-700" : (isUnlocked ? "bg-aux-dark text-white" : "bg-slate-300 text-white")}`}>{isUnlocked ? <Play size={20} className="ml-1" /> : <Lock size={18} />}</div>
                     </div>
                 </div>
             );
         })}
 
         <div className="mt-8 pt-8 border-t border-slate-100">
-            <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 text-center flex items-center justify-center gap-2">
-                <HelpCircle size={16} /> Herramientas de Apoyo
-            </h3>
+            <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 text-center flex items-center justify-center gap-2"><HelpCircle size={16} /> Herramientas de Apoyo</h3>
             <div className="grid grid-cols-2 gap-4">
                 <Link href="/biblioteca" className="bg-white p-3 rounded-xl border border-slate-200 shadow-sm hover:border-aux-green hover:shadow-md transition-all flex items-center gap-3 group">
-                    <div className="w-8 h-8 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center group-hover:bg-aux-green group-hover:text-white transition-colors">
-                        <Library size={18} />
-                    </div>
+                    <div className="w-8 h-8 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center group-hover:bg-aux-green group-hover:text-white transition-colors"><Library size={18} /></div>
                     <span className="text-xs font-bold text-slate-600 group-hover:text-aux-dark text-left leading-tight">Biblioteca<br/>Digital</span>
                 </Link>
-
                 <Link href="https://chat.whatsapp.com/J4VkI8mzTTs9UrzvGqBbdz" target="_blank" className="bg-white p-3 rounded-xl border border-slate-200 shadow-sm hover:border-aux-green hover:shadow-md transition-all flex items-center gap-3 group">
-                    <div className="w-8 h-8 bg-pink-50 text-pink-600 rounded-lg flex items-center justify-center group-hover:bg-aux-green group-hover:text-white transition-colors">
-                        <MessageCircle size={18} />
-                    </div>
+                    <div className="w-8 h-8 bg-pink-50 text-pink-600 rounded-lg flex items-center justify-center group-hover:bg-aux-green group-hover:text-white transition-colors"><MessageCircle size={18} /></div>
                     <span className="text-xs font-bold text-slate-600 group-hover:text-aux-dark text-left leading-tight">Foro de<br/>Consultas</span>
                 </Link>
             </div>
         </div>
-
       </div>
     </main>
   );
