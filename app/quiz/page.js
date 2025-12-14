@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import { LEVELS } from "../data"; 
 import Link from "next/link";
-import { Lock, Play, CheckCircle, XCircle, ChevronLeft, RefreshCcw, ArrowRight, AlertCircle, FileText, Library, MessageCircle, HelpCircle, Clock, Award, Star, ShieldCheck, Trophy } from "lucide-react";
+// Agregamos AlertTriangle a los imports
+import { Lock, Play, CheckCircle, XCircle, ChevronLeft, RefreshCcw, ArrowRight, AlertCircle, FileText, Library, MessageCircle, HelpCircle, Clock, Award, Star, ShieldCheck, Trophy, AlertTriangle } from "lucide-react";
 
 export default function QuizPage() {
   // ESTADOS
@@ -106,52 +107,41 @@ export default function QuizPage() {
 
   const getCurrentLevel = () => LEVELS.find((l) => l.id === activeLevelId);
 
-  // LÓGICA DE APROBACIÓN (SIN SALTO AUTOMÁTICO A FINAL)
+  // LÓGICA DE APROBACIÓN
   useEffect(() => {
     if (showResult && activeLevelId) {
         const level = getCurrentLevel();
         if (level && score >= level.passingScore) {
             const nextLevel = activeLevelId + 1;
-            // Solo desbloqueamos el siguiente si existe y no está ya desbloqueado
             if (LEVELS.find(l => l.id === nextLevel) && !unlockedLevels.includes(nextLevel)) {
                 setUnlockedLevels(prev => [...prev, nextLevel]);
             }
-            // NOTA: Ya no hay setTimeout para showGrandFinale aquí. El usuario decide.
         }
     }
   }, [showResult, score, activeLevelId]);
 
   // --- VISTAS ---
 
-  // 1. VISTA "PREMIUM" DE CERTIFICACIÓN (DISEÑO MEJORADO)
+  // 1. VISTA "PREMIUM" DE CERTIFICACIÓN
   if (showGrandFinale) {
       return (
         <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-6 text-center font-sans relative overflow-hidden">
-            
-            {/* Efectos de Fondo */}
             <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-slate-800 via-slate-900 to-black opacity-80"></div>
             <div className="absolute top-10 right-10 w-32 h-32 bg-aux-green rounded-full blur-[80px] opacity-20"></div>
             <div className="absolute bottom-10 left-10 w-32 h-32 bg-blue-500 rounded-full blur-[80px] opacity-20"></div>
 
-            {/* TARJETA DE CERTIFICACIÓN */}
             <div className="relative bg-white/10 backdrop-blur-md border border-white/20 p-8 md:p-12 rounded-2xl shadow-2xl max-w-md w-full text-white overflow-hidden ring-1 ring-white/10">
-                
-                {/* Borde Dorado Superior */}
                 <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-yellow-600 via-yellow-300 to-yellow-600"></div>
-
-                {/* Icono Premium */}
                 <div className="mb-8 relative inline-block">
                     <div className="absolute inset-0 bg-yellow-400 blur-2xl opacity-30 rounded-full"></div>
                     <div className="relative w-24 h-24 bg-gradient-to-b from-slate-800 to-slate-900 rounded-full flex items-center justify-center border-2 border-yellow-500/50 shadow-xl mx-auto">
                         <Trophy size={48} className="text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.5)]" />
                     </div>
                 </div>
-
                 <h2 className="text-sm font-bold text-yellow-400 tracking-[0.2em] uppercase mb-2">Entrenamiento Completado</h2>
                 <h1 className="text-3xl md:text-4xl font-black text-white mb-6 leading-tight">
                     Auxiliar Pro <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-yellow-500">Certificado</span>
                 </h1>
-
                 <div className="bg-slate-900/50 p-6 rounded-xl border border-white/10 mb-8 backdrop-blur-sm">
                     <div className="flex items-center gap-3 mb-3">
                         <ShieldCheck className="text-emerald-400 shrink-0" size={24} />
@@ -166,15 +156,11 @@ export default function QuizPage() {
                         <p className="text-left text-sm text-slate-300 font-medium">Cálculo de Dosis y Posología</p>
                     </div>
                 </div>
-
                 <button onClick={returnToMenu} className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-emerald-900/50 transition-all transform hover:scale-[1.02] flex items-center justify-center gap-2">
                     <RefreshCcw size={18} /> Volver al Entrenamiento
                 </button>
             </div>
-            
-            <p className="mt-8 text-slate-500 text-xs font-medium relative z-10">
-                Este es un reconocimiento simbólico de tu preparación en AuxiliarPro.
-            </p>
+            <p className="mt-8 text-slate-500 text-xs font-medium relative z-10">Este es un reconocimiento simbólico de tu preparación en AuxiliarPro.</p>
         </div>
       );
   }
@@ -239,13 +225,12 @@ export default function QuizPage() {
     );
   }
 
-  // 3. VISTA RESULTADOS (NORMAL)
+  // 3. VISTA RESULTADOS
   if (showResult) {
     const level = getCurrentLevel();
     if (!level) { returnToMenu(); return null; }
     const passed = score >= level.passingScore;
     const isTimeout = timeLeft === 0 && level.timeLimit > 0;
-    // ¿Es el último nivel y aprobó? Entonces mostramos el botón especial
     const isGrandFinaleReady = activeLevelId === 4 && passed;
 
     return (
@@ -313,23 +298,36 @@ export default function QuizPage() {
         <h1 className="text-lg font-black text-aux-dark">Tu Ruta de Aprendizaje</h1>
       </div>
       <div className="p-6 max-w-md mx-auto space-y-6 mt-4">
+        
+        {/* AVISO DE SEGURIDAD (LocalStorage) */}
+        <div className="bg-amber-50 border border-amber-200 p-4 rounded-xl mb-6 flex gap-3 items-start">
+            <div className="mt-0.5 text-amber-600 shrink-0">
+                <AlertTriangle size={20} />
+            </div>
+            <div className="text-xs text-amber-800 leading-relaxed">
+                <p className="font-bold mb-1">Aviso Importante sobre tu Progreso</p>
+                <p>
+                    Tu avance se guarda localmente en <strong>tu dispositivo</strong>. 
+                    Si borras el historial/caché o cambias de navegador, perderás tus medallas. 
+                    ¡Ten cuidado al limpiar tu equipo!
+                </p>
+            </div>
+        </div>
+
         <div className="bg-blue-50 border border-blue-100 p-4 rounded-xl mb-6">
             <p className="text-sm text-blue-800 font-medium">{unlockedLevels.length === 1 ? "👋 Hola Colega: Completa el Nivel 1 para desbloquear el siguiente." : `🔥 ¡Llevas ${unlockedLevels.length - 1} niveles desbloqueados! Sigue así.`}</p>
         </div>
+        
         {LEVELS.map((level) => {
-            // Lógica de "Passed": Si el siguiente nivel está desbloqueado O si es el nivel 4 y ya vimos el final (o tenemos todos desbloqueados hasta el 5 si existiera)
-            const isPassed = unlockedLevels.includes(level.id + 1) || (level.id === 4 && unlockedLevels.includes(5)); // Truco simple
-            // *Nota para Marcelo: En la próxima sesión podemos refinar esta lógica de 'isPassed' con un estado separado si quieres, pero por ahora funciona visualmente.
-            
-            // Para Nivel 4, usamos una lógica especial visual si quieres, o dejamos la estándar.
-            // Arreglo rápido para que el Nivel 4 se vea verde si ya reclamaste el premio:
+            const isUnlocked = unlockedLevels.includes(level.id);
+            const isPassed = unlockedLevels.includes(level.id + 1) || (level.id === 4 && unlockedLevels.includes(5)); 
             const isLevel4Completed = level.id === 4 && showGrandFinale; 
 
             return (
-                <div key={level.id} onClick={() => startLevel(level.id)} className={`relative overflow-hidden rounded-2xl border-2 transition-all duration-300 ${isPassed || isLevel4Completed ? "bg-emerald-50 border-emerald-200 cursor-pointer" : unlockedLevels.includes(level.id) ? "bg-white border-aux-green/20 shadow-lg cursor-pointer hover:scale-[1.02]" : "bg-slate-100 border-slate-200 opacity-80 cursor-not-allowed grayscale"}`}>
+                <div key={level.id} onClick={() => startLevel(level.id)} className={`relative overflow-hidden rounded-2xl border-2 transition-all duration-300 ${isPassed || isLevel4Completed ? "bg-emerald-50 border-emerald-200 cursor-pointer" : isUnlocked ? "bg-white border-aux-green/20 shadow-lg cursor-pointer hover:scale-[1.02]" : "bg-slate-100 border-slate-200 opacity-80 cursor-not-allowed grayscale"}`}>
                     <div className="p-6 flex items-center gap-4">
-                        <div className={`w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow-sm ${isPassed || isLevel4Completed ? "bg-emerald-500 text-white" : (unlockedLevels.includes(level.id) ? "bg-emerald-100" : "bg-slate-200")}`}>
-                            {isPassed || isLevel4Completed ? <CheckCircle size={28} /> : (unlockedLevels.includes(level.id) ? level.icon : "🔒")}
+                        <div className={`w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow-sm ${isPassed || isLevel4Completed ? "bg-emerald-500 text-white" : (isUnlocked ? "bg-emerald-100" : "bg-slate-200")}`}>
+                            {isPassed || isLevel4Completed ? <CheckCircle size={28} /> : (isUnlocked ? level.icon : "🔒")}
                         </div>
                         <div className="flex-1">
                             <h3 className={`font-black text-lg ${isPassed || isLevel4Completed ? "text-emerald-800" : (unlockedLevels.includes(level.id) ? "text-aux-dark" : "text-slate-400")}`}>{level.title}</h3>
