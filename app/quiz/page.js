@@ -325,3 +325,60 @@ export default function QuizPage() {
                             ? "bg-emerald-50 border-emerald-200 cursor-pointer" // Estilo Aprobado
                             : isUnlocked 
                                 ? "bg-white border-aux-green/20 shadow-lg cursor-pointer hover:scale-[1.02]" // Estilo Disponible
+                                : "bg-slate-100 border-slate-200 opacity-80 cursor-not-allowed grayscale" // Estilo Bloqueado
+                    }`}
+                >
+                    <div className="p-6 flex items-center gap-4">
+                        <div className={`w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow-sm ${
+                            isPassed ? "bg-emerald-500 text-white" : (isUnlocked ? "bg-emerald-100" : "bg-slate-200")
+                        }`}>
+                            {isPassed ? <CheckCircle size={28} /> : (isUnlocked ? level.icon : "🔒")}
+                        </div>
+
+                        <div className="flex-1">
+                            <h3 className={`font-black text-lg ${isPassed ? "text-emerald-800" : (isUnlocked ? "text-aux-dark" : "text-slate-400")}`}>
+                                {level.title}
+                            </h3>
+                            <div className="flex items-center gap-2 mt-1">
+                                {isPassed && <span className="bg-emerald-200 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full">APROBADO</span>}
+                                <p className="text-xs text-slate-500 font-medium">
+                                    {level.qCount} Pregs • {level.timeLimit === 0 ? "Sin Tiempo" : `${level.timeLimit} seg`}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                            isPassed ? "bg-emerald-200 text-emerald-700" : (isUnlocked ? "bg-aux-dark text-white" : "bg-slate-300 text-white")
+                        }`}>
+                            {isUnlocked ? <Play size={20} className="ml-1" /> : <Lock size={18} />}
+                        </div>
+                    </div>
+                </div>
+            );
+        })}
+
+        <div className="mt-8 pt-8 border-t border-slate-100">
+            <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 text-center flex items-center justify-center gap-2">
+                <HelpCircle size={16} /> Herramientas de Apoyo
+            </h3>
+            <div className="grid grid-cols-2 gap-4">
+                <Link href="/biblioteca" className="bg-white p-3 rounded-xl border border-slate-200 shadow-sm hover:border-aux-green hover:shadow-md transition-all flex items-center gap-3 group">
+                    <div className="w-8 h-8 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center group-hover:bg-aux-green group-hover:text-white transition-colors">
+                        <Library size={18} />
+                    </div>
+                    <span className="text-xs font-bold text-slate-600 group-hover:text-aux-dark text-left leading-tight">Biblioteca<br/>Digital</span>
+                </Link>
+
+                <Link href="https://chat.whatsapp.com/J4VkI8mzTTs9UrzvGqBbdz" target="_blank" className="bg-white p-3 rounded-xl border border-slate-200 shadow-sm hover:border-aux-green hover:shadow-md transition-all flex items-center gap-3 group">
+                    <div className="w-8 h-8 bg-pink-50 text-pink-600 rounded-lg flex items-center justify-center group-hover:bg-aux-green group-hover:text-white transition-colors">
+                        <MessageCircle size={18} />
+                    </div>
+                    <span className="text-xs font-bold text-slate-600 group-hover:text-aux-dark text-left leading-tight">Foro de<br/>Consultas</span>
+                </Link>
+            </div>
+        </div>
+
+      </div>
+    </main>
+  );
+}
