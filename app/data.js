@@ -1,5 +1,6 @@
 // app/data.js
 
+// 1. ARTÍCULOS DEL BLOG
 export const BLOG_POSTS = [
     {
         id: 'art_req_2026',
@@ -37,6 +38,7 @@ export const BLOG_POSTS = [
     }
 ];
 
+// 2. PREGUNTAS FRECUENTES
 export const FAQS = [
     {
         q: "¿Dónde hago el trámite del examen?",
@@ -56,7 +58,7 @@ export const FAQS = [
     }
 ];
 
-// --- NIVELES DEL QUIZ ---
+// 3. NIVELES DEL QUIZ
 export const LEVELS = [
     { 
         id: 1, 
@@ -144,81 +146,60 @@ export const LEVELS = [
     { 
         id: 4, 
         title: 'Simulacro Final (Experto)', 
-        desc: 'Examen de alta exigencia con letra chica y cálculos complejos.', 
+        desc: 'Evaluación final de alta exigencia: Técnica, Normativa y Matemáticas.', 
         icon: '🎓', 
         qCount: 40, 
-        passingScore: 24, 
+        passingScore: 24, // 60% Aprobación
         timeLimit: 3600, // 60 Minutos
         questions: [
-            // --- PARTE A: NORMATIVA ESPECÍFICA (LETRA CHICA DE LOS DECRETOS) ---
-            
-            // Del Decreto 404 (Estupefacientes)
-            { id: 401, text: '¿Cuál es la validez de un "Certificado Oficial" para importar estupefacientes?', options: ['30 días', '4 meses', '1 año', 'Indefinida'], correctIndex: 1, studyGuide: 'Guía de Estudio_ Decreto 404.pdf' },
-            { id: 402, text: '¿Es legal que una farmacia entregue muestras médicas de estupefacientes?', options: ['Sí, siempre', 'No, está prohibido (salvo excepciones ISP)', 'Solo si el médico lo pide', 'Solo en hospitales'], correctIndex: 1, studyGuide: 'Guía de Estudio_ Decreto 404.pdf' },
-            { id: 403, text: '¿Cuántos productos estupefacientes se pueden prescribir en una sola Receta Cheque?', options: ['Máximo 2', 'Solo 1 producto', 'Hasta 3', 'Sin límite'], correctIndex: 1, studyGuide: 'Guía de Estudio_ Decreto 404.pdf' },
-            { id: 404, text: 'Si llega una Receta Cheque con enmiendas (borrones), ¿qué debe hacer?', options: ['Aceptarla si es legible', 'Rechazarla (debe ser íntegra)', 'Llamar al médico para confirmar', 'Corregirla usted mismo'], correctIndex: 1, studyGuide: 'Guía de Estudio_ Decreto 404.pdf' },
-            
-            // Del Decreto 405 (Psicotrópicos)
-            { id: 405, text: 'Un Cirujano Dentista puede mantener en su botiquín de urgencia un máximo de:', options: ['50 ampollas de psicotrópicos', '100 ampollas', '150 ampollas de psicotrópicos', 'No puede tener'], correctIndex: 2, studyGuide: 'Guía de Estudio_ Decreto 405.pdf' },
-            { id: 406, text: '¿Qué lista de psicotrópicos permite un "Registro Simplificado" (totales diarios) en el libro?', options: ['Lista I', 'Lista II', 'Lista III', 'Lista IV (Benzodiazepinas)'], correctIndex: 3, studyGuide: 'Guía de Estudio_ Decreto 405.pdf' },
-            { id: 407, text: 'Los productos de la Lista I (ej: LSD, Éxtasis) están:', options: ['Disponibles con Receta Cheque', 'Prohibidos (salvo investigación autorizada)', 'Disponibles con Receta Retenida', 'Venta Libre'], correctIndex: 1, studyGuide: 'Guía de Estudio_ Decreto 405.pdf' },
-            
-            // Del Decreto 466 (Farmacias)
-            { id: 408, text: '¿Qué actividad tiene ESTRICTAMENTE PROHIBIDA un Almacén Farmacéutico?', options: ['Vender paracetamol', 'Tener Director Técnico', 'Preparar Recetas Magistrales', 'Vender insumos médicos'], correctIndex: 2, studyGuide: 'Guía de Estudio_Decreto 466.pdf' },
-            { id: 409, text: '¿Qué productos está prohibido fraccionar en farmacia?', options: ['Antibióticos', 'Analgésicos', 'Hormonas, oncológicos y refrigerados', 'Vitaminas'], correctIndex: 2, studyGuide: 'Guía de Estudio_Decreto 466.pdf' },
-            { id: 410, text: 'La definición legal de "Botiquín" en el D.S. 466 se refiere a:', options: ['La caja de primeros auxilios de una casa', 'Recinto para uso interno exclusivo de instituciones (clínicas, barcos)', 'Una farmacia pequeña', 'Un almacén de barrio'], correctIndex: 1, studyGuide: 'Guía de Estudio_Decreto 466.pdf' },
-            
-            // De la Ley 20.724 (Fármacos I)
-            { id: 411, text: 'Al fraccionar un envase clínico, ¿qué datos críticos del original deben ir en el nuevo rotulado?', options: ['Precio y código de barra', 'Lote y Fecha de Vencimiento', 'Color de la caja', 'Nombre del laboratorio'], correctIndex: 1, studyGuide: 'Guía de Estudio_ Ley 20.724 (Ley de Fármacos I).pdf' },
-            { id: 412, text: 'Según la Ley de Fármacos, si un medicamento recetado tiene un bioequivalente certificado:', options: ['Es opcional mencionarlo', 'El farmacéutico debe ofrecerlo obligatoriamente', 'No se puede cambiar', 'Solo se ofrece el más caro'], correctIndex: 1, studyGuide: 'Guía de Estudio_ Ley 20.724 (Ley de Fármacos I).pdf' },
-            
-            // --- PARTE B: MATEMÁTICAS AVANZADAS Y CASOS (ALTA DIFICULTAD) ---
-            
-            // Regla de Tres Compuesta (Pediatría)
-            { id: 413, text: 'CASO PEDIÁTRICO: Médico receta Amoxicilina 50 mg por kilo de peso al día, dividido en 3 dosis. El niño pesa 20 Kg. ¿Cuántos mg debe tomar EN CADA DOSIS?', options: ['1000 mg', '500 mg', '333 mg (aprox)', '250 mg'], correctIndex: 2, studyGuide: 'guia_posologia.pdf' },
-            // Explicación: 50 * 20 = 1000 mg diarios. Dividido en 3 = 333.3 mg por toma.
+            // --- SECCIÓN 1: MATEMÁTICAS, POSOLOGÍA Y GESTIÓN (15 Preguntas) ---
+            { id: 401, text: 'CÁLCULO DE FRASCOS: Receta dice "Polivitamínico 5 ml al día por 2 meses (60 días)". Frasco trae 100 ml. ¿Cuántos frascos necesita?', options: ['1 Frasco', '2 Frascos', '3 Frascos', '4 Frascos'], correctIndex: 2, studyGuide: 'guia_posologia.pdf' },
+            { id: 402, text: 'FRACCIONAMIENTO: "Propranolol 40mg: tomar 1/2 comprimido en la mañana y 1 en la noche, por 3 meses (90 días)". Caja trae 20 comprimidos. ¿Cuántas cajas necesita?', options: ['5 cajas', '6 cajas', '7 cajas', '8 cajas'], correctIndex: 2, studyGuide: 'guia_posologia.pdf' },
+            { id: 403, text: 'PEDIATRÍA (PESO): Niño de 20 kg. Dosis: 50 mg/kg/día repartido en 4 tomas. ¿Cuántos mg administra en CADA dosis?', options: ['1000 mg', '500 mg', '250 mg', '125 mg'], correctIndex: 2, studyGuide: 'guia_posologia.pdf' },
+            { id: 404, text: 'CÁLCULO GOTAS: Receta "23 gotas c/12hrs por 3 meses (90 días)". Frasco trae 25ml (500 gotas aprox). ¿Cuántos frascos necesita?', options: ['5 Frascos', '7 Frascos', '9 Frascos', '12 Frascos'], correctIndex: 2, studyGuide: 'guia_posologia.pdf' },
+            { id: 405, text: 'INSULINA (DURACIÓN): Paciente usa 40 UI diarias. El lápiz trae 3 ml (100 UI/ml). ¿Cuántos lápices necesita para 1 mes (30 días)?', options: ['2 Lápices', '3 Lápices', '4 Lápices', '5 Lápices'], correctIndex: 2, studyGuide: 'guia_posologia.pdf' },
+            { id: 406, text: 'CONVERSIÓN: ¿A cuántos miligramos (mg) equivalen 0.005 kg?', options: ['5 mg', '50 mg', '500 mg', '5.000 mg'], correctIndex: 3, studyGuide: 'guia_posologia.pdf' },
+            { id: 407, text: 'ENFERMERÍA: Pasar 500 ml de suero en 4 horas con equipo estándar (20 gotas/ml). Velocidad de goteo:', options: ['20 gotas/min', '42 gotas/min', '60 gotas/min', '83 gotas/min'], correctIndex: 1, studyGuide: 'guia_posologia.pdf' },
+            { id: 408, text: 'DILUCIÓN: Si diluyo 1 gramo de antibiótico en 5 ml de lidocaína. ¿Qué concentración final tengo por ml?', options: ['100 mg/ml', '200 mg/ml', '500 mg/ml', '50 mg/ml'], correctIndex: 1, studyGuide: 'guia_posologia.pdf' },
+            { id: 409, text: 'MEDIDAS CASERAS: Si la indicación dice "1 cucharada de postre". ¿A qué volumen equivale?', options: ['5 ml', '10 ml', '15 ml', '20 ml'], correctIndex: 1, studyGuide: 'guia_posologia.pdf' },
+            { id: 410, text: 'PORCENTAJE: ¿Qué significa que una solución sea al 2%?', options: ['2 gramos en 100 ml', '2 mg en 100 ml', '2 gramos en 1 litro', '20 mg en 1 ml'], correctIndex: 0, studyGuide: 'guia_posologia.pdf' },
+            { id: 411, text: 'STOCK DE SEGURIDAD: Vendo 5 cajas diarias de un producto crítico. El proveedor tarda 4 días en reponer. ¿Stock mínimo para no quebrar?', options: ['10 cajas', '15 cajas', '20 cajas', '25 cajas'], correctIndex: 2, studyGuide: 'guia_posologia.pdf' },
+            { id: 412, text: 'DOSIS MÁXIMA: La dosis máxima diaria de Paracetamol es 4g. Si tengo comprimidos de 1g, ¿cuántos es el máximo?', options: ['2', '4', '6', '8'], correctIndex: 1, studyGuide: 'guia_posologia.pdf' },
+            { id: 413, text: 'REGLA DE TRES: Dosis médica 120 mg. Jarabe disponible 200mg/5ml. ¿Qué volumen administra?', options: ['2 ml', '3 ml', '4 ml', '5 ml'], correctIndex: 1, studyGuide: 'guia_posologia.pdf' },
+            { id: 414, text: 'DURACIÓN: Una caja trae 30 comprimidos. La dosis es 1 cada 8 horas. ¿Para cuántos días alcanza?', options: ['5 días', '7 días', '10 días', '30 días'], correctIndex: 2, studyGuide: 'guia_posologia.pdf' },
+            { id: 415, text: 'NORMA ALMACENAMIENTO: ¿Con qué frecuencia mínima se deben registrar las temperaturas (refrigerador y sala)?', options: ['1 vez al día', '2 veces al día (AM/PM)', 'Semanalmente', 'Mensualmente'], correctIndex: 1, studyGuide: 'Manual Auxiliar Farmacia Privada_v2_025 (1).pdf' },
 
-            // Gestión de Stock (Cajas)
-            { id: 414, text: 'GESTIÓN: Paciente crónico toma Losartán 50mg, 1 comprimido cada 12 horas. Quiere comprar para 3 meses exactos (90 días). La caja trae 30 comprimidos. ¿Cuántas cajas necesita?', options: ['3 cajas', '6 cajas', '9 cajas', '12 cajas'], correctIndex: 1, studyGuide: 'guia_posologia.pdf' },
-            // Explicación: 2 comp/día * 90 días = 180 comp totales. 180 / 30 = 6 cajas.
-
-            // Conversión Tramposa + Volumen
-            { id: 415, text: 'CÁLCULO: Receta pide 0.5 gramos de Paracetamol. Usted tiene jarabe de 100mg/5ml. ¿Cuántos ml administra?', options: ['5 ml', '12.5 ml', '25 ml', '50 ml'], correctIndex: 2, studyGuide: 'guia_posologia.pdf' },
-            // Explicación: 0.5g = 500mg. Regla de tres: (500 * 5) / 100 = 25 ml.
-
-            // Cálculo de Goteo (Suero) - Clásico de Salud
-            { id: 416, text: 'ENFERMERÍA: Se debe administrar 500 ml de suero en 4 horas. Usando un equipo estándar (20 gotas/ml), ¿a cuántas gotas por minuto se regula?', options: ['20 gotas/min', '42 gotas/min', '60 gotas/min', '100 gotas/min'], correctIndex: 1, studyGuide: 'guia_posologia.pdf' },
-            // Explicación: Volumen Total (ml) x Factor Goteo / Tiempo Total (minutos). (500 * 20) / (4 * 60) = 10000 / 240 = 41.6.
-
-            // UI (Insulina)
-            { id: 417, text: 'INSULINA (UI): Frasco dice 100 UI por ml. La receta indica administrar 15 UI. ¿Cuántos ml carga en la jeringa?', options: ['1.5 ml', '0.15 ml', '15 ml', '0.015 ml'], correctIndex: 1, studyGuide: 'guia_posologia.pdf' },
+            // --- SECCIÓN 2: TEORÍA TÉCNICA Y NORMATIVA (25 Preguntas) ---
+            // Farmacotecnia y Conceptos (Manual)
+            { id: 416, text: 'DEFINICIÓN: ¿Qué es la "Farmacotecnia"?', options: ['Ciencia que estudia la venta de remedios', 'Ciencia que estudia las manipulaciones para dar forma adecuada a los medicamentos', 'Estudio de los precios', 'Estudio de la anatomía'], correctIndex: 1, studyGuide: 'Manual Auxiliar Farmacia Privada_v2_025 (1).pdf' },
+            { id: 417, text: 'FORMAS FARMACÉUTICAS: ¿Qué caracteriza a las formas "Unidosis"?', options: ['Permiten una dosis única por unidad (ej: comprimido)', 'Vienen en frascos grandes', 'Son solo líquidas', 'Son para una sola enfermedad'], correctIndex: 0, studyGuide: 'Manual Auxiliar Farmacia Privada_v2_025 (1).pdf' },
+            { id: 418, text: 'VÍAS: ¿Qué define a la vía de administración "Parenteral"?', options: ['Se traga', 'Se inhala', 'Se administra rompiendo la barrera de la piel (inyectable)', 'Se aplica en la piel'], correctIndex: 2, studyGuide: 'Manual Auxiliar Farmacia Privada_v2_025 (1).pdf' },
+            { id: 419, text: 'VÍA INTRATECAL: ¿Dónde se deposita el fármaco?', options: ['En la vena', 'En el músculo', 'Alrededor de la médula espinal (LCR)', 'Bajo la lengua'], correctIndex: 2, studyGuide: 'Manual Auxiliar Farmacia Privada_v2_025 (1).pdf' },
+            { id: 420, text: 'PREPARADOS: ¿Diferencia clave entre "Oficinal" y "Magistral"?', options: ['El precio', 'Magistral es para un paciente específico; Oficinal es fórmula estándar', 'Oficinal es con receta cheque', 'No hay diferencia'], correctIndex: 1, studyGuide: 'Manual Auxiliar Farmacia Privada_v2_025 (1).pdf' },
+            { id: 421, text: 'INYECTABLES: ¿Qué requisito visual es indispensable en una solución inyectable?', options: ['Debe ser colorida', 'Debe ser límpida y exenta de partículas', 'Debe tener espuma', 'Debe ser opaca'], correctIndex: 1, studyGuide: 'Manual Auxiliar Farmacia Privada_v2_025 (1).pdf' },
+            { id: 422, text: 'PRODUCCIÓN: ¿Qué es un "Lote"?', options: ['Un grupo de trabajadores', 'Una cantidad definida de producto homogénea en su fabricación', 'Un conjunto de recetas', 'Un tipo de farmacia'], correctIndex: 1, studyGuide: 'Manual Auxiliar Farmacia Privada_v2_025 (1).pdf' },
+            { id: 423, text: 'FARMACOLOGÍA: ¿Qué es el "Efecto de Primer Paso"?', options: ['La primera vez que se toma un remedio', 'La degradación del fármaco en el hígado antes de llegar a la sangre', 'La absorción en el estómago', 'El efecto placebo'], correctIndex: 1, studyGuide: 'Manual Auxiliar Farmacia Privada_v2_025 (1).pdf' },
             
-            // Casos Éticos/Situacionales
-            { id: 418, text: 'CASO: Llega una receta de Clonazepam con fecha de hace 35 días. El paciente ruega que se la vendan. ¿Qué hace?', options: ['La vende por esta vez', 'La vende pero no la retiene', 'Rechaza la venta (receta vencida > 30 días)', 'Llama a Carabineros'], correctIndex: 2, studyGuide: 'Guía de Estudio_ Decreto 405.pdf' },
-            { id: 419, text: 'CASO: Un cliente reclama que las pastillas "sueltas" (fraccionadas) que compró no traen fecha de vencimiento en el sobre. ¿Es válido el reclamo?', options: ['No, porque van sueltas', 'Sí, el rotulado de fraccionamiento DEBE incluir lote y vencimiento', 'Depende de la farmacia', 'Solo si están vencidas'], correctIndex: 1, studyGuide: 'Guía de Estudio_ Ley 20.724 (Ley de Fármacos I).pdf' },
-            { id: 420, text: 'DATO DURO: ¿Cuál es la temperatura máxima legal para almacenar medicamentos en estantería (no refrigerados)?', options: ['20°C', '25°C', '30°C', '18°C'], correctIndex: 1, studyGuide: 'Guía de Estudio_Decreto 466.pdf' },
+            // Almacenamiento y Estabilidad (Manual)
+            { id: 424, text: 'ESTABILIDAD: Los 4 factores principales que dañan los medicamentos son:', options: ['Calor, Frío, Viento, Lluvia', 'Temperatura, Humedad, Luz y Tiempo', 'Precio, Marca, Laboratorio, Envase', 'Ninguna de las anteriores'], correctIndex: 1, studyGuide: 'Manual Auxiliar Farmacia Privada_v2_025 (1).pdf' },
+            { id: 425, text: 'INSULINA EN USO: Una vez abierto el lápiz, ¿cómo se puede almacenar?', options: ['Obligatoriamente refrigerado', 'En el congelador', 'A temperatura ambiente (aprox 4 semanas)', 'Al sol'], correctIndex: 2, studyGuide: 'Manual Auxiliar Farmacia Privada_v2_025 (1).pdf' },
+            { id: 426, text: 'CONGELACIÓN: ¿Qué sucede si una vacuna se congela por error a 0°C?', options: ['Se conserva mejor', 'No pasa nada si se descongela', 'Pierde su potencia irreversiblemente y debe eliminarse', 'Se vuelve tóxica'], correctIndex: 2, studyGuide: 'Manual Auxiliar Farmacia Privada_v2_025 (1).pdf' },
+            { id: 427, text: 'DEVOLUCIONES: Los productos devueltos o vencidos deben ir a:', options: ['La estantería de venta', 'La basura común', 'Un área de segregación o cuarentena', 'Se regalan'], correctIndex: 2, studyGuide: 'Manual Auxiliar Farmacia Privada_v2_025 (1).pdf' },
 
-            // --- RELLENO CON PREGUNTAS CLAVE ANTERIORES PARA COMPLETAR 40 ---
-            { id: 421, text: 'Símbolo Psicotrópicos:', options: ['Estrella Verde', 'Estrella Roja', 'Triángulo', 'Cuadrado'], correctIndex: 0, studyGuide: 'Guía de Estudio_ Decreto 405.pdf' },
-            { id: 422, text: 'Receta de Anfetaminas (Lista II):', options: ['Simple', 'Retenida', 'Cheque', 'Ninguna'], correctIndex: 2, studyGuide: 'Guía de Estudio_ Decreto 405.pdf' },
-            { id: 423, text: '¿Quién fiscaliza estupefacientes a nivel local?', options: ['ISP', 'SEREMI de Salud', 'Municipalidad', 'Aduana'], correctIndex: 1, studyGuide: 'Guía de Estudio_ Decreto 404.pdf' },
-            { id: 424, text: 'Codeína jarabe > 60mg usa receta:', options: ['Simple', 'Retenida', 'Cheque', 'Magistral'], correctIndex: 2, studyGuide: 'Guía de Estudio_ Decreto 404.pdf' },
-            { id: 425, text: '¿Qué es OTC?', options: ['Venta Directa', 'Controlado', 'Hospitalario', 'Caro'], correctIndex: 0, studyGuide: 'Guía de Estudio_ Ley 20.724 (Ley de Fármacos I).pdf' },
-            { id: 426, text: 'Precio en el envase es:', options: ['Opcional', 'Obligatorio', 'Prohibido', 'Solo en oferta'], correctIndex: 1, studyGuide: 'Guía de Estudio_ Ley 20.724 (Ley de Fármacos I).pdf' },
-            { id: 427, text: 'Lista I de Psicotrópicos (LSD) es:', options: ['Venta libre', 'Prohibida', 'Receta Cheque', 'Retenida'], correctIndex: 1, studyGuide: 'Guía de Estudio_ Decreto 405.pdf' },
-            { id: 428, text: '¿Qué se anota en el Libro de Control?', options: ['Precios', 'Entradas, Salidas y Saldos', 'Nombres de empleados', 'Horarios'], correctIndex: 1, studyGuide: 'Guía de Estudio_ Decreto 404.pdf' },
-            { id: 429, text: 'Petitorio Mínimo:', options: ['Stock opcional', 'Listado obligatorio de medicamentos', 'Lista de precios', 'Inventario'], correctIndex: 1, studyGuide: 'Guía de Estudio_Decreto 466.pdf' },
-            { id: 430, text: 'Receta Retenida se guarda por:', options: ['1 mes', '1 año', '5 años', 'Para siempre'], correctIndex: 1, studyGuide: 'Guía de Estudio_Decreto 466.pdf' },
-            { id: 431, text: '¿Edad para comprar controlados?', options: ['18 con carnet', '16', '21', 'Cualquiera'], correctIndex: 0, studyGuide: 'Guía de Estudio_ Decreto 404.pdf' },
-            { id: 432, text: 'Sublingual es:', options: ['Bajo la lengua', 'Tragada', 'Inyectada', 'Rectal'], correctIndex: 0, studyGuide: 'guia_posologia.pdf' },
-            { id: 433, text: 'DCI significa:', options: ['Denominación Común Internacional', 'Dosis Común', 'Droga Central', 'Dato Clínico'], correctIndex: 0, studyGuide: 'Guía de Estudio_ Ley 20.724 (Ley de Fármacos I).pdf' },
-            { id: 434, text: '¿Se puede incentivar una marca (Canela)?', options: ['Sí', 'No', 'A veces', 'Si paga bien'], correctIndex: 1, studyGuide: 'Guía de Estudio_ Ley 20.724 (Ley de Fármacos I).pdf' },
-            { id: 435, text: 'Color Receta Cheque Farmacia:', options: ['Café', 'Amarillo', 'Rojo', 'Verde'], correctIndex: 1, studyGuide: 'Guía de Estudio_ Decreto 404.pdf' },
-            { id: 436, text: 'Auxiliar depende de:', options: ['Q.F.', 'Dueño', 'Nadie', 'Cliente'], correctIndex: 0, studyGuide: 'Guía de Estudio_Decreto 466.pdf' },
-            { id: 437, text: 'Lista IV son principalmente:', options: ['Estimulantes', 'Tranquilizantes (Benzos)', 'Alucinógenos', 'Narcóticos'], correctIndex: 1, studyGuide: 'Guía de Estudio_ Decreto 405.pdf' },
-            { id: 438, text: '¿Qué hacer con receta falsa?', options: ['Retener y denunciar', 'Devolver', 'Vender', 'Botar'], correctIndex: 0, studyGuide: 'Guía de Estudio_ Decreto 404.pdf' },
-            { id: 439, text: 'Botiquín es para:', options: ['Venta calle', 'Uso interno institucional', 'Importar', 'Fabricar'], correctIndex: 1, studyGuide: 'Guía de Estudio_Decreto 466.pdf' },
-            { id: 440, text: 'Moraleja final:', options: ['Estudiar mucho', 'La ética y seguridad del paciente es primero', 'Vender rápido', 'Memorizar todo'], correctIndex: 1, studyGuide: 'Guía de Estudio_Decreto 466.pdf' }
+            // Normativa Específica (Decretos)
+            { id: 428, text: 'AUTORIZACIÓN: ¿Cuánto dura la autorización sanitaria de una farmacia?', options: ['1 año', '3 años, renovables automáticamente', '5 años', 'Indefinida'], correctIndex: 1, studyGuide: 'Guía de Estudio_Decreto 466.pdf' },
+            { id: 429, text: 'PROFESIONALES: ¿Quién puede recetar lentes y fármacos oculares tópicos?', options: ['Enfermera', 'Tecnólogo Médico con mención en Oftalmología', 'Auxiliar de Óptica', 'Nadie'], correctIndex: 1, studyGuide: 'Manual Auxiliar Farmacia Privada_v2_025 (1).pdf' },
+            { id: 430, text: 'DENTISTAS: ¿Qué stock de psicotrópicos pueden mantener para urgencias?', options: ['Ninguno', '50 unidades', 'Máximo 150 unidades', 'Ilimitado'], correctIndex: 2, studyGuide: 'Guía de Estudio_ Decreto 405.pdf' },
+            { id: 431, text: 'LIBROS: ¿Qué Lista permite un "registro simplificado" (totales diarios)?', options: ['Lista I', 'Lista II', 'Lista III', 'Lista IV (Benzodiazepinas)'], correctIndex: 3, studyGuide: 'Guía de Estudio_ Decreto 405.pdf' },
+            { id: 432, text: 'IMPORTACIÓN: Validez del certificado oficial de importación de estupefacientes:', options: ['30 días', '4 meses', '6 meses', '1 año'], correctIndex: 1, studyGuide: 'Guía de Estudio_ Decreto 404.pdf' },
+            { id: 433, text: 'RECETA CHEQUE: ¿Se permiten enmiendas (correcciones)?', options: ['Sí, si se firma al lado', 'No, debe ser íntegra y manuscrita sin borrones', 'Solo en la fecha', 'Depende del criterio'], correctIndex: 1, studyGuide: 'Guía de Estudio_ Decreto 404.pdf' },
+            { id: 434, text: 'FARMACIA MÓVIL: ¿Qué tiene prohibido vender?', options: ['Paracetamol', 'Psicotrópicos, Estupefacientes y Recetario Magistral', 'Vitaminas', 'Insumos'], correctIndex: 1, studyGuide: 'Guía de Estudio_Decreto 466.pdf' },
+            { id: 435, text: 'PUBLICIDAD: ¿Qué medicamentos pueden tener publicidad masiva?', options: ['Todos', 'Solo los de Venta Directa (OTC)', 'Los antibióticos', 'Los bioequivalentes'], correctIndex: 1, studyGuide: 'Guía de Estudio_ Ley 20.724 (Ley de Fármacos I).pdf' },
+            { id: 436, text: 'FRACCIONAMIENTO: El envase entregado al paciente debe incluir obligatoriamente:', options: ['Precio', 'Nombre paciente, fecha vencimiento y lote original', 'Teléfono del médico', 'Marca del laboratorio'], correctIndex: 1, studyGuide: 'Guía de Estudio_ Ley 20.724 (Ley de Fármacos I).pdf' },
+            { id: 437, text: 'DESTRUCCIÓN: ¿Cómo se eliminan los estupefacientes vencidos?', options: ['A la basura', 'Por el desagüe', 'A través de empresas autorizadas por SEREMI', 'Se queman en el patio'], correctIndex: 2, studyGuide: 'Guía de Estudio_Decreto 466.pdf' },
+            { id: 438, text: 'TRANSPORTE: Droga estupefaciente salida de aduana requiere certificado de:', options: ['Carabineros', 'Ruta y Transporte autorizado por el Servicio de Salud', 'El transportista', 'Peaje'], correctIndex: 1, studyGuide: 'Guía de Estudio_ Decreto 404.pdf' },
+            { id: 439, text: 'DEFINICIÓN LEGAL: La Ley 20.724 define a la farmacia como:', options: ['Un comercio', 'Un centro de salud', 'Un almacén', 'Una empresa'], correctIndex: 1, studyGuide: 'Guía de Estudio_ Ley 20.724 (Ley de Fármacos I).pdf' },
+            { id: 440, text: 'SUSPENSIÓN: En farmacotecnia, una suspensión se caracteriza porque:', options: ['Está totalmente disuelta', 'El principio activo no está disuelto, sino disperso (requiere agitar)', 'Es transparente', 'Es un gas'], correctIndex: 1, studyGuide: 'Manual Auxiliar Farmacia Privada_v2_025 (1).pdf' }
         ] 
     }
 ];
