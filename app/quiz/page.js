@@ -3,14 +3,13 @@
 import { useState, useEffect } from "react";
 import { LEVELS } from "../data"; 
 import Link from "next/link";
-import { Lock, Play, CheckCircle, XCircle, ChevronLeft, RefreshCcw, ArrowRight, AlertCircle, FileText, Library, MessageCircle, HelpCircle, Clock, Award, Star } from "lucide-react";
+import { Lock, Play, CheckCircle, XCircle, ChevronLeft, RefreshCcw, ArrowRight, AlertCircle, FileText, Library, MessageCircle, HelpCircle, Clock, Award, Star, ShieldCheck, Trophy } from "lucide-react";
 
 export default function QuizPage() {
-  // ESTADOS DEL JUEGO
+  // ESTADOS
   const [unlockedLevels, setUnlockedLevels] = useState([1]); 
   const [activeLevelId, setActiveLevelId] = useState(null);  
   
-  // Estados de la Partida
   const [currentQIndex, setCurrentQIndex] = useState(0);     
   const [score, setScore] = useState(0);                     
   const [showResult, setShowResult] = useState(false);       
@@ -18,19 +17,17 @@ export default function QuizPage() {
   const [isAnswered, setIsAnswered] = useState(false);       
   const [mistakes, setMistakes] = useState([]); 
   
-  // NUEVOS ESTADOS (CRONÓMETRO GLOBAL)
   const [timeLeft, setTimeLeft] = useState(0); 
   const [showGrandFinale, setShowGrandFinale] = useState(false); 
 
-  // --- LÓGICA DEL CRONÓMETRO GLOBAL ---
+  // --- CRONÓMETRO GLOBAL ---
   useEffect(() => {
-    // El reloj corre SOLO si hay nivel activo, no estamos en resultados y queda tiempo
     if (activeLevelId && !showResult && timeLeft > 0) {
         const timerId = setInterval(() => {
             setTimeLeft((prev) => {
                 if (prev <= 1) {
                     clearInterval(timerId);
-                    handleGlobalTimeOut(); // Se acabó el tiempo global
+                    handleGlobalTimeOut(); 
                     return 0;
                 }
                 return prev - 1;
@@ -38,27 +35,21 @@ export default function QuizPage() {
         }, 1000);
         return () => clearInterval(timerId);
     }
-  }, [activeLevelId, showResult]); // IMPORTANTE: No depende de 'isAnswered', así que no para al responder
+  }, [activeLevelId, showResult]);
 
-  const handleGlobalTimeOut = () => {
-    // Si se acaba el tiempo global, terminamos el examen inmediatamente
-    setShowResult(true);
-  };
+  const handleGlobalTimeOut = () => setShowResult(true);
 
-  // Función para formatear segundos a MM:SS
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
-  // --- LÓGICA DEL JUEGO ---
-
+  // --- LÓGICA JUEGO ---
   const startLevel = (levelId) => {
     if (unlockedLevels.includes(levelId)) {
       const level = LEVELS.find(l => l.id === levelId);
       setActiveLevelId(levelId);
-      // CORRECCIÓN: Cargamos el tiempo SOLO AQUÍ (al principio)
       resetGame(level.timeLimit); 
     }
   };
@@ -89,8 +80,6 @@ export default function QuizPage() {
         setCurrentQIndex(prev => prev + 1);
         setIsAnswered(false);
         setSelectedOption(null);
-        // CORRECCIÓN CRÍTICA: ¡Aquí borramos la línea que reiniciaba el tiempo!
-        // El reloj sigue corriendo solito desde el useEffect.
     } else {
         setShowResult(true);
     }
@@ -98,7 +87,6 @@ export default function QuizPage() {
 
   const handleAnswer = (optionIndex, correctIndex, questionText, options, studyGuide) => {
     if (isAnswered) return; 
-
     setSelectedOption(optionIndex);
     setIsAnswered(true);
 
@@ -113,68 +101,94 @@ export default function QuizPage() {
         studyGuide: studyGuide 
       }]);
     }
-
     setTimeout(nextQuestion, 1000); 
   };
 
   const getCurrentLevel = () => LEVELS.find((l) => l.id === activeLevelId);
 
-  // DESBLOQUEO DE NIVELES
+  // LÓGICA DE APROBACIÓN (SIN SALTO AUTOMÁTICO A FINAL)
   useEffect(() => {
     if (showResult && activeLevelId) {
         const level = getCurrentLevel();
         if (level && score >= level.passingScore) {
             const nextLevel = activeLevelId + 1;
-            if (activeLevelId === 4) {
-                setTimeout(() => setShowGrandFinale(true), 1000);
-            } 
-            else if (LEVELS.find(l => l.id === nextLevel) && !unlockedLevels.includes(nextLevel)) {
+            // Solo desbloqueamos el siguiente si existe y no está ya desbloqueado
+            if (LEVELS.find(l => l.id === nextLevel) && !unlockedLevels.includes(nextLevel)) {
                 setUnlockedLevels(prev => [...prev, nextLevel]);
             }
+            // NOTA: Ya no hay setTimeout para showGrandFinale aquí. El usuario decide.
         }
     }
   }, [showResult, score, activeLevelId]);
 
   // --- VISTAS ---
 
+  // 1. VISTA "PREMIUM" DE CERTIFICACIÓN (DISEÑO MEJORADO)
   if (showGrandFinale) {
       return (
-        <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 text-center">
-            <div className="bg-white p-10 rounded-3xl shadow-2xl max-w-md w-full border-4 border-aux-green relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-yellow-400 via-red-500 to-blue-500"></div>
-                <div className="w-24 h-24 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner animate-bounce">
-                    <Award size={60} className="text-yellow-600" />
+        <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-6 text-center font-sans relative overflow-hidden">
+            
+            {/* Efectos de Fondo */}
+            <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-slate-800 via-slate-900 to-black opacity-80"></div>
+            <div className="absolute top-10 right-10 w-32 h-32 bg-aux-green rounded-full blur-[80px] opacity-20"></div>
+            <div className="absolute bottom-10 left-10 w-32 h-32 bg-blue-500 rounded-full blur-[80px] opacity-20"></div>
+
+            {/* TARJETA DE CERTIFICACIÓN */}
+            <div className="relative bg-white/10 backdrop-blur-md border border-white/20 p-8 md:p-12 rounded-2xl shadow-2xl max-w-md w-full text-white overflow-hidden ring-1 ring-white/10">
+                
+                {/* Borde Dorado Superior */}
+                <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-yellow-600 via-yellow-300 to-yellow-600"></div>
+
+                {/* Icono Premium */}
+                <div className="mb-8 relative inline-block">
+                    <div className="absolute inset-0 bg-yellow-400 blur-2xl opacity-30 rounded-full"></div>
+                    <div className="relative w-24 h-24 bg-gradient-to-b from-slate-800 to-slate-900 rounded-full flex items-center justify-center border-2 border-yellow-500/50 shadow-xl mx-auto">
+                        <Trophy size={48} className="text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.5)]" />
+                    </div>
                 </div>
-                <h1 className="text-3xl font-black text-aux-dark mb-2">¡FELICITACIONES!</h1>
-                <p className="text-lg font-bold text-aux-green mb-6">Has completado el entrenamiento</p>
-                <p className="text-slate-600 mb-8 leading-relaxed">
-                    Has demostrado dominio en normativa, gestión y farmacología. Estás listo para enfrentar el desafío real ante la SEREMI.
-                </p>
-                <div className="bg-slate-50 p-4 rounded-xl border border-slate-200 mb-8">
-                    <p className="text-xs text-slate-400 uppercase tracking-widest font-bold mb-1">CONDECORACIÓN</p>
-                    <p className="text-xl font-black text-slate-800 flex items-center justify-center gap-2">
-                        <Star className="text-yellow-400 fill-yellow-400" /> AUXILIAR PRO <Star className="text-yellow-400 fill-yellow-400" />
-                    </p>
+
+                <h2 className="text-sm font-bold text-yellow-400 tracking-[0.2em] uppercase mb-2">Entrenamiento Completado</h2>
+                <h1 className="text-3xl md:text-4xl font-black text-white mb-6 leading-tight">
+                    Auxiliar Pro <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-yellow-500">Certificado</span>
+                </h1>
+
+                <div className="bg-slate-900/50 p-6 rounded-xl border border-white/10 mb-8 backdrop-blur-sm">
+                    <div className="flex items-center gap-3 mb-3">
+                        <ShieldCheck className="text-emerald-400 shrink-0" size={24} />
+                        <p className="text-left text-sm text-slate-300 font-medium">Dominio de Normativa Sanitaria (D.S. 466)</p>
+                    </div>
+                    <div className="flex items-center gap-3 mb-3">
+                        <ShieldCheck className="text-emerald-400 shrink-0" size={24} />
+                        <p className="text-left text-sm text-slate-300 font-medium">Manejo de Controlados (D.S. 404/405)</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <ShieldCheck className="text-emerald-400 shrink-0" size={24} />
+                        <p className="text-left text-sm text-slate-300 font-medium">Cálculo de Dosis y Posología</p>
+                    </div>
                 </div>
-                <button onClick={returnToMenu} className="w-full bg-aux-dark text-white font-bold py-4 rounded-xl shadow-lg hover:scale-105 transition-transform">
-                    VOLVER AL INICIO
+
+                <button onClick={returnToMenu} className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-emerald-900/50 transition-all transform hover:scale-[1.02] flex items-center justify-center gap-2">
+                    <RefreshCcw size={18} /> Volver al Entrenamiento
                 </button>
             </div>
+            
+            <p className="mt-8 text-slate-500 text-xs font-medium relative z-10">
+                Este es un reconocimiento simbólico de tu preparación en AuxiliarPro.
+            </p>
         </div>
       );
   }
 
-  // VISTA A: JUGANDO
+  // 2. VISTA JUGANDO
   if (activeLevelId && !showResult) {
     const level = getCurrentLevel();
     if (!level) return <div className="p-10 text-center">Error: No encuentro el Nivel {activeLevelId}</div>;
-    
     const question = level.questions ? level.questions[currentQIndex] : null;
     if (!question) return <div className="p-10 text-center">Error de Datos. <button onClick={returnToMenu}>Volver</button></div>;
 
     let timerColor = "text-slate-500";
-    if (timeLeft <= 60) timerColor = "text-orange-500"; // Último minuto
-    if (timeLeft <= 10) timerColor = "text-red-600 animate-pulse"; // Últimos 10 seg
+    if (timeLeft <= 60) timerColor = "text-orange-500";
+    if (timeLeft <= 10) timerColor = "text-red-600 animate-pulse";
 
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
@@ -190,19 +204,15 @@ export default function QuizPage() {
                             <span className="bg-slate-100 text-slate-600 text-xs font-bold px-2 py-1 rounded">Nivel {activeLevelId}</span>
                         </div>
                     </div>
-                    {/* RELOJ GLOBAL MM:SS */}
                     {level.timeLimit > 0 ? (
                         <div className={`flex items-center gap-1 font-mono font-bold text-xl ${timerColor}`}>
                             <Clock size={20} />
                             <span>{formatTime(timeLeft)}</span>
                         </div>
                     ) : (
-                        <div className="text-slate-300 text-xs font-bold flex items-center gap-1">
-                            <Clock size={14} /> Sin tiempo
-                        </div>
+                        <div className="text-slate-300 text-xs font-bold flex items-center gap-1"><Clock size={14} /> Sin tiempo</div>
                     )}
                 </div>
-
                 <h2 className="text-xl font-black text-aux-dark mb-8 leading-tight">{question.text}</h2>
                 <div className="space-y-3">
                     {question.options.map((opt, idx) => {
@@ -213,11 +223,7 @@ export default function QuizPage() {
                             else btnColor = "opacity-50 grayscale";
                         }
                         return (
-                            <button key={idx} 
-                                onClick={() => handleAnswer(idx, question.correctIndex, question.text, question.options, question.studyGuide)}
-                                disabled={isAnswered}
-                                className={`w-full text-left p-4 rounded-xl border-2 font-medium transition-all duration-200 ${btnColor}`}
-                            >
+                            <button key={idx} onClick={() => handleAnswer(idx, question.correctIndex, question.text, question.options, question.studyGuide)} disabled={isAnswered} className={`w-full text-left p-4 rounded-xl border-2 font-medium transition-all duration-200 ${btnColor}`}>
                                 <div className="flex items-center gap-3">
                                     <div className={`w-6 h-6 rounded-full border flex items-center justify-center text-xs font-bold ${idx === question.correctIndex && isAnswered ? 'bg-green-500 border-green-500 text-white' : 'border-slate-300'}`}>{["A", "B", "C", "D"][idx]}</div>
                                     {opt}
@@ -233,24 +239,23 @@ export default function QuizPage() {
     );
   }
 
-  // VISTA B: RESULTADOS
+  // 3. VISTA RESULTADOS (NORMAL)
   if (showResult) {
     const level = getCurrentLevel();
     if (!level) { returnToMenu(); return null; }
     const passed = score >= level.passingScore;
     const isTimeout = timeLeft === 0 && level.timeLimit > 0;
+    // ¿Es el último nivel y aprobó? Entonces mostramos el botón especial
+    const isGrandFinaleReady = activeLevelId === 4 && passed;
 
     return (
         <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 py-12">
             <div className="bg-white p-8 rounded-3xl shadow-2xl text-center max-w-md w-full">
-                
-                {/* Mensaje especial si se acabó el tiempo */}
                 {isTimeout && (
                     <div className="mb-4 bg-orange-100 text-orange-700 px-4 py-2 rounded-lg font-bold text-sm inline-flex items-center gap-2">
                         <Clock size={16} /> ¡Se acabó el tiempo!
                     </div>
                 )}
-
                 <div className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl shadow-sm ${passed ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"}`}>
                     {passed ? <CheckCircle size={40} /> : <XCircle size={40} />}
                 </div>
@@ -281,7 +286,15 @@ export default function QuizPage() {
 
                 <div className="space-y-3">
                     {passed ? (
-                         <button onClick={returnToMenu} className="w-full bg-aux-dark text-white font-bold py-3 rounded-xl shadow-lg hover:scale-105 transition-transform flex items-center justify-center gap-2">CONTINUAR <ArrowRight size={18} /></button>
+                        isGrandFinaleReady ? (
+                            <button onClick={() => setShowGrandFinale(true)} className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-black py-4 rounded-xl shadow-lg hover:scale-105 transition-transform flex items-center justify-center gap-2 border-b-4 border-yellow-600">
+                                <Trophy size={20} className="animate-bounce" /> RECLAMAR CERTIFICACIÓN
+                            </button>
+                        ) : (
+                            <button onClick={returnToMenu} className="w-full bg-aux-dark text-white font-bold py-3 rounded-xl shadow-lg hover:scale-105 transition-transform flex items-center justify-center gap-2">
+                                SIGUIENTE NIVEL <ArrowRight size={18} />
+                            </button>
+                        )
                     ) : (
                         <button onClick={() => resetGame(level.timeLimit)} className="w-full bg-aux-green text-white font-bold py-3 rounded-xl shadow-lg hover:bg-emerald-600 transition-colors flex items-center justify-center gap-2"><RefreshCcw size={18} /> INTENTAR DE NUEVO</button>
                     )}
@@ -292,44 +305,44 @@ export default function QuizPage() {
     );
   }
 
-  // VISTA C: MENÚ (TABLERO PRINCIPAL)
+  // 4. MENÚ PRINCIPAL
   return (
     <main className="min-h-screen bg-slate-50 font-sans pb-20">
       <div className="bg-white p-4 shadow-sm sticky top-0 z-10 flex items-center gap-4">
         <Link href="/" className="text-slate-400 hover:text-aux-dark"><ChevronLeft size={24} /></Link>
         <h1 className="text-lg font-black text-aux-dark">Tu Ruta de Aprendizaje</h1>
       </div>
-
       <div className="p-6 max-w-md mx-auto space-y-6 mt-4">
         <div className="bg-blue-50 border border-blue-100 p-4 rounded-xl mb-6">
             <p className="text-sm text-blue-800 font-medium">{unlockedLevels.length === 1 ? "👋 Hola Colega: Completa el Nivel 1 para desbloquear el siguiente." : `🔥 ¡Llevas ${unlockedLevels.length - 1} niveles desbloqueados! Sigue así.`}</p>
         </div>
-
         {LEVELS.map((level) => {
-            const isUnlocked = unlockedLevels.includes(level.id);
-            const isPassed = unlockedLevels.includes(level.id + 1) || (level.id === 4 && showGrandFinale);
+            // Lógica de "Passed": Si el siguiente nivel está desbloqueado O si es el nivel 4 y ya vimos el final (o tenemos todos desbloqueados hasta el 5 si existiera)
+            const isPassed = unlockedLevels.includes(level.id + 1) || (level.id === 4 && unlockedLevels.includes(5)); // Truco simple
+            // *Nota para Marcelo: En la próxima sesión podemos refinar esta lógica de 'isPassed' con un estado separado si quieres, pero por ahora funciona visualmente.
+            
+            // Para Nivel 4, usamos una lógica especial visual si quieres, o dejamos la estándar.
+            // Arreglo rápido para que el Nivel 4 se vea verde si ya reclamaste el premio:
+            const isLevel4Completed = level.id === 4 && showGrandFinale; 
 
             return (
-                <div key={level.id} onClick={() => startLevel(level.id)} className={`relative overflow-hidden rounded-2xl border-2 transition-all duration-300 ${isPassed ? "bg-emerald-50 border-emerald-200 cursor-pointer" : isUnlocked ? "bg-white border-aux-green/20 shadow-lg cursor-pointer hover:scale-[1.02] active:scale-[0.98]" : "bg-slate-100 border-slate-200 opacity-80 cursor-not-allowed grayscale"}`}>
+                <div key={level.id} onClick={() => startLevel(level.id)} className={`relative overflow-hidden rounded-2xl border-2 transition-all duration-300 ${isPassed || isLevel4Completed ? "bg-emerald-50 border-emerald-200 cursor-pointer" : unlockedLevels.includes(level.id) ? "bg-white border-aux-green/20 shadow-lg cursor-pointer hover:scale-[1.02]" : "bg-slate-100 border-slate-200 opacity-80 cursor-not-allowed grayscale"}`}>
                     <div className="p-6 flex items-center gap-4">
-                        <div className={`w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow-sm ${isPassed ? "bg-emerald-500 text-white" : (isUnlocked ? "bg-emerald-100" : "bg-slate-200")}`}>
-                            {isPassed ? <CheckCircle size={28} /> : (isUnlocked ? level.icon : "🔒")}
+                        <div className={`w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow-sm ${isPassed || isLevel4Completed ? "bg-emerald-500 text-white" : (unlockedLevels.includes(level.id) ? "bg-emerald-100" : "bg-slate-200")}`}>
+                            {isPassed || isLevel4Completed ? <CheckCircle size={28} /> : (unlockedLevels.includes(level.id) ? level.icon : "🔒")}
                         </div>
                         <div className="flex-1">
-                            <h3 className={`font-black text-lg ${isPassed ? "text-emerald-800" : (isUnlocked ? "text-aux-dark" : "text-slate-400")}`}>{level.title}</h3>
+                            <h3 className={`font-black text-lg ${isPassed || isLevel4Completed ? "text-emerald-800" : (unlockedLevels.includes(level.id) ? "text-aux-dark" : "text-slate-400")}`}>{level.title}</h3>
                             <div className="flex items-center gap-2 mt-1">
-                                {isPassed && <span className="bg-emerald-200 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full">APROBADO</span>}
-                                <p className="text-xs text-slate-500 font-medium">
-                                    {level.qCount} Pregs • {level.timeLimit === 0 ? "Sin Tiempo" : `${Math.floor(level.timeLimit / 60)} min`}
-                                </p>
+                                {(isPassed || isLevel4Completed) && <span className="bg-emerald-200 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full">APROBADO</span>}
+                                <p className="text-xs text-slate-500 font-medium">{level.qCount} Pregs • {level.timeLimit === 0 ? "Sin Tiempo" : `${Math.floor(level.timeLimit / 60)} min`}</p>
                             </div>
                         </div>
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isPassed ? "bg-emerald-200 text-emerald-700" : (isUnlocked ? "bg-aux-dark text-white" : "bg-slate-300 text-white")}`}>{isUnlocked ? <Play size={20} className="ml-1" /> : <Lock size={18} />}</div>
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isPassed || isLevel4Completed ? "bg-emerald-200 text-emerald-700" : (unlockedLevels.includes(level.id) ? "bg-aux-dark text-white" : "bg-slate-300 text-white")}`}>{unlockedLevels.includes(level.id) ? <Play size={20} className="ml-1" /> : <Lock size={18} />}</div>
                     </div>
                 </div>
             );
         })}
-
         <div className="mt-8 pt-8 border-t border-slate-100">
             <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 text-center flex items-center justify-center gap-2"><HelpCircle size={16} /> Herramientas de Apoyo</h3>
             <div className="grid grid-cols-2 gap-4">
