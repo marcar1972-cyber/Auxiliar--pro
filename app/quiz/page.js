@@ -303,10 +303,10 @@ export default function QuizPage() {
             <p className="text-sm text-blue-800 font-medium">{unlockedLevels.length === 1 ? "👋 Hola Colega: Completa el Nivel 1 para desbloquear el siguiente." : `🔥 ¡Llevas ${unlockedLevels.length - 1} niveles desbloqueados! Sigue así.`}</p>
         </div>
 
-        {/* AVISO DE SEGURIDAD (Con ícono saltarín) */}
-        <div className="bg-amber-50 border border-amber-200 p-4 rounded-xl mb-6 flex gap-3 items-start">
+        {/* AVISO DE SEGURIDAD (CON MOVIMIENTO EN EL CUADRO COMPLETO) */}
+        <div className="bg-amber-50 border border-amber-200 p-4 rounded-xl mb-6 flex gap-3 items-start animate-bounce">
             <div className="mt-0.5 text-amber-600 shrink-0">
-                <AlertTriangle size={20} className="animate-bounce" />
+                <AlertTriangle size={20} />
             </div>
             <div className="text-xs text-amber-800 leading-relaxed">
                 <p className="font-bold mb-1">Aviso Importante sobre tu Progreso</p>
