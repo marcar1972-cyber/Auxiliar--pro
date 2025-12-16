@@ -9,7 +9,8 @@ export const BLOG_POSTS = [
     excerpt: "Guía oficial basada en el Decreto 466: Experiencia, escolaridad y trámite SEREMI paso a paso.",
     date: "15 Dic 2025",
     readTime: "4 min",
-    image: "/blog/requisitos.jpg",
+    // TRUCO: Usamos una imagen generada automáticamente
+    image: "https://placehold.co/600x400/2563eb/ffffff?text=Requisitos+2026",
     content: `
       <p>Si estás pensando en trabajar en farmacia, uno de los primeros pasos es conocer los <strong>requisitos para ser Auxiliar de Farmacia en Chile</strong>. Esta es una de las búsquedas más comunes, y con razón: es una puerta de entrada real al rubro de la salud.</p>
       
@@ -52,7 +53,8 @@ export const BLOG_POSTS = [
     excerpt: "¿Estudiar carrera o dar examen? Entiende las diferencias de sueldo, formación y funciones.",
     date: "14 Dic 2025",
     readTime: "3 min",
-    image: "/blog/diferencias.jpg",
+    // TRUCO: Usamos una imagen generada automáticamente
+    image: "https://placehold.co/600x400/10b981/ffffff?text=Auxiliar+vs+Tecnico",
     content: `
       <p>Una de las dudas más comunes entre quienes quieren trabajar en farmacia es: <strong>¿Cuál es la diferencia entre Auxiliar de Farmacia y Técnico en Farmacia?</strong> Aunque ambos trabajan en el mismo lugar, tienen distintas funciones, formación y responsabilidades legales.</p>
 
