@@ -360,7 +360,7 @@ export default function QuizPage() {
                 <div className="bg-gradient-to-r from-pink-500 to-rose-500 p-6 text-white text-center">
                     <Users size={48} className="mx-auto mb-2 opacity-90" />
                     
-                    {/* --- AQUÍ ESTÁ EL CAMBIO DE NOMBRE --- */}
+                    {/* Título Corregido */}
                     <h2 className="text-2xl font-black">Comunidad Auxiliar Pro</h2>
                     
                     <p className="text-pink-100 text-sm">Normas del Grupo</p>
@@ -372,7 +372,10 @@ export default function QuizPage() {
                     </div>
                     <div className="flex gap-3 items-start">
                         <XCircle className="text-red-500 shrink-0 mt-1" size={20} />
-                        <p className="text-sm text-slate-600"><strong>No Spam:</strong> Prohibido vender cursos externos, cadenas o publicidad no autorizada.</p>
+                        
+                        {/* --- AQUÍ ESTÁ EL CAMBIO --- */}
+                        <p className="text-sm text-slate-600"><strong>No Spam:</strong> Prohibido vender cursos externos, mensajes masivos o publicidad no autorizada.</p>
+                        
                     </div>
                     <div className="flex gap-3 items-start">
                         <Clock className="text-blue-500 shrink-0 mt-1" size={20} />
