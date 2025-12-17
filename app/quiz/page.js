@@ -31,7 +31,7 @@ export default function QuizPage() {
   const [timeLeft, setTimeLeft] = useState(0); 
   const [showGrandFinale, setShowGrandFinale] = useState(false); 
 
-  // --- NUEVO: ESTADO PARA EL MODAL DE REGLAS (WHATSAPP) ---
+  // ESTADO PARA EL MODAL DE REGLAS (WHATSAPP)
   const [showRulesModal, setShowRulesModal] = useState(false);
 
   // --- 1. EL PORTERO: PROTECCIÓN Y CARGA ---
@@ -191,7 +191,7 @@ export default function QuizPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showResult, score, activeLevelId]);
 
-  // --- NUEVO: FUNCIÓN PARA UNIRSE AL GRUPO ---
+  // FUNCIÓN PARA UNIRSE AL GRUPO
   const handleJoinWhatsapp = () => {
       window.open("https://chat.whatsapp.com/J4VkI8mzTTs9UrzvGqBbdz", "_blank");
       setShowRulesModal(false);
@@ -344,7 +344,7 @@ export default function QuizPage() {
                     <span className="text-xs font-bold text-slate-600">Biblioteca</span>
                 </Link>
 
-                {/* NUEVO: BOTÓN WHATSAPP QUE ABRE EL MODAL */}
+                {/* BOTÓN WHATSAPP CON MODAL */}
                 <button onClick={() => setShowRulesModal(true)} className="bg-white p-3 rounded-xl border border-slate-200 shadow-sm hover:border-aux-green flex items-center gap-3 text-left">
                     <div className="w-8 h-8 bg-pink-50 text-pink-600 rounded-lg flex items-center justify-center"><MessageCircle size={18} /></div>
                     <span className="text-xs font-bold text-slate-600">Foro WhatsApp</span>
@@ -353,13 +353,16 @@ export default function QuizPage() {
         </div>
       </div>
 
-      {/* --- NUEVO: MODAL DE REGLAS DE CONVIVENCIA --- */}
+      {/* --- MODAL DE REGLAS DE CONVIVENCIA --- */}
       {showRulesModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
             <div className="bg-white rounded-3xl shadow-2xl max-w-sm w-full overflow-hidden">
                 <div className="bg-gradient-to-r from-pink-500 to-rose-500 p-6 text-white text-center">
                     <Users size={48} className="mx-auto mb-2 opacity-90" />
-                    <h2 className="text-2xl font-black">Comunidad Pro</h2>
+                    
+                    {/* --- AQUÍ ESTÁ EL CAMBIO DE NOMBRE --- */}
+                    <h2 className="text-2xl font-black">Comunidad Auxiliar Pro</h2>
+                    
                     <p className="text-pink-100 text-sm">Normas del Grupo</p>
                 </div>
                 <div className="p-6 space-y-4">
