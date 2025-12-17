@@ -1,46 +1,16 @@
-import Image from "next/image";
 import Link from "next/link";
-import { User, BookOpen, Search, Calculator, Mail, ChevronDown } from "lucide-react"; 
+import { BookOpen, Mail, ChevronDown } from "lucide-react"; 
 import { FAQS } from "./data"; 
 
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col bg-white font-sans">
       
-      {/* 1. NAVBAR SUPERIOR */}
-      <nav className="w-full p-4 flex justify-between items-center bg-white shadow-sm sticky top-0 z-50">
-        <Link href="/" className="flex items-center">
-            {/* CORREGIDO: Usamos el nombre corto 'logo.png' que ya tienes en public */}
-            <Image 
-                src="/logo.png" 
-                alt="Logo AuxiliarPro Chile" 
-                width={140} 
-                height={84} 
-                priority
-                className="object-contain"
-            />
-        </Link>
-
-        <div className="flex items-center gap-3 md:gap-4">
-            <button className="p-2 text-slate-400 hover:text-aux-dark transition-colors" aria-label="Buscar">
-                <Search size={20} />
-            </button>
-
-            <Link href="https://auxiliar-dermocheck.vercel.app" target="_blank" className="group flex flex-col items-center">
-                <Calculator size={20} className="text-slate-400 group-hover:text-aux-green transition-colors" />
-                <span className="text-[10px] font-bold text-slate-400 group-hover:text-aux-green hidden md:block">DERMOCHECK</span>
-            </Link>
-
-            <div className="h-6 w-px bg-slate-200 mx-1"></div>
-
-            <button className="bg-slate-50 text-aux-dark p-2 rounded-full hover:bg-aux-green hover:text-white transition-colors border border-slate-100">
-                <User size={20} />
-            </button>
-        </div>
-      </nav>
+      {/* 🚫 NAVBAR ELIMINADO: Ya viene automático desde layout.js */}
 
       {/* 2. CONTENIDO PRINCIPAL */}
-      <div className="flex-1 flex flex-col items-center justify-center p-6 text-center max-w-md mx-auto w-full mt-[-20px] mb-10">
+      {/* Cambié el margen superior a mt-8 para que no se pegue al menú nuevo */}
+      <div className="flex-1 flex flex-col items-center justify-center p-6 text-center max-w-md mx-auto w-full mt-8 mb-10">
         
         <span className="bg-emerald-50 text-aux-green text-[11px] font-black px-3 py-1 rounded-full mb-6 tracking-widest border border-emerald-100 uppercase">
             Meta: Credencial 2026
