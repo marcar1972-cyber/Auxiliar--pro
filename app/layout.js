@@ -3,7 +3,7 @@ import "./globals.css";
 import Link from "next/link";
 import Image from "next/image";
 import { Search, Calculator } from "lucide-react";
-import UserIcon from "./UserIcon"; // Asegúrate de que UserIcon.js esté en la misma carpeta
+import UserIcon from "./UserIcon"; 
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,7 +26,7 @@ export const metadata = {
     type: 'website',
   },
 
-  // --- AQUÍ ESTÁ TU CÓDIGO DE GOOGLE ---
+  // VERIFICACIÓN DE GOOGLE (Etiqueta HTML)
   verification: {
     google: 'iIARSpG3ZCQPX13aWBNtsLFQLgwsCWVc-wb8SswLSqY', 
   },
@@ -40,25 +40,24 @@ export default function RootLayout({ children }) {
         <nav className="bg-white border-b border-slate-100 sticky top-0 z-50">
           <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
             
-            {/* LOGO (Izquierda) */}
-            <Link href="/" className="flex items-center gap-2 group">
-               {/* Asegúrate de tener logo.png en la carpeta public */}
-               <div className="relative w-8 h-8">
-                  <Image 
-                    src="/logo.png" 
-                    alt="Logo AuxiliarPro" 
-                    fill
-                    className="object-contain"
-                  />
-               </div>
-               <span className="text-xl font-black text-slate-800 tracking-tight group-hover:opacity-80 transition-opacity">
-                  Auxiliar<span className="text-aux-green">Pro</span>
-               </span>
+            {/* --- LOGO CORREGIDO (Solo Imagen) --- */}
+            <Link href="/" className="relative w-48 h-10 hover:opacity-80 transition-opacity">
+               {/* Le dimos w-48 (ancho) y h-10 (alto) para que la imagen 
+                  tenga espacio y no se vea aplastada. 
+                  object-left hace que se alinee a la izquierda.
+               */}
+               <Image 
+                 src="/logo.png" 
+                 alt="Logo AuxiliarPro" 
+                 fill
+                 className="object-contain object-left"
+               />
             </Link>
+            {/* ----------------------------------- */}
 
             {/* HERRAMIENTAS (Derecha) */}
             <div className="flex items-center gap-4">
-               {/* Lupa (Va al Blog) */}
+               {/* Lupa */}
                <Link href="/blog" className="text-slate-400 hover:text-aux-dark transition-colors p-2 hover:bg-slate-50 rounded-full" title="Buscar en el Blog">
                   <Search size={20} />
                </Link>
@@ -66,7 +65,7 @@ export default function RootLayout({ children }) {
                {/* Separador */}
                <div className="h-6 w-px bg-slate-200 hidden sm:block"></div>
 
-               {/* Link a Dermocheck (Futuro proyecto) */}
+               {/* Link a Dermocheck */}
                <Link href="#" className="hidden sm:flex items-center gap-2 text-slate-500 hover:text-blue-600 font-bold text-xs tracking-wider px-3 py-2 rounded-lg hover:bg-blue-50 transition-all">
                   <Calculator size={16} /> DERMOCHECK
                </Link>
@@ -74,7 +73,7 @@ export default function RootLayout({ children }) {
                {/* Separador */}
                <div className="h-6 w-px bg-slate-200"></div>
 
-               {/* Icono de Usuario (Login/Perfil) */}
+               {/* Icono de Usuario */}
                <UserIcon />
             </div>
           </div>
