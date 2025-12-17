@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
+import Image from "next/image"; // <--- ¡AQUÍ ESTÁ LA CLAVE! Importamos el componente de imagen
 import { Search, User, Calculator } from "lucide-react";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -19,32 +20,37 @@ export default function RootLayout({ children }) {
         <header className="bg-white border-b border-slate-100 sticky top-0 z-50">
           <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
             
-            {/* LOGO IZQUIERDA */}
-            <Link href="/" className="flex items-center gap-2">
-              <span className="text-xl font-extrabold text-slate-900 tracking-tight">
-                Auxiliar<span className="text-blue-600">Pro</span>
-              </span>
+            {/* LOGO IZQUIERDA (AHORA ES IMAGEN) */}
+            <Link href="/" className="flex items-center">
+               <Image 
+                 src="/logo.png" 
+                 alt="AuxiliarPro Logo" 
+                 width={120} 
+                 height={60} 
+                 className="object-contain h-10 w-auto" // Ajuste para que quepa bien en la barra
+                 priority
+               />
             </Link>
 
             {/* ÍCONOS DERECHA (CONECTADOS) */}
             <div className="flex items-center gap-1 md:gap-2">
               
-              {/* LUPA: Lleva al Blog para buscar temas */}
+              {/* LUPA: Lleva al Blog */}
               <Link href="/blog" className="p-2 text-slate-400 hover:text-blue-600 hover:bg-slate-50 rounded-full transition-all" title="Buscar temas en el Blog">
                 <Search className="w-5 h-5" />
               </Link>
 
               <div className="h-6 w-px bg-slate-200 mx-1"></div>
 
-              {/* DERMOCHECK: Botón especial */}
-              <button className="flex items-center gap-2 px-3 py-1.5 text-slate-500 hover:text-slate-800 rounded-lg hover:bg-slate-50 transition-colors">
+              {/* DERMOCHECK: Enlace externo */}
+              <a href="https://auxiliar-dermocheck.vercel.app" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 px-3 py-1.5 text-slate-500 hover:text-slate-800 rounded-lg hover:bg-slate-50 transition-colors">
                 <Calculator className="w-4 h-4" />
                 <span className="text-xs font-bold tracking-wide hidden md:block">DERMOCHECK</span>
-              </button>
+              </a>
 
               <div className="h-6 w-px bg-slate-200 mx-1"></div>
 
-              {/* HOMBRECITO: Lleva al Login de Firebase */}
+              {/* HOMBRECITO: Lleva al Login */}
               <Link href="/login" className="p-2 text-slate-400 hover:text-blue-600 hover:bg-slate-50 rounded-full transition-all" title="Iniciar Sesión / Mi Perfil">
                 <User className="w-5 h-5" />
               </Link>
