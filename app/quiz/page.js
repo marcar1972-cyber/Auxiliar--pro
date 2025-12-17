@@ -1,12 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation"; // <--- Para redirigir
+import { useRouter } from "next/navigation";
 import { LEVELS } from "../data"; 
 import Link from "next/link";
-import { Lock, Play, CheckCircle, XCircle, ChevronLeft, RefreshCcw, ArrowRight, AlertCircle, FileText, Library, MessageCircle, HelpCircle, Clock, Award, Star, ShieldCheck, Trophy, Loader2 } from "lucide-react";
+import { Lock, Play, CheckCircle, XCircle, ChevronLeft, ArrowRight, AlertCircle, FileText, Library, MessageCircle, HelpCircle, Clock, ShieldCheck, Trophy, Loader2, Users, ThumbsUp } from "lucide-react"; 
 
-// --- IMPORTACIONES DE FIREBASE ---
 import { auth, db } from "../firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc, arrayUnion, serverTimestamp } from "firebase/firestore";
@@ -14,10 +13,9 @@ import { doc, getDoc, setDoc, updateDoc, arrayUnion, serverTimestamp } from "fir
 export default function QuizPage() {
   const router = useRouter();
 
-  // ESTADOS DE USUARIO Y CARGA
   const [user, setUser] = useState(null);
-  const [loadingAuth, setLoadingAuth] = useState(true); // Para el spinner de carga inicial
-  const [savingData, setSavingData] = useState(false); // Para mostrar que estamos guardando
+  const [loadingAuth, setLoadingAuth] = useState(true);
+  const [savingData, setSavingData] = useState(false);
 
   // ESTADOS DEL JUEGO
   const [unlockedLevels, setUnlockedLevels] = useState([1]); 
@@ -33,24 +31,23 @@ export default function QuizPage() {
   const [timeLeft, setTimeLeft] = useState(0); 
   const [showGrandFinale, setShowGrandFinale] = useState(false); 
 
-  // --- 1. EL PORTERO: PROTECCIÓN Y CARGA DE DATOS ---
+  // --- NUEVO: ESTADO PARA EL MODAL DE REGLAS (WHATSAPP) ---
+  const [showRulesModal, setShowRulesModal] = useState(false);
+
+  // --- 1. EL PORTERO: PROTECCIÓN Y CARGA ---
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
         if (!currentUser) {
-            // Si no hay usuario, mandar al login
             router.push("/login");
         } else {
             setUser(currentUser);
-            // Si hay usuario, BUSCAR SU PROGRESO EN LA NUBE
             try {
                 const docRef = doc(db, "users", currentUser.uid);
                 const docSnap = await getDoc(docRef);
 
                 if (docSnap.exists() && docSnap.data().unlockedLevels) {
-                    // Si ya tiene progreso guardado, lo cargamos
                     setUnlockedLevels(docSnap.data().unlockedLevels);
                 } else {
-                    // Si es usuario nuevo en la base de datos, creamos su perfil básico
                     await setDoc(docRef, { 
                         email: currentUser.email,
                         unlockedLevels: [1],
@@ -66,8 +63,7 @@ export default function QuizPage() {
     return () => unsubscribe();
   }, [router]);
 
-
-  // --- CRONÓMETRO GLOBAL ---
+  // --- CRONÓMETRO ---
   useEffect(() => {
     if (activeLevelId && !showResult && timeLeft > 0) {
         const timerId = setInterval(() => {
@@ -153,7 +149,7 @@ export default function QuizPage() {
 
   const getCurrentLevel = () => LEVELS.find((l) => l.id === activeLevelId);
 
-  // --- 2. LA GRABADORA: GUARDAR RESULTADOS EN FIREBASE ---
+  // --- GRABADORA FIREBASE ---
   useEffect(() => {
     const saveProgressToFirebase = async () => {
         if (showResult && activeLevelId && user) {
@@ -164,8 +160,6 @@ export default function QuizPage() {
 
             try {
                 const userRef = doc(db, "users", user.uid);
-                
-                // A) Guardar en el Historial (Para estadísticas futuras)
                 await updateDoc(userRef, {
                     quizHistory: arrayUnion({
                         levelId: activeLevelId,
@@ -176,15 +170,11 @@ export default function QuizPage() {
                     })
                 });
 
-                // B) Si aprobó, desbloquear siguiente nivel
                 if (passed) {
                     const nextLevel = activeLevelId + 1;
                     if (LEVELS.find(l => l.id === nextLevel)) {
-                        // Actualizar Local
                         if (!unlockedLevels.includes(nextLevel)) {
                             setUnlockedLevels(prev => [...prev, nextLevel]);
-                            
-                            // Actualizar Nube
                             await updateDoc(userRef, {
                                 unlockedLevels: arrayUnion(nextLevel)
                             });
@@ -192,204 +182,113 @@ export default function QuizPage() {
                     }
                 }
             } catch (error) {
-                console.error("Error guardando en Firebase:", error);
+                console.error("Error guardando:", error);
             }
             setSavingData(false);
         }
     };
-
     saveProgressToFirebase();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showResult, score, activeLevelId]); // Se ejecuta cuando sale la pantalla de resultados
+  }, [showResult, score, activeLevelId]);
 
+  // --- NUEVO: FUNCIÓN PARA UNIRSE AL GRUPO ---
+  const handleJoinWhatsapp = () => {
+      window.open("https://chat.whatsapp.com/J4VkI8mzTTs9UrzvGqBbdz", "_blank");
+      setShowRulesModal(false);
+  };
 
   // --- VISTAS ---
 
-  // 0. PANTALLA DE CARGA (Mientras verificamos quién eres)
-  if (loadingAuth) {
-      return (
-          <div className="min-h-screen bg-white flex flex-col items-center justify-center gap-4">
-              <Loader2 className="animate-spin text-aux-green" size={48} />
-              <p className="text-slate-500 font-medium">Verificando credenciales...</p>
-          </div>
-      );
-  }
+  if (loadingAuth) return <div className="min-h-screen flex items-center justify-center"><Loader2 className="animate-spin text-aux-green" size={48} /></div>;
 
-  // 1. VISTA "PREMIUM" DE CERTIFICACIÓN
+  // 1. GRAND FINALE
   if (showGrandFinale) {
       return (
         <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-6 text-center font-sans relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-slate-800 via-slate-900 to-black opacity-80"></div>
-            <div className="absolute top-10 right-10 w-32 h-32 bg-aux-green rounded-full blur-[80px] opacity-20"></div>
-            <div className="absolute bottom-10 left-10 w-32 h-32 bg-blue-500 rounded-full blur-[80px] opacity-20"></div>
-
-            <div className="relative bg-white/10 backdrop-blur-md border border-white/20 p-8 md:p-12 rounded-2xl shadow-2xl max-w-md w-full text-white overflow-hidden ring-1 ring-white/10">
-                <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-yellow-600 via-yellow-300 to-yellow-600"></div>
-                <div className="mb-8 relative inline-block">
-                    <div className="absolute inset-0 bg-yellow-400 blur-2xl opacity-30 rounded-full"></div>
-                    <div className="relative w-24 h-24 bg-gradient-to-b from-slate-800 to-slate-900 rounded-full flex items-center justify-center border-2 border-yellow-500/50 shadow-xl mx-auto">
-                        <Trophy size={48} className="text-yellow-400 drop-shadow-[0_0_10px_rgba(250,204,21,0.5)]" />
-                    </div>
-                </div>
-                <h2 className="text-sm font-bold text-yellow-400 tracking-[0.2em] uppercase mb-2">Entrenamiento Completado</h2>
-                <h1 className="text-3xl md:text-4xl font-black text-white mb-6 leading-tight">
-                    Auxiliar Pro <br/> <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-yellow-500">Certificado</span>
-                </h1>
-                <div className="bg-slate-900/50 p-6 rounded-xl border border-white/10 mb-8 backdrop-blur-sm">
-                    <div className="flex items-center gap-3 mb-3">
-                        <ShieldCheck className="text-emerald-400 shrink-0" size={24} />
-                        <p className="text-left text-sm text-slate-300 font-medium">Dominio de Normativa Sanitaria (D.S. 466)</p>
-                    </div>
-                    <div className="flex items-center gap-3 mb-3">
-                        <ShieldCheck className="text-emerald-400 shrink-0" size={24} />
-                        <p className="text-left text-sm text-slate-300 font-medium">Manejo de Controlados (D.S. 404/405)</p>
-                    </div>
-                    <div className="flex items-center gap-3">
-                        <ShieldCheck className="text-emerald-400 shrink-0" size={24} />
-                        <p className="text-left text-sm text-slate-300 font-medium">Cálculo de Dosis y Posología</p>
-                    </div>
-                </div>
-                <button onClick={returnToMenu} className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-emerald-900/50 transition-all transform hover:scale-[1.02] flex items-center justify-center gap-2">
-                    <RefreshCcw size={18} /> Volver al Entrenamiento
-                </button>
+            <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-black"></div>
+            <div className="relative z-10 bg-white/10 backdrop-blur-md p-8 rounded-2xl border border-white/20 shadow-2xl max-w-md w-full text-white">
+                <Trophy size={64} className="text-yellow-400 mx-auto mb-6 drop-shadow-[0_0_15px_rgba(250,204,21,0.6)]" />
+                <h1 className="text-3xl font-black mb-4">¡CERTIFICADO!</h1>
+                <p className="mb-8 text-slate-300">Has dominado todos los niveles de AuxiliarPro.</p>
+                <button onClick={returnToMenu} className="bg-emerald-500 text-white font-bold py-3 px-6 rounded-xl w-full hover:bg-emerald-400 transition-colors">Volver al Menú</button>
             </div>
-            <p className="mt-8 text-slate-500 text-xs font-medium relative z-10">Este es un reconocimiento simbólico de tu preparación en AuxiliarPro.</p>
         </div>
       );
   }
 
-  // 2. VISTA JUGANDO
+  // 2. JUGANDO
   if (activeLevelId && !showResult) {
     const level = getCurrentLevel();
-    if (!level) return <div className="p-10 text-center">Error: No encuentro el Nivel {activeLevelId}</div>;
-    const question = level.questions ? level.questions[currentQIndex] : null;
-    if (!question) return <div className="p-10 text-center">Error de Datos. <button onClick={returnToMenu}>Volver</button></div>;
-
-    let timerColor = "text-slate-500";
-    if (timeLeft <= 60) timerColor = "text-orange-500";
-    if (timeLeft <= 10) timerColor = "text-red-600 animate-pulse";
+    if (!level) return null;
+    const question = level.questions[currentQIndex];
 
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
         <div className="w-full max-w-lg bg-white rounded-2xl shadow-xl overflow-hidden">
             <div className="w-full bg-slate-100 h-2">
-                <div className="bg-aux-green h-2 transition-all duration-500" style={{ width: `${((currentQIndex + 1) / level.questions.length) * 100}%` }}></div>
+                <div className="bg-aux-green h-2 transition-all" style={{ width: `${((currentQIndex + 1) / level.questions.length) * 100}%` }}></div>
             </div>
-            <div className="p-6 md:p-8">
-                <div className="flex justify-between items-start mb-6">
-                    <div>
-                        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Pregunta {currentQIndex + 1} de {level.questions.length}</span>
-                        <div className="flex gap-2 mt-1">
-                            <span className="bg-slate-100 text-slate-600 text-xs font-bold px-2 py-1 rounded">Nivel {activeLevelId}</span>
-                        </div>
-                    </div>
-                    {level.timeLimit > 0 ? (
-                        <div className={`flex items-center gap-1 font-mono font-bold text-xl ${timerColor}`}>
-                            <Clock size={20} />
-                            <span>{formatTime(timeLeft)}</span>
-                        </div>
-                    ) : (
-                        <div className="text-slate-300 text-xs font-bold flex items-center gap-1"><Clock size={14} /> Sin tiempo</div>
-                    )}
+            <div className="p-6">
+                <div className="flex justify-between mb-6">
+                    <span className="text-xs font-bold text-slate-400">PREGUNTA {currentQIndex + 1} / {level.questions.length}</span>
+                    {level.timeLimit > 0 && <div className="font-mono font-bold text-slate-500 flex gap-1"><Clock size={16}/> {formatTime(timeLeft)}</div>}
                 </div>
-                <h2 className="text-xl font-black text-aux-dark mb-8 leading-tight">{question.text}</h2>
+                <h2 className="text-xl font-black text-slate-800 mb-6">{question.text}</h2>
                 <div className="space-y-3">
                     {question.options.map((opt, idx) => {
-                        let btnColor = "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100";
+                        let style = "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100";
                         if (isAnswered) {
-                            if (idx === question.correctIndex) btnColor = "bg-green-100 border-green-500 text-green-800";
-                            else if (idx === selectedOption) btnColor = "bg-red-100 border-red-500 text-red-800"; 
-                            else btnColor = "opacity-50 grayscale";
+                            if (idx === question.correctIndex) style = "bg-green-100 border-green-500 text-green-800";
+                            else if (idx === selectedOption) style = "bg-red-100 border-red-500 text-red-800";
+                            else style = "opacity-50";
                         }
                         return (
-                            <button key={idx} onClick={() => handleAnswer(idx, question.correctIndex, question.text, question.options, question.studyGuide)} disabled={isAnswered} className={`w-full text-left p-4 rounded-xl border-2 font-medium transition-all duration-200 ${btnColor}`}>
-                                <div className="flex items-center gap-3">
-                                    <div className={`w-6 h-6 rounded-full border flex items-center justify-center text-xs font-bold ${idx === question.correctIndex && isAnswered ? 'bg-green-500 border-green-500 text-white' : 'border-slate-300'}`}>{["A", "B", "C", "D"][idx]}</div>
-                                    {opt}
-                                </div>
+                            <button key={idx} onClick={() => handleAnswer(idx, question.correctIndex, question.text, question.options, question.studyGuide)} disabled={isAnswered} className={`w-full text-left p-4 rounded-xl border-2 font-medium transition-all ${style}`}>
+                                <div className="flex gap-3"><span className="font-bold">{["A","B","C","D"][idx]}</span>{opt}</div>
                             </button>
                         )
                     })}
                 </div>
             </div>
         </div>
-        <button onClick={returnToMenu} className="mt-6 text-slate-400 text-sm hover:text-red-500 underline">Cancelar y Salir</button>
+        <button onClick={returnToMenu} className="mt-6 text-slate-400 text-sm hover:text-red-500 underline">Salir</button>
       </div>
     );
   }
 
-  // 3. VISTA RESULTADOS
+  // 3. RESULTADOS
   if (showResult) {
     const level = getCurrentLevel();
-    if (!level) { returnToMenu(); return null; }
     const passed = score >= level.passingScore;
-    const isTimeout = timeLeft === 0 && level.timeLimit > 0;
-    const isGrandFinaleReady = activeLevelId === 4 && passed;
-
     return (
-        <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6 py-12">
-            <div className="bg-white p-8 rounded-3xl shadow-2xl text-center max-w-md w-full">
-                {isTimeout && (
-                    <div className="mb-4 bg-orange-100 text-orange-700 px-4 py-2 rounded-lg font-bold text-sm inline-flex items-center gap-2">
-                        <Clock size={16} /> ¡Se acabó el tiempo!
-                    </div>
-                )}
-                
-                {/* INDICADOR DE GUARDADO EN LA NUBE */}
-                {savingData ? (
-                    <div className="mb-4 text-xs font-bold text-blue-500 flex items-center justify-center gap-2 animate-pulse">
-                        <Loader2 size={12} className="animate-spin"/> Guardando resultado en la nube...
-                    </div>
-                ) : (
-                    <div className="mb-4 text-xs font-bold text-green-600 flex items-center justify-center gap-1">
-                        <CheckCircle size={12} /> Resultado guardado
-                    </div>
-                )}
-
-                <div className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl shadow-sm ${passed ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"}`}>
+        <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
+            <div className="bg-white p-8 rounded-3xl shadow-xl text-center max-w-md w-full">
+                {savingData && <p className="text-xs text-blue-500 mb-2 animate-pulse">Guardando...</p>}
+                <div className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 text-4xl ${passed ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"}`}>
                     {passed ? <CheckCircle size={40} /> : <XCircle size={40} />}
                 </div>
-                <h2 className="text-2xl font-black text-aux-dark mb-2">{passed ? "¡APROBADO!" : "Sigue Practicando"}</h2>
-                <p className="text-slate-500 mb-6">Obtuviste <strong className={passed ? "text-green-600" : "text-red-600"}>{score}</strong> de <strong>{level.questions.length}</strong> puntos.</p>
-
+                <h2 className="text-2xl font-black text-slate-800 mb-2">{passed ? "¡APROBADO!" : "Sigue Practicando"}</h2>
+                <p className="text-slate-500 mb-6">Puntaje: {score} / {level.questions.length}</p>
+                
                 {mistakes.length > 0 && (
-                    <div className="mb-8 text-left bg-red-50 p-4 rounded-xl border border-red-100">
-                        <h3 className="text-sm font-bold text-red-800 mb-3 flex items-center gap-2"><AlertCircle size={16} /> Revisa tus errores ({mistakes.length}):</h3>
-                        <div className="space-y-4 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
-                            {mistakes.map((mistake, i) => (
-                                <div key={i} className="bg-white p-3 rounded-lg border border-red-100 shadow-sm text-xs">
-                                    <p className="font-bold text-slate-700 mb-2">{mistake.question}</p>
-                                    <div className="space-y-1 mb-3">
-                                        <p className="text-red-500 flex items-center gap-1"><XCircle size={12} /> Tu respuesta: <span className="font-medium">{mistake.yourAnswer}</span></p>
-                                        <p className="text-green-600 flex items-center gap-1"><CheckCircle size={12} /> Correcta: <span className="font-bold">{mistake.correctAnswer}</span></p>
-                                    </div>
-                                    {mistake.studyGuide && (
-                                        <Link href={`/${mistake.studyGuide}`} target="_blank" className="block w-full bg-slate-50 border border-slate-200 text-slate-600 text-center py-2 rounded hover:bg-aux-green hover:text-white hover:border-aux-green transition-colors font-bold flex items-center justify-center gap-2">
-                                            <FileText size={14} /> Repasar Material de Estudio
-                                        </Link>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
+                    <div className="bg-red-50 p-4 rounded-xl border border-red-100 text-left mb-6 max-h-40 overflow-y-auto">
+                        <p className="text-xs font-bold text-red-700 mb-2">Errores cometidos:</p>
+                        {mistakes.map((m, i) => (
+                            <div key={i} className="mb-2 text-xs border-b border-red-100 pb-2 last:border-0">
+                                <p className="font-bold text-slate-700">{m.question}</p>
+                                <p className="text-red-500">Tuya: {m.yourAnswer}</p>
+                                <p className="text-green-600">Correcta: {m.correctAnswer}</p>
+                            </div>
+                        ))}
                     </div>
                 )}
 
-                <div className="space-y-3">
-                    {passed ? (
-                        isGrandFinaleReady ? (
-                            <button onClick={() => setShowGrandFinale(true)} className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-black py-4 rounded-xl shadow-lg hover:scale-105 transition-transform flex items-center justify-center gap-2 border-b-4 border-yellow-600">
-                                <Trophy size={20} className="animate-bounce" /> RECLAMAR CERTIFICACIÓN
-                            </button>
-                        ) : (
-                            <button onClick={returnToMenu} className="w-full bg-aux-dark text-white font-bold py-3 rounded-xl shadow-lg hover:scale-105 transition-transform flex items-center justify-center gap-2">
-                                SIGUIENTE NIVEL <ArrowRight size={18} />
-                            </button>
-                        )
-                    ) : (
-                        <button onClick={() => resetGame(level.timeLimit)} className="w-full bg-aux-green text-white font-bold py-3 rounded-xl shadow-lg hover:bg-emerald-600 transition-colors flex items-center justify-center gap-2"><RefreshCcw size={18} /> INTENTAR DE NUEVO</button>
-                    )}
-                   {!passed && <button onClick={returnToMenu} className="w-full bg-white text-slate-500 font-bold py-3 rounded-xl border border-slate-200 hover:bg-slate-50">Volver al Menú</button>}
-                </div>
+                {passed ? (
+                    <button onClick={returnToMenu} className="w-full bg-aux-dark text-white font-bold py-3 rounded-xl">Continuar</button>
+                ) : (
+                    <button onClick={() => resetGame(level.timeLimit)} className="w-full bg-aux-green text-white font-bold py-3 rounded-xl">Reintentar</button>
+                )}
+                {!passed && <button onClick={returnToMenu} className="mt-3 text-slate-400 text-sm">Volver</button>}
             </div>
         </div>
     );
@@ -398,66 +297,94 @@ export default function QuizPage() {
   // 4. MENÚ PRINCIPAL
   return (
     <main className="min-h-screen bg-slate-50 font-sans pb-20">
+      
+      {/* HEADER */}
       <div className="bg-white p-4 shadow-sm sticky top-0 z-10 flex items-center gap-4">
         <Link href="/" className="text-slate-400 hover:text-aux-dark"><ChevronLeft size={24} /></Link>
-        <h1 className="text-lg font-black text-aux-dark">Tu Ruta de Aprendizaje</h1>
+        <h1 className="text-lg font-black text-aux-dark">Tu Ruta</h1>
       </div>
+
       <div className="p-6 max-w-md mx-auto space-y-6 mt-4">
-        
-        {/* SALUDO DE BIENVENIDA PERSONALIZADO */}
+        {/* BIENVENIDA */}
         <div className="bg-blue-50 border border-blue-100 p-4 rounded-xl mb-6 flex items-center gap-3">
              {user?.photoURL ? (
                 <img src={user.photoURL} alt="User" className="w-10 h-10 rounded-full border-2 border-white shadow-sm" />
              ) : (
-                <div className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">
-                    {user?.displayName ? user.displayName[0] : "A"}
-                </div>
+                <div className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">{user?.displayName?.[0]}</div>
              )}
              <div>
                 <p className="text-xs text-blue-500 font-bold uppercase">Auxiliar en entrenamiento</p>
-                <p className="text-sm text-blue-900 font-bold">
-                    {user?.displayName || "Usuario"}, llevas {unlockedLevels.length - 1} niveles ganados.
-                </p>
+                <p className="text-sm text-blue-900 font-bold">{user?.displayName}, Nivel {unlockedLevels.length} alcanzado.</p>
              </div>
         </div>
         
+        {/* NIVELES */}
         {LEVELS.map((level) => {
             const isUnlocked = unlockedLevels.includes(level.id);
             const isPassed = unlockedLevels.includes(level.id + 1) || (level.id === 4 && unlockedLevels.includes(5)); 
-            const isLevel4Completed = level.id === 4 && showGrandFinale; 
-
             return (
-                <div key={level.id} onClick={() => startLevel(level.id)} className={`relative overflow-hidden rounded-2xl border-2 transition-all duration-300 ${isPassed || isLevel4Completed ? "bg-emerald-50 border-emerald-200 cursor-pointer" : isUnlocked ? "bg-white border-aux-green/20 shadow-lg cursor-pointer hover:scale-[1.02]" : "bg-slate-100 border-slate-200 opacity-80 cursor-not-allowed grayscale"}`}>
-                    <div className="p-6 flex items-center gap-4">
-                        <div className={`w-14 h-14 rounded-full flex items-center justify-center text-2xl shadow-sm ${isPassed || isLevel4Completed ? "bg-emerald-500 text-white" : (isUnlocked ? "bg-emerald-100" : "bg-slate-200")}`}>
-                            {isPassed || isLevel4Completed ? <CheckCircle size={28} /> : (isUnlocked ? level.icon : "🔒")}
-                        </div>
-                        <div className="flex-1">
-                            <h3 className={`font-black text-lg ${isPassed || isLevel4Completed ? "text-emerald-800" : (unlockedLevels.includes(level.id) ? "text-aux-dark" : "text-slate-400")}`}>{level.title}</h3>
-                            <div className="flex items-center gap-2 mt-1">
-                                {(isPassed || isLevel4Completed) && <span className="bg-emerald-200 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded-full">APROBADO</span>}
-                                <p className="text-xs text-slate-500 font-medium">{level.qCount} Pregs • {level.timeLimit === 0 ? "Sin Tiempo" : `${Math.floor(level.timeLimit / 60)} min`}</p>
-                            </div>
-                        </div>
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isPassed || isLevel4Completed ? "bg-emerald-200 text-emerald-700" : (unlockedLevels.includes(level.id) ? "bg-aux-dark text-white" : "bg-slate-300 text-white")}`}>{unlockedLevels.includes(level.id) ? <Play size={20} className="ml-1" /> : <Lock size={18} />}</div>
+                <div key={level.id} onClick={() => startLevel(level.id)} className={`relative overflow-hidden rounded-2xl border-2 transition-all p-6 flex items-center gap-4 ${isPassed ? "bg-emerald-50 border-emerald-200" : isUnlocked ? "bg-white border-white shadow-md hover:scale-[1.02]" : "bg-slate-100 opacity-60 grayscale"}`}>
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center text-xl ${isPassed ? "bg-emerald-500 text-white" : isUnlocked ? "bg-emerald-100" : "bg-slate-300"}`}>
+                        {isPassed ? <CheckCircle size={24} /> : (isUnlocked ? level.icon : <Lock size={20}/>)}
+                    </div>
+                    <div className="flex-1">
+                        <h3 className="font-black text-lg text-slate-800">{level.title}</h3>
+                        <p className="text-xs text-slate-500">{level.qCount} Preguntas</p>
                     </div>
                 </div>
             );
         })}
+
+        {/* HERRAMIENTAS (FOOTER MENU) */}
         <div className="mt-8 pt-8 border-t border-slate-100">
-            <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 text-center flex items-center justify-center gap-2"><HelpCircle size={16} /> Herramientas de Apoyo</h3>
+            <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 text-center">Comunidad & Ayuda</h3>
             <div className="grid grid-cols-2 gap-4">
-                <Link href="/biblioteca" className="bg-white p-3 rounded-xl border border-slate-200 shadow-sm hover:border-aux-green hover:shadow-md transition-all flex items-center gap-3 group">
-                    <div className="w-8 h-8 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center group-hover:bg-aux-green group-hover:text-white transition-colors"><Library size={18} /></div>
-                    <span className="text-xs font-bold text-slate-600 group-hover:text-aux-dark text-left leading-tight">Biblioteca<br/>Digital</span>
+                <Link href="/biblioteca" className="bg-white p-3 rounded-xl border border-slate-200 shadow-sm hover:border-aux-green flex items-center gap-3">
+                    <div className="w-8 h-8 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center"><Library size={18} /></div>
+                    <span className="text-xs font-bold text-slate-600">Biblioteca</span>
                 </Link>
-                <Link href="https://chat.whatsapp.com/J4VkI8mzTTs9UrzvGqBbdz" target="_blank" className="bg-white p-3 rounded-xl border border-slate-200 shadow-sm hover:border-aux-green hover:shadow-md transition-all flex items-center gap-3 group">
-                    <div className="w-8 h-8 bg-pink-50 text-pink-600 rounded-lg flex items-center justify-center group-hover:bg-aux-green group-hover:text-white transition-colors"><MessageCircle size={18} /></div>
-                    <span className="text-xs font-bold text-slate-600 group-hover:text-aux-dark text-left leading-tight">Foro de<br/>Consultas</span>
-                </Link>
+
+                {/* NUEVO: BOTÓN WHATSAPP QUE ABRE EL MODAL */}
+                <button onClick={() => setShowRulesModal(true)} className="bg-white p-3 rounded-xl border border-slate-200 shadow-sm hover:border-aux-green flex items-center gap-3 text-left">
+                    <div className="w-8 h-8 bg-pink-50 text-pink-600 rounded-lg flex items-center justify-center"><MessageCircle size={18} /></div>
+                    <span className="text-xs font-bold text-slate-600">Foro WhatsApp</span>
+                </button>
             </div>
         </div>
       </div>
+
+      {/* --- NUEVO: MODAL DE REGLAS DE CONVIVENCIA --- */}
+      {showRulesModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+            <div className="bg-white rounded-3xl shadow-2xl max-w-sm w-full overflow-hidden">
+                <div className="bg-gradient-to-r from-pink-500 to-rose-500 p-6 text-white text-center">
+                    <Users size={48} className="mx-auto mb-2 opacity-90" />
+                    <h2 className="text-2xl font-black">Comunidad Pro</h2>
+                    <p className="text-pink-100 text-sm">Normas del Grupo</p>
+                </div>
+                <div className="p-6 space-y-4">
+                    <div className="flex gap-3 items-start">
+                        <ShieldCheck className="text-green-500 shrink-0 mt-1" size={20} />
+                        <p className="text-sm text-slate-600"><strong>Respeto ante todo:</strong> Somos colegas ayudándonos. Cero tolerancia al bullying.</p>
+                    </div>
+                    <div className="flex gap-3 items-start">
+                        <XCircle className="text-red-500 shrink-0 mt-1" size={20} />
+                        <p className="text-sm text-slate-600"><strong>No Spam:</strong> Prohibido vender cursos externos, cadenas o publicidad no autorizada.</p>
+                    </div>
+                    <div className="flex gap-3 items-start">
+                        <Clock className="text-blue-500 shrink-0 mt-1" size={20} />
+                        <p className="text-sm text-slate-600"><strong>Horario:</strong> Intenta escribir en horas prudentes.</p>
+                    </div>
+                    
+                    <button onClick={handleJoinWhatsapp} className="w-full bg-aux-dark text-white font-bold py-4 rounded-xl hover:bg-slate-800 transition-all flex items-center justify-center gap-2 mt-4">
+                        <ThumbsUp size={20} /> Acepto y Unirme
+                    </button>
+                    <button onClick={() => setShowRulesModal(false)} className="w-full text-slate-400 text-sm font-bold py-2">Cancelar</button>
+                </div>
+            </div>
+        </div>
+      )}
+
     </main>
   );
 }
