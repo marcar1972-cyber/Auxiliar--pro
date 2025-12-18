@@ -9,7 +9,6 @@ export const BLOG_POSTS = [
     excerpt: "Guía oficial basada en el Decreto 466: Experiencia, escolaridad y trámite SEREMI paso a paso.",
     date: "15 Dic 2025",
     readTime: "4 min",
-    // TRUCO: Usamos una imagen generada automáticamente
     image: "https://placehold.co/600x400/2563eb/ffffff?text=Requisitos+2026",
     content: `
       <p>Si estás pensando en trabajar en farmacia, uno de los primeros pasos es conocer los <strong>requisitos para ser Auxiliar de Farmacia en Chile</strong>. Esta es una de las búsquedas más comunes, y con razón: es una puerta de entrada real al rubro de la salud.</p>
@@ -53,7 +52,6 @@ export const BLOG_POSTS = [
     excerpt: "¿Estudiar carrera o dar examen? Entiende las diferencias de sueldo, formación y funciones.",
     date: "14 Dic 2025",
     readTime: "3 min",
-    // TRUCO: Usamos una imagen generada automáticamente
     image: "https://placehold.co/600x400/10b981/ffffff?text=Auxiliar+vs+Tecnico",
     content: `
       <p>Una de las dudas más comunes entre quienes quieren trabajar en farmacia es: <strong>¿Cuál es la diferencia entre Auxiliar de Farmacia y Técnico en Farmacia?</strong> Aunque ambos trabajan en el mismo lugar, tienen distintas funciones, formación y responsabilidades legales.</p>
@@ -107,6 +105,64 @@ export const BLOG_POSTS = [
       <h2>¿Cuál es mejor?</h2>
       <p>No es que uno sea "mejor" que otro. Si quieres <strong>entrar rápido al rubro</strong>, el camino de Auxiliar de Farmacia es más directo. Si buscas <strong>formación técnica completa académica</strong>, el camino es el Técnico en Farmacia.</p>
     `
+  },
+  {
+    id: 3,
+    slug: "examen-competencia-seremi-preguntas-reales",
+    title: "Examen de Competencia SEREMI 2025: ¿Qué preguntan realmente?",
+    excerpt: "Analizamos los pilares del examen SEREMI: Legislación, Cadena de Frío y Cálculos. Guía basada en Decretos 466, 404 y 405.",
+    date: "18 Dic 2025",
+    readTime: "4 min",
+    image: "https://placehold.co/600x400/2563eb/ffffff?text=Examen+SEREMI+2025",
+    content: `
+      <p>Si estás leyendo esto, probablemente estás a punto de enfrentar el paso más importante para tu habilitación profesional: el <strong>Examen de Competencia ante la SEREMI de Salud</strong>.</p>
+      <p>Es normal sentir ansiedad. En internet circulan muchos mitos, pero aquí vamos a analizar, basándonos en la normativa oficial (Decretos 466, 404 y 405), cuáles son los temas que sí o sí te van a preguntar.</p>
+      <p>No necesitas suerte, necesitas estrategia. Aquí tienes los 3 pilares fundamentales que debes dominar para aprobar.</p>
+
+      <h2>1. Legislación Farmacéutica (El filtro principal)</h2>
+      <p>La mayoría de los reprobados caen aquí. La autoridad sanitaria necesita saber si conoces las reglas del juego para no cometer errores legales.</p>
+      <h3>Lo que debes dominar:</h3>
+      <ul class="list-disc pl-5 space-y-2 mb-4">
+        <li><strong>Diferencia entre Receta Cheque y Receta Retenida:</strong> No basta con saber el color de la estrella. Debes saber la vigencia (30 días), los libros de control donde se registran y qué decretos las regulan (Decreto 404 para estupefacientes y 405 para psicotrópicos).</li>
+        <li><strong>Roles en la Farmacia:</strong> ¿Qué puede hacer el auxiliar y qué es exclusivo del Químico Farmacéutico? (Pista: el auxiliar no puede realizar indicaciones terapéuticas ni "recetar").</li>
+        <li><strong>Tipos de Establecimientos:</strong> Diferencia legal entre Farmacia, Almacén Farmacéutico y Botiquín.</li>
+      </ul>
+      <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500 my-4">
+        <p><strong>Pregunta típica:</strong> "Si llega una receta de Clonazepam (Lista IV) emitida hace 40 días, ¿la puede despachar?" <br/> 
+        <strong>Respuesta correcta:</strong> No. La vigencia legal máxima para recetas de productos controlados es de 30 días corridos.</p>
+      </div>
+
+      <h2>2. Almacenamiento y Cadena de Frío</h2>
+      <p>Este es un tema técnico crítico. Un error aquí pone en riesgo la salud pública, por lo que los evaluadores son muy estrictos.</p>
+      <h3>Datos clave que debes memorizar:</h3>
+      <ul class="list-disc pl-5 space-y-2 mb-4">
+        <li><strong>Rango de Temperatura:</strong> Los refrigeradores para insulinas, vacunas y colirios deben mantenerse estrictamente entre <strong>2°C y 8°C</strong>.</li>
+        <li><strong>¿Qué hacer si se corta la luz?:</strong> Debes conocer el protocolo de quiebre de cadena de frío (no abrir la puerta del refrigerador, registrar la temperatura máxima alcanzada y consultar al Director Técnico antes de vender nada).</li>
+        <li><strong>FEFO (First Expired, First Out):</strong> El sistema de rotación donde lo primero que vence es lo primero que se vende.</li>
+      </ul>
+
+      <h2>3. Matemáticas Farmacéuticas (Cálculo de Dosis)</h2>
+      <p>No te pedirán cálculo integral, pero sí debes manejar la "Regla de Tres" a la perfección.</p>
+      <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 my-4">
+        <p><strong>Ejemplo práctico:</strong> Si el médico receta "Amoxicilina 500mg cada 8 horas por 7 días", debes ser capaz de calcular rápidamente cuántos comprimidos o frascos necesita el paciente para el tratamiento completo.</p>
+        <p><strong>Cálculo:</strong> 3 veces al día x 7 días = 21 comprimidos. Si la caja trae 16, debes informar al paciente que necesitará 2 cajas.</p>
+      </div>
+
+      <h2>Consejos Finales para el Día del Examen</h2>
+      <ul class="list-disc pl-5 space-y-2 mb-4">
+        <li><strong>Vocabulario Técnico:</strong> No digas "remedios", di "medicamentos" o "especialidades farmacéuticas". No digas "el doctor de la farmacia", di "Director Técnico".</li>
+        <li><strong>Seguridad ante todo:</strong> Ante una pregunta con trampa (ej: "¿Vendería antibióticos sin receta si el paciente tiene mucho dolor?"), la respuesta siempre debe priorizar la normativa legal por sobre la venta comercial.</li>
+        <li><strong>Estudia los Decretos:</strong> No te quedes solo con los apuntes de tu curso. Lee directamente el Decreto 466; es la fuente de la verdad.</li>
+      </ul>
+
+      <div class="bg-blue-600 p-6 rounded-xl text-white text-center my-8">
+        <h3 class="text-xl font-bold mb-2">¿Te estás preparando para el examen?</h3>
+        <p class="mb-4 text-blue-100">En AuxiliarPro tenemos simuladores basados en preguntas reales para que practiques antes del día clave.</p>
+        <a href="/quiz" class="inline-block bg-white text-blue-600 px-6 py-2 rounded-full font-bold hover:bg-blue-50 transition-colors">
+          Ir al Simulador Gratuito
+        </a>
+      </div>
+    `
   }
 ];
 
@@ -130,7 +186,7 @@ export const FAQS = [
     }
 ];
 
-// 3. NIVELES DEL QUIZ
+// 3. NIVELES DEL QUIZ (Se mantienen iguales...)
 export const LEVELS = [
     { 
         id: 1, 
@@ -221,10 +277,9 @@ export const LEVELS = [
         desc: 'Evaluación final de alta exigencia: Técnica, Normativa y Matemáticas.', 
         icon: '🎓', 
         qCount: 40, 
-        passingScore: 24, // 60% Aprobación
-        timeLimit: 3600, // 60 Minutos
+        passingScore: 24,
+        timeLimit: 3600,
         questions: [
-            // --- SECCIÓN 1: MATEMÁTICAS, POSOLOGÍA Y GESTIÓN (15 Preguntas) ---
             { id: 401, text: 'CÁLCULO DE FRASCOS: Receta dice "Polivitamínico 5 ml al día por 2 meses (60 días)". Frasco trae 100 ml. ¿Cuántos frascos necesita?', options: ['1 Frasco', '2 Frascos', '3 Frascos', '4 Frascos'], correctIndex: 2, studyGuide: 'guia_posologia.pdf' },
             { id: 402, text: 'FRACCIONAMIENTO: "Propranolol 40mg: tomar 1/2 comprimido en la mañana y 1 en la noche, por 3 meses (90 días)". Caja trae 20 comprimidos. ¿Cuántas cajas necesita?', options: ['5 cajas', '6 cajas', '7 cajas', '8 cajas'], correctIndex: 2, studyGuide: 'guia_posologia.pdf' },
             { id: 403, text: 'PEDIATRÍA (PESO): Niño de 20 kg. Dosis: 50 mg/kg/día repartido en 4 tomas. ¿Cuántos mg administra en CADA dosis?', options: ['1000 mg', '500 mg', '250 mg', '125 mg'], correctIndex: 2, studyGuide: 'guia_posologia.pdf' },
@@ -240,9 +295,6 @@ export const LEVELS = [
             { id: 413, text: 'REGLA DE TRES: Dosis médica 120 mg. Jarabe disponible 200mg/5ml. ¿Qué volumen administra?', options: ['2 ml', '3 ml', '4 ml', '5 ml'], correctIndex: 1, studyGuide: 'guia_posologia.pdf' },
             { id: 414, text: 'DURACIÓN: Una caja trae 30 comprimidos. La dosis es 1 cada 8 horas. ¿Para cuántos días alcanza?', options: ['5 días', '7 días', '10 días', '30 días'], correctIndex: 2, studyGuide: 'guia_posologia.pdf' },
             { id: 415, text: 'NORMA ALMACENAMIENTO: ¿Con qué frecuencia mínima se deben registrar las temperaturas (refrigerador y sala)?', options: ['1 vez al día', '2 veces al día (AM/PM)', 'Semanalmente', 'Mensualmente'], correctIndex: 1, studyGuide: 'Manual Auxiliar Farmacia Privada_v2_025 (1).pdf' },
-
-            // --- SECCIÓN 2: TEORÍA TÉCNICA Y NORMATIVA (25 Preguntas) ---
-            // Farmacotecnia y Conceptos (Manual)
             { id: 416, text: 'DEFINICIÓN: ¿Qué es la "Farmacotecnia"?', options: ['Ciencia que estudia la venta de remedios', 'Ciencia que estudia las manipulaciones para dar forma adecuada a los medicamentos', 'Estudio de los precios', 'Estudio de la anatomía'], correctIndex: 1, studyGuide: 'Manual Auxiliar Farmacia Privada_v2_025 (1).pdf' },
             { id: 417, text: 'FORMAS FARMACÉUTICAS: ¿Qué caracteriza a las formas "Unidosis"?', options: ['Permiten una dosis única por unidad (ej: comprimido)', 'Vienen en frascos grandes', 'Son solo líquidas', 'Son para una sola enfermedad'], correctIndex: 0, studyGuide: 'Manual Auxiliar Farmacia Privada_v2_025 (1).pdf' },
             { id: 418, text: 'VÍAS: ¿Qué define a la vía de administración "Parenteral"?', options: ['Se traga', 'Se inhala', 'Se administra rompiendo la barrera de la piel (inyectable)', 'Se aplica en la piel'], correctIndex: 2, studyGuide: 'Manual Auxiliar Farmacia Privada_v2_025 (1).pdf' },
@@ -251,14 +303,10 @@ export const LEVELS = [
             { id: 421, text: 'INYECTABLES: ¿Qué requisito visual es indispensable en una solución inyectable?', options: ['Debe ser colorida', 'Debe ser límpida y exenta de partículas', 'Debe tener espuma', 'Debe ser opaca'], correctIndex: 1, studyGuide: 'Manual Auxiliar Farmacia Privada_v2_025 (1).pdf' },
             { id: 422, text: 'PRODUCCIÓN: ¿Qué es un "Lote"?', options: ['Un grupo de trabajadores', 'Una cantidad definida de producto homogénea en su fabricación', 'Un conjunto de recetas', 'Un tipo de farmacia'], correctIndex: 1, studyGuide: 'Manual Auxiliar Farmacia Privada_v2_025 (1).pdf' },
             { id: 423, text: 'FARMACOLOGÍA: ¿Qué es el "Efecto de Primer Paso"?', options: ['La primera vez que se toma un remedio', 'La degradación del fármaco en el hígado antes de llegar a la sangre', 'La absorción en el estómago', 'El efecto placebo'], correctIndex: 1, studyGuide: 'Manual Auxiliar Farmacia Privada_v2_025 (1).pdf' },
-            
-            // Almacenamiento y Estabilidad (Manual)
             { id: 424, text: 'ESTABILIDAD: Los 4 factores principales que dañan los medicamentos son:', options: ['Calor, Frío, Viento, Lluvia', 'Temperatura, Humedad, Luz y Tiempo', 'Precio, Marca, Laboratorio, Envase', 'Ninguna de las anteriores'], correctIndex: 1, studyGuide: 'Manual Auxiliar Farmacia Privada_v2_025 (1).pdf' },
             { id: 425, text: 'INSULINA EN USO: Una vez abierto el lápiz, ¿cómo se puede almacenar?', options: ['Obligatoriamente refrigerado', 'En el congelador', 'A temperatura ambiente (aprox 4 semanas)', 'Al sol'], correctIndex: 2, studyGuide: 'Manual Auxiliar Farmacia Privada_v2_025 (1).pdf' },
             { id: 426, text: 'CONGELACIÓN: ¿Qué sucede si una vacuna se congela por error a 0°C?', options: ['Se conserva mejor', 'No pasa nada si se descongela', 'Pierde su potencia irreversiblemente y debe eliminarse', 'Se vuelve tóxica'], correctIndex: 2, studyGuide: 'Manual Auxiliar Farmacia Privada_v2_025 (1).pdf' },
             { id: 427, text: 'DEVOLUCIONES: Los productos devueltos o vencidos deben ir a:', options: ['La estantería de venta', 'La basura común', 'Un área de segregación o cuarentena', 'Se regalan'], correctIndex: 2, studyGuide: 'Manual Auxiliar Farmacia Privada_v2_025 (1).pdf' },
-
-            // Normativa Específica (Decretos)
             { id: 428, text: 'AUTORIZACIÓN: ¿Cuánto dura la autorización sanitaria de una farmacia?', options: ['1 año', '3 años, renovables automáticamente', '5 años', 'Indefinida'], correctIndex: 1, studyGuide: 'Guía de Estudio_Decreto 466.pdf' },
             { id: 429, text: 'PROFESIONALES: ¿Quién puede recetar lentes y fármacos oculares tópicos?', options: ['Enfermera', 'Tecnólogo Médico con mención en Oftalmología', 'Auxiliar de Óptica', 'Nadie'], correctIndex: 1, studyGuide: 'Manual Auxiliar Farmacia Privada_v2_025 (1).pdf' },
             { id: 430, text: 'DENTISTAS: ¿Qué stock de psicotrópicos pueden mantener para urgencias?', options: ['Ninguno', '50 unidades', 'Máximo 150 unidades', 'Ilimitado'], correctIndex: 2, studyGuide: 'Guía de Estudio_ Decreto 405.pdf' },
