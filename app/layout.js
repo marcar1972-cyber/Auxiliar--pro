@@ -66,7 +66,7 @@ export default function RootLayout({ children }) {
                <Link href="/dermocheck" className="flex items-center gap-2 text-slate-500 hover:text-blue-600 font-bold text-xs tracking-wider px-2 py-2 rounded-lg hover:bg-blue-50 transition-all border border-slate-100 md:border-none">
                   <Calculator size={16} />
                   <span className="hidden sm:inline">DERMOCHECK</span>
-                  <span className="sm:hidden">DERMO</span>
+                  <span className="sm:hidden">DERMOCHECK</span>
                </Link>
 
                <div className="h-6 w-px bg-slate-200"></div>
