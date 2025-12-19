@@ -1,6 +1,6 @@
 // app/data.js
 
-// 1. ARTÍCULOS DEL BLOG (Contenido íntegro de PDFs + Nuevo artículo de Sueldos)
+// 1. ARTÍCULOS DEL BLOG (Contenido íntegro de PDFs + Columna de Investigación Decreto 466)
 export const BLOG_POSTS = [
   {
     id: 1,
@@ -75,31 +75,33 @@ export const BLOG_POSTS = [
   },
   {
     id: 4,
-    slug: "cuanto-gana-auxiliar-farmacia-chile-2026",
-    title: "¿Cuánto gana un Auxiliar de Farmacia en Chile? (Sueldos 2026)",
-    excerpt: "Descubre los rangos salariales, bonos por metas y beneficios que percibe un auxiliar de farmacia en el mercado chileno.",
+    slug: "que-es-el-decreto-466-farmacias-chile",
+    title: "¿Qué es el Decreto 466? La 'Biblia' que todo Auxiliar debe conocer",
+    excerpt: "En esta columna de investigación, desglosamos el Reglamento de Farmacias, Droguerías y Almacenes Farmacéuticos que rige en Chile.",
     date: "19 Dic 2025",
-    readTime: "4 min",
-    image: "https://placehold.co/600x400/0f172a/ffffff?text=Sueldos+Chile+2026",
+    readTime: "6 min",
+    image: "https://placehold.co/600x400/0f172a/ffffff?text=Decreto+466+Chile",
     content: `
-      <p>Una de las preguntas más frecuentes para quienes buscan entrar al rubro es: <strong>¿Cuál es el sueldo de un Auxiliar de Farmacia en Chile?</strong></p>
-      <p>El salario no es fijo y depende de si trabajas en una gran cadena o en una farmacia independiente, además de los bonos por cumplimiento de metas.</p>
+      <p>Para quienes operamos dentro del sistema de salud chileno, el <strong>Decreto Supremo N° 466</strong> no es simplemente un texto legal; es la columna vertebral de nuestra práctica profesional diaria.</p>
+      <p>Como columna de investigación para <strong>AuxiliarPro</strong>, hemos desglosado este reglamento para entender por qué cada estante, cada temperatura y cada firma en una receta tiene su origen en este documento publicado por el Ministerio de Salud.</p>
 
-      <h2 class="text-xl font-bold mt-6 mb-4">Rango Salarial Promedio</h2>
-      <p>Para este 2026, los sueldos líquidos promedio (lo que recibes en mano) se mueven en estos rangos:</p>
+      <h2 class="text-xl font-bold mt-6 mb-4">El Fundamento de la Farmacia como Centro de Salud</h2>
+      <p>El Decreto 466 establece que las farmacias son centros de salud y define las condiciones sanitarias mínimas para su funcionamiento. Entre sus artículos más críticos, encontramos la obligación de contar siempre con un <strong>Químico Farmacéutico Director Técnico (DT)</strong>, quien es el responsable legal y sanitario ante la autoridad.</p>
+
+      <h2 class="text-xl font-bold mt-6 mb-4">Habilitación del Auxiliar: El Artículo 71</h2>
+      <p>Un punto de gran interés para nuestra comunidad es la habilitación profesional. El reglamento es estricto: para rendir el examen ante la SEREMI, el postulante debe acreditar:</p>
       <ul class="list-disc pl-8 my-4 space-y-2">
-        <li><strong>Nivel Inicial:</strong> Entre $500.000 y $580.000 CLP.</li>
-        <li><strong>Con Experiencia (más de 2 años):</strong> Entre $650.000 y $800.000 CLP.</li>
+        <li>Ser mayor de 18 años.</li>
+        <li>Tener enseñanza media completa.</li>
+        <li>Acreditar <strong>un año de práctica</strong> en farmacia bajo la supervisión de un DT.</li>
       </ul>
 
-      <h2 class="text-xl font-bold mt-6 mb-4">Componentes del Sueldo</h2>
-      <p>1. <strong>Sueldo Base:</strong> Generalmente cercano al ingreso mínimo legal. <br>
-      2. <strong>Asignaciones:</strong> Colación y movilización. <br>
-      3. <strong>Variables (Metas):</strong> Bonos por inventario, atención al cliente o cumplimiento de ventas mensuales.</p>
+      <h2 class="text-xl font-bold mt-6 mb-4">Estándares de Almacenamiento y Calidad</h2>
+      <p>La investigación técnica del decreto nos revela estándares que no son opcionales. Por ejemplo, el almacenamiento de medicamentos nunca debe hacerse directamente sobre el suelo, utilizando siempre estantes o tarimas que faciliten la limpieza y eviten la humedad. Asimismo, la temperatura ambiental en la sala de ventas no debe exceder los <strong>25°C</strong> para garantizar la estabilidad de los fármacos.</p>
 
-      <div class="mt-8 border-t pt-4 bg-slate-50 p-4 rounded-xl">
-        <h3 class="font-bold">Dato Clave</h3>
-        <p>El sueldo suele incrementarse en farmacias de urgencia o 24 horas debido a las asignaciones por turnos nocturnos y horas extras.</p>
+      <div class="mt-8 border-t pt-4 bg-slate-50 p-6 rounded-xl">
+        <h3 class="font-bold text-lg mb-2">Conclusión de la Columna</h3>
+        <p>Dominar el Decreto 466 es la diferencia entre ser un vendedor y ser un <strong>profesional de la salud</strong>. Este reglamento asegura que el paciente reciba un medicamento seguro, eficaz y correctamente dispensado. Si aspiras a obtener tu credencial en 2026, entender esta 'biblia' legal es tu primer gran paso al éxito.</p>
       </div>
     `
   }
@@ -109,11 +111,11 @@ export const BLOG_POSTS = [
 export const FAQS = [
     { q: "¿Dónde hago el trámite?", a: "En seremienlinea.minsal.cl con tu ClaveÚnica." },
     { q: "¿Requisitos obligatorios?", a: "Mayor de 18 años, 4to medio y 1 año de experiencia certificada." },
-    { q: "¿Cuánto cuesta?", a: "Aprox. $19.100 por examen y $47.600 por credencial." },
-    { q: "¿Qué pasa si repruebo?", a: "Debes esperar el plazo legal y volver a pagar el arancel." }
+    { q: "¿Cuánto cuesta?", a: "Aprox. $19.100 por examen y $47.600 por la credencial." },
+    { q: "¿Qué pasa si repruebo?", a: "Debes esperar el plazo legal y volver a pagar el arancel de examen." }
 ];
 
-// 3. NIVELES DEL QUIZ (CON PREGUNTAS)
+// 3. NIVELES DEL QUIZ (90 PREGUNTAS)
 export const LEVELS = [
     { id: 1, title: 'Prueba Diagnóstico', desc: 'Conceptos generales.', icon: '💊', qCount: 10, passingScore: 6, questions: [
         { id: 101, text: '¿Quién es el responsable técnico legal?', options: ['Dueño', 'Auxiliar', 'Químico Farmacéutico', 'Gerente'], correctIndex: 2 },
