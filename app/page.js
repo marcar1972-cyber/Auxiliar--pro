@@ -1,84 +1,96 @@
-'use client';
-import React, { useState } from 'react';
-import { FAQS } from './data';
-import { Search, BookOpen, User, ChevronDown, Layout } from 'lucide-react';
-import Link from 'next/link';
+import Link from "next/link";
+import { BookOpen, Mail, ChevronDown } from "lucide-react"; 
+import { FAQS } from "./data"; 
 
-export default function LandingPage() {
-  const [openFaq, setOpenFaq] = useState(null);
-
+export default function Home() {
   return (
-    <div className="min-h-screen bg-white font-sans text-slate-900">
-      {/* HEADER RESTAURADO (image_3d2059.png) */}
-      <nav className="p-4 bg-white border-b sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto flex justify-between items-center px-4">
-          <Link href="/">
-            <img src="/logo.png" alt="AuxiliarPro" className="h-10 w-auto" />
-          </Link>
-          <div className="flex items-center gap-6">
-            <Search className="w-5 h-5 text-slate-400 cursor-pointer" />
-            <Link href="/dermocheck" className="hidden md:flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-slate-500 hover:text-blue-600 transition-colors">
-              <Layout className="w-4 h-4" /> DERMOCHECK
-            </Link>
-            <div className="w-10 h-10 rounded-full bg-emerald-100 border-2 border-white shadow-sm flex items-center justify-center overflow-hidden">
-               <img src="/profile.png" alt="User" className="w-full h-full object-cover" />
-            </div>
-          </div>
-        </div>
-      </nav>
+    <main className="flex min-h-screen flex-col bg-white font-sans">
+      
+      {/* 🚫 NAVBAR ELIMINADO: Ya viene automático desde layout.js */}
 
-      {/* HERO SECTION CON TAMAÑOS ORIGINALES */}
-      <main className="max-w-5xl mx-auto text-center pt-24 pb-16 px-6">
-        <span className="bg-emerald-50 text-emerald-600 text-[10px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-full border border-emerald-100">
-          META: CREDENCIAL 2026
-        </span>
-        <h1 className="text-4xl md:text-6xl font-black mt-10 mb-8 leading-tight tracking-tighter uppercase">
-          PREPÁRATE PARA TU EXAMEN DE <br/>
-          <span className="text-emerald-500">AUXILIAR DE FARMACIA</span>
-        </h1>
+      {/* 2. CONTENIDO PRINCIPAL */}
+      {/* Cambié el margen superior a mt-8 para que no se pegue al menú nuevo */}
+      <div className="flex-1 flex flex-col items-center justify-center p-6 text-center max-w-md mx-auto w-full mt-8 mb-10">
         
-        <div className="flex flex-col md:flex-row justify-center gap-4 mt-12 max-w-lg mx-auto">
-          <Link href="/quiz" className="bg-[#0f172a] text-white px-10 py-5 rounded-2xl font-bold text-lg hover:opacity-90 transition-all shadow-xl">
-            COMENZAR AHORA
-          </Link>
-          <Link href="/blog" className="bg-white text-slate-600 border border-slate-200 px-10 py-5 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-slate-50">
-            <BookOpen className="w-5 h-5" /> LEER ARTÍCULOS
-          </Link>
-        </div>
-      </main>
+        <span className="bg-emerald-50 text-aux-green text-[11px] font-black px-3 py-1 rounded-full mb-6 tracking-widest border border-emerald-100 uppercase">
+            Meta: Credencial 2026
+        </span>
 
-      {/* SECCIÓN MARCELO */}
-      <section className="max-w-2xl mx-auto px-6 mb-20">
-        <div className="bg-[#f8fafc] p-8 rounded-3xl border border-slate-100 flex items-start gap-4">
-          <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-emerald-500 font-black shadow-sm shrink-0">M</div>
-          <div>
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">MARCELO DICE:</p>
-            <p className="text-slate-600 leading-relaxed italic text-sm md:text-base">
-              "Auxiliar de farmacia en preparación, esta web es mi cuaderno de estudio abierto. No vendemos cursos, compartimos conocimiento real basado en la normativa vigente."
-            </p>
-          </div>
-        </div>
-      </section>
+        <h1 className="text-4xl md:text-5xl font-black text-aux-dark leading-[1.1] mb-8 tracking-tight">
+            PREPÁRATE PARA TU EXAMEN DE <br/>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-aux-green to-teal-400">
+                AUXILIAR DE FARMACIA
+            </span>
+        </h1>
 
-      {/* PREGUNTAS FRECUENTES Accordion */}
-      <section className="max-w-3xl mx-auto px-6 pb-24">
-        <h2 className="text-3xl font-black mb-10 tracking-tight text-center">Preguntas Frecuentes</h2>
-        <div className="space-y-4">
-          {FAQS.map((faq, idx) => (
-            <div key={idx} className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-              <button onClick={() => setOpenFaq(openFaq === idx ? null : idx)} className="w-full p-6 text-left flex justify-between items-center">
-                <span className="font-bold text-slate-800">{faq.q}</span>
-                <ChevronDown className={`w-5 h-5 text-slate-300 transition-transform ${openFaq === idx ? 'rotate-180' : ''}`} />
-              </button>
-              {openFaq === idx && (
-                <div className="px-6 pb-6 text-slate-500 leading-relaxed border-t pt-4">
-                  {faq.a}
-                </div>
-              )}
+        <div className="w-full space-y-3">
+            <Link href="/quiz" className="block w-full bg-aux-dark text-white font-bold text-lg py-4 rounded-xl shadow-lg shadow-blue-900/10 hover:scale-[1.02] active:scale-[0.98] transition-all">
+                COMENZAR AHORA
+            </Link>
+
+            <Link href="/blog" className="group block w-full bg-white text-slate-600 border-2 border-slate-100 font-bold text-lg py-4 rounded-xl hover:border-aux-green hover:text-aux-green transition-all flex items-center justify-center gap-2">
+                <BookOpen size={20} className="text-slate-400 group-hover:text-aux-green" />
+                LEER ARTÍCULOS
+            </Link>
+        </div>
+
+        <div className="mt-12 bg-slate-50 p-5 rounded-2xl border border-slate-100 text-left w-full flex gap-4 items-start relative overflow-hidden">
+            <div className="absolute top-0 right-0 watermark-bg w-full h-full opacity-50"></div>
+            <div className="relative z-10 w-10 h-10 min-w-[40px] bg-white border border-slate-200 rounded-full flex items-center justify-center text-aux-green font-black shadow-sm">
+                M
             </div>
-          ))}
+            <div className="relative z-10">
+                <p className="text-xs font-bold text-aux-dark uppercase tracking-wider mb-1">Marcelo dice:</p>
+                <p className="text-slate-600 text-sm italic leading-relaxed">
+                    "Auxiliar de farmacia en preparación, esta web es mi cuaderno de estudio abierto. No vendemos cursos, compartimos conocimiento real basado en la normativa vigente."
+                </p>
+            </div>
         </div>
-      </section>
-    </div>
+
+        {/* 3. SECCIÓN FAQs */}
+        <div className="w-full mt-16 text-left">
+            <h3 className="text-xl font-black text-aux-dark mb-6 px-2">Preguntas Frecuentes</h3>
+            <div className="space-y-3">
+                {FAQS.map((faq, index) => (
+                    <details key={index} className="group bg-white border border-slate-100 rounded-xl overflow-hidden shadow-sm open:shadow-md transition-all">
+                        <summary className="flex justify-between items-center cursor-pointer p-4 font-bold text-slate-700 list-none select-none hover:bg-slate-50 transition-colors">
+                            <span className="text-sm">{faq.q}</span>
+                            <ChevronDown size={18} className="text-slate-400 group-open:rotate-180 transition-transform" />
+                        </summary>
+                        <div className="px-4 pb-4 pt-0 text-sm text-slate-500 leading-relaxed border-t border-slate-50 mt-2">
+                            <div dangerouslySetInnerHTML={{ __html: faq.a }} />
+                        </div>
+                    </details>
+                ))}
+            </div>
+        </div>
+
+      </div>
+
+      {/* 4. FOOTER */}
+      <footer className="w-full bg-slate-50 border-t border-slate-100 py-8 px-4 mt-auto">
+        <div className="max-w-md mx-auto text-center space-y-4">
+            
+            <div className="flex justify-center gap-4 text-xs font-medium text-slate-500">
+                <Link href="/legal/terminos" className="hover:text-aux-green transition-colors">Términos de Uso</Link>
+                <span className="text-slate-300">•</span>
+                <Link href="/legal/descargos" className="hover:text-aux-green transition-colors">Descargos Legales</Link>
+            </div>
+
+            <a href="mailto:contacto@auxiliaresdefarmacia.cl" className="inline-flex items-center gap-2 text-xs text-slate-400 hover:text-aux-green transition-colors bg-white px-3 py-1.5 rounded-full border border-slate-200 shadow-sm">
+                <Mail size={12} />
+                ¿Encontraste un error? Escríbenos
+            </a>
+
+            <div className="pt-4 border-t border-slate-200/50">
+                <p className="text-[10px] text-slate-400 leading-tight">
+                    © 2025 AuxiliarPro Chile. Proyecto independiente.<br/>
+                    Esta web no tiene afiliación con el MINSAL ni SEREMI.
+                </p>
+            </div>
+        </div>
+      </footer>
+
+    </main>
   );
 }
