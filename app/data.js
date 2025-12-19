@@ -1,85 +1,86 @@
 // app/data.js
 
-// 1. ARTÍCULOS DEL BLOG (Contenido íntegro de PDFs letra por letra)
+// 1. ARTÍCULOS DEL BLOG (Copiado exacto de tus PDFs)
 export const BLOG_POSTS = [
   {
     id: 1,
-    slug: "requisitos-auxiliar-farmacia-2026",
+    slug: "requisitos-auxiliar-farmacia-chile-2026",
     title: "Requisitos para ser Auxiliar de Farmacia en Chile (Actualizado 2026)",
     excerpt: "Si estás pensando en trabajar en farmacia, uno de los primeros pasos es conocer los requisitos para ser Auxiliar de Farmacia en Chile.",
     date: "18 Dic 2025",
     readTime: "5 min",
     image: "https://placehold.co/600x400/2563eb/ffffff?text=Requisitos+2026",
     content: `
-      <div class="mb-8 border-l-4 border-blue-600 pl-4 py-2 bg-blue-50/50 rounded-r-xl font-medium text-slate-700 italic">
-        Si estás pensando en trabajar en farmacia, uno de los primeros pasos es conocer los requisitos para ser Auxiliar de Farmacia en Chile. [cite: 2] Esta es una de las búsquedas más comunes en Google, y con razón: es una puerta de entrada real al rubro de la salud. [cite: 3] Aquí te lo explico simple, claro y sin enredos. [cite: 4]
-      </div>
-
-      <h3 class="text-2xl font-black text-slate-900 mb-4 tracking-tight">¿Qué es un Auxiliar de Farmacia?</h3>
-      <p class="mb-6">El Auxiliar de Farmacia es la persona que apoya al Químico Farmacéutico en la atención de público, manejo de medicamentos, control de stock, revisión de vencimientos y orientación básica al paciente, siempre bajo supervisión profesional. [cite: 6]</p>
-
-      <h3 class="text-2xl font-black text-slate-900 mb-4 tracking-tight">Requisitos para Rendir el Examen de Auxiliar de Farmacia en Chile</h3>
-      <p class="mb-4">De acuerdo al Decreto Supremo N° 466, para poder rendir el Examen de Auxiliar de Farmacia debes cumplir con el siguiente requisito principal: [cite: 8]</p>
+      <p class="mb-6">Si estás pensando en trabajar en farmacia, uno de los primeros pasos es conocer los requisitos para ser Auxiliar de Farmacia en Chile. Esta es una de las búsquedas más comunes en Google, y con razón: es una puerta de entrada real al rubro de la salud. Aquí te lo explico simple, claro y sin enredos.</p>
       
-      <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 mb-8">
-        <p class="font-bold flex items-center gap-2 mb-4 text-blue-700">
-           ☑ Mínimo 1 año de experiencia laboral comprobable en farmacia, realizando labores como: [cite: 10]
-        </p>
-        <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 pl-4">
-          <li class="flex items-center gap-2">• Bodegaje [cite: 11]</li>
-          <li class="flex items-center gap-2">• Reposición de medicamentos [cite: 12]</li>
-          <li class="flex items-center gap-2">• Dispensación bajo supervisión [cite: 13]</li>
-          <li class="flex items-center gap-2">• Manejo de productos farmacéuticos [cite: 14]</li>
+      <h2 class="text-2xl font-bold text-slate-900 mt-8 mb-4 border-b pb-2">¿Qué es un Auxiliar de Farmacia?</h2>
+      <p class="mb-6">El Auxiliar de Farmacia es la persona que apoya al Químico Farmacéutico en la atención de público, manejo de medicamentos, control de stock, revisión de vencimientos y orientación básica al paciente, siempre bajo supervisión profesional.</p>
+
+      <h2 class="text-2xl font-bold text-slate-900 mt-8 mb-4 border-b pb-2">Requisitos para Rendir el Examen de Auxiliar de Farmacia en Chile</h2>
+      <p class="mb-4">De acuerdo al Decreto Supremo N° 466, para poder rendir el Examen de Auxiliar de Farmacia debes cumplir con el siguiente requisito principal:</p>
+      
+      <div class="bg-blue-50 p-6 rounded-2xl border-l-4 border-blue-600 mb-8">
+        <p class="font-bold text-blue-900 mb-2">☑ Mínimo 1 año de experiencia laboral comprobable en farmacia, realizando labores como:</p>
+        <ul class="list-disc pl-8 space-y-1 text-slate-700">
+          <li>Bodegaje</li>
+          <li>Reposición de medicamentos</li>
+          <li>• Dispensación bajo supervisión</li>
+          <li>• Manejo de productos farmacéuticos</li>
         </ul>
       </div>
 
-      <p class="mb-6">Toda esta experiencia debe estar certificada por el Químico Farmacéutico Director Técnico del establecimiento. [cite: 15]</p>
-      
-      <div class="bg-blue-600 text-white p-6 rounded-2xl shadow-lg mb-10">
-        <p class="font-bold mb-2">Trámite Oficial:</p>
-        <p class="text-blue-50 text-sm mb-4">El proceso se realiza únicamente a través del portal del Ministerio de Salud en SEREMI en Línea: [cite: 16]</p>
-        <a href="https://seremienlinea.minsal.cl/asdigital/" target="_blank" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-bold text-sm hover:bg-blue-50 transition-colors inline-block underline">
-          ACCEDER A SEREMI EN LÍNEA [cite: 17]
-        </a>
-      </div>
+      <p class="mb-6">Toda esta experiencia debe estar certificada por el Químico Farmacéutico Director Técnico del establecimiento. El trámite oficial se realiza únicamente a través del portal del Ministerio de Salud en SEREMI en Línea, donde podrás revisar requisitos actualizados, costos y disponibilidad: <a href="https://seremienlinea.minsal.cl/asdigital/" target="_blank" class="text-blue-600 underline font-bold italic tracking-tight">https://seremienlinea.minsal.cl/asdigital/</a></p>
+      <p class="mb-10 italic text-slate-500">Este proceso es fundamental para obtener la credencial oficial de Auxiliar de Farmacia en Chile y poder trabajar legalmente en farmacias comunitarias.</p>
 
-      <h3 class="text-2xl font-black text-slate-900 mb-4 tracking-tight">Requisitos Generales para ser Auxiliar de Farmacia en Chile (2026)</h3>
-      <p class="mb-6">Según la normativa vigente del Ministerio de Salud y el Decreto 466, estos son los requisitos generales: [cite: 21]</p>
+      <h2 class="text-2xl font-bold text-slate-900 mt-8 mb-4 border-b pb-2">Requisitos Generales para ser Auxiliar de Farmacia en Chile (2026)</h2>
+      <p class="mb-6">Según la normativa vigente del Ministerio de Salud y el Decreto 466, estos son los requisitos generales:</p>
       
       <div class="space-y-6 mb-10">
         <div class="flex gap-4">
-          <div class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center font-black shrink-0">1</div>
-          <div><strong>Ser mayor de 18 años:</strong> Debes ser legalmente mayor de edad. [cite: 22, 23]</div>
+          <div class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">1</div>
+          <p><strong>Ser mayor de 18 años:</strong> Debes ser legalmente mayor de edad.</p>
         </div>
         <div class="flex gap-4">
-          <div class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center font-black shrink-0">2</div>
-          <div><strong>Enseñanza media completa:</strong> Debes contar con tu licencia de cuarto medio aprobada. [cite: 24, 25]</div>
+          <div class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">2</div>
+          <p><strong>Enseñanza media completa:</strong> Debes contar con tu licencia de cuarto medio aprobada.</p>
         </div>
         <div class="flex gap-4">
-          <div class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center font-black shrink-0">3</div>
+          <div class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">3</div>
           <div>
-            <strong>Haber trabajado en farmacia:</strong> Debes acreditar experiencia práctica en una farmacia, bajo supervisión de un Químico Farmacéutico. [cite: 26, 27] 
-            <span class="block mt-1 text-slate-500 italic text-sm">Importante: El tiempo exacto y forma de acreditación lo revisa directamente la SEREMI de Salud de tu región. [cite: 28]</span>
+            <p><strong>Haber trabajado en farmacia:</strong> Debes acreditar experiencia práctica en una farmacia, bajo supervisión de un Químico Farmacéutico.</p>
+            <p class="text-sm text-slate-500 mt-1 italic">Importante: El tiempo exacto y forma de acreditación lo revisa directamente la SEREMI de Salud de tu región.</p>
           </div>
         </div>
         <div class="flex gap-4">
-          <div class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center font-black shrink-0">4</div>
-          <div>
-            <strong>Rendir y aprobar el examen de Auxiliar de Farmacia:</strong> Evalúa conocimientos como Farmacología básica, Recetas médicas, Cadena de frío, Fechas de vencimiento, Legislación sanitaria y Buenas prácticas en farmacia. [cite: 29, 30, 31, 32, 33, 34, 35, 36]
-          </div>
+          <div class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">4</div>
+          <p><strong>Rendir y aprobar el examen de Auxiliar de Farmacia:</strong> Este examen evalúa conocimientos como: Farmacología básica, Recetas médicas, • Cadena de frío, Fechas de vencimiento, Legislación sanitaria y Buenas prácticas en farmacia.</p>
         </div>
         <div class="flex gap-4">
-          <div class="bg-blue-100 text-blue-600 w-8 h-8 rounded-full flex items-center justify-center font-black shrink-0">5</div>
-          <div><strong>Obtener la credencial de Auxiliar de Farmacia:</strong> Una vez aprobado el examen, la SEREMI entrega la credencial oficial, que te habilita legalmente para trabajar. [cite: 37, 38]</div>
+          <div class="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">5</div>
+          <p><strong>Obtener la credencial de Auxiliar de Farmacia:</strong> Una vez aprobado el examen, la SEREMI entrega la credencial oficial, que te habilita legalmente para trabajar.</p>
         </div>
       </div>
 
-      <h3 class="text-xl font-bold text-slate-900 mb-3">¿Puedo prepararme sin instituto?</h3>
-      <p class="mb-6">Sí. Puedes estudiar de forma independiente, usar material online y prepararte con guías, PDFs, ensayos y contenido práctico. Muchos auxiliares actuales se han preparado así. Lo importante es dominar bien los contenidos del examen. [cite: 42, 43, 44, 45, 46, 47]</p>
+      <h2 class="text-2xl font-bold text-slate-900 mt-8 mb-4 border-b pb-2">¿Dónde se realiza el trámite?</h2>
+      <p class="mb-6">Todo el proceso se gestiona a través de la SEREMI de Salud de tu región. Cada región puede variar levemente en exigencias de documentos, pero la base legal es la misma en todo Chile.</p>
 
-      <div class="bg-emerald-50 border border-emerald-100 p-8 rounded-3xl">
-        <h4 class="text-emerald-900 font-black mb-4">Conclusión clara [cite: 48]</h4>
-        <p class="text-emerald-800">Si quieres ser Auxiliar de Farmacia en Chile el 2026, necesitas: ☑ Cuarto medio, Mínimo 1 año de experiencia en farmacia, ☑ Aprobar el examen y Obtener tu credencial SEREMI. No es imposible, pero sí requiere constancia, práctica real y estudio enfocado. [cite: 49, 50, 51, 52, 53, 54]</p>
+      <h2 class="text-2xl font-bold text-slate-900 mt-8 mb-4 border-b pb-2">¿Puedo prepararme sin instituto?</h2>
+      <p class="mb-4">Sí. Puedes:</p>
+      <ul class="list-disc pl-8 mb-6 space-y-1">
+        <li>Estudiar de forma independiente</li>
+        <li>Usar material online</li>
+        <li>Prepararte con guías, PDFs, ensayos y contenido práctico</li>
+      </ul>
+      <p class="mb-8">Muchos auxiliares actuales se han preparado así. Lo importante es dominar bien los contenidos del examen.</p>
+
+      <div class="bg-slate-900 text-white p-8 rounded-3xl mb-10">
+        <h3 class="text-xl font-bold mb-4">Conclusión clara</h3>
+        <p class="mb-4">Si quieres ser Auxiliar de Farmacia en Chile el 2026, necesitas:</p>
+        <p class="font-bold">☑ Cuarto medio</p>
+        <p class="font-bold">Mínimo 1 año de experiencia en farmacia</p>
+        <p class="font-bold">☑ Aprobar el examen</p>
+        <p class="font-bold">Obtener tu credencial SEREMI</p>
+        <p class="mt-4 text-slate-300">No es imposible, pero sí requiere constancia, práctica real y estudio enfocado.</p>
       </div>
     `
   },
@@ -87,80 +88,104 @@ export const BLOG_POSTS = [
     id: 2,
     slug: "diferencia-auxiliar-tecnico-farmacia",
     title: "Diferencia entre Auxiliar de Farmacia y Técnico en Farmacia en Chile",
-    excerpt: "¿Cuál es la diferencia entre Auxiliar de Farmacia y Técnico en Farmacia? Aunque ambos trabajan en farmacias, no son lo mismo.",
+    excerpt: "Una de las dudas más comunes entre quienes quieren trabajar en farmacia es esta: ¿Cuál es la diferencia?",
     date: "17 Dic 2025",
     readTime: "4 min",
     image: "https://placehold.co/600x400/10b981/ffffff?text=Auxiliar+vs+Tecnico",
     content: `
-      <div class="mb-10 text-lg text-slate-600 leading-relaxed">
-        Una de las dudas más comunes entre quienes quieren trabajar en farmacia es esta: ¿Cuál es la diferencia entre Auxiliar de Farmacia y Técnico en Farmacia? [cite: 57] Aunque ambos trabajan en farmacias, no son lo mismo, tienen distintas funciones, formación y responsabilidades legales. Aquí te lo explico claro y sin enredos. [cite: 58, 59]
+      <p class="text-lg mb-8 italic text-slate-600 font-medium">(Explicado Fácil)</p>
+      <p class="mb-8">Una de las dudas más comunes entre quienes quieren trabajar en farmacia es esta: ¿Cuál es la diferencia entre Auxiliar de Farmacia y Técnico en Farmacia? Aunque ambos trabajan en farmacias, no son lo mismo, tienen distintas funciones, formación y responsabilidades legales. Aquí te lo explico claro y sin enredos.</p>
+
+      <h2 class="text-2xl font-bold text-slate-900 mt-8 mb-4 border-b pb-2">¿Qué es un Auxiliar de Farmacia?</h2>
+      <p class="mb-4 text-slate-700">El Auxiliar de Farmacia es la persona que trabaja en farmacia apoyando al Químico Farmacéutico, principalmente en:</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 bg-slate-50 p-6 rounded-2xl">
+        <p>☑ Atención de público</p>
+        <p>☑ Dispensación de medicamentos bajo supervisión</p>
+        <p>☑ Reposición y bodegaje</p>
+        <p>☑ Revisión de fechas de vencimiento</p>
+        <p>☑ Manejo de stock</p>
+        <p>☑ Orientación básica al paciente</p>
       </div>
-
-      <h3 class="text-2xl font-black text-slate-900 mb-4 tracking-tight">¿Qué es un Auxiliar de Farmacia? [cite: 60]</h3>
-      <p class="mb-4 text-slate-700 italic font-medium">El Auxiliar de Farmacia es la persona que trabaja en farmacia apoyando al Químico Farmacéutico, principalmente en: [cite: 61]</p>
-      <ul class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 bg-slate-50 p-6 rounded-2xl border border-slate-100">
-        <li class="flex items-center gap-2">☑ Atención de público [cite: 64]</li>
-        <li class="flex items-center gap-2">☑ Dispensación de medicamentos [cite: 65]</li>
-        <li class="flex items-center gap-2">☑ Reposición y bodegaje [cite: 66]</li>
-        <li class="flex items-center gap-2">☑ Revisión de vencimientos [cite: 68]</li>
-        <li class="flex items-center gap-2">☑ Manejo de stock [cite: 69]</li>
-        <li class="flex items-center gap-2">☑ Orientación básica [cite: 71]</li>
+      <p class="mb-8 font-medium">En Chile, el Auxiliar no necesita estudiar en instituto, pero sí debe:</p>
+      <ul class="list-disc pl-8 mb-8 space-y-1">
+        <li>Tener enseñanza media completa</li>
+        <li>Contar con mínimo 1 año de experiencia en farmacia</li>
+        <li>Rendir y aprobar el examen ante la SEREMI de Salud</li>
+        <li>Obtener su credencial oficial de Auxiliar de Farmacia, según el Decreto Supremo N° 466</li>
       </ul>
-      <p class="mb-8">En Chile, el Auxiliar no necesita estudiar en instituto, pero sí debe: Tener enseñanza media completa, Contar con mínimo 1 año de experiencia, Rendir y aprobar el examen ante la SEREMI de Salud y Obtener su credencial oficial según el Decreto Supremo N° 466. [cite: 72, 73, 74, 75, 76]</p>
 
-      <h3 class="text-2xl font-black text-slate-900 mb-4 tracking-tight">¿Qué es un Técnico en Farmacia? [cite: 77]</h3>
-      <p class="mb-6">El Técnico en Farmacia es un profesional que sí estudia una carrera formal, generalmente en institutos profesionales o centros de formación técnica durante 2 a 3 años, con malla académica, prácticas y título técnico. [cite: 78, 79, 80, 81]</p>
-      <ul class="space-y-3 mb-8 pl-4">
-        <li class="flex items-center gap-2 font-semibold">☑ Apoyar directamente al Químico Farmacéutico [cite: 84]</li>
-        <li class="flex items-center gap-2 font-semibold">☑ Preparación de medicamentos [cite: 85]</li>
-        <li class="flex items-center gap-2 font-semibold">☑ Control de bodegas y gestión de inventarios [cite: 87, 88]</li>
-        <li class="flex items-center gap-2 font-semibold">☑ Atención clínica básica y apoyo en procesos técnicos complejos [cite: 89, 91]</li>
+      <h2 class="text-2xl font-bold text-slate-900 mt-8 mb-4 border-b pb-2">¿Qué es un Técnico en Farmacia?</h2>
+      <p class="mb-4">El Técnico en Farmacia es un profesional que sí estudia una carrera formal, generalmente:</p>
+      <ul class="list-disc pl-8 mb-6 space-y-1">
+        <li>En institutos profesionales o centros de formación técnica</li>
+        <li>Durante 2 a 3 años</li>
+        <li>Con malla académica, prácticas y título técnico</li>
       </ul>
-      <p class="mb-10 text-blue-700 font-bold bg-blue-50 p-4 rounded-xl border-l-4 border-blue-600">El Técnico no rinde examen en la SEREMI, ya que su título lo habilita directamente. [cite: 92]</p>
+      <p class="mb-4 font-medium italic">Sus funciones incluyen:</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 bg-emerald-50 p-6 rounded-2xl border border-emerald-100">
+        <p>☑ Apoyar directamente al Químico Farmacéutico</p>
+        <p>☑ Preparación de medicamentos</p>
+        <p>☑ Control de bodegas</p>
+        <p>☑ Gestión de inventarios</p>
+        <p>☑ Atención clínica básica</p>
+        <p>☑ Apoyo en procesos técnicos más complejos</p>
+      </div>
+      <p class="mb-10 text-emerald-800 font-bold">El Técnico no rinde examen en la SEREMI, ya que su título lo habilita directamente.</p>
 
-      <h3 class="text-2xl font-black text-slate-900 mb-6 text-center">Diferencias Claves [cite: 93]</h3>
-      <div class="overflow-x-auto mb-10 shadow-sm border border-slate-200 rounded-2xl">
+      <h2 class="text-2xl font-bold text-slate-900 mt-12 mb-6 text-center">Diferencias Claves entre Auxiliar y Técnico en Farmacia</h2>
+      <div class="overflow-x-auto shadow-xl rounded-3xl border border-slate-200 mb-12">
         <table class="w-full text-left">
-          <thead class="bg-slate-100">
+          <thead class="bg-slate-100 border-b border-slate-200">
             <tr>
-              <th class="p-4 border-b">Criterio</th>
-              <th class="p-4 border-b text-blue-600">Auxiliar de Farmacia</th>
-              <th class="p-4 border-b text-emerald-600">Técnico en Farmacia</th>
+              <th class="p-4 font-bold text-slate-900">Característica</th>
+              <th class="p-4 font-bold text-blue-600 text-center">Auxiliar de Farmacia</th>
+              <th class="p-4 font-bold text-emerald-600 text-center">Técnico en Farmacia</th>
             </tr>
           </thead>
-          <tbody>
-            <tr class="border-b">
+          <tbody class="divide-y divide-slate-100">
+            <tr>
               <td class="p-4 font-bold">Estudios</td>
-              <td class="p-4">No estudia carrera formal [cite: 96]</td>
-              <td class="p-4">Estudia 2 a 3 años [cite: 102]</td>
-            </tr>
-            <tr class="border-b">
-              <td class="p-4 font-bold">Aprendizaje</td>
-              <td class="p-4">Aprende trabajando [cite: 97]</td>
-              <td class="p-4">Formación académica [cite: 103]</td>
-            </tr>
-            <tr class="border-b">
-              <td class="p-4 font-bold">Validación</td>
-              <td class="p-4">Rinde examen SEREMI [cite: 98]</td>
-              <td class="p-4">No rinde examen / Tiene título [cite: 104, 105]</td>
+              <td class="p-4 text-center">No estudia carrera formal</td>
+              <td class="p-4 text-center">Estudia 2 a 3 años</td>
             </tr>
             <tr>
-              <td class="p-4 font-bold">Funciones</td>
-              <td class="p-4">Básicas y apoyo [cite: 100]</td>
-              <td class="p-4">Técnicas más avanzadas [cite: 106]</td>
+              <td class="p-4 font-bold">Aprendizaje</td>
+              <td class="p-4 text-center">Aprende trabajando</td>
+              <td class="p-4 text-center">Formación académica</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-bold">Examen</td>
+              <td class="p-4 text-center">Rinde examen SEREMI</td>
+              <td class="p-4 text-center">No rinde examen</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-bold">Experiencia</td>
+              <td class="p-4 text-center">Debe acreditar 1 año</td>
+              <td class="p-4 text-center">Prácticas académicas</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-bold">Título</td>
+              <td class="p-4 text-center">Credencial de oficio</td>
+              <td class="p-4 text-center">Tiene título profesional</td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      <div class="bg-slate-900 text-white p-8 rounded-3xl mb-10">
-        <h4 class="text-xl font-bold mb-4">¿Cuál es mejor? [cite: 107]</h4>
-        <p class="text-slate-300">No es que uno sea "mejor" que otro. Todo depende de tu situación: Si quieres entrar rápido al rubro, el camino de Auxiliar es más directo. Si buscas formación técnica completa, el camino es el Técnico. Ambos son fundamentales para el sistema. [cite: 108, 109, 110, 111]</p>
-      </div>
+      <h2 class="text-2xl font-bold text-slate-900 mt-8 mb-4 border-b pb-2">¿Cuál es mejor?</h2>
+      <p class="mb-6">No es que uno sea "mejor" que otro. Todo depende de tu situación:</p>
+      <ul class="list-disc pl-8 mb-10 space-y-4">
+        <li>Si quieres entrar rápido al rubro, el camino de <strong>Auxiliar de Farmacia</strong> es más directo.</li>
+        <li>Si buscas formación técnica completa, el camino es el <strong>Técnico en Farmacia</strong>.</li>
+      </ul>
+      <p class="mb-10 text-slate-700">Ambos trabajan en farmacia, ambos pueden crecer y ambos son fundamentales para el funcionamiento del sistema.</p>
 
-      <div class="flex flex-col md:flex-row gap-4 border-t pt-8">
-        <div class="flex-1 bg-slate-50 p-4 rounded-xl text-sm font-bold">✓ Formación en práctica + examen [cite: 113]</div>
-        <div class="flex-1 bg-slate-50 p-4 rounded-xl text-sm font-bold">✔ Formación en instituto + título [cite: 114]</div>
+      <div class="bg-slate-50 p-8 rounded-3xl border border-slate-200">
+        <h3 class="text-xl font-bold mb-4">Conclusión Clara</h3>
+        <p class="mb-2">✓ El Auxiliar de Farmacia se forma en la práctica + examen SEREMI</p>
+        <p class="mb-2">✔ El Técnico en Farmacia se forma en instituto + título</p>
+        <p class="mb-2 font-medium text-slate-400 mt-4">Ambos trabajan bajo supervisión del Químico Farmacéutico</p>
+        <p class="font-medium text-slate-400">Ambos pueden desarrollarse profesionalmente en farmacias</p>
       </div>
     `
   },
@@ -168,90 +193,63 @@ export const BLOG_POSTS = [
     id: 3,
     slug: "examen-competencia-seremi-preguntas-reales",
     title: "Examen de Competencia SEREMI 2025: ¿Qué preguntan realmente?",
-    excerpt: "Analizamos, basándonos en la normativa oficial (Decretos 466, 404 y 405), cuáles son los temas que sí o si te van a preguntar.",
+    excerpt: "Análisis basado en la normativa oficial (Decretos 466, 404 y 405) sobre los temas que sí o si te van a preguntar.",
     date: "18 Dic 2025",
     readTime: "4 min",
     image: "https://placehold.co/600x400/2563eb/ffffff?text=Examen+SEREMI+2025",
     content: `
-      <div class="mb-10 p-6 bg-yellow-50 rounded-2xl border-l-4 border-yellow-400">
-        <p class="text-slate-700 italic">Si estás leyendo esto, probablemente estás a punto de enfrentar el paso más importante para tu habilitación profesional: el Examen de Competencia ante la SEREMI de Salud. [cite: 124]</p>
-      </div>
+      <p class="mb-6">Si estás leyendo esto, probablemente estás a punto de enfrentar el paso más importante para tu habilitación profesional: el Examen de Competencia ante la SEREMI de Salud.</p>
+      <p class="mb-6">Es normal sentir ansiedad. En internet circulan muchos mitos, pero aquí vamos a analizar, basándonos en la normativa oficial (Decretos 466, 404 y 405), cuáles son los temas que sí o si te van a preguntar. No necesitas suerte, necesitas estrategia. Aquí tienes los 3 pilares fundamentales que debes dominar para aprobar.</p>
+
+      <h2 class="text-2xl font-bold text-slate-900 mt-8 mb-4 border-b pb-2">1. Legislación Farmacéutica (El filtro principal)</h2>
+      <p class="mb-6">La mayoría de los reprobados caen aquí. La autoridad sanitaria necesita saber si conoces las reglas del juego para no cometer errores legales.</p>
+      <p class="mb-4 font-bold italic">Lo que debes dominar:</p>
+      <ul class="list-disc pl-8 mb-8 space-y-4">
+        <li><strong>Diferencia entre Receta Cheque y Receta Retenida:</strong> No basta con saber el color de la estrella. Debes saber la vigencia (30 días), los libros de control donde se registran y qué decretos las regulan (Decreto 404 para estupefacientes y 405 para psicotrópicos).</li>
+        <li><strong>Roles en la Farmacia:</strong> ¿Qué puede hacer el auxiliar y qué es exclusivo del Químico Farmacéutico? (Pista: el auxiliar no puede realizar indicaciones terapéuticas ni "recetar").</li>
+        <li><strong>Tipos de Establecimientos:</strong> Diferencia legal entre Farmacia, Almacén Farmacéutico y Botiquín.</li>
+      </ul>
       
-      <p class="mb-8">Es normal sentir ansiedad. En internet circulan muchos mitos, pero aquí vamos a analizar, basándonos en la normativa oficial (Decretos 466, 404 y 405), cuáles son los temas que sí o si te van a preguntar. [cite: 125] No necesitas suerte, necesitas estrategia. Aquí tienes los 3 pilares fundamentales que debes dominar para aprobar. [cite: 126]</p>
-
-      <h3 class="text-2xl font-black text-slate-900 mb-4 tracking-tight">1. Legislación Farmacéutica (El filtro principal) [cite: 127]</h3>
-      <p class="mb-6">La mayoría de los reprobados caen aquí. La autoridad sanitaria necesita saber si conoces las reglas del juego para no cometer errores legales. [cite: 128]</p>
-      
-      <div class="space-y-6 mb-10 pl-4 border-l-2 border-slate-200">
-        <div>
-          <p class="font-bold text-slate-900 mb-1">Diferencia entre Receta Cheque y Receta Retenida:</p>
-          <p class="text-slate-600">No basta con saber el color de la estrella. Debes saber la vigencia (30 días), los libros de control donde se registran y qué decretos las regulan (Decreto 404 para estupefacientes y 405 para psicotrópicos). [cite: 131, 132]</p>
-        </div>
-        <div>
-          <p class="font-bold text-slate-900 mb-1">Roles en la Farmacia:</p>
-          <p class="text-slate-600">¿Qué puede hacer el auxiliar y qué es exclusivo del Químico Farmacéutico? (Pista: el auxiliar no puede realizar indicaciones terapéuticas ni "recetar"). [cite: 133, 134]</p>
-        </div>
-        <div>
-          <p class="font-bold text-slate-900 mb-1">Tipos de Establecimientos:</p>
-          <p class="text-slate-600">Diferencia legal entre Farmacia, Almacén Farmacéutico y Botiquín. [cite: 135]</p>
-        </div>
+      <div class="bg-blue-600 text-white p-8 rounded-3xl shadow-xl mb-12">
+        <p class="font-bold mb-2 uppercase text-xs tracking-widest text-blue-200">Pregunta típica:</p>
+        <p class="text-xl font-bold italic mb-4">"Si llega una receta de Clonazepam (Lista IV) emitida hace 40 días, ¿la puede despachar?"</p>
+        <p class="bg-white/10 p-4 rounded-xl font-bold">> Respuesta correcta: No. La vigencia legal máxima para recetas de productos controlados es de 30 días corridos.</p>
       </div>
 
-      <div class="bg-blue-600 text-white p-8 rounded-3xl shadow-xl mb-12 transform hover:scale-[1.02] transition-transform">
-        <p class="font-black text-blue-200 uppercase tracking-widest text-xs mb-2">Pregunta Típica del Examen [cite: 136]</p>
-        <p class="text-xl font-bold mb-4 italic">"Si llega una receta de Clonazepam (Lista IV) emitida hace 40 días, ¿la puede despachar?"</p>
-        <p class="bg-white/10 p-4 rounded-xl font-bold border border-white/20">
-          Respuesta correcta: No. La vigencia legal máxima para recetas de productos controlados es de 30 días corridos. [cite: 137]
-        </p>
-      </div>
-
-      <h3 class="text-2xl font-black text-slate-900 mb-4 tracking-tight">2. Almacenamiento y Cadena de Frío [cite: 138]</h3>
-      <p class="mb-6">Este es un tema técnico crítico. Un error aquí pone en riesgo la salud pública, por lo que los evaluadores son muy estrictos. [cite: 139]</p>
-      <ul class="space-y-4 mb-10">
-        <li class="flex items-start gap-2">
-          <span class="text-blue-600 font-bold mt-1">●</span>
-          <span><strong>Rango de Temperatura:</strong> Los refrigeradores para insulinas, vacunas y colirios deben mantenerse estrictamente entre 2°C y 8°C. [cite: 141]</span>
-        </li>
-        <li class="flex items-start gap-2">
-          <span class="text-blue-600 font-bold mt-1">●</span>
-          <span><strong>¿Qué hacer si se corta la luz?:</strong> Debes conocer el protocolo de quiebre de cadena de frío (no abrir la puerta del refrigerador, registrar la temperatura máxima alcanzada y consultar al Director Técnico antes de vender nada). [cite: 142]</span>
-        </li>
-        <li class="flex items-start gap-2">
-          <span class="text-blue-600 font-bold mt-1">●</span>
-          <span><strong>FEFO (First Expired, First Out):</strong> El sistema de rotación donde lo primero que vence es lo primero que se vende. [cite: 143]</span>
-        </li>
+      <h2 class="text-2xl font-bold text-slate-900 mt-8 mb-4 border-b pb-2">2. Almacenamiento y Cadena de Frío</h2>
+      <p class="mb-6">Este es un tema técnico crítico. Un error aquí pone en riesgo la salud pública, por lo que los evaluadores son muy estrictos.</p>
+      <p class="mb-4 font-bold italic text-blue-600">Datos clave que debes memorizar:</p>
+      <ul class="list-disc pl-8 mb-10 space-y-4 text-slate-700">
+        <li><strong>Rango de Temperatura:</strong> Los refrigeradores para insulinas, vacunas y colirios deben mantenerse estrictamente entre 2°C y 8°C.</li>
+        <li><strong>¿Qué hacer si se corta la luz?:</strong> Debes conocer el protocolo de quiebre de cadena de frío (no abrir la puerta del refrigerador, registrar la temperatura máxima alcanzada y consultar al Director Técnico antes de vender nada).</li>
+        <li><strong>FEFO (First Expired, First Out):</strong> El sistema de rotación donde lo primero que vence es lo primero que se vende.</li>
       </ul>
 
-      <h3 class="text-2xl font-black text-slate-900 mb-4 tracking-tight">3. Matemáticas Farmacéuticas (Cálculo de Dosis) [cite: 144]</h3>
-      <p class="mb-6">No te pedirán cálculo integral, pero sí debes manejar la "Regla de Tres" a la perfección. [cite: 145]</p>
-      <div class="bg-slate-100 p-8 rounded-3xl border-2 border-dashed border-slate-300 mb-10 text-slate-800">
-        <p class="font-bold mb-4">Ejemplo práctico: [cite: 146]</p>
-        <p class="mb-4">Si el médico receta "Amoxicilina 500mg cada 8 horas por 7 días", debes ser capaz de calcular rápidamente cuántos comprimidos o frascos necesita el paciente para el tratamiento completo. [cite: 147]</p>
-        <p class="font-black text-blue-600">Cálculo: 3 veces al día x 7 días = 21 comprimidos. Si la caja trae 16, debes informar al paciente que necesitará 2 cajas. [cite: 149, 150]</p>
+      <h2 class="text-2xl font-bold text-slate-900 mt-8 mb-4 border-b pb-2">3. Matemáticas Farmacéuticas (Cálculo de Dosis)</h2>
+      <p class="mb-6">No te pedirán cálculo integral, pero sí debes manejar la "Regla de Tres" a la perfección.</p>
+      <div class="bg-slate-50 p-8 rounded-3xl border-2 border-dashed border-slate-200 mb-10">
+        <p class="font-bold mb-2">Ejemplo práctico:</p>
+        <p class="mb-4 italic">Si el médico receta "Amoxicilina 500mg cada 8 horas por 7 días", debes ser capaz de calcular rápidamente cuántos comprimidos o frascos necesita el paciente para el tratamiento completo.</p>
+        <p class="font-bold text-blue-600">Cálculo: 3 veces al día x 7 días = 21 comprimidos. Si la caja trae 16, debes informar al paciente que necesitará 2 cajas.</p>
       </div>
 
-      <h3 class="text-2xl font-black text-slate-900 mb-6 tracking-tight">Consejos Finales para el Día del Examen [cite: 151]</h3>
+      <h2 class="text-2xl font-bold text-slate-900 mt-12 mb-6 tracking-tight uppercase text-center">Consejos Finales para el Día del Examen</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-        <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-          <p class="font-bold text-blue-600 mb-2">1. Vocabulario Técnico [cite: 152]</p>
-          <p class="text-sm text-slate-600 italic">No digas "remedios", di "medicamentos" o "especialidades farmacéuticas". No digas "el doctor de la farmacia", di "Director Técnico". [cite: 152, 153]</p>
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+          <p class="font-bold mb-2 text-blue-600">1. Vocabulario Técnico</p>
+          <p class="text-sm">No digas "remedios", di "medicamentos" o "especialidades farmacéuticas". No digas "el doctor de la farmacia", di "Director Técnico".</p>
         </div>
-        <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-          <p class="font-bold text-blue-600 mb-2">2. Seguridad ante todo [cite: 154]</p>
-          <p class="text-sm text-slate-600 italic">Ante una pregunta con trampa, la respuesta siempre debe priorizar la normativa legal por sobre la venta comercial. [cite: 154]</p>
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+          <p class="font-bold mb-2 text-blue-600">2. Seguridad ante todo</p>
+          <p class="text-sm">Ante una pregunta con trampa (ej: "¿Vendería antibióticos sin receta si el paciente tiene mucho dolor?"), la respuesta siempre debe priorizar la normativa legal por sobre la venta comercial.</p>
         </div>
-        <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-          <p class="font-bold text-blue-600 mb-2">3. Estudia los Decretos [cite: 155]</p>
-          <p class="text-sm text-slate-600 italic">No te quedes solo con los apuntes de tu curso. Lee directamente el Decreto 466; es la fuente de la verdad. [cite: 155, 156]</p>
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
+          <p class="font-bold mb-2 text-blue-600">3. Estudia los Decretos</p>
+          <p class="text-sm">No te quedes solo con los apuntes de tu curso. Lee directamente el Decreto 466; es la fuente de la verdad.</p>
         </div>
       </div>
 
-      <div class="text-center p-10 bg-slate-50 rounded-[3rem] border border-slate-200">
-        <p class="text-slate-500 mb-6 font-medium">¿Te estás preparando para el examen? En AuxiliarPro tenemos simuladores basados en preguntas reales para que practiques antes del día clave. [cite: 157]</p>
-        <a href="/quiz" class="inline-block bg-blue-600 text-white px-10 py-4 rounded-full font-black hover:scale-105 transition-transform shadow-xl shadow-blue-200">
-          PROBAR SIMULADOR GRATIS
-        </a>
-      </div>
+      <p class="text-center font-bold text-slate-400 italic">¿Te estás preparando para el examen? En AuxiliarPro tenemos simuladores basados en preguntas reales para que practiques antes del día clave.</p>
     `
   }
 ];
@@ -265,20 +263,37 @@ export const FAQS = [
     {
         q: "¿Cuáles son los requisitos obligatorios?",
         a: "Debes ser mayor de 18 años, haber rendido 4to medio y acreditar <strong>1 año de experiencia</strong> trabajando en farmacia (firmado por un Químico Farmacéutico)."
+    },
+    {
+        q: "¿Cuánto cuesta el examen?",
+        a: "Aproximadamente <strong>$19.100</strong> por el derecho a examen y $47.600 por la credencial (valores referenciales según la UTM vigente)."
+    },
+    {
+        q: "¿Qué pasa si repruebo?",
+        a: "Según el <strong>Artículo 71 del Decreto 466</strong>, si repruebas, la normativa establece que debes esperar un plazo (históricamente 1 año) para rendirlo nuevamente. Además, al ser un nuevo trámite administrativo, deberás <strong>volver a pagar el arancel</strong> de derecho a examen."
     }
 ];
 
-// 3. NIVELES DEL QUIZ (Mantenidos)
+// 3. NIVELES DEL QUIZ (LEVELS COMPLETO)
 export const LEVELS = [
     { 
         id: 1, 
         title: 'Prueba Diagnóstico', 
-        desc: 'Conceptos generales.', 
+        desc: 'Conceptos generales para calentar motores.', 
         icon: '💊', 
         qCount: 10, 
+        passingScore: 6,
         questions: [
-            { id: 101, text: '¿Quién es el responsable técnico legal de una farmacia?', options: ['El Dueño', 'El Auxiliar', 'El Químico Farmacéutico', 'El Gerente'], correctIndex: 2 },
-            { id: 102, text: '¿Rango de temperatura cadena de frío?', options: ['0°C a 5°C', '2°C a 8°C', '8°C a 15°C', 'Ambiente'], correctIndex: 1 }
+            { id: 101, text: '¿Quién es el responsable técnico legal de una farmacia?', options: ['El Dueño', 'El Auxiliar de más antigüedad', 'El Químico Farmacéutico', 'El Gerente'], correctIndex: 2 }, 
+            { id: 102, text: '¿Cuál es el rango de temperatura para cadena de frío?', options: ['0°C a 5°C', '2°C a 8°C', '8°C a 15°C', 'Ambiente'], correctIndex: 1 },
+            { id: 103, text: '¿Qué significa que un medicamento sea OTC?', options: ['Con receta retenida', 'Venta directa (Over The Counter)', 'Uso hospitalario', 'Controlado'], correctIndex: 1 },
+            { id: 104, text: 'El Auxiliar de Farmacia debe trabajar bajo supervisión de:', options: ['El cliente', 'El Químico Farmacéutico', 'El cajero', 'Nadie'], correctIndex: 1 },
+            { id: 105, text: '¿Qué organismo fiscaliza a las farmacias en Chile?', options: ['ISP y SEREMI de Salud', 'Sernac', 'Colegio de Farmacéuticos', 'Carabineros'], correctIndex: 0 },
+            { id: 106, text: '¿Qué es un medicamento Bioequivalente?', options: ['El original', 'Mismo efecto terapéutico comprobado que el original', 'Copia barata', 'Natural'], correctIndex: 1 },
+            { id: 107, text: '¿Cuál es la vía de administración "Sublingual"?', options: ['Debajo de la lengua', 'Inyectable', 'Sobre la piel', 'Rectal'], correctIndex: 0 },
+            { id: 108, text: '¿Qué indica la "Fecha de Vencimiento"?', options: ['Fabricación', 'Límite para consumo seguro', 'Fecha de venta', 'Apertura'], correctIndex: 1 },
+            { id: 109, text: '¿Dónde almacenar medicamentos en casa?', options: ['Baño', 'Cocina', 'Lugar fresco y seco', 'Al sol'], correctIndex: 2 },
+            { id: 110, text: 'La sigla D.C.I. significa:', options: ['Denominación Común Internacional', 'Dosis Común', 'Dirección Central', 'Droguería'], correctIndex: 0 }
         ] 
     }
 ];
