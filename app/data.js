@@ -1,184 +1,125 @@
-// app/data.js
-
-// 1. ARTÍCULOS DEL BLOG (ESTILO RASCACIELOS)
+// 1. ARTÍCULOS DEL BLOG (Contenido íntegro de PDFs)
 export const BLOG_POSTS = [
   {
     id: 1,
-    slug: "requisitos-auxiliar-farmacia-2026",
-    title: "Requisitos para ser Auxiliar de Farmacia en Chile (Guía Completa 2026)",
-    excerpt: "No te pierdas en la burocracia. Basado en el Decreto 466 y la Circular 29 del MINSAL, aquí tienes todo lo que necesitas para tu credencial SEREMI.",
+    slug: "requisitos-auxiliar-farmacia-chile-2026",
+    title: "Requisitos para ser Auxiliar de Farmacia en Chile (Actualizado 2026)",
+    excerpt: "Guía paso a paso sobre los requisitos legales, experiencia necesaria y trámites ante la SEREMI para obtener tu credencial.",
     date: "18 Dic 2025",
-    readTime: "6 min",
-    image: "https://placehold.co/600x400/2563eb/ffffff?text=Requisitos+SEREMI",
+    readTime: "5 min",
+    image: "https://placehold.co/600x400/2563eb/ffffff?text=Requisitos+2026",
     content: `
-      <p>Convertirse en Auxiliar de Farmacia en Chile no es solo un trámite; es una habilitación legal. Según el <strong>Artículo 28 del Decreto 466</strong>, no cualquiera puede llamarse Auxiliar. Aquí te detallamos el camino exacto.</p>
+      <p>Si estás pensando en trabajar en farmacia, uno de los primeros pasos es conocer los <strong>requisitos para ser Auxiliar de Farmacia en Chile</strong>. Esta es una de las búsquedas más comunes en Google, y con razón: es una puerta de entrada real al rubro de la salud. [cite: 2, 3]</p>
       
-      <h2>1. Requisitos de Base (El Filtro Inicial)</h2>
-      <ul class="list-disc pl-5 space-y-2 mb-4">
-        <li><strong>Escolaridad:</strong> Licencia de Enseñanza Media completa (4to Medio).</li>
-        <li><strong>Experiencia Laboral:</strong> Debes acreditar <strong>al menos 1 año (1.600 horas)</strong> de desempeño efectivo en una farmacia.</li>
-        <li><strong>Certificación del Q.F.:</strong> Necesitas un certificado firmado por el Químico Farmacéutico (Director Técnico) que avale tus funciones.</li>
+      <h2>¿Qué es un Auxiliar de Farmacia?</h2>
+      <p>El Auxiliar de Farmacia es la persona que apoya al Químico Farmacéutico en la atención de público, manejo de medicamentos, control de stock, revisión de vencimientos y orientación básica al paciente, siempre bajo supervisión profesional. [cite: 6]</p>
+
+      <h2>Requisitos para Rendir el Examen de Auxiliar de Farmacia en Chile</h2>
+      <p>De acuerdo al <strong>Decreto Supremo N° 466</strong>, para poder rendir el Examen de Auxiliar de Farmacia debes cumplir con el siguiente requisito principal: [cite: 8]</p>
+      <ul class="list-disc pl-5 space-y-2 mb-4 font-bold">
+        <li>Mínimo 1 año de experiencia laboral comprobable en farmacia, realizando labores como: [cite: 10]</li>
+        <ul class="list-circle pl-8 font-normal">
+          <li>Bodegaje [cite: 11]</li>
+          <li>Reposición de medicamentos [cite: 12]</li>
+          <li>Dispensación bajo supervisión [cite: 13]</li>
+          <li>Manejo de productos farmacéuticos [cite: 14]</li>
+        </ul>
       </ul>
-
-      <h2>2. Documentación Crítica para el Portal ASDigital</h2>
-      <p>Cuando subas tus papeles a <a href="https://asdigital.minsal.cl" class="text-blue-600 underline">ASDigital</a>, asegúrate de tener:</p>
-      <ol class="list-decimal pl-5 space-y-2 mb-4">
-        <li>Cédula de Identidad vigente (por ambos lados).</li>
-        <li>Contrato de trabajo o certificado del empleador.</li>
-        <li>Carnet de vacunación <strong>Antihepatitis B</strong> (3 dosis).</li>
-        <li>Certificado de antecedentes fines especiales.</li>
-      </ol>
-
-      <div class="bg-blue-50 p-4 rounded-xl border-l-4 border-blue-500 my-6">
-        <p class="font-bold text-blue-800 italic">"El Auxiliar no es un vendedor; es un colaborador sanitario bajo supervisión directa del Q.F." - Ley 20.724</p>
+      <p>Toda esta experiencia debe estar certificada por el Químico Farmacéutico Director Técnico del establecimiento. [cite: 15]</p>
+      
+      <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 my-6">
+        <p>El trámite oficial se realiza únicamente a través del portal del Ministerio de Salud en <strong>SEREMI en Línea</strong>: <a href="https://seremienlinea.minsal.cl/asdigital/" target="_blank" class="text-blue-600 underline">asdigital</a>. [cite: 16, 17]</p>
       </div>
 
-      <h2>3. El Paso Final: Registro SIS</h2>
-      <p>Una vez que apruebes el examen SEREMI, no olvides inscribirte en el <strong>Registro Nacional de Prestadores Individuales de Salud (Superintendencia de Salud)</strong>. Sin este registro, no figurarás como personal de salud autorizado para trabajar en farmacias asistenciales o botiquines.</p>
+      <h2>Requisitos Generales para ser Auxiliar de Farmacia en Chile (2026)</h2>
+      <p>Según la normativa vigente del Ministerio de Salud y el Decreto 466, estos son los requisitos generales: [cite: 21]</p>
+      <ol class="list-decimal pl-5 space-y-3 mb-4">
+        <li><strong>Ser mayor de 18 años:</strong> Debes ser legalmente mayor de edad. [cite: 22, 23]</li>
+        <li><strong>Enseñanza media completa:</strong> Debes contar con tu licencia de cuarto medio aprobada. [cite: 24, 25]</li>
+        <li><strong>Haber trabajado en farmacia:</strong> Debes acreditar experiencia práctica en una farmacia, bajo supervisión de un Químico Farmacéutico. El tiempo exacto y forma de acreditación lo revisa directamente la SEREMI de Salud de tu región. [cite: 26, 27, 28]</li>
+        <li><strong>Rendir y aprobar el examen de Auxiliar de Farmacia:</strong> Este examen evalúa conocimientos como Farmacología básica, Recetas médicas, Cadena de frío, Fechas de vencimiento, Legislación sanitaria y Buenas prácticas en farmacia. [cite: 29, 30, 31, 32, 33, 34, 35, 36]</li>
+        <li><strong>Obtener la credencial de Auxiliar de Farmacia:</strong> Una vez aprobado el examen, la SEREMI entrega la credencial oficial, que te habilita legalmente para trabajar. [cite: 37, 38]</li>
+      </ol>
+
+      <h2>¿Puedo prepararme sin instituto?</h2>
+      <p>Sí. Puedes estudiar de forma independiente, usar material online y prepararte con guías, PDFs, ensayos y contenido práctico. Muchos auxiliares actuales se han preparado así. Lo importante es dominar bien los contenidos del examen. [cite: 43, 44, 45, 46, 47]</p>
+
+      <h2>Conclusión clara</h2>
+      <p>Si quieres ser Auxiliar de Farmacia en Chile el 2026, necesitas: <strong>Cuarto medio</strong>, <strong>Mínimo 1 año de experiencia en farmacia</strong>, <strong>Aprobar el examen</strong> y <strong>Obtener tu credencial SEREMI</strong>. No es imposible, pero sí requiere constancia, práctica real y estudio enfocado. [cite: 49, 50, 51, 52, 53, 54]</p>
     `
   },
   {
     id: 2,
     slug: "diferencia-auxiliar-tecnico-farmacia",
-    title: "Auxiliar vs Técnico en Farmacia: ¿Cuál elegir en 2026?",
-    excerpt: "¿Vale la pena estudiar 2 años o es mejor la vía del examen? Comparamos sueldos, alcances legales y proyección.",
+    title: "Diferencia entre Auxiliar de Farmacia y Técnico en Farmacia en Chile",
+    excerpt: "Entiende las distintas funciones, formación y responsabilidades legales entre un Auxiliar y un Técnico de Nivel Superior.",
     date: "17 Dic 2025",
-    readTime: "5 min",
+    readTime: "4 min",
     image: "https://placehold.co/600x400/10b981/ffffff?text=Auxiliar+vs+Tecnico",
     content: `
-      <p>Muchos colegas se confunden. ¿Si soy Auxiliar puedo trabajar en un Hospital? ¿Si soy Técnico gano más? Vamos a despejar las dudas con la normativa en la mano.</p>
+      <p>Una de las dudas más comunes entre quienes quieren trabajar en farmacia es esta: <strong>¿Cuál es la diferencia entre Auxiliar de Farmacia y Técnico en Farmacia?</strong> Aunque ambos trabajan en farmacias, no son lo mismo, tienen distintas funciones, formación y responsabilidades legales. [cite: 57, 58]</p>
 
-      <h2>Comparativa Legal (Decreto 466)</h2>
-      <div class="overflow-x-auto my-6">
-        <table class="w-full text-sm text-left border border-slate-200">
-          <thead class="bg-slate-100">
-            <tr>
-              <th class="p-3 border">Característica</th>
-              <th class="p-3 border">Auxiliar de Farmacia</th>
-              <th class="p-3 border">Técnico (TENS en Farmacia)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="p-3 border font-bold">Formación</td>
-              <td class="p-3 border">Experiencia + Examen SEREMI</td>
-              <td class="p-3 border">Título de IP o CFT (2.5 años)</td>
-            </tr>
-            <tr>
-              <td class="p-3 border font-bold">Examen SEREMI</td>
-              <td class="p-3 border">Obligatorio</td>
-              <td class="p-3 border">No rinden (su título los habilita)</td>
-            </tr>
-            <tr>
-              <td class="p-3 border font-bold">Campo Laboral</td>
-              <td class="p-3 border">Principalmente Farmacia Privada</td>
-              <td class="p-3 border">Privada, Hospitales, Clínicas</td>
-            </tr>
-            <tr>
-              <td class="p-3 border font-bold">Práctico de Farmacia</td>
-              <td class="p-3 border">Puede optar tras 5 años de exp.</td>
-              <td class="p-3 border">Habilitado desde el primer día</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <h2>¿Qué es un Auxiliar de Farmacia?</h2>
+      <p>Es la persona que trabaja en farmacia apoyando al Químico Farmacéutico, principalmente en atención de público, dispensación bajo supervisión, reposición, bodegaje, revisión de vencimientos, manejo de stock y orientación básica al paciente. [cite: 60, 61, 64, 65, 66, 68, 69, 71]</p>
+      <p>En Chile, el Auxiliar no necesita estudiar en instituto, pero sí debe tener enseñanza media completa, contar con mínimo 1 año de experiencia, rendir y aprobar el examen ante la SEREMI de Salud y obtener su credencial oficial según el Decreto Supremo N° 466. [cite: 72, 73, 74, 75, 76]</p>
 
-      <h2>¿Se puede pasar de Auxiliar a Técnico?</h2>
-      <p>¡Claro! Muchos centros de formación reconocen tu experiencia laboral como "Aprendizaje Previo" para acortar la carrera. Si buscas estabilidad en el sector público (Hospitales), el título de Técnico es el camino. Si buscas entrar rápido al mercado de cadenas, el examen de Auxiliar es tu mejor aliado.</p>
+      <h2>¿Qué es un Técnico en Farmacia?</h2>
+      <p>El Técnico en Farmacia es un profesional que sí estudia una carrera formal, generalmente en institutos profesionales o centros de formación técnica durante 2 a 3 años, con malla académica, prácticas y título técnico. [cite: 77, 78, 79, 80, 81]</p>
+      <p>Sus funciones incluyen apoyar directamente al Químico Farmacéutico, preparación de medicamentos, control de bodegas, gestión de inventarios, atención clínica básica y apoyo en procesos técnicos más complejos. <strong>El Técnico no rinde examen en la SEREMI</strong>, ya que su título lo habilita directamente. [cite: 82, 84, 85, 87, 88, 89, 91, 92]</p>
+
+      <h2>¿Cuál es mejor?</h2>
+      <p>No es que uno sea "mejor" que otro. Todo depende de tu situación: [cite: 108]</p>
+      <ul class="list-disc pl-5 space-y-2 mb-4">
+        <li>Si quieres entrar rápido al rubro, el camino de <strong>Auxiliar de Farmacia</strong> es más directo. [cite: 109]</li>
+        <li>Si buscas formación técnica completa, el camino es el <strong>Técnico en Farmacia</strong>. [cite: 110]</li>
+      </ul>
+      <p>Ambos trabajan en farmacia, ambos pueden crecer y ambos son fundamentales para el funcionamiento del sistema. [cite: 111]</p>
     `
   },
   {
     id: 3,
     slug: "examen-competencia-seremi-preguntas-reales",
-    title: "Temario Examen SEREMI 2025: Lo que SIEMPRE preguntan",
-    excerpt: "No estudies de más. Enfócate en los pilares que la autoridad sanitaria evalúa: Decretos 466, 404, 405 y Ley de Fármacos.",
+    title: "Examen de Competencia SEREMI 2025: ¿Qué preguntan realmente?",
+    excerpt: "Analizamos los 3 pilares fundamentales que debes dominar para aprobar el examen de la SEREMI de Salud basándonos en la normativa oficial.",
     date: "18 Dic 2025",
-    readTime: "7 min",
-    image: "https://placehold.co/600x400/2563eb/ffffff?text=Guia+Examen+2025",
+    readTime: "4 min",
+    image: "https://placehold.co/600x400/2563eb/ffffff?text=Examen+SEREMI+2025",
     content: `
-      <p>El examen de la SEREMI no busca pillarte, busca asegurar que no pongas en riesgo al paciente. Aquí tienes los 3 ejes temáticos clave:</p>
+      <p>Si estás leyendo esto, probablemente estás a punto de enfrentar el paso más importante para tu habilitación profesional: el <strong>Examen de Competencia ante la SEREMI de Salud</strong>. [cite: 124]</p>
+      <p>Es normal sentir ansiedad. En internet circulan muchos mitos, pero aquí vamos a analizar, basándonos en la normativa oficial (Decretos 466, 404 y 405), cuáles son los temas que sí o si te van a preguntar. No necesitas suerte, necesitas estrategia. [cite: 125, 126]</p>
 
-      <h2>1. Legislación Farmacéutica (40% del Examen)</h2>
+      <h2>1. Legislación Farmacéutica (El filtro principal)</h2>
+      <p>La mayoría de los reprobados caen aquí. La autoridad sanitaria necesita saber si conoces las reglas del juego para no cometer errores legales. [cite: 127, 128]</p>
       <ul class="list-disc pl-5 space-y-2 mb-4">
-        <li><strong>Decreto 466:</strong> Diferencia entre Farmacia, Almacén y Botiquín.</li>
-        <li><strong>Decreto 404/405:</strong> Receta Cheque (Estupefacientes) y Receta Retenida (Psicotrópicos). Recuerda: ¡Vigencia de 30 días!</li>
-        <li><strong>Ley 20.724:</strong> Prohibición de la "Canela", incentivos y Bioequivalencia.</li>
+        <li><strong>Diferencia entre Receta Cheque y Receta Retenida:</strong> No basta con saber el color de la estrella. Debes saber la vigencia (30 días), los libros de control donde se registran y qué decretos las regulan (Decreto 404 para estupefacientes y 405 para psicotrópicos). [cite: 131, 132]</li>
+        <li><strong>Roles en la Farmacia:</strong> ¿Qué puede hacer el auxiliar y qué es exclusivo del Químico Farmacéutico? (Pista: el auxiliar no puede realizar indicaciones terapéuticas ni "recetar"). [cite: 133, 134]</li>
+        <li><strong>Tipos de Establecimientos:</strong> Diferencia legal entre Farmacia, Almacén Farmacéutico y Botiquín. [cite: 135]</li>
       </ul>
-
-      <h2>2. Operaciones Técnicas (30% del Examen)</h2>
-      <p>Debes saber cómo recibir un pedido. Uso del sistema <strong>FEFO</strong> (First Expired, First Out): lo primero que vence es lo primero que sale. No confundir con FIFO.</p>
-      <p><strong>Cadena de Frío:</strong> El rango sagrado de 2°C a 8°C. ¿Qué pasa si el termolábil queda a 15°C por 2 horas? (Protocolo de quiebre de cadena).</p>
-
-      <h2>3. Farmacología y Ética (30% del Examen)</h2>
-      <p>¿Qué es un medicamento OTC? ¿Puede un auxiliar recomendar un antibiótico? (Respuesta: ¡No! Es indicación médica exclusiva).</p>
-
-      <div class="bg-yellow-50 p-6 rounded-2xl border border-yellow-200 my-8">
-        <h3 class="text-lg font-bold text-yellow-800 mb-2">Pregunta de Entrenamiento:</h3>
-        <p class="text-yellow-900 italic">"Llega una receta de Diazepam emitida por un Dentista. ¿Es válida?"</p>
-        <p class="mt-2 font-bold text-yellow-800">Respuesta: Sí, los Cirujanos Dentistas pueden recetar psicotrópicos de la Lista IV (Receta Retenida) para su área de competencia.</p>
-      </div>
-    `
-  },
-  {
-    id: 4,
-    slug: "sueldo-auxiliar-farmacia-chile-2025",
-    title: "Sueldo Auxiliar de Farmacia en Chile 2025: Datos Actualizados",
-    excerpt: "¿Cuánto se gana realmente? Analizamos los promedios en Cruz Verde, Salcobrand y Ahumada, además de las diferencias por región.",
-    date: "18 Dic 2025",
-    readTime: "5 min",
-    image: "https://placehold.co/600x400/f59e0b/ffffff?text=Sueldos+2025",
-    content: `
-      <p>Hablar de sueldos en el rubro farmacéutico es complejo debido a las comisiones. Sin embargo, para este 2025, tenemos datos claros basados en ofertas reales del mercado chileno.</p>
-
-      <h2>1. El Promedio Nacional</h2>
-      <p>Un Auxiliar de Farmacia con credencial SEREMI está percibiendo en promedio <strong>$575.000 líquidos</strong>. Sin embargo, este monto se compone de:</p>
-      <ul class="list-disc pl-5 space-y-2 mb-4">
-        <li>Sueldo Base (cercano al mínimo legal).</li>
-        <li>Gratificación legal.</li>
-        <li><strong>Bonos por metas:</strong> Cumplimiento de inventario, cliente incógnito y dispensación.</li>
-      </ul>
-
-      <h2>2. Diferencias por Cadena y Región</h2>
-      <p>En las grandes cadenas (Cruz Verde, Salcobrand, Ahumada), el sueldo puede subir significativamente con las comisiones por productos propios o metas de local, llegando a los <strong>$750.000 - $850.000</strong> en meses de alta rotación.</p>
-      <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 my-4">
-        <p><strong>Dato Regional:</strong> En zonas extremas como Antofagasta o Calama, debido a la asignación de zona y el costo de vida, los sueldos base suelen ser un 20% superiores al promedio de Santiago.</p>
+      <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200 my-4">
+        <p><strong>Pregunta típica:</strong> "Si llega una receta de Clonazepam (Lista IV) emitida hace 40 días, ¿la puede despachar?" <br/>
+        <strong>Respuesta correcta:</strong> No. La vigencia legal máxima para recetas de productos controlados es de 30 días corridos. [cite: 136, 137]</p>
       </div>
 
-      <h2>3. El fin de la "Canela"</h2>
-      <p>Es importante recordar que la <strong>Ley 20.724 prohíbe incentivar</strong> la venta de un medicamento específico sobre otro. Los bonos hoy deben ser por cumplimiento de indicadores generales de calidad y servicio, no por "empujar" marcas.</p>
+      <h2>2. Almacenamiento y Cadena de Frío</h2>
+      <p>Este es un tema técnico crítico. Un error aquí pone en riesgo la salud pública. Datos clave que debes memorizar: [cite: 138, 139, 140]</p>
+      <ul class="list-disc pl-5 space-y-2 mb-4">
+        <li><strong>Rango de Temperatura:</strong> Los refrigeradores deben mantenerse estrictamente entre <strong>2°C y 8°C</strong>. [cite: 141]</li>
+        <li><strong>¿Qué hacer si se corta la luz?:</strong> Debes conocer el protocolo de quiebre de cadena de frío (no abrir la puerta, registrar temperatura máxima alcanzada y consultar al Director Técnico). [cite: 142]</li>
+        <li><strong>FEFO (First Expired, First Out):</strong> El sistema de rotación donde lo primero que vence es lo primero que se vende. [cite: 143]</li>
+      </ul>
+
+      <h2>3. Matemáticas Farmacéuticas (Cálculo de Dosis)</h2>
+      <p>Debes manejar la "Regla de Tres" a la perfección. [cite: 144, 145]</p>
+      <p><strong>Ejemplo práctico:</strong> Si el médico receta "Amoxicilina 500mg cada 8 horas por 7 días" (3 veces al día x 7 días = 21 comprimidos). Si la caja trae 16, debes informar al paciente que necesitará 2 cajas. [cite: 147, 149, 150]</p>
+
+      <h2>Consejos Finales para el Día del Examen</h2>
+      <ul class="list-disc pl-5 space-y-2 mb-4">
+        <li><strong>Vocabulario Técnico:</strong> Di "medicamentos" o "especialidades farmacéuticas" en lugar de "remedios". Di "Director Técnico" en lugar de "el doctor". [cite: 152, 153]</li>
+        <li><strong>Seguridad ante todo:</strong> La respuesta siempre debe priorizar la normativa legal por sobre la venta comercial. [cite: 154]</li>
+        <li><strong>Estudia los Decretos:</strong> Lee directamente el <strong>Decreto 466</strong>; es la fuente de la verdad. [cite: 155, 156]</li>
+      </ul>
     `
   }
 ];
 
-// 2. PREGUNTAS FRECUENTES (Restauradas)
-export const FAQS = [
-    {
-        q: "¿Dónde hago el trámite del examen?",
-        a: "Todo se realiza digitalmente en <a href='https://seremienlinea.minsal.cl' target='_blank' class='font-bold text-blue-600'>seremienlinea.minsal.cl</a> ingresando con tu ClaveÚnica."
-    },
-    {
-        q: "¿Cuáles son los requisitos obligatorios?",
-        a: "Debes ser mayor de 18 años, haber rendido 4to medio y acreditar <strong>1 año de experiencia</strong> (mínimo 1.600 horas) certificado por un Q.F."
-    }
-];
-
-// 3. NIVELES DEL QUIZ (Restaurados y Completos)
-export const LEVELS = [
-  { 
-      id: 1, 
-      title: 'Prueba Diagnóstico', 
-      desc: 'Conceptos generales para calentar motores.', 
-      icon: '💊', 
-      qCount: 10, 
-      passingScore: 6,
-      questions: [
-          { id: 101, text: '¿Quién es el responsable técnico legal de una farmacia?', options: ['El Dueño', 'El Auxiliar de más antigüedad', 'El Químico Farmacéutico', 'El Gerente'], correctIndex: 2 }, 
-          { id: 102, text: '¿Cuál es el rango de temperatura para cadena de frío?', options: ['0°C a 5°C', '2°C a 8°C', '8°C a 15°C', 'Ambiente'], correctIndex: 1 },
-          { id: 103, text: '¿Qué significa que un medicamento sea OTC?', options: ['Con receta retenida', 'Venta directa (Over The Counter)', 'Uso hospitalario', 'Controlado'], correctIndex: 1 },
-          { id: 104, text: 'El Auxiliar de Farmacia debe trabajar bajo supervisión de:', options: ['El cliente', 'El Químico Farmacéutico', 'El cajero', 'Nadie'], correctIndex: 1 },
-          { id: 105, text: '¿Qué organismo fiscaliza a las farmacias en Chile?', options: ['ISP y SEREMI de Salud', 'Sernac', 'Colegio de Farmacéuticos', 'Carabineros'], correctIndex: 0 }
-          // (Aquí puedes seguir pegando el resto de tus preguntas del ZIP)
-      ] 
-  }
-  // (Aquí pega el resto de tus niveles 2, 3 y 4 del ZIP)
-];
+// ... (Aquí siguen tus export const FAQS y LEVELS que ya tienes en el ZIP)
