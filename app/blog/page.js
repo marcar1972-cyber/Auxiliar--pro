@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { BLOG_POSTS } from '../data';
-import { Search, ArrowLeft, ChevronRight, Home, BookOpen } from 'lucide-react';
+import { Search, ArrowLeft, ChevronRight, Home, BookOpen, User } from 'lucide-react';
 import Link from 'next/link';
 
 export default function BlogPage() {
@@ -13,16 +13,13 @@ export default function BlogPage() {
     post.excerpt.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // BARRA DE NAVEGACIÓN ORIGINAL RESTAURADA
+  // BARRA DE NAVEGACIÓN SUPERIOR (IDÉNTICA A TU REPOSITORIO)
   const Navbar = () => (
     <nav className="p-4 bg-white border-b sticky top-0 z-50 shadow-sm">
       <div className="max-w-6xl mx-auto flex justify-between items-center px-4">
-        {/* LOGO DEL REPOSITORIO */}
         <Link href="/" className="flex items-center">
           <img src="/logo.png" alt="AuxiliarPro" className="h-10 md:h-12 w-auto" />
         </Link>
-
-        {/* ACCESOS Y MENÚ */}
         <div className="flex items-center gap-6">
           <Search className="w-5 h-5 text-slate-400 cursor-pointer hover:text-slate-600 hidden md:block" />
           <div className="flex items-center gap-6 border-l pl-6 border-slate-100">
@@ -31,7 +28,7 @@ export default function BlogPage() {
               DERMOCHECK
             </Link>
             <div className="w-10 h-10 rounded-full bg-emerald-100 border-2 border-white shadow-sm flex items-center justify-center overflow-hidden">
-              <img src="/profile.png" alt="User" className="w-full h-full object-cover" />
+               <User className="w-6 h-6 text-emerald-600" />
             </div>
           </div>
         </div>
@@ -68,17 +65,10 @@ export default function BlogPage() {
             <Home className="w-4 h-4 mr-1" /> Inicio
           </Link>
         </header>
-
         <div className="relative mb-12">
           <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 w-5 h-5" />
-          <input 
-            type="text" 
-            placeholder="Buscar artículos..." 
-            className="w-full p-4 pl-14 rounded-xl border border-slate-200 shadow-sm text-lg outline-none bg-white focus:ring-2 focus:ring-blue-500/20" 
-            onChange={(e) => setSearchTerm(e.target.value)} 
-          />
+          <input type="text" placeholder="Buscar artículos..." className="w-full p-4 pl-14 rounded-xl border border-slate-200 shadow-sm text-lg outline-none bg-white focus:ring-2 focus:ring-blue-500/20" onChange={(e) => setSearchTerm(e.target.value)} />
         </div>
-
         <div className="grid gap-6">
           {filteredPosts.map((post) => (
             <div key={post.id} onClick={() => setSelectedPost(post)} className="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 cursor-pointer hover:shadow-md transition-all group">
