@@ -3,10 +3,7 @@ import './globals.css';
 
 export const metadata = {
   title: 'AuxiliarPro - Tu ruta al éxito en Farmacia',
-  description: 'Plataforma de estudio líder para el Examen de Auxiliar de Farmacia en Chile.',
-  keywords: 'auxiliar de farmacia, examen seremi, farmacia chile, estudiar farmacia',
-  
-  // CÓDIGO DE VERIFICACIÓN DE GOOGLE SEARCH CONSOLE
+  description: 'Plataforma de estudio para el Examen de Auxiliar de Farmacia en Chile.',
   verification: {
     google: 'iIARSpG3ZCQPX13aWBNtsLFQLgwsCWVc-wb8SswLSqY',
   },
@@ -15,10 +12,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="es">
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </head>
-      <body className="antialiased">
+      <body className="antialiased bg-slate-50">
         {children}
       </body>
     </html>
