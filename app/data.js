@@ -330,4 +330,27 @@ export const LEVELS = [
             { id: 417, text: 'FORMAS FARMACÉUTICAS: ¿Qué caracteriza a las formas "Unidosis"?', options: ['Permiten una dosis única por unidad (ej: comprimido)', 'Vienen en frascos grandes', 'Son solo líquidas', 'Son para una sola enfermedad'], correctIndex: 0 },
             { id: 418, text: 'VÍAS: ¿Qué define a la vía de administración "Parenteral"?', options: ['Se traga', 'Se inhala', 'Se administra rompiendo la barrera de la piel (inyectable)', 'Se aplica en la piel'], correctIndex: 2 },
             { id: 419, text: 'VÍA INTRATECAL: ¿Dónde se deposita el fármaco?', options: ['En la vena', 'En el músculo', 'Alrededor de la médula espinal (LCR)', 'Bajo la lengua'], correctIndex: 2 },
-            { id: 420, text: 'PREPARADOS: ¿Diferencia
+            { id: 420, text: 'PREPARADOS: ¿Diferencia clave entre "Oficinal" y "Magistral"?', options: ['El precio', 'Magistral es para un paciente específico; Oficinal es fórmula estándar', 'Oficinal es con receta cheque', 'No hay diferencia'], correctIndex: 1 },
+            { id: 421, text: 'INYECTABLES: ¿Qué requisito visual es indispensable en una solución inyectable?', options: ['Debe ser colorida', 'Debe ser límpida y exenta de partículas', 'Debe tener espuma', 'Debe ser opaca'], correctIndex: 1 },
+            { id: 422, text: 'PRODUCCIÓN: ¿Qué es un "Lote"?', options: ['Un grupo de trabajadores', 'Una cantidad definida de producto homogénea en su fabricación', 'Un conjunto de recetas', 'Un tipo de farmacia'], correctIndex: 1 },
+            { id: 423, text: 'FARMACOLOGÍA: ¿Qué es el "Efecto de Primer Paso"?', options: ['La primera vez que se toma un remedio', 'La degradación del fármaco en el hígado antes de llegar a la sangre', 'La absorción en el estómago', 'El efecto placebo'], correctIndex: 1 },
+            { id: 424, text: 'ESTABILIDAD: Los 4 factores principales que dañan los medicamentos son:', options: ['Calor, Frío, Viento, Lluvia', 'Temperatura, Humedad, Luz y Tiempo', 'Precio, Marca, Laboratorio, Envase', 'Ninguna de las anteriores'], correctIndex: 1 },
+            { id: 425, text: 'INSULINA EN USO: Una vez abierto el lápiz, ¿cómo se puede almacenar?', options: ['Obligatoriamente refrigerado', 'En el congelador', 'A temperatura ambiente (aprox 4 semanas)', 'Al sol'], correctIndex: 2 },
+            { id: 426, text: 'CONGELACIÓN: ¿Qué sucede si una vacuna se congela por error a 0°C?', options: ['Se conserva mejor', 'No pasa nada si se descongela', 'Pierde su potencia irreversiblemente y debe eliminarse', 'Se vuelve tóxica'], correctIndex: 2 },
+            { id: 427, text: 'DEVOLUCIONES: Los productos devueltos o vencidos deben ir a:', options: ['La estantería de venta', 'La basura común', 'Un área de segregación o cuarentena', 'Se regalan'], correctIndex: 2 },
+            { id: 428, text: 'AUTORIZACIÓN: ¿Cuánto dura la autorización sanitaria de una farmacia?', options: ['1 año', '3 años, renovables automáticamente', '5 años', 'Indefinida'], correctIndex: 1 },
+            { id: 429, text: 'PROFESIONALES: ¿Quién puede recetar lentes y fármacos oculares tópicos?', options: ['Enfermera', 'Tecnólogo Médico con mención en Oftalmología', 'Auxiliar de Óptica', 'Nadie'], correctIndex: 1 },
+            { id: 430, text: 'DENTISTAS: ¿Qué stock de psicotrópicos pueden mantener para urgencias?', options: ['Ninguno', '50 unidades', 'Máximo 150 unidades', 'Ilimitado'], correctIndex: 2 },
+            { id: 431, text: 'LIBROS: ¿Qué Lista permite un "registro simplificado" (totales diarios)?', options: ['Lista I', 'Lista II', 'Lista III', 'Lista IV (Benzodiazepinas)'], correctIndex: 3 },
+            { id: 432, text: 'IMPORTACIÓN: Validez del certificado oficial de importación de estupefacientes:', options: ['30 días', '4 meses', '6 meses', '1 año'], correctIndex: 1 },
+            { id: 433, text: 'RECETA CHEQUE: ¿Se permiten enmiendas (correcciones)?', options: ['Sí, si se firma al lado', 'No, debe ser íntegra y manuscrita sin borrones', 'Solo en la fecha', 'Depende del criterio'], correctIndex: 1 },
+            { id: 434, text: 'FARMACIA MÓVIL: ¿Qué tiene prohibido vender?', options: ['Paracetamol', 'Psicotrópicos, Estupefacientes y Recetario Magistral', 'Vitaminas', 'Insumos'], correctIndex: 1 },
+            { id: 435, text: 'PUBLICIDAD: ¿Qué medicamentos pueden tener publicidad masiva?', options: ['Todos', 'Solo los de Venta Directa (OTC)', 'Los antibióticos', 'Los bioequivalentes'], correctIndex: 1 },
+            { id: 436, text: 'FRACCIONAMIENTO: El envase entregado al paciente debe incluir obligatoriamente:', options: ['Precio', 'Nombre paciente, fecha vencimiento y lote original', 'Teléfono del médico', 'Marca del laboratorio'], correctIndex: 1 },
+            { id: 437, text: 'DESTRUCCIÓN: ¿Cómo se eliminan los estupefacientes vencidos?', options: ['A la basura', 'Por el desagüe', 'A través de empresas autorizadas por SEREMI', 'Se queman en el patio'], correctIndex: 2 },
+            { id: 438, text: 'TRANSPORTE: Droga estupefaciente salida de aduana requiere certificado de:', options: ['Carabineros', 'Ruta y Transporte autorizado por el Servicio de Salud', 'El transportista', 'Peaje'], correctIndex: 1 },
+            { id: 439, text: 'DEFINICIÓN LEGAL: La Ley 20.724 define a la farmacia como:', options: ['Un comercio', 'Un centro de salud', 'Un almacén', 'Una empresa'], correctIndex: 1 },
+            { id: 440, text: 'SUSPENSIÓN: En farmacotecnia, una suspensión se caracteriza porque:', options: ['Está totalmente disuelta', 'El principio activo no está disuelto, sino disperso (requiere agitar)', 'Es transparente', 'Es un gas'], correctIndex: 1 }
+        ] 
+    }
+];
