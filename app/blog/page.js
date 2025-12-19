@@ -82,4 +82,14 @@ export default function BlogPage() {
                 <span>{post.readTime}</span>
               </div>
               <h2 className="text-xl md:text-2xl font-bold text-slate-900 group-hover:text-blue-600 mb-2 transition-colors">{post.title}</h2>
-              <p className="
+              <p className="text-slate-500 text-sm line-clamp-2 mb-4">{post.excerpt}</p>
+              <div className="flex items-center text-blue-600 font-bold text-sm uppercase tracking-wider">
+                Empezar lectura <ChevronRight className="ml-1 w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
