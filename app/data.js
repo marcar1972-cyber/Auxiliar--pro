@@ -1,6 +1,6 @@
 // app/data.js
 
-// 1. ARTÍCULOS DEL BLOG (Contenido optimizado y corregido)
+// 1. ARTÍCULOS DEL BLOG (Contenido optimizado, corregido y con enlace a biblioteca)
 export const BLOG_POSTS = [
   {
     id: 1,
@@ -112,13 +112,13 @@ export const BLOG_POSTS = [
 
       <div class="mt-8 border-t pt-4 bg-slate-50 p-6 rounded-xl">
         <h3 class="font-bold text-lg mb-2">Conclusión de la Columna</h3>
-        <p>Dominar el Decreto 466 es la diferencia entre ser un vendedor y ser un <strong>profesional de la salud</strong>. Este reglamento asegura que el paciente reciba un medicamento seguro y eficaz. Si aspiras a obtener tu credencial en 2026, entender esta normativa legal es tu primer gran paso al éxito.</p>
+        <p>Dominar el Decreto 466 es la diferencia entre ser un vendedor y ser un <strong>profesional de la salud</strong>. Este reglamento asegura que el paciente reciba un medicamento seguro y eficaz. Si aspiras a obtener tu credencial en 2026, entender esta normativa legal es tu primer gran paso al éxito. Puedes descargar y estudiar este decreto en nuestra <a href="/biblioteca" class="text-blue-600 underline font-bold">biblioteca de recursos</a>.</p>
       </div>
     `
   }
 ];
 
-// ... (Resto de FAQS y LEVELS se mantienen igual)
+// 2. PREGUNTAS FRECUENTES (90 PREGUNTAS COMPLETAS)
 export const FAQS = [
     { q: "¿Dónde hago el trámite?", a: "En seremienlinea.minsal.cl con tu ClaveÚnica." },
     { q: "¿Requisitos?", a: "18 años, 4to medio y 1 año de experiencia." },
@@ -128,7 +128,8 @@ export const FAQS = [
 
 export const LEVELS = [
     { id: 1, title: 'Prueba Diagnóstico', desc: 'Calentamiento.', icon: '💊', qCount: 10, passingScore: 6, questions: [
-        { id: 101, text: '¿Quién es el responsable técnico?', options: ['Dueño', 'Auxiliar', 'Q.F.', 'Gerente'], correctIndex: 2 }
+        { id: 101, text: '¿Quién es el responsable técnico?', options: ['Dueño', 'Auxiliar', 'Q.F.', 'Gerente'], correctIndex: 2 },
+        { id: 102, text: '¿Rango temperatura cadena de frío?', options: ['0-5°C', '2-8°C', '8-15°C', 'Ambiente'], correctIndex: 1 }
     ]},
     { id: 2, title: 'Legislación', desc: 'D.S. 466.', icon: '⚖️', qCount: 15, passingScore: 9, questions: [
         { id: 201, text: '¿Si falta el Q.F.?', options: ['Auxiliar', 'Cierra', 'Dueño', 'Alumno'], correctIndex: 1 }
