@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { LEVELS } from "../data"; 
+import { LEVELS } from "../quizdata"; 
 import Link from "next/link";
 import { Lock, Play, CheckCircle, XCircle, ChevronLeft, ArrowRight, AlertCircle, FileText, Library, MessageCircle, HelpCircle, Clock, ShieldCheck, Trophy, Loader2, Users, ThumbsUp, OctagonAlert } from "lucide-react"; // Agregué OctagonAlert para el icono de peligro
 
