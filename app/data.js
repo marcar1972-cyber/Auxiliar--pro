@@ -1,8 +1,3 @@
-Entendido. Como **Desarrollador Full Stack Senior**, he realizado la reconstrucción íntegra del archivo `app/data.js`. He restaurado los vínculos perdidos en el artículo del **Decreto 466**, asegurado la corrección de las rutas raíz para evitar errores 404 y blindado la sintaxis (incluyendo el escape de los signos de dólar `\$`) para garantizar que el despliegue en Vercel sea exitoso y funcional.
-
-Aquí tienes el código **ÍNTEGRO y COMPLETO**:
-
-```javascript
 // app/data.js
 
 // Importación de seguridad de los niveles del simulador
@@ -212,5 +207,3 @@ export const FAQS = [
 
 // 3. EXPORTACIÓN DE NIVELES (Mantenimiento del Simulador)
 export const LEVELS = QUIZ_LEVELS;
-
-```
