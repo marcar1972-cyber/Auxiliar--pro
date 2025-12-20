@@ -9,77 +9,73 @@ export default function Decreto466Page() {
   return (
     <main className="min-h-screen bg-white text-slate-900">
       <article className="max-w-4xl mx-auto px-6 py-12">
-        {/* Botón de retorno (Header/Título preservados por estructura) */}
         <nav className="mb-8 text-sm text-slate-500">
-          <Link href="/blog" className="hover:text-blue-600 transition-colors font-bold flex items-center">
+          <Link href="/blog" className="hover:text-blue-600 font-bold flex items-center">
             ← Volver al Blog
           </Link>
         </nav>
 
         <header className="mb-10">
-          <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-4">
+          <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-4 text-slate-900">
             ¿Qué es el Decreto 466? La "Biblia" que todo Auxiliar debe conocer
           </h1>
-          <p className="text-lg text-slate-500">Publicado el 19 de diciembre de 2025</p>
+          <p className="text-lg text-slate-500 italic">
+            Descubre por qué el Decreto 466 es la normativa fundamental para las farmacias en Chile.
+          </p>
         </header>
 
-        {/* CUERPO DEL CONTENIDO (REPARACIÓN DE VISIBILIDAD) */}
         <div className="space-y-8 text-lg leading-relaxed text-slate-700">
           <p>
-            El <strong>Decreto Supremo N° 466</strong> es el reglamento sanitario fundamental que rige a todos los establecimientos farmacéuticos en Chile. Su objetivo primordial es establecer las condiciones sanitarias para la instalación, funcionamiento y fiscalización de estos recintos.
+            El <strong>Decreto 466</strong> es el reglamento fundamental que establece las condiciones sanitarias para la instalación, funcionamiento y fiscalización de los establecimientos farmacéuticos en Chile. Su propósito es asegurar que la distribución, preparación y venta de medicamentos se realicen bajo estrictos estándares de calidad.
           </p>
 
           <h2 className="text-2xl font-bold text-slate-900 border-b pb-2 mt-8">
-            1. Tipos de Establecimientos Farmacéuticos
+            A. Tipos de Establecimientos Farmacéuticos
           </h2>
-          <p>
-            La normativa organiza los lugares de expendio de medicamentos según su complejidad y funciones específicas:
-          </p>
+          <p>La normativa clasifica los lugares de expendio según sus funciones y nivel de complejidad:</p>
           <ul className="list-disc pl-8 space-y-3">
-            <li><strong>Farmacia:</strong> Establecimiento destinado a la venta de productos, fraccionamiento y preparación de recetas magistrales.</li>
-            <li><strong>Almacén Farmacéutico:</strong> Dirigido por un Práctico de Farmacia, limitado a la venta de productos de venta directa y una lista específica con receta.</li>
-            <li><strong>Droguería:</strong> Recinto destinado a la importación y distribución mayorista; no realiza venta directa al público.</li>
-            <li><strong>Botiquín:</strong> Destinado a mantener productos farmacéuticos para uso interno en clínicas, campamentos o naves.</li>
+            <li><strong>Farmacia:</strong> Es el centro de salud más completo. Realiza venta de productos, preparación de recetas magistrales y fraccionamiento de envases.</li>
+            <li><strong>Almacén Farmacéutico:</strong> Dirigido por un Práctico de Farmacia. Puede vender medicamentos de venta directa y un listado específico de medicamentos con receta.</li>
+            <li><strong>Droguería:</strong> Se dedica a la importación, exportación, fraccionamiento y distribución mayorista. No vende directamente al público general.</li>
+            <li><strong>Botiquín:</strong> Destinado al uso interno de instituciones como clínicas, campamentos mineros o navíos para mantener productos farmacéuticos para su uso en el recinto.</li>
           </ul>
 
           <h2 className="text-2xl font-bold text-slate-900 border-b pb-2 mt-12">
-            2. El Personal y sus Responsabilidades
+            B. El Personal y sus Responsabilidades
           </h2>
           <p>
-            Todo establecimiento debe funcionar bajo la responsabilidad de un <strong>Director Técnico</strong> (Químico Farmacéutico). Para desempeñarse como <strong>Auxiliar de Farmacia</strong>, el Decreto 466 exige:
+            Todo establecimiento debe funcionar bajo un <strong>Director Técnico</strong> (Químico Farmacéutico), quien es el responsable legal de la calidad del servicio. Por su parte, para obtener la autorización sanitaria como <strong>Auxiliar de Farmacia</strong>, la ley exige:
           </p>
           <ul className="list-disc pl-8 space-y-3">
-            <li>Contar con enseñanza media completa.</li>
-            <li>Acreditar un año de práctica laboral efectiva en farmacia, certificada por el Director Técnico.</li>
-            <li>Aprobar el examen de competencia ante la SEREMI de Salud de la región correspondiente.</li>
+            <li>Haber rendido satisfactoriamente el 4° año de enseñanza media.</li>
+            <li>Acreditar al menos 1 año de práctica laboral efectiva en farmacia, desempeñando labores de bodegaje y reposición.</li>
+            <li>Rendir y aprobar un examen de competencia ante la SEREMI de Salud.</li>
           </ul>
           <p>
-            Puedes verificar los detalles de inscripción en nuestra guía de <Link href="/requisitos-auxiliar-farmacia-chile-2026" className="text-blue-600 font-bold underline">REQUISITOS LEGALES</Link>.
+            Puedes profundizar en estos puntos en nuestra guía de <Link href="/requisitos-auxiliar-farmacia-chile-2026" className="text-blue-600 font-bold underline">REQUISITOS LEGALES</Link>.
           </p>
 
           <h2 className="text-2xl font-bold text-slate-900 border-b pb-2 mt-12">
-            3. Expendio de Recetas y Bioequivalencia
+            C. Expendio, Recetas y Bioequivalencia
           </h2>
           <p>
-            El despacho de medicamentos es una de las áreas más fiscalizadas. El reglamento estipula que la venta debe ajustarse estrictamente a la condición de venta de cada producto:
+            El expendio se rige por la condición de venta aprobada en el registro sanitario (Venta Directa, Receta Simple, Retenida o Receta Cheque). La receta debe contener datos precisos del paciente y del profesional prescriptor.
           </p>
-          <ul className="list-disc pl-8 space-y-3">
-            <li><strong>Receta Simple y Retenida:</strong> Deben cumplir con la vigencia y datos del profesional prescriptor.</li>
-            <li><strong>Bioequivalencia:</strong> Los establecimientos están obligados a informar al paciente sobre las alternativas bioequivalentes disponibles para el fármaco recetado.</li>
-          </ul>
           <p>
-            Para comprender mejor estas tareas técnicas, revisa la <Link href="/diferencia-auxiliar-tecnico-farmacia" className="text-blue-600 font-bold underline">DIFERENCIA ENTRE AUXILIAR Y TÉCNICO</Link>.
+            Un punto clave es la <strong>Bioequivalencia</strong>: el personal de la farmacia tiene la obligación legal de informar al paciente sobre alternativas bioequivalentes certificadas antes de finalizar la transacción.
+          </p>
+          <p>
+            Para entender mejor cómo varían estas funciones en la práctica, revisa la <Link href="/diferencia-auxiliar-tecnico-farmacia" className="text-blue-600 font-bold underline">DIFERENCIA ENTRE AUXILIAR Y TÉCNICO</Link>.
           </p>
 
-          {/* Módulo de CTA */}
-          <div className="mt-16 bg-slate-900 p-10 rounded-[2.5rem] text-center shadow-2xl">
-            <h3 className="text-2xl font-bold text-white mb-4">¿Estás preparando tu examen?</h3>
-            <p className="text-slate-400 mb-8">
-              El Decreto 466 es la base fundamental de las preguntas de la SEREMI.
+          <div className="mt-16 bg-blue-600 p-10 rounded-[2.5rem] text-center shadow-2xl">
+            <h3 className="text-2xl font-bold text-white mb-4 italic">¿Estás estudiando para tu certificación?</h3>
+            <p className="text-blue-100 mb-8">
+              Dominar el Decreto 466 es esencial para aprobar tu examen ante la SEREMI.
             </p>
             <Link 
               href="/examen-competencia-seremi-2025"
-              className="inline-block bg-blue-600 text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-blue-500 transition-all shadow-lg"
+              className="inline-block bg-white text-blue-600 px-10 py-4 rounded-full font-bold text-lg hover:bg-blue-50 transition-all transform hover:scale-105"
             >
               Ver GUÍA DEL EXAMEN SEREMI 2025
             </Link>
