@@ -2,86 +2,80 @@ import Link from 'next/link';
 
 export const metadata = {
   title: 'Requisitos para ser Auxiliar de Farmacia en Chile (Actualizado 2026)',
-  description: 'Conoce los requisitos legales, laborales y académicos para obtener tu credencial de Auxiliar de Farmacia ante la SEREMI de Salud.',
+  description: 'Guía completa sobre los requisitos legales, académicos y laborales para obtener tu credencial de Auxiliar de Farmacia ante la SEREMI de Salud.',
 };
 
 export default function RequisitosPage() {
   return (
-    <main className="min-h-screen bg-white">
-      <article className="max-w-4xl mx-auto px-6 py-16">
-        {/* Navegación */}
+    <main className="min-h-screen bg-white text-slate-900">
+      <article className="max-w-4xl mx-auto px-6 py-12">
         <nav className="mb-8 text-sm text-slate-500">
-          <Link href="/" className="hover:text-blue-600 transition-colors">Inicio</Link>
-          <span className="mx-2">/</span>
-          <Link href="/blog" className="hover:text-blue-600 transition-colors">Blog</Link>
-          <span className="mx-2">/</span>
-          <span className="text-slate-900 font-medium">Requisitos 2026</span>
+          <Link href="/blog" className="hover:text-blue-600 font-bold flex items-center">
+            ← Volver al Blog
+          </Link>
         </nav>
 
-        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight mb-8">
-          Requisitos para ser Auxiliar de Farmacia en Chile (Actualizado 2026)
-        </h1>
+        <header className="mb-10">
+          <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-4 text-slate-900">
+            Requisitos para ser Auxiliar de Farmacia en Chile (Actualizado 2026)
+          </h1>
+          <p className="text-lg text-slate-500 italic">
+            Conoce el paso a paso legal para trabajar en el rubro farmacéutico chileno.
+          </p>
+        </header>
 
-        <section className="prose prose-slate prose-lg max-w-none text-slate-700 space-y-6">
+        <div className="space-y-8 text-lg leading-relaxed text-slate-700">
           <p>
-            Si estás pensando en trabajar en el rubro farmacéutico, el primer paso es conocer la normativa vigente para el 2026. La obtención de la credencial oficial es una puerta de entrada real al sistema de salud chileno.
+            Si estás pensando en trabajar en una farmacia, el primer paso fundamental es conocer la normativa vigente. En Chile, la labor del auxiliar no solo requiere ganas de aprender, sino el cumplimiento de hitos legales establecidos por el Ministerio de Salud.
           </p>
 
-          <h2 className="text-2xl font-bold text-slate-900 mt-10">📋 Requisitos Legales Básicos</h2>
-          <p>Según el <strong>Decreto Supremo N° 466</strong>, para optar a la autorización sanitaria debes cumplir con los siguientes puntos:</p>
+          <h2 className="text-2xl font-bold text-slate-900 border-b pb-2 mt-8">
+            1. Requisitos Personales y Académicos
+          </h2>
+          <p>Para postular a la certificación oficial, el solicitante debe cumplir con dos condiciones básicas de entrada:</p>
           <ul className="list-disc pl-8 space-y-3">
-            <li><strong>Ser mayor de 18 años:</strong> Debes ser legalmente mayor de edad al momento de la solicitud.</li>
-            <li><strong>Enseñanza Media Completa:</strong> Es obligatorio contar con la licencia de cuarto medio aprobada.</li>
-            <li><strong>Experiencia Laboral:</strong> Debes acreditar un mínimo de <strong>1 año de experiencia</strong> efectiva en farmacia.</li>
+            <li><strong>Mayoría de edad:</strong> Debes tener al menos 18 años cumplidos al momento de iniciar el trámite.</li>
+            <li><strong>Educación Formal:</strong> Es obligatorio contar con la licencia de enseñanza media completa (4° medio aprobado).</li>
           </ul>
 
-          <h2 className="text-2xl font-bold text-slate-900 mt-10">🏥 La Acreditación de Experiencia</h2>
+          <h2 className="text-2xl font-bold text-slate-900 border-b pb-2 mt-12">
+            2. Acreditación de Experiencia Laboral
+          </h2>
           <p>
-            No basta con haber trabajado; esta experiencia debe estar certificada por el <strong>Químico Farmacéutico Director Técnico</strong> del establecimiento donde te desempeñaste. Las labores válidas incluyen bodegaje, reposición y dispensación bajo supervisión profesional.
+            A diferencia de los técnicos, el auxiliar de farmacia en Chile se valida a través de la práctica supervisada. La normativa exige:
           </p>
+          <ul className="list-disc pl-8 space-y-3">
+            <li><strong>Tiempo de desempeño:</strong> Acreditar un mínimo de un año de práctica laboral efectiva en farmacias.</li>
+            <li><strong>Certificación Profesional:</strong> Esta experiencia debe estar respaldada por un certificado firmado por el Químico Farmacéutico Director Técnico del establecimiento donde trabajaste.</li>
+            <li><strong>Labores permitidas:</strong> La práctica debe incluir funciones de bodegaje, reposición de medicamentos y apoyo en la dispensación bajo supervisión directa.</li>
+          </ul>
           <p>
-            El trámite oficial se gestiona digitalmente en el portal <strong>SEREMI en Línea</strong> (ASDigital).
+            Es importante notar que esta formación práctica es la que te permite rendir el examen posterior. Si tienes dudas sobre los roles, consulta nuestra comparativa sobre la <Link href="/diferencia-auxiliar-tecnico-farmacia" className="text-blue-600 font-bold underline">DIFERENCIA ENTRE AUXILIAR Y TÉCNICO</Link>.
           </p>
 
-          <h2 className="text-2xl font-bold text-slate-900 mt-10">📚 El Examen de Competencia</h2>
+          <h2 className="text-2xl font-bold text-slate-900 border-b pb-2 mt-12">
+            3. Trámite en SEREMI y Examen de Competencia
+          </h2>
           <p>
-            Una vez aceptados tus documentos, deberás rendir un examen que evalúa conocimientos críticos: farmacología básica, lectura de recetas, cadena de frío y legislación.
+            Una vez que reúnas los documentos (Certificado de 4° medio y certificado de práctica del Q.F.), debes iniciar el proceso administrativo:
           </p>
-          
-          <div className="bg-slate-50 border border-slate-200 p-8 rounded-2xl my-10">
-            <h3 className="text-xl font-bold text-slate-900 mb-4">Enlaces de Interés para tu Carrera:</h3>
-            <ul className="space-y-4">
-              <li>
-                <Link href="/blog/examen-competencia-seremi-2025" className="text-blue-600 font-bold hover:underline">
-                  → Guía Completa para el Examen SEREMI 2025
-                </Link>
-              </li>
-              <li>
-                <Link href="/blog/cuanto-gana-auxiliar-farmacia-chile" className="text-blue-600 font-bold hover:underline">
-                  → ¿Cuánto gana un Auxiliar de Farmacia en Chile? (Sueldos 2026)
-                </Link>
-              </li>
-              <li>
-                <Link href="/blog/diferencia-auxiliar-tecnico-farmacia" className="text-blue-600 font-bold hover:underline">
-                  → Diferencia real entre Auxiliar y Técnico en Farmacia
-                </Link>
-              </li>
-            </ul>
+          <ul className="list-disc pl-8 space-y-3">
+            <li><strong>Portal ASDigital:</strong> El trámite se realiza 100% en línea a través de la plataforma de la autoridad sanitaria usando tu Clave Única.</li>
+            <li><strong>Evaluación Técnica:</strong> La SEREMI te citará a un examen de competencia donde se evalúan conocimientos de farmacología básica, lectura de recetas y el cumplimiento del <Link href="/que-es-el-decreto-466" className="text-blue-600 font-bold underline">DECRETO 466</Link>.</li>
+          </ul>
+
+          <div className="mt-16 bg-blue-600 p-10 rounded-[2.5rem] text-center shadow-2xl">
+            <h3 className="text-2xl font-bold text-white mb-4 italic">¿Quieres asegurar tu aprobación?</h3>
+            <p className="text-blue-100 mb-8">
+              No dejes tu futuro al azar. Prepárate con contenido diseñado específicamente para el examen de este año.
+            </p>
+            <Link 
+              href="/examen-competencia-seremi-2025"
+              className="inline-block bg-white text-blue-600 px-10 py-4 rounded-full font-bold text-lg hover:bg-blue-50 transition-all transform hover:scale-105"
+            >
+              Estudiar con la GUÍA DEL EXAMEN SEREMI 2025
+            </Link>
           </div>
-        </section>
-
-        {/* Banner Final */}
-        <div className="mt-16 bg-blue-600 p-10 rounded-[2.5rem] text-center shadow-2xl shadow-blue-200">
-          <h2 className="text-3xl font-bold text-white mb-4">¿Te sientes preparado?</h2>
-          <p className="text-blue-100 mb-8 text-lg text-balance italic">
-            "Para trabajar legalmente, necesitas tu credencial SEREMI. No dejes tu futuro al azar."
-          </p>
-          <Link 
-            href="/blog/examen-competencia-seremi-2025"
-            className="inline-block bg-white text-blue-600 px-10 py-4 rounded-full font-bold text-lg hover:bg-blue-50 transition-all transform hover:scale-105"
-          >
-            Estudiar Guía de Examen
-          </Link>
         </div>
       </article>
     </main>
