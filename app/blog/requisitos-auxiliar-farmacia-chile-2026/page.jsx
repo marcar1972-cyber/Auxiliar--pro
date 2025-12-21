@@ -2,13 +2,13 @@ import Link from 'next/link';
 
 export const metadata = {
   title: 'Requisitos para ser Auxiliar de Farmacia en Chile (Actualizado 2026)',
-  description: 'Guía completa sobre los requisitos legales, académicos y laborales para obtener tu credencial de Auxiliar de Farmacia ante la SEREMI de Salud.',
+  description: 'Guía detallada sobre los requisitos legales, académicos y laborales para obtener tu credencial ante la SEREMI.',
 };
 
 export default function RequisitosPage() {
   return (
-    <main className="min-h-screen bg-white text-slate-900">
-      <article className="max-w-4xl mx-auto px-6 py-12">
+    <main className="min-h-screen bg-white text-slate-900 px-6 py-12">
+      <article className="max-w-4xl mx-auto">
         <nav className="mb-8 text-sm text-slate-500">
           <Link href="/blog" className="hover:text-blue-600 font-bold flex items-center">
             ← Volver al Blog
@@ -19,61 +19,59 @@ export default function RequisitosPage() {
           <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-4 text-slate-900">
             Requisitos para ser Auxiliar de Farmacia en Chile (Actualizado 2026)
           </h1>
-          <p className="text-lg text-slate-500 italic">
-            Conoce el paso a paso legal para trabajar en el rubro farmacéutico chileno.
+          <p className="text-xl text-slate-600 leading-relaxed italic">
+            "La obtención de la credencial oficial es una puerta de entrada real al sistema de salud chileno."
           </p>
         </header>
 
         <div className="space-y-8 text-lg leading-relaxed text-slate-700">
           <p>
-            Si estás pensando en trabajar en una farmacia, el primer paso fundamental es conocer la normativa vigente. En Chile, la labor del auxiliar no solo requiere ganas de aprender, sino el cumplimiento de hitos legales establecidos por el Ministerio de Salud.
+            Trabajar en el rubro farmacéutico requiere cumplir con hitos legales específicos establecidos por el Ministerio de Salud. Para este 2026, la normativa exige una combinación de formación académica y experiencia práctica verificable.
           </p>
 
           <h2 className="text-2xl font-bold text-slate-900 border-b pb-2 mt-8">
-            1. Requisitos Personales y Académicos
+            1. Requisitos Académicos y Personales
           </h2>
-          <p>Para postular a la certificación oficial, el solicitante debe cumplir con dos condiciones básicas de entrada:</p>
+          <p>Para iniciar el proceso administrativo, debes cumplir con los siguientes requisitos de entrada:</p>
           <ul className="list-disc pl-8 space-y-3">
-            <li><strong>Mayoría de edad:</strong> Debes tener al menos 18 años cumplidos al momento de iniciar el trámite.</li>
-            <li><strong>Educación Formal:</strong> Es obligatorio contar con la licencia de enseñanza media completa (4° medio aprobado).</li>
+            <li><strong>Mayoría de edad:</strong> Debes tener al menos 18 años cumplidos al momento de la solicitud.</li>
+            <li><strong>Licencia de Enseñanza Media:</strong> Es obligatorio contar con el certificado de 4° medio aprobado (reconocido por el Mineduc).</li>
+            <li><strong>Nacionalidad:</strong> Chilenos o extranjeros con permanencia definitiva o permiso de trabajo vigente.</li>
           </ul>
 
           <h2 className="text-2xl font-bold text-slate-900 border-b pb-2 mt-12">
-            2. Acreditación de Experiencia Laboral
+            2. Acreditación de Experiencia Laboral (El Pilar Crítico)
           </h2>
           <p>
-            A diferencia de los técnicos, el auxiliar de farmacia en Chile se valida a través de la práctica supervisada. La normativa exige:
+            Según el Decreto Supremo N° 466, el auxiliar de farmacia se valida mediante la práctica. No basta con haber trabajado; la experiencia debe estar certificada formalmente:
           </p>
           <ul className="list-disc pl-8 space-y-3">
-            <li><strong>Tiempo de desempeño:</strong> Acreditar un mínimo de un año de práctica laboral efectiva en farmacias.</li>
-            <li><strong>Certificación Profesional:</strong> Esta experiencia debe estar respaldada por un certificado firmado por el Químico Farmacéutico Director Técnico del establecimiento donde trabajaste.</li>
-            <li><strong>Labores permitidas:</strong> La práctica debe incluir funciones de bodegaje, reposición de medicamentos y apoyo en la dispensación bajo supervisión directa.</li>
+            <li><strong>Tiempo Mínimo:</strong> Debes acreditar al menos <strong>1 año de desempeño efectivo</strong> en una farmacia legalmente constituida.</li>
+            <li><strong>Certificación del Director Técnico:</strong> Esta experiencia debe estar respaldada por un certificado firmado por el Químico Farmacéutico (DT) del establecimiento.</li>
+            <li><strong>Funciones Válidas:</strong> El certificado debe indicar que realizaste labores de bodegaje, reposición de medicamentos y apoyo en la dispensación bajo supervisión.</li>
           </ul>
-          <p>
-            Es importante notar que esta formación práctica es la que te permite rendir el examen posterior. Si tienes dudas sobre los roles, consulta nuestra comparativa sobre la <Link href="/diferencia-auxiliar-tecnico-farmacia" className="text-blue-600 font-bold underline">DIFERENCIA ENTRE AUXILIAR Y TÉCNICO</Link>.
-          </p>
 
           <h2 className="text-2xl font-bold text-slate-900 border-b pb-2 mt-12">
-            3. Trámite en SEREMI y Examen de Competencia
+            3. Trámite ante la SEREMI de Salud
           </h2>
           <p>
-            Una vez que reúnas los documentos (Certificado de 4° medio y certificado de práctica del Q.F.), debes iniciar el proceso administrativo:
+            Con tus certificados en mano, el proceso continúa en la plataforma digital <strong>ASDigital (SEREMI en Línea)</strong>:
           </p>
           <ul className="list-disc pl-8 space-y-3">
-            <li><strong>Portal ASDigital:</strong> El trámite se realiza 100% en línea a través de la plataforma de la autoridad sanitaria usando tu Clave Única.</li>
-            <li><strong>Evaluación Técnica:</strong> La SEREMI te citará a un examen de competencia donde se evalúan conocimientos de farmacología básica, lectura de recetas y el cumplimiento del <Link href="/que-es-el-decreto-466" className="text-blue-600 font-bold underline">DECRETO 466</Link>.</li>
+            <li><strong>Pago de Aranceles:</strong> Deberás cancelar el derecho a examen (aprox. $19.100) y, tras aprobar, el registro en el sistema (aprox. $47.600).</li>
+            <li><strong>Examen de Competencia:</strong> La autoridad te citará a una evaluación técnica que cubre legislación, manejo de recetas y cadena de frío.</li>
           </ul>
 
           <div className="mt-16 bg-blue-600 p-10 rounded-[2.5rem] text-center shadow-2xl">
-            <h3 className="text-2xl font-bold text-white mb-4 italic">¿Quieres asegurar tu aprobación?</h3>
+            <h3 className="text-2xl font-bold text-white mb-4 italic">¿Quieres asegurar tu credencial?</h3>
             <p className="text-blue-100 mb-8">
-              No dejes tu futuro al azar. Prepárate con contenido diseñado específicamente para el examen de este año.
+              Prepara tu evaluación con contenido diseñado específicamente para el examen de este año.
             </p>
             <Link 
-              href="/examen-competencia-seremi-2025"
+              href="/blog/examen-competencia-seremi-2025"
               className="inline-block bg-white text-blue-600 px-10 py-4 rounded-full font-bold text-lg hover:bg-blue-50 transition-all transform hover:scale-105"
             >
-              Estudiar con la GUÍA DEL EXAMEN SEREMI 2025
+              Ver GUÍA DEL EXAMEN SEREMI
             </Link>
           </div>
         </div>
