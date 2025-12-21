@@ -1,43 +1,37 @@
 import Link from 'next/link';
 
-export default function Decreto466Page() {
+export const metadata = {
+  title: '¿Qué es el Decreto 466? La "Biblia" de las Farmacias',
+  description: 'Reglamento fundamental de farmacias en Chile.',
+};
+
+export default function DecretoPage() {
   return (
-    <main className="min-h-screen bg-white text-slate-900 p-8 md:p-16">
+    <main className="min-h-screen bg-white text-slate-900 px-6 py-12">
       <article className="max-w-4xl mx-auto">
-        <Link href="/blog" className="text-blue-600 font-bold">← Volver al Blog</Link>
-        
-        <h1 className="text-4xl font-extrabold my-8">¿Qué es el Decreto 466? La "Biblia" del Auxiliar</h1>
-        
-        <div className="space-y-6 text-lg text-slate-700">
-          <h2 className="text-2xl font-bold text-slate-900">1. Tipos de Establecimientos</h2>
-          <p>El reglamento organiza los recintos según su función:</p>
-          <ul className="list-disc pl-6 space-y-2">
-            <li><strong>Farmacia:</strong> Venta, fraccionamiento y recetas magistrales.</li>
-            <li><strong>Almacén Farmacéutico:</strong> Venta directa y lista limitada de recetas.</li>
-            <li><strong>Droguería:</strong> Importación y distribución mayorista.</li>
-            <li><strong>Botiquín:</strong> Uso interno en clínicas o instituciones.</li>
+        <nav className="mb-8">
+          <Link href="/blog" className="text-blue-600 font-bold flex items-center">← Volver al Blog</Link>
+        </nav>
+
+        <h1 className="text-4xl font-extrabold mb-8 text-slate-900">
+          ¿Qué es el Decreto 466? La "Biblia" que todo Auxiliar debe conocer
+        </h1>
+
+        <div className="space-y-8 text-lg text-slate-700">
+          <p>Es el reglamento sanitario que rige a todos los establecimientos farmacéuticos en Chile.</p>
+          
+          <h2 className="text-2xl font-bold border-b pb-2">Puntos Clave</h2>
+          <ul className="list-disc pl-8 space-y-3">
+            <li>Clasificación de recintos (Farmacias, Almacenes, etc.).</li>
+            <li>Requisitos para el personal auxiliar.</li>
+            <li>Normas de despacho y tipos de recetas.</li>
           </ul>
 
-          <h2 className="text-2xl font-bold text-slate-900 mt-8">2. Requisitos del Auxiliar</h2>
-          <p>Para trabajar legalmente, el Decreto 466 exige requisitos claros:</p>
-          <ul className="list-disc pl-6 space-y-2">
-            <li>Haber aprobado 4° medio.</li>
-            <li>Acreditar 1 año de práctica laboral efectiva.</li>
-            <li>Aprobar el examen de competencia ante la SEREMI.</li>
-          </ul>
-
-          <h2 className="text-2xl font-bold text-slate-900 mt-8">3. Expendio y Recetas</h2>
-          <p>La normativa regula cómo se deben despachar los medicamentos:</p>
-          <ul className="list-disc pl-6 space-y-2">
-            <li><strong>Receta Cheque y Retenida:</strong> Tienen una vigencia máxima de 30 días.</li>
-            <li><strong>Bioequivalencia:</strong> Obligación de informar sobre alternativas certificadas.</li>
-          </ul>
-        </div>
-
-        <div className="mt-12 bg-blue-600 p-10 rounded-3xl text-center">
-          <Link href="/blog/examen-competencia-seremi-2025" className="bg-white text-blue-600 px-8 py-3 rounded-full font-bold">
-            Ir a Guía de Examen
-          </Link>
+          <div className="mt-12 bg-slate-900 p-10 rounded-3xl text-center">
+            <Link href="/blog/examen-competencia-seremi-2025" className="bg-blue-600 text-white px-8 py-3 rounded-full font-bold">
+              Ir a Guía de Examen SEREMI
+            </Link>
+          </div>
         </div>
       </article>
     </main>
