@@ -1,96 +1,79 @@
-import Link from "next/link";
-import { BookOpen, Mail, ChevronDown } from "lucide-react"; 
-import { FAQS } from "./data"; 
+"use client";
 
-export default function Home() {
+import { FAQS, BLOG_POSTS } from './data';
+import Link from 'next/link';
+import { ChevronDown, MessageCircle, Library, GraduationCap, ChevronRight } from 'lucide-react';
+import { useState } from 'react';
+
+export default function LandingPage() {
+  const [openFaq, setOpenFaq] = useState(null);
+
   return (
-    <main className="flex min-h-screen flex-col bg-white font-sans">
+    <div className="min-h-screen bg-white font-sans text-slate-900">
       
-      {/* 🚫 NAVBAR ELIMINADO: Ya viene automático desde layout.js */}
+      {/* ... Hero y secciones anteriores ... */}
 
-      {/* 2. CONTENIDO PRINCIPAL */}
-      {/* Cambié el margen superior a mt-8 para que no se pegue al menú nuevo */}
-      <div className="flex-1 flex flex-col items-center justify-center p-6 text-center max-w-md mx-auto w-full mt-8 mb-10">
-        
-        <span className="bg-emerald-50 text-aux-green text-[11px] font-black px-3 py-1 rounded-full mb-6 tracking-widest border border-emerald-100 uppercase">
-            Meta: Credencial 2026
-        </span>
+      {/* SECCIÓN FAQS: CORREGIDA PARA DATOS MODULARES */}
+      <section className="py-24 bg-slate-50">
+        <div className="max-w-4xl mx-auto px-6">
+          <h2 className="text-3xl font-black text-center mb-16 uppercase tracking-tighter text-slate-900">
+            Preguntas Frecuentes 2026
+          </h2>
+          
+          <div className="space-y-12">
+            {FAQS.map((category, catIdx) => (
+              <div key={catIdx} className="space-y-4">
+                <h3 className="text-[10px] font-black text-emerald-600 uppercase tracking-widest ml-4 text-left">
+                  {category.category}
+                </h3>
+                
+                <div className="space-y-3">
+                  {category.questions.map((faq, faqIdx) => {
+                    // Generamos un ID único combinando categoría e índice
+                    const faqId = `${catIdx}-${faqIdx}`;
+                    return (
+                      <div key={faqId} className="bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden">
+                        <button 
+                          onClick={() => setOpenFaq(openFaq === faqId ? null : faqId)}
+                          className="w-full p-6 text-left flex justify-between items-center hover:bg-slate-50 transition-colors"
+                        >
+                          <span className="font-bold text-slate-800 text-sm">{faq.question}</span>
+                          <ChevronDown className={`text-slate-400 transition-transform ${openFaq === faqId ? 'rotate-180' : ''}`} size={20} />
+                        </button>
+                        {openFaq === faqId && (
+                          <div className="px-6 pb-6 text-slate-600 text-sm leading-relaxed border-t border-slate-50 pt-4 text-left">
+                            {faq.answer}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-        <h1 className="text-4xl md:text-5xl font-black text-aux-dark leading-[1.1] mb-8 tracking-tight">
-            PREPÁRATE PARA TU EXAMEN DE <br/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-aux-green to-teal-400">
-                AUXILIAR DE FARMACIA
-            </span>
-        </h1>
-
-        <div className="w-full space-y-3">
-            <Link href="/quiz" className="block w-full bg-aux-dark text-white font-bold text-lg py-4 rounded-xl shadow-lg shadow-blue-900/10 hover:scale-[1.02] active:scale-[0.98] transition-all">
-                COMENZAR AHORA
+      {/* TARJETA FORO NEGRA (ESTILO IMAGEN 2) */}
+      <section className="py-20">
+        <div className="max-w-xl mx-auto px-6">
+          <div className="p-10 bg-[#0f172a] rounded-[3.5rem] shadow-2xl relative overflow-hidden text-center">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-pink-500/10 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+            <h3 className="text-2xl font-black text-white mb-3 italic tracking-tight italic underline">
+              ¿Dudas con la materia?
+            </h3>
+            <p className="text-slate-400 text-sm mb-10 leading-relaxed px-4 italic">
+              Únete a nuestro grupo de apoyo para auxiliares y técnicos. Resolvemos dudas de la SEREMI en comunidad.
+            </p>
+            <Link href="/quiz" className="bg-white text-slate-900 font-black py-5 px-10 rounded-3xl w-full flex items-center justify-center gap-3 hover:bg-slate-100 transition-all shadow-lg text-lg">
+              <MessageCircle size={24} className="text-pink-500"/> Entrar al Foro
             </Link>
-
-            <Link href="/blog" className="group block w-full bg-white text-slate-600 border-2 border-slate-100 font-bold text-lg py-4 rounded-xl hover:border-aux-green hover:text-aux-green transition-all flex items-center justify-center gap-2">
-                <BookOpen size={20} className="text-slate-400 group-hover:text-aux-green" />
-                LEER ARTÍCULOS
-            </Link>
+          </div>
         </div>
+      </section>
 
-        <div className="mt-12 bg-slate-50 p-5 rounded-2xl border border-slate-100 text-left w-full flex gap-4 items-start relative overflow-hidden">
-            <div className="absolute top-0 right-0 watermark-bg w-full h-full opacity-50"></div>
-            <div className="relative z-10 w-10 h-10 min-w-[40px] bg-white border border-slate-200 rounded-full flex items-center justify-center text-aux-green font-black shadow-sm">
-                M
-            </div>
-            <div className="relative z-10">
-                <p className="text-xs font-bold text-aux-dark uppercase tracking-wider mb-1">Marcelo dice:</p>
-                <p className="text-slate-600 text-sm italic leading-relaxed">
-                    "Auxiliar de farmacia en preparación, esta web es mi cuaderno de estudio abierto. No vendemos cursos, compartimos conocimiento real basado en la normativa vigente."
-                </p>
-            </div>
-        </div>
-
-        {/* 3. SECCIÓN FAQs */}
-        <div className="w-full mt-16 text-left">
-            <h3 className="text-xl font-black text-aux-dark mb-6 px-2">Preguntas Frecuentes</h3>
-            <div className="space-y-3">
-                {FAQS.map((faq, index) => (
-                    <details key={index} className="group bg-white border border-slate-100 rounded-xl overflow-hidden shadow-sm open:shadow-md transition-all">
-                        <summary className="flex justify-between items-center cursor-pointer p-4 font-bold text-slate-700 list-none select-none hover:bg-slate-50 transition-colors">
-                            <span className="text-sm">{faq.q}</span>
-                            <ChevronDown size={18} className="text-slate-400 group-open:rotate-180 transition-transform" />
-                        </summary>
-                        <div className="px-4 pb-4 pt-0 text-sm text-slate-500 leading-relaxed border-t border-slate-50 mt-2">
-                            <div dangerouslySetInnerHTML={{ __html: faq.a }} />
-                        </div>
-                    </details>
-                ))}
-            </div>
-        </div>
-
-      </div>
-
-      {/* 4. FOOTER */}
-      <footer className="w-full bg-slate-50 border-t border-slate-100 py-8 px-4 mt-auto">
-        <div className="max-w-md mx-auto text-center space-y-4">
-            
-            <div className="flex justify-center gap-4 text-xs font-medium text-slate-500">
-                <Link href="/legal/terminos" className="hover:text-aux-green transition-colors">Términos de Uso</Link>
-                <span className="text-slate-300">•</span>
-                <Link href="/legal/descargos" className="hover:text-aux-green transition-colors">Descargos Legales</Link>
-            </div>
-
-            <a href="mailto:contacto@auxiliaresdefarmacia.cl" className="inline-flex items-center gap-2 text-xs text-slate-400 hover:text-aux-green transition-colors bg-white px-3 py-1.5 rounded-full border border-slate-200 shadow-sm">
-                <Mail size={12} />
-                ¿Encontraste un error? Escríbenos
-            </a>
-
-            <div className="pt-4 border-t border-slate-200/50">
-                <p className="text-[10px] text-slate-400 leading-tight">
-                    © 2025 AuxiliarPro Chile. Proyecto independiente.<br/>
-                    Esta web no tiene afiliación con el MINSAL ni SEREMI.
-                </p>
-            </div>
-        </div>
-      </footer>
-
-    </main>
+      {/* ... Resto del footer ... */}
+    </div>
   );
 }
