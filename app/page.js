@@ -93,7 +93,7 @@ export default function Home() {
                 <Link href="/legal/descargos" className="hover:text-aux-green transition-colors">Descargos Legales</Link>
             </div>
 
-            <a href="mailto:contacto@auxiliaresdefarmacia.cl" className="inline-flex items-center gap-2 text-xs text-slate-400 hover:text-aux-green transition-colors bg-white px-3 py-1.5 rounded-full border border-slate-200 shadow-sm">
+            <a href="mailto:auxiliarprofarma@gmail.com" className="inline-flex items-center gap-2 text-xs text-slate-400 hover:text-aux-green transition-colors bg-white px-3 py-1.5 rounded-full border border-slate-200 shadow-sm">
                 <Mail size={12} />
                 ¿Encontraste un error? Escríbenos
             </a>
