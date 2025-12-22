@@ -1,5 +1,8 @@
 // app/data.js
-import { LEVELS as QUIZ_LEVELS } from './quizData';
+// --- ACTUALIZACIÓN DE RUTA: Apuntando a la carpeta modular ---
+import { LEVELS as QUIZ_LEVELS } from './quizData/index'; 
+// --- IMPORTACIÓN DE FAQS: Para que el inicio lea los nuevos datos ---
+import { FAQS as MODULAR_FAQS } from './faqData/index';
 
 export const BLOG_POSTS = [
   {
@@ -23,11 +26,11 @@ export const BLOG_POSTS = [
   {
     id: 3,
     slug: 'examen-competencia-seremi-2025',
-    title: 'Examen de Competencia SEREMI 2025: Guía Completa de Estudio',
+    title: 'Examen de Competencia SEREMI 2026: Guía para Preguntas de Alternativas',
     excerpt: 'Descubre los pilares fundamentales para aprobar el examen de Auxiliar ante la SEREMI. Legislación, cadena de frío y cálculos.',
     date: '18 Dic 2025',
     readTime: '6 min',
-    image: 'https://placehold.co/600x400/2563eb/ffffff?text=Examen+SEREMI+2025'
+    image: 'https://placehold.co/600x400/2563eb/ffffff?text=Examen+SEREMI+2026'
   },
   {
     id: 4,
@@ -49,9 +52,7 @@ export const BLOG_POSTS = [
   }
 ];
 
-export const FAQS = [
-  { q: '¿Dónde hago el trámite?', a: 'En seremienlinea.minsal.cl con tu Clave Única.' },
-  { q: '¿Costo?', a: 'Examen $19.100. Registro $47.600. Carnet $29.700.' }
-];
+// Exportamos las FAQS desde la nueva base de datos modular para que el inicio las vea
+export const FAQS = MODULAR_FAQS;
 
 export const LEVELS = QUIZ_LEVELS;
