@@ -15,7 +15,7 @@ import { auth, db } from "../firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc, arrayUnion, serverTimestamp } from "firebase/firestore";
 
-// Mapeador de iconos para los niveles
+// Mapeador de iconos para renderizar componentes de Lucide dinámicamente
 const iconMap = {
   BookOpen: <BookOpen size={32} />,
   Scale: <Scale size={32} />,
@@ -30,7 +30,7 @@ export default function QuizPage() {
   const [loadingAuth, setLoadingAuth] = useState(true);
   const [savingData, setSavingData] = useState(false);
 
-  // ESTADOS DEL JUEGO
+  // ESTADOS DEL SISTEMA
   const [unlockedLevels, setUnlockedLevels] = useState([1]); 
   const [activeLevelId, setActiveLevelId] = useState(null);  
   const [currentQIndex, setCurrentQIndex] = useState(0);      
@@ -43,7 +43,7 @@ export default function QuizPage() {
   const [showGrandFinale, setShowGrandFinale] = useState(false); 
   const [showRulesModal, setShowRulesModal] = useState(false);
 
-  // --- 1. SINCRONIZACIÓN FIREBASE ---
+  // --- 1. SINCRONIZACIÓN CON FIREBASE ---
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
         if (!currentUser) {
@@ -64,7 +64,7 @@ export default function QuizPage() {
                     }, { merge: true });
                 }
             } catch (error) {
-                console.error("Error cargando progreso:", error);
+                console.error("Error al cargar progreso del usuario:", error);
             }
             setLoadingAuth(false);
         }
@@ -72,9 +72,9 @@ export default function QuizPage() {
     return () => unsubscribe();
   }, [router]);
 
-  // --- 2. MOTOR DEL CRONÓMETRO (CON CORRECCIÓN DE TIEMPOS) ---
+  // --- 2. CONTROL DEL CRONÓMETRO ---
   useEffect(() => {
-    // Solo activar si hay tiempo límite (Niveles 2, 3 y 4)
+    // Si timeLeft es 0 (como en el Nivel 1), el timer no se activa
     if (activeLevelId && !showResult && timeLeft > 0) {
         const timerId = setInterval(() => {
             setTimeLeft((prev) => {
@@ -96,7 +96,7 @@ export default function QuizPage() {
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
-  // --- 3. LÓGICA DE NAVEGACIÓN ---
+  // --- 3. FUNCIONES DEL JUEGO ---
   const startLevel = (levelId) => {
     if (unlockedLevels.includes(levelId)) {
       const level = LEVELS.find(l => l.id === levelId);
@@ -109,8 +109,7 @@ export default function QuizPage() {
       setIsAnswered(false);
       setMistakes([]);
       
-      // Asignación de tiempos solicitados
-      // Nivel 1: 0 (Sin tiempo) | Nivel 2: 1200 (20m) | Nivel 3: 1800 (30m) | Nivel 4: 3600 (60m)
+      // Se asigna el tiempo desde la data (0 para Nivel 1)
       setTimeLeft(level.timeLimit); 
     }
   };
@@ -151,7 +150,7 @@ export default function QuizPage() {
     }, 1200); 
   };
 
-  // --- 4. GUARDADO DE PROGRESO ---
+  // --- 4. GUARDADO AUTOMÁTICO DE PROGRESO ---
   useEffect(() => {
     const saveProgress = async () => {
         if (showResult && activeLevelId && user) {
@@ -185,7 +184,7 @@ export default function QuizPage() {
                     }
                 }
             } catch (error) {
-                console.error("Error:", error);
+                console.error("Error al guardar en Firebase:", error);
             }
             setSavingData(false);
         }
@@ -195,7 +194,7 @@ export default function QuizPage() {
 
   if (loadingAuth) return <div className="min-h-screen flex items-center justify-center bg-white"><Loader2 className="animate-spin text-emerald-500" size={48} /></div>;
 
-  // --- VISTA: EXAMEN ACTIVO ---
+  // --- VISTA: JUGANDO EXAMEN ---
   if (activeLevelId && !showResult) {
     const level = LEVELS.find(l => l.id === activeLevelId);
     const question = level?.questions[currentQIndex];
@@ -209,16 +208,19 @@ export default function QuizPage() {
             <div className="p-8 md:p-12">
                 <div className="flex justify-between items-center mb-10">
                     <span className="text-xs font-black text-slate-400 uppercase tracking-widest">Pregunta {currentQIndex + 1} de {level.questions.length}</span>
+                    
+                    {/* LÓGICA DE VISUALIZACIÓN DEL TIMER */}
                     {timeLeft > 0 ? (
                         <div className="bg-slate-100 px-4 py-2 rounded-full font-mono font-bold text-slate-600 flex items-center gap-2">
                           <Clock size={16} className="text-emerald-500"/> {formatTime(timeLeft)}
                         </div>
                     ) : (
                         <div className="bg-emerald-50 px-4 py-2 rounded-full font-bold text-emerald-600 text-[10px] uppercase tracking-wider">
-                          Sin tiempo (Práctica)
+                          Modo Práctica
                         </div>
                     )}
                 </div>
+                
                 <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-10 leading-tight">{question.text}</h2>
                 <div className="space-y-4">
                     {question.options.map((opt, idx) => {
@@ -238,7 +240,7 @@ export default function QuizPage() {
                 </div>
             </div>
         </div>
-        <button onClick={returnToMenu} className="mt-8 text-slate-400 font-bold hover:text-red-500 transition-colors">Abandonar Examen</button>
+        <button onClick={returnToMenu} className="mt-8 text-slate-400 font-bold hover:text-red-500 transition-colors">Abandonar</button>
       </div>
     );
   }
@@ -289,7 +291,7 @@ export default function QuizPage() {
       <div className="bg-white p-6 shadow-sm sticky top-0 z-10 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link href="/" className="text-slate-400 hover:text-slate-900 transition-colors"><ChevronLeft size={28} /></Link>
-          <h1 className="text-xl font-black text-slate-900 tracking-tighter">Mi Ruta de Certificación</h1>
+          <h1 className="text-xl font-black text-slate-900 tracking-tighter">Mi Ruta 2026</h1>
         </div>
         <div className="flex items-center gap-3 bg-slate-100 px-4 py-2 rounded-full">
            <Trophy size={18} className="text-yellow-500"/>
@@ -298,7 +300,7 @@ export default function QuizPage() {
       </div>
 
       <div className="p-6 max-w-xl mx-auto space-y-8 mt-6">
-        {/* PERFIL (Referencia imagen 662268) */}
+        {/* PERFIL */}
         <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 flex items-center gap-5">
              <div className="relative">
                 {user?.photoURL ? (
@@ -311,11 +313,11 @@ export default function QuizPage() {
              <div>
                 <p className="text-[10px] text-emerald-600 font-black uppercase tracking-[0.2em]">Auxiliar en formación</p>
                 <h2 className="text-xl font-black text-slate-900 leading-none mb-1">{user?.displayName}</h2>
-                <p className="text-xs text-slate-400 font-medium italic">Año de examen: 2026</p>
+                <p className="text-xs text-slate-400 font-medium italic">Preparación SEREMI</p>
              </div>
         </div>
         
-        {/* LISTADO DE NIVELES (Referencia imagen 662268 y f8a80e) */}
+        {/* LISTADO DE NIVELES */}
         <div className="space-y-4">
           {LEVELS.map((level) => {
               const isUnlocked = unlockedLevels.includes(level.id);
@@ -331,9 +333,10 @@ export default function QuizPage() {
                       "bg-slate-100 border-transparent opacity-60 grayscale"
                     }`}
                   >
+                      {/* ICONO CIRCULAR CON VERDE MENTA */}
                       <div className={`w-16 h-16 rounded-full flex items-center justify-center text-3xl shadow-inner transition-transform group-hover:scale-110 ${
                           isPassed ? "bg-emerald-500 text-white" : 
-                          isUnlocked ? "bg-[#dcfce7] text-[#10b981]" : // VERDE MENTA (Referencia f8a80e)
+                          isUnlocked ? "bg-[#dcfce7] text-[#10b981]" : 
                           "bg-slate-300 text-slate-400"
                       }`}>
                           {isPassed ? <CheckCircle size={32} /> : (isUnlocked ? (iconMap[level.icon] || level.icon) : <Lock size={28}/>)}
@@ -355,16 +358,16 @@ export default function QuizPage() {
                 </div>
                 <div>
                     <h3 className="font-black text-lg text-slate-800 tracking-tight">Biblioteca Técnica</h3>
-                    <p className="text-xs text-slate-400 font-bold uppercase tracking-wider italic">Material de estudio PDF</p>
+                    <p className="text-xs text-slate-400 font-bold uppercase tracking-wider italic">Material PDF</p>
                 </div>
             </Link>
         </div>
 
-        {/* FORO WHATSAPP (Referencia imagen f8af69) */}
+        {/* FORO WHATSAPP (ESTILO TARJETA NEGRA) */}
         <div className="mt-8 p-10 bg-[#0f172a] rounded-[3.5rem] shadow-2xl relative overflow-hidden text-center border border-white/5">
             <div className="absolute top-0 right-0 w-32 h-32 bg-pink-500/10 rounded-full -mr-16 -mt-16 blur-3xl"></div>
             <h3 className="text-2xl font-black text-white mb-3 italic tracking-tight underline italic">¿Dudas con la materia?</h3>
-            <p className="text-slate-400 text-sm mb-10 leading-relaxed px-4 italic text-center">Únete a nuestro grupo de apoyo para auxiliares y técnicos. Resolvemos dudas de la SEREMI en comunidad.</p>
+            <p className="text-slate-400 text-sm mb-10 leading-relaxed px-4 italic text-center">Únete a nuestro grupo de apoyo para auxiliares y técnicos.</p>
             <button 
               onClick={() => setShowRulesModal(true)} 
               className="bg-white text-slate-900 font-black py-5 px-10 rounded-3xl w-full flex items-center justify-center gap-3 hover:bg-slate-100 transition-all shadow-lg text-lg"
@@ -385,13 +388,13 @@ export default function QuizPage() {
                 <div className="p-8 space-y-6 text-left">
                     <div className="flex gap-4 items-start">
                         <div className="bg-emerald-100 p-2 rounded-lg text-emerald-600 shadow-sm"><ShieldCheck size={20} /></div>
-                        <p className="text-sm text-slate-600 leading-snug"><strong>Colaboración:</strong> Espacio para ayudarnos a estudiar. Prohibido el spam.</p>
+                        <p className="text-sm text-slate-600 leading-snug"><strong>Colaboración:</strong> Espacio exclusivo para estudio e intercambio técnico.</p>
                     </div>
                     <div className="flex gap-4 items-start">
                         <div className="bg-red-100 p-2 rounded-lg text-red-600 shadow-sm"><OctagonAlert size={20} /></div>
-                        <p className="text-sm text-slate-600 leading-snug"><strong>Advertencia:</strong> El incumplimiento de las normas resultará en la eliminación inmediata.</p>
+                        <p className="text-sm text-slate-600 leading-snug"><strong>Advertencia:</strong> Cualquier incumplimiento resultará en eliminación inmediata.</p>
                     </div>
-                    <button onClick={() => { window.open("https://chat.whatsapp.com/J4VkI8mzTTs9UrzvGqBbdz", "_blank"); setShowRulesModal(false); }} className="w-full bg-emerald-500 text-white font-black py-5 rounded-2xl hover:bg-emerald-400 transition-all flex items-center justify-center gap-3 mt-4">
+                    <button onClick={() => { window.open("https://chat.whatsapp.com/J4VkI8mzTTs9UrzvGqBbdz", "_blank"); setShowRulesModal(false); }} className="w-full bg-emerald-500 text-white font-black py-5 rounded-2xl hover:bg-emerald-400 transition-all flex items-center justify-center gap-3 mt-4 shadow-xl shadow-emerald-100">
                         <ThumbsUp size={20} /> Acepto e Ingresar
                     </button>
                     <button onClick={() => setShowRulesModal(false)} className="w-full text-slate-400 text-sm font-bold py-2 text-center">Volver</button>
