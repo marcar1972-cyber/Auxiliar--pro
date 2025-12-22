@@ -9,7 +9,6 @@ export default function Home() {
       {/* 🚫 NAVBAR ELIMINADO: Ya viene automático desde layout.js */}
 
       {/* 2. CONTENIDO PRINCIPAL */}
-      {/* Cambié el margen superior a mt-8 para que no se pegue al menú nuevo */}
       <div className="flex-1 flex flex-col items-center justify-center p-6 text-center max-w-md mx-auto w-full mt-8 mb-10">
         
         <span className="bg-emerald-50 text-aux-green text-[11px] font-black px-3 py-1 rounded-full mb-6 tracking-widest border border-emerald-100 uppercase">
@@ -47,20 +46,37 @@ export default function Home() {
             </div>
         </div>
 
-        {/* 3. SECCIÓN FAQs */}
+        {/* 3. SECCIÓN FAQs MODULARIZADA (AJUSTADA PARA VERCEL) */}
         <div className="w-full mt-16 text-left">
             <h3 className="text-xl font-black text-aux-dark mb-6 px-2">Preguntas Frecuentes</h3>
-            <div className="space-y-3">
-                {FAQS.map((faq, index) => (
-                    <details key={index} className="group bg-white border border-slate-100 rounded-xl overflow-hidden shadow-sm open:shadow-md transition-all">
-                        <summary className="flex justify-between items-center cursor-pointer p-4 font-bold text-slate-700 list-none select-none hover:bg-slate-50 transition-colors">
-                            <span className="text-sm">{faq.q}</span>
-                            <ChevronDown size={18} className="text-slate-400 group-open:rotate-180 transition-transform" />
-                        </summary>
-                        <div className="px-4 pb-4 pt-0 text-sm text-slate-500 leading-relaxed border-t border-slate-50 mt-2">
-                            <div dangerouslySetInnerHTML={{ __html: faq.a }} />
-                        </div>
-                    </details>
+            
+            <div className="space-y-6">
+                {/* Mapeamos las categorías (Examen, Legislación, Laboral)
+                   y luego las preguntas dentro de cada una.
+                */}
+                {FAQS.map((category, catIndex) => (
+                    <div key={catIndex} className="space-y-3">
+                        {/* Pequeña etiqueta de categoría para orden visual */}
+                        <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest px-2 opacity-70">
+                           {category.category}
+                        </p>
+
+                        {category.questions.map((faq, faqIndex) => (
+                            <details 
+                                key={`${catIndex}-${faqIndex}`} 
+                                className="group bg-white border border-slate-100 rounded-xl overflow-hidden shadow-sm open:shadow-md transition-all"
+                            >
+                                <summary className="flex justify-between items-center cursor-pointer p-4 font-bold text-slate-700 list-none select-none hover:bg-slate-50 transition-colors">
+                                    <span className="text-sm">{faq.question}</span>
+                                    <ChevronDown size={18} className="text-slate-400 group-open:rotate-180 transition-transform" />
+                                </summary>
+                                <div className="px-4 pb-4 pt-0 text-sm text-slate-500 leading-relaxed border-t border-slate-50 mt-2">
+                                    {/* Reparado el campo para que lea 'answer' y no 'a' */}
+                                    <div className="mt-3" dangerouslySetInnerHTML={{ __html: faq.answer }} />
+                                </div>
+                            </details>
+                        ))}
+                    </div>
                 ))}
             </div>
         </div>
