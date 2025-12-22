@@ -15,7 +15,6 @@ import { auth, db } from "../firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc, arrayUnion, serverTimestamp } from "firebase/firestore";
 
-// Mapeador de iconos Lucide
 const iconMap = {
   BookOpen: <BookOpen size={32} />,
   Scale: <Scale size={32} />,
@@ -30,7 +29,6 @@ export default function QuizPage() {
   const [loadingAuth, setLoadingAuth] = useState(true);
   const [savingData, setSavingData] = useState(false);
 
-  // ESTADOS DEL JUEGO
   const [unlockedLevels, setUnlockedLevels] = useState([1]); 
   const [activeLevelId, setActiveLevelId] = useState(null);  
   const [currentQIndex, setCurrentQIndex] = useState(0);      
@@ -43,7 +41,6 @@ export default function QuizPage() {
   const [showGrandFinale, setShowGrandFinale] = useState(false); 
   const [showRulesModal, setShowRulesModal] = useState(false);
 
-  // --- 1. AUTENTICACIÓN Y SINCRONIZACIÓN ---
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       try {
@@ -73,7 +70,6 @@ export default function QuizPage() {
     return () => unsubscribe();
   }, [router]);
 
-  // --- 2. CONTROL DEL TIEMPO ---
   useEffect(() => {
     if (activeLevelId && !showResult && timeLeft > 0) {
       const timerId = setInterval(() => {
@@ -96,7 +92,6 @@ export default function QuizPage() {
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
-  // --- 3. LÓGICA DE JUEGO ---
   const startLevel = (levelId) => {
     const level = (LEVELS || []).find(l => l.id === levelId);
     if (!level || !unlockedLevels.includes(levelId)) return;
@@ -108,7 +103,6 @@ export default function QuizPage() {
     setSelectedOption(null);
     setIsAnswered(false);
     setMistakes([]);
-    // Tiempos: N1:0 (Sin tiempo), N2:1200 (20m), N3:1800 (30m), N4:3600 (60m)
     setTimeLeft(level.timeLimit); 
   };
 
@@ -148,7 +142,6 @@ export default function QuizPage() {
     }, 1200); 
   };
 
-  // --- 4. GUARDADO DE PROGRESO ---
   useEffect(() => {
     const saveProgress = async () => {
       if (showResult && activeLevelId && user) {
@@ -185,7 +178,6 @@ export default function QuizPage() {
 
   if (loadingAuth) return <div className="min-h-screen flex items-center justify-center bg-white"><Loader2 className="animate-spin text-emerald-500" size={48} /></div>;
 
-  // --- VISTA: JUGANDO ---
   if (activeLevelId && !showResult) {
     const level = LEVELS.find(l => l.id === activeLevelId);
     const question = level?.questions[currentQIndex];
@@ -193,7 +185,7 @@ export default function QuizPage() {
 
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4 font-sans text-left">
-        <div className="w-full max-w-xl bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100">
+        <div className="w-full max-w-xl bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100 text-left">
           <div className="w-full bg-slate-100 h-3">
             <div className="bg-emerald-500 h-3 transition-all duration-500" style={{ width: `${((currentQIndex + 1) / level.questions.length) * 100}%` }}></div>
           </div>
@@ -232,7 +224,6 @@ export default function QuizPage() {
     );
   }
 
-  // --- VISTA: RESULTADOS ---
   if (showResult) {
     const level = LEVELS.find(l => l.id === activeLevelId);
     const passed = score >= level.passingScore;
@@ -255,7 +246,6 @@ export default function QuizPage() {
     );
   }
 
-  // --- VISTA: MENÚ RUTA 2026 ---
   return (
     <main className="min-h-screen bg-slate-50 pb-24 font-sans text-left">
       <div className="bg-white p-6 shadow-sm sticky top-0 z-10 flex items-center justify-between">
@@ -269,20 +259,32 @@ export default function QuizPage() {
         </div>
       </div>
 
-      <div className="p-6 max-w-xl mx-auto space-y-8 mt-6">
-        {/* PERFIL */}
+      <div className="p-6 max-w-xl mx-auto space-y-8 mt-6 text-left">
+        {/* --- PERFIL ACTUALIZADO CON FOTO DE GOOGLE --- */}
         <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 flex items-center gap-5 text-left">
-          <div className="w-16 h-16 bg-emerald-500 text-white rounded-2xl flex items-center justify-center text-2xl font-black shadow-lg">
-            {user?.displayName?.[0] || "A"}
+          <div className="relative">
+            {user?.photoURL ? (
+              <img 
+                src={user.photoURL} 
+                alt="Profile" 
+                className="w-16 h-16 rounded-2xl border-4 border-slate-50 shadow-md object-cover" 
+              />
+            ) : (
+              <div className="w-16 h-16 bg-emerald-500 text-white rounded-2xl flex items-center justify-center text-2xl font-black shadow-lg">
+                {user?.displayName?.[0] || "M"}
+              </div>
+            )}
+            <div className="absolute -bottom-1 -right-1 bg-blue-500 text-white p-1 rounded-lg border-2 border-white">
+              <ShieldCheck size={14}/>
+            </div>
           </div>
           <div className="text-left">
             <p className="text-[10px] text-emerald-600 font-black uppercase tracking-[0.2em] text-left">Auxiliar en formación</p>
-            <h2 className="text-xl font-black text-slate-900 leading-none mb-1 text-left">{user?.displayName || "Usuario"}</h2>
+            <h2 className="text-xl font-black text-slate-900 leading-none mb-1 text-left">{user?.displayName || "Marcelo C"}</h2>
             <p className="text-xs text-slate-400 font-medium italic text-left">Año de examen: 2026</p>
           </div>
         </div>
         
-        {/* LISTADO DE NIVELES */}
         <div className="space-y-4">
           {LEVELS.map((level) => {
             const isUnlocked = unlockedLevels.includes(level.id);
@@ -314,7 +316,6 @@ export default function QuizPage() {
           })}
         </div>
 
-        {/* --- BIBLIOTECA RESTAURADA --- */}
         <div className="mt-8">
             <Link href="/biblioteca" className="bg-white p-6 rounded-[2rem] border-2 border-slate-100 shadow-sm hover:border-blue-400 transition-all flex items-center gap-6 group text-left">
                 <div className="w-14 h-14 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -327,7 +328,6 @@ export default function QuizPage() {
             </Link>
         </div>
 
-        {/* FORO WHATSAPP (ESTILO TARJETA NEGRA) */}
         <div className="mt-8 p-10 bg-[#0f172a] rounded-[3.5rem] shadow-2xl relative overflow-hidden text-center border border-white/5">
             <div className="absolute top-0 right-0 w-32 h-32 bg-pink-500/10 rounded-full -mr-16 -mt-16 blur-3xl"></div>
             <h3 className="text-2xl font-black text-white mb-3 italic tracking-tight underline italic text-center underline-offset-4 decoration-pink-500/50">¿Dudas con la materia?</h3>
@@ -341,7 +341,6 @@ export default function QuizPage() {
         </div>
       </div>
 
-      {/* MODAL REGLAS */}
       {showRulesModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4 animate-in fade-in zoom-in duration-200">
             <div className="bg-white rounded-[3rem] shadow-2xl max-w-sm w-full overflow-hidden border border-white">
