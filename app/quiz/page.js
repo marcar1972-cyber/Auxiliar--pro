@@ -8,14 +8,13 @@ import {
   Lock, CheckCircle, XCircle, ChevronLeft, Clock, 
   ShieldCheck, Trophy, Loader2, Library, MessageCircle, 
   Users, ThumbsUp, OctagonAlert, GraduationCap, BookOpen, Scale, ThermometerSnowflake,
-  ArrowRight
+  AlertCircle
 } from "lucide-react"; 
 
 import { auth, db } from "../firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc, arrayUnion, serverTimestamp } from "firebase/firestore";
 
-// Mapeador de iconos para los niveles
 const iconMap = {
   Scale: <Scale size={32} />,
   ThermometerSnowflake: <ThermometerSnowflake size={32} />,
@@ -30,7 +29,6 @@ export default function QuizPage() {
   const [loadingAuth, setLoadingAuth] = useState(true);
   const [savingData, setSavingData] = useState(false);
 
-  // ESTADOS DEL JUEGO
   const [unlockedLevels, setUnlockedLevels] = useState([1]); 
   const [activeLevelId, setActiveLevelId] = useState(null);  
   const [currentQIndex, setCurrentQIndex] = useState(0);      
@@ -43,7 +41,6 @@ export default function QuizPage() {
   const [showGrandFinale, setShowGrandFinale] = useState(false); 
   const [showRulesModal, setShowRulesModal] = useState(false);
 
-  // --- 1. SINCRONIZACIÓN FIREBASE ---
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
         if (!currentUser) {
@@ -72,7 +69,6 @@ export default function QuizPage() {
     return () => unsubscribe();
   }, [router]);
 
-  // --- 2. MOTOR DEL CRONÓMETRO ---
   useEffect(() => {
     if (activeLevelId && !showResult && timeLeft > 0) {
         const timerId = setInterval(() => {
@@ -95,7 +91,6 @@ export default function QuizPage() {
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
-  // --- 3. LÓGICA DEL JUEGO ---
   const startLevel = (levelId) => {
     if (unlockedLevels.includes(levelId)) {
       const level = LEVELS.find(l => l.id === levelId);
@@ -147,7 +142,6 @@ export default function QuizPage() {
     }, 1200); 
   };
 
-  // --- 4. GUARDADO DE PROGRESO ---
   useEffect(() => {
     const saveProgress = async () => {
         if (showResult && activeLevelId && user) {
@@ -191,12 +185,11 @@ export default function QuizPage() {
 
   if (loadingAuth) return <div className="min-h-screen flex items-center justify-center bg-white"><Loader2 className="animate-spin text-emerald-500" size={48} /></div>;
 
-  // --- VISTA: CERTIFICACIÓN FINAL ---
   if (showGrandFinale) {
     return (
       <div className="min-h-screen bg-slate-900 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden font-sans">
           <div className="absolute inset-0 bg-gradient-to-br from-blue-900 via-slate-900 to-black opacity-50"></div>
-          <div className="relative z-10 bg-white/10 backdrop-blur-xl p-10 rounded-[3rem] border border-white/20 shadow-2xl max-w-md w-full text-white text-center">
+          <div className="relative z-10 bg-white/10 backdrop-blur-xl p-10 rounded-[3rem] border border-white/20 shadow-2xl max-w-md w-full text-white">
               <Trophy size={80} className="text-yellow-400 mx-auto mb-6 drop-shadow-[0_0_20px_rgba(250,204,21,0.4)]" />
               <h1 className="text-4xl font-black mb-4 tracking-tighter uppercase">¡Certificado!</h1>
               <p className="mb-8 text-slate-300">Has demostrado dominar todos los niveles técnicos requeridos para este 2026. ¡Felicidades, colega!</p>
@@ -206,11 +199,9 @@ export default function QuizPage() {
     );
   }
 
-  // --- VISTA: EL EXAMEN (DURANTE EL JUEGO) ---
   if (activeLevelId && !showResult) {
     const level = LEVELS.find(l => l.id === activeLevelId);
     const question = level?.questions[currentQIndex];
-
     if (!question) return null;
 
     return (
@@ -221,12 +212,12 @@ export default function QuizPage() {
             </div>
             <div className="p-8 md:p-12">
                 <div className="flex justify-between items-center mb-10">
-                    <span className="text-xs font-black text-slate-400 uppercase tracking-widest">Pregunta {currentQIndex + 1} de {level.questions.length}</span>
+                    <span className="text-xs font-black text-slate-400 uppercase tracking-widest text-left">Pregunta {currentQIndex + 1} de {level.questions.length}</span>
                     <div className="bg-slate-100 px-4 py-2 rounded-full font-mono font-bold text-slate-600 flex items-center gap-2">
                       <Clock size={16} className="text-emerald-500"/> {formatTime(timeLeft)}
                     </div>
                 </div>
-                <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-10 leading-tight">{question.text}</h2>
+                <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-10 leading-tight text-left">{question.text}</h2>
                 <div className="space-y-4">
                     {question.options.map((opt, idx) => {
                         let style = "bg-slate-50 border-slate-100 text-slate-600 hover:border-emerald-500 hover:bg-emerald-50";
@@ -250,7 +241,6 @@ export default function QuizPage() {
     );
   }
 
-  // --- VISTA: RESULTADOS ---
   if (showResult) {
     const level = LEVELS.find(l => l.id === activeLevelId);
     const passed = score >= level.passingScore;
@@ -261,12 +251,12 @@ export default function QuizPage() {
                 <div className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-8 ${passed ? "bg-emerald-100 text-emerald-600" : "bg-red-100 text-red-600"}`}>
                     {passed ? <CheckCircle size={48} /> : <XCircle size={48} />}
                 </div>
-                <h2 className="text-3xl font-black text-slate-800 mb-2 tracking-tight text-center">{passed ? "¡EXAMEN APROBADO!" : "SIGUE PRACTICANDO"}</h2>
-                <p className="text-slate-500 text-lg mb-8 font-medium text-center">Lograste {score} de {level.questions.length} correctas</p>
+                <h2 className="text-3xl font-black text-slate-800 mb-2 tracking-tight text-center uppercase">{passed ? "¡Examen Aprobado!" : "Sigue Practicando"}</h2>
+                <p className="text-slate-500 text-lg mb-8 font-medium text-center italic">Lograste {score} de {level.questions.length} correctas</p>
                 
                 {mistakes.length > 0 && (
                     <div className="bg-slate-50 p-6 rounded-3xl border border-slate-200 text-left mb-8 max-h-60 overflow-y-auto">
-                        <p className="text-xs font-black text-slate-400 uppercase mb-4 tracking-widest text-left">Revisión técnica:</p>
+                        <p className="text-xs font-black text-slate-400 uppercase mb-4 tracking-widest text-left underline">Revisión técnica:</p>
                         {mistakes.map((m, i) => (
                             <div key={i} className="mb-6 last:mb-0 border-b border-slate-200 pb-4 last:border-0">
                                 <p className="font-bold text-slate-800 mb-2 text-sm leading-snug">{m.question}</p>
@@ -291,7 +281,6 @@ export default function QuizPage() {
     );
   }
 
-  // --- VISTA: MENÚ PRINCIPAL ---
   return (
     <main className="min-h-screen bg-slate-50 pb-24 font-sans">
       <div className="bg-white p-6 shadow-sm sticky top-0 z-10 flex items-center justify-between">
@@ -306,8 +295,7 @@ export default function QuizPage() {
       </div>
 
       <div className="p-6 max-w-xl mx-auto space-y-8 mt-6">
-        {/* PERFIL */}
-        <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 flex items-center gap-5">
+        <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 flex items-center gap-5 text-left">
              <div className="relative">
                 {user?.photoURL ? (
                     <img src={user.photoURL} alt="User" className="w-16 h-16 rounded-2xl border-4 border-slate-50 shadow-md" />
@@ -323,7 +311,6 @@ export default function QuizPage() {
              </div>
         </div>
         
-        {/* NIVELES */}
         <div className="space-y-4">
           {LEVELS.map((level) => {
               const isUnlocked = unlockedLevels.includes(level.id);
@@ -349,7 +336,7 @@ export default function QuizPage() {
                       <div className="text-left">
                           <h3 className="font-black text-lg text-slate-800 leading-tight">{level.title}</h3>
                           <p className={`text-xs font-bold uppercase tracking-widest mt-1 ${isPassed ? "text-emerald-500" : isUnlocked ? "text-emerald-600" : "text-slate-400"}`}>
-                            {isPassed ? "Nivel Dominado" : isUnlocked ? "Disponible" : "Bloqueado"}
+                            {isPassed ? "Dominado" : isUnlocked ? "Disponible" : "Bloqueado"}
                           </p>
                       </div>
                   </button>
@@ -357,24 +344,22 @@ export default function QuizPage() {
           })}
         </div>
 
-        {/* BIBLIOTECA */}
         <div className="grid grid-cols-1 gap-4 mt-8">
-            <Link href="/biblioteca" className="bg-white p-6 rounded-[2rem] border-2 border-slate-100 shadow-sm hover:border-blue-400 transition-all flex items-center gap-6 group">
+            <Link href="/biblioteca" className="bg-white p-6 rounded-[2rem] border-2 border-slate-100 shadow-sm hover:border-blue-400 transition-all flex items-center gap-6 group text-left">
                 <div className="w-14 h-14 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                     <Library size={28} />
                 </div>
                 <div className="text-left">
-                    <h3 className="font-black text-lg text-slate-800">Biblioteca Técnica</h3>
+                    <h3 className="font-black text-lg text-slate-800 tracking-tight">Biblioteca Técnica</h3>
                     <p className="text-xs text-slate-400 font-bold uppercase tracking-wider italic">Material de estudio PDF</p>
                 </div>
             </Link>
         </div>
 
-        {/* FORO WHATSAPP */}
         <div className="mt-8 p-10 bg-[#0f172a] rounded-[3rem] shadow-2xl relative overflow-hidden text-center border border-white/5">
             <div className="absolute top-0 right-0 w-32 h-32 bg-pink-500/10 rounded-full -mr-16 -mt-16 blur-3xl"></div>
-            <h3 className="text-2xl font-black text-white mb-3 italic tracking-tight italic text-center underline">¿Dudas con la materia?</h3>
-            <p className="text-slate-400 text-sm mb-10 leading-relaxed px-4 text-center italic">Únete a nuestro grupo de apoyo para auxiliares y técnicos. Resolvemos dudas en comunidad.</p>
+            <h3 className="text-2xl font-black text-white mb-3 italic tracking-tight underline italic">¿Dudas con la materia?</h3>
+            <p className="text-slate-400 text-sm mb-10 leading-relaxed px-4 italic">Únete a nuestro grupo de apoyo para auxiliares y técnicos. Resolvemos dudas en comunidad.</p>
             <button 
               onClick={() => setShowRulesModal(true)} 
               className="bg-white text-slate-900 font-black py-5 px-10 rounded-3xl w-full flex items-center justify-center gap-3 hover:bg-slate-100 transition-all shadow-lg text-lg"
@@ -384,7 +369,6 @@ export default function QuizPage() {
         </div>
       </div>
 
-      {/* MODAL DE REGLAS */}
       {showRulesModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4 animate-in fade-in zoom-in duration-200">
             <div className="bg-white rounded-[3rem] shadow-2xl max-w-sm w-full overflow-hidden border border-white">
@@ -393,16 +377,20 @@ export default function QuizPage() {
                     <h2 className="text-2xl font-black tracking-tighter leading-none mb-1 text-center">Comunidad Auxiliar Pro</h2>
                     <p className="text-slate-400 text-xs font-bold uppercase tracking-widest text-center">Reglamento de Honor</p>
                 </div>
-                <div className="p-8 space-y-6">
+                <div className="p-8 space-y-6 text-left">
                     <div className="flex gap-4 items-start">
-                        <div className="bg-emerald-100 p-2 rounded-lg text-emerald-600"><ShieldCheck size={20} /></div>
-                        <p className="text-sm text-slate-600 leading-snug"><strong>Colaboración:</strong> Estamos para ayudarnos, no para generar spam.</p>
+                        <div className="bg-emerald-100 p-2 rounded-lg text-emerald-600 shadow-sm"><ShieldCheck size={20} /></div>
+                        <p className="text-sm text-slate-600 leading-snug"><strong>Colaboración técnica:</strong> Espacio para ayudarnos a estudiar e intercambiar información del rubro. Prohibido el spam.</p>
                     </div>
                     <div className="flex gap-4 items-start">
-                        <div className="bg-red-100 p-2 rounded-lg text-red-600"><OctagonAlert size={20} /></div>
-                        <p className="text-sm text-slate-600 leading-snug"><strong>Respeto:</strong> Cualquier falta de respeto o spam resultará en la eliminación del grupo.</p>
+                        <div className="bg-blue-100 p-2 rounded-lg text-blue-600 shadow-sm"><AlertCircle size={20} /></div>
+                        <p className="text-sm text-slate-600 leading-snug"><strong>Contenido exclusivo:</strong> Solo información referente al tema. No se aceptan mensajes masivos o de otro tipo.</p>
                     </div>
-                    <button onClick={() => { window.open("https://chat.whatsapp.com/J4VkI8mzTTs9UrzvGqBbdz", "_blank"); setShowRulesModal(false); }} className="w-full bg-emerald-500 text-white font-black py-5 rounded-2xl hover:bg-emerald-400 transition-all flex items-center justify-center gap-3 mt-4 shadow-lg shadow-emerald-100">
+                    <div className="flex gap-4 items-start">
+                        <div className="bg-red-100 p-2 rounded-lg text-red-600 shadow-sm"><OctagonAlert size={20} /></div>
+                        <p className="text-sm text-slate-600 leading-snug"><strong>Respeto y Convivencia:</strong> Cualquier falta de respeto o incumplimiento resultará en la <strong>eliminación inmediata</strong> del grupo.</p>
+                    </div>
+                    <button onClick={() => { window.open("https://chat.whatsapp.com/J4VkI8mzTTs9UrzvGqBbdz", "_blank"); setShowRulesModal(false); }} className="w-full bg-emerald-500 text-white font-black py-5 rounded-2xl hover:bg-emerald-400 transition-all flex items-center justify-center gap-3 mt-4 shadow-xl shadow-emerald-100">
                         <ThumbsUp size={20} /> Acepto e Ingresar
                     </button>
                     <button onClick={() => setShowRulesModal(false)} className="w-full text-slate-400 text-sm font-bold py-2 text-center">Volver</button>
