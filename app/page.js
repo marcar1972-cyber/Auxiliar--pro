@@ -1,14 +1,15 @@
 import Link from "next/link";
-import { BookOpen, Mail, ChevronDown } from "lucide-react"; 
-import { FAQS } from "./data"; 
+import { BookOpen, Mail, ChevronDown, HelpCircle, ArrowRight } from "lucide-react"; 
+import { FAQS, BLOG_POSTS } from "./data"; 
 
 export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col bg-white font-sans">
-      
-      {/* 🚫 NAVBAR ELIMINADO: Ya viene automático desde layout.js */}
+  // Tomamos solo las primeras 2 preguntas de la primera categoría para la muestra
+  const featuredFaqs = FAQS[0]?.questions.slice(0, 2) || [];
 
-      {/* 2. CONTENIDO PRINCIPAL */}
+  return (
+    <main className="flex min-h-screen flex-col bg-white font-sans text-left">
+      
+      {/* 2. CONTENIDO PRINCIPAL (HERO) */}
       <div className="flex-1 flex flex-col items-center justify-center p-6 text-center max-w-md mx-auto w-full mt-8 mb-10">
         
         <span className="bg-emerald-50 text-aux-green text-[11px] font-black px-3 py-1 rounded-full mb-6 tracking-widest border border-emerald-100 uppercase">
@@ -33,6 +34,7 @@ export default function Home() {
             </Link>
         </div>
 
+        {/* MENSAJE DE MARCELO */}
         <div className="mt-12 bg-slate-50 p-5 rounded-2xl border border-slate-100 text-left w-full flex gap-4 items-start relative overflow-hidden">
             <div className="absolute top-0 right-0 watermark-bg w-full h-full opacity-50"></div>
             <div className="relative z-10 w-10 h-10 min-w-[40px] bg-white border border-slate-200 rounded-full flex items-center justify-center text-aux-green font-black shadow-sm">
@@ -41,66 +43,66 @@ export default function Home() {
             <div className="relative z-10">
                 <p className="text-xs font-bold text-aux-dark uppercase tracking-wider mb-1">Marcelo dice:</p>
                 <p className="text-slate-600 text-sm italic leading-relaxed">
-                    "Auxiliar de farmacia en preparación, esta web es mi cuaderno de estudio abierto. No vendemos cursos, compartimos conocimiento real basado en la normativa vigente."
+                    "Auxiliar de farmacia en preparación, esta web es mi cuaderno de estudio abierto. Compartimos conocimiento real basado en la normativa 2026."
                 </p>
             </div>
         </div>
 
-        {/* 3. SECCIÓN FAQs MODULARIZADA (AJUSTADA PARA VERCEL) */}
-        <div className="w-full mt-16 text-left">
-            <h3 className="text-xl font-black text-aux-dark mb-6 px-2">Preguntas Frecuentes</h3>
+        {/* 3. SECCIÓN: CENTRO DE AYUDA (TEASER) */}
+        <div className="w-full mt-20 text-left">
+            <div className="flex items-end justify-between mb-6 px-2">
+                <h3 className="text-2xl font-black text-aux-dark tracking-tighter">Centro de Ayuda</h3>
+                <Link href="/faq" className="text-aux-green text-xs font-bold flex items-center gap-1 hover:underline">
+                    Ver todo <ArrowRight size={14} />
+                </Link>
+            </div>
             
-            <div className="space-y-6">
-                {/* Mapeamos las categorías (Examen, Legislación, Laboral)
-                   y luego las preguntas dentro de cada una.
-                */}
-                {FAQS.map((category, catIndex) => (
-                    <div key={catIndex} className="space-y-3">
-                        {/* Pequeña etiqueta de categoría para orden visual */}
-                        <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest px-2 opacity-70">
-                           {category.category}
+            <div className="space-y-3">
+                {featuredFaqs.map((faq, index) => (
+                    <div key={index} className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
+                        <p className="text-sm font-bold text-slate-800 mb-2 flex gap-2">
+                            <HelpCircle size={16} className="text-emerald-500 shrink-0" />
+                            {faq.question}
                         </p>
-
-                        {category.questions.map((faq, faqIndex) => (
-                            <details 
-                                key={`${catIndex}-${faqIndex}`} 
-                                className="group bg-white border border-slate-100 rounded-xl overflow-hidden shadow-sm open:shadow-md transition-all"
-                            >
-                                <summary className="flex justify-between items-center cursor-pointer p-4 font-bold text-slate-700 list-none select-none hover:bg-slate-50 transition-colors">
-                                    <span className="text-sm">{faq.question}</span>
-                                    <ChevronDown size={18} className="text-slate-400 group-open:rotate-180 transition-transform" />
-                                </summary>
-                                <div className="px-4 pb-4 pt-0 text-sm text-slate-500 leading-relaxed border-t border-slate-50 mt-2">
-                                    {/* Reparado el campo para que lea 'answer' y no 'a' */}
-                                    <div className="mt-3" dangerouslySetInnerHTML={{ __html: faq.answer }} />
-                                </div>
-                            </details>
-                        ))}
+                        <p className="text-xs text-slate-500 leading-relaxed line-clamp-2 italic">
+                            {faq.answer}
+                        </p>
                     </div>
                 ))}
+
+                {/* TARJETA DE ACCESO TOTAL */}
+                <Link href="/faq" className="block bg-[#0f172a] p-6 rounded-[2rem] mt-6 relative overflow-hidden group transition-all hover:scale-[1.01]">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/10 rounded-full -mr-12 -mt-12 blur-2xl"></div>
+                    <div className="flex items-center justify-between relative z-10">
+                        <div>
+                            <p className="text-white font-bold text-lg italic text-left">¿Tienes más dudas?</p>
+                            <p className="text-slate-400 text-[11px] font-medium uppercase tracking-widest mt-1 text-left">Explora 30+ respuestas técnicas</p>
+                        </div>
+                        <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center text-white group-hover:bg-emerald-500 transition-colors">
+                            <ChevronDown size={20} className="-rotate-90" />
+                        </div>
+                    </div>
+                </Link>
             </div>
         </div>
 
       </div>
 
-      {/* 4. FOOTER */}
-      <footer className="w-full bg-slate-50 border-t border-slate-100 py-8 px-4 mt-auto">
-        <div className="max-w-md mx-auto text-center space-y-4">
-            
-            <div className="flex justify-center gap-4 text-xs font-medium text-slate-500">
-                <Link href="/legal/terminos" className="hover:text-aux-green transition-colors">Términos de Uso</Link>
-                <span className="text-slate-300">•</span>
-                <Link href="/legal/descargos" className="hover:text-aux-green transition-colors">Descargos Legales</Link>
+      {/* 4. FOOTER CON EMAIL ACTUALIZADO */}
+      <footer className="w-full bg-slate-50 border-t border-slate-100 py-10 px-4 mt-auto">
+        <div className="max-w-md mx-auto text-center space-y-6">
+            <div className="flex justify-center gap-6 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                <Link href="/legal/terminos" className="hover:text-aux-green transition-colors">Términos</Link>
+                <Link href="/legal/descargos" className="hover:text-aux-green transition-colors">Descargos</Link>
             </div>
 
-            <a href="mailto:auxiliarprofarma@gmail.com" className="inline-flex items-center gap-2 text-xs text-slate-400 hover:text-aux-green transition-colors bg-white px-3 py-1.5 rounded-full border border-slate-200 shadow-sm">
-                <Mail size={12} />
-                ¿Encontraste un error? Escríbenos
+            <a href="mailto:auxiliaprofarma@gmail.com" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-tighter text-slate-400 hover:text-aux-green transition-colors bg-white px-4 py-2 rounded-full border border-slate-200 shadow-sm">
+                <Mail size={12} /> auxiliaprofarma@gmail.com
             </a>
 
-            <div className="pt-4 border-t border-slate-200/50">
-                <p className="text-[10px] text-slate-400 leading-tight">
-                    © 2025 AuxiliarPro Chile. Proyecto independiente.<br/>
+            <div className="pt-6 border-t border-slate-200/50">
+                <p className="text-[10px] text-slate-400 leading-tight font-medium">
+                    © 2025 AuxiliarPro Chile. Proyecto independiente para el examen 2026.<br/>
                     Esta web no tiene afiliación con el MINSAL ni SEREMI.
                 </p>
             </div>
