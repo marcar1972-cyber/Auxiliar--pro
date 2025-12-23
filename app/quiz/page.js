@@ -64,23 +64,32 @@ export default function QuizPage() {
   const startLevel = (id) => {
     const level = LEVELS.find(l => l.id === id);
     if (!level || !unlockedLevels.includes(id)) return;
-    setActiveLevelId(id); setCurrentQIndex(0); setScore(0); setShowResult(false); setMistakes([]); setTimeLeft(level.timeLimit);
+    setActiveLevelId(id); 
+    setCurrentQIndex(0); 
+    setScore(0); 
+    setShowResult(false); 
+    setMistakes([]); 
+    setTimeLeft(level.timeLimit);
   };
 
-  const returnToMenu = () => { setActiveLevelId(null); };
+  // --- CORRECCIÓN DE LA LÓGICA DE RETORNO ---
+  const returnToMenu = () => { 
+    setShowResult(false);    // Primero cerramos la vista de resultados
+    setActiveLevelId(null);  // Luego limpiamos el nivel activo
+  };
 
   if (loadingAuth) return <div className="min-h-screen flex items-center justify-center bg-white"><Loader2 className="animate-spin text-emerald-500" size={48} /></div>;
 
-  // VISTA DE EXAMEN
+  // VISTA EXAMEN
   if (activeLevelId && !showResult) {
     const level = LEVELS.find(l => l.id === activeLevelId);
     const q = level.questions[currentQIndex];
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4 text-left">
-        <div className="w-full max-w-xl bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100">
+        <div className="w-full max-w-xl bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100 text-left">
           <div className="w-full bg-slate-100 h-3"><div className="bg-emerald-500 h-3 transition-all duration-500" style={{ width: `${((currentQIndex + 1) / level.questions.length) * 100}%` }}></div></div>
           <div className="p-8 md:p-12 text-left">
-            <div className="flex justify-between items-center mb-10"><span className="text-xs font-black text-slate-400 uppercase">Pregunta {currentQIndex + 1} de {level.questions.length}</span>{timeLeft > 0 ? <div className="bg-slate-100 px-4 py-2 rounded-full font-mono font-bold text-slate-600 flex items-center gap-2"><Clock size={16}/> {Math.floor(timeLeft/60)}:{timeLeft%60<10?'0':''}{timeLeft%60}</div> : <div className="bg-emerald-50 px-4 py-2 rounded-full font-bold text-emerald-600 text-[10px] uppercase">Modo Práctica</div>}</div>
+            <div className="flex justify-between items-center mb-10 text-left"><span className="text-xs font-black text-slate-400 uppercase">Pregunta {currentQIndex + 1} de {level.questions.length}</span>{timeLeft > 0 ? <div className="bg-slate-100 px-4 py-2 rounded-full font-mono font-bold text-slate-600 flex items-center gap-2"><Clock size={16}/> {Math.floor(timeLeft/60)}:{timeLeft%60<10?'0':''}{timeLeft%60}</div> : <div className="bg-emerald-50 px-4 py-2 rounded-full font-bold text-emerald-600 text-[10px] uppercase tracking-wider">Modo Práctica</div>}</div>
             <h2 className="text-2xl font-bold text-slate-800 mb-10 leading-tight text-left">{q.text}</h2>
             <div className="space-y-4 text-left">
               {q.options.map((opt, idx) => {
@@ -95,52 +104,50 @@ export default function QuizPage() {
     );
   }
 
-  // VISTA DE RESULTADOS
-  if (showResult) {
+  // --- VISTA RESULTADOS (CON SEGURO CONTRA EXCEPCIONES) ---
+  if (showResult && activeLevelId) {
     const level = LEVELS.find(l => l.id === activeLevelId);
+    if (!level) return null; // Seguro: Si no hay nivel, no renderizamos nada
+
     const passed = score >= level.passingScore;
     return (
-      <div className="min-h-screen bg-slate-100 flex items-center justify-center p-6 text-left">
-        <div className="bg-white p-10 rounded-[3rem] shadow-2xl text-center max-w-lg w-full">
+      <div className="min-h-screen bg-slate-100 flex items-center justify-center p-6 text-left font-sans">
+        <div className="bg-white p-10 rounded-[3rem] shadow-2xl text-center max-w-lg w-full border border-white">
           <div className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-8 ${passed ? "bg-emerald-100 text-emerald-600" : "bg-red-100 text-red-600"}`}>{passed ? <CheckCircle size={48} /> : <XCircle size={48} />}</div>
-          <h2 className="text-3xl font-black text-slate-800 mb-2 tracking-tight">Lograste {score} de {level.questions.length}</h2>
-          <button onClick={() => setActiveLevelId(null)} className="w-full font-black py-5 rounded-2xl bg-slate-900 text-white shadow-lg mt-8 cursor-pointer">Continuar Ruta</button>
+          <h2 className="text-3xl font-black text-slate-800 mb-2 tracking-tight text-center">{passed ? "¡Nivel Superado!" : "Sigue Practicando"}</h2>
+          <p className="text-slate-500 text-lg mb-8 font-medium text-center italic text-left">Lograste {score} de {level.questions.length} correctas</p>
+          <div className="flex flex-col gap-3">
+            <button onClick={passed ? returnToMenu : () => startLevel(activeLevelId)} className={`w-full font-black py-5 rounded-2xl shadow-lg transition-transform active:scale-95 cursor-pointer ${passed ? "bg-slate-900 text-white" : "bg-emerald-500 text-white"}`}>
+              {passed ? "Continuar Ruta" : "Reintentar Nivel"}
+            </button>
+            <button onClick={returnToMenu} className="py-4 text-slate-400 font-bold text-sm text-center cursor-pointer">Volver al Menú</button>
+          </div>
         </div>
       </div>
     );
   }
 
-  // VISTA DE RUTA (MENÚ)
+  // VISTA MENÚ
   return (
     <main className="min-h-screen bg-slate-50 pb-24 font-sans text-left">
       <div className="bg-white p-6 shadow-sm sticky top-0 z-10 flex items-center justify-between">
         <div className="flex items-center gap-4"><Link href="/" className="text-slate-400 hover:text-slate-900 cursor-pointer"><ChevronLeft size={28} /></Link><h1 className="text-xl font-black text-slate-900 tracking-tighter text-left">Mi Ruta 2026</h1></div>
-        <div className="bg-slate-100 px-4 py-2 rounded-full text-sm font-black text-slate-700 flex items-center gap-3"><Trophy size={18} className="text-yellow-500"/> {unlockedLevels.length - 1} / 4</div>
+        <div className="bg-slate-100 px-4 py-2 rounded-full text-sm font-black text-slate-700 flex items-center gap-3"><Trophy size={18} className="text-yellow-500"/><span className="text-sm font-black text-slate-700">{unlockedLevels.length - 1} / 4</span></div>
       </div>
 
       <div className="p-6 max-w-xl mx-auto space-y-8 mt-6 text-left">
-        {/* PERFIL */}
+        {/* PERFIL (RESTAURADO CON FOTO) */}
         <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 flex items-center gap-5 text-left">
-          <div className="relative">{user?.photoURL ? <img src={user.photoURL} alt="P" className="w-16 h-16 rounded-2xl border-4 border-slate-50 shadow-md object-cover" /> : <div className="w-16 h-16 bg-emerald-500 text-white rounded-2xl flex items-center justify-center text-2xl font-black">M</div>}<div className="absolute -bottom-1 -right-1 bg-blue-500 text-white p-1 rounded-lg border-2 border-white"><ShieldCheck size={14}/></div></div>
+          <div className="relative">{user?.photoURL ? (<img src={user.photoURL} alt="P" className="w-16 h-16 rounded-2xl border-4 border-slate-50 shadow-md object-cover" />) : (<div className="w-16 h-16 bg-emerald-500 text-white rounded-2xl flex items-center justify-center text-2xl font-black shadow-lg">M</div>)}<div className="absolute -bottom-1 -right-1 bg-blue-500 text-white p-1 rounded-lg border-2 border-white"><ShieldCheck size={14}/></div></div>
           <div className="text-left"><p className="text-[10px] text-emerald-600 font-black uppercase text-left">Auxiliar en formación</p><h2 className="text-xl font-black text-slate-900 leading-none mb-1 text-left">{user?.displayName || "Marcelo C"}</h2><p className="text-xs text-slate-400 font-medium italic text-left tracking-tight">Año de examen: 2026</p></div>
         </div>
         
-        {/* FICHAS DE NIVELES CON CURSOR POINTER */}
         <div className="space-y-4 text-left">
           {LEVELS.map((l) => {
             const isU = unlockedLevels.includes(l.id);
             const isP = unlockedLevels.includes(l.id + 1) || (l.id === 4 && unlockedLevels.length > 4); 
             return (
-              <button 
-                key={l.id} 
-                onClick={() => startLevel(l.id)} 
-                disabled={!isU} 
-                className={`w-full group rounded-[2rem] border-2 transition-all p-6 flex items-center gap-6 text-left ${
-                  isP ? "bg-emerald-50 border-emerald-100 cursor-pointer" : 
-                  isU ? "bg-white border-white shadow-xl hover:-translate-y-1 cursor-pointer" : 
-                  "bg-slate-100 opacity-60 grayscale cursor-default"
-                }`}
-              >
+              <button key={l.id} onClick={() => startLevel(l.id)} disabled={!isU} className={`w-full group rounded-[2rem] border-2 transition-all p-6 flex items-center gap-6 text-left ${isP ? "bg-emerald-50 border-emerald-100 cursor-pointer" : isU ? "bg-white border-white shadow-xl hover:-translate-y-1 cursor-pointer" : "bg-slate-100 opacity-60 grayscale cursor-default"}`}>
                 <div className={`w-16 h-16 rounded-full flex items-center justify-center text-3xl shadow-inner ${isP ? "bg-emerald-500 text-white" : isU ? "bg-[#dcfce7] text-[#10b981]" : "bg-slate-300 text-slate-400"}`}>{isP ? <CheckCircle size={32} /> : isU ? (iconMap[l.icon] || l.icon) : <Lock size={28}/>}</div>
                 <div className="text-left"><h3 className="font-black text-lg text-slate-800 leading-tight text-left">{l.title}</h3><p className="text-xs font-bold text-slate-400 mt-0.5 text-left">{l.questions.length} Preguntas</p></div>
               </button>
@@ -150,24 +157,23 @@ export default function QuizPage() {
 
         <div className="mt-8 text-left"><Link href="/biblioteca" className="bg-white p-6 rounded-[2rem] border-2 border-slate-100 shadow-sm hover:border-blue-400 transition-all flex items-center gap-6 group text-left cursor-pointer"><div className="w-14 h-14 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform"><Library size={28} /></div><div className="text-left"><h3 className="font-black text-lg text-slate-800 tracking-tight text-left">Biblioteca Técnica</h3><p className="text-xs text-slate-400 font-bold uppercase tracking-wider italic text-left">Descargar Material de Estudio PDF</p></div></Link></div>
 
-        {/* TARJETA FORO CON CURSOR POINTER */}
-        <div className="mt-8 p-10 bg-[#0f172a] rounded-[3.5rem] shadow-2xl relative overflow-hidden text-center border border-white/5">
+        <div className="mt-8 p-10 bg-[#0f172a] rounded-[3.5rem] shadow-2xl relative overflow-hidden text-center border border-white/5 text-left">
             <h3 className="text-2xl font-black text-white mb-3 italic tracking-tight underline text-center underline-offset-4 decoration-pink-500/50">¿Dudas con la materia?</h3>
             <p className="text-slate-400 text-sm mb-6 leading-relaxed px-4 italic text-center text-left">Únete a nuestra comunidad para auxiliares y técnicos en todas las redes.</p>
-            <div className="flex justify-center gap-6 mb-8">
-                <a href="https://www.facebook.com/profile.php?id=61584679565188" target="_blank" className="text-slate-500 hover:text-white transition-colors cursor-pointer"><Facebook size={22} /></a>
-                <a href="https://www.instagram.com/auxiliarpro/" target="_blank" className="text-slate-500 hover:text-white transition-colors cursor-pointer"><Instagram size={22} /></a>
-                <a href="https://chat.whatsapp.com/J4VkI8mzTTs9UrzvGqBbdz" target="_blank" className="text-slate-500 hover:text-white transition-colors cursor-pointer"><WhatsAppIcon size={22} /></a>
+            <div className="flex justify-center gap-6 mb-8 text-left">
+                <a href="https://www.facebook.com/profile.php?id=61584679565188" target="_blank" className="text-slate-500 hover:text-white transition-colors cursor-pointer text-left"><Facebook size={22} /></a>
+                <a href="https://www.instagram.com/auxiliarpro/" target="_blank" className="text-slate-500 hover:text-white transition-colors cursor-pointer text-left"><Instagram size={22} /></a>
+                <a href="https://chat.whatsapp.com/J4VkI8mzTTs9UrzvGqBbdz" target="_blank" className="text-slate-500 hover:text-white transition-colors cursor-pointer text-left"><WhatsAppIcon size={22} /></a>
             </div>
-            <button onClick={() => setShowRulesModal(true)} className="bg-white text-slate-900 font-black py-5 px-10 rounded-3xl w-full flex items-center justify-center gap-3 hover:bg-slate-100 transition-all shadow-lg text-lg cursor-pointer"><WhatsAppIcon size={24} className="text-pink-500"/> Entrar al WhatsApp</button>
+            <button onClick={() => setShowRulesModal(true)} className="bg-white text-slate-900 font-black py-5 px-10 rounded-3xl w-full flex items-center justify-center gap-3 hover:bg-slate-100 transition-all shadow-lg text-lg cursor-pointer text-left"><WhatsAppIcon size={24} className="text-pink-500"/> Entrar al WhatsApp</button>
         </div>
       </div>
 
       {showRulesModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4 animate-in fade-in zoom-in duration-200">
-            <div className="bg-white rounded-[3rem] shadow-2xl max-w-sm w-full overflow-hidden border border-white">
+            <div className="bg-white rounded-[3rem] shadow-2xl max-w-sm w-full overflow-hidden border border-white text-left">
                 <div className="bg-gradient-to-br from-slate-900 to-slate-800 p-8 text-white text-center"><Users size={56} className="mx-auto mb-4 text-emerald-400" /><h2 className="text-2xl font-black tracking-tighter text-center">Comunidad Auxiliar Pro</h2></div>
-                <div className="p-8 space-y-6 text-left"><div className="flex gap-4 items-start"><div className="bg-emerald-100 p-2 rounded-lg text-emerald-600 shadow-sm"><ShieldCheck size={20} /></div><p className="text-sm text-slate-600 leading-snug text-left"><strong>Contenido Técnico:</strong> Prohibido spam. Solo info de farmacia.</p></div><button onClick={() => { window.open("https://chat.whatsapp.com/J4VkI8mzTTs9UrzvGqBbdz", "_blank"); setShowRulesModal(false); }} className="w-full bg-emerald-500 text-white font-black py-5 rounded-2xl hover:bg-emerald-400 transition-all flex items-center justify-center gap-3 mt-4 shadow-xl cursor-pointer"><ThumbsUp size={20} /> Acepto e Ingresar</button><button onClick={() => setShowRulesModal(false)} className="w-full text-slate-400 text-sm font-bold py-2 text-center text-left cursor-pointer">Volver</button></div>
+                <div className="p-8 space-y-6 text-left"><div className="flex gap-4 items-start text-left"><div className="bg-emerald-100 p-2 rounded-lg text-emerald-600 shadow-sm"><ShieldCheck size={20} /></div><p className="text-sm text-slate-600 leading-snug text-left"><strong>Contenido Técnico:</strong> Prohibido spam. Solo info de farmacia.</p></div><button onClick={() => { window.open("https://chat.whatsapp.com/J4VkI8mzTTs9UrzvGqBbdz", "_blank"); setShowRulesModal(false); }} className="w-full bg-emerald-500 text-white font-black py-5 rounded-2xl hover:bg-emerald-400 transition-all flex items-center justify-center gap-3 mt-4 shadow-xl cursor-pointer text-left"><ThumbsUp size={20} /> Acepto e Ingresar</button><button onClick={() => setShowRulesModal(false)} className="w-full text-slate-400 text-sm font-bold py-2 text-center text-left cursor-pointer">Volver</button></div>
             </div>
         </div>
       )}
