@@ -7,14 +7,13 @@ import Link from "next/link";
 import { 
   Lock, CheckCircle, XCircle, ChevronLeft, Clock, ShieldCheck, Trophy, Loader2, Library, 
   MessageCircle, Users, ThumbsUp, OctagonAlert, GraduationCap, BookOpen, Scale, 
-  ThermometerSnowflake, Facebook, Instagram 
+  ThermometerSnowflake, Facebook, Instagram, ArrowRight
 } from "lucide-react"; 
 
 import { auth, db } from "../firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc, arrayUnion, serverTimestamp } from "firebase/firestore";
 
-// Icono de WhatsApp con figura de teléfono
 const WhatsAppIcon = ({ size = 22, className = "" }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" width={size} height={size} className={className}>
     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.94 3.659 1.437 5.634 1.437h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
@@ -61,27 +60,24 @@ export default function QuizPage() {
     }
   }, [activeLevelId, showResult, timeLeft]);
 
-  // --- CORRECCIÓN DE LA LÓGICA DE INICIO ---
   const startLevel = (id) => {
     const level = LEVELS.find(l => l.id === id);
     if (!level || !unlockedLevels.includes(id)) return;
-    
-    // Reseteamos absolutamente todos los estados antes de abrir el nivel
     setActiveLevelId(id); 
     setCurrentQIndex(0); 
     setScore(0); 
     setShowResult(false); 
     setMistakes([]); 
-    setIsAnswered(false);   // RESET CRÍTICO
-    setSelectedOption(null); // RESET CRÍTICO
+    setIsAnswered(false);   
+    setSelectedOption(null); 
     setTimeLeft(level.timeLimit);
   };
 
   const returnToMenu = () => { 
     setShowResult(false);    
     setActiveLevelId(null);  
-    setIsAnswered(false);    // RESET PREVENTIVO
-    setSelectedOption(null); // RESET PREVENTIVO
+    setIsAnswered(false);    
+    setSelectedOption(null); 
   };
 
   if (loadingAuth) return <div className="min-h-screen flex items-center justify-center bg-white"><Loader2 className="animate-spin text-emerald-500" size={48} /></div>;
@@ -109,6 +105,7 @@ export default function QuizPage() {
     );
   }
 
+  // VISTA RESULTADOS CON RETROALIMENTACIÓN Y LINK A BIBLIOTECA
   if (showResult && activeLevelId) {
     const level = LEVELS.find(l => l.id === activeLevelId);
     if (!level) return null;
@@ -118,7 +115,38 @@ export default function QuizPage() {
         <div className="bg-white p-10 rounded-[3rem] shadow-2xl text-center max-w-lg w-full border border-white">
           <div className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-8 ${passed ? "bg-emerald-100 text-emerald-600" : "bg-red-100 text-red-600"}`}>{passed ? <CheckCircle size={48} /> : <XCircle size={48} />}</div>
           <h2 className="text-3xl font-black text-slate-800 mb-2 tracking-tight text-center">{passed ? "¡Nivel Superado!" : "Sigue Practicando"}</h2>
-          <p className="text-slate-500 text-lg mb-8 font-medium text-center italic text-left">Lograste {score} de {level.questions.length} correctas</p>
+          <p className="text-slate-500 text-lg mb-8 font-medium text-center">Lograste {score} de {level.questions.length} correctas</p>
+          
+          {mistakes.length > 0 && (
+            <div className="bg-slate-50 p-6 rounded-3xl border border-slate-200 text-left mb-8 max-h-60 overflow-y-auto">
+                <p className="text-xs font-black text-slate-400 uppercase mb-4 tracking-widest">Revisión técnica:</p>
+                {mistakes.map((m, i) => (
+                    <div key={i} className="mb-6 last:mb-0 border-b border-slate-200 pb-4 last:border-0">
+                        <p className="font-bold text-slate-800 mb-2 text-sm leading-snug">{m.question}</p>
+                        <div className="space-y-1">
+                          <p className="text-xs text-red-500 font-bold italic">Tu respuesta: {m.yourAnswer}</p>
+                          <p className="text-xs text-emerald-600 font-bold italic">Correcta: {m.correctAnswer}</p>
+                          <div className="bg-white p-3 rounded-lg border border-slate-100 mt-3">
+                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-tighter mb-1">Debes reforzar:</p>
+                             <p className="text-xs text-slate-500 italic leading-relaxed">{m.studyGuide}</p>
+                          </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+          )}
+
+          <Link href="/biblioteca" className="flex items-center justify-between bg-emerald-50 p-5 rounded-2xl mb-8 border border-emerald-100 group hover:bg-emerald-500 transition-colors cursor-pointer">
+              <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-emerald-600"><Library size={20}/></div>
+                  <div className="text-left">
+                      <p className="text-[10px] font-black text-emerald-600 group-hover:text-white uppercase">Refuerza en la</p>
+                      <p className="text-sm font-bold text-slate-800 group-hover:text-white">Biblioteca Técnica</p>
+                  </div>
+              </div>
+              <ArrowRight size={20} className="text-emerald-300 group-hover:text-white"/>
+          </Link>
+
           <div className="flex flex-col gap-3">
             <button onClick={passed ? returnToMenu : () => startLevel(activeLevelId)} className={`w-full font-black py-5 rounded-2xl shadow-lg transition-transform active:scale-95 cursor-pointer ${passed ? "bg-slate-900 text-white" : "bg-emerald-500 text-white"}`}>
               {passed ? "Continuar Ruta" : "Reintentar Nivel"}
@@ -134,7 +162,7 @@ export default function QuizPage() {
     <main className="min-h-screen bg-slate-50 pb-24 font-sans text-left">
       <div className="bg-white p-6 shadow-sm sticky top-0 z-10 flex items-center justify-between">
         <div className="flex items-center gap-4"><Link href="/" className="text-slate-400 hover:text-slate-900 cursor-pointer"><ChevronLeft size={28} /></Link><h1 className="text-xl font-black text-slate-900 tracking-tighter text-left">Mi Ruta 2026</h1></div>
-        <div className="bg-slate-100 px-4 py-2 rounded-full text-sm font-black text-slate-700 flex items-center gap-3"><Trophy size={18} className="text-yellow-500"/><span className="text-sm font-black text-slate-700">{unlockedLevels.length - 1} / 4</span></div>
+        <div className="bg-slate-100 px-4 py-2 rounded-full text-sm font-black text-slate-700 flex items-center gap-3"><Trophy size={18} className="text-yellow-500"/> {unlockedLevels.length - 1} / 4</div>
       </div>
 
       <div className="p-6 max-w-xl mx-auto space-y-8 mt-6 text-left">
@@ -150,7 +178,15 @@ export default function QuizPage() {
             return (
               <button key={l.id} onClick={() => startLevel(l.id)} disabled={!isU} className={`w-full group rounded-[2rem] border-2 transition-all p-6 flex items-center gap-6 text-left ${isP ? "bg-emerald-50 border-emerald-100 cursor-pointer" : isU ? "bg-white border-white shadow-xl hover:-translate-y-1 cursor-pointer" : "bg-slate-100 opacity-60 grayscale cursor-default"}`}>
                 <div className={`w-16 h-16 rounded-full flex items-center justify-center text-3xl shadow-inner ${isP ? "bg-emerald-500 text-white" : isU ? "bg-[#dcfce7] text-[#10b981]" : "bg-slate-300 text-slate-400"}`}>{isP ? <CheckCircle size={32} /> : isU ? (iconMap[l.icon] || l.icon) : <Lock size={28}/>}</div>
-                <div className="text-left"><h3 className="font-black text-lg text-slate-800 leading-tight text-left">{l.title}</h3><p className="text-xs font-bold text-slate-400 mt-0.5 text-left">{l.questions.length} Preguntas</p></div>
+                <div className="flex-1 text-left">
+                    <h3 className="font-black text-lg text-slate-800 leading-tight text-left">{l.title}</h3>
+                    <div className="flex items-center gap-3 mt-0.5">
+                        <p className="text-xs font-bold text-slate-400">{l.questions.length} Preguntas</p>
+                        <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full border ${isP ? "bg-emerald-100 text-emerald-600 border-emerald-200" : isU ? "bg-slate-100 text-slate-400 border-slate-200" : "hidden"}`}>
+                            {isP ? "Superado" : "Pendiente de evaluación"}
+                        </span>
+                    </div>
+                </div>
               </button>
             );
           })}
