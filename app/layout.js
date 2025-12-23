@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react'; // 1. IMPORTACIÓN DE ANALYTICS
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
@@ -40,10 +41,10 @@ export default function RootLayout({ children }) {
         <nav className="bg-white border-b border-slate-100 sticky top-0 z-50">
           <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
             
-            {/* LOGO (Solo Imagen, ajustada a la izquierda) */}
+            {/* LOGO (Ajustado a .webp para mejor benchmark) */}
             <Link href="/" className="relative w-40 h-10 hover:opacity-80 transition-opacity">
                <Image 
-                 src="/logo.png" 
+                 src="/logo.webp" 
                  alt="Logo AuxiliarPro" 
                  fill
                  className="object-contain object-left"
@@ -61,8 +62,7 @@ export default function RootLayout({ children }) {
 
                <div className="h-6 w-px bg-slate-200 hidden sm:block"></div>
 
-               {/* BOTÓN DERMOCHECK (Visible siempre) */}
-               {/* En móvil dice 'DERMO', en PC dice 'DERMOCHECK' */}
+               {/* BOTÓN DERMOCHECK */}
                <Link href="/dermocheck" className="flex items-center gap-2 text-slate-500 hover:text-blue-600 font-bold text-xs tracking-wider px-2 py-2 rounded-lg hover:bg-blue-50 transition-all border border-slate-100 md:border-none">
                   <Calculator size={16} />
                   <span className="hidden sm:inline">DERMOCHECK</span>
@@ -79,6 +79,9 @@ export default function RootLayout({ children }) {
 
         {/* CONTENIDO DE LA PÁGINA */}
         {children}
+
+        {/* 2. SENSOR DE ANALYTICS ACTIVO */}
+        <Analytics /> 
       </body>
     </html>
   );
