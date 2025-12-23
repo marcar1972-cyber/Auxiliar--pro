@@ -61,26 +61,31 @@ export default function QuizPage() {
     }
   }, [activeLevelId, showResult, timeLeft]);
 
+  // --- CORRECCIÓN DE LA LÓGICA DE INICIO ---
   const startLevel = (id) => {
     const level = LEVELS.find(l => l.id === id);
     if (!level || !unlockedLevels.includes(id)) return;
+    
+    // Reseteamos absolutamente todos los estados antes de abrir el nivel
     setActiveLevelId(id); 
     setCurrentQIndex(0); 
     setScore(0); 
     setShowResult(false); 
     setMistakes([]); 
+    setIsAnswered(false);   // RESET CRÍTICO
+    setSelectedOption(null); // RESET CRÍTICO
     setTimeLeft(level.timeLimit);
   };
 
-  // --- CORRECCIÓN DE LA LÓGICA DE RETORNO ---
   const returnToMenu = () => { 
-    setShowResult(false);    // Primero cerramos la vista de resultados
-    setActiveLevelId(null);  // Luego limpiamos el nivel activo
+    setShowResult(false);    
+    setActiveLevelId(null);  
+    setIsAnswered(false);    // RESET PREVENTIVO
+    setSelectedOption(null); // RESET PREVENTIVO
   };
 
   if (loadingAuth) return <div className="min-h-screen flex items-center justify-center bg-white"><Loader2 className="animate-spin text-emerald-500" size={48} /></div>;
 
-  // VISTA EXAMEN
   if (activeLevelId && !showResult) {
     const level = LEVELS.find(l => l.id === activeLevelId);
     const q = level.questions[currentQIndex];
@@ -89,7 +94,7 @@ export default function QuizPage() {
         <div className="w-full max-w-xl bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100 text-left">
           <div className="w-full bg-slate-100 h-3"><div className="bg-emerald-500 h-3 transition-all duration-500" style={{ width: `${((currentQIndex + 1) / level.questions.length) * 100}%` }}></div></div>
           <div className="p-8 md:p-12 text-left">
-            <div className="flex justify-between items-center mb-10 text-left"><span className="text-xs font-black text-slate-400 uppercase">Pregunta {currentQIndex + 1} de {level.questions.length}</span>{timeLeft > 0 ? <div className="bg-slate-100 px-4 py-2 rounded-full font-mono font-bold text-slate-600 flex items-center gap-2"><Clock size={16}/> {Math.floor(timeLeft/60)}:{timeLeft%60<10?'0':''}{timeLeft%60}</div> : <div className="bg-emerald-50 px-4 py-2 rounded-full font-bold text-emerald-600 text-[10px] uppercase tracking-wider">Modo Práctica</div>}</div>
+            <div className="flex justify-between items-center mb-10"><span className="text-xs font-black text-slate-400 uppercase">Pregunta {currentQIndex + 1} de {level.questions.length}</span>{timeLeft > 0 ? <div className="bg-slate-100 px-4 py-2 rounded-full font-mono font-bold text-slate-600 flex items-center gap-2"><Clock size={16}/> {Math.floor(timeLeft/60)}:{timeLeft%60<10?'0':''}{timeLeft%60}</div> : <div className="bg-emerald-50 px-4 py-2 rounded-full font-bold text-emerald-600 text-[10px] uppercase tracking-wider">Modo Práctica</div>}</div>
             <h2 className="text-2xl font-bold text-slate-800 mb-10 leading-tight text-left">{q.text}</h2>
             <div className="space-y-4 text-left">
               {q.options.map((opt, idx) => {
@@ -104,11 +109,9 @@ export default function QuizPage() {
     );
   }
 
-  // --- VISTA RESULTADOS (CON SEGURO CONTRA EXCEPCIONES) ---
   if (showResult && activeLevelId) {
     const level = LEVELS.find(l => l.id === activeLevelId);
-    if (!level) return null; // Seguro: Si no hay nivel, no renderizamos nada
-
+    if (!level) return null;
     const passed = score >= level.passingScore;
     return (
       <div className="min-h-screen bg-slate-100 flex items-center justify-center p-6 text-left font-sans">
@@ -127,7 +130,6 @@ export default function QuizPage() {
     );
   }
 
-  // VISTA MENÚ
   return (
     <main className="min-h-screen bg-slate-50 pb-24 font-sans text-left">
       <div className="bg-white p-6 shadow-sm sticky top-0 z-10 flex items-center justify-between">
@@ -136,7 +138,6 @@ export default function QuizPage() {
       </div>
 
       <div className="p-6 max-w-xl mx-auto space-y-8 mt-6 text-left">
-        {/* PERFIL (RESTAURADO CON FOTO) */}
         <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 flex items-center gap-5 text-left">
           <div className="relative">{user?.photoURL ? (<img src={user.photoURL} alt="P" className="w-16 h-16 rounded-2xl border-4 border-slate-50 shadow-md object-cover" />) : (<div className="w-16 h-16 bg-emerald-500 text-white rounded-2xl flex items-center justify-center text-2xl font-black shadow-lg">M</div>)}<div className="absolute -bottom-1 -right-1 bg-blue-500 text-white p-1 rounded-lg border-2 border-white"><ShieldCheck size={14}/></div></div>
           <div className="text-left"><p className="text-[10px] text-emerald-600 font-black uppercase text-left">Auxiliar en formación</p><h2 className="text-xl font-black text-slate-900 leading-none mb-1 text-left">{user?.displayName || "Marcelo C"}</h2><p className="text-xs text-slate-400 font-medium italic text-left tracking-tight">Año de examen: 2026</p></div>
