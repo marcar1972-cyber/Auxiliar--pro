@@ -1,36 +1,38 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronLeft, FileText, Download, BookOpen, Scale, ThermometerSnowflake, ShieldCheck } from "lucide-react";
+import { ChevronLeft, FileText, Download, BookOpen, Scale, ThermometerSnowflake, ShieldCheck } from "lucide-center";
 
 export default function BibliotecaPage() {
+  // Lista de materiales vinculada a tu repositorio GitHub
   const material = [
     {
       title: "Decreto Supremo 466",
       desc: "Reglamento de Farmacias, Almacenes Farmacéuticos, Botiquines y Depósitos Autorizados.",
       icon: <Scale className="text-blue-500" />,
-      link: "#", // Reemplazar con el link real al PDF
+      // Reemplaza [USUARIO] y [REPO] con tus datos reales de GitHub
+      link: "https://github.com/[USUARIO]/[REPO]/raw/main/public/pdfs/DS466.pdf",
       category: "Legislación"
     },
     {
       title: "Ley de Fármacos (Ley 20.724)",
       desc: "Modificaciones al Código Sanitario en materia de regulación de farmacias y medicamentos.",
       icon: <BookOpen className="text-emerald-500" />,
-      link: "#",
+      link: "https://github.com/[USUARIO]/[REPO]/raw/main/public/pdfs/Ley20724.pdf",
       category: "Legislación"
     },
     {
       title: "Decreto Supremo 404",
       desc: "Reglamento de Estupefacientes (Listas I, II y III).",
       icon: <ShieldCheck className="text-red-500" />,
-      link: "#",
+      link: "https://github.com/[USUARIO]/[REPO]/raw/main/public/pdfs/DS404.pdf",
       category: "Controlados"
     },
     {
       title: "Decreto Supremo 405",
       desc: "Reglamento de Productos Psicotrópicos (Listas I, II, III y IV).",
       icon: <ThermometerSnowflake className="text-cyan-500" />,
-      link: "#",
+      link: "https://github.com/[USUARIO]/[REPO]/raw/main/public/pdfs/DS405.pdf",
       category: "Controlados"
     }
   ];
@@ -60,6 +62,8 @@ export default function BibliotecaPage() {
                 <p className="text-xs text-slate-500 italic leading-relaxed mb-4">{item.desc}</p>
                 <a 
                   href={item.link} 
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 bg-slate-900 text-white text-[10px] font-black px-4 py-2 rounded-full hover:bg-emerald-500 transition-colors cursor-pointer"
                 >
                   <Download size={12} /> DESCARGAR PDF
