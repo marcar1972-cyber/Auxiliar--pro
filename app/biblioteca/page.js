@@ -1,16 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronLeft, FileText, Download, BookOpen, Scale, ThermometerSnowflake, ShieldCheck } from "lucide-center";
+// Corregido: Importación desde lucide-react
+import { ChevronLeft, Download, BookOpen, Scale, ThermometerSnowflake, ShieldCheck } from "lucide-react";
 
 export default function BibliotecaPage() {
-  // Lista de materiales vinculada a tu repositorio GitHub
   const material = [
     {
       title: "Decreto Supremo 466",
       desc: "Reglamento de Farmacias, Almacenes Farmacéuticos, Botiquines y Depósitos Autorizados.",
       icon: <Scale className="text-blue-500" />,
-      // Reemplaza [USUARIO] y [REPO] con tus datos reales de GitHub
       link: "https://github.com/[USUARIO]/[REPO]/raw/main/public/pdfs/DS466.pdf",
       category: "Legislación"
     },
