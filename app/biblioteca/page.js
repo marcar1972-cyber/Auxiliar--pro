@@ -1,37 +1,42 @@
 "use client";
 
 import Link from "next/link";
-// Corregido: Importación desde lucide-react
+// Corregido: Importación oficial para evitar error en Vercel
 import { ChevronLeft, Download, BookOpen, Scale, ThermometerSnowflake, ShieldCheck } from "lucide-react";
 
 export default function BibliotecaPage() {
+  // Lista vinculada con los nombres exactos de tu GitHub (image_fed3c3.png)
   const material = [
     {
       title: "Decreto Supremo 466",
       desc: "Reglamento de Farmacias, Almacenes Farmacéuticos, Botiquines y Depósitos Autorizados.",
       icon: <Scale className="text-blue-500" />,
-      link: "https://github.com/[USUARIO]/[REPO]/raw/main/public/pdfs/DS466.pdf",
+      // Nombre exacto: Guía de Estudio_Decreto 466.pdf
+      link: "https://github.com/[USUARIO]/[REPO]/raw/main/public/pdfs/Gu%C3%ADa%20de%20Estudio_Decreto%20466.pdf",
       category: "Legislación"
     },
     {
       title: "Ley de Fármacos (Ley 20.724)",
       desc: "Modificaciones al Código Sanitario en materia de regulación de farmacias y medicamentos.",
       icon: <BookOpen className="text-emerald-500" />,
-      link: "https://github.com/[USUARIO]/[REPO]/raw/main/public/pdfs/Ley20724.pdf",
+      // Nombre exacto: Guía de Estudio_ Ley 20.724 (Ley de Fármacos I).pdf
+      link: "https://github.com/[USUARIO]/[REPO]/raw/main/public/pdfs/Gu%C3%ADa%20de%20Estudio_%20Ley%2020.724%20(Ley%20de%20F%C3%A1rmacos%20I).pdf",
       category: "Legislación"
     },
     {
       title: "Decreto Supremo 404",
       desc: "Reglamento de Estupefacientes (Listas I, II y III).",
       icon: <ShieldCheck className="text-red-500" />,
-      link: "https://github.com/[USUARIO]/[REPO]/raw/main/public/pdfs/DS404.pdf",
+      // Nombre exacto: Guía de Estudio_ Decreto 404.pdf
+      link: "https://github.com/[USUARIO]/[REPO]/raw/main/public/pdfs/Gu%C3%ADa%20de%20Estudio_%20Decreto%20404.pdf",
       category: "Controlados"
     },
     {
       title: "Decreto Supremo 405",
       desc: "Reglamento de Productos Psicotrópicos (Listas I, II, III y IV).",
       icon: <ThermometerSnowflake className="text-cyan-500" />,
-      link: "https://github.com/[USUARIO]/[REPO]/raw/main/public/pdfs/DS405.pdf",
+      // Nombre exacto: Guía de Estudio_ Decreto 405.pdf
+      link: "https://github.com/[USUARIO]/[REPO]/raw/main/public/pdfs/Gu%C3%ADa%20de%20Estudio_%20Decreto%20405.pdf",
       category: "Controlados"
     }
   ];
@@ -63,7 +68,7 @@ export default function BibliotecaPage() {
                   href={item.link} 
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 bg-slate-900 text-white text-[10px] font-black px-4 py-2 rounded-full hover:bg-emerald-500 transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-2 bg-slate-900 text-white text-[10px] font-black px-4 py-2 rounded-full hover:bg-emerald-500 transition-colors cursor-pointer shadow-lg"
                 >
                   <Download size={12} /> DESCARGAR PDF
                 </a>
