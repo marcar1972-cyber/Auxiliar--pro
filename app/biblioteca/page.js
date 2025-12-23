@@ -28,7 +28,7 @@ export default function BibliotecaPage() {
       desc: "Reglamento de Estupefacientes (Listas I, II y III).",
       icon: <ShieldCheck className="text-red-500" />,
       // Nombre exacto: Guía de Estudio_ Decreto 404.pdf
-      link: "https://github.com/[USUARIO]/[REPO]/raw/main/public/pdfs/Gu%C3%ADa%20de%20Estudio_%20Decreto%20404.pdf",
+      link: "https://github.com/marcar1972-cyber/Auxiliar--pro/blob/AuxiliarPro_borrador/public/Gu%C3%ADa%20de%20Estudio_%20Decreto%20404.pdf",
       category: "Controlados"
     },
     {
