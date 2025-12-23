@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react'; // ACTIVACIÓN DE ANALYTICS
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
@@ -40,10 +41,10 @@ export default function RootLayout({ children }) {
         <nav className="bg-white border-b border-slate-100 sticky top-0 z-50">
           <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
             
-            {/* LOGO (Solo Imagen, ajustada a la izquierda) */}
+            {/* LOGO (Actualizado a logo.webp) */}
             <Link href="/" className="relative w-40 h-10 hover:opacity-80 transition-opacity">
                <Image 
-                 src="/logo.png" 
+                 src="/logo.webp" 
                  alt="Logo AuxiliarPro" 
                  fill
                  className="object-contain object-left"
@@ -79,6 +80,9 @@ export default function RootLayout({ children }) {
 
         {/* CONTENIDO DE LA PÁGINA */}
         {children}
+
+        {/* COMPONENTE DE ANALYTICS PARA REGISTRAR VISITAS */}
+        <Analytics />
       </body>
     </html>
   );
