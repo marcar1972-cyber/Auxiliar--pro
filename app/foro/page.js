@@ -1,6 +1,9 @@
 "use client";
 import { useState } from "react";
-import { ChevronLeft, Users, ShieldCheck, OctagonAlert, ThumbsUp, MessageCircle, Facebook, Instagram } from "lucide-react";
+import { 
+  ChevronLeft, Users, ShieldCheck, XCircle, Clock, 
+  AlertCircle, ThumbsUp, Facebook, Instagram 
+} from "lucide-react";
 import Link from "next/link";
 
 const WhatsAppIcon = ({ size = 22, className = "" }) => (
@@ -14,15 +17,15 @@ export default function ForoPage() {
 
   return (
     <main className="min-h-screen bg-slate-50 p-6 text-left">
-      <Link href="/quiz" className="inline-flex items-center gap-2 text-slate-400 mb-8 cursor-pointer">
+      <Link href="/quiz" className="inline-flex items-center gap-2 text-slate-400 mb-8 cursor-pointer hover:text-slate-900 transition-colors">
         <ChevronLeft size={20} /> Volver a Mi Ruta
       </Link>
 
       <div className="max-w-md mx-auto">
         <div className="bg-[#0f172a] p-10 rounded-[3.5rem] shadow-2xl relative overflow-hidden text-center border border-white/5">
-          <h1 className="text-3xl font-black text-white mb-4 italic tracking-tight underline underline-offset-8 decoration-pink-500/50 text-center">Comunidad Pro</h1>
+          <h1 className="text-3xl font-black text-white mb-4 italic tracking-tight underline underline-offset-8 decoration-pink-500/50 text-center uppercase">Comunidad Pro</h1>
           <p className="text-slate-400 text-sm mb-8 leading-relaxed italic text-center text-left">
-            Espacio exclusivo para alumnos de AuxiliarPro. Compartimos información técnica sobre el examen SEREMI 2026.
+            Únete al grupo de apoyo para auxiliares en formación. Resolvemos dudas técnicas de la SEREMI en conjunto.
           </p>
 
           <div className="flex justify-center gap-8 mb-10">
@@ -37,28 +40,60 @@ export default function ForoPage() {
         </div>
       </div>
 
-      {/* ADVERTENCIAS RESTAURADAS COMPLETAS */}
+      {/* MODAL ACTUALIZADO SEGÚN IMAGEN image_feb93b.png */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-md p-4 animate-in fade-in zoom-in duration-200">
           <div className="bg-white rounded-[3rem] shadow-2xl max-w-sm w-full overflow-hidden border border-white">
-            <div className="bg-gradient-to-br from-slate-900 to-slate-800 p-8 text-white text-center">
-              <Users size={56} className="mx-auto mb-4 text-emerald-400" />
-              <h2 className="text-2xl font-black tracking-tighter">Reglas de la Comunidad</h2>
+            {/* Cabecera con Degradado Rosa/Rojo */}
+            <div className="bg-gradient-to-r from-pink-500 to-red-500 p-10 text-white text-center">
+              <Users size={64} className="mx-auto mb-4" />
+              <h2 className="text-3xl font-black tracking-tighter">Comunidad Auxiliar Pro</h2>
+              <p className="text-white/80 font-bold text-sm mt-1">Normas del Grupo</p>
             </div>
-            <div className="p-8 space-y-6 text-left">
-              <div className="flex gap-4 items-start text-left">
-                <div className="bg-emerald-100 p-2 rounded-lg text-emerald-600 shadow-sm"><ShieldCheck size={20} /></div>
-                <p className="text-sm text-slate-600 leading-snug text-left"><strong>Contenido Técnico:</strong> Prohibido spam, avisos comerciales o cadenas. Solo información técnica de farmacia.</p>
+
+            <div className="p-8 space-y-6">
+              {/* Regla 1: Respeto */}
+              <div className="flex gap-4 items-start">
+                <div className="bg-emerald-50 p-2 rounded-lg text-emerald-500"><ShieldCheck size={20} /></div>
+                <div className="text-left">
+                    <p className="text-sm text-slate-700 leading-tight"><strong>Respeto ante todo:</strong> Somos colegas ayudándonos. Cero tolerancia al bullying.</p>
+                </div>
               </div>
-              <div className="flex gap-4 items-start text-left">
-                <div className="bg-red-100 p-2 rounded-lg text-red-600 shadow-sm"><OctagonAlert size={20} /></div>
-                <p className="text-sm text-slate-600 leading-snug text-left"><strong>Respeto Absoluto:</strong> Cualquier falta de respeto o acoso resultará en la <strong>eliminación inmediata y permanente</strong>.</p>
+
+              {/* Regla 2: No Spam */}
+              <div className="flex gap-4 items-start">
+                <div className="bg-red-50 p-2 rounded-lg text-red-500"><XCircle size={20} /></div>
+                <div className="text-left">
+                    <p className="text-sm text-slate-700 leading-tight"><strong>No Spam:</strong> Prohibido vender cursos externos, mensajes masivos o publicidad no autorizada.</p>
+                </div>
               </div>
+
+              {/* Regla 3: Horario */}
+              <div className="flex gap-4 items-start">
+                <div className="bg-blue-50 p-2 rounded-lg text-blue-500"><Clock size={20} /></div>
+                <div className="text-left">
+                    <p className="text-sm text-slate-700 leading-tight"><strong>Horario:</strong> Intenta escribir en horas prudentes.</p>
+                </div>
+              </div>
+
+              {/* Caja de Advertencia Roja */}
+              <div className="bg-red-50 p-3 rounded-xl border border-red-100 flex items-center gap-3">
+                <AlertCircle size={18} className="text-red-500 shrink-0" />
+                <p className="text-[11px] font-black text-red-600 uppercase tracking-tighter">Quien no respete estas normas será eliminado.</p>
+              </div>
+
               <button 
                 onClick={() => { window.open("https://chat.whatsapp.com/J4VkI8mzTTs9UrzvGqBbdz", "_blank"); setShowModal(false); }}
-                className="w-full bg-emerald-500 text-white font-black py-5 rounded-2xl hover:bg-emerald-400 transition-all flex items-center justify-center gap-3 mt-4 shadow-xl cursor-pointer"
+                className="w-full bg-[#0f172a] text-white font-black py-5 rounded-2xl hover:bg-slate-800 transition-all flex items-center justify-center gap-3 mt-4 shadow-xl cursor-pointer"
               >
-                <ThumbsUp size={20} /> Acepto e Ingresar
+                <ThumbsUp size={20} /> Acepto y Unirme
+              </button>
+              
+              <button 
+                onClick={() => setShowModal(false)}
+                className="w-full text-slate-400 text-sm font-bold py-2 text-center hover:text-slate-600 transition-colors cursor-pointer"
+              >
+                Cancelar
               </button>
             </div>
           </div>
