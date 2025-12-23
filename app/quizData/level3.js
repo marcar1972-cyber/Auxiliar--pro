@@ -3,33 +3,158 @@ export const level3 = {
   title: "Controlados (D.S. 404 y 405)",
   icon: "ThermometerSnowflake",
   qCount: 25,
-  timeLimit: 1800, 
+  timeLimit: 1800, // 30 minutos
   passingScore: 20,
   questions: [
-    { text: "¿Cuál es el periodo de validez de una Receta Cheque?", options: ["10 días", "30 días", "60 días", "90 días"], correctIndex: 1, studyGuide: "Las recetas de estupefacientes expiran al mes." },
-    { text: "¿Dónde deben almacenarse físicamente los productos controlados?", options: ["En la estantería común", "En una caja fuerte o mueble con llave", "En el mostrador", "En la bodega de carga"], correctIndex: 1, studyGuide: "Requieren seguridad máxima bajo llave." },
-    { text: "¿Qué color tiene la Receta Cheque original?", options: ["Blanca", "Rosada", "Amarilla", "Verde"], correctIndex: 2, studyGuide: "El formulario oficial del MINSAL es amarillo." },
-    { text: "¿Por cuánto tiempo se guardan los libros de controlados?", options: ["1 año", "2 años", "5 años", "10 años"], correctIndex: 1, studyGuide: "La normativa exige custodia por 24 meses." },
-    { text: "¿Qué lista de psicotrópicos requiere Receta Retenida?", options: ["Lista A", "Lista B", "Lista C", "Lista D"], correctIndex: 1, studyGuide: "La Lista B (Benzodiacepinas) es de receta retenida." },
-    { text: "¿Qué debe hacer si pierde o le roban una Receta Cheque?", options: ["Hacer una nueva", "Hacer denuncia en Carabineros e informar a SEREMI", "No informar", "Llamar al médico"], correctIndex: 1, studyGuide: "Protocolo legal por pérdida de documentos públicos." },
-    { text: "¿Qué profesional NO puede prescribir psicotrópicos?", options: ["Médico Cirujano", "Dentista", "Veterinario", "Enfermero"], correctIndex: 3, studyGuide: "Solo médicos, dentistas y veterinarios (estos últimos solo Lista B)." },
-    { text: "¿Qué libro debe estar foliado y timbrado por la SEREMI?", options: ["Libro de Asistencia", "Libro de Controlados", "Libro de Facturas", "Libro de Sugerencias"], correctIndex: 1, studyGuide: "Es el registro oficial de entradas y salidas." },
-    { text: "¿Qué significa 'folio' en un libro de controlados?", options: ["Número de página", "Tipo de papel", "Color de tapa", "Nombre del local"], correctIndex: 0, studyGuide: "Cada página debe estar numerada correlativamente." },
-    { text: "¿Qué dato NO es obligatorio al registrar una venta en el libro?", options: ["RUT comprador", "Fecha despacho", "Precio de venta", "Cantidad despachada"], correctIndex: 2, studyGuide: "El precio no es relevante para el control sanitario." },
-    { text: "¿Cuántas dosis máximas se pueden despachar en una Receta Cheque?", options: ["Tratamiento para 10 días", "Tratamiento para 30 días", "Tratamiento para 90 días", "Sin límite"], correctIndex: 1, studyGuide: "Limitado a un mes de tratamiento." },
-    { text: "¿Qué lista contiene los Estupefacientes (D.S. 404)?", options: ["Listas I a IV", "Listas A a D", "Listas 1 a 10", "Lista Roja"], correctIndex: 0, studyGuide: "El 404 usa numeración romana para sus listas." },
-    { text: "¿Puede un odontólogo recetar morfina?", options: ["Sí, para fines dentales", "No, prohibido", "Solo si es cirujano maxilofacial", "Solo en hospitales"], correctIndex: 0, studyGuide: "Dentro de su ámbito profesional está permitido." },
-    { text: "¿Qué es el Balance Trimestral?", options: ["Informe de ganancias", "Resumen de stock de controlados enviado a SEREMI", "Cierre de caja", "Inventario general"], correctIndex: 1, studyGuide: "Obligación legal de reporte de existencias." },
-    { text: "¿Qué sucede si el stock físico no coincide con el libro?", options: ["Se corrige con lápiz", "Se informa al DT para aclarar diferencias", "Se borra la línea", "Se rompe el libro"], correctIndex: 1, studyGuide: "Cualquier descuadre es objeto de sumario sanitario." },
-    { text: "¿Quién firma el cierre mensual del libro de controlados?", options: ["El dueño", "El auxiliar", "El Químico Farmacéutico", "El fiscalizador"], correctIndex: 2, studyGuide: "Responsabilidad técnica intransferible del DT." },
-    { text: "La línea roja en el libro de controlados sirve para:", options: ["Decorar", "Indicar el final de una hoja", "Cierre mensual de existencias", "Anular una venta"], correctIndex: 2, studyGuide: "Marca el balance final de cada mes." },
-    { text: "¿Qué pasa con las recetas retenidas una vez despachadas?", options: ["Se devuelven al cliente", "Se botan", "Se guardan en archivo correlativo", "Se envían al médico"], correctIndex: 2, studyGuide: "Deben quedar en custodia física de la farmacia." },
-    { text: "¿Se pueden vender controlados por internet?", options: ["Sí, sin receta", "Solo si se envía por delivery propio", "No, está estrictamente prohibido", "Solo genéricos"], correctIndex: 2, studyGuide: "Requieren validación física presencial de receta." },
-    { text: "¿Qué es una Receta Magistral Controlada?", options: ["Una receta muy buena", "Preparado con dosis específica de un controlado", "Receta de un mago", "Receta sin firma"], correctIndex: 1, studyGuide: "Preparado en recetario con insumos controlados." },
-    { text: "¿Qué identificación se le pide al comprador de un psicotrópico?", options: ["Ninguna", "Carnet de Identidad vigente", "Pase de movilidad", "Credencial de trabajo"], correctIndex: 1, studyGuide: "Obligatorio registrar el RUT y nombre de quien retira." },
-    { text: "¿Qué lista es la 'Lista A' de psicotrópicos?", options: ["Anfetaminas y estimulantes", "Benzodiacepinas", "Jarabes", "Antigripales"], correctIndex: 0, studyGuide: "Productos con alto potencial de abuso." },
-    { text: "¿Qué profesional firma las recetas retenidas?", options: ["Cualquier persona", "Solo Médicos Cirujanos", "Personal de salud autorizado", "El farmacéutico"], correctIndex: 2, studyGuide: "Médicos, dentistas y veterinarios habilitados." },
-    { text: "¿Cuál es la vigencia de una receta de psicotrópico para despacho?", options: ["15 días", "30 días", "6 meses", "1 año"], correctIndex: 1, studyGuide: "Igual que la receta cheque, 30 días." },
-    { text: "¿Qué organismo fiscaliza los libros de controlados?", options: ["Carabineros", "SEREMI de Salud", "PDI", "Municipalidad"], correctIndex: 1, studyGuide: "La autoridad sanitaria regional es la fiscalizadora." }
+    {
+      text: "¿A qué lista pertenecen los productos psicotrópicos que se despachan con Receta Médica Retenida y control de stock?",
+      options: ["Lista I", "Lista II", "Lista III", "Lista IV"],
+      correctIndex: 3,
+      studyGuide: "El D.S. 405 establece que las sustancias de la Lista IV, como las benzodiacepinas, requieren receta retenida y registro en el libro de controlados."
+    },
+    {
+      text: "Según el D.S. 405, ¿qué condición de venta requieren los psicotrópicos de las Listas II y III?",
+      options: ["Receta Simple", "Venta Directa", "Receta Cheque", "Receta Retenida sin control de stock"],
+      correctIndex: 2,
+      studyGuide: "Las sustancias de las Listas II y III de psicotrópicos solo pueden expenderse mediante Receta Cheque."
+    },
+    {
+      text: "¿En qué lugar físico de la farmacia deben almacenarse los productos de las Listas de controlados?",
+      options: ["En estanterías de acceso libre", "En el área de despacho", "Bajo llave en muebles adosados a la estructura", "En el refrigerador común"],
+      correctIndex: 2,
+      studyGuide: "La normativa exige que estupefacientes y psicotrópicos se mantengan bajo llave y en muebles de seguridad."
+    },
+    {
+      text: "¿Cuál es el periodo de validez legal para el despacho de una Receta Cheque desde su emisión?",
+      options: ["10 días", "30 días", "60 días", "90 días"],
+      correctIndex: 1,
+      studyGuide: "Las recetas de productos controlados tienen una vigencia máxima de 30 días para ser despachadas."
+    },
+    {
+      text: "Bajo el D.S. 404, ¿qué tipo de receta requiere un Estupefaciente de la Lista I como la Morfina?",
+      options: ["Receta Médica Retenida", "Receta Cheque", "Receta Simple", "Venta Directa"],
+      correctIndex: 1,
+      studyGuide: "Los estupefacientes de la Lista I requieren obligatoriamente Receta Cheque para su expendio."
+    },
+    {
+      text: "¿Por cuánto tiempo deben custodiarse las recetas de productos controlados en el archivo de la farmacia?",
+      options: ["6 meses", "1 año", "2 años", "5 años"],
+      correctIndex: 2,
+      studyGuide: "Tanto las recetas como los libros de controlados deben guardarse por un periodo de 2 años."
+    },
+    {
+      text: "¿Qué lista del D.S. 404 contempla preparados que requieren Receta Médica Retenida?",
+      options: ["Lista I", "Lista II", "Lista III", "Lista IV"],
+      correctIndex: 2,
+      studyGuide: "Los preparados de la Lista III de estupefacientes se despachan con Receta Médica Retenida."
+    },
+    {
+      text: "¿Quién es el responsable directo de la custodia de la llave del mueble de productos controlados?",
+      options: ["El Auxiliar de turno", "El Dueño de la farmacia", "El Director Técnico (Q.F.)", "El Guardia de seguridad"],
+      correctIndex: 2,
+      studyGuide: "La apertura y custodia del mueble de controlados es responsabilidad del Director Técnico o personal autorizado."
+    },
+    {
+      text: "¿Qué información NO es obligatoria registrar en el Libro de Controlados al vender un psicotrópico Lista IV?",
+      options: ["Nombre del paciente", "RUT del comprador", "Precio de venta", "Cantidad despachada"],
+      correctIndex: 2,
+      studyGuide: "El libro registra datos sanitarios y de trazabilidad, el precio no es un requisito de este registro."
+    },
+    {
+      text: "¿Qué profesional NO está facultado para prescribir psicotrópicos de la Lista IV?",
+      options: ["Médico Cirujano", "Cirujano Dentista", "Médico Veterinario", "Psicólogo Clínico"],
+      correctIndex: 3,
+      studyGuide: "Solo médicos, dentistas y veterinarios (dentro de su área) pueden prescribir estas sustancias."
+    },
+    {
+      text: "¿Cuál es el color del formulario oficial 'original' de la Receta Cheque?",
+      options: ["Blanco", "Rosado", "Amarillo", "Verde"],
+      correctIndex: 2,
+      studyGuide: "El formulario oficial entregado por el servicio de salud es de color amarillo."
+    },
+    {
+      text: "¿Qué organismo debe timbrar y foliar el Libro de Controlados de una farmacia?",
+      options: ["El ISP", "La Municipalidad", "La SEREMI de Salud", "Caja de compensación"],
+      correctIndex: 2,
+      studyGuide: "La autoridad sanitaria regional (SEREMI) es quien legaliza los libros de control."
+    },
+    {
+      text: "¿Qué tipo de receta se utiliza para un preparado magistral que contiene un psicotrópico de la Lista IV?",
+      options: ["Receta Cheque", "Receta Médica Retenida", "Receta Simple", "Venta en mostrador"],
+      correctIndex: 1,
+      studyGuide: "Los magistrales con Lista IV siguen la condición de Receta Retenida."
+    },
+    {
+      text: "La sigla RAM en Farmacovigilancia de controlados significa:",
+      options: ["Receta Altamente Marcada", "Reacción Adversa a Medicamentos", "Registro de Auxiliares Médicos", "Riesgo de Abuso Moderado"],
+      correctIndex: 1,
+      studyGuide: "Se refiere a las sospechas de reacciones adversas que deben reportarse."
+    },
+    {
+      text: "En caso de hurto de productos controlados, el Director Técnico debe:",
+      options: ["Comprar el stock faltante", "Hacer la denuncia y notificar a la SEREMI", "Borrar el registro del libro", "No hacer nada"],
+      correctIndex: 1,
+      studyGuide: "Se debe realizar la denuncia legal e informar de inmediato a la autoridad sanitaria."
+    },
+    {
+      text: "¿Cuál es la dosis máxima de tratamiento que se puede despachar en una Receta Cheque?",
+      options: ["7 días", "15 días", "30 días", "90 días"],
+      correctIndex: 2,
+      studyGuide: "La Receta Cheque está limitada a un máximo de 30 días de tratamiento."
+    },
+    {
+      text: "¿Qué sucede con la Receta Médica Retenida de un psicotrópico Lista IV tras el despacho?",
+      options: ["Se devuelve al paciente", "Se envía al médico", "Se archiva correlativamente en la farmacia", "Se destruye de inmediato"],
+      correctIndex: 2,
+      studyGuide: "La receta debe quedar bajo custodia de la farmacia para futuras fiscalizaciones."
+    },
+    {
+      text: "El reporte de existencias que se envía periódicamente a la autoridad se llama:",
+      options: ["Inventario General", "Balance Trimestral", "Cierre de Caja", "Reporte Diario"],
+      correctIndex: 1,
+      studyGuide: "El Balance Trimestral informa los movimientos de entradas y salidas de controlados."
+    },
+    {
+      text: "¿Qué es un producto Bioequivalente en el contexto de controlados?",
+      options: ["Un producto que es igual de adictivo", "Un fármaco con la misma eficacia terapéutica que el referente", "Un remedio natural", "Un producto sin fecha de vencimiento"],
+      correctIndex: 1,
+      studyGuide: "Demuestra que tiene la misma biodisponibilidad que el fármaco innovador."
+    },
+    {
+      text: "Si un libro de controlados tiene un error de digitación, se debe:",
+      options: ["Usar corrector blanco", "Borrar con goma", "Anular con una línea y dejar nota del DT", "Romper la página"],
+      correctIndex: 2,
+      studyGuide: "Los libros legales no admiten enmendaduras; los errores se aclaran con notas marginales del DT."
+    },
+    {
+      text: "¿Pueden venderse psicotrópicos de la Lista IV por comercio electrónico?",
+      options: ["Sí, con receta digital", "Solo si es entrega a domicilio", "No, está estrictamente prohibido", "Solo genéricos"],
+      correctIndex: 2,
+      studyGuide: "La venta de controlados exige validación física y presencial de la receta."
+    },
+    {
+      text: "¿Qué indica la 'Línea Roja' al final del mes en el libro de controlados?",
+      options: ["El fin de la jornada", "Un error grave", "El balance de stock del mes", "Falta de productos"],
+      correctIndex: 2,
+      studyGuide: "Representa el cierre mensual firmado por el Director Técnico."
+    },
+    {
+      text: "El Diazepam y el Alprazolam pertenecen a la familia de:",
+      options: ["Analgésicos", "Antibióticos", "Benzodiacepinas", "Antivirales"],
+      correctIndex: 2,
+      studyGuide: "Son psicotrópicos del grupo de las benzodiacepinas (Lista IV)."
+    },
+    {
+      text: "¿Qué dato del médico es indispensable en una receta de controlados?",
+      options: ["Su dirección particular", "Su número de teléfono", "Su RUT y especialidad", "Su correo electrónico"],
+      correctIndex: 2,
+      studyGuide: "La identificación completa del prescriptor es requisito legal."
+    },
+    {
+      text: "¿Qué ocurre si una farmacia no tiene el Libro de Controlados al día durante una fiscalización?",
+      options: ["Se le da una advertencia", "Se arriesga a sumario sanitario y multas", "Se cierra el local para siempre", "No hay sanción"],
+      correctIndex: 1,
+      studyGuide: "Es una falta grave que conlleva sanciones administrativas y económicas."
+    }
   ]
 };
