@@ -43,7 +43,7 @@ export default function RootLayout({ children }) {
             {/* LOGO: Actualizado a logo.webp */}
             <Link href="/" className="relative w-40 h-10 hover:opacity-80 transition-opacity">
                <Image 
-                 src="/logo.webp" 
+                 src="public/logo.webp" 
                  alt="Logo AuxiliarPro" 
                  fill
                  className="object-contain object-left"
