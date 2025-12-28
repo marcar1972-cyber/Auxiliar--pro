@@ -1,117 +1,133 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
-import { Mail, Instagram, Facebook, ShieldAlert, Scale, ChevronUp } from "lucide-react";
+import { ChevronRight, Scale, Thermometer, Pill, Clipboard, ShieldAlert, ArrowRight, BookOpen, CheckCircle } from "lucide-react";
+import Footer from "./components/Footer"; 
 
-// Icono de WhatsApp con diseño oficial
-const WhatsAppIcon = ({ size = 22 }) => (
-  <svg viewBox="0 0 24 24" fill="currentColor" width={size} height={size}>
-    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.94 3.659 1.437 5.634 1.437h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-  </svg>
-);
-
-export default function Footer() {
-  const [activeTab, setActiveTab] = useState(null);
-
+export default function LandingPage() {
   return (
-    <footer className="bg-[#0f172a] text-slate-300 py-16 px-6 mt-20 border-t border-white/5">
-      <div className="max-w-7xl mx-auto">
-        
-        {/* FILA 1: LOGO (IZQ) - LINKS (CENTRO) - EMAIL (DER) */}
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-10 mb-12">
+    <div className="min-h-screen bg-white font-sans text-slate-800">
+      
+      {/* HERO SECTION: ENFOQUE LEGAL PURO */}
+      <header className="py-24 px-6 bg-gradient-to-b from-slate-50 to-white text-center">
+        <div className="max-w-4xl mx-auto">
+          <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest mb-10 border border-emerald-100 italic">
+            Comunidad activa de +50 alumnos capacitándose bajo normativa vigente
+          </div>
+          <h1 className="text-5xl md:text-7xl font-black text-slate-900 mb-8 leading-[1.05] tracking-tighter">
+            Tu examen <span className="text-emerald-500">SEREMI</span> <br/>comienza aquí.
+          </h1>
+          <p className="text-xl text-slate-500 mb-12 max-w-2xl mx-auto font-medium">
+            Entrena con bases legales extraídas directamente de los <strong>Decretos 466, 404 y 405</strong> del Ministerio de Salud. 
+            Contenido técnico y jurídico validado para el proceso de certificación 2026.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/quiz" className="inline-flex items-center gap-2 bg-slate-900 text-white px-12 py-5 rounded-[2rem] font-black text-lg hover:bg-emerald-600 transition-all shadow-2xl">
+              EMPEZAR AHORA <ArrowRight />
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      {/* 5 ARTÍCULOS TÉCNICOS BASADOS EN LA LEY (750+ Palabras para SEO) */}
+      <main className="max-w-6xl mx-auto px-6 py-24 border-t border-slate-50">
+        <h2 className="text-center font-black text-2xl uppercase tracking-widest mb-16 italic">Módulos Críticos de Legislación</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           
-          {/* LOGO IZQUIERDA */}
-          <div className="flex-1 flex justify-start">
-            <div className="relative w-44 h-12 grayscale invert opacity-70">
-              <Image src="/logo.webp" alt="Logo AuxiliarPro" fill className="object-contain object-left" />
-            </div>
-          </div>
+          <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all">
+            <Scale className="text-emerald-500 mb-6" size={32} />
+            <h3 className="font-black text-xl mb-4 leading-tight">Rol Técnico y Decreto 466</h3>
+            <p className="text-sm text-slate-500 leading-relaxed">
+              El <strong>Decreto Supremo 466</strong> constituye el marco jurídico fundamental que regula la instalación, funcionamiento y responsabilidades en farmacias y almacenes farmacéuticos. Todo auxiliar debe dominar las prohibiciones de dispensación y las obligaciones de infraestructura, como el almacenamiento técnico a 10 cm del piso y 30 cm de los muros para garantizar la higiene exigida por la autoridad.
+            </p>
+          </article>
 
-          {/* LINKS CENTRO */}
-          <div className="flex-1 flex justify-center gap-8">
-            <button 
-              onClick={() => setActiveTab(activeTab === 'terms' ? null : 'terms')}
-              className={`text-xs font-black uppercase tracking-[0.2em] transition-colors ${activeTab === 'terms' ? 'text-emerald-400' : 'text-slate-400 hover:text-white'}`}
-            >
-              Términos de Uso
-            </button>
-            <button 
-              onClick={() => setActiveTab(activeTab === 'legal' ? null : 'legal')}
-              className={`text-xs font-black uppercase tracking-[0.2em] transition-colors ${activeTab === 'legal' ? 'text-emerald-400' : 'text-slate-400 hover:text-white'}`}
-            >
-              Descargos Legales
-            </button>
-          </div>
+          <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all">
+            <Thermometer className="text-blue-500 mb-6" size={32} />
+            <h3 className="font-black text-xl mb-4 leading-tight">Estabilidad y Cadena de Frío</h3>
+            <p className="text-sm text-slate-500 leading-relaxed">
+              La seguridad de los productos biológicos se rige por normas técnicas de almacenamiento estrictas. El mantenimiento de la temperatura entre <strong>2°C y 8°C</strong> es una obligación legal para insulinas y vacunas. Este módulo profundiza en el control de termohigrómetros, registros de planillas de temperatura y protocolos de contingencia ante quiebres de cadena de frío según las directrices sanitarias.
+            </p>
+          </article>
 
-          {/* EMAIL DERECHA */}
-          <div className="flex-1 flex justify-end">
-            <a 
-              href="mailto:auxiliarprofarna@gmail.com" 
-              className="text-xs font-bold text-slate-400 hover:text-emerald-400 transition-colors flex items-center gap-2"
-            >
-              <Mail size={16} className="text-emerald-500" />
-              auxiliarprofarna@gmail.com <span className="text-slate-600 font-medium">(Sugerencia)</span>
-            </a>
-          </div>
+          <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all">
+            <ShieldAlert className="text-purple-500 mb-6" size={32} />
+            <h3 className="font-black text-xl mb-4 leading-tight">Controlados: Decretos 404 y 405</h3>
+            <p className="text-sm text-slate-500 leading-relaxed">
+              La dispensación de Estupefacientes y Psicotrópicos requiere un cumplimiento riguroso de los reglamentos <strong>DS 404 y DS 405</strong>. El aspirante debe dominar los requisitos de la Receta Cheque y Receta Retenida, el registro diario obligatorio en libros de control y la normativa de custodia en muebles de seguridad bajo llave para evitar infracciones legales graves durante las inspecciones de la SEREMI.
+            </p>
+          </article>
+
+          <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all">
+            <Pill className="text-amber-500 mb-6" size={32} />
+            <h3 className="font-black text-xl mb-4 leading-tight">Bioequivalencia y Ley de Fármacos</h3>
+            <p className="text-sm text-slate-500 leading-relaxed">
+              La <strong>Ley de Fármacos II</strong> impulsa el uso de medicamentos genéricos con sello de Bioequivalencia vigente, garantizando la misma eficacia que el innovador. En este bloque se analiza la obligatoriedad de informar precios y el marco legal para el fraccionamiento de medicamentos en unidades autorizadas, permitiendo un acceso más económico y seguro a los tratamientos prescritos por los profesionales facultados.
+            </p>
+          </article>
+
+          <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all">
+            <Clipboard className="text-rose-500 mb-6" size={32} />
+            <h3 className="font-black text-xl mb-4 leading-tight">Seguridad y Farmacovigilancia</h3>
+            <p className="text-sm text-slate-500 leading-relaxed">
+              El reporte de Reacciones Adversas a Medicamentos (RAM) es un deber ético y legal del personal de farmacia ante el <strong>Instituto de Salud Pública (ISP)</strong>. Comprender los procesos de farmacocinética y farmacodinamia permite una detección temprana de efectos no deseados, contribuyendo directamente a la farmacovigilancia nacional y asegurando que la salud pública sea resguardada post-dispensación.
+            </p>
+          </article>
         </div>
 
-        {/* CONTENIDO INTERACTIVO DESPLEGABLE */}
-        {activeTab && (
-          <div className="max-w-4xl mx-auto mb-12 bg-white/5 p-8 rounded-[2.5rem] border border-white/10 animate-in fade-in slide-in-from-top-2">
-            {activeTab === 'terms' ? (
-              <div className="text-sm leading-relaxed space-y-6 text-left">
-                <h4 className="text-white font-black text-xs uppercase tracking-widest flex items-center gap-2">
-                  <Scale size={16} className="text-emerald-500" /> Términos de Uso
-                </h4>
-                <p className="text-slate-400 font-medium underline decoration-emerald-500/20">Bienvenido a AuxiliarPro Chile. Al utilizar esta plataforma, aceptas las siguientes condiciones:</p>
-                <div className="space-y-4">
-                  <p><strong>1. Uso Educativo:</strong> Esta plataforma es exclusivamente una herramienta de estudio y preparación. No garantizamos la aprobación del examen oficial de la SEREMI de Salud, ya que esto depende del esfuerzo personal del estudiante.</p>
-                  <p><strong>2. Propiedad Intelectual:</strong> El código fuente, diseño y estructura de "Dermocheck" y los simuladores son propiedad de Marcelo (AuxiliarPro). Los textos legales (Decretos) son de dominio público.</p>
-                  <p><strong>3. Responsabilidad:</strong> No nos hacemos responsables por errores u omisiones en la información, aunque nos esforzamos por mantenerla actualizada según la normativa vigente.</p>
-                </div>
-                <button onClick={() => setActiveTab(null)} className="text-emerald-400 text-xs font-black uppercase tracking-widest hover:underline flex items-center gap-2 mt-4">
-                   Cerrar Ventana <ChevronUp size={14}/>
-                </button>
-              </div>
-            ) : (
-              <div className="text-sm leading-relaxed space-y-6 text-left">
-                <h4 className="text-white font-black text-xs uppercase tracking-widest flex items-center gap-2">
-                  <ShieldAlert size={16} className="text-emerald-500" /> Descargos Legales
-                </h4>
-                <p className="text-slate-400 font-black italic uppercase tracking-tighter text-xs">Aviso Importante de No Afiliación</p>
-                <ul className="space-y-4 text-slate-400">
-                  <li className="flex gap-2">● <strong>NO representa</strong> al Ministerio de Salud (MINSAL), ni al Instituto de Salud Pública (ISP), ni a las Secretarías Regionales Ministeriales (SEREMI).</li>
-                  <li className="flex gap-2">● No tiene la facultad de otorgar credenciales, títulos ni certificados oficiales de competencia.</li>
-                  <li className="flex gap-2">● Cualquier cobro o trámite oficial debe realizarse única y exclusivamente a través de los canales del Estado (<em>seremienlinea.minsal.cl</em>).</li>
-                  <li className="flex gap-2">● Esta web es una iniciativa independiente creada por profesionales para facilitar el acceso al estudio y la preparación de futuros colegas.</li>
+        {/* METODOLOGÍA: BASADA EN LEYES VIGENTES */}
+        <section className="mt-32 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className="space-y-6">
+                <h2 className="text-3xl font-black text-slate-900 leading-tight">Preparación Técnica para el Proceso de Certificación 2026</h2>
+                <p className="text-slate-500 leading-relaxed font-medium">
+                    Nuestra metodología de entrenamiento se centra en la aplicación práctica de los reglamentos sanitarios. Los exámenes de competencia exigen un análisis profundo de la normativa vigente en Chile.
+                </p>
+                <ul className="space-y-4">
+                    <li className="flex items-center gap-3 text-sm font-bold text-slate-700">
+                        <CheckCircle size={18} className="text-emerald-500" /> Simulacros con tiempo real de 60 minutos
+                    </li>
+                    <li className="flex items-center gap-3 text-sm font-bold text-slate-700">
+                        <CheckCircle size={18} className="text-emerald-500" /> Preguntas basadas en los Reglamentos Sanitarios Vigentes
+                    </li>
+                    <li className="flex items-center gap-3 text-sm font-bold text-slate-700">
+                        <CheckCircle size={18} className="text-emerald-500" /> Enfoque en Decretos 466, 404, 405 y Ley de Fármacos
+                    </li>
                 </ul>
-              </div>
-            )}
-          </div>
-        )}
+            </div>
+            <div className="bg-slate-900 p-10 rounded-[3rem] text-white shadow-2xl">
+                <h4 className="text-xl font-black mb-4 flex items-center gap-2">
+                    <BookOpen size={24} className="text-emerald-400" /> Compendio de Estudio Legal
+                </h4>
+                <p className="text-slate-400 text-sm leading-relaxed mb-6">
+                    ¿Conoces los plazos legales de vigencia de una receta simple o los requisitos técnicos para el almacenamiento de vacunas? El dominio de estos detalles jurídicos es el factor determinante para aprobar el examen de la autoridad sanitaria.
+                </p>
+                <Link href="/biblioteca" className="text-emerald-400 font-bold hover:underline flex items-center gap-2 text-sm uppercase tracking-widest">
+                    EXPLORAR TEXTOS LEGALES <ChevronRight size={16}/>
+                </Link>
+            </div>
+        </section>
 
-        {/* FILA 2: ICONOS DE RRSS CON LINKS ACTIVOS (DEBAJO DE LOS LINKS) */}
-        <div className="flex flex-col items-center gap-8 pt-10 border-t border-white/5">
-          <div className="flex justify-center gap-10 text-white/40">
-            <a href="https://facebook.com/auxiliarpro" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-all transform hover:scale-110">
-              <Facebook size={26}/>
-            </a>
-            <a href="https://instagram.com/auxiliarpro" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-all transform hover:scale-110">
-              <Instagram size={26}/>
-            </a>
-            <a href="https://wa.me/tu_numero" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-500 transition-all transform hover:scale-110">
-              <WhatsAppIcon size={26}/>
-            </a>
-          </div>
-
-          {/* FILA 3: COPYRIGHT (ESPACIADO ENTRE LETRAS) */}
-          <div className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-600 text-center">
-            AuxiliarPro Chile © 2026 | Excelencia Farmacéutica
+        {/* ACCESO A FAQS */}
+        <div className="mt-32 flex flex-col items-center">
+          <div className="bg-slate-50 p-12 rounded-[3.5rem] border border-slate-100 w-full max-w-3xl text-center shadow-sm">
+            <h4 className="text-2xl font-black text-slate-900 mb-4">¿Dudas sobre la Normativa Sanitaria?</h4>
+            <p className="text-slate-500 text-sm mb-10 font-medium max-w-lg mx-auto leading-relaxed">
+              Consulta nuestro centro de respuestas detalladas sobre el Decreto 466, 
+              almacenamiento técnico en bodega y validación de recetas electrónicas según las leyes vigentes.
+            </p>
+            
+            <Link 
+              href="/faq" 
+              className="inline-flex items-center gap-3 bg-white text-slate-900 border-2 border-slate-200 px-12 py-5 rounded-full font-black text-xs uppercase tracking-[0.2em] hover:border-emerald-500 hover:text-emerald-600 transition-all shadow-sm group"
+            >
+              Ver todas las FAQs 
+              <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
           </div>
         </div>
-      </div>
-    </footer>
+      </main>
+
+      <Footer />
+    </div>
   );
 }
