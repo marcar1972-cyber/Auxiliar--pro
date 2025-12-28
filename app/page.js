@@ -1,97 +1,79 @@
-import Link from "next/link";
-import { Montserrat, Inter } from "next/font/google";
-import { 
-  BookOpen, Mail, ChevronDown, HelpCircle, ArrowRight, Facebook, Instagram 
-} from "lucide-react"; 
-import { FAQS } from "./data"; 
+{/* SECCIÓN SEO: EXPANSIÓN DE CONTENIDO EDUCATIVO */}
+<section className="max-w-5xl mx-auto px-6 py-16 border-t border-slate-100">
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-slate-600 leading-relaxed">
+    
+    {/* COLUMNA 1: EL ROL Y LA LEY */}
+    <div className="space-y-6">
+      <h2 className="text-3xl font-black text-slate-900 leading-tight">
+        El Rol del Auxiliar de Farmacia en Chile (Actualización 2025)
+      </h2>
+      <p>
+        El Auxiliar de Farmacia desempeña una labor crítica en la salud pública chilena, colaborando directamente con el Químico Farmacéutico en la dispensación de medicamentos y el cumplimiento de la normativa sanitaria vigente. Su función principal es asegurar que los pacientes reciban la medicación correcta, bajo las condiciones de seguridad que exige el <strong>Decreto Supremo 466</strong>.
+      </p>
+      <p>
+        En la actualidad, el manejo de recetas exige un conocimiento técnico profundo sobre la diferencia entre recetas simples, retenidas y la implementación de la <strong>receta electrónica</strong> para productos controlados. Además, el auxiliar debe garantizar la integridad de los productos mediante un control estricto de la <strong>cadena de frío</strong>, manteniendo rangos térmicos entre los 2°C y los 8°C para fármacos termolábiles.
+      </p>
+      <div className="bg-emerald-50 p-6 rounded-2xl border border-emerald-100">
+        <h3 className="font-bold text-emerald-900 mb-2">Claves del Examen de Competencia</h3>
+        <ul className="text-sm space-y-2 list-disc pl-4 text-emerald-800">
+          <li>Dominio de los Reglamentos de Psicotrópicos (DS 405) y Estupefacientes (DS 404).</li>
+          <li>Identificación de sellos de <strong>Bioequivalencia</strong> para fomentar el uso de medicamentos genéricos de calidad.</li>
+          <li>Gestión de inventarios bajo el sistema FEFO (Primero en vencer, primero en salir).</li>
+        </ul>
+      </div>
+    </div>
 
-const montserrat = Montserrat({ subsets: ["latin"], weight: ["700", "900"], variable: '--font-montserrat' });
-const inter = Inter({ subsets: ["latin"], weight: ["400", "700"], variable: '--font-inter' });
-
-const WhatsAppIcon = ({ size = 22, className = "" }) => (
-  <svg viewBox="0 0 24 24" fill="currentColor" width={size} height={size} className={className} aria-hidden="true">
-    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.94 3.659 1.437 5.634 1.437h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-  </svg>
-);
-
-export default function Home() {
-  const featuredFaqs = FAQS[0]?.questions.slice(0, 2) || [];
-
-  return (
-    <main className={`${inter.variable} ${montserrat.variable} flex min-h-screen flex-col bg-white font-sans text-left`}>
-      <div className="flex-1 flex flex-col items-center justify-center p-6 text-center max-w-md mx-auto w-full mt-12 mb-10">
-        
-        {/* Logo central eliminado según tu dibujo */}
-
-        <span className="bg-emerald-50 text-aux-green text-[11px] font-black px-3 py-1 rounded-full mb-6 tracking-widest border border-emerald-100 uppercase">
-            Meta: Credencial 2026
-        </span>
-
-        <h1 className="text-4xl md:text-5xl font-black text-aux-dark leading-[1.1] mb-8 tracking-tight text-center font-montserrat">
-            PREPÁRATE PARA TU EXAMEN DE <br/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-aux-green to-teal-400">
-                AUXILIAR DE FARMACIA
-            </span>
-        </h1>
-
-        <div className="w-full space-y-3">
-            {/* Texto centrado en el botón */}
-            <Link href="/quiz" aria-label="Comenzar ahora el examen" className="block w-full bg-aux-dark text-white font-bold text-lg py-4 rounded-xl shadow-lg shadow-blue-900/10 transition-all text-center">
-                COMENZAR AHORA
-            </Link>
-            <Link href="/blog" aria-label="Leer artículos" className="group block w-full bg-white text-slate-600 border-2 border-slate-100 font-bold text-lg py-4 rounded-xl hover:border-aux-green transition-all flex items-center justify-center gap-2">
-                <BookOpen size={20} className="text-slate-400 group-hover:text-aux-green" aria-hidden="true" />
-                LEER ARTÍCULOS
-            </Link>
+    {/* COLUMNA 2: MÓDULOS DEL SIMULADOR */}
+    <div className="space-y-6">
+      <h2 className="text-3xl font-black text-slate-900 leading-tight">
+        Módulos de Preparación para la SEREMI
+      </h2>
+      <p>
+        Nuestra plataforma ha sido diseñada para cubrir los cuatro pilares fundamentales que la autoridad sanitaria evalúa en los exámenes de competencia. Cada nivel de nuestro simulador ha sido actualizado según el <strong>Manual de Farmacia Privada 2025</strong>.
+      </p>
+      <div className="space-y-4">
+        <div className="border-l-4 border-emerald-500 pl-4">
+          <h4 className="font-bold text-slate-800">Legislación Farmacéutica</h4>
+          <p className="text-sm">Análisis detallado de las facultades de prescripción de médicos, dentistas y matronas, junto a los plazos legales de vigencia de cada documento médico.</p>
         </div>
-
-        <div className="mt-12 bg-slate-50 p-5 rounded-2xl border border-slate-100 text-left w-full flex gap-4 items-start relative overflow-hidden">
-            <div className="relative z-10 w-10 h-10 min-w-[40px] bg-white border border-slate-200 rounded-full flex items-center justify-center text-aux-green font-black shadow-sm italic">M</div>
-            <div className="relative z-10">
-                <p className="text-xs font-bold text-aux-dark uppercase tracking-wider mb-1">Marcelo dice:</p>
-                <p className="text-slate-600 text-sm italic leading-relaxed">
-                    "Auxiliar de farmacia en preparación, esta web es mi cuaderno de estudio abierto. Compartimos conocimiento real basado en la normativa 2026."
-                </p>
-            </div>
+        <div className="border-l-4 border-blue-500 pl-4">
+          <h4 className="font-bold text-slate-800">Farmacología y Seguridad</h4>
+          <p className="text-sm">Estudio de la farmacocinética (procesos ADME) y farmacodinamia, además del reporte obligatorio de Reacciones Adversas a Medicamentos (RAM) al ISP.</p>
         </div>
-
-        <div className="w-full mt-20 text-left">
-            <div className="flex items-end justify-between mb-6 px-2">
-                <h3 className="text-2xl font-black text-aux-dark tracking-tighter font-montserrat">Centro de Ayuda</h3>
-                <Link href="/faq" className="text-aux-green text-xs font-bold flex items-center gap-1 hover:underline">Ver todo <ArrowRight size={14} aria-hidden="true" /></Link>
-            </div>
-            
-            <div className="space-y-3">
-                {featuredFaqs.map((faq, index) => (
-                    <article key={index} className="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
-                        <p className="text-sm font-bold text-slate-800 mb-2 flex gap-2">
-                            <HelpCircle size={16} className="text-emerald-500 shrink-0" aria-hidden="true" />
-                            {faq.question}
-                        </p>
-                        <p className="text-xs text-slate-500 italic leading-relaxed">{faq.answer}</p>
-                    </article>
-                ))}
-            </div>
+        <div className="border-l-4 border-orange-500 pl-4">
+          <h4 className="font-bold text-slate-800">Operaciones Farmacéuticas</h4>
+          <p className="text-sm">Procedimientos técnicos de recepción, almacenamiento a 10cm del suelo y manejo de productos rechazados o vencidos en áreas segregadas.</p>
+        </div>
+        <div className="border-l-4 border-slate-800 pl-4">
+          <h4 className="font-bold text-slate-800">Cálculos Farmacéuticos Aplicados</h4>
+          <p className="text-sm">Conversión de dosis (gramos a miligramos) y cálculo de duración de tratamientos según posología indicada en la receta.</p>
         </div>
       </div>
+    </div>
+  </div>
 
-      <footer className="w-full bg-slate-50 border-t border-slate-100 py-12 px-4 mt-auto">
-        <div className="max-w-md mx-auto text-center space-y-8">
-            <div className="flex justify-center gap-8 mb-4">
-                <a href="https://www.facebook.com/profile.php?id=61584679565188" target="_blank" aria-label="Facebook" className="text-slate-400 hover:text-blue-600 transition-all"><Facebook size={24} aria-hidden="true" /></a>
-                <a href="https://www.instagram.com/auxiliarpro/" target="_blank" aria-label="Instagram" className="text-slate-400 hover:text-pink-500 transition-all"><Instagram size={24} aria-hidden="true" /></a>
-                <a href="https://chat.whatsapp.com/J4VkI8mzTTs9UrzvGqBbdz" target="_blank" aria-label="WhatsApp" className="text-slate-400 hover:text-emerald-500 transition-all"><WhatsAppIcon size={24} aria-hidden="true" /></a>
-            </div>
-            <nav className="flex justify-center gap-6 text-xs font-bold text-slate-400 uppercase tracking-widest">
-                <Link href="/legal/terminos" className="hover:text-aux-green">Términos</Link>
-                <Link href="/legal/descargos" className="hover:text-aux-green">Descargos</Link>
-            </nav>
-            <a href="mailto:auxiliaprofarma@gmail.com" className="inline-flex items-center gap-2 text-[10px] font-black uppercase text-slate-400 bg-white px-4 py-2 rounded-full border border-slate-200 shadow-sm">
-                <Mail size={12} aria-hidden="true" /> auxiliaprofarma@gmail.com
-            </a>
-            <p className="text-[10px] text-slate-400 font-medium italic">© 2025 AuxiliarPro Chile.</p>
-        </div>
-      </footer>
-    </main>
-  );
-}
+  {/* SECCIÓN FINAL: FAQ EXPANDIDO PARA SEO */}
+  <div className="mt-16 pt-16 border-t border-slate-100">
+    <h3 className="text-2xl font-black text-center text-slate-900 mb-10">Preguntas Frecuentes sobre el Examen 2026</h3>
+    <div className="max-w-3xl mx-auto space-y-6">
+      <details className="bg-slate-50 p-6 rounded-2xl group cursor-pointer">
+        <summary className="font-bold text-slate-800 flex justify-between items-center">
+          ¿Cómo inscribirse para el examen de Auxiliar de Farmacia?
+          <span className="text-emerald-500 group-open:rotate-180 transition-transform">↓</span>
+        </summary>
+        <p className="mt-4 text-sm">
+          El proceso se realiza directamente en la oficina de la SEREMI de Salud de tu región. Debes presentar certificados de estudios (enseñanza media completa) y, en algunos casos, acreditar práctica profesional en una farmacia autorizada bajo la supervisión de un Químico Farmacéutico.
+        </p>
+      </details>
+      <details className="bg-slate-50 p-6 rounded-2xl group cursor-pointer">
+        <summary className="font-bold text-slate-800 flex justify-between items-center">
+          ¿Qué es el Petitorio Mínimo Farmacéutico?
+          <span className="text-emerald-500 group-open:rotate-180 transition-transform">↓</span>
+        </summary>
+        <p className="mt-4 text-sm">
+          Es el listado obligatorio de medicamentos e insumos que toda farmacia o almacén farmacéutico debe mantener en stock para garantizar el acceso a la salud de la población. El incumplimiento de este petitorio puede conllevar sanciones graves por parte del Instituto de Salud Pública (ISP).
+        </p>
+      </details>
+    </div>
+  </div>
+</section>
