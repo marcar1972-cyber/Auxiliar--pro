@@ -19,9 +19,14 @@ export const level4 = {
       studyGuide: "Roles profesionales en farmacia"
     },
     {
-      text: "¿Qué documento es obligatorio para la venta de antibióticos?",
-      options: ["Receta Simple", "Receta Cheque", "Receta Retenida", "Venta Directa"],
-      correctIndex: 2,
+      text: "¿Qué documento es obligatorio para la venta de antibióticos en Chile?",
+      options: [
+        "Venta Directa únicamente", 
+        "Receta Simple o Receta Retenida, según el registro sanitario", 
+        "Solo Receta Cheque", 
+        "Receta Médica manual únicamente"
+      ],
+      correctIndex: 1,
       studyGuide: "Normativa de antibióticos en Chile"
     },
     {
@@ -112,7 +117,7 @@ export const level4 = {
     },
     {
       text: "¿Quién debe firmar el Libro de Controlados diariamente?",
-      options: ["El Auxiliar de turno", "El Director Técnico", "El inspector del ISP", "El Jefe de Local (no farmacéutico)"],
+      options: ["El Auxiliar de turno", "El Director Técnico", "El inspector del ISP", "El Jefe de Local"],
       correctIndex: 1,
       studyGuide: "Manejo de registros oficiales"
     },
@@ -218,7 +223,7 @@ export const level4 = {
     },
     {
       text: "Una RAM es:",
-      options: ["Receta de alta montaña", "Reacción Adversa a un Medicamento", "Reporte de administración", "Registro de Almacenamiento Mensual"],
+      options: ["Receta de alta montaña", "Reacción Adversa a un Medicamento", "Reporte de administración", "Registro Mensual"],
       correctIndex: 1,
       studyGuide: "Farmacovigilancia y RAMs"
     },
