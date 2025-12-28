@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ChevronRight, Scale, Thermometer, Pill, Clipboard, ShieldAlert, ArrowRight } from "lucide-react";
-import Footer from "./components/Footer"; // <--- Importamos el componente estable
+import Footer from "./components/Footer"; 
 
 export default function LandingPage() {
   return (
@@ -29,58 +29,65 @@ export default function LandingPage() {
 
       {/* 5 ARTÍCULOS TÉCNICOS (SEO > 600 palabras) */}
       <main className="max-w-6xl mx-auto px-6 py-24">
-        <h2 className="text-center font-black text-2xl uppercase tracking-widest mb-16">Artículos Técnicos de Estudio</h2>
+        <h2 className="text-center font-black text-2xl uppercase tracking-widest mb-16 italic">Artículos Técnicos de Estudio</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100">
             <Scale className="text-emerald-500 mb-6" />
             <h3 className="font-black text-xl mb-4">Rol Técnico y DS 466</h3>
-            <p className="text-sm text-slate-500">Estudio profundo sobre las facultades del auxiliar bajo el Decreto Supremo 466.</p>
+            <p className="text-sm text-slate-500 leading-relaxed">
+              Estudio profundo sobre las facultades del auxiliar bajo el Decreto Supremo 466 y la normativa de dispensación vigente.
+            </p>
           </article>
           <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100">
             <Thermometer className="text-blue-500 mb-6" />
             <h3 className="font-black text-xl mb-4">Cadena de Frío</h3>
-            <p className="text-sm text-slate-500">Normativa de temperatura (2°C a 8°C) para fármacos termolábiles según Seremi.</p>
+            <p className="text-sm text-slate-500 leading-relaxed">
+              Normativa técnica de temperatura (2°C a 8°C) para fármacos termolábiles y manejo de termohigrómetros.
+            </p>
           </article>
           <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100">
             <ShieldAlert className="text-purple-500 mb-6" />
             <h3 className="font-black text-xl mb-4">Controlados 404/405</h3>
-            <p className="text-sm text-slate-500">Manejo legal de Estupefacientes y Psicotrópicos. Receta Cheque y Retenida.</p>
+            <p className="text-sm text-slate-500 leading-relaxed">
+              Manejo legal de Estupefacientes y Psicotrópicos. Requisitos de Receta Cheque y Retenida según la autoridad sanitaria.
+            </p>
           </article>
           <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100">
             <Pill className="text-amber-500 mb-6" />
             <h3 className="font-black text-xl mb-4">Bioequivalencia</h3>
-            <p className="text-sm text-slate-500">Importancia del sello amarillo y el intercambio seguro de medicamentos.</p>
+            <p className="text-sm text-slate-500 leading-relaxed">
+              Importancia del sello amarillo, estudios de biodisponibilidad y el intercambio seguro de medicamentos genéricos.
+            </p>
           </article>
           <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100">
             <Clipboard className="text-rose-500 mb-6" />
             <h3 className="font-black text-xl mb-4">Farmacovigilancia</h3>
-            <p className="text-sm text-slate-500">Notificación obligatoria de RAM (Reacciones Adversas) al Instituto de Salud Pública.</p>
+            <p className="text-sm text-slate-500 leading-relaxed">
+              Notificación obligatoria de RAM (Reacciones Adversas) al ISP y protocolos de seguridad post-dispensación.
+            </p>
           </article>
         </div>
 
-        {/* 4 FAQS PARA SEO */}
-        <section className="mt-24 max-w-4xl mx-auto space-y-4">
-          <h3 className="text-center font-black text-xl mb-10">Preguntas Frecuentes</h3>
-          <details className="group bg-white p-6 rounded-3xl border border-slate-100 cursor-pointer">
-            <summary className="font-bold flex justify-between items-center text-[10px] uppercase tracking-widest text-slate-400">¿Qué es el Petitorio Mínimo? <ChevronRight size={14}/></summary>
-            <p className="mt-4 text-slate-600 text-sm">Es el listado obligatorio de fármacos que toda farmacia debe tener en stock.</p>
-          </details>
-          <details className="group bg-white p-6 rounded-3xl border border-slate-100 cursor-pointer">
-            <summary className="font-bold flex justify-between items-center text-[10px] uppercase tracking-widest text-slate-400">¿Vigencia de receta simple? <ChevronRight size={14}/></summary>
-            <p className="mt-4 text-slate-600 text-sm">Generalmente 6 meses según el DS 466, salvo indicación del médico.</p>
-          </details>
-          <details className="group bg-white p-6 rounded-3xl border border-slate-100 cursor-pointer">
-            <summary className="font-bold flex justify-between items-center text-[10px] uppercase tracking-widest text-slate-400">¿Almacenamiento técnico? <ChevronRight size={14}/></summary>
-            <p className="mt-4 text-slate-600 text-sm">Medicamentos a 10 cm del suelo y 30 cm de los muros.</p>
-          </details>
-          <details className="group bg-white p-6 rounded-3xl border border-slate-100 cursor-pointer">
-            <summary className="font-bold flex justify-between items-center text-[10px] uppercase tracking-widest text-slate-400">¿Receta Electrónica? <ChevronRight size={14}/></summary>
-            <p className="mt-4 text-slate-600 text-sm">Validación obligatoria de folios en plataforma oficial para controlados.</p>
-          </details>
-        </section>
+        {/* SECCIÓN DE ACCESO A FAQS (Reemplaza la lista anterior) */}
+        <div className="mt-32 flex flex-col items-center">
+          <div className="bg-slate-50 p-12 rounded-[3.5rem] border border-slate-100 w-full max-w-3xl text-center shadow-sm">
+            <h4 className="text-2xl font-black text-slate-900 mb-4">¿Tienes dudas técnicas?</h4>
+            <p className="text-slate-500 text-sm mb-10 font-medium max-w-lg mx-auto leading-relaxed">
+              Consulta nuestro centro de respuestas detalladas sobre el Decreto 466, 
+              almacenamiento técnico a 10cm del suelo y validación de recetas electrónicas.
+            </p>
+            
+            <Link 
+              href="/faq" 
+              className="inline-flex items-center gap-3 bg-white text-slate-900 border-2 border-slate-200 px-12 py-5 rounded-full font-black text-xs uppercase tracking-[0.2em] hover:border-emerald-500 hover:text-emerald-600 transition-all shadow-sm group"
+            >
+              Ver todas las FAQs 
+              <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+        </div>
       </main>
 
-      {/* Llama al componente Footer que acabamos de crear */}
       <Footer />
     </div>
   );
