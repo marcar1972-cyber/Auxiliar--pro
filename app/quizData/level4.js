@@ -1,251 +1,258 @@
-// app/quizData/level4.js
 export const level4 = {
   id: 4,
-  title: "Cálculos Farmacéuticos",
-  icon: "GraduationCap", // Icono de birrete para estética profesional
-  qCount: 40,
-  timeLimit: 3600, // 60 minutos exactos para el nivel
-  passingScore: 32, // 80% de aprobación exigido
+  title: "Simulacro Final Seremi 2025",
+  icon: "GraduationCap",
+  passingScore: 30,
+  timeLimit: 3600, // 60 minutos en segundos
   questions: [
+    // --- LEGISLACIÓN Y RECETAS (DS 466) ---
     {
-      text: "Un paciente presenta una receta que indica administrar 1 comprimido cada 8 horas. Si la caja adquirida contiene 30 comprimidos, ¿para cuántos días de tratamiento alcanza exactamente el stock?",
-      options: ["5 días", "10 días", "15 días", "30 días"],
+      text: "¿Cuál es el plazo de vigencia de una receta médica simple desde su emisión?",
+      options: ["30 días", "6 meses", "1 año"],
       correctIndex: 1,
-      studyGuide: "8 horas equivalen a 3 tomas diarias. 30 unidades totales divididas por 3 unidades al día resultan en 10 días de stock."
+      studyGuide: "Vigencia de recetas según DS 466"
     },
     {
-      text: "La dosis máxima diaria recomendada de Paracetamol en un adulto sano es de 4 g. Si se dispone de comprimidos con una concentración de 1 g cada uno, ¿cuál es el número máximo de comprimidos permitidos en 24 horas?",
-      options: ["2 comprimidos", "4 comprimidos", "6 comprimidos", "8 comprimidos"],
-      correctIndex: 1,
-      studyGuide: "Dosis total (4 g) dividida por la concentración unitaria (1 g) da un máximo de 4 unidades al día."
+      text: "¿Quién es el responsable técnico de la correcta dispensación en una farmacia?",
+      options: ["El Auxiliar de Farmacia", "El Dueño de la Farmacia", "El Químico Farmacéutico"],
+      correctIndex: 2,
+      studyGuide: "Roles profesionales en farmacia"
     },
     {
-      text: "Se debe administrar una dosis de 500 mg de un jarabe cuya concentración declarada es de 250 mg por cada 5 ml. ¿Cuántos mililitros (ml) exactos debe medir el paciente?",
-      options: ["5 ml", "10 ml", "15 ml", "20 ml"],
-      correctIndex: 1,
-      studyGuide: "Mediante regla de tres: si 250 mg están en 5 ml, los 500 mg (el doble) se encuentran en 10 ml."
+      text: "¿Qué documento es obligatorio para la venta de antibióticos?",
+      options: ["Receta Simple", "Receta Retenida", "Receta Simple con control de stock"],
+      correctIndex: 2,
+      studyGuide: "Normativa de antibióticos en Chile"
     },
     {
-      text: "Un paciente insulinodependiente debe inyectarse 20 unidades de insulina por la mañana y 10 unidades por la noche. Si el frasco contiene 1.000 unidades totales, ¿cuántos días durará el frasco?",
-      options: ["30 días", "33 días", "45 días", "50 días"],
-      correctIndex: 1,
-      studyGuide: "Dosis diaria total: 30 unidades. 1.000 unidades del frasco dividido por 30 diarias resulta en 33,3 días de duración."
-    },
-    {
-      text: "Una receta indica tomar 1 comprimido cada 12 horas por un periodo de 7 días. ¿Cuántos comprimidos en total debe dispensar el auxiliar para completar el tratamiento?",
-      options: ["7 comprimidos", "14 comprimidos", "21 comprimidos", "28 comprimidos"],
-      correctIndex: 1,
-      studyGuide: "Frecuencia de 12 horas implica 2 tomas diarias. 2 unidades al día por 7 días de tratamiento resultan en 14 comprimidos."
-    },
-    {
-      text: "Si un jarabe de 120 ml indica una posología de 5 ml cada 6 horas, ¿para cuántos días de tratamiento rinde el contenido total del frasco?",
-      options: ["4 días", "6 días", "8 días", "10 días"],
-      correctIndex: 1,
-      studyGuide: "Frecuencia de 6 horas implica 4 tomas diarias. 4 tomas por 5 ml cada una son 20 ml al día. 120 ml dividido 20 ml diarios da 6 días."
-    },
-    {
-      text: "Un médico prescribe 1,5 g de un fármaco repartido en 3 dosis diarias iguales. Si los comprimidos disponibles son de 500 mg, ¿cuántos comprimidos debe ingerir el paciente en cada toma?",
-      options: ["1 comprimido", "2 comprimidos", "3 comprimidos", "1.5 comprimidos"],
+      text: "¿Qué información NO puede faltar en una receta para ser válida?",
+      options: ["Nombre del paciente y fecha", "Nombre comercial únicamente", "Firma y timbre del profesional únicamente"],
       correctIndex: 0,
-      studyGuide: "1,5 g equivale a 1.500 mg totales. Dividido en 3 dosis, cada toma es de 500 mg, lo que corresponde a 1 comprimido."
+      studyGuide: "Contenido obligatorio de la receta médica"
     },
     {
-      text: "Un inhalador de dosis medida cuenta con 200 dosis totales. Si el tratamiento indicado es de 2 inhalaciones (puffs) cada 12 horas, ¿cuántos días durará el inhalador?",
-      options: ["25 días", "50 días", "100 días", "200 días"],
+      text: "Un establecimiento que solo vende medicamentos de venta directa se denomina:",
+      options: ["Farmacia", "Almacén Farmacéutico", "Botiquín"],
       correctIndex: 1,
-      studyGuide: "2 inhalaciones cada 12 horas son 4 al día. 200 dosis totales dividido 4 diarias resultan en 50 días de stock."
+      studyGuide: "Tipos de establecimientos farmacéuticos"
     },
     {
-      text: "Se solicita una dosis de 125 mg de un fármaco cuya presentación líquida es de 50 mg / 1 ml. ¿Qué volumen debe medir el auxiliar para cumplir la dosis?",
-      options: ["1,5 ml", "2,5 ml", "3,5 ml", "5 ml"],
+      text: "¿Cuál es el plazo para responder un reclamo en el libro oficial de la farmacia?",
+      options: ["48 horas", "5 días hábiles", "15 días corridos"],
       correctIndex: 1,
-      studyGuide: "Dosis deseada (125 mg) dividida por la concentración (50 mg por ml) resulta en 2,5 ml de volumen."
+      studyGuide: "Manejo del Libro de Reclamaciones"
     },
     {
-      text: "La dosis diaria máxima de Ibuprofeno en un adulto es de 2.400 mg. Si los comprimidos en stock son de 600 mg, ¿cuántos comprimidos al día representan el límite máximo?",
-      options: ["2 comprimidos", "3 comprimidos", "4 comprimidos", "6 comprimidos"],
-      correctIndex: 2,
-      studyGuide: "2.400 mg de límite máximo dividido por la concentración de 600 mg por unidad da 4 comprimidos diarios."
+      text: "¿Qué profesional NO puede prescribir medicamentos en Chile?",
+      options: ["Enfermero/a", "Médico Cirujano", "Cirujano Dentista"],
+      correctIndex: 0,
+      studyGuide: "Facultad de prescripción legal"
     },
     {
-      text: "Un paciente pediátrico pesa 10 kg y la dosis indicada es de 15 mg por cada kg de peso al día. ¿Cuántos miligramos totales debe recibir el niño en 24 horas?",
-      options: ["100 mg", "150 mg", "200 mg", "300 mg"],
+      text: "¿Qué se entiende por 'Venta Directa'?",
+      options: ["Medicamentos que no requieren receta médica", "Medicamentos que solo el DT puede entregar", "Medicamentos de receta retenida"],
+      correctIndex: 0,
+      studyGuide: "Categorías de venta de medicamentos"
+    },
+    {
+      text: "El petitorio mínimo farmacéutico es:",
+      options: ["El stock de seguridad de la farmacia", "El listado de medicamentos obligatorios que debe tener la farmacia", "La lista de precios autorizada"],
       correctIndex: 1,
-      studyGuide: "Se multiplica el peso (10 kg) por la dosis unitaria (15 mg), resultando en 150 mg totales al día."
+      studyGuide: "Cumplimiento del petitorio mínimo"
     },
     {
-      text: "Un frasco de gotas oftálmicas de 15 ml indica que 1 ml equivale exactamente a 20 gotas. ¿Cuántas gotas totales contiene el envase?",
-      options: ["150 gotas", "200 gotas", "300 gotas", "600 gotas"],
-      correctIndex: 2,
-      studyGuide: "15 ml de contenido total multiplicado por 20 gotas por cada mililitro resulta en 300 gotas."
-    },
-    {
-      text: "Un colirio de 10 ml debe ser utilizado mediante 1 gota en cada ojo, 2 veces al día. Si el frasco rinde 200 gotas, ¿para cuántos días alcanza?",
-      options: ["25 días", "50 días", "100 días", "200 días"],
+      text: "La receta electrónica para productos controlados debe ser:",
+      options: ["Impresa por el paciente", "Verificada en el sistema centralizado de salud", "Aceptada solo si es manual"],
       correctIndex: 1,
-      studyGuide: "2 ojos con 1 gota cada uno son 2 gotas por vez. Al ser 2 veces al día, son 4 gotas diarias. 200 gotas / 4 diarias = 50 días."
+      studyGuide: "Manejo de receta electrónica 2025"
     },
     {
-      text: "Si se indica una dosis única de 0,5 g de un fármaco y se dispone de comprimidos de 250 mg, ¿cuántas unidades debe ingerir el paciente?",
-      options: ["0.5 comprimido", "1 comprimido", "2 comprimidos", "4 comprimidos"],
-      correctIndex: 2,
-      studyGuide: "0,5 g es equivalente a 500 mg. 500 mg requeridos dividido 250 mg por comprimido resulta en 2 unidades."
-    },
-    {
-      text: "Un frasco de jarabe de 60 ml indica una dosis de 1 cucharadita (5 ml) una vez al día. ¿Cuántas dosis totales contiene el frasco?",
-      options: ["6 dosis", "10 dosis", "12 dosis", "15 dosis"],
-      correctIndex: 2,
-      studyGuide: "60 ml totales dividido por la dosis de 5 ml resulta en un total de 12 dosis disponibles."
-    },
-    {
-      text: "Un tratamiento requiere 1 gramo de Amoxicilina cada 8 horas. Si los comprimidos disponibles son de 500 mg, ¿cuántos comprimidos toma en cada toma?",
-      options: ["1 comprimido", "2 comprimidos", "3 comprimidos", "4 comprimidos"],
+      text: "¿A qué distancia mínima del muro deben estar los estantes en bodega?",
+      options: ["5 cm", "30 cm", "No hay distancia mínima"],
       correctIndex: 1,
-      studyGuide: "1 g equivale a 1.000 mg. 1.000 mg requeridos dividido 500 mg por comprimido resulta en 2 comprimidos por vez."
+      studyGuide: "Condiciones de almacenamiento en bodega"
     },
     {
-      text: "Un paciente ingiere 2 comprimidos de 500 mg de Metformina en la mañana y 1 comprimido en la noche. ¿Cuál es su dosis diaria total en miligramos?",
-      options: ["500 mg", "1.000 mg", "1.500 mg", "2.000 mg"],
-      correctIndex: 2,
-      studyGuide: "3 comprimidos totales al día multiplicados por 500 mg cada uno resultan en 1.500 mg diarios."
-    },
-    {
-      text: "Se receta un jarabe con concentración 125 mg / 5 ml. El paciente debe tomar 250 mg cada 12 horas. ¿Cuántos mililitros debe tomar por dosis?",
-      options: ["5 ml", "10 ml", "15 ml", "20 ml"],
+      text: "¿Qué significa que un medicamento esté 'registrado'?",
+      options: ["Que tiene precio de venta", "Que posee autorización sanitaria del ISP", "Que está en el inventario"],
       correctIndex: 1,
-      studyGuide: "Si 125 mg están en 5 ml, los 250 mg requeridos se encuentran contenidos en 10 ml."
+      studyGuide: "Rol del ISP y registro sanitario"
     },
     {
-      text: "Un tratamiento antibiótico dura 10 días, tomando 1 comprimido cada 6 horas. ¿Cuántos comprimidos totales requiere el tratamiento?",
-      options: ["10 comprimidos", "20 comprimidos", "30 comprimidos", "40 comprimidos"],
-      correctIndex: 3,
-      studyGuide: "Cada 6 horas son 4 tomas diarias. 4 tomas al día por 10 días resultan en 40 comprimidos totales."
-    },
-    {
-      text: "Un paciente debe tomar 1/4 de comprimido de 100 mg de Ácido Acetilsalicílico. ¿Cuántos miligramos consume en cada toma?",
-      options: ["10 mg", "25 mg", "50 mg", "75 mg"],
+      text: "¿Se puede vender una fracción de un envase en cualquier farmacia?",
+      options: ["Sí, si el paciente lo pide", "Solo si la farmacia tiene unidad de fraccionamiento autorizada", "No, está prohibido en todas partes"],
       correctIndex: 1,
-      studyGuide: "100 mg dividido por 4 (la cuarta parte) resulta en una dosis de 25 mg."
+      studyGuide: "Normativa de fraccionamiento"
     },
     {
-      text: "La dosis pediátrica indicada es de 5 ml de jarabe cada 8 horas. ¿Cuántos ml totales consume el niño en 24 horas?",
-      options: ["10 ml", "15 ml", "20 ml", "25 ml"],
+      text: "¿Cuál es la función del Auxiliar de Farmacia según la ley?",
+      options: ["Prescribir medicamentos", "Colaborar en la dispensación bajo supervisión del DT", "Realizar diagnósticos médicos"],
       correctIndex: 1,
-      studyGuide: "Cada 8 horas implica 3 tomas al día. 3 tomas de 5 ml cada una resultan en 15 ml totales al día."
+      studyGuide: "Alcance del rol del Auxiliar"
     },
     {
-      text: "Si un inhalador de 200 dosis se utiliza 2 inhalaciones en la mañana y 2 en la noche, ¿cuántos días durará el producto?",
-      options: ["25 días", "50 días", "75 días", "100 días"],
+      text: "La publicidad de medicamentos de venta bajo receta está:",
+      options: ["Permitida en televisión", "Prohibida al público general", "Permitida solo en farmacias"],
       correctIndex: 1,
-      studyGuide: "Uso diario total de 4 inhalaciones. 200 dosis dividido 4 diarias resulta en 50 días de stock."
+      studyGuide: "Regulación de publicidad farmacéutica"
+    },
+
+    // --- PRODUCTOS CONTROLADOS (DS 404/405) ---
+    {
+      text: "¿Qué color tiene la Receta Cheque?",
+      options: ["Amarillo", "Rosado", "Blanco"],
+      correctIndex: 0,
+      studyGuide: "Formatos de recetas controladas"
     },
     {
-      text: "Un paciente debe tomar 0,75 g de un fármaco. Si solo se dispone de cápsulas de 250 mg, ¿cuántas debe tomar por dosis?",
-      options: ["1 cápsula", "2 cápsulas", "3 cápsulas", "4 cápsulas"],
-      correctIndex: 2,
-      studyGuide: "0,75 g es igual a 750 mg. 750 mg requerido dividido 250 mg por cápsula resulta en 3 unidades."
-    },
-    {
-      text: "Se indica administrar 2,5 ml de un jarabe pediátrico. ¿A qué medida casera equivale este volumen aproximadamente?",
-      options: ["1 cucharada sopera", "1 cucharadita de té", "Media cucharadita de té", "Un vasito medidor"],
-      correctIndex: 2,
-      studyGuide: "La cucharadita de té estándar son 5 ml, por lo tanto 2,5 ml equivalen a la mitad de dicha medida."
-    },
-    {
-      text: "Un paciente toma 1 comprimido al día de un anticonceptivo en envase de 28 días. ¿Cuántas cajas necesita para cubrir 84 días de tratamiento?",
-      options: ["2 cajas", "3 cajas", "4 cajas", "6 cajas"],
+      text: "¿Por cuánto tiempo se deben archivar las recetas retenidas de controlados?",
+      options: ["1 año", "2 años", "3 años"],
       correctIndex: 1,
-      studyGuide: "84 días totales dividido por 28 comprimidos que trae cada caja resulta en 3 cajas exactas."
+      studyGuide: "Archivo de recetas según DS 404"
     },
     {
-      text: "Un tratamiento requiere 1,2 g diarios divididos en 3 tomas iguales. ¿Cuántos miligramos debe tomar el paciente en cada dosis?",
-      options: ["200 mg", "300 mg", "400 mg", "600 mg"],
-      correctIndex: 2,
-      studyGuide: "1,2 g equivale a 1.200 mg. 1.200 mg dividido 3 dosis resulta en 400 mg por cada toma."
-    },
-    {
-      text: "Un frasco de 30 ml de gotas tiene una concentración de 100 mg / 1 ml. ¿Cuántos miligramos totales de principio activo contiene el frasco?",
-      options: ["1.000 mg", "3.000 mg", "100 mg", "1.500 mg"],
+      text: "¿Quién debe firmar el Libro de Controlados diariamente?",
+      options: ["El Auxiliar de turno", "El Director Técnico", "El inspector del ISP"],
       correctIndex: 1,
-      studyGuide: "30 ml de contenido total multiplicado por 100 mg por cada mililitro resulta en 3.000 mg totales."
+      studyGuide: "Manejo de registros oficiales"
     },
     {
-      text: "Si la dosis indicada es 1 gramo cada 24 horas y el comprimido disponible es de 500 mg, ¿cuántos comprimidos toma por dosis?",
-      options: ["1 comprimido", "2 comprimidos", "3 comprimidos", "4 comprimidos"],
+      text: "Un ejemplo de Estupefaciente es:",
+      options: ["Diazepam", "Morfina", "Amoxicilina"],
       correctIndex: 1,
-      studyGuide: "1 g equivale a 1.000 mg. Se requieren 2 unidades de 500 mg para cumplir la dosis."
+      studyGuide: "Clasificación de sustancias controladas"
     },
     {
-      text: "Un jarabe de 100 ml rinde exactamente 20 dosis de 5 ml. Si el paciente toma la dosis cada 12 horas, ¿cuántos días dura el frasco?",
-      options: ["5 días", "10 días", "15 días", "20 días"],
+      text: "El robo de productos controlados debe ser informado a:",
+      options: ["Solo a la policía", "A la policía y a la Seremi de Salud mediante acta", "Solo al dueño de la farmacia"],
       correctIndex: 1,
-      studyGuide: "Dosis diaria: 10 ml (5 ml cada 12h). 100 ml totales dividido 10 ml diarios resulta en 10 días."
+      studyGuide: "Protocolo de pérdidas en controlados"
     },
     {
-      text: "Un paciente debe administrarse 2 gotas en cada ojo, 3 veces al día. ¿Cuántas gotas totales consume en una jornada?",
-      options: ["6 gotas", "8 gotas", "10 gotas", "12 gotas"],
-      correctIndex: 3,
-      studyGuide: "2 ojos multiplicado por 2 gotas son 4 gotas por toma. Al ser 3 tomas diarias, resultan en 12 gotas."
-    },
-    {
-      text: "Se indica una dosis de 0,25 mg de un fármaco. Disponemos de comprimidos de 0,5 mg en el local. ¿Cuál es la dosis física correcta?",
-      options: ["1 comprimido", "Medio comprimido", "Un cuarto de comprimido", "2 comprimidos"],
+      text: "¿Cuál es la vigencia de una Receta Cheque?",
+      options: ["10 días", "30 días", "60 días"],
       correctIndex: 1,
-      studyGuide: "0,25 mg representa exactamente la mitad de un comprimido de 0,5 mg."
+      studyGuide: "Vigencia de documentos controlados"
     },
     {
-      text: "Un niño pesa 20 kg y la dosis indicada es 10 mg por cada kg de peso al día. ¿Cuál es la dosis diaria total?",
-      options: ["100 mg", "200 mg", "400 mg", "500 mg"],
+      text: "Los psicotrópicos se encuentran en el reglamento:",
+      options: ["DS 404", "DS 405", "DS 466"],
       correctIndex: 1,
-      studyGuide: "Se multiplica el peso (20 kg) por la dosis unitaria (10 mg/kg), resultando en 200 mg diarios."
+      studyGuide: "Marco legal de psicotrópicos"
     },
     {
-      text: "Si la dosis requerida es 300 mg y la presentación es de 100 mg / 5 ml, ¿cuántos mililitros debe medir el auxiliar?",
-      options: ["5 ml", "10 ml", "15 ml", "20 ml"],
-      correctIndex: 2,
-      studyGuide: "Si 100 mg están en 5 ml, los 300 mg (el triple) se encuentran en 15 ml."
-    },
-    {
-      text: "Un frasco de 60 ml indica una posología de 2,5 ml cada 8 horas. ¿Cuántos días dura el tratamiento completo?",
-      options: ["4 días", "6 días", "8 días", "10 días"],
-      correctIndex: 2,
-      studyGuide: "Consumo diario: 7,5 ml (2,5 ml tres veces). 60 ml dividido 7,5 ml diarios resulta en 8 días."
-    },
-    {
-      text: "Se receta 1,5 g de Vitamina C al día. Si el comprimido efervescente disponible es de 1.000 mg, ¿cuántos toma?",
-      options: ["1 comprimido", "1,5 comprimidos", "2 comprimidos", "3 comprimidos"],
+      text: "¿Se puede entregar un psicotrópico con fotocopia de receta?",
+      options: ["Sí, si es legible", "No, debe ser el original", "Solo si está firmada ante notario"],
       correctIndex: 1,
-      studyGuide: "1.500 mg requeridos dividido por 1.000 mg por comprimido resulta en 1,5 unidades."
+      studyGuide: "Validez de documentos de dispensación"
     },
+
+    // --- ALMACENAMIENTO Y LOGÍSTICA ---
     {
-      text: "Un tratamiento requiere 40 mg de un fármaco. Tenemos gotas de 20 mg / ml (donde 1 ml = 20 gotas). ¿Cuántas gotas toma?",
-      options: ["10 gotas", "20 gotas", "40 gotas", "60 gotas"],
-      correctIndex: 2,
-      studyGuide: "Requiere 2 ml para alcanzar 40 mg. 2 ml multiplicados por 20 gotas resulta en 40 gotas."
-    },
-    {
-      text: "Dosis de 1 gramo cada 12 horas indicada en receta médica. ¿Cuántos gramos totales toma el paciente en 24 horas?",
-      options: ["1 gramo", "2 gramos", "3 gramos", "4 gramos"],
+      text: "¿Cuál es el rango de temperatura de refrigeración (cadena de frío)?",
+      options: ["0°C a 5°C", "2°C a 8°C", "8°C a 15°C"],
       correctIndex: 1,
-      studyGuide: "Dos tomas diarias de 1 g cada una resultan en un total de 2 gramos al día."
+      studyGuide: "Gestión de cadena de frío"
     },
     {
-      text: "Un paciente asmático usa 2 inhalaciones de rescate 4 veces al día. ¿Cuántas dosis consume en total durante la jornada?",
-      options: ["4 dosis", "6 dosis", "8 dosis", "10 dosis"],
-      correctIndex: 2,
-      studyGuide: "2 inhalaciones multiplicadas por 4 veces al día resultan en 8 dosis totales."
-    },
-    {
-      text: "Si un paciente debe tomar 375 mg de un jarabe con concentración 125 mg / 5 ml, ¿cuántos ml debe medir?",
-      options: ["5 ml", "10 ml", "15 ml", "20 ml"],
-      correctIndex: 2,
-      studyGuide: "375 mg dividido 125 mg por unidad resulta en 3 dosis de 5 ml, es decir, 15 ml."
-    },
-    {
-      text: "Un frasco de 20 ml indica que se debe administrar 1 ml por cada dosis. ¿Cuántas dosis rinde el frasco?",
-      options: ["10 dosis", "20 dosis", "30 dosis", "40 dosis"],
+      text: "¿Qué significa el sistema FEFO en logística farmacéutica?",
+      options: ["Primero en entrar, primero en salir", "Primero en vencer, primero en salir", "Producto más caro primero"],
       correctIndex: 1,
-      studyGuide: "20 ml totales dividido por 1 ml que es la dosis unitaria resulta en 20 dosis exactas."
+      studyGuide: "Gestión de inventarios"
+    },
+    {
+      text: "La humedad relativa ideal en una farmacia debe ser:",
+      options: ["Menor al 20%", "Entre 40% y 70%", "Sobre el 90%"],
+      correctIndex: 1,
+      studyGuide: "Control ambiental en farmacia"
+    },
+    {
+      text: "¿Qué se debe hacer ante un quiebre de cadena de frío?",
+      options: ["Vender los productos rápido", "Segregar los productos y dar aviso inmediato al DT", "Congelar los productos"],
+      correctIndex: 1,
+      studyGuide: "Protocolo de emergencias logísticas"
+    },
+    {
+      text: "Los medicamentos deben almacenarse separados del piso al menos:",
+      options: ["5 cm", "10 cm", "20 cm"],
+      correctIndex: 1,
+      studyGuide: "Normas de almacenamiento físico"
+    },
+    {
+      text: "¿Dónde se deben dejar los medicamentos vencidos?",
+      options: ["En la basura común", "En un área de rechazados, debidamente rotulados", "Se deben devolver al laboratorio de inmediato"],
+      correctIndex: 1,
+      studyGuide: "Manejo de productos no aptos para venta"
+    },
+    {
+      text: "¿Qué herramienta mide la temperatura y humedad simultáneamente?",
+      options: ["Termómetro de mercurio", "Termohigrómetro", "Barómetro"],
+      correctIndex: 1,
+      studyGuide: "Equipamiento de control ambiental"
+    },
+
+    // --- FARMACOLOGÍA Y BIOEQUIVALENCIA ---
+    {
+      text: "¿Qué indica el sello amarillo de bioequivalencia?",
+      options: ["Que el medicamento es más barato", "Que tiene la misma eficacia y seguridad que el original", "Que es un producto natural"],
+      correctIndex: 1,
+      studyGuide: "Concepto de Bioequivalencia 2025"
+    },
+    {
+      text: "La Farmacodinamia estudia:",
+      options: ["Lo que el cuerpo le hace al fármaco", "Lo que el fármaco le hace al cuerpo", "La velocidad de absorción"],
+      correctIndex: 1,
+      studyGuide: "Conceptos básicos de farmacología"
+    },
+    {
+      text: "¿Qué es el DCI de un medicamento?",
+      options: ["La Denominación Común Internacional (Nombre Genérico)", "El código de barras", "El nombre del fabricante"],
+      correctIndex: 0,
+      studyGuide: "Nomenclatura farmacéutica internacional"
+    },
+    {
+      text: "La biotransformación de los fármacos ocurre principalmente en:",
+      options: ["Los riñones", "El hígado", "El estómago"],
+      correctIndex: 1,
+      studyGuide: "Metabolismo de fármacos"
+    },
+    {
+      text: "Una RAM es:",
+      options: ["Una receta de alta montaña", "Una Reacción Adversa a un Medicamento", "Un reporte de administración médica"],
+      correctIndex: 1,
+      studyGuide: "Farmacovigilancia y RAMs"
+    },
+    {
+      text: "¿Cuál es la principal vía de excreción de los fármacos?",
+      options: ["Sudor", "Orina (vía renal)", "Saliva"],
+      correctIndex: 1,
+      studyGuide: "Excreción de sustancias"
+    },
+
+    // --- CÁLCULOS Y OPERACIONES ---
+    {
+      text: "Si un jarabe tiene 250mg/5ml, ¿cuántos mg hay en 10ml?",
+      options: ["250 mg", "500 mg", "1000 mg"],
+      correctIndex: 1,
+      studyGuide: "Cálculos básicos de dosificación"
+    },
+    {
+      text: "Un paciente debe tomar 1 tableta cada 8 horas por 7 días. ¿Cuántas tabletas necesita?",
+      options: ["14 tabletas", "21 tabletas", "28 tabletas"],
+      correctIndex: 1,
+      studyGuide: "Cálculo de cantidad total de tratamiento"
+    },
+    {
+      text: "¿A cuántos ml equivale aproximadamente una 'cucharadita' de té?",
+      options: ["2 ml", "5 ml", "15 ml"],
+      correctIndex: 1,
+      studyGuide: "Conversiones de medidas caseras"
+    },
+    {
+      text: "Si se indica 1 gramo de Paracetamol y tenemos tabletas de 500mg, el paciente debe tomar:",
+      options: ["1 tableta", "2 tabletas", "4 tabletas"],
+      correctIndex: 1,
+      studyGuide: "Conversión de unidades de masa (g a mg)"
     }
   ]
 };
