@@ -16,7 +16,7 @@ export default function Footer() {
   const [activeTab, setActiveTab] = useState(null);
 
   return (
-    <footer className="bg-[#0f172a] text-slate-300 py-16 px-6 mt-20 border-t border-white/5">
+    <footer className="bg-[#0f172a] text-slate-300 py-16 px-6 mt-20 border-t border-white/5 font-sans">
       <div className="max-w-7xl mx-auto">
         
         {/* FILA 1: LOGO (IZQ) - LINKS (CENTRO) - EMAIL (DER) */}
@@ -69,7 +69,7 @@ export default function Footer() {
                 <div className="space-y-4">
                   <p><strong>1. Uso Educativo:</strong> Esta plataforma es exclusivamente una herramienta de estudio y preparación. No garantizamos la aprobación del examen oficial de la SEREMI de Salud, ya que esto depende del esfuerzo personal del estudiante.</p>
                   <p><strong>2. Propiedad Intelectual:</strong> El código fuente, diseño y estructura de "Dermocheck" y los simuladores son propiedad de Marcelo (AuxiliarPro). Los textos legales (Decretos) son de dominio público.</p>
-                  <p><strong>3. Responsabilidad:</strong> No nos hacemos responsables por errores u omisiones en la información, aunque nos esforzamos por mantenerla actualizada según la normativa vigente.</p>
+                  <p><strong>3. Responsabilidad:</strong> No nos hacemos responsables por errores u omisiones en la información, aunque nos esforzamos por mantenerla actualizada según la normativa vigente (D.S. 466).</p>
                 </div>
                 <button onClick={() => setActiveTab(null)} className="text-emerald-400 text-xs font-black uppercase tracking-widest hover:underline flex items-center gap-2 mt-4">
                    Cerrar Ventana <ChevronUp size={14}/>
@@ -92,16 +92,16 @@ export default function Footer() {
           </div>
         )}
 
-        {/* FILA 2: ICONOS DE RRSS CON LINKS ACTIVOS (DEBAJO DE LOS LINKS) */}
+        {/* FILA 2: ICONOS DE RRSS CON LINKS VERIFICADOS (DEBAJO DE LOS LINKS) */}
         <div className="flex flex-col items-center gap-8 pt-10 border-t border-white/5">
           <div className="flex justify-center gap-10 text-white/40">
-            <a href="https://facebook.com/auxiliarpro" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-all transform hover:scale-110">
+            <a href="https://www.facebook.com/profile.php?id=61584679565188" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-all transform hover:scale-110">
               <Facebook size={26}/>
             </a>
-            <a href="https://instagram.com/auxiliarpro" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-all transform hover:scale-110">
+            <a href="https://www.instagram.com/auxiliarpro/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-all transform hover:scale-110">
               <Instagram size={26}/>
             </a>
-            <a href="https://wa.me/tu_numero" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-500 transition-all transform hover:scale-110">
+            <a href="https://chat.whatsapp.com/IPvHmnNGWYmH61FrdV56g1" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-500 transition-all transform hover:scale-110">
               <WhatsAppIcon size={26}/>
             </a>
           </div>
