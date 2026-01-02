@@ -97,13 +97,24 @@ export default function Footer() {
             <a href="https://www.instagram.com/auxiliarpro/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-all transform hover:scale-110">
               <Instagram size={24}/>
             </a>
-            <a href="https://chat.whatsapp.com/IPvHmnNGWYmH61FrdV56g1" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-500 transition-all transform hover:scale-110">
+            <a href="https://chat.whatsapp.com/Gm30JCRLvx9HoSZ4JTipQX" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-500 transition-all transform hover:scale-110">
               <WhatsAppIcon size={24}/>
             </a>
           </div>
 
-          <div className="text-[9px] font-black uppercase tracking-[0.4em] text-slate-600 text-center">
-            AuxiliarPro Chile © 2026 | Excelencia Farmacéutica
+          <div className="flex flex-col items-center gap-2 text-center">
+            <div className="text-[9px] font-black uppercase tracking-[0.4em] text-slate-600">
+              AuxiliarPro Chile © 2026 | Excelencia Farmacéutica
+            </div>
+            {/* Firma del Desarrollador */}
+            <a 
+              href="https://macz.dev" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-[10px] font-mono font-bold text-emerald-500/50 hover:text-emerald-400 transition-colors tracking-widest"
+            >
+              {"< macz.dev />"}
+            </a>
           </div>
         </div>
       </div>
