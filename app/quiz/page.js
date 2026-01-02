@@ -191,9 +191,9 @@ export default function QuizPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showResult, score, activeLevelId]);
 
-  // FUNCIÓN PARA UNIRSE AL GRUPO
+  // FUNCIÓN PARA UNIRSE AL GRUPO - ENLACE ACTUALIZADO
   const handleJoinWhatsapp = () => {
-      window.open("https://chat.whatsapp.com/J4VkI8mzTTs9UrzvGqBbdz", "_blank");
+      window.open("https://chat.whatsapp.com/Gm30JCRLvx9HoSZ4JTipQX", "_blank");
       setShowRulesModal(false);
   };
 
