@@ -54,7 +54,7 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* CONTENIDO DESPLEGABLE RECOMPUESTO */}
+        {/* CONTENIDO DESPLEGABLE */}
         {activeTab && (
           <div className="max-w-4xl mx-auto mb-8 bg-white/5 p-8 rounded-[2rem] border border-white/5 animate-in fade-in slide-in-from-top-1 text-left">
             {activeTab === 'terms' ? (
@@ -64,9 +64,8 @@ export default function Footer() {
                 </h4>
                 <p>Bienvenido a <strong>AuxiliarPro Chile</strong>. Al utilizar esta plataforma, aceptas las siguientes condiciones:</p>
                 <div className="space-y-3">
-                  <p><strong>1. Uso Educativo:</strong> Esta plataforma es exclusivamente una herramienta de estudio y preparación. No garantizamos la aprobación del examen oficial de la SEREMI de Salud, ya que esto depende del esfuerzo personal del estudiante.</p>
-                  <p><strong>2. Propiedad Intelectual:</strong> El código fuente, diseño y estructura de "Dermocheck" y los simuladores son propiedad de Marcelo (AuxiliarPro). Los textos legales (Decretos) son de dominio público.</p>
-                  <p><strong>3. Responsabilidad:</strong> No nos hacemos responsables por errores u omisiones en la información, aunque nos esforzamos por mantenerla actualizada según la normativa vigente (D.S. 466).</p>
+                  <p><strong>1. Uso Educativo:</strong> Esta plataforma es exclusivamente una herramienta de estudio y preparación.</p>
+                  <p><strong>2. Propiedad Intelectual:</strong> El código fuente, diseño y estructura son propiedad de Marcelo (AuxiliarPro).</p>
                 </div>
                 <button onClick={() => setActiveTab(null)} className="text-emerald-400 font-bold hover:underline flex items-center gap-1 mt-4 text-[10px] uppercase">Cerrar Ventana</button>
               </div>
@@ -75,20 +74,13 @@ export default function Footer() {
                 <h4 className="text-white font-black text-[9px] uppercase tracking-widest flex items-center gap-2 mb-2 italic">
                   <ShieldAlert size={14} className="text-emerald-500" /> Descargos Legales
                 </h4>
-                <p className="text-white font-bold text-[10px] uppercase tracking-tighter italic">Aviso Importante de No Afiliación</p>
-                <p>AuxiliarPro Chile declara explícitamente que:</p>
-                <ul className="space-y-3">
-                  <li className="flex gap-2">● <strong>NO representa</strong> al Ministerio de Salud (MINSAL), ni al Instituto de Salud Pública (ISP), ni a las Secretarías Regionales Ministeriales (SEREMI) de Salud.</li>
-                  <li className="flex gap-2">● No tiene la facultad de otorgar credenciales, títulos ni certificados oficiales de competencia.</li>
-                  <li className="flex gap-2">● Cualquier cobro o trámite oficial debe realizarse única y exclusivamente a través de los canales del Estado (seremienlinea.minsal.cl).</li>
-                  <li className="flex gap-2">● Esta web es una iniciativa independiente creada por profesionales para facilitar el acceso al estudio y la preparación de futuros colegas.</li>
-                </ul>
+                <p>AuxiliarPro Chile declara explícitamente que NO representa al Ministerio de Salud (MINSAL) ni al ISP.</p>
               </div>
             )}
           </div>
         )}
 
-        {/* FILA INFERIOR: Iconos (Centro) y Copyright */}
+        {/* FILA INFERIOR: Iconos y Copyright */}
         <div className="flex flex-col items-center gap-6 pt-6 border-t border-white/5">
           <div className="flex justify-center gap-10 text-white/40">
             <a href="https://www.facebook.com/profile.php?id=61584679565188" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-all transform hover:scale-110">
@@ -102,19 +94,20 @@ export default function Footer() {
             </a>
           </div>
 
-          <div className="flex flex-col items-center gap-2 text-center">
+          <div className="flex flex-col items-center gap-3 text-center">
             <div className="text-[9px] font-black uppercase tracking-[0.4em] text-slate-600">
               AuxiliarPro Chile © 2026 | Excelencia Farmacéutica
             </div>
-            {/* Firma del Desarrollador */}
-            <a 
-              href="https://macz.dev" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="text-[10px] font-mono font-bold text-emerald-500/50 hover:text-emerald-400 transition-colors tracking-widest"
-            >
-              {"< macz.dev />"}
-            </a>
+            
+            {/* NUEVA FIRMA MACZDEV */}
+            <div className="flex flex-col items-center gap-1">
+              <p className="text-[10px] font-bold text-emerald-500/80 tracking-widest">
+                Desarrollado por MaczDev • 2025
+              </p>
+              <p className="text-[9px] text-slate-500 italic font-medium">
+                Hecho con 80% de curiosidad humana y 20% de IA.
+              </p>
+            </div>
           </div>
         </div>
       </div>
