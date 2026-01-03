@@ -1,14 +1,15 @@
-"use client";
-
 import Link from "next/link";
-import { BookOpen, Mail, ChevronDown, MessageCircle } from "lucide-react"; 
+import { BookOpen, Mail, ChevronDown } from "lucide-react"; 
 import { FAQS } from "./data"; 
 
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col bg-white font-sans">
       
+      {/* 🚫 NAVBAR ELIMINADO: Ya viene automático desde layout.js */}
+
       {/* 2. CONTENIDO PRINCIPAL */}
+      {/* Cambié el margen superior a mt-8 para que no se pegue al menú nuevo */}
       <div className="flex-1 flex flex-col items-center justify-center p-6 text-center max-w-md mx-auto w-full mt-8 mb-10">
         
         <span className="bg-emerald-50 text-aux-green text-[11px] font-black px-3 py-1 rounded-full mb-6 tracking-widest border border-emerald-100 uppercase">
@@ -48,7 +49,7 @@ export default function Home() {
 
         {/* 3. SECCIÓN FAQs */}
         <div className="w-full mt-16 text-left">
-            <h3 className="text-xl font-black text-aux-dark mb-6 px-2 text-center">Preguntas Frecuentes</h3>
+            <h3 className="text-xl font-black text-aux-dark mb-6 px-2">Preguntas Frecuentes</h3>
             <div className="space-y-3">
                 {FAQS.map((faq, index) => (
                     <details key={index} className="group bg-white border border-slate-100 rounded-xl overflow-hidden shadow-sm open:shadow-md transition-all">
@@ -66,42 +67,26 @@ export default function Home() {
 
       </div>
 
-      {/* 4. FOOTER ACTUALIZADO POR MACZDEV */}
-      <footer className="w-full bg-[#0f172a] text-slate-400 border-t border-white/5 py-10 px-4 mt-auto">
-        <div className="max-w-md mx-auto text-center space-y-6">
+      {/* 4. FOOTER */}
+      <footer className="w-full bg-slate-50 border-t border-slate-100 py-8 px-4 mt-auto">
+        <div className="max-w-md mx-auto text-center space-y-4">
             
-            {/* Redes y WhatsApp */}
-            <div className="flex justify-center gap-6">
-              <a href="https://chat.whatsapp.com/Gm30JCRLvx9HoSZ4JTipQX" target="_blank" rel="noopener noreferrer" className="text-emerald-500 hover:text-emerald-400 transition-all">
-                <MessageCircle size={24} />
-              </a>
+            <div className="flex justify-center gap-4 text-xs font-medium text-slate-500">
+                <Link href="/legal/terminos" className="hover:text-aux-green transition-colors">Términos de Uso</Link>
+                <span className="text-slate-300">•</span>
+                <Link href="/legal/descargos" className="hover:text-aux-green transition-colors">Descargos Legales</Link>
             </div>
 
-            <div className="flex justify-center gap-4 text-[10px] font-black uppercase tracking-widest">
-                <Link href="/legal/terminos" className="hover:text-white transition-colors">Términos</Link>
-                <span className="text-slate-700">•</span>
-                <Link href="/legal/descargos" className="hover:text-white transition-colors">Descargos</Link>
-            </div>
-
-            <a href="mailto:auxiliarprofarna@gmail.com" className="inline-flex items-center gap-2 text-[10px] font-bold text-slate-500 hover:text-emerald-400 transition-colors">
+            <a href="mailto:contacto@auxiliaresdefarmacia.cl" className="inline-flex items-center gap-2 text-xs text-slate-400 hover:text-aux-green transition-colors bg-white px-3 py-1.5 rounded-full border border-slate-200 shadow-sm">
                 <Mail size={12} />
-                auxiliarprofarna@gmail.com
+                ¿Encontraste un error? Escríbenos
             </a>
 
-            <div className="pt-6 border-t border-white/5 space-y-3">
-                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-600">
-                    AuxiliarPro Chile © 2026 | Excelencia Farmacéutica
+            <div className="pt-4 border-t border-slate-200/50">
+                <p className="text-[10px] text-slate-400 leading-tight">
+                    © 2025 AuxiliarPro Chile. Proyecto independiente.<br/>
+                    Esta web no tiene afiliación con el MINSAL ni SEREMI.
                 </p>
-                
-                {/* Firma MaczDev */}
-                <div className="flex flex-col items-center gap-1">
-                  <p className="text-[10px] font-bold text-emerald-500/80 tracking-widest">
-                    Desarrollado por MaczDev • 2025
-                  </p>
-                  <p className="text-[9px] text-slate-500 italic font-medium">
-                    Hecho con 80% de curiosidad humana y 20% de IA.
-                  </p>
-                </div>
             </div>
         </div>
       </footer>
