@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { LEVELS } from "../data"; 
 import Link from "next/link";
-import { Lock, Play, CheckCircle, XCircle, ChevronLeft, ArrowRight, AlertCircle, FileText, Library, MessageCircle, HelpCircle, Clock, ShieldCheck, Trophy, Loader2, Users, ThumbsUp, OctagonAlert } from "lucide-react"; // Agregué OctagonAlert para el icono de peligro
+import { Lock, Play, CheckCircle, XCircle, ChevronLeft, ArrowRight, AlertCircle, FileText, Library, MessageCircle, HelpCircle, Clock, ShieldCheck, Trophy, Loader2, Users, ThumbsUp, OctagonAlert } from "lucide-react";
 
 import { auth, db } from "../firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
@@ -78,7 +78,7 @@ export default function QuizPage() {
         }, 1000);
         return () => clearInterval(timerId);
     }
-  }, [activeLevelId, showResult]);
+  }, [activeLevelId, showResult, timeLeft]);
 
   const handleGlobalTimeOut = () => setShowResult(true);
 
@@ -188,8 +188,7 @@ export default function QuizPage() {
         }
     };
     saveProgressToFirebase();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showResult, score, activeLevelId]);
+  }, [showResult, score, activeLevelId, user, unlockedLevels]);
 
   // FUNCIÓN PARA UNIRSE AL GRUPO - ENLACE ACTUALIZADO
   const handleJoinWhatsapp = () => {
