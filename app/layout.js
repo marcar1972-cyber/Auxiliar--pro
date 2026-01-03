@@ -43,7 +43,7 @@ export default function RootLayout({ children }) {
             {/* LOGO (Solo Imagen, ajustada a la izquierda) */}
             <Link href="/" className="relative w-40 h-10 hover:opacity-80 transition-opacity">
                <Image 
-                 src="/logo.png" 
+                 src="/logo.webp" 
                  alt="Logo AuxiliarPro" 
                  fill
                  className="object-contain object-left"
