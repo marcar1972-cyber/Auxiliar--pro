@@ -6,6 +6,9 @@ import Image from "next/image";
 import { Search, Calculator } from "lucide-react";
 import UserIcon from "./UserIcon";
 
+// 1. IMPORTAMOS EL FOOTER (Asegúrate que el archivo Footer.js esté en la carpeta components)
+import Footer from "@/components/Footer";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -41,7 +44,8 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="es">
-      <body className={inter.className}>
+      {/* 2. AGREGAMOS CLASES PARA QUE EL FOOTER SE QUEDE AL FINAL (min-h-screen flex flex-col) */}
+      <body className={`${inter.className} min-h-screen flex flex-col bg-white`}>
         <nav className="bg-white border-b border-slate-100 sticky top-0 z-50">
           <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
             
@@ -72,7 +76,13 @@ export default function RootLayout({ children }) {
           </div>
         </nav>
 
-        {children}
+        {/* 3. ENVOLVEMOS EL CONTENIDO EN MAIN CON flex-grow */}
+        <main className="flex-grow">
+          {children}
+        </main>
+        
+        {/* 4. AQUÍ ESTÁ EL FOOTER PARA TODAS LAS PÁGINAS */}
+        <Footer />
         
         {/* ANALYTICS ACTIVO */}
         <Analytics />
