@@ -6,15 +6,16 @@ import Image from "next/image";
 import { Search, Calculator } from "lucide-react";
 import UserIcon from "./UserIcon";
 
-// 1. IMPORTAMOS EL FOOTER (Asegúrate que el archivo Footer.js esté en la carpeta components)
-import Footer from "@/components/Footer";
+// CORRECCIÓN AQUÍ: 
+// Usamos "./Footer" (con punto) para decirle: "Busca aquí mismo, a mi lado".
+// Antes decía "@/components/Footer" y por eso fallaba si no tenías esa carpeta.
+import Footer from "./Footer"; 
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   metadataBase: new URL('https://www.auxiliaresdefarmacia.cl'),
   
-  // SOLUCIÓN AL ERROR DE INDEXACIÓN: Etiqueta Canónica
   alternates: {
     canonical: 'https://www.auxiliaresdefarmacia.cl',
   },
@@ -44,12 +45,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="es">
-      {/* 2. AGREGAMOS CLASES PARA QUE EL FOOTER SE QUEDE AL FINAL (min-h-screen flex flex-col) */}
       <body className={`${inter.className} min-h-screen flex flex-col bg-white`}>
         <nav className="bg-white border-b border-slate-100 sticky top-0 z-50">
           <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
             
-            {/* LOGO: logo.webp */}
+            {/* LOGO */}
             <Link href="/" className="relative w-40 h-10 hover:opacity-80 transition-opacity">
                <Image 
                  src="/logo.webp" 
@@ -76,15 +76,13 @@ export default function RootLayout({ children }) {
           </div>
         </nav>
 
-        {/* 3. ENVOLVEMOS EL CONTENIDO EN MAIN CON flex-grow */}
         <main className="flex-grow">
           {children}
         </main>
         
-        {/* 4. AQUÍ ESTÁ EL FOOTER PARA TODAS LAS PÁGINAS */}
+        {/* Aquí se carga el footer que está en la misma carpeta */}
         <Footer />
         
-        {/* ANALYTICS ACTIVO */}
         <Analytics />
       </body>
     </html>
