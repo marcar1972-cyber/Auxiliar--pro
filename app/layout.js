@@ -6,9 +6,7 @@ import Image from "next/image";
 import { Search, Calculator } from "lucide-react";
 import UserIcon from "./UserIcon";
 
-// CORRECCIÓN AQUÍ: 
-// Usamos "./Footer" (con punto) para decirle: "Busca aquí mismo, a mi lado".
-// Antes decía "@/components/Footer" y por eso fallaba si no tenías esa carpeta.
+// SOLUCIÓN FINAL: Importamos desde la misma carpeta usando "./"
 import Footer from "./Footer"; 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -80,7 +78,7 @@ export default function RootLayout({ children }) {
           {children}
         </main>
         
-        {/* Aquí se carga el footer que está en la misma carpeta */}
+        {/* FOOTER AÑADIDO AL FINAL */}
         <Footer />
         
         <Analytics />
