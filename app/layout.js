@@ -3,8 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 import Image from "next/image";
-import { Search, Calculator } from "lucide-react"; 
-import UserIcon from "./UserIcon"; 
+import { Search, Calculator } from "lucide-react";
+import UserIcon from "./UserIcon";
 
 const inter = Inter({ subsets: ["latin"] });
 
