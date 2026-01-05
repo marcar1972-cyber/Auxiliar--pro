@@ -3,27 +3,28 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 import Image from "next/image";
-import { Search, Calculator } from "lucide-react"; 
-import UserIcon from "./UserIcon"; 
+import { Search, Calculator } from "lucide-react";
+import UserIcon from "./UserIcon";
+
+// CORRECCIÓN DEFINITIVA: 
+// Usamos "../" para salir de la carpeta 'app' y entrar en 'components'.
+// Esto funciona sin necesidad de configurar alias.
+import Footer from "../components/Footer"; 
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   metadataBase: new URL('https://www.auxiliaresdefarmacia.cl'),
-  
-  // SOLUCIÓN AL ERROR DE INDEXACIÓN: Etiqueta Canónica
   alternates: {
     canonical: 'https://www.auxiliaresdefarmacia.cl',
   },
-
   title: {
     default: "AuxiliarPro | Simulador Examen Farmacia Chile",
     template: "%s | AuxiliarPro"
   },
-  description: "Plataforma de estudio para Auxiliares de Farmacia en Chile. Simulador de examen, biblioteca de decretos (DS 466, 404) y blog educativo.",
-  keywords: ["Auxiliar de farmacia", "Examen competencia", "Seremi Salud", "Farmacia Chile", "Decreto 466", "Simulador Farmacia"],
+  description: "Plataforma de estudio para Auxiliares de Farmacia en Chile.",
+  keywords: ["Auxiliar de farmacia", "Examen competencia", "Farmacia Chile"],
   authors: [{ name: "Marcelo C." }],
-  
   openGraph: {
     title: "AuxiliarPro Chile",
     description: "Prepara tu examen de competencia gratis.",
@@ -32,7 +33,6 @@ export const metadata = {
     locale: 'es_CL',
     type: 'website',
   },
-
   verification: {
     google: 'iIARSpG3ZCQPX13aWBNtsLFQLgwsCWVc-wb8SswLSqY', 
   },
@@ -41,23 +41,18 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="es">
-      <body className={inter.className}>
+      {/* min-h-screen y flex-col aseguran que el footer se vaya al fondo */}
+      <body className={`${inter.className} min-h-screen flex flex-col bg-white`}>
+        
         <nav className="bg-white border-b border-slate-100 sticky top-0 z-50">
           <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
-            
-            {/* LOGO: logo.webp */}
+            {/* LOGO */}
             <Link href="/" className="relative w-40 h-10 hover:opacity-80 transition-opacity">
-               <Image 
-                 src="/logo.webp" 
-                 alt="Logo AuxiliarPro" 
-                 fill
-                 className="object-contain object-left"
-                 priority
-               />
+               <Image src="/logo.webp" alt="Logo AuxiliarPro" fill className="object-contain object-left" priority />
             </Link>
 
             <div className="flex items-center gap-2 md:gap-4">
-               <Link href="/blog" className="text-slate-400 hover:text-aux-dark transition-colors p-2 hover:bg-slate-50 rounded-full" title="Buscar en el Blog">
+               <Link href="/blog" className="text-slate-400 hover:text-aux-dark transition-colors p-2 hover:bg-slate-50 rounded-full">
                   <Search size={20} />
                </Link>
                <div className="h-6 w-px bg-slate-200 hidden sm:block"></div>
@@ -72,9 +67,14 @@ export default function RootLayout({ children }) {
           </div>
         </nav>
 
-        {children}
+        {/* CONTENIDO PRINCIPAL */}
+        <main className="flex-grow">
+          {children}
+        </main>
         
-        {/* ANALYTICS ACTIVO */}
+        {/* FOOTER */}
+        <Footer />
+        
         <Analytics />
       </body>
     </html>
