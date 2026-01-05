@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
-import { Mail, Instagram, Facebook, ShieldAlert, Scale, ChevronUp } from "lucide-react";
+import { Mail, Instagram, Facebook, ShieldAlert, Scale } from "lucide-react";
 
 // Icono de WhatsApp oficial
 const WhatsAppIcon = ({ size = 20 }) => (
@@ -19,9 +18,8 @@ export default function Footer() {
     <footer className="bg-[#0f172a] text-slate-300 py-10 px-6 border-t border-white/5 font-sans">
       <div className="max-w-6xl mx-auto">
         
-        {/* FILA SUPERIOR: Logo (Izq) - Links (Centro) - Email (Der) */}
+        {/* FILA SUPERIOR */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-8">
-          
           <div className="w-full md:w-1/4 flex justify-center md:justify-start">
             <div className="relative w-36 h-10 grayscale invert opacity-70">
               <Image src="/logo.webp" alt="AuxiliarPro" fill className="object-contain object-left" />
@@ -44,12 +42,9 @@ export default function Footer() {
           </div>
 
           <div className="w-full md:w-1/4 flex justify-center md:justify-end">
-            <a 
-              href="mailto:auxiliarprofarna@gmail.com" 
-              className="text-[10px] font-bold text-slate-400 hover:text-emerald-400 transition-colors flex items-center gap-2 whitespace-nowrap"
-            >
+            <a href="mailto:auxiliarprofarna@gmail.com" className="text-[10px] font-bold text-slate-400 hover:text-emerald-400 transition-colors flex items-center gap-2 whitespace-nowrap">
               <Mail size={14} className="text-emerald-500" />
-              auxiliarprofarna@gmail.com <span className="text-slate-600 font-medium tracking-tight ml-1">(Sugerencia)</span>
+              auxiliarprofarna@gmail.com
             </a>
           </div>
         </div>
@@ -62,11 +57,7 @@ export default function Footer() {
                 <h4 className="text-white font-black text-[9px] uppercase tracking-widest flex items-center gap-2 mb-2 italic">
                   <Scale size={14} className="text-emerald-500" /> Términos de Uso
                 </h4>
-                <p>Bienvenido a <strong>AuxiliarPro Chile</strong>. Al utilizar esta plataforma, aceptas las siguientes condiciones:</p>
-                <div className="space-y-3">
-                  <p><strong>1. Uso Educativo:</strong> Esta plataforma es exclusivamente una herramienta de estudio y preparación.</p>
-                  <p><strong>2. Propiedad Intelectual:</strong> El código fuente, diseño y estructura son propiedad de Marcelo (AuxiliarPro).</p>
-                </div>
+                <p>Bienvenido a <strong>AuxiliarPro Chile</strong>. Al utilizar esta plataforma, aceptas las siguientes condiciones: Uso exclusivamente educativo. Propiedad intelectual de Marcelo (AuxiliarPro).</p>
                 <button onClick={() => setActiveTab(null)} className="text-emerald-400 font-bold hover:underline flex items-center gap-1 mt-4 text-[10px] uppercase">Cerrar Ventana</button>
               </div>
             ) : (
@@ -80,33 +71,20 @@ export default function Footer() {
           </div>
         )}
 
-        {/* FILA INFERIOR: Iconos y Copyright */}
+        {/* FILA INFERIOR */}
         <div className="flex flex-col items-center gap-6 pt-6 border-t border-white/5">
           <div className="flex justify-center gap-10 text-white/40">
-            <a href="https://www.facebook.com/profile.php?id=61584679565188" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-all transform hover:scale-110">
-              <Facebook size={24}/>
-            </a>
-            <a href="https://www.instagram.com/auxiliarpro/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-all transform hover:scale-110">
-              <Instagram size={24}/>
-            </a>
-            <a href="https://chat.whatsapp.com/Gm30JCRLvx9HoSZ4JTipQX" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-500 transition-all transform hover:scale-110">
-              <WhatsAppIcon size={24}/>
-            </a>
+            <a href="https://www.facebook.com/profile.php?id=61584679565188" target="_blank" rel="noopener noreferrer"><Facebook size={24}/></a>
+            <a href="https://www.instagram.com/auxiliarpro/" target="_blank" rel="noopener noreferrer"><Instagram size={24}/></a>
+            <a href="https://chat.whatsapp.com/Gm30JCRLvx9HoSZ4JTipQX" target="_blank" rel="noopener noreferrer"><WhatsAppIcon size={24}/></a>
           </div>
 
           <div className="flex flex-col items-center gap-3 text-center">
             <div className="text-[9px] font-black uppercase tracking-[0.4em] text-slate-600">
-              AuxiliarPro Chile © 2026 | Excelencia Farmacéutica
+              AuxiliarPro Chile © 2026
             </div>
-            
-            {/* NUEVA FIRMA MACZDEV */}
             <div className="flex flex-col items-center gap-1">
-              <p className="text-[10px] font-bold text-emerald-500/80 tracking-widest">
-                Desarrollado por MaczDev • 2025
-              </p>
-              <p className="text-[9px] text-slate-500 italic font-medium">
-                Hecho con 80% de curiosidad humana y 20% de IA.
-              </p>
+              <p className="text-[10px] font-bold text-emerald-500/80 tracking-widest">Desarrollado por MaczDev • 2025</p>
             </div>
           </div>
         </div>
