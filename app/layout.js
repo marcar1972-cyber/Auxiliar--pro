@@ -3,15 +3,18 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 import Image from "next/image";
-import { Search, Calculator } from "lucide-react"; 
-import UserIcon from "./UserIcon"; 
+import { Search, Calculator } from "lucide-react";
+import UserIcon from "./UserIcon";
+
+// AQUÍ ESTÁ LA CLAVE: Usamos "@/components/Footer" para buscarlo en la carpeta correcta
+import Footer from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   metadataBase: new URL('https://www.auxiliaresdefarmacia.cl'),
   
-  // SOLUCIÓN AL ERROR DE INDEXACIÓN: Etiqueta Canónica
+  // SEO: Solución al error "Duplicada" de Google
   alternates: {
     canonical: 'https://www.auxiliaresdefarmacia.cl',
   },
@@ -41,11 +44,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="es">
-      <body className={inter.className}>
+      {/* "min-h-screen flex flex-col" asegura que el footer siempre quede abajo */}
+      <body className={`${inter.className} min-h-screen flex flex-col bg-white`}>
         <nav className="bg-white border-b border-slate-100 sticky top-0 z-50">
           <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
             
-            {/* LOGO: logo.webp */}
+            {/* LOGO */}
             <Link href="/" className="relative w-40 h-10 hover:opacity-80 transition-opacity">
                <Image 
                  src="/logo.webp" 
@@ -72,9 +76,14 @@ export default function RootLayout({ children }) {
           </div>
         </nav>
 
-        {children}
+        {/* El contenido de la página empuja al footer hacia abajo */}
+        <main className="flex-grow">
+          {children}
+        </main>
         
-        {/* ANALYTICS ACTIVO */}
+        {/* El Footer aparece automáticamente en TODAS las páginas */}
+        <Footer />
+        
         <Analytics />
       </body>
     </html>
