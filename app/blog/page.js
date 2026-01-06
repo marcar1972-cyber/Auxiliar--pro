@@ -1,14 +1,72 @@
 import Link from "next/link";
-import { Calendar, ArrowRight, BookOpen, FileText } from "lucide-react";
+import { Calendar, BookOpen, FileText, DollarSign, Scale, Users, ArrowRight } from "lucide-react";
 
 export const metadata = {
   title: "Blog AuxiliarPro | Noticias y Guías",
   description: "Artículos educativos, noticias sobre el examen de competencia y consejos para auxiliares de farmacia en Chile.",
 };
 
+// LISTADO DE TUS ARTÍCULOS REALES (Basado en tus carpetas)
+const articles = [
+  {
+    slug: "fecha-examen-auxiliar-farmacia-seremi",
+    title: "¿Cuándo es el Examen de Auxiliar de Farmacia?",
+    desc: "No existe un calendario fijo. Descubre cómo funciona el proceso de asignación de fechas de la SEREMI.",
+    category: "Trámites",
+    color: "text-emerald-600",
+    bgIcon: "bg-emerald-500/10",
+    icon: <Calendar className="text-emerald-500 w-16 h-16 opacity-50" />
+  },
+  {
+    slug: "requisitos-auxiliar-farmacia-chile-2026",
+    title: "Requisitos para ser Auxiliar de Farmacia (2026)",
+    desc: "Guía completa con la normativa actualizada. Descubre qué documentos necesitas para tu inscripción.",
+    category: "Guía 2026",
+    color: "text-blue-600",
+    bgIcon: "bg-blue-500/10",
+    icon: <BookOpen className="text-blue-500 w-16 h-16 opacity-50" />
+  },
+  {
+    slug: "cuanto-gana-auxiliar-farmacia-chile",
+    title: "¿Cuánto gana un Auxiliar de Farmacia en Chile?",
+    desc: "Análisis de mercado laboral, rentas promedio y diferencias entre farmacia privada y asistencial.",
+    category: "Laboral",
+    color: "text-green-600",
+    bgIcon: "bg-green-500/10",
+    icon: <DollarSign className="text-green-500 w-16 h-16 opacity-50" />
+  },
+  {
+    slug: "que-es-el-decreto-466",
+    title: "¿Qué es el Decreto 466? Lo que debes saber",
+    desc: "El reglamento fundamental que rige a las farmacias en Chile y base del examen de competencia.",
+    category: "Normativa",
+    color: "text-slate-600",
+    bgIcon: "bg-slate-500/10",
+    icon: <Scale className="text-slate-500 w-16 h-16 opacity-50" />
+  },
+  {
+    slug: "examen-competencia-seremi-2025",
+    title: "Todo sobre el Examen de Competencia SEREMI",
+    desc: "Detalles sobre la evaluación, contenidos frecuentes y cómo prepararte para aprobar.",
+    category: "Examen",
+    color: "text-purple-600",
+    bgIcon: "bg-purple-500/10",
+    icon: <FileText className="text-purple-500 w-16 h-16 opacity-50" />
+  },
+  {
+    slug: "diferencia-auxiliar-tecnico-farmacia",
+    title: "Diferencia entre Auxiliar y Técnico en Farmacia",
+    desc: "Comparativa de roles, responsabilidades legales y formación requerida para cada cargo.",
+    category: "Orientación",
+    color: "text-orange-600",
+    bgIcon: "bg-orange-500/10",
+    icon: <Users className="text-orange-500 w-16 h-16 opacity-50" />
+  }
+];
+
 export default function BlogIndex() {
   return (
-    <div className="max-w-5xl mx-auto px-6 py-12 md:py-20 text-slate-700">
+    <div className="max-w-6xl mx-auto px-6 py-12 md:py-20 text-slate-700">
       
       {/* HEADER DEL BLOG */}
       <header className="mb-12 text-center">
@@ -22,102 +80,38 @@ export default function BlogIndex() {
 
       {/* GRILLA DE ARTÍCULOS */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-
-        {/* --- ARTÍCULO 1 (NUEVO): FECHAS SEREMI --- */}
-        <article className="bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-xl transition-shadow flex flex-col">
-          <div className="h-48 bg-emerald-500/10 flex items-center justify-center">
-             <Calendar className="text-emerald-500 w-16 h-16 opacity-50" />
-          </div>
-          
-          <div className="p-6 flex-grow flex flex-col">
-            <div className="flex items-center gap-2 text-xs font-bold text-emerald-600 mb-3 uppercase tracking-wider">
-              Trámites y Legal
-            </div>
-            <h2 className="text-xl font-bold text-slate-900 mb-3 leading-tight">
-              ¿Cuándo es el Examen de Auxiliar de Farmacia?
-            </h2>
-            <p className="text-slate-500 text-sm mb-6 line-clamp-3">
-              No existe un calendario fijo. Descubre cómo funciona el proceso de asignación de fechas de la SEREMI y qué requisitos debes cumplir.
-            </p>
-            
-            <div className="mt-auto">
-              <Link 
-                href="/blog/fecha-examen-auxiliar-farmacia-seremi" 
-                className="inline-flex items-center gap-2 text-slate-900 font-bold hover:text-emerald-600 transition-colors"
-              >
-                Leer Artículo <ArrowRight size={16} />
-              </Link>
-            </div>
-          </div>
-        </article>
-
-
-        {/* --- ARTÍCULO 2 (RECUPERADO - EDITA AQUÍ EL TÍTULO Y LINK) --- */}
-        <article className="bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-xl transition-shadow flex flex-col">
-          <div className="h-48 bg-blue-500/10 flex items-center justify-center">
-             <BookOpen className="text-blue-500 w-16 h-16 opacity-50" />
-          </div>
-          
-          <div className="p-6 flex-grow flex flex-col">
-            <div className="flex items-center gap-2 text-xs font-bold text-blue-600 mb-3 uppercase tracking-wider">
-              Guías de Estudio
-            </div>
-            <h2 className="text-xl font-bold text-slate-900 mb-3 leading-tight">
-              Requisitos y Normativa (Ejemplo)
-            </h2>
-            <p className="text-slate-500 text-sm mb-6 line-clamp-3">
-              Aquí puedes poner la descripción de tu artículo anterior. Si tenías una guía sobre el Decreto 466 o requisitos, edita este texto.
-            </p>
-            
-            <div className="mt-auto">
-              {/* OJO: Cambia el href por la ruta de tu artículo anterior */}
-              <Link 
-                href="/blog/ruta-de-tu-articulo-anterior" 
-                className="inline-flex items-center gap-2 text-slate-900 font-bold hover:text-blue-600 transition-colors"
-              >
-                Leer Artículo <ArrowRight size={16} />
-              </Link>
-            </div>
-          </div>
-        </article>
-
-
-        {/* --- ARTÍCULO 3 (RECUPERADO - EDITA AQUÍ) --- */}
-        <article className="bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-xl transition-shadow flex flex-col">
-          <div className="h-48 bg-purple-500/10 flex items-center justify-center">
-             <FileText className="text-purple-500 w-16 h-16 opacity-50" />
-          </div>
-          
-          <div className="p-6 flex-grow flex flex-col">
-            <div className="flex items-center gap-2 text-xs font-bold text-purple-600 mb-3 uppercase tracking-wider">
-              Material de Apoyo
-            </div>
-            <h2 className="text-xl font-bold text-slate-900 mb-3 leading-tight">
-              Otro Artículo Anterior
-            </h2>
-            <p className="text-slate-500 text-sm mb-6 line-clamp-3">
-              Restaura aquí el contenido de tu tercer artículo. Manteniendo el formato, tu blog se verá ordenado y profesional.
-            </p>
-            
-            <div className="mt-auto">
-              {/* OJO: Cambia el href por la ruta de tu otro artículo */}
-              <Link 
-                href="/blog/ruta-de-tu-otro-articulo" 
-                className="inline-flex items-center gap-2 text-slate-900 font-bold hover:text-purple-600 transition-colors"
-              >
-                Leer Artículo <ArrowRight size={16} />
-              </Link>
-            </div>
-          </div>
-        </article>
-
         
-        {/* --- TARJETA DE RELLENO "PRÓXIMAMENTE" --- */}
-        <article className="bg-slate-50 border border-slate-100 rounded-2xl p-6 flex flex-col justify-center items-center text-center opacity-60 min-h-[300px]">
-          <div className="h-12 w-12 bg-slate-200 rounded-full mb-4 animate-pulse"></div>
-          <h3 className="font-bold text-slate-400">Próximamente...</h3>
-          <p className="text-sm text-slate-400">Estamos redactando más guías de estudio.</p>
-        </article>
+        {/* Generamos las tarjetas automáticamente usando la lista de arriba */}
+        {articles.map((post, index) => (
+          <article key={index} className="bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-xl transition-shadow flex flex-col h-full">
+            
+            {/* Icono / Imagen */}
+            <div className={`h-48 ${post.bgIcon} flex items-center justify-center`}>
+               {post.icon}
+            </div>
+            
+            <div className="p-6 flex-grow flex flex-col">
+              <div className={`flex items-center gap-2 text-xs font-bold ${post.color} mb-3 uppercase tracking-wider`}>
+                {post.category}
+              </div>
+              <h2 className="text-xl font-bold text-slate-900 mb-3 leading-tight">
+                {post.title}
+              </h2>
+              <p className="text-slate-500 text-sm mb-6 line-clamp-3">
+                {post.desc}
+              </p>
+              
+              <div className="mt-auto">
+                <Link 
+                  href={`/blog/${post.slug}`} 
+                  className="inline-flex items-center gap-2 text-slate-900 font-bold hover:text-emerald-600 transition-colors"
+                >
+                  Leer Artículo <ArrowRight size={16} />
+                </Link>
+              </div>
+            </div>
+          </article>
+        ))}
 
       </div>
     </div>
