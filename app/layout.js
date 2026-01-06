@@ -3,10 +3,10 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 import Image from "next/image";
-import { Search, Calculator } from "lucide-react";
+import { Search, Calculator, BookOpen } from "lucide-react"; // Agregué BookOpen para el icono del Blog
 import UserIcon from "./UserIcon";
 
-// ACTUALIZADO: Busca en la carpeta components dentro de app
+// Importamos el Footer desde la carpeta correcta
 import Footer from "./components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -14,7 +14,6 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata = {
   metadataBase: new URL('https://www.auxiliaresdefarmacia.cl'),
   
-  // Solución al error de indexación (Canonical)
   alternates: {
     canonical: 'https://www.auxiliaresdefarmacia.cl',
   },
@@ -23,8 +22,8 @@ export const metadata = {
     default: "AuxiliarPro | Simulador Examen Farmacia Chile",
     template: "%s | AuxiliarPro"
   },
-  description: "Plataforma de estudio para Auxiliares de Farmacia en Chile. Simulador de examen, biblioteca de decretos (DS 466, 404) y blog educativo.",
-  keywords: ["Auxiliar de farmacia", "Examen competencia", "Seremi Salud", "Farmacia Chile", "Decreto 466", "Simulador Farmacia"],
+  description: "Plataforma de estudio para Auxiliares de Farmacia en Chile.",
+  keywords: ["Auxiliar de farmacia", "Examen competencia", "Farmacia Chile"],
   authors: [{ name: "Marcelo C." }],
   
   openGraph: {
@@ -60,16 +59,26 @@ export default function RootLayout({ children }) {
             </Link>
 
             <div className="flex items-center gap-2 md:gap-4">
-               <Link href="/blog" className="text-slate-400 hover:text-aux-dark transition-colors p-2 hover:bg-slate-50 rounded-full" title="Buscar en el Blog">
-                  <Search size={20} />
+               
+               {/* --- NUEVO BOTÓN DE BLOG (VISIBLE) --- */}
+               <Link href="/blog" className="flex items-center gap-2 text-slate-500 hover:text-emerald-600 font-bold text-xs tracking-wider px-3 py-2 rounded-lg hover:bg-emerald-50 transition-all">
+                  <BookOpen size={16} />
+                  <span>BLOG</span>
                </Link>
+               {/* ------------------------------------- */}
+
                <div className="h-6 w-px bg-slate-200 hidden sm:block"></div>
+               
+               {/* BOTÓN DERMOCHECK */}
                <Link href="/dermocheck" className="flex items-center gap-2 text-slate-500 hover:text-blue-600 font-bold text-xs tracking-wider px-2 py-2 rounded-lg hover:bg-blue-50 transition-all border border-slate-100 md:border-none">
                   <Calculator size={16} />
                   <span className="hidden sm:inline">DERMOCHECK</span>
                   <span className="sm:hidden">DERMO</span>
                </Link>
+
                <div className="h-6 w-px bg-slate-200"></div>
+               
+               {/* ICONO DE USUARIO */}
                <UserIcon />
             </div>
           </div>
@@ -79,7 +88,6 @@ export default function RootLayout({ children }) {
           {children}
         </main>
         
-        {/* Footer visible en todas las secciones */}
         <Footer />
         
         <Analytics />
