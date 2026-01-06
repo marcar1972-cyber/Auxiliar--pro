@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ChevronRight, Scale, Thermometer, Pill, Clipboard, ShieldAlert, ArrowRight, BookOpen, CheckCircle } from "lucide-react";
-import Footer from "./components/Footer"; 
+// Eliminado: import Footer from "./components/Footer";  <-- Ya está en layout.js
 
 export default function LandingPage() {
   return (
@@ -127,7 +127,7 @@ export default function LandingPage() {
         </div>
       </main>
 
-      <Footer />
+      {/* Eliminado: <Footer /> */}
     </div>
   );
 }
