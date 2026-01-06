@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Calendar, ArrowRight } from "lucide-react";
+import { Calendar, ArrowRight, BookOpen, FileText } from "lucide-react";
 
 export const metadata = {
   title: "Blog AuxiliarPro | Noticias y Guías",
@@ -23,9 +23,8 @@ export default function BlogIndex() {
       {/* GRILLA DE ARTÍCULOS */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
 
-        {/* --- ARTÍCULO NUEVO: FECHAS SEREMI --- */}
+        {/* --- ARTÍCULO 1 (NUEVO): FECHAS SEREMI --- */}
         <article className="bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-xl transition-shadow flex flex-col">
-          {/* Si tienes una imagen, iría aquí. Por ahora usaremos un color de fondo */}
           <div className="h-48 bg-emerald-500/10 flex items-center justify-center">
              <Calendar className="text-emerald-500 w-16 h-16 opacity-50" />
           </div>
@@ -52,10 +51,69 @@ export default function BlogIndex() {
           </div>
         </article>
 
-        {/* --- AQUÍ PUEDES AGREGAR MÁS TARJETAS EN EL FUTURO --- */}
+
+        {/* --- ARTÍCULO 2 (RECUPERADO - EDITA AQUÍ EL TÍTULO Y LINK) --- */}
+        <article className="bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-xl transition-shadow flex flex-col">
+          <div className="h-48 bg-blue-500/10 flex items-center justify-center">
+             <BookOpen className="text-blue-500 w-16 h-16 opacity-50" />
+          </div>
+          
+          <div className="p-6 flex-grow flex flex-col">
+            <div className="flex items-center gap-2 text-xs font-bold text-blue-600 mb-3 uppercase tracking-wider">
+              Guías de Estudio
+            </div>
+            <h2 className="text-xl font-bold text-slate-900 mb-3 leading-tight">
+              Requisitos y Normativa (Ejemplo)
+            </h2>
+            <p className="text-slate-500 text-sm mb-6 line-clamp-3">
+              Aquí puedes poner la descripción de tu artículo anterior. Si tenías una guía sobre el Decreto 466 o requisitos, edita este texto.
+            </p>
+            
+            <div className="mt-auto">
+              {/* OJO: Cambia el href por la ruta de tu artículo anterior */}
+              <Link 
+                href="/blog/ruta-de-tu-articulo-anterior" 
+                className="inline-flex items-center gap-2 text-slate-900 font-bold hover:text-blue-600 transition-colors"
+              >
+                Leer Artículo <ArrowRight size={16} />
+              </Link>
+            </div>
+          </div>
+        </article>
+
+
+        {/* --- ARTÍCULO 3 (RECUPERADO - EDITA AQUÍ) --- */}
+        <article className="bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-xl transition-shadow flex flex-col">
+          <div className="h-48 bg-purple-500/10 flex items-center justify-center">
+             <FileText className="text-purple-500 w-16 h-16 opacity-50" />
+          </div>
+          
+          <div className="p-6 flex-grow flex flex-col">
+            <div className="flex items-center gap-2 text-xs font-bold text-purple-600 mb-3 uppercase tracking-wider">
+              Material de Apoyo
+            </div>
+            <h2 className="text-xl font-bold text-slate-900 mb-3 leading-tight">
+              Otro Artículo Anterior
+            </h2>
+            <p className="text-slate-500 text-sm mb-6 line-clamp-3">
+              Restaura aquí el contenido de tu tercer artículo. Manteniendo el formato, tu blog se verá ordenado y profesional.
+            </p>
+            
+            <div className="mt-auto">
+              {/* OJO: Cambia el href por la ruta de tu otro artículo */}
+              <Link 
+                href="/blog/ruta-de-tu-otro-articulo" 
+                className="inline-flex items-center gap-2 text-slate-900 font-bold hover:text-purple-600 transition-colors"
+              >
+                Leer Artículo <ArrowRight size={16} />
+              </Link>
+            </div>
+          </div>
+        </article>
+
         
-        {/* Ejemplo de tarjeta "Próximamente" para rellenar espacio si quieres */}
-        <article className="bg-slate-50 border border-slate-100 rounded-2xl p-6 flex flex-col justify-center items-center text-center opacity-60">
+        {/* --- TARJETA DE RELLENO "PRÓXIMAMENTE" --- */}
+        <article className="bg-slate-50 border border-slate-100 rounded-2xl p-6 flex flex-col justify-center items-center text-center opacity-60 min-h-[300px]">
           <div className="h-12 w-12 bg-slate-200 rounded-full mb-4 animate-pulse"></div>
           <h3 className="font-bold text-slate-400">Próximamente...</h3>
           <p className="text-sm text-slate-400">Estamos redactando más guías de estudio.</p>
