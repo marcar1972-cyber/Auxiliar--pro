@@ -78,8 +78,10 @@ export default function RootLayout({ children }) {
 
                <div className="h-6 w-px bg-slate-200"></div>
                
-               {/* ICONO DE USUARIO */}
-               <UserIcon />
+               {/* ICONO DE USUARIO (Protegido con shrink-0 para no aplastarse) */}
+               <div className="shrink-0">
+                  <UserIcon />
+               </div>
             </div>
           </div>
         </nav>
