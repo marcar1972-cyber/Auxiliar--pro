@@ -27,6 +27,13 @@ export const metadata = {
   keywords: ["Auxiliar de farmacia", "Examen competencia", "Farmacia Chile", "Seremi Salud", "Decreto 404"], // Agregué un par de keywords de nicho
   authors: [{ name: "MaczDev", url: "https://macz.dev" }], // Unificamos marca personal
   
+  // --- FAVICON AGREGADO AQUÍ ---
+  icons: {
+    icon: '/logo-favicon.png',
+    apple: '/logo-favicon.png',
+  },
+  // ----------------------------
+
   openGraph: {
     title: "AuxiliarPro Chile",
     description: "Prepara tu examen de competencia gratis.",
