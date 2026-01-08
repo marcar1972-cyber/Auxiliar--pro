@@ -14,7 +14,6 @@ export const metadata = {
   metadataBase: new URL('https://www.auxiliaresdefarmacia.cl'),
   
   // 2. CORRECCIÓN CRÍTICA: Usamos './' para que sea dinámico.
-  // Esto asegura que /blog tenga su propio canonical, y /dermocheck el suyo.
   alternates: {
     canonical: './',
   },
@@ -24,15 +23,15 @@ export const metadata = {
     template: "%s | AuxiliarPro"
   },
   description: "Plataforma de estudio para Auxiliares de Farmacia en Chile.",
-  keywords: ["Auxiliar de farmacia", "Examen competencia", "Farmacia Chile", "Seremi Salud", "Decreto 404"], // Agregué un par de keywords de nicho
-  authors: [{ name: "MaczDev", url: "https://macz.dev" }], // Unificamos marca personal
+  keywords: ["Auxiliar de farmacia", "Examen competencia", "Farmacia Chile", "Seremi Salud", "Decreto 404"],
+  authors: [{ name: "MaczDev", url: "https://macz.dev" }],
   
-  // --- FAVICON AGREGADO AQUÍ ---
+  // --- FAVICON CORREGIDO (.ico) ---
   icons: {
-    icon: '/logo-favicon.png',
-    apple: '/logo-favicon.png',
+    icon: '/logo-favicon.ico', // Cambiado a .ico
+    apple: '/logo-favicon.ico', // Cambiado a .ico
   },
-  // ----------------------------
+  // -------------------------------
 
   openGraph: {
     title: "AuxiliarPro Chile",
@@ -85,7 +84,7 @@ export default function RootLayout({ children }) {
 
                <div className="h-6 w-px bg-slate-200"></div>
                
-               {/* ICONO DE USUARIO (Protegido con shrink-0 para no aplastarse) */}
+               {/* ICONO DE USUARIO (Protegido con shrink-0) */}
                <div className="shrink-0">
                   <UserIcon />
                </div>
