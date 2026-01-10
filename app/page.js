@@ -1,133 +1,125 @@
-"use client";
-
 import Link from "next/link";
-import { ChevronRight, Scale, Thermometer, Pill, Clipboard, ShieldAlert, ArrowRight, BookOpen, CheckCircle } from "lucide-react";
-// Eliminado: import Footer from "./components/Footer";  <-- Ya está en layout.js
+import { Calendar, BookOpen, FileText, DollarSign, Scale, Users, ArrowRight } from "lucide-react";
 
-export default function LandingPage() {
+// 🟢 CORRECCIÓN SEO: Metadatos completos y Canonical
+export const metadata = {
+  title: "Blog y Guías de Estudio | Auxiliar de Farmacia Chile",
+  description: "Artículos educativos, noticias sobre el examen de competencia SEREMI y consejos legales (Decreto 466) para auxiliares de farmacia en Chile.",
+  keywords: ["blog farmacia chile", "guias auxiliar farmacia", "noticias seremi salud", "decreto 466 resumen"],
+  alternates: {
+    canonical: './',
+  },
+};
+
+// LISTADO DE TUS ARTÍCULOS REALES (Intacto)
+const articles = [
+  {
+    slug: "fecha-examen-auxiliar-farmacia-seremi",
+    title: "¿Cuándo es el Examen de Auxiliar de Farmacia?",
+    desc: "No existe un calendario fijo. Descubre cómo funciona el proceso de asignación de fechas de la SEREMI.",
+    category: "Trámites",
+    color: "text-emerald-600",
+    bgIcon: "bg-emerald-500/10",
+    icon: <Calendar className="text-emerald-500 w-16 h-16 opacity-50" />
+  },
+  {
+    slug: "requisitos-auxiliar-farmacia-chile-2026",
+    title: "Requisitos para ser Auxiliar de Farmacia (2026)",
+    desc: "Guía completa con la normativa actualizada. Descubre qué documentos necesitas para tu inscripción.",
+    category: "Guía 2026",
+    color: "text-blue-600",
+    bgIcon: "bg-blue-500/10",
+    icon: <BookOpen className="text-blue-500 w-16 h-16 opacity-50" />
+  },
+  {
+    slug: "cuanto-gana-auxiliar-farmacia-chile",
+    title: "¿Cuánto gana un Auxiliar de Farmacia en Chile?",
+    desc: "Análisis de mercado laboral, rentas promedio y diferencias entre farmacia privada y asistencial.",
+    category: "Laboral",
+    color: "text-green-600",
+    bgIcon: "bg-green-500/10",
+    icon: <DollarSign className="text-green-500 w-16 h-16 opacity-50" />
+  },
+  {
+    slug: "que-es-el-decreto-466",
+    title: "¿Qué es el Decreto 466? Lo que debes saber",
+    desc: "El reglamento fundamental que rige a las farmacias en Chile y base del examen de competencia.",
+    category: "Normativa",
+    color: "text-slate-600",
+    bgIcon: "bg-slate-500/10",
+    icon: <Scale className="text-slate-500 w-16 h-16 opacity-50" />
+  },
+  {
+    slug: "examen-competencia-seremi-2025",
+    title: "Todo sobre el Examen de Competencia SEREMI",
+    desc: "Detalles sobre la evaluación, contenidos frecuentes y cómo prepararte para aprobar.",
+    category: "Examen",
+    color: "text-purple-600",
+    bgIcon: "bg-purple-500/10",
+    icon: <FileText className="text-purple-500 w-16 h-16 opacity-50" />
+  },
+  {
+    slug: "diferencia-auxiliar-tecnico-farmacia",
+    title: "Diferencia entre Auxiliar y Técnico en Farmacia",
+    desc: "Comparativa de roles, responsabilidades legales y formación requerida para cada cargo.",
+    category: "Orientación",
+    color: "text-orange-600",
+    bgIcon: "bg-orange-500/10",
+    icon: <Users className="text-orange-500 w-16 h-16 opacity-50" />
+  }
+];
+
+export default function BlogIndex() {
   return (
-    <div className="min-h-screen bg-white font-sans text-slate-800">
+    <div className="max-w-6xl mx-auto px-6 py-12 md:py-20 text-slate-700">
       
-      {/* HERO SECTION: ENFOQUE LEGAL PURO */}
-      <header className="py-24 px-6 bg-gradient-to-b from-slate-50 to-white text-center">
-        <div className="max-w-4xl mx-auto">
-          <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest mb-10 border border-emerald-100 italic">
-            Comunidad activa de +50 alumnos capacitándose bajo normativa vigente
-          </div>
-          <h1 className="text-5xl md:text-7xl font-black text-slate-900 mb-8 leading-[1.05] tracking-tighter">
-            Tu examen <span className="text-emerald-500">SEREMI</span> <br/>comienza aquí.
-          </h1>
-          <p className="text-xl text-slate-500 mb-12 max-w-2xl mx-auto font-medium">
-            Entrena con bases legales extraídas directamente de los <strong>Decretos 466, 404 y 405</strong> del Ministerio de Salud. 
-            Contenido técnico y jurídico validado para el proceso de certificación 2026.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/quiz" className="inline-flex items-center gap-2 bg-slate-900 text-white px-12 py-5 rounded-[2rem] font-black text-lg hover:bg-emerald-600 transition-all shadow-2xl">
-              EMPEZAR AHORA <ArrowRight />
-            </Link>
-          </div>
-        </div>
+      {/* HEADER DEL BLOG */}
+      <header className="mb-12 text-center">
+        {/* 🟢 CORRECCIÓN SEO: H1 descriptivo para conectar con el Título */}
+        <h1 className="text-3xl md:text-5xl font-black text-slate-900 mb-4">
+          Blog y Guías para <span className="text-emerald-600">Auxiliar de Farmacia</span>
+        </h1>
+        <p className="text-slate-500 text-lg max-w-2xl mx-auto">
+          Mantente al día con las normativas, fechas de examen y consejos de estudio para asegurar tu registro en la SEREMI.
+        </p>
       </header>
 
-      {/* 5 ARTÍCULOS TÉCNICOS BASADOS EN LA LEY (750+ Palabras para SEO) */}
-      <main className="max-w-6xl mx-auto px-6 py-24 border-t border-slate-50">
-        <h2 className="text-center font-black text-2xl uppercase tracking-widest mb-16 italic">Módulos Críticos de Legislación</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          
-          <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all">
-            <Scale className="text-emerald-500 mb-6" size={32} />
-            <h3 className="font-black text-xl mb-4 leading-tight">Rol Técnico y Decreto 466</h3>
-            <p className="text-sm text-slate-500 leading-relaxed">
-              El <strong>Decreto Supremo 466</strong> constituye el marco jurídico fundamental que regula la instalación, funcionamiento y responsabilidades en farmacias y almacenes farmacéuticos. Todo auxiliar debe dominar las prohibiciones de dispensación y las obligaciones de infraestructura, como el almacenamiento técnico a 10 cm del piso y 30 cm de los muros para garantizar la higiene exigida por la autoridad.
-            </p>
-          </article>
-
-          <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all">
-            <Thermometer className="text-blue-500 mb-6" size={32} />
-            <h3 className="font-black text-xl mb-4 leading-tight">Estabilidad y Cadena de Frío</h3>
-            <p className="text-sm text-slate-500 leading-relaxed">
-              La seguridad de los productos biológicos se rige por normas técnicas de almacenamiento estrictas. El mantenimiento de la temperatura entre <strong>2°C y 8°C</strong> es una obligación legal para insulinas y vacunas. Este módulo profundiza en el control de termohigrómetros, registros de planillas de temperatura y protocolos de contingencia ante quiebres de cadena de frío según las directrices sanitarias.
-            </p>
-          </article>
-
-          <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all">
-            <ShieldAlert className="text-purple-500 mb-6" size={32} />
-            <h3 className="font-black text-xl mb-4 leading-tight">Controlados: Decretos 404 y 405</h3>
-            <p className="text-sm text-slate-500 leading-relaxed">
-              La dispensación de Estupefacientes y Psicotrópicos requiere un cumplimiento riguroso de los reglamentos <strong>DS 404 y DS 405</strong>. El aspirante debe dominar los requisitos de la Receta Cheque y Receta Retenida, el registro diario obligatorio en libros de control y la normativa de custodia en muebles de seguridad bajo llave para evitar infracciones legales graves durante las inspecciones de la SEREMI.
-            </p>
-          </article>
-
-          <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all">
-            <Pill className="text-amber-500 mb-6" size={32} />
-            <h3 className="font-black text-xl mb-4 leading-tight">Bioequivalencia y Ley de Fármacos</h3>
-            <p className="text-sm text-slate-500 leading-relaxed">
-              La <strong>Ley de Fármacos II</strong> impulsa el uso de medicamentos genéricos con sello de Bioequivalencia vigente, garantizando la misma eficacia que el innovador. En este bloque se analiza la obligatoriedad de informar precios y el marco legal para el fraccionamiento de medicamentos en unidades autorizadas, permitiendo un acceso más económico y seguro a los tratamientos prescritos por los profesionales facultados.
-            </p>
-          </article>
-
-          <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all">
-            <Clipboard className="text-rose-500 mb-6" size={32} />
-            <h3 className="font-black text-xl mb-4 leading-tight">Seguridad y Farmacovigilancia</h3>
-            <p className="text-sm text-slate-500 leading-relaxed">
-              El reporte de Reacciones Adversas a Medicamentos (RAM) es un deber ético y legal del personal de farmacia ante el <strong>Instituto de Salud Pública (ISP)</strong>. Comprender los procesos de farmacocinética y farmacodinamia permite una detección temprana de efectos no deseados, contribuyendo directamente a la farmacovigilancia nacional y asegurando que la salud pública sea resguardada post-dispensación.
-            </p>
-          </article>
-        </div>
-
-        {/* METODOLOGÍA: BASADA EN LEYES VIGENTES */}
-        <section className="mt-32 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div className="space-y-6">
-                <h2 className="text-3xl font-black text-slate-900 leading-tight">Preparación Técnica para el Proceso de Certificación 2026</h2>
-                <p className="text-slate-500 leading-relaxed font-medium">
-                    Nuestra metodología de entrenamiento se centra en la aplicación práctica de los reglamentos sanitarios. Los exámenes de competencia exigen un análisis profundo de la normativa vigente en Chile.
-                </p>
-                <ul className="space-y-4">
-                    <li className="flex items-center gap-3 text-sm font-bold text-slate-700">
-                        <CheckCircle size={18} className="text-emerald-500" /> Simulacros con tiempo real de 60 minutos
-                    </li>
-                    <li className="flex items-center gap-3 text-sm font-bold text-slate-700">
-                        <CheckCircle size={18} className="text-emerald-500" /> Preguntas basadas en los Reglamentos Sanitarios Vigentes
-                    </li>
-                    <li className="flex items-center gap-3 text-sm font-bold text-slate-700">
-                        <CheckCircle size={18} className="text-emerald-500" /> Enfoque en Decretos 466, 404, 405 y Ley de Fármacos
-                    </li>
-                </ul>
-            </div>
-            <div className="bg-slate-900 p-10 rounded-[3rem] text-white shadow-2xl">
-                <h4 className="text-xl font-black mb-4 flex items-center gap-2">
-                    <BookOpen size={24} className="text-emerald-400" /> Compendio de Estudio Legal
-                </h4>
-                <p className="text-slate-400 text-sm leading-relaxed mb-6">
-                    ¿Conoces los plazos legales de vigencia de una receta simple o los requisitos técnicos para el almacenamiento de vacunas? El dominio de estos detalles jurídicos es el factor determinante para aprobar el examen de la autoridad sanitaria.
-                </p>
-                <Link href="/biblioteca" className="text-emerald-400 font-bold hover:underline flex items-center gap-2 text-sm uppercase tracking-widest">
-                    EXPLORAR TEXTOS LEGALES <ChevronRight size={16}/>
-                </Link>
-            </div>
-        </section>
-
-        {/* ACCESO A FAQS */}
-        <div className="mt-32 flex flex-col items-center">
-          <div className="bg-slate-50 p-12 rounded-[3.5rem] border border-slate-100 w-full max-w-3xl text-center shadow-sm">
-            <h4 className="text-2xl font-black text-slate-900 mb-4">¿Dudas sobre la Normativa Sanitaria?</h4>
-            <p className="text-slate-500 text-sm mb-10 font-medium max-w-lg mx-auto leading-relaxed">
-              Consulta nuestro centro de respuestas detalladas sobre el Decreto 466, 
-              almacenamiento técnico en bodega y validación de recetas electrónicas según las leyes vigentes.
-            </p>
+      {/* GRILLA DE ARTÍCULOS */}
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        {/* Generamos las tarjetas automáticamente usando la lista de arriba */}
+        {articles.map((post, index) => (
+          <article key={index} className="bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-xl transition-shadow flex flex-col h-full">
             
-            <Link 
-              href="/faq" 
-              className="inline-flex items-center gap-3 bg-white text-slate-900 border-2 border-slate-200 px-12 py-5 rounded-full font-black text-xs uppercase tracking-[0.2em] hover:border-emerald-500 hover:text-emerald-600 transition-all shadow-sm group"
-            >
-              Ver todas las FAQs 
-              <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </div>
-        </div>
-      </main>
+            {/* Icono / Imagen */}
+            <div className={`h-48 ${post.bgIcon} flex items-center justify-center`}>
+               {post.icon}
+            </div>
+            
+            <div className="p-6 flex-grow flex flex-col">
+              <div className={`flex items-center gap-2 text-xs font-bold ${post.color} mb-3 uppercase tracking-wider`}>
+                {post.category}
+              </div>
+              <h2 className="text-xl font-bold text-slate-900 mb-3 leading-tight">
+                {post.title}
+              </h2>
+              <p className="text-slate-500 text-sm mb-6 line-clamp-3">
+                {post.desc}
+              </p>
+              
+              <div className="mt-auto">
+                <Link 
+                  href={`/blog/${post.slug}`} 
+                  className="inline-flex items-center gap-2 text-slate-900 font-bold hover:text-emerald-600 transition-colors"
+                >
+                  Leer Artículo <ArrowRight size={16} />
+                </Link>
+              </div>
+            </div>
+          </article>
+        ))}
 
-      {/* Eliminado: <Footer /> */}
+      </div>
     </div>
   );
 }
