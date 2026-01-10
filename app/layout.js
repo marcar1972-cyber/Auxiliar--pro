@@ -10,36 +10,62 @@ import Footer from "./components/Footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  // 1. La base define el dominio raíz
+  // 1. BASE: Fundamental para el SEO técnico
   metadataBase: new URL('https://www.auxiliaresdefarmacia.cl'),
   
-  // 2. CORRECCIÓN CRÍTICA: Usamos './' para que sea dinámico.
+  // 2. CANONICAL: Configuración dinámica correcta (Solución al reporte)
   alternates: {
     canonical: './',
   },
 
+  // 3. ROBOTS: Permisos explícitos para Google (Faltaba esto)
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+
+  // 4. IDENTIDAD Y PALABRAS CLAVE
   title: {
     default: "AuxiliarPro | Simulador Examen Farmacia Chile",
     template: "%s | AuxiliarPro"
   },
-  description: "Plataforma de estudio para Auxiliares de Farmacia en Chile.",
-  keywords: ["Auxiliar de farmacia", "Examen competencia", "Farmacia Chile", "Seremi Salud", "Decreto 404"],
-  authors: [{ name: "MaczDev", url: "https://macz.dev" }],
+  // Descripción ampliada para cubrir más keywords
+  description: "Plataforma de estudio para Auxiliares de Farmacia en Chile. Simulador de examen SEREMI, guías del Decreto 466, 404 y bolsa de empleo.",
   
-  // --- FAVICON CORREGIDO (.ico) ---
+  // Agregado "Decreto 466" y "Simulador" que son vitales
+  keywords: ["Auxiliar de farmacia", "Examen competencia", "Farmacia Chile", "Seremi Salud", "Decreto 404", "Decreto 466", "Simulador Farmacia"],
+  
+  authors: [{ name: "AuxiliarPro", url: "https://www.auxiliaresdefarmacia.cl" }],
+  
+  // 5. ICONOS
   icons: {
-    icon: '/logo-favicon.ico', // Cambiado a .ico
-    apple: '/logo-favicon.ico', // Cambiado a .ico
+    icon: '/logo-favicon.ico', 
+    apple: '/logo-favicon.ico', 
   },
-  // -------------------------------
 
+  // 6. REDES SOCIALES (Open Graph con Imagen)
   openGraph: {
     title: "AuxiliarPro Chile",
-    description: "Prepara tu examen de competencia gratis.",
+    description: "Prepara tu examen de competencia gratis con el simulador real.",
     url: 'https://www.auxiliaresdefarmacia.cl',
     siteName: 'AuxiliarPro',
     locale: 'es_CL',
     type: 'website',
+    images: [
+      {
+        url: '/logo.webp', // Usa tu logo como imagen de previsualización
+        width: 800,
+        height: 600,
+        alt: 'Logo AuxiliarPro',
+      },
+    ],
   },
 
   verification: {
@@ -84,7 +110,7 @@ export default function RootLayout({ children }) {
 
                <div className="h-6 w-px bg-slate-200"></div>
                
-               {/* ICONO DE USUARIO (Protegido con shrink-0) */}
+               {/* ICONO DE USUARIO */}
                <div className="shrink-0">
                   <UserIcon />
                </div>
