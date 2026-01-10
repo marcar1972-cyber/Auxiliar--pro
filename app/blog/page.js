@@ -1,12 +1,17 @@
 import Link from "next/link";
 import { Calendar, BookOpen, FileText, DollarSign, Scale, Users, ArrowRight } from "lucide-react";
 
+// 🟢 CORRECCIÓN SEO: Metadatos completos y Canonical
 export const metadata = {
-  title: "Blog AuxiliarPro | Noticias y Guías",
-  description: "Artículos educativos, noticias sobre el examen de competencia y consejos para auxiliares de farmacia en Chile.",
+  title: "Blog y Guías de Estudio | Auxiliar de Farmacia Chile",
+  description: "Artículos educativos, noticias sobre el examen de competencia SEREMI y consejos legales (Decreto 466) para auxiliares de farmacia en Chile.",
+  keywords: ["blog farmacia chile", "guias auxiliar farmacia", "noticias seremi salud", "decreto 466 resumen"],
+  alternates: {
+    canonical: './',
+  },
 };
 
-// LISTADO DE TUS ARTÍCULOS REALES (Basado en tus carpetas)
+// LISTADO DE TUS ARTÍCULOS REALES (Intacto)
 const articles = [
   {
     slug: "fecha-examen-auxiliar-farmacia-seremi",
@@ -70,8 +75,9 @@ export default function BlogIndex() {
       
       {/* HEADER DEL BLOG */}
       <header className="mb-12 text-center">
+        {/* 🟢 CORRECCIÓN SEO: H1 descriptivo para conectar con el Título */}
         <h1 className="text-3xl md:text-5xl font-black text-slate-900 mb-4">
-          Blog Educativo
+          Blog y Guías para <span className="text-emerald-600">Auxiliar de Farmacia</span>
         </h1>
         <p className="text-slate-500 text-lg max-w-2xl mx-auto">
           Mantente al día con las normativas, fechas de examen y consejos de estudio para asegurar tu registro en la SEREMI.
