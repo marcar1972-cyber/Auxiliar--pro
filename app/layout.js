@@ -18,7 +18,7 @@ export const metadata = {
     canonical: './',
   },
 
-  // 3. ROBOTS: Permisos explícitos para Google (Faltaba esto)
+  // 3. ROBOTS: Permisos explícitos para Google
   robots: {
     index: true,
     follow: true,
@@ -36,10 +36,8 @@ export const metadata = {
     default: "AuxiliarPro | Simulador Examen Farmacia Chile",
     template: "%s | AuxiliarPro"
   },
-  // Descripción ampliada para cubrir más keywords
   description: "Plataforma de estudio para Auxiliares de Farmacia en Chile. Simulador de examen SEREMI, guías del Decreto 466, 404 y bolsa de empleo.",
   
-  // Agregado "Decreto 466" y "Simulador" que son vitales
   keywords: ["Auxiliar de farmacia", "Examen competencia", "Farmacia Chile", "Seremi Salud", "Decreto 404", "Decreto 466", "Simulador Farmacia"],
   
   authors: [{ name: "AuxiliarPro", url: "https://www.auxiliaresdefarmacia.cl" }],
@@ -101,12 +99,17 @@ export default function RootLayout({ children }) {
 
                <div className="h-6 w-px bg-slate-200 hidden sm:block"></div>
                
-               {/* BOTÓN DERMOCHECK */}
-               <Link href="/dermocheck" className="flex items-center gap-2 text-slate-500 hover:text-blue-600 font-bold text-xs tracking-wider px-2 py-2 rounded-lg hover:bg-blue-50 transition-all border border-slate-100 md:border-none">
+               {/* BOTÓN DERMOCHECK (Enlace Externo Actualizado) */}
+               <a 
+                 href="https://www.dermocheck.cl/#calculator-section" 
+                 target="_blank" 
+                 rel="noopener noreferrer"
+                 className="flex items-center gap-2 text-slate-500 hover:text-blue-600 font-bold text-xs tracking-wider px-2 py-2 rounded-lg hover:bg-blue-50 transition-all border border-slate-100 md:border-none"
+               >
                   <Calculator size={16} />
                   <span className="hidden sm:inline">DERMOCHECK</span>
                   <span className="sm:hidden">DERMO</span>
-               </Link>
+               </a>
 
                <div className="h-6 w-px bg-slate-200"></div>
                
