@@ -1,8 +1,23 @@
 import Link from 'next/link';
 
+// 🟢 1. METADATA OPTIMIZADA (Solución al Reporte SEO)
 export const metadata = {
+  // Base del dominio para esta página
+  metadataBase: new URL('https://www.auxiliaresdefarmacia.cl'),
+  
+  // Título potente que coincide con el H1
   title: '¿Qué es el Decreto 466? La "Biblia" de las Farmacias en Chile',
-  description: 'Explora el reglamento fundamental que rige la instalación y funcionamiento de farmacias.',
+  description: 'Explora el reglamento fundamental que rige la instalación y funcionamiento de farmacias. Guía esencial sobre el Decreto 466 para el examen de competencia.',
+  
+  // Keywords específicas de este artículo
+  keywords: ["decreto 466 farmacia", "reglamento farmacias chile", "examen seremi auxiliar", "libros oficiales farmacia"],
+  
+  authors: [{ name: "AuxiliarPro" }],
+  
+  // Canonical individual para evitar contenido duplicado
+  alternates: {
+    canonical: './', 
+  },
 };
 
 export default function DecretoPage() {
@@ -16,8 +31,9 @@ export default function DecretoPage() {
         </nav>
 
         <header className="mb-12">
+          {/* H1 Coincidente con Title (Crucial para SEO) */}
           <h1 className="text-4xl md:text-5xl font-extrabold mb-6 text-slate-900 leading-tight tracking-tight">
-            ¿Qué es el Decreto 466? La "Biblia" que todo Auxiliar debe conocer
+            ¿Qué es el Decreto 466? La "Biblia" de las Farmacias en Chile
           </h1>
           <p className="text-xl text-slate-600 italic leading-relaxed">
             "Para nosotros, no es solo una ley; es el manual de supervivencia técnica que garantiza la seguridad de cada paciente que atendemos."
@@ -65,8 +81,6 @@ export default function DecretoPage() {
             </div>
           </div>
 
-          
-
           <h2 className="text-3xl font-bold border-b-4 border-blue-600 pb-2 text-slate-900">Personal y Responsabilidades Técnicas</h2>
           <p>
             La seguridad del paciente depende de una jerarquía técnica innegociable. La normativa define roles claros para evitar errores en la cadena de dispensación:
@@ -89,8 +103,6 @@ export default function DecretoPage() {
           <p>
             El despacho de fármacos no es un acto comercial simple, sino un acto sanitario que debe ajustarse al registro de cada producto:
           </p>
-
-          
 
           <div className="space-y-4 mt-6">
             <div className="flex gap-4 p-5 border-b border-slate-100">
