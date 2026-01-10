@@ -1,8 +1,16 @@
-"use client";
-
 import Link from "next/link";
 import { ChevronRight, Scale, Thermometer, Pill, Clipboard, ShieldAlert, ArrowRight, BookOpen, CheckCircle } from "lucide-react";
-// Eliminado: import Footer from "./components/Footer";  <-- Ya está en layout.js
+
+// 🟢 BLOQUE SEO OBLIGATORIO (Solución al Reporte PDF)
+// Esto define el Título y Descripción específicos para la Portada.
+export const metadata = {
+  title: "Examen Auxiliar de Farmacia SEREMI | Simulador y Normativa 2026",
+  description: "Aprueba tu examen de competencia SEREMI. Estudia gratis los Decretos 466, 404 y 405. Simulador de preguntas reales y material de estudio validado en Chile.",
+  keywords: ["examen auxiliar farmacia", "seremi salud", "decreto 466", "test farmacia chile", "simulador competencia"],
+  alternates: {
+    canonical: './', // Soluciona el error de "Canonical link" del reporte
+  },
+};
 
 export default function LandingPage() {
   return (
@@ -126,8 +134,6 @@ export default function LandingPage() {
           </div>
         </div>
       </main>
-
-      {/* Eliminado: <Footer /> */}
     </div>
   );
 }
