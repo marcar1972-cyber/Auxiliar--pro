@@ -1,8 +1,15 @@
 import Link from 'next/link';
 
+// 🟢 1. METADATOS SEO CORREGIDOS (Solución al Reporte PDF)
 export const metadata = {
   title: 'Requisitos para ser Auxiliar de Farmacia en Chile (Actualizado 2026)',
   description: 'Guía detallada sobre los requisitos legales, académicos y laborales para obtener tu credencial ante la SEREMI durante el año 2026.',
+  keywords: ["requisitos auxiliar farmacia", "carnet seremi", "examen competencia farmacia", "decreto 466 requisitos"],
+  authors: [{ name: "AuxiliarPro" }],
+  // Canonical individual para esta página específica
+  alternates: {
+    canonical: './', 
+  },
 };
 
 export default function RequisitosPage() {
@@ -16,6 +23,7 @@ export default function RequisitosPage() {
         </nav>
 
         <header className="mb-12">
+          {/* H1 Coincidente con Title (Crucial para SEO) */}
           <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-6 tracking-tight text-slate-900">
             Requisitos para ser Auxiliar de Farmacia en Chile (Actualizado 2026)
           </h1>
@@ -91,8 +99,6 @@ export default function RequisitosPage() {
           <p>
             No importa en qué mes te toque rendir durante este 2026, el examen siempre evaluará tu capacidad para garantizar la seguridad en el uso de medicamentos. Los ejes principales son:
           </p>
-
-          
 
           <ul className="list-disc pl-8 space-y-4">
             <li><strong>Legislación Farmacéutica:</strong> Dominio total del <Link href="/blog/que-es-el-decreto-466" className="text-blue-600 underline font-bold">DECRETO 466</Link>. Especial énfasis en tipos de establecimientos y roles del personal.</li>
