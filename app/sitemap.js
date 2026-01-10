@@ -6,21 +6,16 @@ export default function sitemap() {
     {
       url: baseUrl,
       lastModified: new Date(),
-      changeFrequency: 'weekly', // Cambiado a semanal para que Google revise novedades
+      changeFrequency: 'weekly', 
       priority: 1,
     },
     {
       url: `${baseUrl}/quiz`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
-      priority: 0.9, // Subimos prioridad por ser herramienta core
+      priority: 0.9, 
     },
-    {
-      url: `${baseUrl}/dermocheck`, // FALTABA ESTA (Importante)
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.9,
-    },
+    // ❌ ELIMINADO: dermocheck (Ya no existe internamente)
     {
       url: `${baseUrl}/blog`,
       lastModified: new Date(),
@@ -41,8 +36,7 @@ export default function sitemap() {
     },
   ];
 
-  // 2. ARTÍCULOS DEL BLOG (Vital para el SEO de contenido)
-  // Agregamos manualmente tus carpetas actuales para asegurar que se indexen.
+  // 2. ARTÍCULOS DEL BLOG
   const blogPosts = [
     'requisitos-auxiliar-farmacia-chile-2026',
     'cuanto-gana-auxiliar-farmacia-chile',
