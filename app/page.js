@@ -1,8 +1,17 @@
-"use client";
-
 import Link from "next/link";
 import { ChevronRight, Scale, Thermometer, Pill, Clipboard, ShieldAlert, ArrowRight, BookOpen, CheckCircle } from "lucide-react";
 import Footer from "./components/Footer"; 
+
+// --- 🟢 BLOQUE SEO CORREGIDO (SOLUCIÓN AL REPORTE) ---
+export const metadata = {
+  title: "Examen Auxiliar de Farmacia SEREMI | Simulador y Normativa 2026",
+  description: "Aprueba tu examen de competencia SEREMI. Estudia gratis los Decretos 466, 404 y 405. Simulador de preguntas reales y material de estudio validado en Chile.",
+  keywords: ["examen auxiliar farmacia", "seremi salud", "decreto 466", "test farmacia chile", "simulador competencia"],
+  alternates: {
+    canonical: './', // Refuerza la corrección del canonical
+  },
+};
+// -----------------------------------------------------
 
 export default function LandingPage() {
   return (
