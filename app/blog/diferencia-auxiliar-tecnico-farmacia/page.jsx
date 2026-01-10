@@ -1,8 +1,22 @@
 import Link from 'next/link';
 
+// 🟢 1. METADATA OPTIMIZADA (Solución al Reporte SEO)
 export const metadata = {
+  // Base del dominio para esta página
+  metadataBase: new URL('https://www.auxiliaresdefarmacia.cl'),
+  
   title: 'Diferencia entre Auxiliar y Técnico en Farmacia en Chile (Guía 2026)',
-  description: 'Comparamos formación, sueldo y legalidad de ambos cargos para orientar tu carrera profesional en salud.',
+  description: 'Comparamos formación, sueldo y legalidad de ambos cargos. Descubre las diferencias entre el examen SEREMI y el título técnico para orientar tu carrera.',
+  
+  // Keywords específicas
+  keywords: ["diferencia auxiliar tecnico farmacia", "tecnico en farmacia sueldo", "examen seremi vs titulo", "rol auxiliar farmacia"],
+  
+  authors: [{ name: "AuxiliarPro" }],
+  
+  // Canonical individual
+  alternates: {
+    canonical: './', 
+  },
 };
 
 export default function DiferenciaPage() {
@@ -16,6 +30,7 @@ export default function DiferenciaPage() {
         </nav>
 
         <header className="mb-12 text-center md:text-left">
+          {/* H1 Coincidente con Title (Crucial para SEO) */}
           <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-8 tracking-tight text-slate-900">
             Diferencia entre Auxiliar de Farmacia y Técnico en Farmacia en Chile
           </h1>
