@@ -1,8 +1,22 @@
 import Link from 'next/link';
 
+// 🟢 1. METADATA OPTIMIZADA (Solución al Reporte SEO)
 export const metadata = {
+  // Base del dominio para esta página
+  metadataBase: new URL('https://www.auxiliaresdefarmacia.cl'),
+  
   title: '¿Cuánto gana un Auxiliar de Farmacia en Chile? (Sueldos y Bonos 2026)',
-  description: 'Análisis referencial de la estructura salarial, comisiones por venta sugerida y bonos en farmacias chilenas.',
+  description: 'Análisis referencial de la estructura salarial, comisiones por venta sugerida y bonos en farmacias chilenas. Conoce cuánto gana un auxiliar acreditado.',
+  
+  // Keywords específicas
+  keywords: ["sueldo auxiliar farmacia", "cuanto gana auxiliar farmacia", "bonos farmacia chile", "renta liquida farmacia"],
+  
+  authors: [{ name: "AuxiliarPro" }],
+  
+  // Canonical individual
+  alternates: {
+    canonical: './', 
+  },
 };
 
 export default function SueldosPage() {
@@ -16,6 +30,7 @@ export default function SueldosPage() {
         </nav>
 
         <header className="mb-8">
+          {/* H1 Coincidente con Title (Crucial para SEO) */}
           <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-6 tracking-tight text-slate-900">
             ¿Cuánto gana un Auxiliar de Farmacia en Chile? (Sueldos y Bonos 2026)
           </h1>
@@ -37,8 +52,6 @@ export default function SueldosPage() {
               Hola colega. Si estás preparando tu examen de competencia para cualquier fecha de este 2026, seguramente te interesa saber cómo se traduce ese esfuerzo en tu liquidación mensual. En el sistema chileno, el sueldo de un auxiliar de farmacia es uno de los más dinámicos del retail, ya que combina una base estable con incentivos por gestión directa en el mostrador.
             </p>
           </section>
-
-          
 
           <h2 className="text-3xl font-bold text-slate-900 border-b-4 border-blue-600 pb-2">Composición de la Liquidación de Sueldo</h2>
           <p>
