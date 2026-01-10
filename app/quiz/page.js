@@ -6,7 +6,7 @@ import { LEVELS } from "../quizData/index";
 import Link from "next/link";
 import { 
   Lock, CheckCircle, XCircle, ChevronLeft, Clock, ShieldCheck, Trophy, Loader2, Library, 
-  MessageCircle, GraduationCap, BookOpen, Scale, ThermometerSnowflake, ArrowRight
+  MessageCircle, GraduationCap, BookOpen, Scale, ThermometerSnowflake, ArrowRight, BrainCircuit
 } from "lucide-react"; 
 
 import { auth, db } from "../firebase/config";
@@ -67,14 +67,14 @@ export default function QuizPage() {
     return () => unsubscribe();
   }, [router]);
 
-  // LÓGICA DEL TEMPORIZADOR: Cierra la prueba al llegar a cero
+  // LÓGICA DEL TEMPORIZADOR
   useEffect(() => {
     if (activeLevelId && !showResult && timeLeft > 0) {
       const timerId = setInterval(() => {
         setTimeLeft(p => { 
           if (p <= 1) { 
             clearInterval(timerId); 
-            setShowResult(true); // Cierra automáticamente la prueba
+            setShowResult(true); 
             return 0; 
           } 
           return p - 1; 
@@ -95,7 +95,6 @@ export default function QuizPage() {
     setMistakes([]); 
     setIsAnswered(false); 
     setSelectedOption(null); 
-    // Si el nivel tiene límite de tiempo (ej. 3600 para 60 min), se activa
     setTimeLeft(level.timeLimit || 0); 
   };
 
@@ -106,7 +105,6 @@ export default function QuizPage() {
     setSelectedOption(null); 
   };
 
-  // Función para guardar progreso en Firebase cuando aprueba
   const handleLevelPass = async (levelId) => {
     if (user && !unlockedLevels.includes(levelId + 1)) {
       try {
@@ -131,7 +129,6 @@ export default function QuizPage() {
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
         <div className="w-full max-w-xl bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100">
-          {/* Barra de Progreso Visual */}
           <div className="w-full bg-slate-100 h-3">
             <div 
               className="bg-emerald-500 h-3 transition-all duration-500" 
@@ -144,7 +141,6 @@ export default function QuizPage() {
               <span className="text-xs font-black text-slate-400 uppercase tracking-widest">
                 Pregunta {currentQIndex + 1} de {level.questions.length}
               </span>
-              {/* Reloj de cuenta regresiva */}
               {timeLeft > 0 && (
                 <div className="bg-slate-100 px-4 py-2 rounded-full font-mono font-bold text-slate-600 flex items-center gap-2">
                   <Clock size={16} className={timeLeft < 300 ? "text-red-500 animate-pulse" : ""}/> 
@@ -216,7 +212,7 @@ export default function QuizPage() {
   if (showResult && activeLevelId) {
     const level = LEVELS.find(l => l.id === activeLevelId);
     const passed = score >= (level?.passingScore || 0);
-    const timeOut = timeLeft === 0 && activeLevelId === 4; // Caso específico Nivel 4
+    const timeOut = timeLeft === 0 && activeLevelId === 4; 
 
     return (
       <div className="min-h-screen bg-slate-100 flex items-center justify-center p-6">
@@ -252,7 +248,7 @@ export default function QuizPage() {
     );
   }
 
-  // RENDER: MENÚ DE NIVELES
+  // RENDER: MENÚ DE NIVELES (CON SEO FOOTER INYECTADO)
   return (
     <main className="min-h-screen bg-slate-50 pb-24 font-sans">
       {/* HEADER STICKY */}
@@ -286,7 +282,7 @@ export default function QuizPage() {
           </div>
           <div>
             <p className="text-[10px] text-emerald-600 font-black uppercase tracking-wider">Auxiliar en formación</p>
-            <h2 className="text-xl font-black text-slate-900 leading-none mb-1">{user?.displayName || "Marcelo C"}</h2>
+            <h2 className="text-xl font-black text-slate-900 leading-none mb-1">{user?.displayName || "Colega"}</h2>
             <p className="text-xs text-slate-400 font-medium italic tracking-tight">Preparación Seremi 2026</p>
           </div>
         </div>
@@ -333,7 +329,7 @@ export default function QuizPage() {
           })}
         </div>
 
-        {/* ACCESOS RÁPIDOS MODULARES */}
+        {/* ACCESOS RÁPIDOS */}
         <div className="grid grid-cols-1 gap-4 mt-10">
             <Link href="/biblioteca" className="bg-white p-6 rounded-[2rem] border-2 border-slate-100 shadow-sm hover:border-blue-400 transition-all flex items-center gap-6 group cursor-pointer">
                 <div className="w-14 h-14 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -341,7 +337,7 @@ export default function QuizPage() {
                 </div>
                 <div>
                   <h3 className="font-black text-lg text-slate-800 tracking-tight">Biblioteca</h3>
-                  <p className="text-xs text-slate-400 font-bold uppercase italic">Recursos PDF 2025</p>
+                  <p className="text-xs text-slate-400 font-bold uppercase italic">Recursos PDF 2026</p>
                 </div>
             </Link>
 
@@ -357,6 +353,30 @@ export default function QuizPage() {
                 </div>
             </Link>
         </div>
+
+        {/* 🟢 SECCIÓN SEO INYECTADA: Soluciona "Página con poco texto" del reporte */}
+        <section className="mt-16 pt-16 border-t border-slate-200">
+          <h2 className="text-2xl font-black text-slate-900 mb-6 flex items-center gap-2">
+            <BrainCircuit className="text-emerald-500"/>
+            Sobre el Simulador SEREMI 2026
+          </h2>
+          <div className="prose prose-sm prose-slate text-slate-600 leading-relaxed">
+            <p>
+              El <strong>Simulador de Examen de Competencia</strong> de AuxiliarPro es la herramienta más avanzada para preparar tu acreditación ante la autoridad sanitaria. Diseñado siguiendo estrictamente el temario del <strong>Decreto Supremo 466</strong>, este sistema te permite entrenar en un entorno controlado antes de rendir la prueba real.
+            </p>
+            <h3 className="text-lg font-bold text-slate-800 mt-4">¿Qué evalúan los niveles?</h3>
+            <ul className="list-disc pl-5 space-y-2 mt-2">
+              <li><strong>Normativa Farmacéutica:</strong> Roles, prohibiciones y tipos de establecimientos (Farmacias, Botiquines, Almacenes).</li>
+              <li><strong>Farmacología Básica:</strong> Vías de administración, formas farmacéuticas y bioequivalencia.</li>
+              <li><strong>Gestión de Calidad:</strong> Cadena de frío (2°C a 8°C), control de vencimientos y manejo de libros oficiales.</li>
+              <li><strong>Dispensación Segura:</strong> Interpretación de recetas (Cheque, Retenida, Magistral) y cálculo de dosis.</li>
+            </ul>
+            <p className="mt-4">
+              Cada nivel superado queda registrado en tu perfil de alumno, permitiéndote retomar tu estudio donde lo dejaste. Al completar la ruta, estarás listo para enfrentar las 60 preguntas de selección múltiple del examen oficial.
+            </p>
+          </div>
+        </section>
+
       </div>
     </main>
   );
