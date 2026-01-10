@@ -9,13 +9,31 @@ import UserIcon from "./UserIcon";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
+  // 1. BASE: Fundamental para que el canonical funcione bien
   metadataBase: new URL('https://www.auxiliaresdefarmacia.cl'),
   
-  // SOLUCIÓN AL ERROR DE INDEXACIÓN: Etiqueta Canónica
+  // 2. CORRECCIÓN CRÍTICA CANONICAL
+  // Usar './' permite que cada subpágina (blog, quiz) genere su propia URL canónica 
+  // automáticamente, evitando que Google piense que todo el sitio es la Home.
   alternates: {
-    canonical: 'https://www.auxiliaresdefarmacia.cl',
+    canonical: './',
   },
 
+  // 3. CORRECCIÓN ROBOTS (Faltaba en tu código)
+  // Esto le dice explícitamente a Google "Indexa todo y sigue los enlaces".
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+
+  // 4. IDENTIDAD Y FAVICON
   title: {
     default: "AuxiliarPro | Simulador Examen Farmacia Chile",
     template: "%s | AuxiliarPro"
@@ -23,6 +41,12 @@ export const metadata = {
   description: "Plataforma de estudio para Auxiliares de Farmacia en Chile. Simulador de examen, biblioteca de decretos (DS 466, 404) y blog educativo.",
   keywords: ["Auxiliar de farmacia", "Examen competencia", "Seremi Salud", "Farmacia Chile", "Decreto 466", "Simulador Farmacia"],
   authors: [{ name: "Marcelo C." }],
+  
+  // Agregamos iconos explícitos para asegurar que el navegador los encuentre
+  icons: {
+    icon: '/logo-favicon.ico', 
+    apple: '/logo-favicon.ico',
+  },
   
   openGraph: {
     title: "AuxiliarPro Chile",
@@ -57,7 +81,7 @@ export default function RootLayout({ children }) {
             </Link>
 
             <div className="flex items-center gap-2 md:gap-4">
-               <Link href="/blog" className="text-slate-400 hover:text-aux-dark transition-colors p-2 hover:bg-slate-50 rounded-full" title="Buscar en el Blog">
+               <Link href="/blog" className="text-slate-400 hover:text-emerald-600 transition-colors p-2 hover:bg-slate-50 rounded-full" title="Buscar en el Blog">
                   <Search size={20} />
                </Link>
                <div className="h-6 w-px bg-slate-200 hidden sm:block"></div>
