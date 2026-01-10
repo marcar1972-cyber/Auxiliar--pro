@@ -1,6 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { HelpCircle, Calendar, Search, Pill, ExternalLink, AlertOctagon, X, CheckCircle2, Info, Package, Disc, Cylinder, Sun, ShieldCheck, ArrowLeft } from 'lucide-react';
+import { HelpCircle, Calendar, Search, Pill, ExternalLink, AlertOctagon, X, CheckCircle2, Info, Package, Disc, Cylinder, Sun, ShieldCheck, ArrowLeft, BookOpen, AlertTriangle } from 'lucide-react';
 import Link from 'next/link';
 
 // --- CONFIGURACIÓN Y DATOS ---
@@ -287,6 +287,39 @@ export default function DermocheckPage() {
             </div>
           </div>
         )}
+
+        {/* 🟢 SECCIÓN SEO INYECTADA: Soluciona el error "Thin Content" del reporte */}
+        <section className="mt-16 pt-12 border-t border-slate-700/50 text-slate-400">
+          <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+            <Package className="text-emerald-500" />
+            ¿Cómo leer la fecha de vencimiento de cosméticos?
+          </h2>
+          <div className="space-y-4 text-sm leading-relaxed">
+            <p>
+              Muchos productos dermocosméticos (como <strong>CeraVe, Eucerin o Vichy</strong>) no imprimen la fecha de caducidad de forma explícita en el envase. En su lugar, utilizan un <strong>Código de Lote (Batch Code)</strong> que cifra cuándo fue fabricado el producto.
+            </p>
+            <h3 className="text-emerald-400 font-bold mt-4">¿Qué es el Código de Lote?</h3>
+            <p>
+              Es una serie alfanumérica impresa o troquelada en la caja o el envase. No debe confundirse con el código de barras. Esta herramienta decodifica ese lote para calcular la fecha exacta de fabricación y proyectar la fecha límite de uso seguro.
+            </p>
+            <div className="bg-slate-800 p-4 rounded-xl border border-slate-700 mt-4">
+              <h4 className="text-white font-bold text-xs uppercase mb-2 flex items-center gap-2">
+                <AlertTriangle size={14} className="text-amber-500"/> Importante sobre Protectores Solares
+              </h4>
+              <p className="text-xs">
+                Los filtros solares tienen una vida útil más corta debido a la inestabilidad de sus componentes. Mientras una crema hidratante puede durar 36 meses cerrada, un protector solar suele tener una garantía de estabilidad de solo <strong>30 meses</strong> desde su fabricación.
+              </p>
+            </div>
+            
+            <div className="mt-8 text-center">
+              <p className="mb-4 text-xs font-bold uppercase tracking-wider text-slate-500">¿Eres personal de farmacia?</p>
+              <Link href="/biblioteca" className="inline-flex items-center gap-2 bg-emerald-900/30 text-emerald-400 px-6 py-3 rounded-full font-bold hover:bg-emerald-500 hover:text-slate-900 transition-all text-xs border border-emerald-500/30">
+                <BookOpen size={16} /> Ir a la Biblioteca de Estudio
+              </Link>
+            </div>
+          </div>
+        </section>
+
       </main>
 
       {/* MODAL AYUDA */}
