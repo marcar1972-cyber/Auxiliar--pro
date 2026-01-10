@@ -1,9 +1,20 @@
 import Link from "next/link";
 import { Calendar, Clock, AlertCircle, BookOpen, CheckCircle } from "lucide-react";
 
+// 🟢 1. METADATA OPTIMIZADA (Solución Reporte SEO)
 export const metadata = {
-  title: "¿Cuándo es el Examen de Auxiliar de Farmacia? | AuxiliarPro",
-  description: "No busques un calendario fijo. Descubre cómo obtener tu fecha de examen tras subir tus papeles a la SEREMI y qué documentos necesitas.",
+  // Define la URL base para que el canonical se construya correctamente
+  metadataBase: new URL('https://www.auxiliaresdefarmacia.cl'),
+  
+  title: "¿Cuándo es el Examen de Auxiliar de Farmacia? Fechas y Proceso SEREMI",
+  description: "No existe un calendario fijo. Descubre cómo obtener tu fecha de examen tras subir tus documentos a SEREMI en Línea y qué requisitos necesitas.",
+  keywords: ["fecha examen auxiliar farmacia", "seremi en linea", "calendario seremi salud", "tramite auxiliar farmacia"],
+  authors: [{ name: "AuxiliarPro" }],
+  
+  // Canonical individual para evitar contenido duplicado
+  alternates: {
+    canonical: './',
+  },
 };
 
 export default function BlogPost() {
@@ -15,6 +26,7 @@ export default function BlogPost() {
         <span className="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
           Trámites y Legal
         </span>
+        {/* H1 Coincidente con Title (Crucial para SEO) */}
         <h1 className="text-3xl md:text-4xl font-black text-slate-900 mt-4 mb-4 leading-tight">
           ¿Cuándo es el Examen de Auxiliar de Farmacia? Fechas y Proceso SEREMI
         </h1>
