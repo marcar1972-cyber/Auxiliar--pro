@@ -5,12 +5,12 @@ import Link from "next/link";
 import Script from "next/script"; 
 import { BookOpen, CheckCircle, AlertTriangle, Thermometer, ShieldCheck, FileText, Download, ArrowRight, Info, Package, XCircle, Trophy } from "lucide-react";
 
-// 📝 PREGUNTAS DEL QUIZ (Exclusivas del Decreto 3)
+// 📝 10 PREGUNTAS CLAVE DEL DECRETO 3 (Expandido)
 const preguntasQuiz = [
   {
     pregunta: "¿Qué indica obligatoriamente la Franja Amarilla en un envase?",
     opciones: ["Es un medicamento Genérico", "Es Bioequivalente", "Requiere Receta Cheque", "Es de Venta Directa"],
-    correcta: 1 // Índice de la respuesta correcta (0, 1, 2, 3)
+    correcta: 1 
   },
   {
     pregunta: "¿Cuál es el rango de temperatura estricto para la Cadena de Frío?",
@@ -31,6 +31,31 @@ const preguntasQuiz = [
     pregunta: "¿Si un medicamento no tiene Registro ISP, se considera...?",
     opciones: ["Un remedio casero", "Un suplemento alimenticio", "Falsificado o contrabando (Ilegal)", "Un producto importado legal"],
     correcta: 2
+  },
+  {
+    pregunta: "¿Qué significa el término FEFO en almacenamiento?",
+    opciones: ["Lo primero que entra es lo primero que sale", "Lo primero que vence es lo primero que sale", "Lo más barato se vende primero", "Lo último que llega se guarda atrás"],
+    correcta: 1
+  },
+  {
+    pregunta: "¿Dónde debe aparecer la fecha de vencimiento?",
+    opciones: ["Solo en la caja externa", "Solo en el blíster", "Tanto en el envase primario como en el secundario", "En la factura de compra solamente"],
+    correcta: 2
+  },
+  {
+    pregunta: "¿Qué pasa si se rompe la cadena de frío de una vacuna?",
+    opciones: ["Se puede volver a congelar", "Se debe vender rápido", "Pierde su eficacia y debe eliminarse", "Se puede usar si no cambió de color"],
+    correcta: 2
+  },
+  {
+    pregunta: "¿Qué diferencia legal tiene un Bioequivalente de un Genérico común?",
+    opciones: ["Es más barato", "Tiene estudios científicos que prueban su eficacia igual al innovador", "Es fabricado en el extranjero", "No tiene ninguna diferencia"],
+    correcta: 1
+  },
+  {
+    pregunta: "¿Qué debe hacer el auxiliar al recepcionar un pedido?",
+    opciones: ["Guardar todo rápido sin mirar", "Verificar que Lote y Vencimiento coincidan con la factura y caja", "Abrir los frascos para probar el sabor", "Poner los productos nuevos adelante en la estantería"],
+    correcta: 1
   }
 ];
 
@@ -42,13 +67,12 @@ export default function GuiaDecreto3() {
   const [preguntaActual, setPreguntaActual] = useState(0);
   const [puntaje, setPuntaje] = useState(0);
   const [mostrarResultado, setMostrarResultado] = useState(false);
-  const [respuestaSeleccionada, setRespuestaSeleccionada] = useState(null); // Para feedback visual inmediato
+  const [respuestaSeleccionada, setRespuestaSeleccionada] = useState(null); 
 
   // 🎮 LÓGICA DEL QUIZ
   const manejarRespuesta = (indiceOpcion) => {
     setRespuestaSeleccionada(indiceOpcion);
     
-    // Esperamos un poquito para que el usuario vea si acertó (feedback visual)
     setTimeout(() => {
         if (indiceOpcion === preguntasQuiz[preguntaActual].correcta) {
             setPuntaje(puntaje + 1);
@@ -61,7 +85,7 @@ export default function GuiaDecreto3() {
         } else {
             setMostrarResultado(true);
         }
-    }, 800); // 0.8 segundos de espera
+    }, 800); 
   };
 
   const reiniciarQuiz = () => {
@@ -83,7 +107,6 @@ export default function GuiaDecreto3() {
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2, useCORS: true, scrollY: 0 }, 
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        // 👇 MEJORA: Evita cortar textos o tablas a la mitad
         pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
       };
 
@@ -129,10 +152,9 @@ export default function GuiaDecreto3() {
       <main className="max-w-6xl mx-auto px-6 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           
-          {/* 🟢 COLUMNA IZQUIERDA: CONTENIDO COMPLETO (8 columnas) */}
+          {/* 🟢 COLUMNA IZQUIERDA: CONTENIDO COMPLETO */}
           <div id="contenido-pdf" className="lg:col-span-8 space-y-12 bg-white p-4 md:p-8 rounded-xl shadow-sm">
             
-            {/* 🟢 LOGO PARA EL PDF (Solo se verá bien al imprimir/descargar) */}
             <div className="mb-8 border-b pb-4 border-slate-100 flex justify-between items-center">
                 <img 
                     src="/logo.webp" 
@@ -364,9 +386,8 @@ export default function GuiaDecreto3() {
           <div className="lg:col-span-4">
             <div className="sticky top-24 space-y-6">
               
-              {/* TARJETA 1: QUIZ INTERACTIVO (Modificada) */}
+              {/* TARJETA 1: QUIZ INTERACTIVO */}
               <div className="bg-slate-900 text-white p-6 md:p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
-                {/* Fondo animado */}
                 <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500 rounded-full blur-3xl opacity-20 group-hover:opacity-30 transition-opacity"></div>
                 
                 <div className="relative z-10">
@@ -381,7 +402,7 @@ export default function GuiaDecreto3() {
                             ¿Entendiste el Decreto 3?
                         </h3>
                         <p className="text-slate-400 mb-8 text-sm leading-relaxed">
-                            Responde 5 preguntas rápidas sobre Bioequivalencia, ISP y cadena de frío. ¡Sin salir de aquí!
+                            Responde 10 preguntas rápidas sobre Bioequivalencia, ISP y cadena de frío. ¡Sin salir de aquí!
                         </p>
                         <button 
                             onClick={() => setQuizActivo(true)}
