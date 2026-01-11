@@ -6,7 +6,8 @@ import { LEVELS } from "../quizData/index";
 import Link from "next/link";
 import { 
   Lock, CheckCircle, XCircle, ChevronLeft, Clock, ShieldCheck, Trophy, Loader2, Library, 
-  MessageCircle, GraduationCap, BookOpen, Scale, ThermometerSnowflake, ArrowRight, BrainCircuit
+  MessageCircle, GraduationCap, BookOpen, Scale, ThermometerSnowflake, ArrowRight, BrainCircuit,
+  LogIn
 } from "lucide-react"; 
 
 import { auth, db } from "../firebase/config";
@@ -40,23 +41,28 @@ export default function QuizPage() {
   const [isAnswered, setIsAnswered] = useState(false);        
   const [mistakes, setMistakes] = useState([]); 
   const [timeLeft, setTimeLeft] = useState(0); 
+  const [showAuthModal, setShowAuthModal] = useState(false); // 🟢 Modal de Login
 
-  // Lógica de Autenticación y Carga de Niveles
+  // Lógica de Autenticación (NO REDIRIGE, SOLO CARGA DATOS)
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       try {
-        if (!currentUser) { router.push("/login"); return; }
-        setUser(currentUser);
-        const docRef = doc(db, "users", currentUser.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists() && docSnap.data().unlockedLevels) {
-          setUnlockedLevels(docSnap.data().unlockedLevels);
+        if (currentUser) {
+          setUser(currentUser);
+          const docRef = doc(db, "users", currentUser.uid);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists() && docSnap.data().unlockedLevels) {
+            setUnlockedLevels(docSnap.data().unlockedLevels);
+          } else {
+            await setDoc(docRef, { 
+              email: currentUser.email, 
+              unlockedLevels: [1], 
+              createdAt: serverTimestamp() 
+            }, { merge: true });
+          }
         } else {
-          await setDoc(docRef, { 
-            email: currentUser.email, 
-            unlockedLevels: [1], 
-            createdAt: serverTimestamp() 
-          }, { merge: true });
+          setUser(null);
+          // 🟢 Si no hay usuario, dejamos los niveles por defecto [1] para que vea el menú
         }
       } catch (e) {
         console.error("Error cargando perfil:", e);
@@ -65,7 +71,7 @@ export default function QuizPage() {
       }
     });
     return () => unsubscribe();
-  }, [router]);
+  }, []);
 
   // LÓGICA DEL TEMPORIZADOR
   useEffect(() => {
@@ -84,10 +90,22 @@ export default function QuizPage() {
     }
   }, [activeLevelId, showResult, timeLeft]);
 
+  // 🟢 INTENTAR INICIAR NIVEL
   const startLevel = (id) => {
+    // 1. Verificamos si existe el nivel
     const level = LEVELS.find(l => l.id === id);
-    if (!level || !unlockedLevels.includes(id)) return;
+    if (!level) return;
+
+    // 2. Si no hay usuario -> Mostrar aviso de login
+    if (!user) {
+      setShowAuthModal(true);
+      return;
+    }
+
+    // 3. Si el nivel está bloqueado para el usuario
+    if (!unlockedLevels.includes(id)) return;
     
+    // 4. Iniciar nivel
     setActiveLevelId(id); 
     setCurrentQIndex(0); 
     setScore(0); 
@@ -122,7 +140,7 @@ export default function QuizPage() {
 
   if (loadingAuth) return <div className="min-h-screen flex items-center justify-center bg-white"><Loader2 className="animate-spin text-emerald-500" size={48} /></div>;
 
-  // RENDER: EXAMEN ACTIVO
+  // RENDER: EXAMEN ACTIVO (Solo si hay usuario y nivel activo)
   if (activeLevelId && !showResult) {
     const level = LEVELS.find(l => l.id === activeLevelId);
     const q = level.questions[currentQIndex];
@@ -250,7 +268,37 @@ export default function QuizPage() {
 
   // RENDER: MENÚ DE NIVELES (CON SEO FOOTER INYECTADO)
   return (
-    <main className="min-h-screen bg-slate-50 pb-24 font-sans">
+    <main className="min-h-screen bg-slate-50 pb-24 font-sans relative">
+      
+      {/* 🟢 MODAL DE AUTENTICACIÓN (Se muestra si intenta entrar sin cuenta) */}
+      {showAuthModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4 animate-in fade-in">
+          <div className="bg-white rounded-[2rem] p-8 max-w-sm w-full text-center shadow-2xl">
+            <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Lock size={32} />
+            </div>
+            <h3 className="text-2xl font-black text-slate-900 mb-2">Acceso Restringido</h3>
+            <p className="text-slate-500 mb-8 leading-relaxed">
+              Para guardar tu progreso y desbloquear niveles, necesitas una cuenta gratuita.
+            </p>
+            <div className="space-y-3">
+              <Link 
+                href="/login" 
+                className="block w-full bg-blue-600 text-white font-bold py-4 rounded-xl hover:bg-blue-700 transition-colors"
+              >
+                Iniciar Sesión / Registrarse
+              </Link>
+              <button 
+                onClick={() => setShowAuthModal(false)}
+                className="text-slate-400 font-bold text-sm hover:text-slate-600"
+              >
+                Seguir mirando
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* HEADER STICKY */}
       <div className="bg-white p-6 shadow-sm sticky top-0 z-10 flex items-center justify-between border-b border-slate-100">
         <div className="flex items-center gap-4">
@@ -261,43 +309,51 @@ export default function QuizPage() {
         </div>
         <div className="bg-slate-100 px-4 py-2 rounded-full text-sm font-black text-slate-700 flex items-center gap-3">
           <Trophy size={18} className="text-yellow-500"/> 
-          {unlockedLevels.length - 1} / {LEVELS.length}
+          {/* Si no hay usuario, mostramos 0/N, si hay, mostramos avance real */}
+          {user ? unlockedLevels.length - 1 : 0} / {LEVELS.length}
         </div>
       </div>
 
       <div className="p-6 max-w-xl mx-auto space-y-8 mt-6">
-        {/* TARJETA DE PERFIL */}
+        {/* TARJETA DE PERFIL (Dinámica) */}
         <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 flex items-center gap-5">
           <div className="relative">
             {user?.photoURL ? (
               <img src={user.photoURL} alt="User" className="w-16 h-16 rounded-2xl border-4 border-slate-50 shadow-md object-cover" />
             ) : (
-              <div className="w-16 h-16 bg-emerald-500 text-white rounded-2xl flex items-center justify-center text-2xl font-black shadow-lg">
-                {user?.displayName?.charAt(0) || "M"}
+              <div className="w-16 h-16 bg-slate-200 text-slate-400 rounded-2xl flex items-center justify-center text-2xl font-black shadow-inner">
+                ?
               </div>
             )}
-            <div className="absolute -bottom-1 -right-1 bg-blue-500 text-white p-1 rounded-lg border-2 border-white">
+            <div className={`absolute -bottom-1 -right-1 text-white p-1 rounded-lg border-2 border-white ${user ? 'bg-emerald-500' : 'bg-slate-400'}`}>
               <ShieldCheck size={14}/>
             </div>
           </div>
           <div>
-            <p className="text-[10px] text-emerald-600 font-black uppercase tracking-wider">Auxiliar en formación</p>
-            <h2 className="text-xl font-black text-slate-900 leading-none mb-1">{user?.displayName || "Colega"}</h2>
-            <p className="text-xs text-slate-400 font-medium italic tracking-tight">Preparación Seremi 2026</p>
+            <p className="text-[10px] text-emerald-600 font-black uppercase tracking-wider">
+              {user ? "Auxiliar en formación" : "Modo Visitante"}
+            </p>
+            <h2 className="text-xl font-black text-slate-900 leading-none mb-1">
+              {user?.displayName || "Invitado"}
+            </h2>
+            <p className="text-xs text-slate-400 font-medium italic tracking-tight">
+              {user ? "Preparación Seremi 2026" : "Crea una cuenta para guardar progreso"}
+            </p>
           </div>
         </div>
         
         {/* LISTA DE NIVELES DINÁMICA */}
         <div className="space-y-4">
           {LEVELS.map((l) => {
-            const isU = unlockedLevels.includes(l.id);
-            const isP = unlockedLevels.includes(l.id + 1) || (l.id === LEVELS.length && unlockedLevels.length > LEVELS.length); 
+            // Si hay usuario, usamos su progreso real. Si no, solo el nivel 1 se ve "desbloqueado" visualmente pero pide login.
+            const isU = user ? unlockedLevels.includes(l.id) : (l.id === 1); 
+            const isP = user ? (unlockedLevels.includes(l.id + 1) || (l.id === LEVELS.length && unlockedLevels.length > LEVELS.length)) : false; 
             
             return (
               <button 
                 key={l.id} 
                 onClick={() => startLevel(l.id)} 
-                disabled={!isU} 
+                // Ya no deshabilitamos el botón, dejamos que 'startLevel' maneje el clic
                 className={`w-full group rounded-[2rem] border-2 transition-all p-6 flex items-center gap-6 ${
                   isP ? "bg-emerald-50 border-emerald-100 cursor-pointer" : 
                   isU ? "bg-white border-white shadow-xl hover:-translate-y-1 cursor-pointer" : 
@@ -315,13 +371,15 @@ export default function QuizPage() {
                     <h3 className="font-black text-lg text-slate-800 leading-tight">{l.title}</h3>
                     <div className="flex items-center gap-3 mt-0.5 text-xs">
                         <p className="font-bold text-slate-400">{l.questions.length} Preguntas</p>
-                        <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full border ${
-                          isP ? "bg-emerald-100 text-emerald-600 border-emerald-200" : 
-                          isU ? "bg-slate-100 text-slate-400 border-slate-200" : 
-                          "hidden"
-                        }`}>
-                            {isP ? "Superado" : "Pendiente"}
-                        </span>
+                        {user && (
+                          <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full border ${
+                            isP ? "bg-emerald-100 text-emerald-600 border-emerald-200" : 
+                            isU ? "bg-slate-100 text-slate-400 border-slate-200" : 
+                            "hidden"
+                          }`}>
+                              {isP ? "Superado" : "Pendiente"}
+                          </span>
+                        )}
                     </div>
                 </div>
               </button>
@@ -354,7 +412,7 @@ export default function QuizPage() {
             </Link>
         </div>
 
-        {/* 🟢 SECCIÓN SEO INYECTADA: Soluciona "Página con poco texto" del reporte */}
+        {/* 🟢 SECCIÓN SEO INYECTADA */}
         <section className="mt-16 pt-16 border-t border-slate-200">
           <h2 className="text-2xl font-black text-slate-900 mb-6 flex items-center gap-2">
             <BrainCircuit className="text-emerald-500"/>
