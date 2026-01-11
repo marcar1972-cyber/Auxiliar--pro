@@ -17,7 +17,8 @@ export default function GuiaDecreto3() {
         margin:       10,
         filename:     'Guia-Decreto-3-AuxiliarPro.pdf',
         image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true }, 
+        // 👇 SOLUCIÓN PDF BLANCO: 'scrollY: 0' obliga a capturar desde arriba
+        html2canvas:  { scale: 2, useCORS: true, scrollY: 0 }, 
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
@@ -37,7 +38,7 @@ export default function GuiaDecreto3() {
         onLoad={() => setIsPdfReady(true)}
       />
 
-      {/* HEADER DE LA GUÍA */}
+      {/* HEADER DE LA GUÍA (Visible en Web) */}
       <header className="bg-white border-b border-slate-200 py-12 px-6">
         <div className="max-w-6xl mx-auto">
           <nav className="mb-6">
@@ -50,7 +51,6 @@ export default function GuiaDecreto3() {
             Guía de Estudio Oficial
           </div>
           
-          {/* 🟢 TÍTULO CORREGIDO: Se verá equilibrado en PC y Móvil */}
           <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-slate-900 mb-6 leading-tight text-balance">
             Reglamento de Control de Productos <span className="text-blue-600 whitespace-nowrap">(Decreto 3)</span>
           </h1>
@@ -66,8 +66,20 @@ export default function GuiaDecreto3() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           
           {/* 🟢 COLUMNA IZQUIERDA: CONTENIDO COMPLETO (8 columnas) */}
-          <div id="contenido-pdf" className="lg:col-span-8 space-y-12">
+          {/* Este div (contenido-pdf) es lo que saldrá en el archivo descargado */}
+          <div id="contenido-pdf" className="lg:col-span-8 space-y-12 bg-white p-2 md:p-0">
             
+            {/* 🟢 LOGO PARA EL PDF (Se verá al principio del documento) */}
+            <div className="mb-8 pt-4">
+                {/* Usamos <img> normal para asegurar compatibilidad con html2pdf */}
+                <img 
+                    src="/logo.webp" 
+                    alt="AuxiliarPro Logo" 
+                    className="w-40 opacity-90" 
+                    crossOrigin="anonymous" 
+                />
+            </div>
+
             {/* 1. INTRODUCCIÓN */}
             <section className="bg-white p-8 rounded-3xl border border-slate-100 shadow-sm">
               <h2 className="text-2xl font-black text-slate-900 mb-4 flex items-center gap-3">
