@@ -1,11 +1,8 @@
 import { Analytics } from '@vercel/analytics/react';
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Link from "next/link";
-import Image from "next/image";
-// 1. Agregamos GraduationCap para el ícono de Guías
-import { Search, Calculator, BookOpen, GraduationCap } from "lucide-react"; 
-import UserIcon from "./UserIcon";
+// 👇 Importamos el componente Navbar que acabamos de crear
+import Navbar from "./components/Navbar"; 
 import Footer from "./components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -62,65 +59,15 @@ export default function RootLayout({ children }) {
   return (
     <html lang="es">
       <body className={`${inter.className} min-h-screen flex flex-col bg-white`}>
-        <nav className="bg-white border-b border-slate-100 sticky top-0 z-50">
-          <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
-            
-            {/* LOGO */}
-            <Link href="/" className="relative w-32 md:w-40 h-10 hover:opacity-80 transition-opacity shrink-0">
-               <Image 
-                 src="/logo.webp" 
-                 alt="Logo AuxiliarPro - Hub de Farmacia" 
-                 fill
-                 className="object-contain object-left"
-                 priority
-               />
-            </Link>
-
-            {/* MENÚ DE NAVEGACIÓN */}
-            <div className="flex items-center gap-1 md:gap-4">
-               
-               {/* 1. BOTÓN BLOG */}
-               <Link href="/blog" className="flex items-center gap-2 text-slate-500 hover:text-emerald-600 font-bold text-xs tracking-wider px-2 md:px-3 py-2 rounded-lg hover:bg-emerald-50 transition-all">
-                  <BookOpen size={18} />
-                  {/* Ocultamos texto en celular (hidden), mostramos en PC (md:inline) */}
-                  <span className="hidden md:inline">BLOG</span>
-               </Link>
-
-               {/* 2. NUEVO BOTÓN GUÍAS (Destacado sutil) */}
-               <Link href="/guias/decreto-3-control-productos" className="flex items-center gap-2 text-blue-600 bg-blue-50/50 hover:bg-blue-100 font-bold text-xs tracking-wider px-2 md:px-3 py-2 rounded-lg transition-all border border-blue-100 md:border-transparent">
-                  <GraduationCap size={18} />
-                  <span className="hidden md:inline">GUÍAS</span>
-               </Link>
-
-               <div className="h-6 w-px bg-slate-200 hidden sm:block"></div>
-               
-               {/* 3. BOTÓN DERMOCHECK */}
-               <a 
-                 href="https://www.dermocheck.cl/#calculator-section" 
-                 target="_blank" 
-                 rel="noopener noreferrer"
-                 className="flex items-center gap-2 text-slate-500 hover:text-pink-600 font-bold text-xs tracking-wider px-2 md:px-3 py-2 rounded-lg hover:bg-pink-50 transition-all"
-               >
-                  <Calculator size={18} />
-                  <span className="hidden md:inline">DERMO</span>
-               </a>
-
-               <div className="h-6 w-px bg-slate-200"></div>
-               
-               {/* ICONO DE USUARIO */}
-               <div className="shrink-0">
-                  <UserIcon />
-               </div>
-            </div>
-          </div>
-        </nav>
+        
+        {/* Aquí llamamos al Navbar interactivo */}
+        <Navbar />
 
         <main className="flex-grow">
           {children}
         </main>
         
         <Footer />
-        
         <Analytics />
       </body>
     </html>
