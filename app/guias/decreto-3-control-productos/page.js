@@ -73,6 +73,7 @@ export default function GuiaDecreto3() {
   const manejarRespuesta = (indiceOpcion) => {
     setRespuestaSeleccionada(indiceOpcion);
     
+    // Esperamos un poquito para que el usuario vea si acertó (feedback visual)
     setTimeout(() => {
         if (indiceOpcion === preguntasQuiz[preguntaActual].correcta) {
             setPuntaje(puntaje + 1);
@@ -85,7 +86,7 @@ export default function GuiaDecreto3() {
         } else {
             setMostrarResultado(true);
         }
-    }, 800); 
+    }, 800); // 0.8 segundos de espera
   };
 
   const reiniciarQuiz = () => {
@@ -152,7 +153,7 @@ export default function GuiaDecreto3() {
       <main className="max-w-6xl mx-auto px-6 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           
-          {/* 🟢 COLUMNA IZQUIERDA: CONTENIDO COMPLETO */}
+          {/* 🟢 COLUMNA IZQUIERDA: CONTENIDO COMPLETO (8 columnas) */}
           <div id="contenido-pdf" className="lg:col-span-8 space-y-12 bg-white p-4 md:p-8 rounded-xl shadow-sm">
             
             <div className="mb-8 border-b pb-4 border-slate-100 flex justify-between items-center">
@@ -428,7 +429,7 @@ export default function GuiaDecreto3() {
                         <div className="space-y-3">
                             {preguntasQuiz[preguntaActual].opciones.map((opcion, index) => (
                                 <button
-                                    key={index}
+                                    key={`${preguntaActual}-${index}`} // 👈 AQUÍ ESTÁ EL CAMBIO CLAVE
                                     onClick={() => manejarRespuesta(index)}
                                     disabled={respuestaSeleccionada !== null}
                                     className={`w-full text-left p-3 rounded-xl text-sm font-medium transition-all ${
