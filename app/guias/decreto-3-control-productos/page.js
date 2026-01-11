@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from "next/link";
-import Script from "next/script"; // 👈 Importamos esto para cargar la herramienta externa
+import Script from "next/script"; 
 import { BookOpen, CheckCircle, AlertTriangle, Thermometer, ShieldCheck, FileText, Download, ArrowRight, Info, Package } from "lucide-react";
 
 export default function GuiaDecreto3() {
@@ -10,7 +10,6 @@ export default function GuiaDecreto3() {
 
   // 🖨️ FUNCIÓN PARA GENERAR EL PDF
   const generarPDF = () => {
-    // Verificamos si la herramienta cargó
     if (typeof window !== 'undefined' && window.html2pdf) {
       const elemento = document.getElementById('contenido-pdf');
       
@@ -22,7 +21,6 @@ export default function GuiaDecreto3() {
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
       };
 
-      // Ejecutamos la conversión
       window.html2pdf().from(elemento).set(opciones).save();
     } else {
       alert("La herramienta de PDF se está cargando, intenta de nuevo en 2 segundos.");
@@ -32,7 +30,7 @@ export default function GuiaDecreto3() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-700 font-sans">
       
-      {/* 🟢 CARGAMOS LA LIBRERÍA DESDE INTERNET (CDN) */}
+      {/* 🟢 SCRIPT PARA PDF (Carga externa) */}
       <Script 
         src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" 
         strategy="lazyOnload"
@@ -51,9 +49,12 @@ export default function GuiaDecreto3() {
             <BookOpen size={18} />
             Guía de Estudio Oficial
           </div>
-          <h1 className="text-3xl md:text-5xl font-black text-slate-900 mb-6 leading-tight">
-            Reglamento de Control de Productos <span className="text-blue-600">(Decreto 3)</span>
+          
+          {/* 🟢 TÍTULO CORREGIDO: Se verá equilibrado en PC y Móvil */}
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-slate-900 mb-6 leading-tight text-balance">
+            Reglamento de Control de Productos <span className="text-blue-600 whitespace-nowrap">(Decreto 3)</span>
           </h1>
+          
           <p className="text-xl text-slate-500 max-w-3xl">
             La base legal que garantiza que los medicamentos sean seguros, eficaces y de calidad. 
             Domina los conceptos de <strong>Registro ISP, Bioequivalencia y Cadena de Frío</strong>.
@@ -65,7 +66,6 @@ export default function GuiaDecreto3() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           
           {/* 🟢 COLUMNA IZQUIERDA: CONTENIDO COMPLETO (8 columnas) */}
-          {/* 👇 ESTE ID ES LO QUE SE IMPRIMIRÁ */}
           <div id="contenido-pdf" className="lg:col-span-8 space-y-12">
             
             {/* 1. INTRODUCCIÓN */}
