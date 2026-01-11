@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { Calendar, BookOpen, FileText, DollarSign, Scale, Users, ArrowRight } from "lucide-react";
+import { Calendar, BookOpen, FileText, DollarSign, Scale, Users, ArrowRight, GraduationCap } from "lucide-react";
 
-// 🟢 CORRECCIÓN SEO: Metadatos completos y Canonical
+// 🟢 METADATOS (Intactos)
 export const metadata = {
   title: "Blog y Guías de Estudio | Auxiliar de Farmacia Chile",
   description: "Artículos educativos, noticias sobre el examen de competencia SEREMI y consejos legales (Decreto 466) para auxiliares de farmacia en Chile.",
@@ -11,8 +11,17 @@ export const metadata = {
   },
 };
 
-// LISTADO DE TUS ARTÍCULOS REALES (Intacto)
+// LISTADO DE ARTÍCULOS (Agregado el nuevo al principio)
 const articles = [
+  {
+    slug: "curso-auxiliar-farmacia-gratis-chile-2026",
+    title: "Curso de Auxiliar de Farmacia Gratis en Chile",
+    desc: "Guía de autoaprendizaje 2026. Estudia gratis con los Decretos 90, 466 y nuestro simulador.",
+    category: "Estudio Gratis",
+    color: "text-teal-600",
+    bgIcon: "bg-teal-500/10",
+    icon: <GraduationCap className="text-teal-500 w-16 h-16 opacity-50" />
+  },
   {
     slug: "fecha-examen-auxiliar-farmacia-seremi",
     title: "¿Cuándo es el Examen de Auxiliar de Farmacia?",
@@ -75,7 +84,6 @@ export default function BlogIndex() {
       
       {/* HEADER DEL BLOG */}
       <header className="mb-12 text-center">
-        {/* 🟢 CORRECCIÓN SEO: H1 descriptivo para conectar con el Título */}
         <h1 className="text-3xl md:text-5xl font-black text-slate-900 mb-4">
           Blog y Guías para <span className="text-emerald-600">Auxiliar de Farmacia</span>
         </h1>
@@ -87,7 +95,6 @@ export default function BlogIndex() {
       {/* GRILLA DE ARTÍCULOS */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         
-        {/* Generamos las tarjetas automáticamente usando la lista de arriba */}
         {articles.map((post, index) => (
           <article key={index} className="bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-xl transition-shadow flex flex-col h-full">
             
