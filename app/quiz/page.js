@@ -41,9 +41,9 @@ export default function QuizPage() {
   const [isAnswered, setIsAnswered] = useState(false);        
   const [mistakes, setMistakes] = useState([]); 
   const [timeLeft, setTimeLeft] = useState(0); 
-  const [showAuthModal, setShowAuthModal] = useState(false); // 🟢 Modal de Login
+  const [showAuthModal, setShowAuthModal] = useState(false); 
 
-  // Lógica de Autenticación (NO REDIRIGE, SOLO CARGA DATOS)
+  // Lógica de Autenticación
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       try {
@@ -62,7 +62,6 @@ export default function QuizPage() {
           }
         } else {
           setUser(null);
-          // 🟢 Si no hay usuario, dejamos los niveles por defecto [1] para que vea el menú
         }
       } catch (e) {
         console.error("Error cargando perfil:", e);
@@ -90,22 +89,18 @@ export default function QuizPage() {
     }
   }, [activeLevelId, showResult, timeLeft]);
 
-  // 🟢 INTENTAR INICIAR NIVEL
+  // INICIAR NIVEL
   const startLevel = (id) => {
-    // 1. Verificamos si existe el nivel
     const level = LEVELS.find(l => l.id === id);
     if (!level) return;
 
-    // 2. Si no hay usuario -> Mostrar aviso de login
     if (!user) {
       setShowAuthModal(true);
       return;
     }
 
-    // 3. Si el nivel está bloqueado para el usuario
     if (!unlockedLevels.includes(id)) return;
     
-    // 4. Iniciar nivel
     setActiveLevelId(id); 
     setCurrentQIndex(0); 
     setScore(0); 
@@ -140,7 +135,7 @@ export default function QuizPage() {
 
   if (loadingAuth) return <div className="min-h-screen flex items-center justify-center bg-white"><Loader2 className="animate-spin text-emerald-500" size={48} /></div>;
 
-  // RENDER: EXAMEN ACTIVO (Solo si hay usuario y nivel activo)
+  // RENDER: EXAMEN ACTIVO
   if (activeLevelId && !showResult) {
     const level = LEVELS.find(l => l.id === activeLevelId);
     const q = level.questions[currentQIndex];
@@ -270,7 +265,7 @@ export default function QuizPage() {
   return (
     <main className="min-h-screen bg-slate-50 pb-24 font-sans relative">
       
-      {/* 🟢 MODAL DE AUTENTICACIÓN (Se muestra si intenta entrar sin cuenta) */}
+      {/* 🟢 MODAL DE AUTENTICACIÓN */}
       {showAuthModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4 animate-in fade-in">
           <div className="bg-white rounded-[2rem] p-8 max-w-sm w-full text-center shadow-2xl">
@@ -309,14 +304,17 @@ export default function QuizPage() {
         </div>
         <div className="bg-slate-100 px-4 py-2 rounded-full text-sm font-black text-slate-700 flex items-center gap-3">
           <Trophy size={18} className="text-yellow-500"/> 
-          {/* Si no hay usuario, mostramos 0/N, si hay, mostramos avance real */}
           {user ? unlockedLevels.length - 1 : 0} / {LEVELS.length}
         </div>
       </div>
 
       <div className="p-6 max-w-xl mx-auto space-y-8 mt-6">
-        {/* TARJETA DE PERFIL (Dinámica) */}
-        <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 flex items-center gap-5">
+        
+        {/* 🟢 TARJETA DE PERFIL (Ahora interactiva si es Invitado) */}
+        <div 
+          onClick={() => !user && setShowAuthModal(true)} 
+          className={`bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 flex items-center gap-5 ${!user ? 'cursor-pointer hover:bg-slate-50 transition-colors' : ''}`}
+        >
           <div className="relative">
             {user?.photoURL ? (
               <img src={user.photoURL} alt="User" className="w-16 h-16 rounded-2xl border-4 border-slate-50 shadow-md object-cover" />
@@ -345,7 +343,6 @@ export default function QuizPage() {
         {/* LISTA DE NIVELES DINÁMICA */}
         <div className="space-y-4">
           {LEVELS.map((l) => {
-            // Si hay usuario, usamos su progreso real. Si no, solo el nivel 1 se ve "desbloqueado" visualmente pero pide login.
             const isU = user ? unlockedLevels.includes(l.id) : (l.id === 1); 
             const isP = user ? (unlockedLevels.includes(l.id + 1) || (l.id === LEVELS.length && unlockedLevels.length > LEVELS.length)) : false; 
             
@@ -353,7 +350,6 @@ export default function QuizPage() {
               <button 
                 key={l.id} 
                 onClick={() => startLevel(l.id)} 
-                // Ya no deshabilitamos el botón, dejamos que 'startLevel' maneje el clic
                 className={`w-full group rounded-[2rem] border-2 transition-all p-6 flex items-center gap-6 ${
                   isP ? "bg-emerald-50 border-emerald-100 cursor-pointer" : 
                   isU ? "bg-white border-white shadow-xl hover:-translate-y-1 cursor-pointer" : 
@@ -412,7 +408,7 @@ export default function QuizPage() {
             </Link>
         </div>
 
-        {/* 🟢 SECCIÓN SEO INYECTADA */}
+        {/* 🟢 SECCIÓN SEO INYECTADA (CORREGIDA) */}
         <section className="mt-16 pt-16 border-t border-slate-200">
           <h2 className="text-2xl font-black text-slate-900 mb-6 flex items-center gap-2">
             <BrainCircuit className="text-emerald-500"/>
@@ -420,7 +416,7 @@ export default function QuizPage() {
           </h2>
           <div className="prose prose-sm prose-slate text-slate-600 leading-relaxed">
             <p>
-              El <strong>Simulador de Examen de Competencia</strong> de AuxiliarPro es la herramienta más avanzada para preparar tu acreditación ante la autoridad sanitaria. Diseñado siguiendo estrictamente el temario del <strong>Decreto Supremo 466</strong>, este sistema te permite entrenar en un entorno controlado antes de rendir la prueba real.
+              El <strong>Simulador de Examen de Competencia</strong> de AuxiliarPro es la herramienta más avanzada para preparar tu acreditación ante la autoridad sanitaria. Diseñado siguiendo estrictamente el temario de los <strong>Decretos Supremos 466, 404, 3 y 90</strong>, este sistema te permite entrenar en un entorno controlado antes de rendir la prueba real.
             </p>
             <h3 className="text-lg font-bold text-slate-800 mt-4">¿Qué evalúan los niveles?</h3>
             <ul className="list-disc pl-5 space-y-2 mt-2">
