@@ -3,10 +3,74 @@
 import { useState } from 'react';
 import Link from "next/link";
 import Script from "next/script"; 
-import { BookOpen, CheckCircle, AlertTriangle, Thermometer, ShieldCheck, FileText, Download, ArrowRight, Info, Package } from "lucide-react";
+import { BookOpen, CheckCircle, AlertTriangle, Thermometer, ShieldCheck, FileText, Download, ArrowRight, Info, Package, XCircle, Trophy } from "lucide-react";
+
+// 📝 PREGUNTAS DEL QUIZ (Exclusivas del Decreto 3)
+const preguntasQuiz = [
+  {
+    pregunta: "¿Qué indica obligatoriamente la Franja Amarilla en un envase?",
+    opciones: ["Es un medicamento Genérico", "Es Bioequivalente", "Requiere Receta Cheque", "Es de Venta Directa"],
+    correcta: 1 // Índice de la respuesta correcta (0, 1, 2, 3)
+  },
+  {
+    pregunta: "¿Cuál es el rango de temperatura estricto para la Cadena de Frío?",
+    opciones: ["0°C a 5°C", "2°C a 8°C", "8°C a 25°C", "Menos de 0°C"],
+    correcta: 1
+  },
+  {
+    pregunta: "¿Qué institución otorga el Registro Sanitario en Chile?",
+    opciones: ["La SEREMI de Salud", "El CENABAST", "El Instituto de Salud Pública (ISP)", "El Ministerio de Economía"],
+    correcta: 2
+  },
+  {
+    pregunta: "¿Cuál es el envase primario?",
+    opciones: ["La caja de cartón", "El blíster o frasco (contacto directo)", "La bolsa de la farmacia", "El embalaje de transporte"],
+    correcta: 1
+  },
+  {
+    pregunta: "¿Si un medicamento no tiene Registro ISP, se considera...?",
+    opciones: ["Un remedio casero", "Un suplemento alimenticio", "Falsificado o contrabando (Ilegal)", "Un producto importado legal"],
+    correcta: 2
+  }
+];
 
 export default function GuiaDecreto3() {
   const [isPdfReady, setIsPdfReady] = useState(false);
+  
+  // ESTADOS DEL QUIZ
+  const [quizActivo, setQuizActivo] = useState(false);
+  const [preguntaActual, setPreguntaActual] = useState(0);
+  const [puntaje, setPuntaje] = useState(0);
+  const [mostrarResultado, setMostrarResultado] = useState(false);
+  const [respuestaSeleccionada, setRespuestaSeleccionada] = useState(null); // Para feedback visual inmediato
+
+  // 🎮 LÓGICA DEL QUIZ
+  const manejarRespuesta = (indiceOpcion) => {
+    setRespuestaSeleccionada(indiceOpcion);
+    
+    // Esperamos un poquito para que el usuario vea si acertó (feedback visual)
+    setTimeout(() => {
+        if (indiceOpcion === preguntasQuiz[preguntaActual].correcta) {
+            setPuntaje(puntaje + 1);
+        }
+
+        const siguientePregunta = preguntaActual + 1;
+        if (siguientePregunta < preguntasQuiz.length) {
+            setPreguntaActual(siguientePregunta);
+            setRespuestaSeleccionada(null);
+        } else {
+            setMostrarResultado(true);
+        }
+    }, 800); // 0.8 segundos de espera
+  };
+
+  const reiniciarQuiz = () => {
+    setQuizActivo(false);
+    setPreguntaActual(0);
+    setPuntaje(0);
+    setMostrarResultado(false);
+    setRespuestaSeleccionada(null);
+  };
 
   // 🖨️ FUNCIÓN PARA GENERAR EL PDF
   const generarPDF = () => {
@@ -14,12 +78,12 @@ export default function GuiaDecreto3() {
       const elemento = document.getElementById('contenido-pdf');
       
       const opciones = {
-        margin:       [15, 15, 15, 15], // Márgenes más amplios (Arriba, Izq, Abajo, Der)
+        margin:       [15, 15, 15, 15],
         filename:     'Guia-Decreto-3-AuxiliarPro.pdf',
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2, useCORS: true, scrollY: 0 }, 
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        // 👇 SOLUCIÓN SALTOS DE PÁGINA: Evita cortar tablas o textos a la mitad
+        // 👇 MEJORA: Evita cortar textos o tablas a la mitad
         pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
       };
 
@@ -32,14 +96,13 @@ export default function GuiaDecreto3() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-700 font-sans">
       
-      {/* 🟢 SCRIPT PARA PDF (Carga externa) */}
       <Script 
         src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" 
         strategy="lazyOnload"
         onLoad={() => setIsPdfReady(true)}
       />
 
-      {/* HEADER DE LA GUÍA (Visible en Web) */}
+      {/* HEADER DE LA GUÍA */}
       <header className="bg-white border-b border-slate-200 py-12 px-6">
         <div className="max-w-6xl mx-auto">
           <nav className="mb-6">
@@ -67,10 +130,9 @@ export default function GuiaDecreto3() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           
           {/* 🟢 COLUMNA IZQUIERDA: CONTENIDO COMPLETO (8 columnas) */}
-          {/* Este div (contenido-pdf) es lo que saldrá en el archivo descargado */}
-          <div id="contenido-pdf" className="lg:col-span-8 space-y-12 bg-white p-4 md:p-8 rounded-xl">
+          <div id="contenido-pdf" className="lg:col-span-8 space-y-12 bg-white p-4 md:p-8 rounded-xl shadow-sm">
             
-            {/* 🟢 LOGO PARA EL PDF (Se verá al principio del documento) */}
+            {/* 🟢 LOGO PARA EL PDF (Solo se verá bien al imprimir/descargar) */}
             <div className="mb-8 border-b pb-4 border-slate-100 flex justify-between items-center">
                 <img 
                     src="/logo.webp" 
@@ -78,7 +140,7 @@ export default function GuiaDecreto3() {
                     className="w-32" 
                     crossOrigin="anonymous" 
                 />
-                <span className="text-xs text-slate-400 font-bold uppercase tracking-widest">Guía de Estudio Oficial</span>
+                <span className="text-xs text-slate-400 font-bold uppercase tracking-widest">Guía Oficial 2026</span>
             </div>
 
             {/* 1. INTRODUCCIÓN */}
@@ -298,31 +360,103 @@ export default function GuiaDecreto3() {
 
           </div>
 
-          {/* 🔴 COLUMNA DERECHA: SIDEBAR STICKY (4 columnas) */}
+          {/* 🔴 COLUMNA DERECHA: SIDEBAR STICKY CON QUIZ INTERACTIVO */}
           <div className="lg:col-span-4">
             <div className="sticky top-24 space-y-6">
               
-              {/* TARJETA 1: QUIZ */}
-              <div className="bg-slate-900 text-white p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
+              {/* TARJETA 1: QUIZ INTERACTIVO (Modificada) */}
+              <div className="bg-slate-900 text-white p-6 md:p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
+                {/* Fondo animado */}
                 <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500 rounded-full blur-3xl opacity-20 group-hover:opacity-30 transition-opacity"></div>
                 
                 <div className="relative z-10">
-                  <span className="bg-emerald-500 text-emerald-950 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
-                    Quiz Express
-                  </span>
-                  <h3 className="text-3xl font-black mb-4 leading-tight">
-                    ¿Entendiste el Decreto 3?
-                  </h3>
-                  <p className="text-slate-400 mb-8 text-sm leading-relaxed">
-                    Pon a prueba lo que acabas de leer con 10 preguntas rápidas tipo SEREMI.
-                  </p>
                   
-                  <Link 
-                    href="/quiz" 
-                    className="w-full block bg-white text-slate-900 font-black text-center py-4 rounded-xl hover:bg-emerald-400 transition-colors shadow-lg flex items-center justify-center gap-2"
-                  >
-                    COMENZAR TEST <ArrowRight size={18} />
-                  </Link>
+                  {/* ESTADO 1: INICIO */}
+                  {!quizActivo && !mostrarResultado && (
+                    <>
+                        <span className="bg-emerald-500 text-emerald-950 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
+                            Quiz Express
+                        </span>
+                        <h3 className="text-3xl font-black mb-4 leading-tight">
+                            ¿Entendiste el Decreto 3?
+                        </h3>
+                        <p className="text-slate-400 mb-8 text-sm leading-relaxed">
+                            Responde 5 preguntas rápidas sobre Bioequivalencia, ISP y cadena de frío. ¡Sin salir de aquí!
+                        </p>
+                        <button 
+                            onClick={() => setQuizActivo(true)}
+                            className="w-full block bg-white text-slate-900 font-black text-center py-4 rounded-xl hover:bg-emerald-400 transition-colors shadow-lg flex items-center justify-center gap-2"
+                        >
+                            COMENZAR TEST <ArrowRight size={18} />
+                        </button>
+                    </>
+                  )}
+
+                  {/* ESTADO 2: PREGUNTAS */}
+                  {quizActivo && (
+                    <div className="animate-in fade-in slide-in-from-right-4 duration-300">
+                        <div className="flex justify-between items-center mb-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                            <span>Pregunta {preguntaActual + 1} de {preguntasQuiz.length}</span>
+                            <button onClick={reiniciarQuiz}><XCircle size={20} className="hover:text-red-400"/></button>
+                        </div>
+                        
+                        <h4 className="font-bold text-lg mb-6 leading-tight">
+                            {preguntasQuiz[preguntaActual].pregunta}
+                        </h4>
+
+                        <div className="space-y-3">
+                            {preguntasQuiz[preguntaActual].opciones.map((opcion, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => manejarRespuesta(index)}
+                                    disabled={respuestaSeleccionada !== null}
+                                    className={`w-full text-left p-3 rounded-xl text-sm font-medium transition-all ${
+                                        respuestaSeleccionada === index 
+                                            ? index === preguntasQuiz[preguntaActual].correcta 
+                                                ? 'bg-emerald-500 text-emerald-950 font-bold' 
+                                                : 'bg-red-500 text-white'
+                                            : 'bg-slate-800 hover:bg-slate-700 text-slate-200'
+                                    }`}
+                                >
+                                    {opcion}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                  )}
+
+                  {/* ESTADO 3: RESULTADOS */}
+                  {mostrarResultado && (
+                    <div className="text-center animate-in zoom-in duration-300">
+                        <div className="bg-emerald-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-400">
+                            <Trophy size={32} />
+                        </div>
+                        <h3 className="text-2xl font-black mb-2">¡Completado!</h3>
+                        <p className="text-slate-400 mb-6">
+                            Obtuviste <strong className="text-white">{puntaje}</strong> de <strong className="text-white">{preguntasQuiz.length}</strong> correctas.
+                        </p>
+                        
+                        <div className="space-y-3">
+                            {puntaje === preguntasQuiz.length ? (
+                                <div className="bg-emerald-900/50 p-3 rounded-lg text-sm text-emerald-200 border border-emerald-800">
+                                    ¡Excelente! Dominas el Decreto 3.
+                                </div>
+                            ) : (
+                                <button 
+                                    onClick={reiniciarQuiz}
+                                    className="w-full bg-slate-800 text-white font-bold py-3 rounded-xl hover:bg-slate-700 text-sm"
+                                >
+                                    Intentar de nuevo
+                                </button>
+                            )}
+                            
+                            <Link href="/quiz" className="block w-full bg-emerald-600 text-white font-bold py-3 rounded-xl hover:bg-emerald-500 text-sm">
+                                Ir al Simulador Completo
+                            </Link>
+                        </div>
+                    </div>
+                  )}
+
                 </div>
               </div>
 
@@ -341,7 +475,6 @@ export default function GuiaDecreto3() {
                     Convierte esta página en un archivo PDF automáticamente.
                 </p>
                 
-                {/* BOTÓN MAGICO */}
                 <button 
                     onClick={generarPDF}
                     disabled={!isPdfReady}
