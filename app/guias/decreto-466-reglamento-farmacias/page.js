@@ -3,63 +3,64 @@
 import { useState } from 'react';
 import Link from "next/link";
 import Script from "next/script"; 
-import { BookOpen, CheckCircle, AlertTriangle, ShieldCheck, FileText, Download, ArrowRight, Info, Package, Store, UserCheck, FileSignature, Scissors, Book, Trophy, XCircle } from "lucide-react";
+// 👇 AQUÍ AGREGUÉ 'Scale' QUE FALTABA
+import { BookOpen, CheckCircle, AlertTriangle, ShieldCheck, FileText, Download, ArrowRight, Info, Package, Pill, Lock, FileSignature, Syringe, Trophy, XCircle, Truck, Scale } from "lucide-react";
 
-// 📝 PREGUNTAS DEL QUIZ
+// 📝 PREGUNTAS DEL QUIZ (Específicas del Decreto 404)
 const preguntasQuiz = [
   {
-    pregunta: "¿Qué profesional debe asumir la Dirección Técnica de una Farmacia?",
-    opciones: ["Médico Cirujano", "Químico Farmacéutico", "Auxiliar de Farmacia", "Enfermera"],
+    pregunta: "¿Cuál es el objetivo principal del Decreto 404?",
+    opciones: ["Regular los precios de los remedios", "Fiscalizar toda la cadena de vida de los estupefacientes", "Prohibir la venta de analgésicos", "Crear farmacias municipales"],
     correcta: 1
   },
   {
-    pregunta: "¿Qué establecimiento tiene PROHIBIDO preparar fórmulas magistrales?",
-    opciones: ["Farmacia Privada", "Farmacia Hospitalaria", "Almacén Farmacéutico", "Droguería"],
+    pregunta: "¿Qué institución fiscaliza la etapa 'local' (venta en farmacias y tenencia)?",
+    opciones: ["El ISP", "La Aduana", "Servicios de Salud (SEREMI)", "Carabineros"],
     correcta: 2
   },
   {
-    pregunta: "¿Cuál es el requisito de escolaridad para ser Auxiliar de Farmacia?",
-    opciones: ["8° Básico", "Enseñanza Media Completa (4° Medio)", "Título Técnico Nivel Superior", "Título Universitario"],
-    correcta: 1
-  },
-  {
-    pregunta: "¿Qué tipo de receta se usa para estupefacientes de alto control?",
+    pregunta: "Según la 'Regla de la Codeína', ¿Cómo se vende un producto con 60 mg o más?",
     opciones: ["Receta Simple", "Receta Retenida", "Receta Cheque", "Venta Directa"],
     correcta: 2
   },
   {
-    pregunta: "¿Dónde deben guardarse los productos estupefacientes?",
-    opciones: ["En el mostrador", "En la bodega común", "Bajo llave en estantería exclusiva", "En el refrigerador siempre"],
-    correcta: 2
-  },
-  {
-    pregunta: "¿Qué productos NO se pueden fraccionar?",
-    opciones: ["Antibióticos orales", "Paracetamol", "Productos oncológicos y hormonas", "Vitaminas"],
-    correcta: 2
-  },
-  {
-    pregunta: "¿Qué es un Botiquín según el Decreto 466?",
-    opciones: ["Una caja de primeros auxilios", "Recinto de uso interno en instituciones (ej: colegios, mineras)", "Una farmacia pequeña de barrio", "Un almacén de cosméticos"],
+    pregunta: "¿Cuál es la validez de una Receta Cheque?",
+    opciones: ["60 días", "30 días", "1 año", "Indefinida"],
     correcta: 1
   },
   {
-    pregunta: "¿Cuántas horas mínimo debe estar el DT en la farmacia?",
-    opciones: ["4 horas", "8 horas", "Solo cuando hay inspección", "12 horas"],
+    pregunta: "¿De qué color es la Receta Cheque que usa la Farmacia?",
+    opciones: ["Café claro", "Rojo", "Amarillo", "Blanco"],
+    correcta: 2
+  },
+  {
+    pregunta: "¿Quién debe despachar obligatoriamente estos productos?",
+    opciones: ["El Auxiliar de Farmacia", "El dueño", "El Director Técnico (DT) personalmente", "El cajero"],
+    correcta: 2
+  },
+  {
+    pregunta: "¿Cómo deben almacenarse los estupefacientes en la farmacia?",
+    opciones: ["En vitrina con llave", "En estantería abierta", "Bajo llave en estantería exclusiva", "Junto a los antibióticos"],
+    correcta: 2
+  },
+  {
+    pregunta: "¿Qué símbolo identifica a los estupefacientes en el envase?",
+    opciones: ["Una franja verde", "Una estrella roja de 5 puntas", "Un círculo negro", "Una cruz azul"],
     correcta: 1
   },
   {
-    pregunta: "¿Qué libro es obligatorio mantener a disposición del público?",
-    opciones: ["Libro de Reclamos", "Libro de Estupefacientes", "Libro de Fraccionamiento", "Libro de Finanzas"],
-    correcta: 0
+    pregunta: "¿Está permitida la distribución de muestras médicas de estupefacientes?",
+    opciones: ["Sí, a todos los médicos", "Solo a psiquiatras", "Está prohibida (salvo autorización especial)", "Sí, si son dosis bajas"],
+    correcta: 2
   },
   {
-    pregunta: "¿Quién autoriza al Auxiliar de Farmacia para ejercer?",
-    opciones: ["El dueño de la farmacia", "El Ministerio de Educación", "La SEREMI de Salud", "El Colegio de Químicos"],
-    correcta: 2
+    pregunta: "¿Qué debe hacer el DT si sospecha que una receta es falsa?",
+    opciones: ["Devolverla al cliente", "Retenerla, tomar datos y denunciar", "Vender el producto igual", "Llamar a la prensa"],
+    correcta: 1
   }
 ];
 
-export default function GuiaDecreto466() {
+export default function GuiaDecreto404() {
   const [isPdfReady, setIsPdfReady] = useState(false);
   
   // ESTADOS DEL QUIZ
@@ -103,7 +104,7 @@ export default function GuiaDecreto466() {
       
       const opciones = {
         margin:       [15, 15, 15, 15],
-        filename:     'Guia-Decreto-466-AuxiliarPro.pdf',
+        filename:     'Guia-Decreto-404-Estupefacientes.pdf',
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2, useCORS: true, scrollY: 0 }, 
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
@@ -129,7 +130,7 @@ export default function GuiaDecreto466() {
       <header className="bg-white border-b border-slate-200 py-12 px-6">
         <div className="max-w-6xl mx-auto">
           <nav className="mb-6">
-            <Link href="/blog" className="text-slate-400 hover:text-blue-600 font-bold text-sm flex items-center gap-2 transition-colors">
+            <Link href="/guias" className="text-slate-400 hover:text-blue-600 font-bold text-sm flex items-center gap-2 transition-colors">
               ← Volver a la Biblioteca
             </Link>
           </nav>
@@ -139,11 +140,11 @@ export default function GuiaDecreto466() {
           </div>
           
           <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-slate-900 mb-6 leading-tight text-balance">
-            Reglamento de Farmacias <span className="text-blue-600 whitespace-nowrap">(Decreto 466)</span>
+            Reglamento de Estupefacientes <span className="text-blue-600 whitespace-nowrap">(Decreto 404)</span>
           </h1>
           
           <p className="text-xl text-slate-500 max-w-3xl">
-            El reglamento fundamental que define las reglas del juego: Tipos de establecimientos, roles del personal y condiciones sanitarias para operar en Chile.
+            La normativa estricta que regula el control, venta y almacenamiento de drogas con alto potencial de abuso en Chile.
           </p>
         </div>
       </header>
@@ -170,10 +171,10 @@ export default function GuiaDecreto466() {
                 1. Introducción
               </h2>
               <p className="text-lg leading-relaxed mb-4">
-                El Decreto 466 es el reglamento fundamental que establece las condiciones sanitarias para la instalación, funcionamiento y fiscalización de los establecimientos farmacéuticos en Chile.
+                El Decreto 404, aprobado en 1983, es la normativa encargada de regular el control de los estupefacientes en Chile. Su objetivo principal es fiscalizar toda la "cadena de vida" de estas drogas: desde su importación o fabricación industrial hasta su entrega final al paciente.
               </p>
               <p className="text-lg leading-relaxed mb-6">
-                Su propósito es asegurar que la distribución, preparación y venta de medicamentos se realicen bajo estándares de calidad para proteger la salud de la población.
+                Este reglamento busca evitar que sustancias con fines terapéuticos, pero con alto potencial de abuso y adicción, se desvíen hacia el tráfico ilícito o el uso indebido.
               </p>
             </section>
 
@@ -182,157 +183,129 @@ export default function GuiaDecreto466() {
               <h2 className="text-3xl font-black text-slate-900 mb-8 break-before-auto">
                 2. Contenido Principal
               </h2>
-              <p className="mb-6 text-slate-600">Para facilitar el estudio, hemos organizado la información en 5 Módulos Clave:</p>
+              <p className="mb-6 text-slate-600">Para facilitar tu estudio, hemos dividido el contenido en 4 Módulos Esenciales:</p>
 
-              {/* MÓDULO A: TIPOS DE ESTABLECIMIENTOS */}
+              {/* MÓDULO A */}
               <div className="mb-12 break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <Store className="text-blue-500" /> Módulo A: Tipos de Establecimientos
-                </h3>
-                <p className="mb-6 text-lg text-slate-600">
-                  El reglamento clasifica los lugares de expendio según sus funciones y complejidad:
-                </p>
-                
-                <ul className="space-y-4">
-                  <li className="bg-blue-50 p-5 rounded-2xl border border-blue-100">
-                    <h4 className="font-bold text-blue-900 mb-2">Farmacia</h4>
-                    <p className="text-sm text-blue-800 leading-relaxed">
-                      Es el establecimiento más completo. Está destinado a la venta de productos farmacéuticos, alimentos de uso médico, la preparación de recetas magistrales (fórmulas a medida) y oficinas, y el fraccionamiento de envases.
-                    </p>
-                  </li>
-                  <li className="bg-white p-5 rounded-2xl border border-slate-200">
-                    <h4 className="font-bold text-slate-900 mb-2">Almacén Farmacéutico</h4>
-                    <p className="text-sm text-slate-600 leading-relaxed">
-                      Establecimiento dirigido por un Práctico de Farmacia. Vende medicamentos de venta directa y un listado específico de medicamentos con receta (definidos en el Título X del reglamento). <strong>Tienen estrictamente prohibido preparar fórmulas magistrales.</strong>
-                    </p>
-                  </li>
-                  <li className="bg-white p-5 rounded-2xl border border-slate-200">
-                    <h4 className="font-bold text-slate-900 mb-2">Droguería</h4>
-                    <p className="text-sm text-slate-600 leading-relaxed">
-                      Se dedica a la importación, fraccionamiento y distribución mayorista de drogas, sustancias químicas y accesorios médicos. Vende principalmente a farmacias y laboratorios, no al público general.
-                    </p>
-                  </li>
-                  <li className="bg-white p-5 rounded-2xl border border-slate-200">
-                    <h4 className="font-bold text-slate-900 mb-2">Botiquín</h4>
-                    <p className="text-sm text-slate-600 leading-relaxed">
-                      Recinto con medicamentos destinados exclusivamente al uso interno de instituciones como clínicas, maternidades, campamentos mineros, navíos o enfermerías de colegios.
-                    </p>
-                  </li>
-                  <li className="bg-white p-5 rounded-2xl border border-slate-200">
-                    <h4 className="font-bold text-slate-900 mb-2">Depósito de Productos</h4>
-                    <p className="text-sm text-slate-600 leading-relaxed">
-                      Bodegas autorizadas para el almacenamiento y distribución de productos (pueden ser de uso humano, veterinario o dental).
-                    </p>
-                  </li>
-                </ul>
-              </div>
-
-              {/* MÓDULO B: PERSONAL */}
-              <div className="mb-12 break-inside-avoid">
-                <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <UserCheck className="text-blue-500" /> Módulo B: El Personal y sus Responsabilidades
+                  <Scale className="text-blue-500" /> Módulo A: Definiciones y Autoridades
                 </h3>
                 
                 <div className="space-y-6">
-                    <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                        <strong className="text-lg text-blue-700 block mb-2">1. Director Técnico (DT)</strong>
-                        <ul className="list-disc pl-5 text-sm text-slate-600 space-y-2">
-                            <li>Toda farmacia debe funcionar bajo la dirección de un Químico Farmacéutico.</li>
-                            <li>Debe ejercer su cargo al menos 8 horas diarias (o durante todo el horario si la farmacia atiende menos tiempo).</li>
-                            <li><strong>Responsabilidades:</strong> Despachar personalmente recetas de productos controlados (estupefacientes y psicotrópicos), velar por la correcta conservación de los medicamentos, capacitar al personal auxiliar y supervisar el fraccionamiento.</li>
+                    <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200">
+                        <h4 className="font-bold text-slate-900 mb-2">¿Qué se considera estupefaciente?</h4>
+                        <p className="text-sm text-slate-700">
+                            Cualquier sustancia (droga) o preparado que esté incluido en las Listas I y II que aparecen al final de este reglamento (como la morfina, fentanilo, codeína, etc.).
+                        </p>
+                    </div>
+
+                    <div className="bg-white p-5 rounded-2xl border border-slate-200">
+                        <h4 className="font-bold text-slate-900 mb-3">¿Quién fiscaliza?</h4>
+                        <p className="text-sm text-slate-600 mb-3">El control se divide en dos niveles:</p>
+                        <ul className="space-y-2 text-sm text-slate-700">
+                            <li className="flex items-start gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5"></span>
+                                <strong>Instituto de Salud Pública (ISP):</strong> Controla la etapa "macro" o industrial (importación, exportación, producción, fabricación y distribución mayorista).
+                            </li>
+                            <li className="flex items-start gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5"></span>
+                                <strong>Servicios de Salud (SEREMI):</strong> Controlan la etapa "local" (transporte, venta en farmacias, tenencia y uso final).
+                            </li>
                         </ul>
                     </div>
 
-                    <div className="bg-emerald-50 p-6 rounded-2xl border border-emerald-100 relative overflow-hidden">
-                        <div className="absolute top-0 right-0 bg-emerald-200 text-emerald-800 text-[10px] font-bold px-3 py-1 uppercase tracking-widest rounded-bl-xl">
-                            Tu Rol
-                        </div>
-                        <strong className="text-lg text-emerald-900 block mb-2">2. Auxiliar de Farmacia</strong>
-                        <p className="text-sm text-emerald-800 mb-3">Para obtener la autorización sanitaria como Auxiliar de Farmacia, se deben cumplir tres requisitos fundamentales:</p>
-                        <ul className="space-y-2 text-sm">
-                            <li className="flex gap-2 items-start"><CheckCircle size={16} className="text-emerald-600 shrink-0 mt-0.5"/> Haber rendido satisfactoriamente 4° año de enseñanza media.</li>
-                            <li className="flex gap-2 items-start"><CheckCircle size={16} className="text-emerald-600 shrink-0 mt-0.5"/> Haber trabajado al menos 1 año en farmacia realizando labores de bodegaje y reposición (certificado por el DT).</li>
-                            <li className="flex gap-2 items-start"><CheckCircle size={16} className="text-emerald-600 shrink-0 mt-0.5"/> Rendir y aprobar un examen de competencia ante la autoridad sanitaria (SEREMI de Salud). Este examen evalúa conocimientos sobre regulación sanitaria, almacenamiento y acción terapéutica de medicamentos de venta directa.</li>
-                        </ul>
-                    </div>
-
-                    <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                        <strong className="text-lg text-slate-700 block mb-2">3. Práctico de Farmacia</strong>
-                        <p className="text-sm text-slate-600">Es la persona autorizada para asumir la dirección técnica de un Almacén Farmacéutico.</p>
+                    <div className="bg-red-50 p-5 rounded-2xl border border-red-100">
+                        <h4 className="font-bold text-red-900 mb-2">Prohibiciones</h4>
+                        <p className="text-sm text-red-800 leading-relaxed">
+                            En Chile está prohibida la producción, tráfico y posesión de heroína, cocaína y cannabis, entre otros. Sin embargo, existen excepciones estrictas para investigación científica o para la elaboración de productos farmacéuticos (como en el caso del cannabis), siempre con autorización del ISP.
+                        </p>
                     </div>
                 </div>
               </div>
 
-              {/* MÓDULO C: EXPENDIO */}
+              {/* MÓDULO B */}
               <div className="mb-12 break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <FileSignature className="text-blue-500" /> Módulo C: El Expendio y las Recetas
+                  <Truck className="text-blue-500" /> Módulo B: Importación y Producción
                 </h3>
-                <p className="mb-4 text-slate-600">La venta de medicamentos se rige estrictamente por la condición de venta aprobada en su registro sanitario:</p>
+                <p className="mb-4 text-sm text-slate-600">El manejo de estas sustancias es exclusivo de establecimientos autorizados (laboratorios, droguerías, farmacias, hospitales).</p>
                 
-                <ol className="list-decimal pl-5 space-y-2 text-sm text-slate-700 mb-6 font-medium">
-                    <li><strong>Venta Directa (VD):</strong> Medicamentos que no requieren receta médica.</li>
-                    <li><strong>Receta Simple (R):</strong> La orden médica habitual.</li>
-                    <li><strong>Receta Retenida (RR):</strong> La farmacia debe archivar la receta tras el despacho.</li>
-                    <li><strong>Receta Cheque (RCH):</strong> Formulario oficial para estupefacientes y psicotrópicos de mayor control.</li>
+                <ul className="space-y-3 text-sm text-slate-700">
+                    <li className="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+                        <strong>Previsiones (Cuotas):</strong> En octubre de cada año, los establecimientos deben informar al ISP cuánto estiman importar o producir para el año siguiente. El ISP aprueba esas cuotas.
+                    </li>
+                    <li className="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+                        <strong>Certificados Oficiales:</strong> Para importar o exportar, se requiere un "Certificado Oficial" específico para cada partida, el cual tiene una validez de 4 meses.
+                    </li>
+                    <li className="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+                        <strong>Seguridad en Aduana:</strong> Una vez que la droga llega a Chile, no puede moverse de la aduana al lugar de depósito sin un certificado del Servicio de Salud que autorice la ruta y el transporte seguro.
+                    </li>
+                </ul>
+              </div>
+
+              {/* MÓDULO C */}
+              <div className="mb-12 break-inside-avoid">
+                <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
+                  <FileSignature className="text-blue-500" /> Módulo C: La Venta (Expendio) y Recetas
+                </h3>
+                <p className="mb-4 text-slate-600">
+                    Este es el módulo más importante para el trabajo en farmacia. Los estupefacientes de las Listas I y II se venden principalmente mediante Receta Cheque o Receta Médica Retenida.
+                </p>
+                
+                <div className="bg-blue-50 p-6 rounded-2xl border border-blue-100 mb-6 relative">
+                    <div className="absolute top-0 right-0 bg-blue-500 text-white text-[10px] font-bold px-3 py-1 uppercase tracking-widest rounded-bl-xl">Clave Examen</div>
+                    <h4 className="font-bold text-blue-900 mb-3">La Regla de la Codeína</h4>
+                    <p className="text-sm text-blue-800 mb-3">La condición de venta cambia según la cantidad de droga por unidad posológica:</p>
+                    <ul className="space-y-2 text-sm text-blue-900 font-medium">
+                        <li>• Hasta 10 mg: Se vende con <strong>Receta Médica Simple</strong>.</li>
+                        <li>• Más de 10 mg e inferior a 60 mg: Se vende con <strong>Receta Retenida</strong>.</li>
+                        <li>• 60 mg o más: Se vende con <strong>Receta Cheque</strong>.</li>
+                    </ul>
+                </div>
+
+                <h4 className="font-bold text-slate-900 mb-3">Sobre la Receta Cheque:</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="bg-white p-4 rounded-xl border border-slate-200 text-sm">
+                        <strong>Formato:</strong> Son formularios oficiales impresos por la autoridad (con folio).
+                    </div>
+                    <div className="bg-white p-4 rounded-xl border border-slate-200 text-sm">
+                        <strong>Validez:</strong> 30 días desde la fecha de emisión.
+                    </div>
+                    <div className="bg-white p-4 rounded-xl border border-slate-200 text-sm md:col-span-2">
+                        <strong>Colores:</strong> Café claro (Médicos), Amarillo (Farmacias), Rojo (Hospitales Psiquiátricos).
+                    </div>
+                </div>
+
+                <div className="mt-6 space-y-3 text-sm text-slate-700">
+                    <p><strong>Llenado:</strong> Debe ser manuscrita íntegramente por el médico, sin dejar espacios en blanco ni tener enmiendas. Solo se puede prescribir UN producto estupefaciente por receta.</p>
+                    <p><strong>Despacho:</strong> Debe hacerlo personalmente el Director Técnico (DT). Se entrega solo a mayores de 18 años, quienes deben exhibir su Cédula de Identidad.</p>
+                    <div className="bg-red-50 p-3 rounded-lg border border-red-100 text-red-800">
+                        <strong>Seguridad:</strong> Si el DT sospecha que una receta es falsa o está adulterada, no debe despacharla. Su deber es retenerla, tomar los datos del portador y denunciar al Servicio de Salud.
+                    </div>
+                </div>
+              </div>
+
+              {/* MÓDULO D */}
+              <div className="mb-12 break-inside-avoid">
+                <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
+                  <Lock className="text-blue-500" /> Módulo D: Control Interno y Almacenamiento
+                </h3>
+                <p className="mb-4 text-sm text-slate-600">Dentro de la farmacia, el manejo de estas drogas es estricto:</p>
+                
+                <ol className="list-decimal pl-5 space-y-4 text-sm text-slate-700">
+                    <li>
+                        <strong>Almacenamiento:</strong> Los estupefacientes deben guardarse obligatoriamente bajo llave para prevenir robos o pérdidas.
+                    </li>
+                    <li>
+                        <strong>Libro de Control:</strong> Es obligatorio llevar un Libro de Control de Estupefacientes (visado) donde se registra por separado cada producto (entradas, salidas y saldos).
+                    </li>
+                    <li>
+                        <strong>Identificación:</strong> Los envases de estos medicamentos deben tener una estrella roja de 5 puntas en su etiqueta y la leyenda "Sujeto a Control de Estupefacientes".
+                    </li>
+                    <li>
+                        <strong>Muestras Médicas:</strong> Está prohibida la distribución de muestras médicas de estupefacientes (salvo autorización especial del ISP).
+                    </li>
                 </ol>
-
-                <div className="grid md:grid-cols-2 gap-4">
-                    <div className="bg-white p-5 rounded-xl border border-slate-200">
-                        <h4 className="font-bold text-slate-900 mb-2">Requisitos de la Receta</h4>
-                        <p className="text-sm text-slate-600 leading-relaxed">
-                            Toda receta debe ser clara y contener la identificación del profesional (incluyendo RUT y registro), identificación del paciente, nombre del medicamento, dosis, forma farmacéutica, posología y firma.
-                        </p>
-                    </div>
-                    <div className="bg-white p-5 rounded-xl border border-slate-200">
-                        <h4 className="font-bold text-slate-900 mb-2">Bioequivalencia</h4>
-                        <p className="text-sm text-slate-600 leading-relaxed">
-                            Si un medicamento prescrito tiene alternativas bioequivalentes certificadas, la farmacia debe informar al paciente sobre su existencia y disponibilidad antes de finalizar la venta.
-                        </p>
-                    </div>
-                </div>
-              </div>
-
-              {/* MÓDULO D: LIBROS */}
-              <div className="mb-12 break-inside-avoid">
-                <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <Book className="text-blue-500" /> Módulo D: Infraestructura y Libros Obligatorios
-                </h3>
-                <p className="mb-4 text-sm text-slate-600">Para asegurar el control sanitario, las farmacias deben mantener al día los siguientes Registros Oficiales (que pueden ser digitales o físicos):</p>
-                
-                <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
-                    <li className="bg-white p-3 rounded-lg border border-slate-100 text-sm flex items-center gap-2"><CheckCircle size={14} className="text-slate-400"/> 1. De Inspección.</li>
-                    <li className="bg-white p-3 rounded-lg border border-slate-100 text-sm flex items-center gap-2"><CheckCircle size={14} className="text-slate-400"/> 2. De Fraccionamiento (si corresponde).</li>
-                    <li className="bg-white p-3 rounded-lg border border-slate-100 text-sm flex items-center gap-2"><CheckCircle size={14} className="text-slate-400"/> 3. De Control de Estupefacientes.</li>
-                    <li className="bg-white p-3 rounded-lg border border-slate-100 text-sm flex items-center gap-2"><CheckCircle size={14} className="text-slate-400"/> 4. De Control de Productos Psicotrópicos.</li>
-                    <li className="bg-white p-3 rounded-lg border border-slate-100 text-sm flex items-center gap-2"><CheckCircle size={14} className="text-slate-400"/> 5. De Reclamos (siempre a disposición del público).</li>
-                </ul>
-                
-                <div className="bg-red-50 p-4 rounded-xl border border-red-100 flex gap-3 text-red-800 text-sm">
-                    <ShieldCheck className="shrink-0" size={20}/>
-                    <p><strong>Seguridad:</strong> Los productos estupefacientes y psicotrópicos deben almacenarse en una estantería exclusiva y bajo llave para evitar hurtos o extravíos.</p>
-                </div>
-              </div>
-
-              {/* MÓDULO E: FRACCIONAMIENTO */}
-              <div className="mb-12 break-inside-avoid">
-                <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <Scissors className="text-blue-500" /> Módulo E: Fraccionamiento de Medicamentos
-                </h3>
-                <p className="text-sm text-slate-600 mb-4">El fraccionamiento es el procedimiento mediante el cual se extraen dosis específicas de un envase clínico para entregarlas al paciente según su receta.</p>
-                <ul className="space-y-2 text-sm text-slate-700 mb-4">
-                    <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5"></span>
-                        Debe realizarse en un área separada y exclusiva dentro de la farmacia (o por un tercero autorizado).
-                    </li>
-                    <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5"></span>
-                        El envase entregado al paciente debe estar sellado y rotulado con información clave (paciente, medicamento, lote, vencimiento).
-                    </li>
-                </ul>
-                <div className="p-4 bg-slate-100 rounded-xl text-xs font-medium text-slate-600">
-                    🚫 <strong>Prohibiciones:</strong> No se pueden fraccionar hormonas, productos oncológicos, radiofármacos, ni aquellos que requieran refrigeración.
-                </div>
               </div>
 
             </section>
@@ -343,13 +316,13 @@ export default function GuiaDecreto466() {
                     3. Conclusión
                 </h2>
                 <p className="text-lg leading-relaxed text-slate-700 mb-4">
-                    El Decreto 466 organiza el funcionamiento farmacéutico en Chile, estableciendo jerarquías claras entre los tipos de establecimientos y definiendo roles precisos para el personal.
+                    El Decreto 404 establece un sistema de "circuito cerrado" para los estupefacientes. Nada entra, sale o se vende sin dejar un registro documental.
                 </p>
                 <p className="text-lg font-bold text-slate-900">
-                    Para quien aspira a certificarse como Auxiliar de Farmacia, es vital comprender que su labor siempre está bajo la supervisión del Químico Farmacéutico y que el manejo de medicamentos requiere un estricto apego a las normas de almacenamiento y venta para garantizar la seguridad del paciente.
+                    Para el equipo de farmacia, las claves del éxito en el cumplimiento de esta norma son: seguridad física (armario bajo llave), seguridad administrativa (libros al día) y rigurosidad en el mesón (revisión exhaustiva de la Receta Cheque por parte del Químico Farmacéutico).
                 </p>
                 <p className="mt-8 text-xs text-slate-400 uppercase tracking-widest leading-relaxed">
-                    Fuente utilizada: Ministerio de Salud de Chile. Decreto N° 466: Aprueba Reglamento de Farmacias, Droguerías, Almacenes Farmacéuticos, Botiquines y Depósitos Autorizados.
+                    Fuente utilizada: Ministerio de Salud Pública de Chile. Decreto N° 404: Reglamento de Estupefacientes.
                 </p>
             </section>
 
@@ -372,10 +345,10 @@ export default function GuiaDecreto466() {
                             Quiz Express
                         </span>
                         <h3 className="text-3xl font-black mb-4 leading-tight">
-                            ¿Sabes del Decreto 466?
+                            ¿Sabes del Decreto 404?
                         </h3>
                         <p className="text-slate-400 mb-8 text-sm leading-relaxed">
-                            10 preguntas rápidas sobre roles, recetas y prohibiciones. ¿Podrás con todas?
+                            Pon a prueba lo que leíste sobre estupefacientes, recetas y prohibiciones.
                         </p>
                         <button 
                             onClick={() => setQuizActivo(true)}
@@ -433,7 +406,7 @@ export default function GuiaDecreto466() {
                         <div className="space-y-3">
                             {puntaje === preguntasQuiz.length ? (
                                 <div className="bg-blue-900/50 p-3 rounded-lg text-sm text-blue-200 border border-blue-800">
-                                    ¡Excelente! Estás listo para el módulo de Normativa.
+                                    ¡Excelente! Manejas el reglamento de estupefacientes.
                                 </div>
                             ) : (
                                 <button 
