@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import Link from "next/link";
 import Script from "next/script"; 
-import { BookOpen, CheckCircle, AlertTriangle, ShieldCheck, FileText, Download, ArrowRight, Info, Package, Pill, Lock, FileSignature, Syringe, Trophy, XCircle, Truck } from "lucide-react";
+// 👇 CORRECCIÓN CRÍTICA: Asegúrate de que 'Scale' y 'Truck' estén en esta lista
+import { BookOpen, CheckCircle, AlertTriangle, ShieldCheck, FileText, Download, ArrowRight, Info, Package, Pill, Lock, FileSignature, Syringe, Trophy, XCircle, Truck, Scale } from "lucide-react";
 
 // 📝 PREGUNTAS DEL QUIZ (Específicas del Decreto 404)
 const preguntasQuiz = [
