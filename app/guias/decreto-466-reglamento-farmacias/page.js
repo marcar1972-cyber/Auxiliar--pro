@@ -5,7 +5,7 @@ import Link from "next/link";
 import Script from "next/script"; 
 import { BookOpen, CheckCircle, AlertTriangle, ShieldCheck, FileText, Download, ArrowRight, Info, Package, Store, UserCheck, FileSignature, Scissors, Book, Trophy, XCircle } from "lucide-react";
 
-// 📝 PREGUNTAS DEL QUIZ (Basadas en el texto completo)
+// 📝 PREGUNTAS DEL QUIZ
 const preguntasQuiz = [
   {
     pregunta: "¿Qué profesional debe asumir la Dirección Técnica de una Farmacia?",
@@ -164,70 +164,70 @@ export default function GuiaDecreto466() {
                 <span className="text-xs text-slate-400 font-bold uppercase tracking-widest">Guía Oficial 2026</span>
             </div>
 
-            [cite_start]{/* 1. INTRODUCCIÓN [cite: 4] */}
+            {/* 1. INTRODUCCIÓN */}
             <section className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm break-inside-avoid">
               <h2 className="text-2xl font-black text-slate-900 mb-4 flex items-center gap-3">
                 1. Introducción
               </h2>
               <p className="text-lg leading-relaxed mb-4">
-                [cite_start]El Decreto 466 es el reglamento fundamental que establece las condiciones sanitarias para la instalación, funcionamiento y fiscalización de los establecimientos farmacéuticos en Chile[cite: 5].
+                El Decreto 466 es el reglamento fundamental que establece las condiciones sanitarias para la instalación, funcionamiento y fiscalización de los establecimientos farmacéuticos en Chile.
               </p>
               <p className="text-lg leading-relaxed mb-6">
-                [cite_start]Su propósito es asegurar que la distribución, preparación y venta de medicamentos se realicen bajo estándares de calidad para proteger la salud de la población[cite: 6].
+                Su propósito es asegurar que la distribución, preparación y venta de medicamentos se realicen bajo estándares de calidad para proteger la salud de la población.
               </p>
             </section>
 
-            [cite_start]{/* 2. CONTENIDO PRINCIPAL [cite: 7] */}
+            {/* 2. CONTENIDO PRINCIPAL */}
             <section>
               <h2 className="text-3xl font-black text-slate-900 mb-8 break-before-auto">
                 2. Contenido Principal
               </h2>
-              [cite_start]<p className="mb-6 text-slate-600">Para facilitar el estudio, hemos organizado la información en 5 Módulos Clave[cite: 8]:</p>
+              <p className="mb-6 text-slate-600">Para facilitar el estudio, hemos organizado la información en 5 Módulos Clave:</p>
 
-              [cite_start]{/* MÓDULO A: TIPOS DE ESTABLECIMIENTOS [cite: 9] */}
+              {/* MÓDULO A: TIPOS DE ESTABLECIMIENTOS */}
               <div className="mb-12 break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
                   <Store className="text-blue-500" /> Módulo A: Tipos de Establecimientos
                 </h3>
                 <p className="mb-6 text-lg text-slate-600">
-                  [cite_start]El reglamento clasifica los lugares de expendio según sus funciones y complejidad[cite: 10]:
+                  El reglamento clasifica los lugares de expendio según sus funciones y complejidad:
                 </p>
                 
-                <div className="space-y-4">
-                  <div className="bg-blue-50 p-5 rounded-2xl border border-blue-100">
+                <ul className="space-y-4">
+                  <li className="bg-blue-50 p-5 rounded-2xl border border-blue-100">
                     <h4 className="font-bold text-blue-900 mb-2">Farmacia</h4>
                     <p className="text-sm text-blue-800 leading-relaxed">
-                      Es el establecimiento más completo. [cite_start]Está destinado a la venta de productos farmacéuticos, alimentos de uso médico, la preparación de recetas magistrales (fórmulas a medida) y oficinas, y el fraccionamiento de envases[cite: 14].
+                      Es el establecimiento más completo. Está destinado a la venta de productos farmacéuticos, alimentos de uso médico, la preparación de recetas magistrales (fórmulas a medida) y oficinas, y el fraccionamiento de envases.
                     </p>
-                  </div>
-                  <div className="bg-white p-5 rounded-2xl border border-slate-200">
+                  </li>
+                  <li className="bg-white p-5 rounded-2xl border border-slate-200">
                     <h4 className="font-bold text-slate-900 mb-2">Almacén Farmacéutico</h4>
                     <p className="text-sm text-slate-600 leading-relaxed">
-                      Establecimiento dirigido por un Práctico de Farmacia. Vende medicamentos de venta directa y un listado específico de medicamentos con receta (definidos en el Título X del reglamento). [cite_start]<strong>Tienen estrictamente prohibido preparar fórmulas magistrales[cite: 15, 16].</strong>
+                      Establecimiento dirigido por un Práctico de Farmacia. Vende medicamentos de venta directa y un listado específico de medicamentos con receta (definidos en el Título X del reglamento). <strong>Tienen estrictamente prohibido preparar fórmulas magistrales.</strong>
                     </p>
-                  </div>
-                  <div className="bg-white p-5 rounded-2xl border border-slate-200">
+                  </li>
+                  <li className="bg-white p-5 rounded-2xl border border-slate-200">
                     <h4 className="font-bold text-slate-900 mb-2">Droguería</h4>
                     <p className="text-sm text-slate-600 leading-relaxed">
-                      Se dedica a la importación, fraccionamiento y distribución mayorista de drogas, sustancias químicas y accesorios médicos. [cite_start]Vende principalmente a farmacias y laboratorios, no al público general[cite: 17, 18].
+                      Se dedica a la importación, fraccionamiento y distribución mayorista de drogas, sustancias químicas y accesorios médicos. Vende principalmente a farmacias y laboratorios, no al público general.
                     </p>
-                  </div>
-                  <div className="bg-white p-5 rounded-2xl border border-slate-200">
+                  </li>
+                  <li className="bg-white p-5 rounded-2xl border border-slate-200">
                     <h4 className="font-bold text-slate-900 mb-2">Botiquín</h4>
                     <p className="text-sm text-slate-600 leading-relaxed">
-                      [cite_start]Recinto con medicamentos destinados exclusivamente al uso interno de instituciones como clínicas, maternidades, campamentos mineros, navíos o enfermerías de colegios[cite: 19].
+                      Recinto con medicamentos destinados exclusivamente al uso interno de instituciones como clínicas, maternidades, campamentos mineros, navíos o enfermerías de colegios.
                     </p>
-                  </div>
-                  <div className="bg-white p-5 rounded-2xl border border-slate-200">
+                  </li>
+                  <li className="bg-white p-5 rounded-2xl border border-slate-200">
                     <h4 className="font-bold text-slate-900 mb-2">Depósito de Productos</h4>
                     <p className="text-sm text-slate-600 leading-relaxed">
-                      [cite_start]Bodegas autorizadas para el almacenamiento y distribución de productos (pueden ser de uso humano, veterinario o dental)[cite: 20].
+                      Bodegas autorizadas para el almacenamiento y distribución de productos (pueden ser de uso humano, veterinario o dental).
                     </p>
-                  </div>
-                </div>
+                  </li>
+                </ul>
               </div>
 
-              [cite_start]{/* MÓDULO B: PERSONAL [cite: 21] */}
+              {/* MÓDULO B: PERSONAL */}
               <div className="mb-12 break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
                   <UserCheck className="text-blue-500" /> Módulo B: El Personal y sus Responsabilidades
@@ -235,11 +235,11 @@ export default function GuiaDecreto466() {
                 
                 <div className="space-y-6">
                     <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                        <strong className="text-lg text-blue-700 block mb-2">1. [cite_start]Director Técnico (DT) [cite: 22]</strong>
+                        <strong className="text-lg text-blue-700 block mb-2">1. Director Técnico (DT)</strong>
                         <ul className="list-disc pl-5 text-sm text-slate-600 space-y-2">
-                            [cite_start]<li>Toda farmacia debe funcionar bajo la dirección de un Químico Farmacéutico[cite: 23].</li>
-                            [cite_start]<li>Debe ejercer su cargo al menos 8 horas diarias (o durante todo el horario si la farmacia atiende menos tiempo)[cite: 26].</li>
-                            [cite_start]<li><strong>Responsabilidades:</strong> Despachar personalmente recetas de productos controlados (estupefacientes y psicotrópicos), velar por la correcta conservación de los medicamentos, capacitar al personal auxiliar y supervisar el fraccionamiento[cite: 27].</li>
+                            <li>Toda farmacia debe funcionar bajo la dirección de un Químico Farmacéutico.</li>
+                            <li>Debe ejercer su cargo al menos 8 horas diarias (o durante todo el horario si la farmacia atiende menos tiempo).</li>
+                            <li><strong>Responsabilidades:</strong> Despachar personalmente recetas de productos controlados (estupefacientes y psicotrópicos), velar por la correcta conservación de los medicamentos, capacitar al personal auxiliar y supervisar el fraccionamiento.</li>
                         </ul>
                     </div>
 
@@ -247,109 +247,109 @@ export default function GuiaDecreto466() {
                         <div className="absolute top-0 right-0 bg-emerald-200 text-emerald-800 text-[10px] font-bold px-3 py-1 uppercase tracking-widest rounded-bl-xl">
                             Tu Rol
                         </div>
-                        <strong className="text-lg text-emerald-900 block mb-2">2. [cite_start]Auxiliar de Farmacia [cite: 28]</strong>
-                        [cite_start]<p className="text-sm text-emerald-800 mb-3">Para obtener la autorización sanitaria como Auxiliar de Farmacia, se deben cumplir tres requisitos fundamentales[cite: 29]:</p>
+                        <strong className="text-lg text-emerald-900 block mb-2">2. Auxiliar de Farmacia</strong>
+                        <p className="text-sm text-emerald-800 mb-3">Para obtener la autorización sanitaria como Auxiliar de Farmacia, se deben cumplir tres requisitos fundamentales:</p>
                         <ul className="space-y-2 text-sm">
-                            [cite_start]<li className="flex gap-2 items-start"><CheckCircle size={16} className="text-emerald-600 shrink-0 mt-0.5"/> Haber rendido satisfactoriamente 4° año de enseñanza media[cite: 30].</li>
-                            [cite_start]<li className="flex gap-2 items-start"><CheckCircle size={16} className="text-emerald-600 shrink-0 mt-0.5"/> Haber trabajado al menos 1 año en farmacia realizando labores de bodegaje y reposición (certificado por el DT)[cite: 31].</li>
-                            <li className="flex gap-2 items-start"><CheckCircle size={16} className="text-emerald-600 shrink-0 mt-0.5"/> Rendir y aprobar un examen de competencia ante la autoridad sanitaria (SEREMI de Salud). [cite_start]Este examen evalúa conocimientos sobre regulación sanitaria, almacenamiento y acción terapéutica de medicamentos de venta directa[cite: 32, 33].</li>
+                            <li className="flex gap-2 items-start"><CheckCircle size={16} className="text-emerald-600 shrink-0 mt-0.5"/> Haber rendido satisfactoriamente 4° año de enseñanza media.</li>
+                            <li className="flex gap-2 items-start"><CheckCircle size={16} className="text-emerald-600 shrink-0 mt-0.5"/> Haber trabajado al menos 1 año en farmacia realizando labores de bodegaje y reposición (certificado por el DT).</li>
+                            <li className="flex gap-2 items-start"><CheckCircle size={16} className="text-emerald-600 shrink-0 mt-0.5"/> Rendir y aprobar un examen de competencia ante la autoridad sanitaria (SEREMI de Salud). Este examen evalúa conocimientos sobre regulación sanitaria, almacenamiento y acción terapéutica de medicamentos de venta directa.</li>
                         </ul>
                     </div>
 
                     <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                        <strong className="text-lg text-slate-700 block mb-2">3. [cite_start]Práctico de Farmacia [cite: 34]</strong>
-                        [cite_start]<p className="text-sm text-slate-600">Es la persona autorizada para asumir la dirección técnica de un Almacén Farmacéutico[cite: 35].</p>
+                        <strong className="text-lg text-slate-700 block mb-2">3. Práctico de Farmacia</strong>
+                        <p className="text-sm text-slate-600">Es la persona autorizada para asumir la dirección técnica de un Almacén Farmacéutico.</p>
                     </div>
                 </div>
               </div>
 
-              [cite_start]{/* MÓDULO C: EXPENDIO [cite: 36] */}
+              {/* MÓDULO C: EXPENDIO */}
               <div className="mb-12 break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
                   <FileSignature className="text-blue-500" /> Módulo C: El Expendio y las Recetas
                 </h3>
-                [cite_start]<p className="mb-4 text-slate-600">La venta de medicamentos se rige estrictamente por la condición de venta aprobada en su registro sanitario[cite: 37]:</p>
+                <p className="mb-4 text-slate-600">La venta de medicamentos se rige estrictamente por la condición de venta aprobada en su registro sanitario:</p>
                 
                 <ol className="list-decimal pl-5 space-y-2 text-sm text-slate-700 mb-6 font-medium">
-                    [cite_start]<li><strong>Venta Directa (VD):</strong> Medicamentos que no requieren receta médica[cite: 38].</li>
-                    [cite_start]<li><strong>Receta Simple (R):</strong> La orden médica habitual[cite: 39].</li>
-                    [cite_start]<li><strong>Receta Retenida (RR):</strong> La farmacia debe archivar la receta tras el despacho[cite: 40].</li>
-                    [cite_start]<li><strong>Receta Cheque (RCH):</strong> Formulario oficial para estupefacientes y psicotrópicos de mayor control[cite: 41].</li>
+                    <li><strong>Venta Directa (VD):</strong> Medicamentos que no requieren receta médica.</li>
+                    <li><strong>Receta Simple (R):</strong> La orden médica habitual.</li>
+                    <li><strong>Receta Retenida (RR):</strong> La farmacia debe archivar la receta tras el despacho.</li>
+                    <li><strong>Receta Cheque (RCH):</strong> Formulario oficial para estupefacientes y psicotrópicos de mayor control.</li>
                 </ol>
 
                 <div className="grid md:grid-cols-2 gap-4">
                     <div className="bg-white p-5 rounded-xl border border-slate-200">
-                        [cite_start]<h4 className="font-bold text-slate-900 mb-2">Requisitos de la Receta [cite: 42]</h4>
+                        <h4 className="font-bold text-slate-900 mb-2">Requisitos de la Receta</h4>
                         <p className="text-sm text-slate-600 leading-relaxed">
-                            [cite_start]Toda receta debe ser clara y contener la identificación del profesional (incluyendo RUT y registro), identificación del paciente, nombre del medicamento, dosis, forma farmacéutica, posología y firma[cite: 43].
+                            Toda receta debe ser clara y contener la identificación del profesional (incluyendo RUT y registro), identificación del paciente, nombre del medicamento, dosis, forma farmacéutica, posología y firma.
                         </p>
                     </div>
                     <div className="bg-white p-5 rounded-xl border border-slate-200">
-                        [cite_start]<h4 className="font-bold text-slate-900 mb-2">Bioequivalencia [cite: 44]</h4>
+                        <h4 className="font-bold text-slate-900 mb-2">Bioequivalencia</h4>
                         <p className="text-sm text-slate-600 leading-relaxed">
-                            [cite_start]Si un medicamento prescrito tiene alternativas bioequivalentes certificadas, la farmacia debe informar al paciente sobre su existencia y disponibilidad antes de finalizar la venta[cite: 45].
+                            Si un medicamento prescrito tiene alternativas bioequivalentes certificadas, la farmacia debe informar al paciente sobre su existencia y disponibilidad antes de finalizar la venta.
                         </p>
                     </div>
                 </div>
               </div>
 
-              [cite_start]{/* MÓDULO D: LIBROS [cite: 46] */}
+              {/* MÓDULO D: LIBROS */}
               <div className="mb-12 break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
                   <Book className="text-blue-500" /> Módulo D: Infraestructura y Libros Obligatorios
                 </h3>
-                [cite_start]<p className="mb-4 text-sm text-slate-600">Para asegurar el control sanitario, las farmacias deben mantener al día los siguientes Registros Oficiales (que pueden ser digitales o físicos)[cite: 47]:</p>
+                <p className="mb-4 text-sm text-slate-600">Para asegurar el control sanitario, las farmacias deben mantener al día los siguientes Registros Oficiales (que pueden ser digitales o físicos):</p>
                 
                 <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
-                    [cite_start]<li className="bg-white p-3 rounded-lg border border-slate-100 text-sm flex items-center gap-2"><CheckCircle size={14} className="text-slate-400"/> 1. De Inspección[cite: 48].</li>
-                    [cite_start]<li className="bg-white p-3 rounded-lg border border-slate-100 text-sm flex items-center gap-2"><CheckCircle size={14} className="text-slate-400"/> 2. De Fraccionamiento (si corresponde)[cite: 49].</li>
-                    [cite_start]<li className="bg-white p-3 rounded-lg border border-slate-100 text-sm flex items-center gap-2"><CheckCircle size={14} className="text-slate-400"/> 3. De Control de Estupefacientes[cite: 50].</li>
-                    [cite_start]<li className="bg-white p-3 rounded-lg border border-slate-100 text-sm flex items-center gap-2"><CheckCircle size={14} className="text-slate-400"/> 4. De Control de Productos Psicotrópicos[cite: 52].</li>
-                    [cite_start]<li className="bg-white p-3 rounded-lg border border-slate-100 text-sm flex items-center gap-2"><CheckCircle size={14} className="text-slate-400"/> 5. De Reclamos (siempre a disposición del público)[cite: 53].</li>
+                    <li className="bg-white p-3 rounded-lg border border-slate-100 text-sm flex items-center gap-2"><CheckCircle size={14} className="text-slate-400"/> 1. De Inspección.</li>
+                    <li className="bg-white p-3 rounded-lg border border-slate-100 text-sm flex items-center gap-2"><CheckCircle size={14} className="text-slate-400"/> 2. De Fraccionamiento (si corresponde).</li>
+                    <li className="bg-white p-3 rounded-lg border border-slate-100 text-sm flex items-center gap-2"><CheckCircle size={14} className="text-slate-400"/> 3. De Control de Estupefacientes.</li>
+                    <li className="bg-white p-3 rounded-lg border border-slate-100 text-sm flex items-center gap-2"><CheckCircle size={14} className="text-slate-400"/> 4. De Control de Productos Psicotrópicos.</li>
+                    <li className="bg-white p-3 rounded-lg border border-slate-100 text-sm flex items-center gap-2"><CheckCircle size={14} className="text-slate-400"/> 5. De Reclamos (siempre a disposición del público).</li>
                 </ul>
                 
                 <div className="bg-red-50 p-4 rounded-xl border border-red-100 flex gap-3 text-red-800 text-sm">
                     <ShieldCheck className="shrink-0" size={20}/>
-                    [cite_start]<p><strong>Seguridad:</strong> Los productos estupefacientes y psicotrópicos deben almacenarse en una estantería exclusiva y bajo llave para evitar hurtos o extravíos[cite: 54].</p>
+                    <p><strong>Seguridad:</strong> Los productos estupefacientes y psicotrópicos deben almacenarse en una estantería exclusiva y bajo llave para evitar hurtos o extravíos.</p>
                 </div>
               </div>
 
-              [cite_start]{/* MÓDULO E: FRACCIONAMIENTO [cite: 55] */}
+              {/* MÓDULO E: FRACCIONAMIENTO */}
               <div className="mb-12 break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
                   <Scissors className="text-blue-500" /> Módulo E: Fraccionamiento de Medicamentos
                 </h3>
-                [cite_start]<p className="text-sm text-slate-600 mb-4">El fraccionamiento es el procedimiento mediante el cual se extraen dosis específicas de un envase clínico para entregarlas al paciente según su receta[cite: 56].</p>
+                <p className="text-sm text-slate-600 mb-4">El fraccionamiento es el procedimiento mediante el cual se extraen dosis específicas de un envase clínico para entregarlas al paciente según su receta.</p>
                 <ul className="space-y-2 text-sm text-slate-700 mb-4">
                     <li className="flex items-start gap-2">
                         <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5"></span>
-                        [cite_start]Debe realizarse en un área separada y exclusiva dentro de la farmacia (o por un tercero autorizado)[cite: 58].
+                        Debe realizarse en un área separada y exclusiva dentro de la farmacia (o por un tercero autorizado).
                     </li>
                     <li className="flex items-start gap-2">
                         <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5"></span>
-                        [cite_start]El envase entregado al paciente debe estar sellado y rotulado con información clave (paciente, medicamento, lote, vencimiento)[cite: 59].
+                        El envase entregado al paciente debe estar sellado y rotulado con información clave (paciente, medicamento, lote, vencimiento).
                     </li>
                 </ul>
                 <div className="p-4 bg-slate-100 rounded-xl text-xs font-medium text-slate-600">
-                    [cite_start]🚫 <strong>Prohibiciones:</strong> No se pueden fraccionar hormonas, productos oncológicos, radiofármacos, ni aquellos que requieran refrigeración[cite: 60].
+                    🚫 <strong>Prohibiciones:</strong> No se pueden fraccionar hormonas, productos oncológicos, radiofármacos, ni aquellos que requieran refrigeración.
                 </div>
               </div>
 
             </section>
 
-            [cite_start]{/* 3. CONCLUSIÓN [cite: 61] */}
+            {/* 3. CONCLUSIÓN */}
             <section className="mb-10 break-inside-avoid">
                 <h2 className="text-2xl font-black text-slate-900 mb-4">
                     3. Conclusión
                 </h2>
                 <p className="text-lg leading-relaxed text-slate-700 mb-4">
-                    [cite_start]El Decreto 466 organiza el funcionamiento farmacéutico en Chile, estableciendo jerarquías claras entre los tipos de establecimientos y definiendo roles precisos para el personal[cite: 62].
+                    El Decreto 466 organiza el funcionamiento farmacéutico en Chile, estableciendo jerarquías claras entre los tipos de establecimientos y definiendo roles precisos para el personal.
                 </p>
                 <p className="text-lg font-bold text-slate-900">
-                    [cite_start]Para quien aspira a certificarse como Auxiliar de Farmacia, es vital comprender que su labor siempre está bajo la supervisión del Químico Farmacéutico y que el manejo de medicamentos requiere un estricto apego a las normas de almacenamiento y venta para garantizar la seguridad del paciente[cite: 63].
+                    Para quien aspira a certificarse como Auxiliar de Farmacia, es vital comprender que su labor siempre está bajo la supervisión del Químico Farmacéutico y que el manejo de medicamentos requiere un estricto apego a las normas de almacenamiento y venta para garantizar la seguridad del paciente.
                 </p>
                 <p className="mt-8 text-xs text-slate-400 uppercase tracking-widest leading-relaxed">
-                    Fuente utilizada: Ministerio de Salud de Chile. [cite_start]Decreto N° 466: Aprueba Reglamento de Farmacias, Droguerías, Almacenes Farmacéuticos, Botiquines y Depósitos Autorizados[cite: 64].
+                    Fuente utilizada: Ministerio de Salud de Chile. Decreto N° 466: Aprueba Reglamento de Farmacias, Droguerías, Almacenes Farmacéuticos, Botiquines y Depósitos Autorizados.
                 </p>
             </section>
 
