@@ -17,6 +17,7 @@ export default function GuiasIndex() {
       color: "blue"
     },
     {
+      // 🟢 AGREGADO: Decreto 404
       slug: "decreto-404-estupefacientes",
       title: "Reglamento de Estupefacientes (DS 404)",
       desc: "Normativa crítica sobre drogas de alto control. Receta Cheque, almacenamiento seguro y prohibiciones.",
@@ -55,7 +56,7 @@ export default function GuiasIndex() {
           </p>
         </div>
 
-        {/* GRILLA DE GUÍAS (Ahora con 3 columnas en pantallas grandes) */}
+        {/* GRILLA DE GUÍAS */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
           {guias.map((guia) => (
             <Link 
@@ -73,6 +74,7 @@ export default function GuiasIndex() {
                 {guia.desc}
               </p>
               <div className="mt-auto w-full">
+                {/* 🟢 LÓGICA DE COLORES ACTUALIZADA (Soporta blue, red y purple) */}
                 <span className={`block w-full text-center py-4 rounded-xl font-black text-xs uppercase tracking-wider transition-colors ${
                     guia.color === 'blue' ? 'bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white' : 
                     guia.color === 'red' ? 'bg-red-50 text-red-600 group-hover:bg-red-600 group-hover:text-white' :
