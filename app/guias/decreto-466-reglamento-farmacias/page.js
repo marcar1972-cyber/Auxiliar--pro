@@ -129,7 +129,8 @@ export default function GuiaDecreto466() {
       <header className="bg-white border-b border-slate-200 py-12 px-6">
         <div className="max-w-6xl mx-auto">
           <nav className="mb-6">
-            <Link href="/blog" className="text-slate-400 hover:text-blue-600 font-bold text-sm flex items-center gap-2 transition-colors">
+            {/* 🟢 CORRECCIÓN: Ahora apunta a /guias (el índice que acabas de aprobar) */}
+            <Link href="/guias" className="text-slate-400 hover:text-blue-600 font-bold text-sm flex items-center gap-2 transition-colors">
               ← Volver a la Biblioteca
             </Link>
           </nav>
@@ -148,10 +149,10 @@ export default function GuiaDecreto466() {
         </div>
       </header>
 
+      {/* ... (El resto del contenido main se mantiene idéntico) ... */}
       <main className="max-w-6xl mx-auto px-6 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           
-          {/* 🟢 COLUMNA IZQUIERDA: CONTENIDO COMPLETO (8 columnas) */}
           <div id="contenido-pdf" className="lg:col-span-8 space-y-12 bg-white p-4 md:p-8 rounded-xl shadow-sm">
             
             <div className="mb-8 border-b pb-4 border-slate-100 flex justify-between items-center">
@@ -164,7 +165,6 @@ export default function GuiaDecreto466() {
                 <span className="text-xs text-slate-400 font-bold uppercase tracking-widest">Guía Oficial 2026</span>
             </div>
 
-            {/* 1. INTRODUCCIÓN */}
             <section className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm break-inside-avoid">
               <h2 className="text-2xl font-black text-slate-900 mb-4 flex items-center gap-3">
                 1. Introducción
@@ -177,14 +177,12 @@ export default function GuiaDecreto466() {
               </p>
             </section>
 
-            {/* 2. CONTENIDO PRINCIPAL */}
             <section>
               <h2 className="text-3xl font-black text-slate-900 mb-8 break-before-auto">
                 2. Contenido Principal
               </h2>
               <p className="mb-6 text-slate-600">Para facilitar el estudio, hemos organizado la información en 5 Módulos Clave:</p>
 
-              {/* MÓDULO A: TIPOS DE ESTABLECIMIENTOS */}
               <div className="mb-12 break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
                   <Store className="text-blue-500" /> Módulo A: Tipos de Establecimientos
@@ -227,7 +225,6 @@ export default function GuiaDecreto466() {
                 </ul>
               </div>
 
-              {/* MÓDULO B: PERSONAL */}
               <div className="mb-12 break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
                   <UserCheck className="text-blue-500" /> Módulo B: El Personal y sus Responsabilidades
@@ -263,7 +260,6 @@ export default function GuiaDecreto466() {
                 </div>
               </div>
 
-              {/* MÓDULO C: EXPENDIO */}
               <div className="mb-12 break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
                   <FileSignature className="text-blue-500" /> Módulo C: El Expendio y las Recetas
@@ -293,7 +289,6 @@ export default function GuiaDecreto466() {
                 </div>
               </div>
 
-              {/* MÓDULO D: LIBROS */}
               <div className="mb-12 break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
                   <Book className="text-blue-500" /> Módulo D: Infraestructura y Libros Obligatorios
@@ -314,7 +309,6 @@ export default function GuiaDecreto466() {
                 </div>
               </div>
 
-              {/* MÓDULO E: FRACCIONAMIENTO */}
               <div className="mb-12 break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
                   <Scissors className="text-blue-500" /> Módulo E: Fraccionamiento de Medicamentos
@@ -337,7 +331,6 @@ export default function GuiaDecreto466() {
 
             </section>
 
-            {/* 3. CONCLUSIÓN */}
             <section className="mb-10 break-inside-avoid">
                 <h2 className="text-2xl font-black text-slate-900 mb-4">
                     3. Conclusión
@@ -359,13 +352,11 @@ export default function GuiaDecreto466() {
           <div className="lg:col-span-4">
             <div className="sticky top-24 space-y-6">
               
-              {/* TARJETA 1: QUIZ INTERACTIVO */}
               <div className="bg-slate-900 text-white p-6 md:p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500 rounded-full blur-3xl opacity-20 group-hover:opacity-30 transition-opacity"></div>
                 
                 <div className="relative z-10">
                   
-                  {/* ESTADO 1: INICIO */}
                   {!quizActivo && !mostrarResultado && (
                     <>
                         <span className="bg-blue-500 text-blue-50 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
@@ -386,7 +377,6 @@ export default function GuiaDecreto466() {
                     </>
                   )}
 
-                  {/* ESTADO 2: PREGUNTAS */}
                   {quizActivo && (
                     <div className="animate-in fade-in slide-in-from-right-4 duration-300">
                         <div className="flex justify-between items-center mb-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
@@ -419,7 +409,6 @@ export default function GuiaDecreto466() {
                     </div>
                   )}
 
-                  {/* ESTADO 3: RESULTADOS */}
                   {mostrarResultado && (
                     <div className="text-center animate-in zoom-in duration-300">
                         <div className="bg-blue-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-400">
@@ -454,7 +443,6 @@ export default function GuiaDecreto466() {
                 </div>
               </div>
 
-              {/* TARJETA 2: DESCARGAR PDF AUTOMÁTICO */}
               <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
                 <div className="flex items-center gap-4 mb-4">
                     <div className="bg-red-50 text-red-600 p-3 rounded-full">
