@@ -42,7 +42,7 @@ export default function QuizPage() {
   const [mistakes, setMistakes] = useState([]); 
   const [timeLeft, setTimeLeft] = useState(0); 
   const [showAuthModal, setShowAuthModal] = useState(false); 
-  const [showForumModal, setShowForumModal] = useState(false); // 🟢 Modal del Foro
+  const [showForumModal, setShowForumModal] = useState(false); 
 
   // Lógica de Autenticación
   useEffect(() => {
@@ -295,7 +295,7 @@ export default function QuizPage() {
         </div>
       )}
 
-      {/* 🟢 MODAL DE CONFIRMACIÓN FORO (Nuevo botón de volver) */}
+      {/* 🟢 MODAL DE CONFIRMACIÓN FORO */}
       {showForumModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4 animate-in fade-in">
           <div className="bg-white rounded-[2rem] p-8 max-w-sm w-full text-center shadow-2xl">
@@ -316,7 +316,7 @@ export default function QuizPage() {
               </Link>
               <button 
                 onClick={() => setShowForumModal(false)}
-                className="w-full text-slate-400 font-bold text-sm hover:text-slate-600 py-2"
+                className="w-full text-slate-400 font-bold text-sm hover:text-slate-600 py-2 cursor-pointer"
               >
                 Me arrepentí / Volver
               </button>
@@ -341,7 +341,7 @@ export default function QuizPage() {
 
       <div className="p-6 max-w-xl mx-auto space-y-8 mt-6">
         
-        {/* TARJETA DE PERFIL (Interactiva si Invitado) */}
+        {/* TARJETA DE PERFIL */}
         <div 
           onClick={() => !user && setShowAuthModal(true)} 
           className={`bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 flex items-center gap-5 ${!user ? 'cursor-pointer hover:bg-slate-50 transition-colors' : ''}`}
@@ -416,17 +416,17 @@ export default function QuizPage() {
 
         {/* ACCESOS RÁPIDOS */}
         <div className="grid grid-cols-1 gap-4 mt-10">
-            <Link href="/biblioteca" className="bg-white p-6 rounded-[2rem] border-2 border-slate-100 shadow-sm hover:border-blue-400 transition-all flex items-center gap-6 group cursor-pointer">
+            {/* 🟢 CORRECCIÓN: Apunta a /guias */}
+            <Link href="/guias" className="bg-white p-6 rounded-[2rem] border-2 border-slate-100 shadow-sm hover:border-blue-400 transition-all flex items-center gap-6 group cursor-pointer">
                 <div className="w-14 h-14 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Library size={28} />
                 </div>
                 <div>
-                  <h3 className="font-black text-lg text-slate-800 tracking-tight">Biblioteca</h3>
-                  <p className="text-xs text-slate-400 font-bold uppercase italic">Recursos PDF 2026</p>
+                  <h3 className="font-black text-lg text-slate-800 tracking-tight">Guías de Estudio</h3>
+                  <p className="text-xs text-slate-400 font-bold uppercase italic">Resúmenes y Normativa</p>
                 </div>
             </Link>
 
-            {/* 🟢 TARJETA DE FORO (Ahora abre el Modal) */}
             <div 
               onClick={() => setShowForumModal(true)} 
               className="bg-[#0f172a] p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden group hover:scale-[1.01] transition-all cursor-pointer border border-white/10"
