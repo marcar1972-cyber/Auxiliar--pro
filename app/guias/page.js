@@ -1,15 +1,23 @@
 import Link from "next/link";
-// 🟢 IMPORTANTE: Agregué 'BrainCircuit' para el ícono del 405 (puedes usar otro si prefieres)
-import { BookOpen, Pill, Lock, ArrowRight, Library, GraduationCap, BrainCircuit } from "lucide-react";
+// 🟢 IMPORTANTE: Agregué 'BrainCircuit' y 'Store' para los íconos nuevos
+import { BookOpen, Pill, Lock, ArrowRight, Library, GraduationCap, BrainCircuit, Store } from "lucide-react";
 
 export const metadata = {
-  title: 'Guías de Estudio Auxiliar de Farmacia Chile | Decretos 466, 404, 405 y 3',
-  description: 'Material de estudio gratuito para el examen de competencia de Auxiliar de Farmacia (Seremi de Salud). Descarga resúmenes del Decreto 466, 404, 405 y 3.',
-  keywords: ['auxiliar de farmacia', 'examen seremi salud', 'decreto 466 resumen', 'decreto 404 estupefacientes', 'decreto 405 psicotropicos', 'decreto 3 farmacia', 'guia estudio farmacia chile'],
+  title: 'Guías de Estudio Auxiliar de Farmacia Chile | Decretos y Ley 20.724',
+  description: 'Material de estudio gratuito para el examen de competencia de Auxiliar de Farmacia (Seremi de Salud). Descarga resúmenes de la Ley 20.724, Decretos 466, 404, 405 y 3.',
+  keywords: ['auxiliar de farmacia', 'examen seremi salud', 'ley 20724 resumen', 'decreto 466', 'decreto 404', 'decreto 405', 'decreto 3'],
 };
 
 export default function GuiasIndex() {
   const guias = [
+    {
+      // 🟢 NUEVO: Ley 20.724 (Ley de Fármacos I)
+      slug: "ley-20724-farmacos-1",
+      title: "Ley de Fármacos I (20.724)",
+      desc: "La farmacia como Centro de Salud. Prohibición de la canela, bioequivalencia obligatoria y fraccionamiento.",
+      icon: <Store size={40} className="text-teal-600" />, 
+      color: "teal"
+    },
     {
       slug: "decreto-466-reglamento-farmacias",
       title: "Reglamento de Farmacias (DS 466)",
@@ -25,11 +33,10 @@ export default function GuiasIndex() {
       color: "red"
     },
     {
-      // 🟢 NUEVO: Decreto 405 Psicotrópicos
       slug: "decreto-405-psicotropicos",
       title: "Reglamento de Psicotrópicos (DS 405)",
       desc: "Todo sobre las Listas I, II, III y IV. Estrellas verdes, recetas retenidas y control de benzodiazepinas.",
-      icon: <BrainCircuit size={40} className="text-emerald-600" />, // Usé verde esmeralda por la 'estrella verde'
+      icon: <BrainCircuit size={40} className="text-emerald-600" />,
       color: "emerald"
     },
     {
@@ -82,11 +89,12 @@ export default function GuiasIndex() {
                 {guia.desc}
               </p>
               <div className="mt-auto w-full">
-                {/* 🟢 LÓGICA DE COLORES ACTUALIZADA (Ahora soporta 'emerald' también) */}
+                {/* 🟢 LÓGICA DE COLORES ACTUALIZADA (Soporta todos los colores usados) */}
                 <span className={`block w-full text-center py-4 rounded-xl font-black text-xs uppercase tracking-wider transition-colors ${
                     guia.color === 'blue' ? 'bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white' : 
                     guia.color === 'red' ? 'bg-red-50 text-red-600 group-hover:bg-red-600 group-hover:text-white' :
                     guia.color === 'emerald' ? 'bg-emerald-50 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white' :
+                    guia.color === 'teal' ? 'bg-teal-50 text-teal-600 group-hover:bg-teal-600 group-hover:text-white' :
                     'bg-purple-50 text-purple-600 group-hover:bg-purple-600 group-hover:text-white'
                 }`}>
                   Leer Resumen y Quiz
@@ -103,7 +111,7 @@ export default function GuiasIndex() {
                 ¿Qué debo estudiar para el examen?
             </h3>
             <p className="text-slate-500 max-w-2xl mx-auto text-sm leading-relaxed">
-                El examen de competencia para Auxiliar de Farmacia en Chile evalúa principalmente el conocimiento sobre el <strong>Código Sanitario</strong>, específicamente el <strong>Decreto 466</strong> (Reglamento de Farmacias), el <strong>Decreto 404</strong> (Estupefacientes), el <strong>Decreto 405</strong> (Psicotrópicos) y el <strong>Decreto 3</strong> (Productos Farmacéuticos).
+                El examen de competencia para Auxiliar de Farmacia en Chile evalúa principalmente el conocimiento sobre el <strong>Código Sanitario</strong>, la <strong>Ley 20.724</strong> (Fármacos I), el <strong>Decreto 466</strong> (Reglamento de Farmacias), los <strong>Decretos 404 y 405</strong> (Estupefacientes y Psicotrópicos) y el <strong>Decreto 3</strong> (Productos Farmacéuticos).
             </p>
         </div>
 
