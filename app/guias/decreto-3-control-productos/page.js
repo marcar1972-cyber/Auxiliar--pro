@@ -130,7 +130,8 @@ export default function GuiaDecreto3() {
       <header className="bg-white border-b border-slate-200 py-12 px-6">
         <div className="max-w-6xl mx-auto">
           <nav className="mb-6">
-            <Link href="/blog" className="text-slate-400 hover:text-blue-600 font-bold text-sm flex items-center gap-2 transition-colors">
+            {/* 🟢 CORRECCIÓN: Apunta a /guias en lugar de /blog */}
+            <Link href="/guias" className="text-slate-400 hover:text-blue-600 font-bold text-sm flex items-center gap-2 transition-colors">
               ← Volver a la Biblioteca
             </Link>
           </nav>
