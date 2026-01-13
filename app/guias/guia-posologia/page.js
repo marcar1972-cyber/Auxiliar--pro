@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from "next/link";
 import Script from "next/script"; 
-import { BookOpen, CheckCircle, AlertTriangle, Calculator, ShieldCheck, FileText, Download, ArrowRight, Info, Package, Syringe, Trophy, XCircle, Droplets, Scale } from "lucide-react";
+import { BookOpen, CheckCircle, AlertTriangle, Calculator, ShieldCheck, FileText, Download, ArrowRight, Info, Package, Syringe, Trophy, XCircle, Droplets, Scale, Target, Users, BrainCircuit } from "lucide-react";
 
 // 📝 PREGUNTAS DEL QUIZ (Basadas en los ejercicios de la guía)
 const preguntasQuiz = [
@@ -143,7 +143,7 @@ export default function GuiaPosologia() {
           </h1>
           
           <p className="text-xl text-slate-500 max-w-3xl">
-            "Cómo calcular dosis exactas sin perder la cabeza". La posología no es solo matemáticas; es seguridad para el paciente.
+            Aprende a calcular dosis exactas sin perder la cabeza. La posología no es solo matemáticas; es la base de la seguridad para el paciente en farmacia.
           </p>
         </div>
       </header>
@@ -164,20 +164,48 @@ export default function GuiaPosologia() {
                 <span className="text-xs text-slate-400 font-bold uppercase tracking-widest">Guía Oficial 2026</span>
             </div>
 
-            {/* 1. INTRODUCCIÓN */}
+            {/* 1. INTRODUCCIÓN Y DEFINICIÓN (SEO MEJORADO) */}
             <section className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm break-inside-avoid">
               <h2 className="text-2xl font-black text-slate-900 mb-4 flex items-center gap-3">
-                1. Introducción
+                1. ¿Qué es la Posología?
               </h2>
               <p className="text-lg leading-relaxed mb-4">
-                La posología no es solo matemáticas; es seguridad para el paciente. Tu trabajo como auxiliar es asegurar que el paciente se lleve la cantidad exacta de medicamento para cumplir su tratamiento completo.
+                La <strong>posología</strong> (del griego <em>posos</em> "cuánto" y <em>logos</em> "estudio") es la rama de la farmacología que se encarga de determinar las <strong>dosis</strong> de los medicamentos.
               </p>
+              <p className="text-lg leading-relaxed mb-6">
+                Para el Auxiliar de Farmacia, dominar el cálculo de dosis es una habilidad crítica. Un error en la conversión de miligramos a mililitros o una mala interpretación de la receta puede llevar a la <strong>ineficacia del tratamiento</strong> (dosis baja) o a la <strong>toxicidad</strong> (sobredosis).
+              </p>
+              
+              <div className="bg-indigo-50 border-l-4 border-indigo-500 p-4 rounded-r-xl text-indigo-900 italic flex gap-3">
+                <Target className="shrink-0" />
+                <span>
+                  <strong>Objetivo:</strong> Asegurar que el paciente se lleve la cantidad exacta de medicamento para cumplir su tratamiento completo, evitando interrupciones o desperdicios.
+                </span>
+              </div>
             </section>
 
-            {/* 2. CONTENIDO PRINCIPAL */}
+            {/* SECCIÓN SEO: FACTORES QUE MODIFICAN LA DOSIS */}
+            <section className="break-inside-avoid">
+                <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
+                  <BrainCircuit className="text-blue-500" /> Factores que modifican la Dosis
+                </h3>
+                <p className="mb-4 text-slate-600">No todos los pacientes son iguales. Aunque la guía se centra en el cálculo matemático, recuerda que la dosis varía según:</p>
+                <div className="grid md:grid-cols-2 gap-4 mb-8">
+                    <div className="bg-slate-50 p-4 rounded-xl">
+                        <strong className="flex items-center gap-2 text-slate-900 mb-1"><Users size={16}/> Edad del Paciente</strong>
+                        <p className="text-sm text-slate-600">Los niños (pediatría) y adultos mayores (geriatría) metabolizan los fármacos de forma diferente, requiriendo ajustes de dosis.</p>
+                    </div>
+                    <div className="bg-slate-50 p-4 rounded-xl">
+                        <strong className="flex items-center gap-2 text-slate-900 mb-1"><Scale size={16}/> Peso Corporal</strong>
+                        <p className="text-sm text-slate-600">Muchos antibióticos y analgésicos se calculan en base a <strong>mg/kg</strong> de peso, especialmente en niños.</p>
+                    </div>
+                </div>
+            </section>
+
+            {/* 2. CONTENIDO PRINCIPAL (MATERIAL DEL PDF) */}
             <section>
               <h2 className="text-3xl font-black text-slate-900 mb-8 break-before-auto">
-                2. Contenido Principal
+                2. Contenido Práctico
               </h2>
 
               {/* MÓDULO A: KIT DE HERRAMIENTAS */}
@@ -186,7 +214,7 @@ export default function GuiaPosologia() {
                   <Scale className="text-blue-500" /> Módulo A: El "Kit de Herramientas" Matemático
                 </h3>
                 <p className="mb-6 text-slate-600">
-                  Antes de calcular nada, debes tener estas equivalencias grabadas en tu memoria. Son la base de todo:
+                  Antes de calcular nada, debes tener estas equivalencias grabadas en tu memoria. Son la base de todo cálculo farmacéutico:
                 </p>
                 
                 <div className="grid md:grid-cols-2 gap-6 mb-6">
@@ -221,7 +249,7 @@ export default function GuiaPosologia() {
                 <div className="space-y-3">
                     <div className="flex items-center gap-4 bg-white p-4 rounded-xl border border-slate-200">
                         <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold">1</div>
-                        <p className="text-sm font-medium"><strong>Calcula la Dosis Diaria:</strong> ¿Cuánto toma el paciente en un solo día?</p>
+                        <p className="text-sm font-medium"><strong>Calcula la Dosis Diaria:</strong> ¿Cuánto toma el paciente en un solo día? (Ej: 2 pastillas x 3 veces = 6 al día).</p>
                     </div>
                     <div className="flex items-center gap-4 bg-white p-4 rounded-xl border border-slate-200">
                         <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold">2</div>
@@ -349,14 +377,14 @@ export default function GuiaPosologia() {
               
               {/* TARJETA 1: QUIZ INTERACTIVO */}
               <div className="bg-slate-900 text-white p-6 md:p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500 rounded-full blur-3xl opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500 rounded-full blur-3xl opacity-20 group-hover:opacity-30 transition-opacity"></div>
                 
                 <div className="relative z-10">
                   
                   {/* ESTADO 1: INICIO */}
                   {!quizActivo && !mostrarResultado && (
                     <>
-                        <span className="bg-blue-500 text-blue-50 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
+                        <span className="bg-indigo-500 text-indigo-50 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
                             Quiz Express
                         </span>
                         <h3 className="text-3xl font-black mb-4 leading-tight">
@@ -367,7 +395,7 @@ export default function GuiaPosologia() {
                         </p>
                         <button 
                             onClick={() => setQuizActivo(true)}
-                            className="w-full block bg-white text-slate-900 font-black text-center py-4 rounded-xl hover:bg-blue-400 transition-colors shadow-lg flex items-center justify-center gap-2"
+                            className="w-full block bg-white text-slate-900 font-black text-center py-4 rounded-xl hover:bg-indigo-400 transition-colors shadow-lg flex items-center justify-center gap-2"
                         >
                             COMENZAR TEST <ArrowRight size={18} />
                         </button>
@@ -410,7 +438,7 @@ export default function GuiaPosologia() {
                   {/* ESTADO 3: RESULTADOS */}
                   {mostrarResultado && (
                     <div className="text-center animate-in zoom-in duration-300">
-                        <div className="bg-blue-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-400">
+                        <div className="bg-indigo-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-indigo-400">
                             <Trophy size={32} />
                         </div>
                         <h3 className="text-2xl font-black mb-2">¡Completado!</h3>
@@ -420,7 +448,7 @@ export default function GuiaPosologia() {
                         
                         <div className="space-y-3">
                             {puntaje === preguntasQuiz.length ? (
-                                <div className="bg-blue-900/50 p-3 rounded-lg text-sm text-blue-200 border border-blue-800">
+                                <div className="bg-indigo-900/50 p-3 rounded-lg text-sm text-indigo-200 border border-indigo-800">
                                     ¡Excelente! Eres un maestro del cálculo.
                                 </div>
                             ) : (
@@ -432,7 +460,7 @@ export default function GuiaPosologia() {
                                 </button>
                             )}
                             
-                            <Link href="/quiz" className="block w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-500 text-sm">
+                            <Link href="/quiz" className="block w-full bg-indigo-600 text-white font-bold py-3 rounded-xl hover:bg-indigo-500 text-sm">
                                 Ir al Simulador Completo
                             </Link>
                         </div>
