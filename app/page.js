@@ -30,6 +30,7 @@ export default function LandingPage() {
             Contenido técnico y jurídico validado para el proceso de certificación 2026.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            {/* 🟢 ESTE BOTÓN LLEVA A /quiz SIN PEDIR LOGIN (El login se pide dentro de /quiz al elegir nivel) */}
             <Link href="/quiz" className="inline-flex items-center gap-2 bg-slate-900 text-white px-12 py-5 rounded-[2rem] font-black text-lg hover:bg-emerald-600 transition-all shadow-2xl">
               EMPEZAR AHORA <ArrowRight />
             </Link>
@@ -109,7 +110,8 @@ export default function LandingPage() {
                 <p className="text-slate-400 text-sm leading-relaxed mb-6">
                     ¿Conoces los plazos legales de vigencia de una receta simple o los requisitos técnicos para el almacenamiento de vacunas? El dominio de estos detalles jurídicos es el factor determinante para aprobar el examen de la autoridad sanitaria.
                 </p>
-                <Link href="/biblioteca" className="text-emerald-400 font-bold hover:underline flex items-center gap-2 text-sm uppercase tracking-widest">
+                {/* 🟢 CORRECCIÓN: Apunta a /guias (la nueva biblioteca) */}
+                <Link href="/guias" className="text-emerald-400 font-bold hover:underline flex items-center gap-2 text-sm uppercase tracking-widest">
                     EXPLORAR TEXTOS LEGALES <ChevronRight size={16}/>
                 </Link>
             </div>
