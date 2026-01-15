@@ -3,7 +3,7 @@ import { Calendar, BookOpen, FileText, DollarSign, Scale, Users, ArrowRight, Gra
 
 // 🟢 METADATOS (Intactos)
 export const metadata = {
-  title: "Blog y Guías de Estudio | Auxiliar de Farmacia Chile",
+  title: "Blog y Noticias | Auxiliar de Farmacia Chile",
   description: "Artículos educativos, noticias sobre el examen de competencia SEREMI y consejos legales (Decreto 466) para auxiliares de farmacia en Chile.",
   keywords: ["blog farmacia chile", "guias auxiliar farmacia", "noticias seremi salud", "decreto 466 resumen"],
   alternates: {
@@ -84,8 +84,9 @@ export default function BlogIndex() {
       
       {/* HEADER DEL BLOG */}
       <header className="mb-12 text-center">
+        {/* 🟢 TÍTULO CORREGIDO: Se eliminó "y Guías" para evitar confusión */}
         <h1 className="text-3xl md:text-5xl font-black text-slate-900 mb-4">
-          Blog y Guías para <span className="text-emerald-600">Auxiliar de Farmacia</span>
+          Blog para <span className="text-emerald-600">Auxiliar de Farmacia</span>
         </h1>
         <p className="text-slate-500 text-lg max-w-2xl mx-auto">
           Mantente al día con las normativas, fechas de examen y consejos de estudio para asegurar tu registro en la SEREMI.
