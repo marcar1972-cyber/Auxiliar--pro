@@ -1,4 +1,3 @@
-
 export const level7 = {
   id: 7,
   title: "Nivel 7: Examen Global SEREMI",
