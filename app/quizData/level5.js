@@ -1,4 +1,3 @@
-
 export const level5 = {
   id: 5,
   title: "Nivel 5: Estupefacientes (D.404)",
