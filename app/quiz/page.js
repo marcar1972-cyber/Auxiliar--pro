@@ -6,7 +6,8 @@ import { LEVELS } from "../quizData/index";
 import Link from "next/link";
 import { 
   Lock, CheckCircle, XCircle, ChevronLeft, Clock, ShieldCheck, Trophy, Loader2, Library, 
-  MessageCircle, GraduationCap, BookOpen, Scale, ThermometerSnowflake, ArrowRight, BrainCircuit
+  GraduationCap, BookOpen, Scale, ThermometerSnowflake, ArrowRight, BrainCircuit,
+  LogIn, ExternalLink, Store, Calculator, Medal
 } from "lucide-react"; 
 
 import { auth, db } from "../firebase/config";
@@ -21,10 +22,13 @@ const WhatsAppIcon = ({ size = 22, className = "" }) => (
 );
 
 const iconMap = { 
-  BookOpen: <BookOpen size={32} />, 
-  Scale: <Scale size={32} />, 
   ThermometerSnowflake: <ThermometerSnowflake size={32} />, 
-  GraduationCap: <GraduationCap size={32} /> 
+  Store: <Store size={32} />, 
+  BookOpen: <BookOpen size={32} />, 
+  BrainCircuit: <BrainCircuit size={32} />, 
+  Lock: <Lock size={32} />, 
+  Calculator: <Calculator size={32} />, 
+  Trophy: <Trophy size={32} /> 
 };
 
 export default function QuizPage() {
@@ -40,23 +44,29 @@ export default function QuizPage() {
   const [isAnswered, setIsAnswered] = useState(false);        
   const [mistakes, setMistakes] = useState([]); 
   const [timeLeft, setTimeLeft] = useState(0); 
+  const [showAuthModal, setShowAuthModal] = useState(false); 
+  const [showForumModal, setShowForumModal] = useState(false); 
 
-  // Lógica de Autenticación y Carga de Niveles
+  // 🟢 LÓGICA DE AUTENTICACIÓN CORREGIDA
+  // No redirige automáticamente. Solo carga el estado del usuario.
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       try {
-        if (!currentUser) { router.push("/login"); return; }
-        setUser(currentUser);
-        const docRef = doc(db, "users", currentUser.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists() && docSnap.data().unlockedLevels) {
-          setUnlockedLevels(docSnap.data().unlockedLevels);
+        if (currentUser) {
+          setUser(currentUser);
+          const docRef = doc(db, "users", currentUser.uid);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists() && docSnap.data().unlockedLevels) {
+            setUnlockedLevels(docSnap.data().unlockedLevels);
+          } else {
+            await setDoc(docRef, { 
+              email: currentUser.email, 
+              unlockedLevels: [1], 
+              createdAt: serverTimestamp() 
+            }, { merge: true });
+          }
         } else {
-          await setDoc(docRef, { 
-            email: currentUser.email, 
-            unlockedLevels: [1], 
-            createdAt: serverTimestamp() 
-          }, { merge: true });
+          setUser(null); // Modo visitante activado
         }
       } catch (e) {
         console.error("Error cargando perfil:", e);
@@ -65,9 +75,9 @@ export default function QuizPage() {
       }
     });
     return () => unsubscribe();
-  }, [router]);
+  }, []);
 
-  // LÓGICA DEL TEMPORIZADOR
+  // Lógica del Temporizador
   useEffect(() => {
     if (activeLevelId && !showResult && timeLeft > 0) {
       const timerId = setInterval(() => {
@@ -84,9 +94,18 @@ export default function QuizPage() {
     }
   }, [activeLevelId, showResult, timeLeft]);
 
+  // INICIAR NIVEL
   const startLevel = (id) => {
     const level = LEVELS.find(l => l.id === id);
-    if (!level || !unlockedLevels.includes(id)) return;
+    if (!level) return;
+
+    // 🔒 SI NO ESTÁ LOGUEADO, MUESTRA EL MODAL (Bloqueo solo al intentar jugar)
+    if (!user) {
+      setShowAuthModal(true);
+      return;
+    }
+
+    if (!unlockedLevels.includes(id)) return;
     
     setActiveLevelId(id); 
     setCurrentQIndex(0); 
@@ -106,9 +125,11 @@ export default function QuizPage() {
   };
 
   const handleLevelPass = async (levelId) => {
-    if (user && !unlockedLevels.includes(levelId + 1)) {
+    const nextLevel = levelId + 1;
+    const nextLevelExists = LEVELS.find(l => l.id === nextLevel);
+    
+    if (user && nextLevelExists && !unlockedLevels.includes(nextLevel)) {
       try {
-        const nextLevel = levelId + 1;
         const docRef = doc(db, "users", user.uid);
         await updateDoc(docRef, {
           unlockedLevels: arrayUnion(nextLevel)
@@ -122,7 +143,7 @@ export default function QuizPage() {
 
   if (loadingAuth) return <div className="min-h-screen flex items-center justify-center bg-white"><Loader2 className="animate-spin text-emerald-500" size={48} /></div>;
 
-  // RENDER: EXAMEN ACTIVO
+  // 🎮 RENDER: JUEGO ACTIVO
   if (activeLevelId && !showResult) {
     const level = LEVELS.find(l => l.id === activeLevelId);
     const q = level.questions[currentQIndex];
@@ -149,7 +170,7 @@ export default function QuizPage() {
               )}
             </div>
 
-            <h2 className="text-2xl font-bold text-slate-800 mb-10 leading-tight">{q.text}</h2>
+            <h2 className="text-xl md:text-2xl font-bold text-slate-800 mb-10 leading-tight">{q.text}</h2>
             
             <div className="space-y-4">
               {q.options.map((opt, idx) => {
@@ -191,10 +212,10 @@ export default function QuizPage() {
                     }} 
                     className={`w-full text-left p-5 rounded-2xl border-2 font-bold transition-all flex items-center gap-4 cursor-pointer ${s}`}
                   >
-                    <span className="w-8 h-8 rounded-lg bg-white border border-inherit flex items-center justify-center text-sm">
+                    <span className="w-8 h-8 rounded-lg bg-white border border-inherit flex items-center justify-center text-sm shrink-0">
                       {["A","B","C","D"][idx]}
                     </span>
-                    <span className="flex-1">{opt}</span>
+                    <span className="flex-1 text-sm md:text-base">{opt}</span>
                   </button>
                 );
               })}
@@ -208,30 +229,46 @@ export default function QuizPage() {
     );
   }
 
-  // RENDER: PANTALLA DE RESULTADOS
+  // 🏆 RENDER: PANTALLA DE RESULTADOS
   if (showResult && activeLevelId) {
     const level = LEVELS.find(l => l.id === activeLevelId);
     const passed = score >= (level?.passingScore || 0);
-    const timeOut = timeLeft === 0 && activeLevelId === 4; 
+    const timeOut = timeLeft === 0;
 
     return (
       <div className="min-h-screen bg-slate-100 flex items-center justify-center p-6">
-        <div className="bg-white p-10 rounded-[3rem] shadow-2xl text-center max-w-lg w-full border border-white">
-          <div className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-8 ${passed ? "bg-emerald-100 text-emerald-600" : "bg-red-100 text-red-600"}`}>
-            {passed ? <CheckCircle size={48} /> : <XCircle size={48} />}
+        <div className="bg-white p-10 rounded-[3rem] shadow-2xl text-center max-w-lg w-full border border-white animate-in zoom-in">
+          <div className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-8 ${passed ? "bg-yellow-100 text-yellow-500" : "bg-red-100 text-red-600"}`}>
+            {passed ? <Trophy size={48} className="animate-bounce"/> : <XCircle size={48} />}
           </div>
+          
           <h2 className="text-3xl font-black text-slate-800 mb-2 tracking-tight">
-            {timeOut ? "¡Se acabó el tiempo!" : passed ? "¡Nivel Superado!" : "Sigue Practicando"}
+            {timeOut ? "¡Tiempo Agotado!" : passed ? "¡Nivel Superado!" : "Sigue Intentando"}
           </h2>
-          <p className="text-slate-500 text-lg mb-8 font-medium italic">Lograste {score} de {level?.questions.length} correctas</p>
+          
+          <p className="text-slate-500 text-lg mb-4 font-medium italic">
+            Lograste {score} de {level?.questions.length} correctas
+          </p>
+
+          {passed && (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-8 text-yellow-800 flex items-center gap-3 text-left">
+                <Medal className="shrink-0" />
+                <div>
+                    <p className="font-bold text-sm">¡Has ganado una medalla!</p>
+                    <p className="text-xs">{level.medal}</p>
+                </div>
+            </div>
+          )}
           
           {mistakes.length > 0 && (
             <div className="bg-slate-50 p-6 rounded-3xl border border-slate-200 text-left mb-8 max-h-60 overflow-y-auto">
+                <h4 className="font-bold text-slate-400 text-xs uppercase tracking-widest mb-4">Revisión de Errores</h4>
                 {mistakes.map((m, i) => (
                     <div key={i} className="mb-6 last:mb-0 border-b border-slate-200 pb-4 last:border-0 text-sm">
                         <p className="font-bold text-slate-800 mb-2">{m.question}</p>
-                        <p className="text-xs text-emerald-600 font-bold italic">Respuesta correcta: {m.correctAnswer}</p>
-                        <p className="text-[10px] text-slate-400 mt-2 font-medium">Tema: {m.studyGuide}</p>
+                        <p className="text-xs text-red-500 font-medium mb-1">Tu respuesta: {m.yourAnswer}</p>
+                        <p className="text-xs text-emerald-600 font-bold">Correcta: {m.correctAnswer}</p>
+                        <p className="text-[10px] text-slate-400 mt-2 font-medium">Repasar: {m.studyGuide}</p>
                     </div>
                 ))}
             </div>
@@ -239,18 +276,77 @@ export default function QuizPage() {
 
           <div className="flex flex-col gap-3">
             <button onClick={passed ? returnToMenu : () => startLevel(activeLevelId)} className={`w-full font-black py-5 rounded-2xl shadow-lg cursor-pointer transition-transform hover:scale-[1.02] ${passed ? "bg-slate-900 text-white" : "bg-emerald-500 text-white"}`}>
-              {passed ? "Continuar Ruta" : "Reintentar Nivel"}
+              {passed ? "Volver al Mapa" : "Reintentar Nivel"}
             </button>
-            <button onClick={returnToMenu} className="py-4 text-slate-400 font-bold text-sm text-center cursor-pointer">Volver al Menú</button>
           </div>
         </div>
       </div>
     );
   }
 
-  // RENDER: MENÚ DE NIVELES (CON SEO FOOTER INYECTADO)
+  // 🗺️ RENDER: MENÚ DE NIVELES (DASHBOARD)
   return (
-    <main className="min-h-screen bg-slate-50 pb-24 font-sans">
+    <main className="min-h-screen bg-slate-50 pb-24 font-sans relative">
+      
+      {/* 🟢 MODAL DE AUTENTICACIÓN (Restaurado) */}
+      {showAuthModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4 animate-in fade-in">
+          <div className="bg-white rounded-[2rem] p-8 max-w-sm w-full text-center shadow-2xl">
+            <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Lock size={32} />
+            </div>
+            <h3 className="text-2xl font-black text-slate-900 mb-2">Acceso Restringido</h3>
+            <p className="text-slate-500 mb-8 leading-relaxed">
+              Para guardar tu progreso y desbloquear niveles, necesitas una cuenta gratuita.
+            </p>
+            <div className="space-y-3">
+              <Link 
+                href="/login" 
+                className="block w-full bg-blue-600 text-white font-bold py-4 rounded-xl hover:bg-blue-700 transition-colors"
+              >
+                Iniciar Sesión / Registrarse
+              </Link>
+              <button 
+                onClick={() => setShowAuthModal(false)}
+                className="text-slate-400 font-bold text-sm hover:text-slate-600"
+              >
+                Seguir mirando
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 🟢 MODAL DE CONFIRMACIÓN FORO (Restaurado) */}
+      {showForumModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4 animate-in fade-in">
+          <div className="bg-white rounded-[2rem] p-8 max-w-sm w-full text-center shadow-2xl">
+            <div className="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
+              <WhatsAppIcon size={32} />
+            </div>
+            <h3 className="text-2xl font-black text-slate-900 mb-2">Comunidad VIP</h3>
+            <p className="text-slate-500 mb-8 leading-relaxed text-sm">
+              Vas a ser redirigido a nuestro grupo de WhatsApp para resolver dudas técnicas.
+            </p>
+            <div className="space-y-3">
+              <Link 
+                href="/foro" 
+                target="_blank"
+                className="block w-full bg-emerald-500 text-white font-bold py-4 rounded-xl hover:bg-emerald-600 transition-colors flex items-center justify-center gap-2"
+              >
+                Ir al Grupo <ExternalLink size={18}/>
+              </Link>
+              <button 
+                onClick={() => setShowForumModal(false)}
+                className="w-full text-slate-400 font-bold text-sm hover:text-slate-600 py-2 cursor-pointer"
+              >
+                Me arrepentí / Volver
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* HEADER STICKY */}
       <div className="bg-white p-6 shadow-sm sticky top-0 z-10 flex items-center justify-between border-b border-slate-100">
         <div className="flex items-center gap-4">
@@ -261,67 +357,83 @@ export default function QuizPage() {
         </div>
         <div className="bg-slate-100 px-4 py-2 rounded-full text-sm font-black text-slate-700 flex items-center gap-3">
           <Trophy size={18} className="text-yellow-500"/> 
-          {unlockedLevels.length - 1} / {LEVELS.length}
+          {user ? unlockedLevels.length - 1 : 0} / {LEVELS.length}
         </div>
       </div>
 
       <div className="p-6 max-w-xl mx-auto space-y-8 mt-6">
-        {/* TARJETA DE PERFIL */}
-        <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 flex items-center gap-5">
+        
+        {/* TARJETA DE PERFIL (Interactiva si Invitado) */}
+        <div 
+          onClick={() => !user && setShowAuthModal(true)} 
+          className={`bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 flex items-center gap-5 ${!user ? 'cursor-pointer hover:bg-slate-50 transition-colors' : ''}`}
+        >
           <div className="relative">
             {user?.photoURL ? (
               <img src={user.photoURL} alt="User" className="w-16 h-16 rounded-2xl border-4 border-slate-50 shadow-md object-cover" />
             ) : (
-              <div className="w-16 h-16 bg-emerald-500 text-white rounded-2xl flex items-center justify-center text-2xl font-black shadow-lg">
-                {user?.displayName?.charAt(0) || "M"}
+              <div className="w-16 h-16 bg-slate-200 text-slate-400 rounded-2xl flex items-center justify-center text-2xl font-black shadow-inner">
+                ?
               </div>
             )}
-            <div className="absolute -bottom-1 -right-1 bg-blue-500 text-white p-1 rounded-lg border-2 border-white">
+            <div className={`absolute -bottom-1 -right-1 text-white p-1 rounded-lg border-2 border-white ${user ? 'bg-emerald-500' : 'bg-slate-400'}`}>
               <ShieldCheck size={14}/>
             </div>
           </div>
           <div>
-            <p className="text-[10px] text-emerald-600 font-black uppercase tracking-wider">Auxiliar en formación</p>
-            <h2 className="text-xl font-black text-slate-900 leading-none mb-1">{user?.displayName || "Colega"}</h2>
-            <p className="text-xs text-slate-400 font-medium italic tracking-tight">Preparación Seremi 2026</p>
+            <p className="text-[10px] text-emerald-600 font-black uppercase tracking-wider">
+              {user ? "Auxiliar en formación" : "Modo Visitante"}
+            </p>
+            <h2 className="text-xl font-black text-slate-900 leading-none mb-1">
+              {user?.displayName || "Invitado"}
+            </h2>
+            <p className="text-xs text-slate-400 font-medium italic tracking-tight">
+              {user ? "Preparación Seremi 2026" : "Crea una cuenta para guardar progreso"}
+            </p>
           </div>
         </div>
         
         {/* LISTA DE NIVELES DINÁMICA */}
         <div className="space-y-4">
           {LEVELS.map((l) => {
-            const isU = unlockedLevels.includes(l.id);
-            const isP = unlockedLevels.includes(l.id + 1) || (l.id === LEVELS.length && unlockedLevels.length > LEVELS.length); 
+            const isUnlocked = user ? unlockedLevels.includes(l.id) : (l.id === 1); 
+            const isPassed = user ? unlockedLevels.includes(l.id + 1) || (l.id === LEVELS.length && unlockedLevels.length > LEVELS.length) : false;
             
             return (
               <button 
                 key={l.id} 
                 onClick={() => startLevel(l.id)} 
-                disabled={!isU} 
-                className={`w-full group rounded-[2rem] border-2 transition-all p-6 flex items-center gap-6 ${
-                  isP ? "bg-emerald-50 border-emerald-100 cursor-pointer" : 
-                  isU ? "bg-white border-white shadow-xl hover:-translate-y-1 cursor-pointer" : 
+                className={`w-full group rounded-[2rem] border-2 transition-all p-6 flex items-center gap-6 relative overflow-hidden ${
+                  isPassed ? "bg-emerald-50 border-emerald-100 cursor-pointer" : 
+                  isUnlocked ? "bg-white border-blue-100 shadow-xl hover:-translate-y-1 cursor-pointer" : 
                   "bg-slate-100 opacity-60 grayscale cursor-default"
                 }`}
               >
-                <div className={`w-16 h-16 rounded-full flex items-center justify-center text-3xl shadow-inner ${
-                  isP ? "bg-emerald-500 text-white" : 
-                  isU ? "bg-[#dcfce7] text-[#10b981]" : 
+                {/* ÍCONO DEL NIVEL */}
+                <div className={`w-16 h-16 rounded-full flex items-center justify-center text-3xl shadow-inner shrink-0 ${
+                  isPassed ? "bg-emerald-500 text-white" : 
+                  isUnlocked ? "bg-blue-500 text-white" : 
                   "bg-slate-300 text-slate-400"
                 }`}>
-                  {isP ? <CheckCircle size={32} /> : isU ? (iconMap[l.icon] || l.icon) : <Lock size={28}/>}
+                  {isPassed ? <CheckCircle size={32} /> : isUnlocked ? (iconMap[l.icon] || l.icon) : <Lock size={28}/>}
                 </div>
-                <div className="flex-1 text-left">
+
+                {/* TEXTOS */}
+                <div className="flex-1 text-left z-10">
                     <h3 className="font-black text-lg text-slate-800 leading-tight">{l.title}</h3>
-                    <div className="flex items-center gap-3 mt-0.5 text-xs">
-                        <p className="font-bold text-slate-400">{l.questions.length} Preguntas</p>
-                        <span className={`text-[9px] font-black uppercase px-2 py-0.5 rounded-full border ${
-                          isP ? "bg-emerald-100 text-emerald-600 border-emerald-200" : 
-                          isU ? "bg-slate-100 text-slate-400 border-slate-200" : 
-                          "hidden"
-                        }`}>
-                            {isP ? "Superado" : "Pendiente"}
-                        </span>
+                    <p className="text-xs text-slate-500 mt-1 line-clamp-1">{l.description}</p>
+                    
+                    <div className="flex items-center gap-2 mt-2">
+                        {isPassed && (
+                            <span className="bg-yellow-100 text-yellow-700 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 border border-yellow-200">
+                                <Medal size={10}/> {l.medal}
+                            </span>
+                        )}
+                        {!isPassed && isUnlocked && (
+                            <span className="bg-blue-100 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-blue-200">
+                                Disponible
+                            </span>
+                        )}
                     </div>
                 </div>
               </button>
@@ -331,17 +443,22 @@ export default function QuizPage() {
 
         {/* ACCESOS RÁPIDOS */}
         <div className="grid grid-cols-1 gap-4 mt-10">
-            <Link href="/biblioteca" className="bg-white p-6 rounded-[2rem] border-2 border-slate-100 shadow-sm hover:border-blue-400 transition-all flex items-center gap-6 group cursor-pointer">
+            {/* 🟢 ENLACE A GUÍAS */}
+            <Link href="/guias" className="bg-white p-6 rounded-[2rem] border-2 border-slate-100 shadow-sm hover:border-blue-400 transition-all flex items-center gap-6 group cursor-pointer">
                 <div className="w-14 h-14 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Library size={28} />
                 </div>
                 <div>
-                  <h3 className="font-black text-lg text-slate-800 tracking-tight">Biblioteca</h3>
-                  <p className="text-xs text-slate-400 font-bold uppercase italic">Recursos PDF 2026</p>
+                  <h3 className="font-black text-lg text-slate-800 tracking-tight">Guías de Estudio</h3>
+                  <p className="text-xs text-slate-400 font-bold uppercase italic">Resúmenes y Normativa</p>
                 </div>
             </Link>
 
-            <Link href="/foro" className="bg-[#0f172a] p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden group hover:scale-[1.01] transition-all cursor-pointer border border-white/10">
+            {/* FORO */}
+            <div 
+              onClick={() => setShowForumModal(true)} 
+              className="bg-[#0f172a] p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden group hover:scale-[1.01] transition-all cursor-pointer border border-white/10"
+            >
                 <div className="flex items-center justify-between relative z-10">
                     <div className="pr-4">
                         <h3 className="text-xl font-black text-white italic">¿Dudas Técnicas?</h3>
@@ -351,10 +468,10 @@ export default function QuizPage() {
                       <WhatsAppIcon size={32} className="text-emerald-500 group-hover:text-white transition-colors" />
                     </div>
                 </div>
-            </Link>
+            </div>
         </div>
 
-        {/* 🟢 SECCIÓN SEO INYECTADA: Soluciona "Página con poco texto" del reporte */}
+        {/* SECTION SEO INYECTADA */}
         <section className="mt-16 pt-16 border-t border-slate-200">
           <h2 className="text-2xl font-black text-slate-900 mb-6 flex items-center gap-2">
             <BrainCircuit className="text-emerald-500"/>
@@ -362,18 +479,15 @@ export default function QuizPage() {
           </h2>
           <div className="prose prose-sm prose-slate text-slate-600 leading-relaxed">
             <p>
-              El <strong>Simulador de Examen de Competencia</strong> de AuxiliarPro es la herramienta más avanzada para preparar tu acreditación ante la autoridad sanitaria. Diseñado siguiendo estrictamente el temario del <strong>Decreto Supremo 466</strong>, este sistema te permite entrenar en un entorno controlado antes de rendir la prueba real.
+              El <strong>Simulador de Examen de Competencia</strong> de AuxiliarPro es la herramienta más avanzada para preparar tu acreditación ante la autoridad sanitaria. Diseñado siguiendo estrictamente el temario de los <strong>Decretos Supremos 466, 404, 405 y 3</strong>, además de la Ley 20.724.
             </p>
             <h3 className="text-lg font-bold text-slate-800 mt-4">¿Qué evalúan los niveles?</h3>
             <ul className="list-disc pl-5 space-y-2 mt-2">
-              <li><strong>Normativa Farmacéutica:</strong> Roles, prohibiciones y tipos de establecimientos (Farmacias, Botiquines, Almacenes).</li>
-              <li><strong>Farmacología Básica:</strong> Vías de administración, formas farmacéuticas y bioequivalencia.</li>
-              <li><strong>Gestión de Calidad:</strong> Cadena de frío (2°C a 8°C), control de vencimientos y manejo de libros oficiales.</li>
-              <li><strong>Dispensación Segura:</strong> Interpretación de recetas (Cheque, Retenida, Magistral) y cálculo de dosis.</li>
+              <li><strong>Normativa Farmacéutica:</strong> Roles, prohibiciones y tipos de establecimientos.</li>
+              <li><strong>Gestión de Calidad:</strong> Cadena de frío, control de vencimientos y bioequivalencia.</li>
+              <li><strong>Sustancias Controladas:</strong> Estupefacientes (D.404) y Psicotrópicos (D.405).</li>
+              <li><strong>Cálculo de Dosis:</strong> Posología matemática para la dispensación segura.</li>
             </ul>
-            <p className="mt-4">
-              Cada nivel superado queda registrado en tu perfil de alumno, permitiéndote retomar tu estudio donde lo dejaste. Al completar la ruta, estarás listo para enfrentar las 60 preguntas de selección múltiple del examen oficial.
-            </p>
           </div>
         </section>
 
