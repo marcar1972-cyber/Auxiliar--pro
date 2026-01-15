@@ -1,14 +1,13 @@
 import Link from "next/link";
 import { ChevronRight, Scale, Thermometer, Pill, Clipboard, ShieldAlert, ArrowRight, BookOpen, CheckCircle } from "lucide-react";
 
-// 🟢 BLOQUE SEO OBLIGATORIO (Solución al Reporte PDF)
-// Esto define el Título y Descripción específicos para la Portada.
+// 🟢 BLOQUE SEO OBLIGATORIO
 export const metadata = {
   title: "Examen Auxiliar de Farmacia SEREMI | Simulador y Normativa 2026",
   description: "Aprueba tu examen de competencia SEREMI. Estudia gratis los Decretos 466, 404 y 405. Simulador de preguntas reales y material de estudio validado en Chile.",
   keywords: ["examen auxiliar farmacia", "seremi salud", "decreto 466", "test farmacia chile", "simulador competencia"],
   alternates: {
-    canonical: './', // Soluciona el error de "Canonical link" del reporte
+    canonical: './',
   },
 };
 
@@ -16,7 +15,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white font-sans text-slate-800">
       
-      {/* HERO SECTION: ENFOQUE LEGAL PURO */}
+      {/* HERO SECTION */}
       <header className="py-24 px-6 bg-gradient-to-b from-slate-50 to-white text-center">
         <div className="max-w-4xl mx-auto">
           <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest mb-10 border border-emerald-100 italic">
@@ -37,7 +36,7 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* 5 ARTÍCULOS TÉCNICOS BASADOS EN LA LEY (750+ Palabras para SEO) */}
+      {/* 5 ARTÍCULOS TÉCNICOS */}
       <main className="max-w-6xl mx-auto px-6 py-24 border-t border-slate-50">
         <h2 className="text-center font-black text-2xl uppercase tracking-widest mb-16 italic">Módulos Críticos de Legislación</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -46,7 +45,7 @@ export default function LandingPage() {
             <Scale className="text-emerald-500 mb-6" size={32} />
             <h3 className="font-black text-xl mb-4 leading-tight">Rol Técnico y Decreto 466</h3>
             <p className="text-sm text-slate-500 leading-relaxed">
-              El <strong>Decreto Supremo 466</strong> constituye el marco jurídico fundamental que regula la instalación, funcionamiento y responsabilidades en farmacias y almacenes farmacéuticos. Todo auxiliar debe dominar las prohibiciones de dispensación y las obligaciones de infraestructura, como el almacenamiento técnico a 10 cm del piso y 30 cm de los muros para garantizar la higiene exigida por la autoridad.
+              El <strong>Decreto Supremo 466</strong> constituye el marco jurídico fundamental que regula la instalación, funcionamiento y responsabilidades en farmacias y almacenes farmacéuticos. Todo auxiliar debe dominar las prohibiciones de dispensación y las obligaciones de infraestructura.
             </p>
           </article>
 
@@ -54,7 +53,7 @@ export default function LandingPage() {
             <Thermometer className="text-blue-500 mb-6" size={32} />
             <h3 className="font-black text-xl mb-4 leading-tight">Estabilidad y Cadena de Frío</h3>
             <p className="text-sm text-slate-500 leading-relaxed">
-              La seguridad de los productos biológicos se rige por normas técnicas de almacenamiento estrictas. El mantenimiento de la temperatura entre <strong>2°C y 8°C</strong> es una obligación legal para insulinas y vacunas. Este módulo profundiza en el control de termohigrómetros, registros de planillas de temperatura y protocolos de contingencia ante quiebres de cadena de frío según las directrices sanitarias.
+              La seguridad de los productos biológicos se rige por normas técnicas estrictas. El mantenimiento de la temperatura entre <strong>2°C y 8°C</strong> es una obligación legal para insulinas y vacunas. Este módulo profundiza en el control de termohigrómetros y protocolos de contingencia.
             </p>
           </article>
 
@@ -62,7 +61,7 @@ export default function LandingPage() {
             <ShieldAlert className="text-purple-500 mb-6" size={32} />
             <h3 className="font-black text-xl mb-4 leading-tight">Controlados: Decretos 404 y 405</h3>
             <p className="text-sm text-slate-500 leading-relaxed">
-              La dispensación de Estupefacientes y Psicotrópicos requiere un cumplimiento riguroso de los reglamentos <strong>DS 404 y DS 405</strong>. El aspirante debe dominar los requisitos de la Receta Cheque y Receta Retenida, el registro diario obligatorio en libros de control y la normativa de custodia en muebles de seguridad bajo llave para evitar infracciones legales graves durante las inspecciones de la SEREMI.
+              La dispensación de Estupefacientes y Psicotrópicos requiere un cumplimiento riguroso de los reglamentos <strong>DS 404 y DS 405</strong>. Domina los requisitos de la Receta Cheque y Retenida, el registro diario en libros de control y la normativa de seguridad bajo llave.
             </p>
           </article>
 
@@ -70,7 +69,7 @@ export default function LandingPage() {
             <Pill className="text-amber-500 mb-6" size={32} />
             <h3 className="font-black text-xl mb-4 leading-tight">Bioequivalencia y Ley de Fármacos</h3>
             <p className="text-sm text-slate-500 leading-relaxed">
-              La <strong>Ley de Fármacos II</strong> impulsa el uso de medicamentos genéricos con sello de Bioequivalencia vigente, garantizando la misma eficacia que el innovador. En este bloque se analiza la obligatoriedad de informar precios y el marco legal para el fraccionamiento de medicamentos en unidades autorizadas, permitiendo un acceso más económico y seguro a los tratamientos prescritos por los profesionales facultados.
+              La <strong>Ley de Fármacos II</strong> impulsa el uso de medicamentos genéricos con sello de Bioequivalencia. Analizamos la obligatoriedad de informar precios y el marco legal para el fraccionamiento de medicamentos en unidades autorizadas.
             </p>
           </article>
 
@@ -78,38 +77,41 @@ export default function LandingPage() {
             <Clipboard className="text-rose-500 mb-6" size={32} />
             <h3 className="font-black text-xl mb-4 leading-tight">Seguridad y Farmacovigilancia</h3>
             <p className="text-sm text-slate-500 leading-relaxed">
-              El reporte de Reacciones Adversas a Medicamentos (RAM) es un deber ético y legal del personal de farmacia ante el <strong>Instituto de Salud Pública (ISP)</strong>. Comprender los procesos de farmacocinética y farmacodinamia permite una detección temprana de efectos no deseados, contribuyendo directamente a la farmacovigilancia nacional y asegurando que la salud pública sea resguardada post-dispensación.
+              El reporte de Reacciones Adversas (RAM) es un deber ético y legal ante el <strong>Instituto de Salud Pública (ISP)</strong>. Comprender la farmacocinética permite una detección temprana de efectos no deseados, contribuyendo a la salud pública.
             </p>
           </article>
         </div>
 
-        {/* METODOLOGÍA: BASADA EN LEYES VIGENTES */}
+        {/* METODOLOGÍA */}
         <section className="mt-32 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="space-y-6">
                 <h2 className="text-3xl font-black text-slate-900 leading-tight">Preparación Técnica para el Proceso de Certificación 2026</h2>
                 <p className="text-slate-500 leading-relaxed font-medium">
-                    Nuestra metodología de entrenamiento se centra en la aplicación práctica de los reglamentos sanitarios. Los exámenes de competencia exigen un análisis profundo de la normativa vigente en Chile.
+                    Nuestra metodología se centra en la aplicación práctica de los reglamentos sanitarios. Los exámenes de competencia exigen un análisis profundo de la normativa vigente.
                 </p>
                 <ul className="space-y-4">
                     <li className="flex items-center gap-3 text-sm font-bold text-slate-700">
                         <CheckCircle size={18} className="text-emerald-500" /> Simulacros con tiempo real de 60 minutos
                     </li>
                     <li className="flex items-center gap-3 text-sm font-bold text-slate-700">
-                        <CheckCircle size={18} className="text-emerald-500" /> Preguntas basadas en los Reglamentos Sanitarios Vigentes
+                        <CheckCircle size={18} className="text-emerald-500" /> Preguntas basadas en los Reglamentos Vigentes
                     </li>
                     <li className="flex items-center gap-3 text-sm font-bold text-slate-700">
                         <CheckCircle size={18} className="text-emerald-500" /> Enfoque en Decretos 466, 404, 405 y Ley de Fármacos
                     </li>
                 </ul>
             </div>
+            
             <div className="bg-slate-900 p-10 rounded-[3rem] text-white shadow-2xl">
                 <h4 className="text-xl font-black mb-4 flex items-center gap-2">
                     <BookOpen size={24} className="text-emerald-400" /> Compendio de Estudio Legal
                 </h4>
                 <p className="text-slate-400 text-sm leading-relaxed mb-6">
-                    ¿Conoces los plazos legales de vigencia de una receta simple o los requisitos técnicos para el almacenamiento de vacunas? El dominio de estos detalles jurídicos es el factor determinante para aprobar el examen de la autoridad sanitaria.
+                    ¿Conoces los plazos legales de vigencia de una receta o los requisitos de almacenamiento de vacunas? El dominio de estos detalles jurídicos es el factor determinante para aprobar.
                 </p>
-                <Link href="/biblioteca" className="text-emerald-400 font-bold hover:underline flex items-center gap-2 text-sm uppercase tracking-widest">
+                
+                {/* 🟢 CORRECCIÓN REALIZADA: Ahora apunta a /guias */}
+                <Link href="/guias" className="text-emerald-400 font-bold hover:underline flex items-center gap-2 text-sm uppercase tracking-widest">
                     EXPLORAR TEXTOS LEGALES <ChevronRight size={16}/>
                 </Link>
             </div>
@@ -121,7 +123,7 @@ export default function LandingPage() {
             <h4 className="text-2xl font-black text-slate-900 mb-4">¿Dudas sobre la Normativa Sanitaria?</h4>
             <p className="text-slate-500 text-sm mb-10 font-medium max-w-lg mx-auto leading-relaxed">
               Consulta nuestro centro de respuestas detalladas sobre el Decreto 466, 
-              almacenamiento técnico en bodega y validación de recetas electrónicas según las leyes vigentes.
+              almacenamiento técnico en bodega y validación de recetas electrónicas.
             </p>
             
             <Link 
