@@ -1,15 +1,15 @@
-
 import Link from "next/link";
 import { ChevronRight, Scale, Thermometer, Pill, Clipboard, ShieldAlert, ArrowRight, BookOpen, CheckCircle } from "lucide-react";
+// 👇 Importamos el nuevo componente
+import AboutSection from "./components/AboutSection";
 
 // 🟢 BLOQUE SEO OBLIGATORIO (Solución al Reporte PDF)
-// Esto define el Título y Descripción específicos para la Portada.
 export const metadata = {
   title: "Examen Auxiliar de Farmacia SEREMI | Simulador y Normativa 2026",
   description: "Aprueba tu examen de competencia SEREMI. Estudia gratis los Decretos 466, 404 y 405. Simulador de preguntas reales y material de estudio validado en Chile.",
   keywords: ["examen auxiliar farmacia", "seremi salud", "decreto 466", "test farmacia chile", "simulador competencia"],
   alternates: {
-    canonical: './', // Soluciona el error de "Canonical link" del reporte
+    canonical: './', 
   },
 };
 
@@ -31,7 +31,7 @@ export default function LandingPage() {
             Contenido técnico y jurídico validado para el proceso de certificación 2026.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            {/* 🟢 ESTE BOTÓN LLEVA A /quiz SIN PEDIR LOGIN (El login se pide dentro de /quiz al elegir nivel) */}
+            {/* 🟢 ESTE BOTÓN LLEVA A /quiz SIN PEDIR LOGIN */}
             <Link href="/quiz" className="inline-flex items-center gap-2 bg-slate-900 text-white px-12 py-5 rounded-[2rem] font-black text-lg hover:bg-emerald-600 transition-all shadow-2xl">
               EMPEZAR AHORA <ArrowRight />
             </Link>
@@ -39,7 +39,7 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* 5 ARTÍCULOS TÉCNICOS BASADOS EN LA LEY (750+ Palabras para SEO) */}
+      {/* 5 ARTÍCULOS TÉCNICOS BASADOS EN LA LEY */}
       <main className="max-w-6xl mx-auto px-6 py-24 border-t border-slate-50">
         <h2 className="text-center font-black text-2xl uppercase tracking-widest mb-16 italic">Módulos Críticos de Legislación</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -111,7 +111,7 @@ export default function LandingPage() {
                 <p className="text-slate-400 text-sm leading-relaxed mb-6">
                     ¿Conoces los plazos legales de vigencia de una receta simple o los requisitos técnicos para el almacenamiento de vacunas? El dominio de estos detalles jurídicos es el factor determinante para aprobar el examen de la autoridad sanitaria.
                 </p>
-                {/* 🟢 CORRECCIÓN: Apunta a /guias (la nueva biblioteca) */}
+                {/* 🟢 ENLACE A GUIAS */}
                 <Link href="/guias" className="text-emerald-400 font-bold hover:underline flex items-center gap-2 text-sm uppercase tracking-widest">
                     EXPLORAR TEXTOS LEGALES <ChevronRight size={16}/>
                 </Link>
@@ -136,6 +136,12 @@ export default function LandingPage() {
             </Link>
           </div>
         </div>
+
+        {/* 👇 NUEVA SECCIÓN SOBRE NOSOTROS (MACZDEV) */}
+        <div className="mt-32">
+          <AboutSection />
+        </div>
+
       </main>
     </div>
   );
