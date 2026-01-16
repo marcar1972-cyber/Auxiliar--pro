@@ -1,5 +1,5 @@
 'use client';
-import { User, Heart, Lightbulb, ShieldCheck, Cpu, Code } from 'lucide-react';
+import { Heart, Lightbulb, Code } from 'lucide-react';
 
 export default function AboutSection() {
   return (
@@ -21,14 +21,22 @@ export default function AboutSection() {
 
         {/* Historia Principal */}
         <div className="bg-slate-50 rounded-[2.5rem] p-8 md:p-12 border border-slate-200 flex flex-col md:flex-row gap-10 items-center mb-16 shadow-sm">
-            <div className="w-24 h-24 md:w-32 md:h-32 bg-white border-4 border-emerald-100 rounded-full flex items-center justify-center flex-shrink-0 text-emerald-500 shadow-md">
-                <User size={48} />
+            
+            {/* FOTO DE PERFIL */}
+            <div className="relative w-32 h-32 md:w-40 md:h-40 flex-shrink-0">
+                <div className="absolute inset-0 bg-emerald-200 rounded-full blur-lg opacity-50"></div>
+                <img 
+                    src="/macdev.webp" 
+                    alt="MaczDev" 
+                    className="relative w-full h-full object-cover rounded-full border-4 border-white shadow-md"
+                />
             </div>
+
             <div className="flex-1 text-center md:text-left">
                 <h3 className="text-2xl font-black text-slate-900 mb-4">Hola, soy MaczDev 👋</h3>
                 <div className="space-y-4 text-slate-600 leading-relaxed">
                     <p>
-                        Soy <strong>Auxiliar Trainee de Farmacia</strong> y <strong>Desarrollador Web IA</strong>. Actualmente trabajo en el rubro y, al igual que tú, me estoy preparando para rendir la prueba de competencia <strong>SEREMI 2026</strong>.
+                        Soy <strong>Auxiliar Trainee de Farmacia</strong> y <strong>Desarrollador Web & Maker</strong>. Actualmente trabajo en el rubro y, al igual que tú, me estoy preparando para rendir la prueba de competencia <strong>SEREMI 2026</strong>.
                     </p>
                     <p>
                         Mientras estudiaba, me di cuenta de un gran vacío: <strong>no existían ensayos tipo prueba disponibles en la red</strong>. Esa frustración fue mi motor.
