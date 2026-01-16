@@ -25,8 +25,9 @@ export default function AboutSection() {
             {/* FOTO DE PERFIL */}
             <div className="relative w-32 h-32 md:w-40 md:h-40 flex-shrink-0">
                 <div className="absolute inset-0 bg-emerald-200 rounded-full blur-lg opacity-50"></div>
+                {/* 👇 AQUÍ ESTABA EL ERROR: AGREGAMOS LA 'z' */}
                 <img 
-                    src="/macdev.webp" 
+                    src="/maczdev.webp" 
                     alt="MaczDev" 
                     className="relative w-full h-full object-cover rounded-full border-4 border-white shadow-md"
                 />
