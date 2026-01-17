@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { Calendar, BookOpen, FileText, DollarSign, Scale, Users, ArrowRight, GraduationCap } from "lucide-react";
+import { Calendar, BookOpen, FileText, DollarSign, Scale, Users, ArrowRight, GraduationCap, Lightbulb } from "lucide-react";
 
-// 🟢 METADATOS (Intactos)
+// 🟢 METADATOS
 export const metadata = {
   title: "Blog y Noticias | Auxiliar de Farmacia Chile",
   description: "Artículos educativos, noticias sobre el examen de competencia SEREMI y consejos legales (Decreto 466) para auxiliares de farmacia en Chile.",
@@ -11,8 +11,18 @@ export const metadata = {
   },
 };
 
-// LISTADO DE ARTÍCULOS (Agregado el nuevo al principio)
+// LISTADO DE ARTÍCULOS
 const articles = [
+  // 👇 AQUÍ AGREGAMOS EL NUEVO ARTÍCULO (TOP 1)
+  {
+    slug: "vision-ley-farmacos",
+    title: "Ley de Fármacos II: Mi visión y por qué creé DermoCheck",
+    desc: "Opinión estratégica: ¿Por qué la posible baja de márgenes amenaza tu estabilidad y cómo la gestión de stock te protege?",
+    category: "Opinión",
+    color: "text-amber-600",
+    bgIcon: "bg-amber-500/10",
+    icon: <Lightbulb className="text-amber-500 w-16 h-16 opacity-50" />
+  },
   {
     slug: "curso-auxiliar-farmacia-gratis-chile-2026",
     title: "Curso de Auxiliar de Farmacia Gratis en Chile",
@@ -84,7 +94,6 @@ export default function BlogIndex() {
       
       {/* HEADER DEL BLOG */}
       <header className="mb-12 text-center">
-        {/* 🟢 TÍTULO CORREGIDO: Se eliminó "y Guías" para evitar confusión */}
         <h1 className="text-3xl md:text-5xl font-black text-slate-900 mb-4">
           Blog para <span className="text-emerald-600">Auxiliar de Farmacia</span>
         </h1>
