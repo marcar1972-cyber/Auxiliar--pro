@@ -1,9 +1,18 @@
 import Link from "next/link";
 import { ArrowLeft, Quote, CheckCircle, ExternalLink } from "lucide-react";
 
+// 🟢 SEO OPTIMIZADO: Integra "Ley de Fármacos" + Palabras Clave de Dermo (KD Easy/High Vol)
 export const metadata = {
-  title: "Ley de Fármacos II y el Futuro del Auxiliar | Opinión MaczDev",
-  description: "Análisis sobre el impacto de la Ley de Fármacos II en la farmacia chilena y por qué la gestión y especialización son claves. Conoce la visión detrás de DermoCheck.",
+  title: "Ley de Fármacos II y Dermocosmética: El futuro del Auxiliar",
+  description: "Análisis estratégico: Por qué la Ley de Fármacos II hará vital el curso de dermocosmética. Aprende a gestionar descuentos, packs y stock con DermoCheck.",
+  keywords: [
+    "ley de farmacos 2", 
+    "curso dermocosmetica", 
+    "dermocosmetica cruz verde", 
+    "dermocosmetica salcobrand", 
+    "descuentos dermocosmetica", 
+    "auxiliar de farmacia chile"
+  ],
 };
 
 export default function BlogPost() {
@@ -12,12 +21,12 @@ export default function BlogPost() {
       {/* Header / Hero del Artículo */}
       <header className="bg-slate-50 border-b border-slate-100 py-20 px-6">
         <div className="max-w-3xl mx-auto">
-            <Link href="/" className="inline-flex items-center text-slate-500 hover:text-emerald-600 mb-8 transition-colors font-medium">
-                <ArrowLeft size={20} className="mr-2" /> Volver al Inicio
+            <Link href="/blog" className="inline-flex items-center text-slate-500 hover:text-emerald-600 mb-8 transition-colors font-medium">
+                <ArrowLeft size={20} className="mr-2" /> Volver al Blog
             </Link>
             
             <span className="text-emerald-600 font-bold tracking-wider text-sm uppercase mb-4 block">
-                Opinión & Estrategia
+                Opinión & Estrategia Laboral
             </span>
             
             <h1 className="text-3xl md:text-5xl font-black text-slate-900 leading-tight mb-6">
@@ -25,13 +34,12 @@ export default function BlogPost() {
             </h1>
             
             <p className="text-xl text-slate-500 leading-relaxed font-medium">
-                Nadie tiene una bola de cristal, pero el escenario económico de la farmacia podría cambiar. Aquí te cuento por qué creo que gestionar mejor y especializarse es el único camino seguro.
+                Nadie tiene una bola de cristal, pero el mercado de la <strong>dermocosmética</strong> podría ser tu salvavidas ante la regulación de precios. Aquí te cuento mi estrategia.
             </p>
             
             {/* Autor */}
             <div className="flex items-center gap-4 mt-8 pt-8 border-t border-slate-200">
                 <div className="w-12 h-12 rounded-full bg-emerald-100 overflow-hidden border-2 border-white shadow-sm">
-                   {/* Usamos tu foto real */}
                    <img src="/maczdev.webp" alt="MaczDev" className="w-full h-full object-cover" />
                 </div>
                 <div>
@@ -45,6 +53,10 @@ export default function BlogPost() {
       {/* Contenido del Post */}
       <div className="max-w-3xl mx-auto px-6 py-16 space-y-10 leading-loose text-lg text-slate-700">
         
+        <p>
+            Hola, soy Marcelo. Hoy quiero compartirte una reflexión muy personal que nace desde el cariño y respeto profundo a nuestro trabajo. Cada vez que leo sobre la tramitación de la <strong>Ley de Fármacos II</strong>, no puedo evitar preguntarme: <em>"¿Cómo será el trabajo del auxiliar en 5 años más?"</em>.
+        </p>
+
         <p>
             Tengo una admiración gigante por la "vieja escuela". Esos colegas que llevan años en el mesón, que interpretan recetas ilegibles y que son el corazón de la farmacia. Ellos son la base de todo.
         </p>
@@ -66,21 +78,21 @@ export default function BlogPost() {
         </p>
 
         <p>
-            Mi apuesta es que la farmacia del futuro necesitará compensar esa caída de márgenes evolucionando hacia las áreas que el mercado no regula y que permiten mayor gestión comercial: <strong>Dermocosmética, Vitaminas y Bienestar.</strong>
+            Mi apuesta es que la farmacia del futuro necesitará compensar esa caída de márgenes evolucionando hacia las áreas que el mercado no regula y que permiten mayor gestión comercial. Ya sea que trabajes viendo la <strong>dermocosmética en Cruz Verde</strong>, Salcobrand o en una farmacia independiente, la tendencia es la misma: el foco se mueve a la venta libre.
         </p>
         
         <p>
-            Vislumbro un futuro donde el auxiliar indispensable no es solo el que despacha rápido la receta (que deja poco margen), sino el que <strong>cuida y rentabiliza el negocio</strong>.
+            Vislumbro un futuro donde el auxiliar indispensable no es solo el que despacha rápido la receta (que deja poco margen), sino el que <strong>cuida y rentabiliza el negocio</strong> a través de las categorías libres.
         </p>
 
         <h2 className="text-2xl md:text-3xl font-black text-slate-900 mt-12 mb-6">¿Por qué cuidar el negocio? (El Rol de la Gestión)</h2>
         
         <p>
-            Aquí es donde aterrizo mi visión en algo real. Especializarse no es solo saber vender una crema cara; es saber <strong>gestionarla</strong>.
+            Aquí es donde aterrizo mi visión en algo real. Especializarse no es solo saber vender; es saber gestionar.
         </p>
         
         <p>
-            Los productos de Dermo son activos de alto valor. Si un lote de protectores solares importados se vence en la estantería porque nadie lo revisó, es una pérdida dolorosa que afecta directamente los números de la sucursal (y a la larga, pone en riesgo nuestra estabilidad laboral).
+            El paciente de hoy es experto. Llega buscando <strong>descuentos en dermocosmética</strong>, pregunta por el último <strong>pack de dermocosmética</strong> que vio en TikTok o compara precios. Los productos de Dermo son activos de alto valor y alta rotación. Si un lote de protectores solares importados se vence en la estantería porque nadie lo revisó, es una pérdida dolorosa.
         </p>
 
         <p>
@@ -96,11 +108,11 @@ export default function BlogPost() {
         <ul className="space-y-4 my-8 bg-slate-50 p-6 rounded-2xl border border-slate-100">
             <li className="flex items-start gap-3">
                 <CheckCircle className="text-emerald-500 mt-1 flex-shrink-0" />
-                <span>Es una herramienta gratuita y precisa.</span>
+                <span>Herramienta gratuita para verificar lotes.</span>
             </li>
             <li className="flex items-start gap-3">
                 <CheckCircle className="text-emerald-500 mt-1 flex-shrink-0" />
-                <span>Permite verificar fecha de producción y vencimiento real a partir del lote (Batch Code).</span>
+                <span>Clave para gestionar <strong>ofertas de dermocosmética</strong> sin riesgo de vencimiento.</span>
             </li>
             <li className="flex items-start gap-3">
                 <CheckCircle className="text-emerald-500 mt-1 flex-shrink-0" />
@@ -111,7 +123,7 @@ export default function BlogPost() {
         <h2 className="text-2xl md:text-3xl font-black text-slate-900 mt-12 mb-6">Lo que viene: Un proyecto de estudio</h2>
 
         <p>
-            DermoCheck es solo el comienzo. Estoy convencido de que la especialización en Dermo es el camino para protegernos ante cualquier consecuencia del mercado, pero he notado que la información para estudiar está muy dispersa.
+            DermoCheck es solo el comienzo. Estoy convencido de que realizar un <strong>curso de dermocosmética</strong> (o auto-capacitarse seriamente) es el camino para protegernos ante cualquier consecuencia del mercado.
         </p>
 
         <p>
@@ -120,12 +132,11 @@ export default function BlogPost() {
 
         {/* CONCLUSIÓN Y CTA */}
         <div className="bg-slate-900 text-white rounded-[2rem] p-8 md:p-12 mt-16 shadow-2xl relative overflow-hidden">
-            {/* Decoración de fondo */}
             <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
 
             <h3 className="text-2xl font-black mb-6 relative z-10">Mi invitación</h3>
             <p className="text-slate-300 mb-8 leading-relaxed relative z-10">
-                Mientras avanzo con el proyecto de las guías, te invito a usar lo que ya es una realidad. Usa <strong>DermoCheck</strong> en tu turno. Revisa esos lotes dudosos, limpia tu stock, evita mermas. Demuestra con hechos que tu gestión es impecable.
+                Mientras avanzo con el proyecto de las guías, te invito a usar lo que ya es una realidad. Usa <strong>DermoCheck</strong> en tu turno. Revisa esos lotes dudosos, limpia tu stock y evita mermas.
             </p>
             
             <div className="bg-emerald-900/40 border border-emerald-500/20 p-6 rounded-xl mb-8 relative z-10">
