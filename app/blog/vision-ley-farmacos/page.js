@@ -46,10 +46,6 @@ export default function BlogPost() {
       <div className="max-w-3xl mx-auto px-6 py-16 space-y-10 leading-loose text-lg text-slate-700">
         
         <p>
-            Hola, soy Marcelo. Hoy quiero compartirte una reflexión muy personal que nace desde el cariño y respeto profundo a nuestro trabajo. Cada vez que leo sobre la tramitación de la <strong>Ley de Fármacos II</strong>, no puedo evitar preguntarme: <em>"¿Cómo será el trabajo del auxiliar en 5 años más?"</em>.
-        </p>
-
-        <p>
             Tengo una admiración gigante por la "vieja escuela". Esos colegas que llevan años en el mesón, que interpretan recetas ilegibles y que son el corazón de la farmacia. Ellos son la base de todo.
         </p>
 
