@@ -1,3 +1,15 @@
+¡Entendido! Ese enlace directo a la sección de la calculadora (`#calculator-section`) es mucho mejor para la experiencia de usuario, así la gente no se pierde buscando dónde hacer la verificación.
+
+Aquí tienes el código **FINAL y CORREGIDO** para el archivo **`app/blog/vision-ley-farmacos/page.js`**.
+
+Solo copia y pega todo esto. Ya incluye:
+
+1. **SEO Optimizado** (Palabras clave de Dermo).
+2. **Tono Profesional** (Sin frases peyorativas).
+3. **Cierre Potente** (Indispensable y valorado).
+4. **Enlace Correcto** directo a tu calculadora.
+
+```javascript
 import Link from "next/link";
 import { ArrowLeft, Quote, CheckCircle, ExternalLink } from "lucide-react";
 
@@ -136,18 +148,25 @@ export default function BlogPost() {
 
             <h3 className="text-2xl font-black mb-6 relative z-10">Mi invitación</h3>
             <p className="text-slate-300 mb-8 leading-relaxed relative z-10">
-                Mientras avanzo con el proyecto de las guías, te invito a usar lo que ya es una realidad. Usa <strong>DermoCheck</strong> en tu turno. Revisa esos lotes dudosos, limpia tu stock y evita mermas.
+                Mientras avanzo con el proyecto de las guías, te invito a no esperar sentados. Usa lo que ya es una realidad: <strong>DermoCheck</strong>. Aplícalo en tu turno, revisa esos lotes dudosos, limpia tu stock y evita mermas.
             </p>
             
+            <div className="bg-white/5 border border-white/10 p-6 rounded-xl mb-8 relative z-10 text-sm md:text-base">
+                 <p className="font-medium text-slate-300 leading-relaxed">
+                    Y llévate esta reflexión final: El entorno cambia y exige nuevas competencias. Aunque nuestro rol actual es fundamental, <strong>si nos limitamos exclusivamente a la dispensación tradicional sin sumar nuevas habilidades, corremos el riesgo de quedar en una posición de mayor vulnerabilidad</strong>, expuestos a ser reemplazados ante cualquier ajuste de estructura o presupuesto.
+                 </p>
+            </div>
+
             <div className="bg-emerald-900/40 border border-emerald-500/20 p-6 rounded-xl mb-8 relative z-10">
                 <Quote className="text-emerald-400 mb-2 opacity-50" size={24} />
                 <p className="font-medium italic text-emerald-100">
-                    "Puede que me equivoque sobre los efectos de la Ley, pero estoy seguro de una cosa: un auxiliar que se especializa constantemente y usa tecnología para cuidar los recursos de su farmacia, siempre tendrá trabajo."
+                    "Puede que me equivoque sobre los efectos de la Ley, pero estoy seguro de una cosa: un auxiliar que se especializa constantemente y usa tecnología para cuidar los recursos de su farmacia, <strong>se convertirá en un profesional indispensable y altamente valorado en cualquier equipo.</strong>"
                 </p>
             </div>
 
+            {/* 👇 LINK CORREGIDO DIRECTO A LA CALCULADORA */}
             <a 
-                href="https://dermocheck.cl" 
+                href="https://www.dermocheck.cl/#calculator-section" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-3 bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-black px-8 py-4 rounded-full text-lg transition-all w-full md:w-auto shadow-lg hover:shadow-emerald-500/20 relative z-10"
@@ -160,3 +179,5 @@ export default function BlogPost() {
     </article>
   );
 }
+
+```
