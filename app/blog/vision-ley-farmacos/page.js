@@ -1,15 +1,3 @@
-¡Entendido! Ese enlace directo a la sección de la calculadora (`#calculator-section`) es mucho mejor para la experiencia de usuario, así la gente no se pierde buscando dónde hacer la verificación.
-
-Aquí tienes el código **FINAL y CORREGIDO** para el archivo **`app/blog/vision-ley-farmacos/page.js`**.
-
-Solo copia y pega todo esto. Ya incluye:
-
-1. **SEO Optimizado** (Palabras clave de Dermo).
-2. **Tono Profesional** (Sin frases peyorativas).
-3. **Cierre Potente** (Indispensable y valorado).
-4. **Enlace Correcto** directo a tu calculadora.
-
-```javascript
 import Link from "next/link";
 import { ArrowLeft, Quote, CheckCircle, ExternalLink } from "lucide-react";
 
@@ -179,5 +167,3 @@ export default function BlogPost() {
     </article>
   );
 }
-
-```
