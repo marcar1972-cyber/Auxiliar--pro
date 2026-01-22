@@ -1,11 +1,11 @@
 import Link from "next/link";
-// 🟢 IMPORTANTE: Agregué 'Calculator' a los imports para la guía de posología
-import { BookOpen, Pill, Lock, ArrowRight, Library, GraduationCap, BrainCircuit, Store, Calculator } from "lucide-react";
+// 🟢 IMPORTANTE: Agregué 'Microscope' a los imports para la guía de farmacología
+import { BookOpen, Pill, Lock, ArrowRight, Library, GraduationCap, BrainCircuit, Store, Calculator, Microscope } from "lucide-react";
 
 export const metadata = {
-  title: 'Guías de Estudio Auxiliar de Farmacia Chile | Decretos y Posología',
-  description: 'Material de estudio gratuito para el examen de competencia de Auxiliar de Farmacia (Seremi de Salud). Descarga resúmenes de la Ley 20.724, Decretos 466, 404, 405, 3 y Guía de Posología.',
-  keywords: ['auxiliar de farmacia', 'examen seremi salud', 'ley 20724 resumen', 'decreto 466', 'decreto 404', 'decreto 405', 'decreto 3', 'calculo de dosis', 'posologia'],
+  title: 'Guías de Estudio Auxiliar de Farmacia Chile | Decretos, Posología y Farmacología',
+  description: 'Material de estudio gratuito para el examen de competencia de Auxiliar de Farmacia (Seremi de Salud). Descarga resúmenes de la Ley 20.724, Decretos 466, 404, 405, 3, Guía de Posología y Farmacología.',
+  keywords: ['auxiliar de farmacia', 'examen seremi salud', 'ley 20724 resumen', 'decreto 466', 'decreto 404', 'decreto 405', 'decreto 3', 'calculo de dosis', 'posologia', 'farmacologia ladme'],
 };
 
 export default function GuiasIndex() {
@@ -46,12 +46,19 @@ export default function GuiasIndex() {
       color: "purple"
     },
     {
-      // 🟢 NUEVO: Guía de Posología
       slug: "guia-posologia",
       title: "Guía Maestra de Posología",
       desc: "Aprende a calcular dosis exactas. Regla de tres, equivalencias de gotas/ml y ejercicios prácticos.",
       icon: <Calculator size={40} className="text-indigo-600" />, 
       color: "indigo"
+    },
+    {
+      // 🟢 NUEVO: Guía de Farmacología N°1
+      slug: "farmacologia-1",
+      title: "Farmacología N°1: Fundamentos",
+      desc: "Lo básico que debes saber. Sistema LADME, Farmacodinamia (Receptores) y Glosario Técnico.",
+      icon: <Microscope size={40} className="text-cyan-600" />, 
+      color: "cyan"
     }
   ];
 
@@ -96,13 +103,14 @@ export default function GuiasIndex() {
                 {guia.desc}
               </p>
               <div className="mt-auto w-full">
-                {/* 🟢 LÓGICA DE COLORES ACTUALIZADA (Soporta todos los colores + indigo) */}
+                {/* 🟢 LÓGICA DE COLORES ACTUALIZADA (Soporta todos los colores + indigo + cyan) */}
                 <span className={`block w-full text-center py-4 rounded-xl font-black text-xs uppercase tracking-wider transition-colors ${
                     guia.color === 'blue' ? 'bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white' : 
                     guia.color === 'red' ? 'bg-red-50 text-red-600 group-hover:bg-red-600 group-hover:text-white' :
                     guia.color === 'emerald' ? 'bg-emerald-50 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white' :
                     guia.color === 'teal' ? 'bg-teal-50 text-teal-600 group-hover:bg-teal-600 group-hover:text-white' :
                     guia.color === 'indigo' ? 'bg-indigo-50 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white' :
+                    guia.color === 'cyan' ? 'bg-cyan-50 text-cyan-600 group-hover:bg-cyan-600 group-hover:text-white' :
                     'bg-purple-50 text-purple-600 group-hover:bg-purple-600 group-hover:text-white'
                 }`}>
                   Leer Resumen y Quiz
@@ -119,7 +127,7 @@ export default function GuiasIndex() {
                 ¿Qué debo estudiar para el examen?
             </h3>
             <p className="text-slate-500 max-w-2xl mx-auto text-sm leading-relaxed">
-                El examen de competencia para Auxiliar de Farmacia en Chile evalúa principalmente el conocimiento sobre el <strong>Código Sanitario</strong>, la <strong>Ley 20.724</strong> (Fármacos I), el <strong>Decreto 466</strong> (Reglamento de Farmacias), los <strong>Decretos 404 y 405</strong> (Estupefacientes y Psicotrópicos) y el <strong>Decreto 3</strong> (Productos Farmacéuticos), además de nociones básicas de <strong>Cálculo de Dosis (Posología)</strong>.
+                El examen de competencia para Auxiliar de Farmacia en Chile evalúa principalmente el conocimiento sobre el <strong>Código Sanitario</strong>, la <strong>Ley 20.724</strong> (Fármacos I), el <strong>Decreto 466</strong> (Reglamento de Farmacias), los <strong>Decretos 404 y 405</strong> (Estupefacientes y Psicotrópicos) y el <strong>Decreto 3</strong> (Productos Farmacéuticos), además de nociones básicas de <strong>Cálculo de Dosis (Posología)</strong> y <strong>Farmacología General</strong>.
             </p>
         </div>
 

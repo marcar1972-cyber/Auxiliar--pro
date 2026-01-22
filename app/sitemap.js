@@ -15,9 +15,14 @@ export default function sitemap() {
       changeFrequency: 'monthly',
       priority: 0.9, 
     },
-    // ❌ ELIMINADO: dermocheck (Ya no existe internamente)
     {
       url: `${baseUrl}/blog`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/guias`, // 🟢 NUEVO: Agregado porque estamos creando esta sección
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.8,
@@ -36,13 +41,15 @@ export default function sitemap() {
     },
   ];
 
-  // 2. ARTÍCULOS DEL BLOG
+  // 2. ARTÍCULOS DEL BLOG (Slugs deben coincidir con las carpetas en app/blog/)
   const blogPosts = [
+    'vision-ley-farmacos', // 🟢 NUEVO: El artículo estratégico de hoy
+    'curso-auxiliar-farmacia-gratis-chile-2026', // 🟢 NUEVO: Estaba en tu lista pero no en sitemap
     'requisitos-auxiliar-farmacia-chile-2026',
     'cuanto-gana-auxiliar-farmacia-chile',
     'diferencia-auxiliar-tecnico-farmacia',
     'fecha-examen-auxiliar-farmacia-seremi',
-    'examen-competencia-seremi-2026',
+    'examen-competencia-seremi-2025', // ⚠️ OJO: Verifica si tu carpeta termina en 2025 o 2026
     'que-es-el-decreto-466',
   ].map((slug) => ({
     url: `${baseUrl}/blog/${slug}`,
