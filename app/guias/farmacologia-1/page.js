@@ -502,7 +502,8 @@ export default function GuiaFarmacologia() {
         </section>
 
         {/* ACCESOS RÁPIDOS (SIMULADOR Y QUIZ) */}
-        <section className="mt-16 grid md:grid-cols-2 gap-6">
+        <section className="mt-16 grid md:grid-cols-3 gap-6">
+             {/* 1. QUIZ (VERDE) */}
              <Link href="/quiz" className="group bg-emerald-600 hover:bg-emerald-500 text-white p-8 rounded-2xl transition-all shadow-lg hover:shadow-xl flex flex-col items-center text-center">
                 <PlayCircle size={48} className="mb-4 text-emerald-100 group-hover:scale-110 transition-transform" />
                 <h3 className="text-2xl font-bold mb-2">Pon a prueba lo aprendido</h3>
@@ -510,11 +511,20 @@ export default function GuiaFarmacologia() {
                 <span className="bg-white/20 px-6 py-2 rounded-full font-bold text-sm">Iniciar Quiz Ahora</span>
              </Link>
 
+             {/* 2. SIMULADOR (NUEVO - AZUL/INDIGO) */}
+             <Link href="/simulador" className="group bg-blue-600 hover:bg-blue-500 text-white p-8 rounded-2xl transition-all shadow-lg hover:shadow-xl flex flex-col items-center text-center">
+                <MonitorPlay size={48} className="mb-4 text-blue-100 group-hover:scale-110 transition-transform" />
+                <h3 className="text-2xl font-bold mb-2">Simulador de Examen</h3>
+                <p className="text-blue-100 mb-6">Supera los 7 niveles de dificultad en nuestro simulador.</p>
+                <span className="bg-white/20 px-6 py-2 rounded-full font-bold text-sm">Ir al Simulador</span>
+             </Link>
+
+             {/* 3. DERMOCHECK (OSCURO - ACTUALIZADO) */}
              <a href="https://dermocheck.cl" target="_blank" rel="noopener noreferrer" className="group bg-slate-800 hover:bg-slate-700 text-white p-8 rounded-2xl transition-all shadow-lg hover:shadow-xl flex flex-col items-center text-center">
-                <MonitorPlay size={48} className="mb-4 text-slate-300 group-hover:scale-110 transition-transform" />
-                <h3 className="text-2xl font-bold mb-2">Simulador & Herramientas</h3>
-                <p className="text-slate-300 mb-6">Accede a DermoCheck y otras herramientas de gestión farmacéutica.</p>
-                <span className="bg-white/10 px-6 py-2 rounded-full font-bold text-sm">Ir a Herramientas</span>
+                <Clock size={48} className="mb-4 text-slate-300 group-hover:scale-110 transition-transform" />
+                <h3 className="text-2xl font-bold mb-2">DermoCheck</h3>
+                <p className="text-slate-300 mb-6">Verifica vencimientos de dermocosmética mediante código de lote.</p>
+                <span className="bg-white/10 px-6 py-2 rounded-full font-bold text-sm">Ver Vencimientos</span>
              </a>
         </section>
 
