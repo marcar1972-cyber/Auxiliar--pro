@@ -1,16 +1,7 @@
 "use client"; // 👈 Necesario para el Quiz interactivo
 import { useState } from 'react';
 import Link from "next/link";
-import { ArrowLeft, AlertTriangle, Clock, Zap, Activity, Pill, Thermometer, GraduationCap, PlayCircle, MonitorPlay, X, CheckCircle, XCircle } from "lucide-react";
-
-// ⚠️ NOTA: Al usar "use client", la metadata no se puede exportar desde este archivo.
-// Deberías moverla a layout.js o usar un componente wrapper si el SEO es crítico para esta página.
-/*
-export const metadata = {
-  title: "Guía 1: Fundamentos de Farmacología | Auxiliar de Farmacia",
-  description: "Guía completa: Farmacotecnia, LADME, Farmacodinamia y Bioequivalencia. Texto oficial para estudio.",
-};
-*/
+import { ArrowLeft, AlertTriangle, Clock, Zap, Activity, Pill, Thermometer, GraduationCap, PlayCircle, FileText, X, CheckCircle, XCircle } from "lucide-react";
 
 export default function GuiaFarmacologia() {
   const [showQuiz, setShowQuiz] = useState(false);
@@ -526,13 +517,13 @@ export default function GuiaFarmacologia() {
                 <span className="bg-white/20 px-6 py-2 rounded-full font-bold text-sm">Iniciar Quiz Ahora</span>
              </button>
 
-             {/* 2. SIMULADOR: LINK A /QUIZ */}
-             <Link href="/quiz" className="group bg-blue-600 hover:bg-blue-500 text-white p-8 rounded-2xl transition-all shadow-lg hover:shadow-xl flex flex-col items-center text-center">
-                <MonitorPlay size={48} className="mb-4 text-blue-100 group-hover:scale-110 transition-transform" />
-                <h3 className="text-2xl font-bold mb-2">Simulador de Examen</h3>
-                <p className="text-blue-100 mb-6">Supera los 7 niveles de dificultad en nuestro simulador oficial.</p>
-                <span className="bg-white/20 px-6 py-2 rounded-full font-bold text-sm">Ir al Simulador</span>
-             </Link>
+             {/* 2. DESCARGAR PDF: (REEMPLAZA AL SIMULADOR) */}
+             <a href="/guias/guia-farmacologia.pdf" download className="group bg-blue-600 hover:bg-blue-500 text-white p-8 rounded-2xl transition-all shadow-lg hover:shadow-xl flex flex-col items-center text-center">
+                <FileText size={48} className="mb-4 text-blue-100 group-hover:scale-110 transition-transform" />
+                <h3 className="text-2xl font-bold mb-2">Descargar Guía (PDF)</h3>
+                <p className="text-blue-100 mb-6">Guarda este material para estudiar sin conexión.</p>
+                <span className="bg-white/20 px-6 py-2 rounded-full font-bold text-sm">Descargar PDF</span>
+             </a>
 
              {/* 3. DERMOCHECK: EXTERNAL LINK */}
              <a href="https://dermocheck.cl" target="_blank" rel="noopener noreferrer" className="group bg-slate-800 hover:bg-slate-700 text-white p-8 rounded-2xl transition-all shadow-lg hover:shadow-xl flex flex-col items-center text-center">
