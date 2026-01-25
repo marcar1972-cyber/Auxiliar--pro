@@ -342,7 +342,7 @@ export default function GuiaAltaRotacion() {
                         <p className="text-sm text-yellow-800 mb-3">Es una tos molesta, que pica, sin desgarro. Impide dormir.</p>
                         <strong className="text-sm text-yellow-900 block">Recomendación: Antitusivos</strong>
                         <ul className="text-sm text-yellow-800 list-disc pl-4 mt-1">
-                            <li><strong>Dextrometorfano / Codeína:</strong> Actúan en el cerebro bloqueando el reflejo de la tos.</li>
+                            <li><strong>Oxalamina / Codeína:</strong> Actúan calmando el reflejo de la tos en la garganta o cerebro.</li>
                             <li>Nunca dar si hay flema (provocaría retención e infección).</li>
                         </ul>
                     </div>
@@ -405,6 +405,55 @@ export default function GuiaAltaRotacion() {
                         </div>
                     </div>
 
+                </div>
+            </section>
+
+            {/* MÓDULO 4: ANAMNESIS Y SEGURIDAD (AGREGADO) */}
+            <hr className="border-slate-200 my-8" />
+            <section className="break-inside-avoid">
+                <h2 className="text-2xl font-black text-slate-900 mb-6 flex items-center gap-3">
+                    <UserCheck className="text-blue-600" /> Módulo 4: Seguridad Clínica y Protocolo
+                </h2>
+                
+                {/* Contraindicaciones */}
+                <div className="bg-white border border-slate-200 rounded-2xl p-6 mb-6 shadow-sm">
+                    <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <AlertOctagon className="text-red-500" size={20} /> Contraindicaciones Absolutas
+                    </h3>
+                    <ul className="space-y-3 text-sm text-slate-700">
+                        <li className="flex gap-2">
+                            <XCircle className="text-red-500 shrink-0" size={16} />
+                            <span><strong>Alergia a la Aspirina (AAS):</strong> Riesgo de reacción cruzada con otros AINEs.</span>
+                        </li>
+                        <li className="flex gap-2">
+                            <XCircle className="text-red-500 shrink-0" size={16} />
+                            <span><strong>Úlcera Gástrica Activa:</strong> Nunca vender AINEs. Preferir Paracetamol.</span>
+                        </li>
+                        <li className="flex gap-2">
+                            <XCircle className="text-red-500 shrink-0" size={16} />
+                            <span><strong>Insuficiencia Renal Grave:</strong> Los AINEs empeoran la función renal.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                {/* Grupos de Riesgo y Anamnesis */}
+                <div className="grid md:grid-cols-2 gap-6">
+                    <div className="bg-blue-50 p-5 rounded-2xl border border-blue-100">
+                        <h4 className="font-bold text-blue-900 mb-3">Grupos de Riesgo</h4>
+                        <ul className="text-sm text-blue-800 space-y-2 list-disc pl-4">
+                            <li><strong>Tercera Edad:</strong> Mayor riesgo renal y gástrico.</li>
+                            <li><strong>Embarazadas:</strong> AINEs prohibidos en 3er trimestre. Paracetamol es seguro.</li>
+                            <li><strong>Lactancia:</strong> Verificar compatibilidad en sitios especializados.</li>
+                        </ul>
+                    </div>
+
+                    <div className="bg-emerald-50 p-5 rounded-2xl border border-emerald-100">
+                        <h4 className="font-bold text-emerald-900 mb-3">Protocolo de Anamnesis</h4>
+                        <ul className="text-sm text-emerald-800 space-y-2">
+                            <li><strong>¿Es Hipertenso?</strong> Cuidado con antigripales (pseudoefedrina) y AINEs.</li>
+                            <li><strong>¿Es Diabético?</strong> Cuidado con jarabes con azúcar.</li>
+                        </ul>
+                    </div>
                 </div>
             </section>
 
