@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BookOpen, Pill, Lock, ArrowRight, Library, GraduationCap, BrainCircuit, Store, Calculator, Microscope, Flame } from "lucide-react";
+import { BookOpen, Pill, Lock, ArrowRight, Library, GraduationCap, BrainCircuit, Store, Calculator, Microscope, Flame, Heart } from "lucide-react";
 
 export const metadata = {
   title: 'Guías de Estudio Auxiliar de Farmacia Chile | Decretos, Posología y Farmacología',
@@ -59,12 +59,19 @@ export default function GuiasIndex() {
       color: "cyan"
     },
     {
-      // 🟢 NUEVO: Guía Unificada de Alta Rotación (Reemplaza a Dolor y Cardio)
       slug: "alta-rotacion",
       title: "Farmacología: Alta Rotación",
       desc: "El 80% de la venta diaria. Dolor (AINEs), Respiratorio (Antigripales) y Digestivo. Lo que sale todos los días.",
       icon: <Flame size={40} className="text-orange-600" />, 
       color: "orange"
+    },
+    {
+      // 🟢 NUEVO: Guía de Crónicos y Antiinfecciosos
+      slug: "cronicos-antiinfecciosos",
+      title: "Farmacología: Crónicos y Antiinfecciosos",
+      desc: "Fidelización del paciente. Hipertensión, Diabetes, Colesterol y uso responsable de Antibióticos.",
+      icon: <Heart size={40} className="text-rose-600" />, 
+      color: "rose"
     }
   ];
 
@@ -117,6 +124,7 @@ export default function GuiasIndex() {
                     guia.color === 'indigo' ? 'bg-indigo-50 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white' :
                     guia.color === 'cyan' ? 'bg-cyan-50 text-cyan-600 group-hover:bg-cyan-600 group-hover:text-white' :
                     guia.color === 'orange' ? 'bg-orange-50 text-orange-600 group-hover:bg-orange-600 group-hover:text-white' :
+                    guia.color === 'rose' ? 'bg-rose-50 text-rose-600 group-hover:bg-rose-600 group-hover:text-white' :
                     'bg-purple-50 text-purple-600 group-hover:bg-purple-600 group-hover:text-white'
                 }`}>
                   Leer Resumen y Quiz
