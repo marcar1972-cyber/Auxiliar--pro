@@ -16,7 +16,7 @@ const preguntasQuiz = [
     opciones: [
       "Receta Médica Simple.",
       "Venta Directa.",
-      "Receta Médica Retenida con Control de Stock.",
+      "Receta Médica Retenida (sin control de stock en libro).",
       "Receta Cheque únicamente."
     ],
     correcta: 2
@@ -194,8 +194,8 @@ export default function GuiaEspecialidadesControlados() {
                                 <AlertTriangle size={18}/> Control Legal: Receta Retenida
                             </strong>
                             <p className="text-sm text-amber-800">
-                                Pertenecen a la <strong>Lista IV de Psicotrópicos</strong>. Deben venderse con <strong>Receta Médica Retenida</strong> con control de stock (se anota en el libro correspondiente).
-                                <br/><span className="text-xs mt-1 block font-semibold">*Nota: La receta debe tener todos los datos del médico y paciente, y no puede tener más de 30 días de emisión.</span>
+                                Pertenecen a la <strong>Lista IV de Psicotrópicos</strong>. Deben venderse con <strong>Receta Médica Retenida</strong>.
+                                <br/><span className="text-xs mt-2 block font-semibold">⚠️ Diferencia clave: A diferencia de las Listas II y III, la Lista IV NO requiere registro en el Libro de Control de Psicotrópicos, pero la receta se debe retener, foliar y archivar para control de la autoridad.</span>
                             </p>
                         </div>
 
