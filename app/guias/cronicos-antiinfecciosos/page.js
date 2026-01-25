@@ -6,7 +6,7 @@ import Script from "next/script";
 import { 
   BookOpen, AlertTriangle, Download, ArrowRight, Pill, Heart, Activity, 
   Droplet, Thermometer, Clock, CheckCircle, ShieldAlert, Bug, 
-  Syringe, XCircle, Trophy, FileText 
+  Syringe, XCircle, Trophy, FileText, UserCheck, AlertOctagon 
 } from "lucide-react";
 
 // 📝 PREGUNTAS DEL QUIZ (Cardiovascular, Metabólico y Antibióticos)
@@ -315,16 +315,51 @@ export default function GuiaCronicosInfecciosos() {
                             </p>
                         </div>
                     </div>
+                </div>
+            </section>
 
-                    {/* ANTIMICÓTICOS */}
-                    <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex gap-4 items-start">
-                        <div className="bg-teal-50 p-2 rounded-lg text-teal-600"><Pill size={24}/></div>
-                        <div>
-                            <strong className="text-slate-900 block mb-1">Fluconazol (Antimicótico)</strong>
-                            <p className="text-sm text-slate-600">
-                                Para infecciones por hongos (Candidiasis). La dosis típica es una cápsula única de 150mg, o tratamientos semanales.
-                            </p>
-                        </div>
+             {/* MÓDULO 4: ANAMNESIS Y SEGURIDAD (AGREGADO) */}
+            <hr className="border-slate-200 my-8" />
+            <section className="break-inside-avoid">
+                <h2 className="text-2xl font-black text-slate-900 mb-6 flex items-center gap-3">
+                    <UserCheck className="text-blue-600" /> Módulo 4: Seguridad Clínica y Protocolo
+                </h2>
+                
+                {/* Contraindicaciones */}
+                <div className="bg-white border border-slate-200 rounded-2xl p-6 mb-6 shadow-sm">
+                    <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <AlertOctagon className="text-red-500" size={20} /> Contraindicaciones Absolutas
+                    </h3>
+                    <ul className="space-y-3 text-sm text-slate-700">
+                        <li className="flex gap-2">
+                            <XCircle className="text-red-500 shrink-0" size={16} />
+                            <span><strong>Alergia a la Penicilina:</strong> Riesgo de shock anafiláctico (mortal). Siempre preguntar antes de dispensar Amoxicilina.</span>
+                        </li>
+                        <li className="flex gap-2">
+                            <XCircle className="text-red-500 shrink-0" size={16} />
+                            <span><strong>Insuficiencia Renal:</strong> Ajustar dosis en diabéticos (Metformina) y evitar AINEs.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                {/* Grupos de Riesgo y Anamnesis */}
+                <div className="grid md:grid-cols-2 gap-6">
+                    <div className="bg-blue-50 p-5 rounded-2xl border border-blue-100">
+                        <h4 className="font-bold text-blue-900 mb-3">Grupos de Riesgo</h4>
+                        <ul className="text-sm text-blue-800 space-y-2 list-disc pl-4">
+                            <li><strong>Diabéticos:</strong> Cuidado con jarabes con azúcar.</li>
+                            <li><strong>Hipertensos:</strong> Evitar antigripales con Pseudoefedrina.</li>
+                            <li><strong>Lactancia:</strong> Verificar compatibilidad en <a href="https://www.e-lactancia.org" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline font-bold hover:text-blue-800">e-lactancia.org</a>.</li>
+                        </ul>
+                    </div>
+
+                    <div className="bg-emerald-50 p-5 rounded-2xl border border-emerald-100">
+                        <h4 className="font-bold text-emerald-900 mb-3">Protocolo de Anamnesis (Qué preguntar)</h4>
+                        <ul className="text-sm text-emerald-800 space-y-2">
+                            <li><strong>1. ¿Es alérgico a algún medicamento?</strong> (Penicilina, Sulfa).</li>
+                            <li><strong>2. ¿Toma otros medicamentos de forma crónica?</strong> (Para evitar interacciones).</li>
+                            <li><strong>3. ¿Para quién es el medicamento?</strong> (Niño, embarazada, abuelo).</li>
+                        </ul>
                     </div>
                 </div>
             </section>
