@@ -250,7 +250,7 @@ export default function GuiaEspecialidadesControlados() {
                                 <strong className="text-slate-800 block">Betametasona / Clobetasol</strong>
                                 <span className="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded font-bold">Potencia Alta</span>
                             </div>
-                            <span className="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-bold mb-2 inline-block">Receta Retenida</span>
+                            <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-bold mb-2 inline-block">Receta Médica</span>
                             <p className="text-sm text-slate-600">
                                 Excelentes antiinflamatorios para dermatitis, eczemas y alergias. Requieren control médico por sus efectos adversos.
                             </p>
