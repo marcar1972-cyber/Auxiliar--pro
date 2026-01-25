@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BookOpen, Pill, Lock, ArrowRight, Library, GraduationCap, BrainCircuit, Store, Calculator, Microscope, Flame, Heart } from "lucide-react";
+import { BookOpen, Pill, Lock, ArrowRight, Library, GraduationCap, BrainCircuit, Store, Calculator, Microscope, Flame } from "lucide-react";
 
 export const metadata = {
   title: 'Guías de Estudio Auxiliar de Farmacia Chile | Decretos, Posología y Farmacología',
@@ -53,27 +53,18 @@ export default function GuiasIndex() {
     },
     {
       slug: "farmacologia-1",
-      // 🟢 ACTUALIZADO: Título unificado
       title: "Farmacología: Fundamentos",
       desc: "Lo básico que debes saber. Sistema LADME, Farmacodinamia (Receptores) y Glosario Técnico.",
       icon: <Microscope size={40} className="text-cyan-600" />, 
       color: "cyan"
     },
     {
-      slug: "dolor-inflamacion",
-      // 🟢 ACTUALIZADO: Título unificado
-      title: "Farmacología: Dolor e Inflamación",
-      desc: "Domina los AINEs. Diferencias entre Paracetamol, Ibuprofeno, Ketorolaco. Riesgos gástricos y renales.",
+      // 🟢 NUEVO: Guía Unificada de Alta Rotación
+      slug: "alta-rotacion",
+      title: "Farmacología: Alta Rotación",
+      desc: "El 80% de la venta diaria. Dolor (AINEs), Respiratorio (Antigripales) y Digestivo. Lo que sale todos los días.",
       icon: <Flame size={40} className="text-orange-600" />, 
       color: "orange"
-    },
-    {
-      slug: "cardiovascular-metabolico",
-      // 🟢 ACTUALIZADO: Título unificado
-      title: "Farmacología: Cardiovascular y Metabólico",
-      desc: "Fideliza al paciente crónico. Hipertensión (Losartán), Diabetes (Metformina/Insulinas) y Colesterol.",
-      icon: <Heart size={40} className="text-rose-600" />, 
-      color: "rose"
     }
   ];
 
@@ -118,7 +109,6 @@ export default function GuiasIndex() {
                 {guia.desc}
               </p>
               <div className="mt-auto w-full">
-                {/* 🟢 LÓGICA DE COLORES ACTUALIZADA (Soporta todos los colores + rose) */}
                 <span className={`block w-full text-center py-4 rounded-xl font-black text-xs uppercase tracking-wider transition-colors ${
                     guia.color === 'blue' ? 'bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white' : 
                     guia.color === 'red' ? 'bg-red-50 text-red-600 group-hover:bg-red-600 group-hover:text-white' :
@@ -127,7 +117,6 @@ export default function GuiasIndex() {
                     guia.color === 'indigo' ? 'bg-indigo-50 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white' :
                     guia.color === 'cyan' ? 'bg-cyan-50 text-cyan-600 group-hover:bg-cyan-600 group-hover:text-white' :
                     guia.color === 'orange' ? 'bg-orange-50 text-orange-600 group-hover:bg-orange-600 group-hover:text-white' :
-                    guia.color === 'rose' ? 'bg-rose-50 text-rose-600 group-hover:bg-rose-600 group-hover:text-white' :
                     'bg-purple-50 text-purple-600 group-hover:bg-purple-600 group-hover:text-white'
                 }`}>
                   Leer Resumen y Quiz
