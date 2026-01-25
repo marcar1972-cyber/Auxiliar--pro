@@ -246,17 +246,22 @@ export default function GuiaEspecialidadesControlados() {
                     <h3 className="text-lg font-bold text-slate-900 mb-3">A. Corticoides Tópicos</h3>
                     <div className="grid md:grid-cols-2 gap-4">
                         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                            <strong className="text-slate-800 block mb-1">Betametasona / Clobetasol</strong>
-                            <span className="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded font-bold">Potencia Alta</span>
-                            <p className="text-sm text-slate-600 mt-2">
-                                Excelentes antiinflamatorios para dermatitis, eczemas y alergias.
+                            <div className="flex justify-between items-start mb-2">
+                                <strong className="text-slate-800 block">Betametasona / Clobetasol</strong>
+                                <span className="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded font-bold">Potencia Alta</span>
+                            </div>
+                            <span className="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-bold mb-2 inline-block">Receta Retenida</span>
+                            <p className="text-sm text-slate-600">
+                                Excelentes antiinflamatorios para dermatitis, eczemas y alergias. Requieren control médico por sus efectos adversos.
                             </p>
                         </div>
                         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                            <strong className="text-slate-800 block mb-1">Hidrocortisona</strong>
-                            <span className="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded font-bold">Potencia Baja</span>
+                            <div className="flex justify-between items-start mb-2">
+                                <strong className="text-slate-800 block">Hidrocortisona</strong>
+                                <span className="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded font-bold">Potencia Baja</span>
+                            </div>
                             <p className="text-sm text-slate-600 mt-2">
-                                Más seguro para zonas delicadas (cara, pliegues) o niños.
+                                Más seguro para zonas delicadas (cara, pliegues) o niños. Generalmente venta bajo receta simple.
                             </p>
                         </div>
                     </div>
