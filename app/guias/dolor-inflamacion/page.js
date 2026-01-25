@@ -448,7 +448,7 @@ export default function GuiaDolorInflamacion() {
                         <ul className="text-sm text-blue-800 space-y-2 list-disc pl-4">
                             <li><strong>Tercera Edad:</strong> Mayor riesgo de sangrado gástrico y falla renal.</li>
                             <li><strong>Embarazadas:</strong> Evitar AINEs, especialmente en el 3er trimestre (cierre del ductus arterioso). <strong>Paracetamol</strong> es la opción segura.</li>
-                            <li><strong>Lactancia:</strong> Paracetamol e Ibuprofeno suelen ser compatibles (verificar e-lactancia.org).</li>
+                            <li><strong>Lactancia:</strong> Paracetamol e Ibuprofeno suelen ser compatibles (verificar en <a href="https://www.e-lactancia.org" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-600 font-semibold">e-lactancia.org</a>).</li>
                         </ul>
                     </div>
 
