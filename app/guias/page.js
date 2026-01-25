@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BookOpen, Pill, Lock, ArrowRight, Library, GraduationCap, BrainCircuit, Store, Calculator, Microscope, Flame, Heart } from "lucide-react";
+import { BookOpen, Pill, Lock, ArrowRight, Library, GraduationCap, BrainCircuit, Store, Calculator, Microscope, Flame, Heart, Brain } from "lucide-react";
 
 export const metadata = {
   title: 'Guías de Estudio Auxiliar de Farmacia Chile | Decretos, Posología y Farmacología',
@@ -66,12 +66,19 @@ export default function GuiasIndex() {
       color: "orange"
     },
     {
-      // 🟢 NUEVO: Guía de Crónicos y Antiinfecciosos
       slug: "cronicos-antiinfecciosos",
       title: "Farmacología: Crónicos y Antiinfecciosos",
       desc: "Fidelización del paciente. Hipertensión, Diabetes, Colesterol y uso responsable de Antibióticos.",
       icon: <Heart size={40} className="text-rose-600" />, 
       color: "rose"
+    },
+    {
+      // 🟢 NUEVO: Guía de Especialidades y Controlados
+      slug: "especialidades-controlados",
+      title: "Farmacología: Especialidades y Controlados",
+      desc: "SNC (Benzodiazepinas, Antidepresivos) y Dermatológicos. Manejo de receta retenida y venta consultiva.",
+      icon: <Brain size={40} className="text-purple-600" />, 
+      color: "purple"
     }
   ];
 
