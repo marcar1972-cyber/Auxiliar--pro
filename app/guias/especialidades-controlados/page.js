@@ -251,9 +251,9 @@ export default function GuiaEspecialidadesControlados() {
                                 <strong className="text-slate-800 block">Betametasona</strong>
                                 <span className="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded font-bold">Potencia Alta</span>
                             </div>
-                            <span className="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-bold mb-2 inline-block">Receta Retenida</span>
+                            <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-bold mb-2 inline-block">Receta Médica</span>
                             <p className="text-sm text-slate-600">
-                                Antiinflamatorio potente. Se retiene la receta (sin control de stock).
+                                Antiinflamatorio potente.
                             </p>
                         </div>
 
@@ -265,7 +265,7 @@ export default function GuiaEspecialidadesControlados() {
                             </div>
                             <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-bold mb-2 inline-block">Receta Médica</span>
                             <p className="text-sm text-slate-600">
-                                El más potente. Venta bajo presentación de receta médica simple.
+                                El más potente. Venta bajo presentación de receta médica.
                             </p>
                         </div>
 
