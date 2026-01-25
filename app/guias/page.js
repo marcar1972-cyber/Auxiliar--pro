@@ -53,22 +53,24 @@ export default function GuiasIndex() {
     },
     {
       slug: "farmacologia-1",
-      title: "Farmacología N°1: Fundamentos",
+      // 🟢 ACTUALIZADO: Título unificado
+      title: "Farmacología: Fundamentos",
       desc: "Lo básico que debes saber. Sistema LADME, Farmacodinamia (Receptores) y Glosario Técnico.",
       icon: <Microscope size={40} className="text-cyan-600" />, 
       color: "cyan"
     },
     {
       slug: "dolor-inflamacion",
-      title: "Dolor e Inflamación",
+      // 🟢 ACTUALIZADO: Título unificado
+      title: "Farmacología: Dolor e Inflamación",
       desc: "Domina los AINEs. Diferencias entre Paracetamol, Ibuprofeno, Ketorolaco. Riesgos gástricos y renales.",
       icon: <Flame size={40} className="text-orange-600" />, 
       color: "orange"
     },
     {
-      // 🟢 NUEVO: Guía Cardiovascular y Metabólico
       slug: "cardiovascular-metabolico",
-      title: "Cardiovascular y Metabólico",
+      // 🟢 ACTUALIZADO: Título unificado
+      title: "Farmacología: Cardiovascular y Metabólico",
       desc: "Fideliza al paciente crónico. Hipertensión (Losartán), Diabetes (Metformina/Insulinas) y Colesterol.",
       icon: <Heart size={40} className="text-rose-600" />, 
       color: "rose"
