@@ -260,6 +260,7 @@ export default function GuiaEspecialidadesControlados() {
                                 <strong className="text-slate-800 block">Hidrocortisona</strong>
                                 <span className="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded font-bold">Potencia Baja</span>
                             </div>
+                            <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-bold mb-2 inline-block">Receta Médica</span>
                             <p className="text-sm text-slate-600 mt-2">
                                 Más seguro para zonas delicadas (cara, pliegues) o niños. Generalmente venta bajo receta simple.
                             </p>
