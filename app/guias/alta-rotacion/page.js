@@ -342,7 +342,7 @@ export default function GuiaAltaRotacion() {
                         <p className="text-sm text-yellow-800 mb-3">Es una tos molesta, que pica, sin desgarro. Impide dormir.</p>
                         <strong className="text-sm text-yellow-900 block">Recomendación: Antitusivos</strong>
                         <ul className="text-sm text-yellow-800 list-disc pl-4 mt-1">
-                            <li><strong>Oxolamina / Codeína:</strong> Actúan calmando la irritación periférica o el reflejo central de la tos.</li>
+                            <li><strong>Oxolamina / Codeína:</strong> Actúan calmando la irritación periférica o inhibiendo el reflejo de la tos.</li>
                             <li>Nunca dar si hay flema (provocaría retención e infección).</li>
                         </ul>
                     </div>
@@ -447,6 +447,7 @@ export default function GuiaAltaRotacion() {
                         <ul className="text-sm text-blue-800 space-y-2 list-disc pl-4">
                             <li><strong>Tercera Edad:</strong> Mayor riesgo renal y gástrico. Evitar AINEs potentes.</li>
                             <li><strong>Embarazadas:</strong> AINEs prohibidos en 3er trimestre. Paracetamol es seguro.</li>
+                            <li><strong>Lactancia:</strong> Paracetamol e Ibuprofeno suelen ser compatibles (verificar en <a href="https://www.e-lactancia.org" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-600 font-semibold">e-lactancia.org</a>).</li>
                             <li><strong>Hipertensos:</strong> Evitar antigripales con Pseudoefedrina (sube la presión).</li>
                         </ul>
                     </div>
