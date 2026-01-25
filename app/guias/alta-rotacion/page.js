@@ -342,7 +342,7 @@ export default function GuiaAltaRotacion() {
                         <p className="text-sm text-yellow-800 mb-3">Es una tos molesta, que pica, sin desgarro. Impide dormir.</p>
                         <strong className="text-sm text-yellow-900 block">Recomendación: Antitusivos</strong>
                         <ul className="text-sm text-yellow-800 list-disc pl-4 mt-1">
-                            <li><strong>Oxalamina / Codeína:</strong> Actúan calmando el reflejo de la tos en la garganta o cerebro.</li>
+                            <li><strong>Oxolamina / Codeína:</strong> Actúan calmando la irritación periférica o el reflejo central de la tos.</li>
                             <li>Nunca dar si hay flema (provocaría retención e infección).</li>
                         </ul>
                     </div>
@@ -433,6 +433,10 @@ export default function GuiaAltaRotacion() {
                             <XCircle className="text-red-500 shrink-0" size={16} />
                             <span><strong>Insuficiencia Renal Grave:</strong> Los AINEs empeoran la función renal.</span>
                         </li>
+                        <li className="flex gap-2">
+                            <XCircle className="text-red-500 shrink-0" size={16} />
+                            <span><strong>Tos Productiva + Antitusivo:</strong> Nunca inhibir la tos si hay flema, ya que puede causar neumonía por retención.</span>
+                        </li>
                     </ul>
                 </div>
 
@@ -441,17 +445,19 @@ export default function GuiaAltaRotacion() {
                     <div className="bg-blue-50 p-5 rounded-2xl border border-blue-100">
                         <h4 className="font-bold text-blue-900 mb-3">Grupos de Riesgo</h4>
                         <ul className="text-sm text-blue-800 space-y-2 list-disc pl-4">
-                            <li><strong>Tercera Edad:</strong> Mayor riesgo renal y gástrico.</li>
+                            <li><strong>Tercera Edad:</strong> Mayor riesgo renal y gástrico. Evitar AINEs potentes.</li>
                             <li><strong>Embarazadas:</strong> AINEs prohibidos en 3er trimestre. Paracetamol es seguro.</li>
-                            <li><strong>Lactancia:</strong> Verificar compatibilidad en sitios especializados.</li>
+                            <li><strong>Hipertensos:</strong> Evitar antigripales con Pseudoefedrina (sube la presión).</li>
                         </ul>
                     </div>
 
                     <div className="bg-emerald-50 p-5 rounded-2xl border border-emerald-100">
-                        <h4 className="font-bold text-emerald-900 mb-3">Protocolo de Anamnesis</h4>
+                        <h4 className="font-bold text-emerald-900 mb-3">Protocolo de Anamnesis (Qué preguntar)</h4>
                         <ul className="text-sm text-emerald-800 space-y-2">
-                            <li><strong>¿Es Hipertenso?</strong> Cuidado con antigripales (pseudoefedrina) y AINEs.</li>
-                            <li><strong>¿Es Diabético?</strong> Cuidado con jarabes con azúcar.</li>
+                            <li><strong>1. ¿Para quién es?</strong> (Niño, adulto, embarazada, abuelo).</li>
+                            <li><strong>2. ¿Tiene alguna enfermedad crónica?</strong> (HTA, Diabetes, Gastritis).</li>
+                            <li><strong>3. ¿Toma otros medicamentos?</strong> (Para evitar interacciones).</li>
+                            <li><strong>4. Síntoma Clave:</strong> "¿La tos es seca o con flema?", "¿Le duele el estómago al comer?".</li>
                         </ul>
                     </div>
                 </div>
