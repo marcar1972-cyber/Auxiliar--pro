@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from "next/link";
 import Script from "next/script"; 
-import { BookOpen, AlertTriangle, Download, ArrowRight, Pill, Flame, Activity, ShieldAlert, Stethoscope, Zap, HeartPulse, XCircle, Clock, CheckCircle, GraduationCap, FileText, Trophy } from "lucide-react";
+import { BookOpen, AlertTriangle, Download, ArrowRight, Pill, Flame, Activity, ShieldAlert, Stethoscope, Zap, HeartPulse, XCircle, Clock, CheckCircle, GraduationCap, FileText, Trophy, UserCheck, Syringe, AlertOctagon } from "lucide-react";
 
 // 📝 PREGUNTAS DEL QUIZ (Específicas de AINEs y Analgésicos)
 const preguntasQuiz = [
@@ -189,7 +189,7 @@ export default function GuiaDolorInflamacion() {
           </div>
           
           <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight text-balance">
-            Guía 2: Dolor e Inflamación (AINEs y Analgésicos)
+            Dolor e Inflamación (AINEs y Analgésicos)
           </h1>
           
           <p className="text-xl text-emerald-100 max-w-3xl">
@@ -405,6 +405,68 @@ export default function GuiaDolorInflamacion() {
                         <p className="text-red-800 text-sm">
                             Al tomar AINEs, bloqueamos la protección del estómago. Por eso, el uso prolongado causa <strong>Gastritis</strong> y Úlceras. Además, reducen el riego sanguíneo al riñón, pudiendo causar <strong>Falla Renal</strong>, especialmente en ancianos o hipertensos.
                         </p>
+                    </div>
+                </div>
+            </section>
+
+            {/* 5. SEGURIDAD CLÍNICA Y PROTOCOLO DE VENTA (NUEVO) */}
+            <section className="break-inside-avoid">
+                <h2 className="text-2xl font-black text-slate-900 mb-6 flex items-center gap-3">
+                    <UserCheck className="text-blue-600" /> 5. Seguridad Clínica y Protocolo
+                </h2>
+                <p className="text-slate-600 mb-6">
+                    Esto diferencia a un experto de un vendedor. Antes de recomendar, siempre verifica estos puntos:
+                </p>
+
+                {/* Contraindicaciones */}
+                <div className="bg-white border border-slate-200 rounded-2xl p-6 mb-6 shadow-sm">
+                    <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                        <AlertOctagon className="text-red-500" size={20} /> Contraindicaciones Absolutas
+                    </h3>
+                    <ul className="space-y-3 text-sm text-slate-700">
+                        <li className="flex gap-2">
+                            <XCircle className="text-red-500 shrink-0" size={16} />
+                            <span><strong>Alergia a la Aspirina (AAS):</strong> Si el paciente es alérgico a la aspirina, existe una alta probabilidad de reacción cruzada con otros AINEs (Ibuprofeno, Naproxeno).</span>
+                        </li>
+                        <li className="flex gap-2">
+                            <XCircle className="text-red-500 shrink-0" size={16} />
+                            <span><strong>Úlcera Gástrica Activa:</strong> Nunca vender AINEs. Preferir Paracetamol o consultar al médico.</span>
+                        </li>
+                        <li className="flex gap-2">
+                            <XCircle className="text-red-500 shrink-0" size={16} />
+                            <span><strong>Insuficiencia Renal Grave:</strong> Los AINEs pueden empeorar la función renal hasta la diálisis.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                {/* Grupos de Riesgo */}
+                <div className="grid md:grid-cols-2 gap-6 mb-8">
+                    <div className="bg-blue-50 p-5 rounded-2xl border border-blue-100">
+                        <h4 className="font-bold text-blue-900 mb-3 flex items-center gap-2">
+                            <Syringe className="text-blue-600" size={18} /> Grupos de Riesgo
+                        </h4>
+                        <ul className="text-sm text-blue-800 space-y-2 list-disc pl-4">
+                            <li><strong>Tercera Edad:</strong> Mayor riesgo de sangrado gástrico y falla renal.</li>
+                            <li><strong>Embarazadas:</strong> Evitar AINEs, especialmente en el 3er trimestre (cierre del ductus arterioso). <strong>Paracetamol</strong> es la opción segura.</li>
+                            <li><strong>Lactancia:</strong> Paracetamol e Ibuprofeno suelen ser compatibles (verificar e-lactancia.org).</li>
+                        </ul>
+                    </div>
+
+                    <div className="bg-emerald-50 p-5 rounded-2xl border border-emerald-100">
+                        <h4 className="font-bold text-emerald-900 mb-3 flex items-center gap-2">
+                            <CheckCircle className="text-emerald-600" size={18} /> Protocolo de Anamnesis
+                        </h4>
+                        <p className="text-sm text-emerald-800 mb-2">Preguntas clave en el mesón:</p>
+                        <ul className="text-sm text-emerald-800 space-y-2">
+                            <li>
+                                <strong>¿Es Hipertenso?</strong>
+                                <br/><span className="text-xs opacity-80">Ojo con los efervescentes (tienen mucho sodio/sal) y AINEs (suben la presión).</span>
+                            </li>
+                            <li>
+                                <strong>¿Es Diabético?</strong>
+                                <br/><span className="text-xs opacity-80">Cuidado con los jarabes con azúcar. La neuropatía puede enmascarar dolores graves.</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </section>
