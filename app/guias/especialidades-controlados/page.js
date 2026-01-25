@@ -245,24 +245,39 @@ export default function GuiaEspecialidadesControlados() {
                 <div className="mb-8">
                     <h3 className="text-lg font-bold text-slate-900 mb-3">A. Corticoides Tópicos</h3>
                     <div className="grid md:grid-cols-2 gap-4">
+                        {/* BETAMETASONA */}
                         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                             <div className="flex justify-between items-start mb-2">
-                                <strong className="text-slate-800 block">Betametasona / Clobetasol</strong>
+                                <strong className="text-slate-800 block">Betametasona</strong>
                                 <span className="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded font-bold">Potencia Alta</span>
+                            </div>
+                            <span className="text-xs bg-amber-100 text-amber-800 px-2 py-0.5 rounded font-bold mb-2 inline-block">Receta Retenida</span>
+                            <p className="text-sm text-slate-600">
+                                Antiinflamatorio potente. Se retiene la receta (sin control de stock).
+                            </p>
+                        </div>
+
+                        {/* CLOBETASOL */}
+                        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                            <div className="flex justify-between items-start mb-2">
+                                <strong className="text-slate-800 block">Clobetasol</strong>
+                                <span className="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded font-bold">Potencia Muy Alta</span>
                             </div>
                             <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-bold mb-2 inline-block">Receta Médica</span>
                             <p className="text-sm text-slate-600">
-                                Excelentes antiinflamatorios para dermatitis, eczemas y alergias. Requieren control médico por sus efectos adversos.
+                                El más potente. Venta bajo presentación de receta médica simple.
                             </p>
                         </div>
-                        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+
+                        {/* HIDROCORTISONA */}
+                        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm md:col-span-2">
                             <div className="flex justify-between items-start mb-2">
                                 <strong className="text-slate-800 block">Hidrocortisona</strong>
                                 <span className="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded font-bold">Potencia Baja</span>
                             </div>
                             <span className="text-xs bg-slate-100 text-slate-600 px-2 py-0.5 rounded font-bold mb-2 inline-block">Receta Médica</span>
                             <p className="text-sm text-slate-600 mt-2">
-                                Más seguro para zonas delicadas (cara, pliegues) o niños. Generalmente venta bajo receta simple.
+                                Más seguro para zonas delicadas (cara, pliegues) o niños. Venta bajo receta simple.
                             </p>
                         </div>
                     </div>
