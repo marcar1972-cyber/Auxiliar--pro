@@ -220,7 +220,7 @@ export default function GuiaEspecialidadesControlados() {
                     </div>
 
                     <p className="text-sm text-slate-600 mb-4">
-                        Actúan aumentando la disponibilidad de Serotonina en el cerebro. Su venta suele ser bajo <strong>Receta Médica Retenida</strong> (sin control de stock en libro, salvo excepciones del DT).
+                        Actúan aumentando la disponibilidad de Serotonina en el cerebro. Su venta es bajo <strong>Receta Médica Simple</strong> (Presentación de Receta). Es fundamental exigirla para verificar la indicación, pero se devuelve al paciente tras el despacho.
                     </p>
 
                     <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
