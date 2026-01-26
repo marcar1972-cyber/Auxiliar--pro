@@ -1,8 +1,5 @@
 import Link from "next/link";
 import { ChevronRight, Scale, Thermometer, Pill, Clipboard, ShieldAlert, ArrowRight, BookOpen, CheckCircle } from "lucide-react";
-// 👇 Importamos el nuevo componente (Asegúrate de que este archivo exista en tu proyecto)
-// Si no existe, coméntalo o crea el archivo para evitar errores de compilación.
-// import AboutSection from "./components/AboutSection"; 
 
 // 🟢 BLOQUE SEO OBLIGATORIO (Solución al Reporte PDF)
 export const metadata = {
@@ -75,7 +72,7 @@ export default function LandingPage() {
             </article>
           </Link>
 
-          {/* 🟢 CORRECCIÓN: Enlace al Blog de Visión Ley Fármacos */}
+          {/* 🟢 CORRECCIÓN 1: Enlace al Blog de Visión Ley Fármacos */}
           <Link href="/blog/vision-ley-farmacos" className="group">
             <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all h-full hover:bg-white hover:border-amber-200">
               <Pill className="text-amber-500 mb-6 group-hover:scale-110 transition-transform" size={32} />
@@ -86,7 +83,7 @@ export default function LandingPage() {
             </article>
           </Link>
 
-          {/* 🟢 CORRECCIÓN: Enlace al Decreto 3 (Seguridad y Farmacovigilancia) */}
+          {/* 🟢 CORRECCIÓN 2: Enlace al Decreto 3 (Seguridad y Farmacovigilancia) */}
           <Link href="/guias/decreto-3-control-productos" className="group">
             <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all h-full hover:bg-white hover:border-rose-200">
               <Clipboard className="text-rose-500 mb-6 group-hover:scale-110 transition-transform" size={32} />
@@ -150,11 +147,63 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* 👇 NUEVA SECCIÓN SOBRE NOSOTROS (MACZDEV) */}
-        {/* Asegúrate de tener este componente creado en app/components/AboutSection.js si descomentas la línea de importación arriba */}
-        {/* <div className="mt-32">
-          <AboutSection />
-        </div> */}
+        {/* 👇 SECCIÓN SOBRE NOSOTROS (MACZDEV) - RESTAURADA */}
+        <div className="mt-32 max-w-5xl mx-auto bg-slate-900 rounded-[3rem] p-8 md:p-12 shadow-2xl relative overflow-hidden">
+          {/* Fondo decorativo */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500 rounded-full blur-[100px] opacity-20 -mr-20 -mt-20"></div>
+          
+          <div className="relative z-10 flex flex-col md:flex-row items-center gap-10">
+            {/* Imagen del perfil */}
+            <div className="shrink-0">
+              <div className="w-32 h-32 md:w-48 md:h-48 rounded-full border-4 border-slate-800 overflow-hidden shadow-xl">
+                <img 
+                  src="/maczdev.webp" 
+                  alt="MaczDev" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+
+            {/* Contenido de texto */}
+            <div className="flex-1 text-center md:text-left space-y-6">
+              <div>
+                <h4 className="text-2xl md:text-3xl font-black text-white mb-2">Hola, soy MaczDev 👋</h4>
+                <p className="text-emerald-400 font-bold text-sm uppercase tracking-wider">Auxiliar Trainee & Desarrollador Web</p>
+              </div>
+              
+              <div className="space-y-4 text-slate-300 text-sm leading-relaxed">
+                <p>
+                  Actualmente trabajo en el rubro y, al igual que tú, me estoy preparando para rendir la prueba de competencia <strong>SEREMI 2026</strong>.
+                </p>
+                <p>
+                  Mientras estudiaba, me di cuenta de un gran vacío: <strong>no existían ensayos tipo prueba disponibles en la red</strong>. Esa frustración fue mi motor. Decidí no quedarme de brazos cruzados. Uní mis conocimientos en farmacia y tecnología, y con la ayuda de <strong>Inteligencia Artificial (Gemini)</strong>, construí esta plataforma y generé guías de estudio propias.
+                </p>
+                <p>
+                  Lanzamos en diciembre de 2025 y ver la gran afluencia de usuarios me confirma que esto era necesario.
+                </p>
+                <blockquote className="border-l-4 border-emerald-500 pl-4 italic text-white my-4">
+                  "Creo firmemente que el conocimiento que nos permite crecer profesional y espiritualmente debe ser libre y gratuito para todos."
+                </blockquote>
+              </div>
+
+              {/* Grid de valores */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 border-t border-slate-800">
+                <div>
+                  <h5 className="text-white font-bold mb-1 flex items-center gap-2"><Scale size={16} className="text-emerald-400"/> Tecnología + Salud</h5>
+                  <p className="text-xs text-slate-400">Plataforma programada con IA para estructurar contenido legal complejo de forma simple.</p>
+                </div>
+                <div>
+                  <h5 className="text-white font-bold mb-1 flex items-center gap-2"><BookOpen size={16} className="text-blue-400"/> Nuestra Visión</h5>
+                  <p className="text-xs text-slate-400">Crear la comunidad de apoyo más grande de Chile. Que nadie repruebe por falta de recursos.</p>
+                </div>
+                <div>
+                  <h5 className="text-white font-bold mb-1 flex items-center gap-2"><CheckCircle size={16} className="text-purple-400"/> Gratuidad Real</h5>
+                  <p className="text-xs text-slate-400">Sin letra chica. No vendemos tus datos. Un aporte personal para devolver la mano.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
       </main>
     </div>
