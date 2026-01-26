@@ -1,81 +1,158 @@
 import Link from "next/link";
-import { ChevronRight, Scale, Thermometer, Pill, Clipboard, ShieldAlert, ArrowRight, BookOpen, CheckCircle } from "lucide-react";
+import { BookOpen, Pill, Lock, ArrowRight, Library, GraduationCap, BrainCircuit, Store, Calculator, Microscope, Flame, Heart, Brain } from "lucide-react";
 
-// 🟢 BLOQUE SEO OBLIGATORIO
 export const metadata = {
-  title: "Examen Auxiliar de Farmacia SEREMI | Simulador y Normativa 2026",
-  description: "Aprueba tu examen de competencia SEREMI. Estudia gratis los Decretos 466, 404 y 405. Simulador de preguntas reales y material de estudio validado en Chile.",
-  keywords: ["examen auxiliar farmacia", "seremi salud", "decreto 466", "test farmacia chile", "simulador competencia"],
-  alternates: {
-    canonical: './', 
-  },
+  title: 'Guías de Estudio Auxiliar de Farmacia Chile | Decretos, Posología y Farmacología',
+  description: 'Material de estudio gratuito para el examen de competencia de Auxiliar de Farmacia (Seremi de Salud). Descarga resúmenes de la Ley 20.724, Decretos 466, 404, 405, 3, Guía de Posología y Farmacología.',
+  keywords: ['auxiliar de farmacia', 'examen seremi salud', 'ley 20724 resumen', 'decreto 466', 'decreto 404', 'decreto 405', 'decreto 3', 'calculo de dosis', 'posologia', 'farmacologia ladme', 'aines ibuprofeno', 'hipertension diabetes'],
 };
 
-export default function LandingPage() {
+export default function GuiasIndex() {
+  const guias = [
+    {
+      slug: "ley-20724-farmacos-1",
+      title: "Ley de Fármacos I (20.724)",
+      desc: "La farmacia como Centro de Salud. Prohibición de la canela, bioequivalencia obligatoria y fraccionamiento.",
+      icon: <Store size={40} className="text-teal-600" />, 
+      color: "teal"
+    },
+    {
+      slug: "decreto-466-reglamento-farmacias",
+      title: "Reglamento de Farmacias (DS 466)",
+      desc: "El pilar fundamental. Aprende sobre roles del DT, infraestructura, libros obligatorios y tipos de establecimientos.",
+      icon: <BookOpen size={40} className="text-blue-600" />,
+      color: "blue"
+    },
+    {
+      slug: "decreto-404-estupefacientes",
+      title: "Reglamento de Estupefacientes (DS 404)",
+      desc: "Normativa crítica sobre drogas de alto control. Receta Cheque, almacenamiento seguro y prohibiciones.",
+      icon: <Lock size={40} className="text-red-600" />,
+      color: "red"
+    },
+    {
+      slug: "decreto-405-psicotropicos",
+      title: "Reglamento de Psicotrópicos (DS 405)",
+      desc: "Todo sobre las Listas I, II, III y IV. Estrellas verdes, recetas retenidas y control de benzodiazepinas.",
+      icon: <BrainCircuit size={40} className="text-emerald-600" />,
+      color: "emerald"
+    },
+    {
+      slug: "decreto-3-control-productos",
+      title: "Control de Productos (DS 3)",
+      desc: "Domina la Bioequivalencia, el Registro Sanitario ISP, la Cadena de Frío y los tipos de envases.",
+      icon: <Pill size={40} className="text-purple-600" />,
+      color: "purple"
+    },
+    {
+      slug: "guia-posologia",
+      title: "Guía Maestra de Posología",
+      desc: "Aprende a calcular dosis exactas. Regla de tres, equivalencias de gotas/ml y ejercicios prácticos.",
+      icon: <Calculator size={40} className="text-indigo-600" />, 
+      color: "indigo"
+    },
+    {
+      slug: "farmacologia-1",
+      title: "Farmacología: Fundamentos",
+      desc: "Lo básico que debes saber. Sistema LADME, Farmacodinamia (Receptores) y Glosario Técnico.",
+      icon: <Microscope size={40} className="text-cyan-600" />, 
+      color: "cyan"
+    },
+    {
+      slug: "alta-rotacion",
+      title: "Farmacología: Alta Rotación",
+      desc: "El 80% de la venta diaria. Dolor (AINEs), Respiratorio (Antigripales) y Digestivo. Lo que sale todos los días.",
+      icon: <Flame size={40} className="text-orange-600" />, 
+      color: "orange"
+    },
+    {
+      slug: "cronicos-antiinfecciosos",
+      title: "Farmacología: Crónicos y Antiinfecciosos",
+      desc: "Fidelización del paciente. Hipertensión, Diabetes, Colesterol y uso responsable de Antibióticos.",
+      icon: <Heart size={40} className="text-rose-600" />, 
+      color: "rose"
+    },
+    {
+      // 🟢 NUEVO: Guía de Especialidades y Controlados
+      slug: "especialidades-controlados",
+      title: "Farmacología: Especialidades y Controlados",
+      desc: "SNC (Benzodiazepinas, Antidepresivos) y Dermatológicos. Manejo de receta retenida y venta consultiva.",
+      icon: <Brain size={40} className="text-purple-600" />, 
+      color: "purple"
+    }
+  ];
+
   return (
-    <div className="min-h-screen bg-white font-sans text-slate-800">
-      
-      {/* HERO SECTION: ENFOQUE LEGAL PURO */}
-      <header className="py-24 px-6 bg-gradient-to-b from-slate-50 to-white text-center">
-        <div className="max-w-4xl mx-auto">
-          <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest mb-10 border border-emerald-100 italic">
-            Comunidad activa de +50 alumnos capacitándose bajo normativa vigente
+    <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 font-sans">
+      <div className="max-w-6xl mx-auto">
+        
+        {/* HEADER SEO OPTIMIZADO */}
+        <div className="text-center mb-16">
+          <div className="flex items-center justify-center gap-2 mb-4">
+             <span className="bg-emerald-100 text-emerald-800 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-2">
+                <Library size={14} /> Biblioteca Oficial 2026
+             </span>
           </div>
-          <h1 className="text-5xl md:text-7xl font-black text-slate-900 mb-8 leading-[1.05] tracking-tighter">
-            Tu examen <span className="text-emerald-500">SEREMI</span> <br/>comienza aquí.
-          </h1>
-          <p className="text-xl text-slate-500 mb-12 max-w-2xl mx-auto font-medium">
-            Entrena con bases legales extraídas directamente de los <strong>Decretos 466, 404 y 405</strong> del Ministerio de Salud. 
-            Contenido técnico y jurídico validado para el proceso de certificación 2026.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            {/* 🟢 ESTE BOTÓN LLEVA A /quiz SIN PEDIR LOGIN */}
-            <Link href="/quiz" className="inline-flex items-center gap-2 bg-slate-900 text-white px-12 py-5 rounded-[2rem] font-black text-lg hover:bg-emerald-600 transition-all shadow-2xl">
-              EMPEZAR AHORA <ArrowRight />
-            </Link>
-          </div>
-        </div>
-      </header>
-
-      {/* 5 ARTÍCULOS TÉCNICOS BASADOS EN LA LEY */}
-      <main className="max-w-6xl mx-auto px-6 py-24 border-t border-slate-50">
-        <h2 className="text-center font-black text-2xl uppercase tracking-widest mb-16 italic">Módulos Críticos de Legislación</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           
-          <Link href="/guias/decreto-466-reglamento-farmacias" className="group">
-            <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all h-full hover:bg-white hover:border-emerald-200">
-              <Scale className="text-emerald-500 mb-6 group-hover:scale-110 transition-transform" size={32} />
-              <h3 className="font-black text-xl mb-4 leading-tight group-hover:text-emerald-600 transition-colors">Rol Técnico y Decreto 466</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">
-                El <strong>Decreto Supremo 466</strong> constituye el marco jurídico fundamental que regula la instalación, funcionamiento y responsabilidades en farmacias y almacenes farmacéuticos. Todo auxiliar debe dominar las prohibiciones de dispensación y las obligaciones de infraestructura, como el almacenamiento técnico a 10 cm del piso y 30 cm de los muros para garantizar la higiene exigida por la autoridad.
-              </p>
-            </article>
-          </Link>
+          <h1 className="text-3xl md:text-5xl font-black text-slate-900 mb-6 leading-tight">
+            Guías de Estudio para <br/>
+            <span className="text-blue-600">Auxiliares de Farmacia</span>
+          </h1>
+          
+          <p className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+            Prepara tu examen de competencia ante la <strong>SEREMI de Salud</strong> con nuestros resúmenes normativos. 
+            Contenido actualizado, fácil de leer y listo para <strong>descargar en PDF</strong>.
+          </p>
+        </div>
 
-          <Link href="/guias/decreto-3-control-productos" className="group">
-            <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all h-full hover:bg-white hover:border-blue-200">
-              <Thermometer className="text-blue-500 mb-6 group-hover:scale-110 transition-transform" size={32} />
-              <h3 className="font-black text-xl mb-4 leading-tight group-hover:text-blue-600 transition-colors">Estabilidad y Cadena de Frío</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">
-                La seguridad de los productos biológicos se rige por normas técnicas de almacenamiento estrictas. El mantenimiento de la temperatura entre <strong>2°C y 8°C</strong> es una obligación legal para insulinas y vacunas. Este módulo profundiza en el control de termohigrómetros, registros de planillas de temperatura y protocolos de contingencia ante quiebres de cadena de frío según las directrices sanitarias.
+        {/* GRILLA DE GUÍAS */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+          {guias.map((guia) => (
+            <Link 
+              key={guia.slug}
+              href={`/guias/${guia.slug}`}
+              className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-2xl transition-all group flex flex-col items-start hover:-translate-y-2 h-full"
+            >
+              <div className={`mb-6 p-5 rounded-3xl bg-${guia.color}-50 group-hover:scale-110 transition-transform duration-300`}>
+                {guia.icon}
+              </div>
+              <h2 className="text-xl font-black text-slate-900 mb-3 leading-tight group-hover:text-blue-600 transition-colors">
+                {guia.title}
+              </h2>
+              <p className="text-slate-500 mb-8 leading-relaxed font-medium text-sm flex-grow">
+                {guia.desc}
               </p>
-            </article>
-          </Link>
+              <div className="mt-auto w-full">
+                <span className={`block w-full text-center py-4 rounded-xl font-black text-xs uppercase tracking-wider transition-colors ${
+                    guia.color === 'blue' ? 'bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white' : 
+                    guia.color === 'red' ? 'bg-red-50 text-red-600 group-hover:bg-red-600 group-hover:text-white' :
+                    guia.color === 'emerald' ? 'bg-emerald-50 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white' :
+                    guia.color === 'teal' ? 'bg-teal-50 text-teal-600 group-hover:bg-teal-600 group-hover:text-white' :
+                    guia.color === 'indigo' ? 'bg-indigo-50 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white' :
+                    guia.color === 'cyan' ? 'bg-cyan-50 text-cyan-600 group-hover:bg-cyan-600 group-hover:text-white' :
+                    guia.color === 'orange' ? 'bg-orange-50 text-orange-600 group-hover:bg-orange-600 group-hover:text-white' :
+                    guia.color === 'rose' ? 'bg-rose-50 text-rose-600 group-hover:bg-rose-600 group-hover:text-white' :
+                    'bg-purple-50 text-purple-600 group-hover:bg-purple-600 group-hover:text-white'
+                }`}>
+                  Leer Resumen y Quiz
+                </span>
+              </div>
+            </Link>
+          ))}
+        </div>
 
-          <Link href="/guias/decreto-404-estupefacientes" className="group">
-            <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all h-full hover:bg-white hover:border-purple-200">
-              <ShieldAlert className="text-purple-500 mb-6 group-hover:scale-110 transition-transform" size={32} />
-              <h3 className="font-black text-xl mb-4 leading-tight group-hover:text-purple-600 transition-colors">Controlados: Decretos 404 y 405</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">
-                La dispensación de Estupefacientes y Psicotrópicos requiere un cumplimiento riguroso de los reglamentos <strong>DS 404 y DS 405</strong>. El aspirante debe dominar los requisitos de la Receta Cheque y Receta Retenida, el registro diario obligatorio en libros de control y la normativa de custodia en muebles de seguridad bajo llave para evitar infracciones legales graves durante las inspecciones de la SEREMI.
-              </p>
-            </article>
-          </Link>
+        {/* SECCIÓN INFORMATIVA SEO */}
+        <div className="border-t border-slate-200 pt-16 text-center">
+            <h3 className="text-xl font-bold text-slate-800 mb-4 flex items-center justify-center gap-2">
+                <GraduationCap className="text-slate-400"/>
+                ¿Qué debo estudiar para el examen?
+            </h3>
+            <p className="text-slate-500 max-w-2xl mx-auto text-sm leading-relaxed">
+                El examen de competencia para Auxiliar de Farmacia en Chile evalúa principalmente el conocimiento sobre el <strong>Código Sanitario</strong>, la <strong>Ley 20.724</strong> (Fármacos I), el <strong>Decreto 466</strong> (Reglamento de Farmacias), los <strong>Decretos 404 y 405</strong> (Estupefacientes y Psicotrópicos) y el <strong>Decreto 3</strong> (Productos Farmacéuticos), además de nociones básicas de <strong>Cálculo de Dosis (Posología)</strong> y <strong>Farmacología General</strong>.
+            </p>
+        </div>
 
-          {/* 🟢 CORRECCIÓN: Enlace directo a la guía de Ley de Fármacos */}
-          <Link href="/guias/ley-20724-farmacos-1" className="group">
-            <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all h-full hover:bg-white hover:border-amber-200">
-              <Pill className="text-amber-500 mb-6 group-hover:scale-110 transition-transform" size={32} />
-              <h3 className="font-black text-xl mb-4 leading-tight group-hover:text-amber-600 transition-colors">Bioequivalencia y Ley de Fármacos</h3>
-              <p className="text-sm text-slate-500 leading-relaxed">
-                La <strong>Ley de Fármacos II</strong> impulsa el uso de medicamentos genéricos con sello de Bioequivalencia vigente, garantizando la misma eficacia que el innovador. En este bloque se analiza la obligatoriedad
+      </div>
+    </div>
+  );
+}
