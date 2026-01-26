@@ -39,50 +39,77 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* 5 ARTÍCULOS TÉCNICOS BASADOS EN LA LEY */}
+      {/* 5 ARTÍCULOS TÉCNICOS BASADOS EN LA LEY - AHORA CON ENLACES */}
       <main className="max-w-6xl mx-auto px-6 py-24 border-t border-slate-50">
         <h2 className="text-center font-black text-2xl uppercase tracking-widest mb-16 italic">Módulos Críticos de Legislación</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           
-          <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all">
-            <Scale className="text-emerald-500 mb-6" size={32} />
-            <h3 className="font-black text-xl mb-4 leading-tight">Rol Técnico y Decreto 466</h3>
-            <p className="text-sm text-slate-500 leading-relaxed">
-              El <strong>Decreto Supremo 466</strong> constituye el marco jurídico fundamental que regula la instalación, funcionamiento y responsabilidades en farmacias y almacenes farmacéuticos. Todo auxiliar debe dominar las prohibiciones de dispensación y las obligaciones de infraestructura, como el almacenamiento técnico a 10 cm del piso y 30 cm de los muros para garantizar la higiene exigida por la autoridad.
-            </p>
-          </article>
+          {/* Tarjeta 1: Decreto 466 */}
+          <Link href="/guias/decreto-466-reglamento-farmacias" className="group">
+            <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all h-full hover:bg-white hover:border-emerald-200">
+              <Scale className="text-emerald-500 mb-6 group-hover:scale-110 transition-transform" size={32} />
+              <h3 className="font-black text-xl mb-4 leading-tight group-hover:text-emerald-600 transition-colors">Rol Técnico y Decreto 466</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">
+                El <strong>Decreto Supremo 466</strong> constituye el marco jurídico fundamental que regula la instalación, funcionamiento y responsabilidades en farmacias. Domina las prohibiciones y obligaciones de infraestructura e higiene.
+              </p>
+            </article>
+          </Link>
 
-          <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all">
-            <Thermometer className="text-blue-500 mb-6" size={32} />
-            <h3 className="font-black text-xl mb-4 leading-tight">Estabilidad y Cadena de Frío</h3>
-            <p className="text-sm text-slate-500 leading-relaxed">
-              La seguridad de los productos biológicos se rige por normas técnicas de almacenamiento estrictas. El mantenimiento de la temperatura entre <strong>2°C y 8°C</strong> es una obligación legal para insulinas y vacunas. Este módulo profundiza en el control de termohigrómetros, registros de planillas de temperatura y protocolos de contingencia ante quiebres de cadena de frío según las directrices sanitarias.
-            </p>
-          </article>
+          {/* Tarjeta 2: Decreto 3 (Cadena de Frío) */}
+          <Link href="/guias/decreto-3-control-productos" className="group">
+            <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all h-full hover:bg-white hover:border-blue-200">
+              <Thermometer className="text-blue-500 mb-6 group-hover:scale-110 transition-transform" size={32} />
+              <h3 className="font-black text-xl mb-4 leading-tight group-hover:text-blue-600 transition-colors">Estabilidad y Cadena de Frío</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">
+                Normas técnicas de almacenamiento para productos biológicos. El mantenimiento de la temperatura entre <strong>2°C y 8°C</strong> es una obligación legal. Aprende sobre el control de termohigrómetros y registros obligatorios.
+              </p>
+            </article>
+          </Link>
 
-          <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all">
-            <ShieldAlert className="text-purple-500 mb-6" size={32} />
-            <h3 className="font-black text-xl mb-4 leading-tight">Controlados: Decretos 404 y 405</h3>
-            <p className="text-sm text-slate-500 leading-relaxed">
-              La dispensación de Estupefacientes y Psicotrópicos requiere un cumplimiento riguroso de los reglamentos <strong>DS 404 y DS 405</strong>. El aspirante debe dominar los requisitos de la Receta Cheque y Receta Retenida, el registro diario obligatorio en libros de control y la normativa de custodia en muebles de seguridad bajo llave para evitar infracciones legales graves durante las inspecciones de la SEREMI.
-            </p>
-          </article>
+          {/* Tarjeta 3: Decretos 404 y 405 (Controlados) */}
+          <Link href="/guias/decreto-404-estupefacientes" className="group">
+            <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all h-full hover:bg-white hover:border-purple-200">
+              <ShieldAlert className="text-purple-500 mb-6 group-hover:scale-110 transition-transform" size={32} />
+              <h3 className="font-black text-xl mb-4 leading-tight group-hover:text-purple-600 transition-colors">Controlados: Decretos 404 y 405</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">
+                La dispensación de Estupefacientes y Psicotrópicos requiere cumplimiento riguroso. Domina los requisitos de Receta Cheque, Receta Retenida y el registro diario en libros de control fiscalizados.
+              </p>
+            </article>
+          </Link>
 
-          <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all">
-            <Pill className="text-amber-500 mb-6" size={32} />
-            <h3 className="font-black text-xl mb-4 leading-tight">Bioequivalencia y Ley de Fármacos</h3>
-            <p className="text-sm text-slate-500 leading-relaxed">
-              La <strong>Ley de Fármacos II</strong> impulsa el uso de medicamentos genéricos con sello de Bioequivalencia vigente, garantizando la misma eficacia que el innovador. En este bloque se analiza la obligatoriedad de informar precios y el marco legal para el fraccionamiento de medicamentos en unidades autorizadas, permitiendo un acceso más económico y seguro a los tratamientos prescritos por los profesionales facultados.
-            </p>
-          </article>
+          {/* Tarjeta 4: Ley de Fármacos (20.724) */}
+          <Link href="/guias/ley-20724-farmacos-1" className="group">
+            <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all h-full hover:bg-white hover:border-amber-200">
+              <Pill className="text-amber-500 mb-6 group-hover:scale-110 transition-transform" size={32} />
+              <h3 className="font-black text-xl mb-4 leading-tight group-hover:text-amber-600 transition-colors">Bioequivalencia y Ley de Fármacos</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">
+                La <strong>Ley de Fármacos</strong> impulsa el uso de genéricos bioequivalentes. Analiza la obligatoriedad de informar precios, la prohibición de la "Canela" y el marco legal para el fraccionamiento.
+              </p>
+            </article>
+          </Link>
 
-          <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all">
-            <Clipboard className="text-rose-500 mb-6" size={32} />
-            <h3 className="font-black text-xl mb-4 leading-tight">Seguridad y Farmacovigilancia</h3>
-            <p className="text-sm text-slate-500 leading-relaxed">
-              El reporte de Reacciones Adversas a Medicamentos (RAM) es un deber ético y legal del personal de farmacia ante el <strong>Instituto de Salud Pública (ISP)</strong>. Comprender los procesos de farmacocinética y farmacodinamia permite una detección temprana de efectos no deseados, contribuyendo directamente a la farmacovigilancia nacional y asegurando que la salud pública sea resguardada post-dispensación.
-            </p>
-          </article>
+          {/* Tarjeta 5: Farmacología General (Seguridad) */}
+          <Link href="/guias/farmacologia-1" className="group">
+            <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all h-full hover:bg-white hover:border-rose-200">
+              <Clipboard className="text-rose-500 mb-6 group-hover:scale-110 transition-transform" size={32} />
+              <h3 className="font-black text-xl mb-4 leading-tight group-hover:text-rose-600 transition-colors">Seguridad y Farmacovigilancia</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">
+                Comprender los procesos de farmacocinética (LADME) y farmacodinamia es vital para la seguridad del paciente y la detección de Reacciones Adversas a Medicamentos (RAM).
+              </p>
+            </article>
+          </Link>
+
+           {/* Tarjeta 6: Posología (Cálculo de Dosis) - AGREGADA PARA COMPLETAR GRID */}
+           <Link href="/guias/guia-posologia" className="group">
+            <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all h-full hover:bg-white hover:border-indigo-200">
+              <Clipboard className="text-indigo-500 mb-6 group-hover:scale-110 transition-transform" size={32} />
+              <h3 className="font-black text-xl mb-4 leading-tight group-hover:text-indigo-600 transition-colors">Cálculo de Dosis y Posología</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">
+                Domina la matemática farmacéutica esencial: Regla de tres, cálculo de dosis pediátricas, conversiones de unidades y gestión de presentaciones para una dispensación exacta.
+              </p>
+            </article>
+          </Link>
+
         </div>
 
         {/* METODOLOGÍA: BASADA EN LEYES VIGENTES */}
