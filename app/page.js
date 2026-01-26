@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { ChevronRight, Scale, Thermometer, Pill, Clipboard, ShieldAlert, ArrowRight, BookOpen, CheckCircle } from "lucide-react";
-// 👇 Importamos el nuevo componente
-import AboutSection from "./components/AboutSection";
+// 👇 Importamos el nuevo componente (Asegúrate de que este archivo exista en tu proyecto)
+// Si no existe, coméntalo o crea el archivo para evitar errores de compilación.
+// import AboutSection from "./components/AboutSection"; 
 
 // 🟢 BLOQUE SEO OBLIGATORIO (Solución al Reporte PDF)
 export const metadata = {
@@ -74,8 +75,8 @@ export default function LandingPage() {
             </article>
           </Link>
 
-          {/* 🟢 CORRECCIÓN 1: Enlace al Blog */}
-          <Link href="/blog/ley-farmacos-2-vision-futuro" className="group">
+          {/* 🟢 CORRECCIÓN: Enlace al Blog de Visión Ley Fármacos */}
+          <Link href="/blog/vision-ley-farmacos" className="group">
             <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all h-full hover:bg-white hover:border-amber-200">
               <Pill className="text-amber-500 mb-6 group-hover:scale-110 transition-transform" size={32} />
               <h3 className="font-black text-xl mb-4 leading-tight group-hover:text-amber-600 transition-colors">Bioequivalencia y Ley de Fármacos</h3>
@@ -85,7 +86,7 @@ export default function LandingPage() {
             </article>
           </Link>
 
-          {/* 🟢 CORRECCIÓN 2: Enlace al Decreto 3 */}
+          {/* 🟢 CORRECCIÓN: Enlace al Decreto 3 (Seguridad y Farmacovigilancia) */}
           <Link href="/guias/decreto-3-control-productos" className="group">
             <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all h-full hover:bg-white hover:border-rose-200">
               <Clipboard className="text-rose-500 mb-6 group-hover:scale-110 transition-transform" size={32} />
@@ -150,9 +151,10 @@ export default function LandingPage() {
         </div>
 
         {/* 👇 NUEVA SECCIÓN SOBRE NOSOTROS (MACZDEV) */}
-        <div className="mt-32">
+        {/* Asegúrate de tener este componente creado en app/components/AboutSection.js si descomentas la línea de importación arriba */}
+        {/* <div className="mt-32">
           <AboutSection />
-        </div>
+        </div> */}
 
       </main>
     </div>
