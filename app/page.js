@@ -1,7 +1,5 @@
 import Link from "next/link";
 import { ChevronRight, Scale, Thermometer, Pill, Clipboard, ShieldAlert, ArrowRight, BookOpen, CheckCircle } from "lucide-react";
-// 👇 Importamos el nuevo componente
-import AboutSection from "./components/AboutSection";
 
 // 🟢 BLOQUE SEO OBLIGATORIO (Solución al Reporte PDF)
 export const metadata = {
@@ -44,45 +42,57 @@ export default function LandingPage() {
         <h2 className="text-center font-black text-2xl uppercase tracking-widest mb-16 italic">Módulos Críticos de Legislación</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           
-          <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all">
-            <Scale className="text-emerald-500 mb-6" size={32} />
-            <h3 className="font-black text-xl mb-4 leading-tight">Rol Técnico y Decreto 466</h3>
-            <p className="text-sm text-slate-500 leading-relaxed">
-              El <strong>Decreto Supremo 466</strong> constituye el marco jurídico fundamental que regula la instalación, funcionamiento y responsabilidades en farmacias y almacenes farmacéuticos. Todo auxiliar debe dominar las prohibiciones de dispensación y las obligaciones de infraestructura, como el almacenamiento técnico a 10 cm del piso y 30 cm de los muros para garantizar la higiene exigida por la autoridad.
-            </p>
-          </article>
+          <Link href="/guias/decreto-466-reglamento-farmacias" className="group">
+            <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all h-full hover:bg-white hover:border-emerald-200">
+              <Scale className="text-emerald-500 mb-6 group-hover:scale-110 transition-transform" size={32} />
+              <h3 className="font-black text-xl mb-4 leading-tight group-hover:text-emerald-600 transition-colors">Rol Técnico y Decreto 466</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">
+                El <strong>Decreto Supremo 466</strong> constituye el marco jurídico fundamental que regula la instalación, funcionamiento y responsabilidades en farmacias y almacenes farmacéuticos. Todo auxiliar debe dominar las prohibiciones de dispensación y las obligaciones de infraestructura, como el almacenamiento técnico a 10 cm del piso y 30 cm de los muros para garantizar la higiene exigida por la autoridad.
+              </p>
+            </article>
+          </Link>
 
-          <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all">
-            <Thermometer className="text-blue-500 mb-6" size={32} />
-            <h3 className="font-black text-xl mb-4 leading-tight">Estabilidad y Cadena de Frío</h3>
-            <p className="text-sm text-slate-500 leading-relaxed">
-              La seguridad de los productos biológicos se rige por normas técnicas de almacenamiento estrictas. El mantenimiento de la temperatura entre <strong>2°C y 8°C</strong> es una obligación legal para insulinas y vacunas. Este módulo profundiza en el control de termohigrómetros, registros de planillas de temperatura y protocolos de contingencia ante quiebres de cadena de frío según las directrices sanitarias.
-            </p>
-          </article>
+          <Link href="/guias/decreto-3-control-productos" className="group">
+            <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all h-full hover:bg-white hover:border-blue-200">
+              <Thermometer className="text-blue-500 mb-6 group-hover:scale-110 transition-transform" size={32} />
+              <h3 className="font-black text-xl mb-4 leading-tight group-hover:text-blue-600 transition-colors">Estabilidad y Cadena de Frío</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">
+                La seguridad de los productos biológicos se rige por normas técnicas de almacenamiento estrictas. El mantenimiento de la temperatura entre <strong>2°C y 8°C</strong> es una obligación legal para insulinas y vacunas. Este módulo profundiza en el control de termohigrómetros, registros de planillas de temperatura y protocolos de contingencia ante quiebres de cadena de frío según las directrices sanitarias.
+              </p>
+            </article>
+          </Link>
 
-          <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all">
-            <ShieldAlert className="text-purple-500 mb-6" size={32} />
-            <h3 className="font-black text-xl mb-4 leading-tight">Controlados: Decretos 404 y 405</h3>
-            <p className="text-sm text-slate-500 leading-relaxed">
-              La dispensación de Estupefacientes y Psicotrópicos requiere un cumplimiento riguroso de los reglamentos <strong>DS 404 y DS 405</strong>. El aspirante debe dominar los requisitos de la Receta Cheque y Receta Retenida, el registro diario obligatorio en libros de control y la normativa de custodia en muebles de seguridad bajo llave para evitar infracciones legales graves durante las inspecciones de la SEREMI.
-            </p>
-          </article>
+          <Link href="/guias/decreto-404-estupefacientes" className="group">
+            <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all h-full hover:bg-white hover:border-purple-200">
+              <ShieldAlert className="text-purple-500 mb-6 group-hover:scale-110 transition-transform" size={32} />
+              <h3 className="font-black text-xl mb-4 leading-tight group-hover:text-purple-600 transition-colors">Controlados: Decretos 404 y 405</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">
+                La dispensación de Estupefacientes y Psicotrópicos requiere un cumplimiento riguroso de los reglamentos <strong>DS 404 y DS 405</strong>. El aspirante debe dominar los requisitos de la Receta Cheque y Receta Retenida, el registro diario obligatorio en libros de control y la normativa de custodia en muebles de seguridad bajo llave para evitar infracciones legales graves durante las inspecciones de la SEREMI.
+              </p>
+            </article>
+          </Link>
 
-          <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all">
-            <Pill className="text-amber-500 mb-6" size={32} />
-            <h3 className="font-black text-xl mb-4 leading-tight">Bioequivalencia y Ley de Fármacos</h3>
-            <p className="text-sm text-slate-500 leading-relaxed">
-              La <strong>Ley de Fármacos II</strong> impulsa el uso de medicamentos genéricos con sello de Bioequivalencia vigente, garantizando la misma eficacia que el innovador. En este bloque se analiza la obligatoriedad de informar precios y el marco legal para el fraccionamiento de medicamentos en unidades autorizadas, permitiendo un acceso más económico y seguro a los tratamientos prescritos por los profesionales facultados.
-            </p>
-          </article>
+          {/* 🟢 CORRECCIÓN 1: Enlace al Blog de Visión Ley Fármacos */}
+          <Link href="/blog/vision-ley-farmacos" className="group">
+            <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all h-full hover:bg-white hover:border-amber-200">
+              <Pill className="text-amber-500 mb-6 group-hover:scale-110 transition-transform" size={32} />
+              <h3 className="font-black text-xl mb-4 leading-tight group-hover:text-amber-600 transition-colors">Bioequivalencia y Ley de Fármacos</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">
+                La <strong>Ley de Fármacos II</strong> impulsa el uso de medicamentos genéricos con sello de Bioequivalencia vigente, garantizando la misma eficacia que el innovador. En este bloque se analiza la obligatoriedad de informar precios y el marco legal para el fraccionamiento de medicamentos en unidades autorizadas, permitiendo un acceso más económico y seguro a los tratamientos prescritos por los profesionales facultados.
+              </p>
+            </article>
+          </Link>
 
-          <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all">
-            <Clipboard className="text-rose-500 mb-6" size={32} />
-            <h3 className="font-black text-xl mb-4 leading-tight">Seguridad y Farmacovigilancia</h3>
-            <p className="text-sm text-slate-500 leading-relaxed">
-              El reporte de Reacciones Adversas a Medicamentos (RAM) es un deber ético y legal del personal de farmacia ante el <strong>Instituto de Salud Pública (ISP)</strong>. Comprender los procesos de farmacocinética y farmacodinamia permite una detección temprana de efectos no deseados, contribuyendo directamente a la farmacovigilancia nacional y asegurando que la salud pública sea resguardada post-dispensación.
-            </p>
-          </article>
+          {/* 🟢 CORRECCIÓN 2: Enlace al Decreto 3 (Seguridad y Farmacovigilancia) */}
+          <Link href="/guias/decreto-3-control-productos" className="group">
+            <article className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-md transition-all h-full hover:bg-white hover:border-rose-200">
+              <Clipboard className="text-rose-500 mb-6 group-hover:scale-110 transition-transform" size={32} />
+              <h3 className="font-black text-xl mb-4 leading-tight group-hover:text-rose-600 transition-colors">Seguridad y Farmacovigilancia</h3>
+              <p className="text-sm text-slate-500 leading-relaxed">
+                El reporte de Reacciones Adversas a Medicamentos (RAM) es un deber ético y legal del personal de farmacia ante el <strong>Instituto de Salud Pública (ISP)</strong>. Comprender los procesos de farmacocinética y farmacodinamia permite una detección temprana de efectos no deseados, contribuyendo directamente a la farmacovigilancia nacional y asegurando que la salud pública sea resguardada post-dispensación.
+              </p>
+            </article>
+          </Link>
         </div>
 
         {/* METODOLOGÍA: BASADA EN LEYES VIGENTES */}
@@ -137,9 +147,62 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* 👇 NUEVA SECCIÓN SOBRE NOSOTROS (MACZDEV) */}
-        <div className="mt-32">
-          <AboutSection />
+        {/* 👇 SECCIÓN SOBRE NOSOTROS (MACZDEV) - RESTAURADA */}
+        <div className="mt-32 max-w-5xl mx-auto bg-slate-900 rounded-[3rem] p-8 md:p-12 shadow-2xl relative overflow-hidden">
+          {/* Fondo decorativo */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500 rounded-full blur-[100px] opacity-20 -mr-20 -mt-20"></div>
+          
+          <div className="relative z-10 flex flex-col md:flex-row items-center gap-10">
+            {/* Imagen del perfil */}
+            <div className="shrink-0">
+              <div className="w-32 h-32 md:w-48 md:h-48 rounded-full border-4 border-slate-800 overflow-hidden shadow-xl">
+                <img 
+                  src="/maczdev.webp" 
+                  alt="MaczDev" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+
+            {/* Contenido de texto */}
+            <div className="flex-1 text-center md:text-left space-y-6">
+              <div>
+                <h4 className="text-2xl md:text-3xl font-black text-white mb-2">Hola, soy MaczDev 👋</h4>
+                <p className="text-emerald-400 font-bold text-sm uppercase tracking-wider">Auxiliar Trainee & Desarrollador Web</p>
+              </div>
+              
+              <div className="space-y-4 text-slate-300 text-sm leading-relaxed">
+                <p>
+                  Actualmente trabajo en el rubro y, al igual que tú, me estoy preparando para rendir la prueba de competencia <strong>SEREMI 2026</strong>.
+                </p>
+                <p>
+                  Mientras estudiaba, me di cuenta de un gran vacío: <strong>no existían ensayos tipo prueba disponibles en la red</strong>. Esa frustración fue mi motor. Decidí no quedarme de brazos cruzados. Uní mis conocimientos en farmacia y tecnología, y con la ayuda de <strong>Inteligencia Artificial (Gemini)</strong>, construí esta plataforma y generé guías de estudio propias.
+                </p>
+                <p>
+                  Lanzamos en diciembre de 2025 y ver la gran afluencia de usuarios me confirma que esto era necesario.
+                </p>
+                <blockquote className="border-l-4 border-emerald-500 pl-4 italic text-white my-4">
+                  "Creo firmemente que el conocimiento que nos permite crecer profesional y espiritualmente debe ser libre y gratuito para todos."
+                </blockquote>
+              </div>
+
+              {/* Grid de valores */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-4 border-t border-slate-800">
+                <div>
+                  <h5 className="text-white font-bold mb-1 flex items-center gap-2"><Scale size={16} className="text-emerald-400"/> Tecnología + Salud</h5>
+                  <p className="text-xs text-slate-400">Plataforma programada con IA para estructurar contenido legal complejo de forma simple.</p>
+                </div>
+                <div>
+                  <h5 className="text-white font-bold mb-1 flex items-center gap-2"><BookOpen size={16} className="text-blue-400"/> Nuestra Visión</h5>
+                  <p className="text-xs text-slate-400">Crear la comunidad de apoyo más grande de Chile. Que nadie repruebe por falta de recursos.</p>
+                </div>
+                <div>
+                  <h5 className="text-white font-bold mb-1 flex items-center gap-2"><CheckCircle size={16} className="text-purple-400"/> Gratuidad Real</h5>
+                  <p className="text-xs text-slate-400">Sin letra chica. No vendemos tus datos. Un aporte personal para devolver la mano.</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
       </main>

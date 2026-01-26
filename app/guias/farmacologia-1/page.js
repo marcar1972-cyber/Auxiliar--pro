@@ -3,59 +3,109 @@
 import { useState } from 'react';
 import Link from "next/link";
 import Script from "next/script"; 
-import { BookOpen, CheckCircle, Microscope, FlaskConical, Pill, Activity, FileText, Download, ArrowRight, Info, BrainCircuit, XCircle, Zap, ShieldAlert, Key, Clock, List } from "lucide-react";
+import { BookOpen, CheckCircle, AlertTriangle, ShieldCheck, FileText, Download, ArrowRight, Info, Package, Pill, Lock, FileSignature, Syringe, Trophy, XCircle, Truck, Scale, Zap, Activity, Clock, Thermometer, GraduationCap } from "lucide-react";
 
-// 📝 PREGUNTAS DEL QUIZ (Adaptadas a Farmacología Básica)
+// 📝 PREGUNTAS DEL QUIZ (Específicas de Fundamentos de Farmacología)
 const preguntasQuiz = [
   {
-    pregunta: "¿Cuál es la diferencia principal entre Fármaco y Medicamento?",
-    opciones: ["Son lo mismo", "El fármaco es la caja y el medicamento la pastilla", "Fármaco es el principio activo puro; Medicamento incluye excipientes", "El medicamento es natural"],
-    correcta: 2 
-  },
-  {
-    pregunta: "¿Qué estudia la Farmacocinética?",
-    opciones: ["Cómo se prepara el remedio", "Lo que el cuerpo le hace al fármaco (LADME)", "Lo que el fármaco le hace al cuerpo", "El precio de venta"],
+    pregunta: "¿Qué diferencia técnica existe entre Fármaco y Medicamento?",
+    opciones: [
+      "Son sinónimos exactos.",
+      "El Fármaco es la sustancia pura y el Medicamento es el producto final con excipientes.",
+      "El Medicamento es la sustancia pura y el Fármaco es el nombre comercial.",
+      "El Fármaco es líquido y el Medicamento es sólido."
+    ],
     correcta: 1
   },
   {
-    pregunta: "¿Qué significa la sigla LADME?",
-    opciones: ["Liberación, Absorción, Distribución, Metabolismo, Excreción", "Limpieza, Almacenaje, Dosis, Medida, Entrega", "Líquido, Activo, Droga, Mezcla, Efecto", "Ninguna de las anteriores"],
-    correcta: 0
+    pregunta: "¿Qué significan las siglas LADME?",
+    opciones: [
+      "Limpieza, Aseo, Desinfección, Mantenimiento, Entrega.",
+      "Liberación, Absorción, Distribución, Metabolismo, Excreción.",
+      "Laboratorio, Administración, Dosis, Medicamento, Efecto.",
+      "Líquido, Activo, Dosis, Mezcla, Envase."
+    ],
+    correcta: 1
   },
   {
-    pregunta: "¿Qué órgano es el principal encargado del METABOLISMO de fármacos?",
-    opciones: ["El Riñón", "El Estómago", "El Hígado", "El Corazón"],
+    pregunta: "¿Cuál es la función principal del Hígado en la farmacología?",
+    opciones: [
+      "Absorción.",
+      "Distribución.",
+      "Metabolismo.",
+      "Excreción."
+    ],
     correcta: 2
   },
   {
-    pregunta: "Si un medicamento es 'Bioequivalente', ¿qué se garantiza?",
-    opciones: ["Que es más barato solamente", "Que tiene el mismo color", "Que tiene la misma biodisponibilidad y velocidad de acción que el original", "Que es natural"],
+    pregunta: "¿Qué vía de administración tiene una Biodisponibilidad del 100%?",
+    opciones: [
+      "Vía Oral.",
+      "Vía Intramuscular.",
+      "Vía Subcutánea.",
+      "Vía Intravenosa."
+    ],
+    correcta: 3
+  },
+  {
+    pregunta: "¿Qué significa que un medicamento sea Bioequivalente?",
+    opciones: [
+      "Que es más barato.",
+      "Que tiene el mismo color de caja.",
+      "Que ha demostrado tener la misma biodisponibilidad y efecto que el original.",
+      "Que se vende sin receta."
+    ],
     correcta: 2
   },
   {
-    pregunta: "¿Qué es un 'Profármaco'?",
-    opciones: ["Un fármaco profesional", "Un medicamento que entra inactivo y se activa en el hígado", "Un medicamento vencido", "Un antibiótico fuerte"],
+    pregunta: "¿Qué hace un fármaco Agonista?",
+    opciones: [
+      "Bloquea el receptor.",
+      "Activa el receptor imitando una sustancia natural.",
+      "Destruye el receptor.",
+      "No tiene efecto."
+    ],
     correcta: 1
   },
   {
-    pregunta: "En Farmacodinamia, ¿qué hace un 'Antagonista'?",
-    opciones: ["Activa el receptor", "Bloquea el receptor (como una llave atascada)", "Destruye el receptor", "Aumenta la dosis"],
+    pregunta: "¿Qué hace un fármaco Antagonista?",
+    opciones: [
+      "Activa el receptor.",
+      "Acelera el metabolismo.",
+      "Bloquea el receptor impidiendo la acción de sustancias naturales.",
+      "Mejora el sabor del medicamento."
+    ],
+    correcta: 2
+  },
+  {
+    pregunta: "¿Cuál es la regla de oro con los comprimidos de Liberación Prolongada (Retard)?",
+    opciones: [
+      "Triturarlos para que actúen más rápido.",
+      "Tomarlos con leche.",
+      "Nunca triturarlos ni partirlos.",
+      "Disolverlos en agua caliente."
+    ],
+    correcta: 2
+  },
+  {
+    pregunta: "¿Qué es la Vida Media de un fármaco?",
+    opciones: [
+      "La fecha de vencimiento.",
+      "El tiempo que tarda en reducirse a la mitad su concentración en sangre.",
+      "La mitad del tiempo que dura el tratamiento.",
+      "El tiempo que tarda en absorberse."
+    ],
     correcta: 1
   },
   {
-    pregunta: "¿Para qué sirven los Excipientes?",
-    opciones: ["Para curar la enfermedad", "Para dar forma, sabor y estabilidad (sin efecto medicinal)", "Para cobrar más caro", "Para aumentar la potencia"],
-    correcta: 1
-  },
-  {
-    pregunta: "¿Qué es la 'Vida Media' de un fármaco?",
-    opciones: ["La fecha de vencimiento", "El tiempo que tarda el cuerpo en eliminar la mitad del medicamento", "La mitad de la pastilla", "El tiempo que dura en la caja"],
-    correcta: 1
-  },
-  {
-    pregunta: "Si la receta dice 'Con las comidas', ¿cuál suele ser la razón?",
-    opciones: ["Para que sepa mejor", "Para proteger el estómago de irritación", "Para que no se olvide", "Para absorberlo más rápido"],
-    correcta: 1
+    pregunta: "¿Cuál es el órgano principal de la excreción?",
+    opciones: [
+      "Hígado.",
+      "Estómago.",
+      "Riñón.",
+      "Corazón."
+    ],
+    correcta: 2
   }
 ];
 
@@ -103,7 +153,7 @@ export default function GuiaFarmacologia() {
       
       const opciones = {
         margin:       [15, 15, 15, 15],
-        filename:     'Guia-1-Fundamentos-Farmacologia-AuxiliarPro.pdf',
+        filename:     'Guia-Fundamentos-Farmacologia.pdf',
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2, useCORS: true, scrollY: 0 }, 
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
@@ -126,24 +176,24 @@ export default function GuiaFarmacologia() {
       />
 
       {/* HEADER DE LA GUÍA */}
-      <header className="bg-white border-b border-slate-200 py-12 px-6">
+      <header className="bg-emerald-900 border-b border-emerald-800 py-12 px-6 text-white">
         <div className="max-w-6xl mx-auto">
           <nav className="mb-6">
-            <Link href="/guias" className="text-slate-400 hover:text-blue-600 font-bold text-sm flex items-center gap-2 transition-colors">
+            <Link href="/guias" className="text-emerald-300 hover:text-white font-bold text-sm flex items-center gap-2 transition-colors">
               ← Volver a la Biblioteca
             </Link>
           </nav>
-          <div className="flex items-center gap-2 text-blue-600 font-bold text-sm uppercase tracking-wider mb-4">
+          <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm uppercase tracking-wider mb-4">
             <BookOpen size={18} />
-            Guía de Estudio Oficial N°1
+            Guía de Estudio Oficial
           </div>
           
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-slate-900 mb-6 leading-tight text-balance">
-            Fundamentos Científicos de la <span className="text-blue-600 whitespace-nowrap">Farmacología</span>
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight text-balance">
+            Fundamentos de Farmacología
           </h1>
           
-          <p className="text-xl text-slate-500 max-w-3xl">
-            No basta con saber vender; hay que entender. Domina los conceptos de Farmacocinética (LADME), Dinamia y Tecnia para convertirte en un experto del mesón.
+          <p className="text-xl text-emerald-100 max-w-3xl">
+            Un Auxiliar de Farmacia competente no solo despacha cajas; entiende la ciencia detrás del tratamiento. Esta guía profundiza en los pilares de la ciencia farmacéutica: Farmacotecnia, Farmacocinética y Farmacodinamia.
           </p>
         </div>
       </header>
@@ -155,147 +205,345 @@ export default function GuiaFarmacologia() {
           <div id="contenido-pdf" className="lg:col-span-8 space-y-12 bg-white p-4 md:p-8 rounded-xl shadow-sm">
             
             <div className="mb-8 border-b pb-4 border-slate-100 flex justify-between items-center">
-                {/* Asegúrate de tener tu logo en /public/logo.webp */}
                 <img 
                     src="/logo.webp" 
                     alt="AuxiliarPro Logo" 
                     className="w-32" 
                     crossOrigin="anonymous" 
                 />
-                <span className="text-xs text-slate-400 font-bold uppercase tracking-widest">Módulo 1: Ciencias Básicas</span>
+                <span className="text-xs text-slate-400 font-bold uppercase tracking-widest">Guía Oficial 2026</span>
             </div>
 
-            {/* 1. INTRODUCCIÓN */}
-            <section className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm break-inside-avoid">
-              <h2 className="text-2xl font-black text-slate-900 mb-4 flex items-center gap-3">
-                1. Las 3 Ramas Principales
-              </h2>
-              <p className="text-lg leading-relaxed mb-6">
-                Para entender cómo funciona un medicamento, debemos dividir su estudio en tres grandes áreas. No son lo mismo y a menudo se confunden.
-              </p>
-              
-              <div className="grid gap-4 md:grid-cols-3">
-                  <div className="bg-blue-50 p-4 rounded-xl border border-blue-100">
-                      <FlaskConical className="text-blue-600 mb-2" size={28} />
-                      <h3 className="font-bold text-blue-900 mb-2">Farmacotecnia</h3>
-                      <p className="text-xs text-blue-800">"El Arte de Preparar". Transforma el químico puro en una pastilla, jarabe o crema útil.</p>
-                  </div>
-                  <div className="bg-emerald-50 p-4 rounded-xl border border-emerald-100">
-                      <Activity className="text-emerald-600 mb-2" size={28} />
-                      <h3 className="font-bold text-emerald-900 mb-2">Farmacocinética</h3>
-                      <p className="text-xs text-emerald-800">"Lo que el cuerpo le hace al fármaco". Estudio del viaje y los tiempos (LADME).</p>
-                  </div>
-                  <div className="bg-purple-50 p-4 rounded-xl border border-purple-100">
-                      <Zap className="text-purple-600 mb-2" size={28} />
-                      <h3 className="font-bold text-purple-900 mb-2">Farmacodinamia</h3>
-                      <p className="text-xs text-purple-800">"Lo que el fármaco le hace al cuerpo". El mecanismo para quitar el dolor.</p>
-                  </div>
-              </div>
-            </section>
-
-            {/* 2. FARMACOCINÉTICA (LADME) */}
+            {/* 1. FARMACOTECNIA */}
             <section className="break-inside-avoid">
-                <h3 className="text-xl font-bold text-slate-900 mb-6 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <Clock className="text-blue-500" /> 2. El Viaje L.A.D.M.E. (Cinética)
-                </h3>
-                <p className="mb-6 text-slate-600">Este proceso determina la dosis y los horarios. Si falla uno, el medicamento no funciona.</p>
-                
-                <div className="space-y-4">
-                    <div className="flex gap-4">
-                        <div className="w-10 h-10 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold shrink-0">L</div>
-                        <div>
-                            <strong className="text-slate-900 block">Liberación</strong>
-                            <p className="text-sm text-slate-600">El "desempaquetado". La pastilla se disuelve. <span className="text-red-500 italic">¡Nunca moler comprimidos de liberación prolongada!</span></p>
-                        </div>
-                    </div>
-                    <div className="flex gap-4">
-                        <div className="w-10 h-10 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold shrink-0">A</div>
-                        <div>
-                            <strong className="text-slate-900 block">Absorción</strong>
-                            <p className="text-sm text-slate-600">Paso a la sangre. Aquí entra la <strong>Biodisponibilidad</strong> (cuánto llegó realmente).</p>
-                        </div>
-                    </div>
-                    <div className="flex gap-4">
-                        <div className="w-10 h-10 rounded-full bg-slate-700 text-white flex items-center justify-center font-bold shrink-0">D</div>
-                        <div>
-                            <strong className="text-slate-900 block">Distribución</strong>
-                            <p className="text-sm text-slate-600">El viaje por la sangre hacia el órgano enfermo.</p>
-                        </div>
-                    </div>
-                    <div className="flex gap-4">
-                        <div className="w-10 h-10 rounded-full bg-slate-600 text-white flex items-center justify-center font-bold shrink-0">M</div>
-                        <div>
-                            <strong className="text-slate-900 block">Metabolismo (El Hígado)</strong>
-                            <p className="text-sm text-slate-600">Transformación del químico. Ojo con los <strong>Profármacos</strong> (como Enalapril) que entran inactivos y necesitan del hígado para activarse.</p>
-                        </div>
-                    </div>
-                    <div className="flex gap-4">
-                        <div className="w-10 h-10 rounded-full bg-slate-500 text-white flex items-center justify-center font-bold shrink-0">E</div>
-                        <div>
-                            <strong className="text-slate-900 block">Excreción</strong>
-                            <p className="text-sm text-slate-600">Salida final (Orina/Heces). Fundamental en pacientes renales.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* 3. FARMACODINAMIA */}
-            <section className="break-inside-avoid">
-                <h3 className="text-xl font-bold text-slate-900 mb-6 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <Key className="text-blue-500" /> 3. Llave y Cerradura (Dinamia)
-                </h3>
-                <p className="mb-4 text-slate-600">
-                    Las células tienen "cerraduras" (Receptores). Los fármacos son llaves.
+                <h2 className="text-2xl font-black text-slate-900 mb-6 flex items-center gap-3">
+                    <Pill className="text-emerald-600" /> 1. Farmacotecnia: La Ciencia de la Formulación
+                </h2>
+                <p className="text-lg leading-relaxed mb-6">
+                    Es la disciplina que estudia la manipulación de las materias primas para darles una forma adecuada, que permita ser administrada a los seres vivos.
                 </p>
-                
-                <div className="grid md:grid-cols-2 gap-6">
-                    <div className="bg-indigo-50 p-5 rounded-2xl border border-indigo-100">
-                        <h4 className="font-bold text-indigo-900 mb-2 flex items-center gap-2"><CheckCircle size={16}/> Agonistas (Activadores)</h4>
-                        <p className="text-sm text-indigo-800 leading-relaxed">
-                            La llave entra, gira y activa una función. <br/>
-                            Ej: <strong>Salbutamol</strong> (activa los bronquios para abrirlos).
-                        </p>
-                    </div>
-                    <div className="bg-red-50 p-5 rounded-2xl border border-red-100">
-                        <h4 className="font-bold text-red-900 mb-2 flex items-center gap-2"><XCircle size={16}/> Antagonistas (Bloqueadores)</h4>
-                        <p className="text-sm text-red-800 leading-relaxed">
-                            La llave entra pero no gira. Bloquea la puerta. <br/>
-                            Ej: <strong>Antihistamínicos</strong> (bloquean la alergia).
-                        </p>
+
+                <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 mb-8">
+                    <h3 className="font-bold text-slate-900 text-lg mb-4">A. Diferencia Técnica: Fármaco vs. Medicamento</h3>
+                    <p className="mb-4 text-slate-600">Es el error número uno en el mesón. Debes usar los términos con propiedad:</p>
+                    <ul className="space-y-4">
+                        <li className="bg-white p-4 rounded-xl shadow-sm">
+                            <strong className="text-emerald-700 block text-lg mb-1">Fármaco (o Principio Activo - API):</strong>
+                            <p className="text-sm">Es la sustancia química pura responsable del efecto terapéutico. Por sí sola, suele ser inestable o difícil de administrar.</p>
+                            <em className="text-xs text-slate-500 block mt-1">Ejemplo: Paracetamol polvo.</em>
+                        </li>
+                        <li className="bg-white p-4 rounded-xl shadow-sm">
+                            <strong className="text-emerald-700 block text-lg mb-1">Medicamento:</strong>
+                            <p className="text-sm">Es el producto tecnológico final. Es la suma de <strong>Fármaco + Excipientes + Técnica de Manufactura</strong>.</p>
+                            <em className="text-xs text-slate-500 block mt-1">Ejemplo: Comprimido de Paracetamol 500mg.</em>
+                        </li>
+                    </ul>
+                </div>
+
+                <h3 className="font-bold text-slate-900 text-lg mb-4">B. Los Excipientes: No son "relleno"</h3>
+                <p className="text-slate-600 mb-4">
+                    Los excipientes son sustancias auxiliares que permiten que el medicamento sea estable, eficaz y seguro. Aunque no tienen actividad terapéutica, <strong>determinan la calidad del producto</strong>.
+                </p>
+                <ul className="grid md:grid-cols-2 gap-4 mb-6">
+                    <li className="bg-slate-100 p-3 rounded-lg text-sm"><strong>Aglutinantes:</strong> Mantienen los polvos unidos para formar la pastilla.</li>
+                    <li className="bg-slate-100 p-3 rounded-lg text-sm"><strong>Desintegrantes:</strong> Hacen que la pastilla "explote" o se deshaga al contacto con el jugo gástrico.</li>
+                    <li className="bg-slate-100 p-3 rounded-lg text-sm"><strong>Correctores:</strong> Enmascaran sabores amargos (sacarosa, saborizantes).</li>
+                    <li className="bg-slate-100 p-3 rounded-lg text-sm"><strong>Conservantes:</strong> Evitan que crezcan bacterias en jarabes o cremas (parabenos).</li>
+                </ul>
+
+                <div className="bg-amber-50 p-4 rounded-xl border-l-4 border-amber-400 flex gap-3">
+                    <AlertTriangle className="text-amber-500 flex-shrink-0" />
+                    <div>
+                        <strong className="text-amber-900 block">💡 Ojo Clínico</strong>
+                        <p className="text-amber-800 text-sm">Revisa siempre los excipientes en pacientes con alergias alimentarias. Muchos comprimidos usan <strong>Lactosa</strong> o <strong>Almidón de trigo (Gluten)</strong> como diluyentes.</p>
                     </div>
                 </div>
             </section>
 
-            {/* 4. GLOSARIO TÉCNICO */}
-            <section className="mb-12 break-inside-avoid">
-                <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <List className="text-blue-500" /> Glosario Técnico del Auxiliar
-                </h3>
-                <p className="text-slate-500 text-sm mb-4">Términos que debes dominar para no perderte leyendo un envase.</p>
+            {/* 2. FARMACOCINÉTICA */}
+            <section className="break-inside-avoid">
+                <h2 className="text-2xl font-black text-slate-900 mb-6 flex items-center gap-3">
+                    <Activity className="text-blue-600" /> 2. Farmacocinética: El Viaje del Fármaco (LADME)
+                </h2>
                 
-                <div className="bg-slate-50 p-6 rounded-3xl border border-slate-200 space-y-4">
-                    {[
-                        { term: "Bioequivalencia", def: "Copia que garantiza misma biodisponibilidad y velocidad que el original." },
-                        { term: "Excipiente", def: "Sustancia inerte para dar forma/sabor. No cura." },
-                        { term: "Principio Activo", def: "Sustancia química responsable del efecto curativo." },
-                        { term: "Vida Media (t ½)", def: "Tiempo que tarda el cuerpo en eliminar el 50% del fármaco." },
-                        { term: "Ventana Terapéutica", def: "Margen de seguridad entre la dosis que cura y la que mata." },
-                        { term: "Posología", def: "Estudio de las dosis e intervalos de tiempo." },
-                        { term: "RAM", def: "Reacción Adversa al Medicamento (efecto secundario)." }
-                    ].map((item, idx) => (
-                        <div key={idx} className="pb-3 border-b border-slate-200 last:border-0 last:pb-0">
-                            <strong className="text-slate-900 block mb-1">{item.term}</strong>
-                            <p className="text-sm text-slate-600">{item.def}</p>
+                <div className="bg-slate-900 text-white p-6 rounded-2xl mb-8">
+                    <div className="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <strong className="text-emerald-400 block text-lg mb-1">Farmacodinamia</strong>
+                            <span className="text-xs uppercase tracking-widest opacity-70 block mb-2">(Dinámica = Fuerza/Efecto)</span>
+                            <p className="text-sm text-slate-300">Estudia "lo que el fármaco le hace al organismo". Es el efecto curativo (ej: bajar la fiebre, quitar el dolor, matar una bacteria).</p>
                         </div>
-                    ))}
+                        <div className="border-t md:border-t-0 md:border-l border-slate-700 pt-4 md:pt-0 md:pl-6">
+                            <strong className="text-blue-400 block text-lg mb-1">Farmacocinética</strong>
+                            <span className="text-xs uppercase tracking-widest opacity-70 block mb-2">(Cinética = Movimiento)</span>
+                            <p className="text-sm text-slate-300">Estudia "lo que el organismo le hace al fármaco". El cuerpo no se queda quieto; toma el medicamento, lo mueve, lo transforma y lo elimina.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <p className="mb-6 font-bold text-slate-800">El proceso farmacocinético se resume en el acrónimo LADME:</p>
+
+                <div className="space-y-6">
+                    <div className="flex gap-4">
+                        <div className="font-black text-4xl text-slate-200">L</div>
+                        <div>
+                            <h4 className="font-bold text-slate-900">Liberación (El inicio)</h4>
+                            <p className="text-sm text-slate-600 mb-2">Es el primer paso para que el fármaco pueda absorberse. El medicamento debe separarse de su forma farmacéutica.</p>
+                            <ul className="list-disc pl-4 text-sm text-slate-600">
+                                <li><strong>Desintegración:</strong> La pastilla se rompe en trozos pequeños.</li>
+                                <li><strong>Disolución:</strong> Las partículas se disuelven en los fluidos gástricos.</li>
+                            </ul>
+                            <span className="text-xs bg-slate-100 px-2 py-1 rounded mt-2 inline-block">Nota: Los jarabes y soluciones IV se saltan este paso (actúan más rápido).</span>
+                        </div>
+                    </div>
+
+                    <div className="flex gap-4">
+                        <div className="font-black text-4xl text-slate-200">A</div>
+                        <div>
+                            <h4 className="font-bold text-slate-900">Absorción (La entrada)</h4>
+                            <p className="text-sm text-slate-600 mb-2">Es el paso del fármaco desde el sitio de administración hasta la circulación sanguínea (plasma).</p>
+                            <div className="bg-blue-50 p-3 rounded-lg border border-blue-100">
+                                <strong className="text-blue-900 block text-sm">Concepto Clave: Biodisponibilidad</strong>
+                                <p className="text-xs text-blue-800 mb-2">Es la cantidad real de fármaco que llega a la sangre inalterado.</p>
+                                <ul className="text-xs text-blue-800 list-disc pl-4">
+                                    <li><strong>Vía Intravenosa (IV):</strong> Biodisponibilidad del 100% (todo entra directo).</li>
+                                    <li><strong>Vía Oral:</strong> Siempre es menor al 100% debido a la acidez del estómago y al "Efecto de Primer Paso".</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex gap-4">
+                        <div className="font-black text-4xl text-slate-200">D</div>
+                        <div>
+                            <h4 className="font-bold text-slate-900">Distribución (El transporte)</h4>
+                            <p className="text-sm text-slate-600 mb-2">Una vez en la sangre, el fármaco debe viajar a los tejidos. ¿Cómo lo hace?</p>
+                            <ul className="text-sm text-slate-600 space-y-2">
+                                <li><strong>Unión a Proteínas Plasmáticas:</strong> La mayoría de los fármacos viajan "pegados" a una proteína llamada Albúmina, que actúa como un taxi.</li>
+                                <li><strong>Fracción Unida:</strong> El fármaco va "en el taxi". No hace efecto mientras viaja.</li>
+                                <li><strong>Fracción Libre:</strong> El fármaco se baja del taxi, atraviesa los tejidos y hace el efecto.</li>
+                                <li><strong>Interacciones:</strong> Si dos fármacos compiten por el mismo "taxi" (Albúmina), uno puede desplazar al otro, aumentando su fracción libre y causando toxicidad. (Ej: Warfarina + Aspirina).</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div className="flex gap-4">
+                        <div className="font-black text-4xl text-slate-200">M</div>
+                        <div>
+                            <h4 className="font-bold text-slate-900">Metabolismo (La transformación)</h4>
+                            <p className="text-sm text-slate-600 mb-2">El cuerpo detecta el fármaco como un agente extraño y trata de modificarlo para eliminarlo.</p>
+                            <ul className="text-sm text-slate-600 list-disc pl-4 mb-2">
+                                <li><strong>Órgano Principal:</strong> El Hígado.</li>
+                                <li><strong>Sistema Enzimático:</strong> El hígado usa una "familia" de enzimas llamada Citocromo P450 (CYP) para oxidar y degradar los fármacos.</li>
+                            </ul>
+                            <div className="bg-orange-50 p-3 rounded-lg border-l-4 border-orange-400">
+                                <strong className="text-orange-900 text-sm block">Efecto de Primer Paso Hepático:</strong>
+                                <p className="text-xs text-orange-800">Cuando tomas una pastilla, se absorbe en el intestino y va directo al hígado antes de llegar al resto del cuerpo. El hígado puede destruir una gran parte del fármaco antes de que haga efecto. (Por esto las dosis orales son más altas que las inyectables).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex gap-4">
+                        <div className="font-black text-4xl text-slate-200">E</div>
+                        <div>
+                            <h4 className="font-bold text-slate-900">Excreción (La salida)</h4>
+                            <p className="text-sm text-slate-600 mb-2">La eliminación definitiva del fármaco y sus metabolitos del organismo.</p>
+                            <ul className="text-sm text-slate-600 list-disc pl-4 mb-2">
+                                <li><strong>Vía Renal (Orina):</strong> La más importante. Si el riñón falla (insuficiencia renal), el medicamento se acumula y intoxica.</li>
+                                <li><strong>Vía Biliar (Heces), Pulmonar o Leche Materna.</strong></li>
+                            </ul>
+                            <div className="bg-emerald-50 p-3 rounded-lg border border-emerald-100">
+                                <strong className="text-emerald-900 block text-sm">Concepto Clave: Vida Media (t1/2)</strong>
+                                <p className="text-xs text-emerald-800 mb-1">Es el tiempo que tarda la concentración del fármaco en la sangre en reducirse a la mitad. Esto determina cada cuántas horas se toma.</p>
+                                <ul className="text-xs text-emerald-800 list-disc pl-4">
+                                    <li><strong>Vida media corta:</strong> Se toma cada 6 u 8 horas (Ej: Paracetamol).</li>
+                                    <li><strong>Vida media larga:</strong> Se toma cada 24 horas (Ej: Losartán).</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
-            {/* TIPS FINALES */}
-            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-xl text-yellow-900 text-sm break-inside-avoid">
-                <strong className="flex items-center gap-2 mb-1"><ShieldAlert size={16}/> Tip de Seguridad:</strong>
-                <p>Si un paciente pregunta "¿Por qué hay que tomarlo con comida?", la respuesta suele ser farmacodinámica (protección gástrica). Si dice "en ayunas", es farmacocinética (para mejorar la absorción).</p>
-            </div>
+            {/* 3. FORMAS FARMACÉUTICAS */}
+            <section className="break-inside-avoid">
+                <h2 className="text-2xl font-black text-slate-900 mb-6 flex items-center gap-3">
+                    <Clock className="text-purple-600" /> 3. Formas Farmacéuticas y Velocidad de Efecto
+                </h2>
+                <p className="text-slate-600 mb-6">Para entender la rapidez de acción, primero debemos conocer al detalle qué es lo que estamos vendiendo.</p>
+
+                <h3 className="font-bold text-slate-900 text-lg mb-4">A. Clasificación de Formas Farmacéuticas</h3>
+                <div className="grid md:grid-cols-3 gap-6 mb-8">
+                    <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <h4 className="font-bold text-purple-700 mb-2 border-b border-purple-100 pb-1">1. Sólidas</h4>
+                        <ul className="text-sm space-y-2">
+                            <li><strong>Comprimidos:</strong> Recubiertos, Efervescentes, Sublinguales, Masticables.</li>
+                            <li><strong>Cápsulas:</strong> Duras (polvo) y Blandas (líquido).</li>
+                            <li><strong>Supositorios/Óvulos:</strong> Se funden a 37°C.</li>
+                        </ul>
+                    </div>
+                    <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <h4 className="font-bold text-blue-700 mb-2 border-b border-blue-100 pb-1">2. Líquidas</h4>
+                        <ul className="text-sm space-y-2">
+                            <li><strong>Soluciones:</strong> Homogéneas (Gotas).</li>
+                            <li><strong>Suspensiones:</strong> Heterogéneas. <span className="bg-yellow-100 px-1 rounded font-bold text-xs">¡Agitar!</span></li>
+                            <li><strong>Emulsiones:</strong> Agua y aceite.</li>
+                            <li><strong>Jarabes:</strong> Alta concentración de azúcar.</li>
+                        </ul>
+                    </div>
+                    <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <h4 className="font-bold text-emerald-700 mb-2 border-b border-emerald-100 pb-1">3. Semisólidas</h4>
+                        <ul className="text-sm space-y-2">
+                            <li><strong>Ungüentos:</strong> Base grasa, oclusivos.</li>
+                            <li><strong>Cremas:</strong> Emulsión agua/aceite.</li>
+                            <li><strong>Geles:</strong> Base agua/alcohol. Sin grasa.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3 className="font-bold text-slate-900 text-lg mb-4">B. Semáforo de Velocidad: Aplicación Práctica</h3>
+                <div className="space-y-4">
+                    <div className="flex bg-red-50 border border-red-200 rounded-xl overflow-hidden">
+                        <div className="w-2 bg-red-500"></div>
+                        <div className="p-4">
+                            <h4 className="font-bold text-red-900 flex items-center gap-2">🔴 Velocidad "Fórmula 1" (1-5 min)</h4>
+                            <p className="text-xs text-red-800 font-bold uppercase mb-2">Urgencias o crisis</p>
+                            <ul className="text-sm text-red-800 list-disc pl-4">
+                                <li><strong>Vía Intravenosa (IV):</strong> Campeona indiscutible. No hay absorción. Instantáneo.</li>
+                                <li><strong>Vía Inhalatoria:</strong> Directo al pulmón.</li>
+                                <li><strong>Vía Sublingual:</strong> Se salta el hígado.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div className="flex bg-yellow-50 border border-yellow-200 rounded-xl overflow-hidden">
+                        <div className="w-2 bg-yellow-400"></div>
+                        <div className="p-4">
+                            <h4 className="font-bold text-yellow-900 flex items-center gap-2">🟡 Velocidad Rápida (15-30 min)</h4>
+                            <p className="text-xs text-yellow-800 font-bold uppercase mb-2">Dolor intenso pero espera una hora</p>
+                            <ul className="text-sm text-yellow-800 list-disc pl-4">
+                                <li><strong>Comprimidos Efervescentes:</strong> Disueltos antes de tomar.</li>
+                                <li><strong>Soluciones/Cápsulas Blandas:</strong> Ya están líquidas.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div className="flex bg-emerald-50 border border-emerald-200 rounded-xl overflow-hidden">
+                        <div className="w-2 bg-emerald-500"></div>
+                        <div className="p-4">
+                            <h4 className="font-bold text-emerald-900 flex items-center gap-2">🟢 Velocidad Estándar (30-60 min)</h4>
+                            <p className="text-xs text-emerald-800 font-bold uppercase mb-2">Tratamientos crónicos</p>
+                            <p className="text-sm text-emerald-800">Comprimidos y Cápsulas Duras (Requieren desintegración).</p>
+                        </div>
+                    </div>
+
+                    <div className="flex bg-blue-50 border border-blue-200 rounded-xl overflow-hidden">
+                        <div className="w-2 bg-blue-500"></div>
+                        <div className="p-4">
+                            <h4 className="font-bold text-blue-900 flex items-center gap-2">🔵 Velocidad Lenta (Liberación Prolongada)</h4>
+                            <p className="text-xs text-blue-800 font-bold uppercase mb-2">Duración de 12 a 24 horas</p>
+                            <p className="text-sm text-blue-800 mb-2">Siglas: XR, ER, CR, Retard, LP.</p>
+                            <div className="bg-red-100 text-red-800 text-xs font-bold px-2 py-1 rounded inline-block">
+                                ⚠️ REGLA DE ORO: ¡NUNCA TRITURAR! Riesgo de toxicidad.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* 4. FARMACODINAMIA */}
+            <section className="break-inside-avoid">
+                <h2 className="text-2xl font-black text-slate-900 mb-6 flex items-center gap-3">
+                    <Zap className="text-amber-500" /> 4. Farmacodinamia: El Mecanismo de Acción
+                </h2>
+                <p className="text-slate-600 mb-4">Estudia "lo que el fármaco le hace al organismo". Se basa en la <strong>Teoría del Receptor (Llave y Cerradura)</strong>.</p>
+
+                <div className="grid md:grid-cols-2 gap-6 mb-8">
+                    <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h4 className="font-bold text-emerald-700 text-lg mb-2">1. Agonistas (Activadores)</h4>
+                        <p className="text-sm text-slate-600 mb-2">Tienen afinidad (encajan) y eficacia (activan).</p>
+                        <p className="text-sm text-slate-700 italic bg-emerald-50 p-2 rounded">Ejemplo: El <strong>Salbutamol</strong> activa los receptores Beta-2 para abrir los bronquios.</p>
+                    </div>
+                    <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h4 className="font-bold text-red-700 text-lg mb-2">2. Antagonistas (Bloqueadores)</h4>
+                        <p className="text-sm text-slate-600 mb-2">Tienen afinidad pero NO eficacia (tapan).</p>
+                        <p className="text-sm text-slate-700 italic bg-red-50 p-2 rounded">Ejemplo: Los <strong>Antihistamínicos</strong> bloquean el receptor de la Histamina para frenar la alergia.</p>
+                    </div>
+                </div>
+
+                <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200">
+                    <h3 className="font-bold text-slate-900 mb-3">Conceptos de Seguridad</h3>
+                    <ul className="space-y-3 text-sm">
+                        <li className="flex gap-2"><span className="w-2 h-2 rounded-full bg-slate-400 mt-1.5"></span> <strong>Ventana Terapéutica:</strong> Margen entre dosis que cura y dosis que intoxica.</li>
+                        <li className="flex gap-2"><span className="w-2 h-2 rounded-full bg-emerald-500 mt-1.5"></span> <strong>Ventana Amplia:</strong> Seguros (Paracetamol, Amoxicilina).</li>
+                        <li className="flex gap-2"><span className="w-2 h-2 rounded-full bg-red-500 mt-1.5"></span> <strong>Ventana Estrecha:</strong> Peligrosos (Warfarina, Digoxina). Requieren monitoreo.</li>
+                    </ul>
+                </div>
+            </section>
+
+            {/* 5. BIOEQUIVALENCIA */}
+            <section className="break-inside-avoid">
+                <h2 className="text-2xl font-black text-slate-900 mb-6 flex items-center gap-3">
+                    <Thermometer className="text-teal-500" /> 5. Bioequivalencia: La Garantía de Calidad
+                </h2>
+                <div className="space-y-4">
+                    <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <strong className="text-teal-800 block">El Innovador:</strong>
+                        <span className="text-sm text-slate-600">El medicamento original que desarrolló la molécula (Ej: Aspirina).</span>
+                    </div>
+                    <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <strong className="text-teal-800 block">Biodisponibilidad Comparada:</strong>
+                        <span className="text-sm text-slate-600">Estudio clínico que compara la curva de concentración en sangre del Referente vs. el Test.</span>
+                    </div>
+                    <div className="bg-teal-50 p-4 rounded-xl border border-teal-200 text-teal-900 text-sm font-medium">
+                        <p><strong>Conclusión:</strong> Un Bioequivalente garantiza el mismo efecto terapéutico (Farmacodinamia) porque tiene la misma Farmacocinética que el original. Es 100% intercambiable.</p>
+                    </div>
+                </div>
+            </section>
+
+            {/* GLOSARIO */}
+            <section className="bg-slate-900 text-slate-300 p-8 rounded-2xl break-inside-avoid">
+                <div className="flex items-center gap-2 mb-6 text-emerald-400 font-bold uppercase tracking-wider">
+                    <GraduationCap /> Glosario Técnico
+                </div>
+                <div className="grid md:grid-cols-2 gap-6 text-sm">
+                    <div>
+                        <dt className="text-white font-bold">Afinidad</dt>
+                        <dd className="mb-3">Capacidad de un fármaco para unirse a un receptor.</dd>
+                        
+                        <dt className="text-white font-bold">Agonista</dt>
+                        <dd className="mb-3">Fármaco que activa un receptor y provoca respuesta.</dd>
+
+                        <dt className="text-white font-bold">Antagonista</dt>
+                        <dd className="mb-3">Fármaco que bloquea un receptor.</dd>
+
+                        <dt className="text-white font-bold">Biodisponibilidad</dt>
+                        <dd className="mb-3">Porcentaje de fármaco que llega inalterado a la sangre.</dd>
+
+                        <dt className="text-white font-bold">Bioequivalente</dt>
+                        <dd className="mb-3">Misma biodisponibilidad que el innovador.</dd>
+
+                        <dt className="text-white font-bold">Excipiente</dt>
+                        <dd className="mb-3">Sustancia inactiva para dar forma y estabilidad.</dd>
+                    </div>
+                    <div>
+                        <dt className="text-white font-bold">Farmacocinética</dt>
+                        <dd className="mb-3">Movimiento del fármaco en el cuerpo (LADME).</dd>
+
+                        <dt className="text-white font-bold">Farmacodinamia</dt>
+                        <dd className="mb-3">Efecto del fármaco y mecanismo de acción.</dd>
+
+                        <dt className="text-white font-bold">Primer Paso Hepático</dt>
+                        <dd className="mb-3">Metabolismo previo en el hígado antes de llegar a la sangre.</dd>
+
+                        <dt className="text-white font-bold">Suspensión</dt>
+                        <dd className="mb-3">Líquido turbio, el polvo no se disuelve. ¡Agitar!</dd>
+
+                        <dt className="text-white font-bold">Vida Media (t1/2)</dt>
+                        <dd>Tiempo para que la concentración baje a la mitad.</dd>
+                    </div>
+                </div>
+            </section>
 
           </div>
 
@@ -305,27 +553,27 @@ export default function GuiaFarmacologia() {
               
               {/* TARJETA 1: QUIZ INTERACTIVO */}
               <div className="bg-slate-900 text-white p-6 md:p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500 rounded-full blur-3xl opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500 rounded-full blur-3xl opacity-20 group-hover:opacity-30 transition-opacity"></div>
                 
                 <div className="relative z-10">
                   
                   {/* ESTADO 1: INICIO */}
                   {!quizActivo && !mostrarResultado && (
                     <>
-                        <span className="bg-indigo-500 text-indigo-50 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
-                            Quiz Rápido
+                        <span className="bg-emerald-500 text-emerald-50 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
+                            Quiz Express
                         </span>
                         <h3 className="text-3xl font-black mb-4 leading-tight">
-                            ¿Entendiste la teoría?
+                            ¿Sabes de Farmacología?
                         </h3>
                         <p className="text-slate-400 mb-8 text-sm leading-relaxed">
-                            10 preguntas para verificar si dominas LADME, excipientes y receptores.
+                            Pon a prueba tus conocimientos sobre Farmacotecnia, LADME y Farmacodinamia.
                         </p>
                         <button 
                             onClick={() => setQuizActivo(true)}
-                            className="w-full block bg-white text-slate-900 font-black text-center py-4 rounded-xl hover:bg-indigo-400 transition-colors shadow-lg flex items-center justify-center gap-2"
+                            className="w-full block bg-white text-slate-900 font-black text-center py-4 rounded-xl hover:bg-emerald-400 transition-colors shadow-lg flex items-center justify-center gap-2"
                         >
-                            INICIAR TEST <ArrowRight size={18} />
+                            COMENZAR TEST <ArrowRight size={18} />
                         </button>
                     </>
                   )}
@@ -366,8 +614,8 @@ export default function GuiaFarmacologia() {
                   {/* ESTADO 3: RESULTADOS */}
                   {mostrarResultado && (
                     <div className="text-center animate-in zoom-in duration-300">
-                        <div className="bg-indigo-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-indigo-400">
-                            <BrainCircuit size={32} />
+                        <div className="bg-emerald-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-400">
+                            <Trophy size={32} />
                         </div>
                         <h3 className="text-2xl font-black mb-2">¡Completado!</h3>
                         <p className="text-slate-400 mb-6">
@@ -375,21 +623,21 @@ export default function GuiaFarmacologia() {
                         </p>
                         
                         <div className="space-y-3">
-                            {puntaje >= 7 ? (
-                                <div className="bg-indigo-900/50 p-3 rounded-lg text-sm text-indigo-200 border border-indigo-800">
-                                    ¡Excelente! Tienes bases sólidas.
+                            {puntaje === preguntasQuiz.length ? (
+                                <div className="bg-emerald-900/50 p-3 rounded-lg text-sm text-emerald-200 border border-emerald-800">
+                                    ¡Excelente! Dominas los fundamentos.
                                 </div>
                             ) : (
                                 <button 
                                     onClick={reiniciarQuiz}
                                     className="w-full bg-slate-800 text-white font-bold py-3 rounded-xl hover:bg-slate-700 text-sm"
                                 >
-                                    Repasar y Reintentar
+                                    Intentar de nuevo
                                 </button>
                             )}
                             
-                            <Link href="/guias" className="block w-full bg-indigo-600 text-white font-bold py-3 rounded-xl hover:bg-indigo-500 text-sm">
-                                Volver a Guías
+                            <Link href="/quiz" className="block w-full bg-emerald-600 text-white font-bold py-3 rounded-xl hover:bg-emerald-500 text-sm">
+                                Ir al Simulador Completo
                             </Link>
                         </div>
                     </div>
@@ -406,11 +654,11 @@ export default function GuiaFarmacologia() {
                     </div>
                     <div>
                         <h4 className="font-bold text-slate-900">Guía en PDF</h4>
-                        <p className="text-xs text-slate-500">Módulo 1: Fundamentos</p>
+                        <p className="text-xs text-slate-500">Guardar para estudiar</p>
                     </div>
                 </div>
                 <p className="text-sm text-slate-600 mb-6 leading-relaxed">
-                    Descarga este material de estudio para leerlo sin conexión.
+                    Convierte esta página en un archivo PDF automáticamente.
                 </p>
                 
                 <button 
