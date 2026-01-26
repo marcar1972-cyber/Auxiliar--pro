@@ -10,6 +10,7 @@ export const metadata = {
 export default function GuiasIndex() {
   const guias = [
     {
+      // 🟢 CORRECCIÓN: Slug ajustado para apuntar a la ruta correcta
       slug: "ley-20724-farmacos-1",
       title: "Ley de Fármacos I (20.724)",
       desc: "La farmacia como Centro de Salud. Prohibición de la canela, bioequivalencia obligatoria y fraccionamiento.",
@@ -73,7 +74,6 @@ export default function GuiasIndex() {
       color: "rose"
     },
     {
-      // 🟢 NUEVO: Guía de Especialidades y Controlados
       slug: "especialidades-controlados",
       title: "Farmacología: Especialidades y Controlados",
       desc: "SNC (Benzodiazepinas, Antidepresivos) y Dermatológicos. Manejo de receta retenida y venta consultiva.",
