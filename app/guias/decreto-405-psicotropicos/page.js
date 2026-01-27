@@ -3,7 +3,11 @@
 import { useState } from 'react';
 import Link from "next/link";
 import Script from "next/script"; 
-import { BookOpen, CheckCircle, AlertTriangle, ShieldCheck, FileText, Download, ArrowRight, Info, Package, Pill, Lock, FileSignature, Syringe, Trophy, XCircle, Truck, Scale, Stethoscope } from "lucide-react";
+import { 
+  BookOpen, CheckCircle, AlertTriangle, ShieldCheck, FileText, 
+  Download, ArrowRight, Pill, Lock, FileSignature, Trophy, 
+  XCircle, Scale, Truck, Stethoscope, Clock, ExternalLink 
+} from "lucide-react";
 
 // 📝 PREGUNTAS DEL QUIZ (Específicas del Decreto 405)
 const preguntasQuiz = [
@@ -61,7 +65,7 @@ const preguntasQuiz = [
 
 export default function GuiaDecreto405() {
   const [isPdfReady, setIsPdfReady] = useState(false);
-  
+   
   // ESTADOS DEL QUIZ
   const [quizActivo, setQuizActivo] = useState(false);
   const [preguntaActual, setPreguntaActual] = useState(0);
@@ -125,24 +129,24 @@ export default function GuiaDecreto405() {
         onLoad={() => setIsPdfReady(true)}
       />
 
-      {/* HEADER DE LA GUÍA */}
-      <header className="bg-white border-b border-slate-200 py-12 px-6">
+      {/* HEADER DE LA GUÍA (Estilo Emerald) */}
+      <header className="bg-emerald-900 border-b border-emerald-800 py-12 px-6 text-white">
         <div className="max-w-6xl mx-auto">
           <nav className="mb-6">
-            <Link href="/guias" className="text-slate-400 hover:text-blue-600 font-bold text-sm flex items-center gap-2 transition-colors">
+            <Link href="/guias" className="text-emerald-300 hover:text-white font-bold text-sm flex items-center gap-2 transition-colors">
               ← Volver a la Biblioteca
             </Link>
           </nav>
-          <div className="flex items-center gap-2 text-blue-600 font-bold text-sm uppercase tracking-wider mb-4">
+          <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm uppercase tracking-wider mb-4">
             <BookOpen size={18} />
-            Guía de Estudio Oficial
+            Módulo Legislativo
           </div>
           
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-slate-900 mb-6 leading-tight text-balance">
-            Reglamento de Productos Psicotrópicos <span className="text-blue-600 whitespace-nowrap">(Decreto 405)</span>
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight text-balance">
+            Reglamento de Productos Psicotrópicos <span className="text-emerald-400 whitespace-nowrap">(Decreto 405)</span>
           </h1>
           
-          <p className="text-xl text-slate-500 max-w-3xl">
+          <p className="text-xl text-emerald-100 max-w-3xl">
             La normativa que controla las sustancias que actúan sobre el sistema nervioso central, evitando su abuso y dependencia.
           </p>
         </div>
@@ -169,10 +173,10 @@ export default function GuiaDecreto405() {
               <h2 className="text-2xl font-black text-slate-900 mb-4 flex items-center gap-3">
                 1. Introducción
               </h2>
-              <p className="text-lg leading-relaxed mb-4">
+              <p className="text-lg leading-relaxed mb-4 text-slate-600">
                 El Decreto 405, aprobado en 1983, es la normativa que regula en Chile todo lo relacionado con las sustancias psicotrópicas. Estas son sustancias que actúan sobre el sistema nervioso central, modificando el comportamiento, la percepción o el estado de ánimo (como los tranquilizantes, estimulantes o hipnóticos).
               </p>
-              <p className="text-lg leading-relaxed mb-6">
+              <p className="text-lg leading-relaxed mb-6 text-slate-600">
                 Al igual que con los estupefacientes, el objetivo de este reglamento es controlar la importación, producción y venta para evitar el abuso y la dependencia, asegurando que solo se usen con fines médicos o científicos legítimos.
               </p>
             </section>
@@ -187,7 +191,7 @@ export default function GuiaDecreto405() {
               {/* MÓDULO A */}
               <div className="mb-12 break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <Scale className="text-blue-500" /> Módulo A: Clasificación y Etiquetado
+                  <Scale className="text-blue-600" /> Módulo A: Clasificación y Etiquetado
                 </h3>
                 <p className="mb-4 text-sm text-slate-600">A diferencia de los estupefacientes, los psicotrópicos se dividen en 4 Listas según su peligrosidad y potencial terapéutico:</p>
                 
@@ -210,7 +214,7 @@ export default function GuiaDecreto405() {
                     <CheckCircle className="text-emerald-500 shrink-0" size={32}/>
                     <div>
                         <h4 className="font-bold text-emerald-900">Identificación Visual</h4>
-                        <p className="text-sm text-emerald-800">Todo envase de producto psicotrópico debe tener en su etiqueta una estrella de cinco puntas de color <strong>VERDE</strong> y la leyenda "Sujeto a Control de Psicotrópicos".</p>
+                        <p className="text-sm text-emerald-800">Todo envase de producto psicotrópico debe tener en su etiqueta una estrella de cinco puntas de color <strong>VERDE</strong> y la leyenda "Sujeto a Control de Psicotrópicos". </p>
                     </div>
                 </div>
               </div>
@@ -218,7 +222,7 @@ export default function GuiaDecreto405() {
               {/* MÓDULO B */}
               <div className="mb-12 break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <FileSignature className="text-blue-500" /> Módulo B: La Venta (Expendio) y Tipos de Receta
+                  <FileSignature className="text-blue-600" /> Módulo B: La Venta (Expendio) y Tipos de Receta
                 </h3>
                 <p className="mb-4 text-slate-600">La forma de vender estos productos depende estrictamente de la Lista a la que pertenezcan:</p>
                 
@@ -247,7 +251,7 @@ export default function GuiaDecreto405() {
               {/* MÓDULO C */}
               <div className="mb-12 break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <Lock className="text-blue-500" /> Módulo C: Almacenamiento y Control Interno
+                  <Lock className="text-blue-600" /> Módulo C: Almacenamiento y Control Interno
                 </h3>
                 <p className="mb-4 text-sm text-slate-600">Las farmacias deben cumplir medidas de seguridad rigurosas:</p>
                 
@@ -279,7 +283,7 @@ export default function GuiaDecreto405() {
               {/* MÓDULO D */}
               <div className="mb-12 break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <Stethoscope className="text-blue-500" /> Módulo D: Profesionales y Muestras Médicas
+                  <Stethoscope className="text-blue-600" /> Módulo D: Profesionales y Muestras Médicas
                 </h3>
                 
                 <div className="grid md:grid-cols-2 gap-4 mb-4">
@@ -441,6 +445,28 @@ export default function GuiaDecreto405() {
                     {isPdfReady ? 'DESCARGAR AHORA' : 'Cargando herramienta...'}
                 </button>
               </div>
+
+              {/* 3. TARJETA DERMOCHECK (CROSS-SELLING) */}
+              <a 
+                href="https://www.dermocheck.cl/#calculator-section" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-sm group hover:ring-2 hover:ring-emerald-500 transition-all"
+              >
+                <div className="flex items-center gap-4 mb-4">
+                    <div className="bg-emerald-500/20 text-emerald-400 p-3 rounded-full group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+                        <Clock size={24} />
+                    </div>
+                    <div>
+                        <h4 className="font-bold text-white">DermoCheck</h4>
+                        <p className="text-xs text-slate-400">Herramienta Exclusiva</p>
+                    </div>
+                    <ExternalLink size={16} className="text-slate-500 ml-auto"/>
+                </div>
+                <p className="text-sm text-slate-300 leading-relaxed mb-0">
+                    ¿Vendes Dermo? Verifica vencimientos por lote aquí.
+                </p>
+              </a>
 
             </div>
           </div>
