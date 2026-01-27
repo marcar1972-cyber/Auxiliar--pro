@@ -3,65 +3,69 @@
 import { useState } from 'react';
 import Link from "next/link";
 import Script from "next/script"; 
-import { BookOpen, CheckCircle, AlertTriangle, ShieldCheck, FileText, Download, ArrowRight, Info, Package, Store, UserCheck, FileSignature, Scissors, Book, Trophy, XCircle } from "lucide-react";
+import { 
+  BookOpen, AlertTriangle, Download, ArrowRight, Store, 
+  Ban, Pill, FileText, CheckCircle, XCircle, Trophy, 
+  Scale, Syringe, Clock, ExternalLink 
+} from "lucide-react";
 
-// 📝 PREGUNTAS DEL QUIZ
+// 📝 PREGUNTAS DEL QUIZ (Ley 20.724)
 const preguntasQuiz = [
   {
-    pregunta: "¿Qué profesional debe asumir la Dirección Técnica de una Farmacia?",
-    opciones: ["Médico Cirujano", "Químico Farmacéutico", "Auxiliar de Farmacia", "Enfermera"],
+    pregunta: "¿Cuál es la definición legal actual de la Farmacia según la Ley 20.724?",
+    opciones: [
+      "Un comercio minorista de productos.",
+      "Un Centro de Salud.",
+      "Una bodega de almacenamiento.",
+      "Un supermercado de medicamentos."
+    ],
     correcta: 1
   },
   {
-    pregunta: "¿Qué establecimiento tiene PROHIBIDO preparar fórmulas magistrales?",
-    opciones: ["Farmacia Privada", "Farmacia Hospitalaria", "Almacén Farmacéutico", "Droguería"],
-    correcta: 2
-  },
-  {
-    pregunta: "¿Cuál es el requisito de escolaridad para ser Auxiliar de Farmacia?",
-    opciones: ["8° Básico", "Enseñanza Media Completa (4° Medio)", "Título Técnico Nivel Superior", "Título Universitario"],
+    pregunta: "¿Qué prohíbe terminantemente el Artículo 100 (conocido como 'Ley de la Canela')?",
+    opciones: [
+      "Vender paracetamol.",
+      "Incentivos económicos a los auxiliares por vender ciertos laboratorios.",
+      "Usar delantal blanco.",
+      "Abrir los domingos."
+    ],
     correcta: 1
   },
   {
-    pregunta: "¿Qué tipo de receta se usa para estupefacientes de alto control?",
-    opciones: ["Receta Simple", "Receta Retenida", "Receta Cheque", "Venta Directa"],
+    pregunta: "¿Qué indica la franja amarilla en el envase de un medicamento?",
+    opciones: [
+      "Que es un producto cosmético.",
+      "Que requiere cadena de frío.",
+      "Que tiene Bioequivalencia comprobada.",
+      "Que está en oferta."
+    ],
     correcta: 2
   },
   {
-    pregunta: "¿Dónde deben guardarse los productos estupefacientes?",
-    opciones: ["En el mostrador", "En la bodega común", "Bajo llave en estantería exclusiva", "En el refrigerador siempre"],
-    correcta: 2
-  },
-  {
-    pregunta: "¿Qué productos NO se pueden fraccionar?",
-    opciones: ["Antibióticos orales", "Paracetamol", "Productos oncológicos y hormonas", "Vitaminas"],
-    correcta: 2
-  },
-  {
-    pregunta: "¿Qué es un Botiquín según el Decreto 466?",
-    opciones: ["Una caja de primeros auxilios", "Recinto de uso interno en instituciones (ej: colegios, mineras)", "Una farmacia pequeña de barrio", "Un almacén de cosméticos"],
+    pregunta: "¿Cómo deben prescribir (recetar) los médicos obligatoriamente?",
+    opciones: [
+      "Solo con el nombre de fantasía.",
+      "Usando la Denominación Común Internacional (DCI) o nombre genérico.",
+      "Usando códigos secretos.",
+      "En inglés."
+    ],
     correcta: 1
   },
   {
-    pregunta: "¿Cuántas horas mínimo debe estar el DT en la farmacia?",
-    opciones: ["4 horas", "8 horas", "Solo cuando hay inspección", "12 horas"],
+    pregunta: "¿Qué busca el Fraccionamiento de medicamentos?",
+    opciones: [
+      "Vender más cajas.",
+      "Que el paciente compre la cantidad exacta recetada y pague lo justo.",
+      "Romper los envases para reciclar.",
+      "Mezclar pastillas de distintos tipos."
+    ],
     correcta: 1
-  },
-  {
-    pregunta: "¿Qué libro es obligatorio mantener a disposición del público?",
-    opciones: ["Libro de Reclamos", "Libro de Estupefacientes", "Libro de Fraccionamiento", "Libro de Finanzas"],
-    correcta: 0
-  },
-  {
-    pregunta: "¿Quién autoriza al Auxiliar de Farmacia para ejercer?",
-    opciones: ["El dueño de la farmacia", "El Ministerio de Educación", "La SEREMI de Salud", "El Colegio de Químicos"],
-    correcta: 2
   }
 ];
 
-export default function GuiaDecreto466() {
+export default function GuiaLeyFarmacos1() {
   const [isPdfReady, setIsPdfReady] = useState(false);
-  
+   
   // ESTADOS DEL QUIZ
   const [quizActivo, setQuizActivo] = useState(false);
   const [preguntaActual, setPreguntaActual] = useState(0);
@@ -103,7 +107,7 @@ export default function GuiaDecreto466() {
       
       const opciones = {
         margin:       [15, 15, 15, 15],
-        filename:     'Guia-Decreto-466-AuxiliarPro.pdf',
+        filename:     'Resumen-Ley-20724-AuxiliarPro.pdf',
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2, useCORS: true, scrollY: 0 }, 
         jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
@@ -126,33 +130,32 @@ export default function GuiaDecreto466() {
       />
 
       {/* HEADER DE LA GUÍA */}
-      <header className="bg-white border-b border-slate-200 py-12 px-6">
+      <header className="bg-emerald-900 border-b border-emerald-800 py-12 px-6 text-white">
         <div className="max-w-6xl mx-auto">
           <nav className="mb-6">
-            {/* 🟢 CORRECCIÓN: Ahora apunta a /guias (el índice que acabas de aprobar) */}
-            <Link href="/guias" className="text-slate-400 hover:text-blue-600 font-bold text-sm flex items-center gap-2 transition-colors">
+            <Link href="/guias" className="text-emerald-300 hover:text-white font-bold text-sm flex items-center gap-2 transition-colors">
               ← Volver a la Biblioteca
             </Link>
           </nav>
-          <div className="flex items-center gap-2 text-blue-600 font-bold text-sm uppercase tracking-wider mb-4">
+          <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm uppercase tracking-wider mb-4">
             <BookOpen size={18} />
-            Guía de Estudio Oficial
+            Módulo Legislativo
           </div>
           
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-slate-900 mb-6 leading-tight text-balance">
-            Reglamento de Farmacias <span className="text-blue-600 whitespace-nowrap">(Decreto 466)</span>
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight text-balance">
+            Ley de Fármacos I (20.724)
           </h1>
           
-          <p className="text-xl text-slate-500 max-w-3xl">
-            El reglamento fundamental que define las reglas del juego: Tipos de establecimientos, roles del personal y condiciones sanitarias para operar en Chile.
+          <p className="text-xl text-emerald-100 max-w-3xl">
+            El marco legal que transformó a la farmacia en un Centro de Salud. Aprende sobre bioequivalencia, la prohibición de la "Canela" y el uso racional de medicamentos.
           </p>
         </div>
       </header>
 
-      {/* ... (El resto del contenido main se mantiene idéntico) ... */}
       <main className="max-w-6xl mx-auto px-6 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           
+          {/* 🟢 COLUMNA IZQUIERDA: CONTENIDO COMPLETO (8 columnas) */}
           <div id="contenido-pdf" className="lg:col-span-8 space-y-12 bg-white p-4 md:p-8 rounded-xl shadow-sm">
             
             <div className="mb-8 border-b pb-4 border-slate-100 flex justify-between items-center">
@@ -162,215 +165,141 @@ export default function GuiaDecreto466() {
                     className="w-32" 
                     crossOrigin="anonymous" 
                 />
-                <span className="text-xs text-slate-400 font-bold uppercase tracking-widest">Guía Oficial 2026</span>
+                <span className="text-xs text-slate-400 font-bold uppercase tracking-widest">Legislación Farmacéutica 2026</span>
             </div>
 
-            <section className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm break-inside-avoid">
-              <h2 className="text-2xl font-black text-slate-900 mb-4 flex items-center gap-3">
-                1. Introducción
-              </h2>
-              <p className="text-lg leading-relaxed mb-4">
-                El Decreto 466 es el reglamento fundamental que establece las condiciones sanitarias para la instalación, funcionamiento y fiscalización de los establecimientos farmacéuticos en Chile.
-              </p>
-              <p className="text-lg leading-relaxed mb-6">
-                Su propósito es asegurar que la distribución, preparación y venta de medicamentos se realicen bajo estándares de calidad para proteger la salud de la población.
-              </p>
+            {/* 1. LA FARMACIA COMO CENTRO DE SALUD */}
+            <section className="break-inside-avoid">
+                <div className="flex items-center gap-3 mb-6">
+                    <div className="bg-blue-100 p-3 rounded-lg text-blue-600"><Store size={28} /></div>
+                    <h2 className="text-2xl font-black text-slate-900">1. La Farmacia como Centro de Salud</h2>
+                </div>
+                
+                <p className="mb-6 text-slate-600 text-lg">
+                    La Ley 20.724 modifica el Código Sanitario para redefinir el rol de la farmacia. Ya no es solo un comercio; es un establecimiento sanitario clave en la salud pública.
+                </p>
+
+                <div className="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm mb-6">
+                    <h3 className="font-bold text-blue-900 text-lg mb-2">Definición Legal</h3>
+                    <p className="text-sm text-blue-800">
+                        Los establecimientos farmacéuticos son <strong>Centros de Salud</strong>, esto implica que su objetivo principal es garantizar el uso racional de los medicamentos y la atención farmacéutica oportuna, por sobre los intereses comerciales.
+                    </p>
+                </div>
             </section>
 
-            <section>
-              <h2 className="text-3xl font-black text-slate-900 mb-8 break-before-auto">
-                2. Contenido Principal
-              </h2>
-              <p className="mb-6 text-slate-600">Para facilitar el estudio, hemos organizado la información en 5 Módulos Clave:</p>
+            <hr className="border-slate-200" />
 
-              <div className="mb-12 break-inside-avoid">
-                <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <Store className="text-blue-500" /> Módulo A: Tipos de Establecimientos
-                </h3>
-                <p className="mb-6 text-lg text-slate-600">
-                  El reglamento clasifica los lugares de expendio según sus funciones y complejidad:
-                </p>
-                
-                <ul className="space-y-4">
-                  <li className="bg-blue-50 p-5 rounded-2xl border border-blue-100">
-                    <h4 className="font-bold text-blue-900 mb-2">Farmacia</h4>
-                    <p className="text-sm text-blue-800 leading-relaxed">
-                      Es el establecimiento más completo. Está destinado a la venta de productos farmacéuticos, alimentos de uso médico, la preparación de recetas magistrales (fórmulas a medida) y oficinas, y el fraccionamiento de envases.
-                    </p>
-                  </li>
-                  <li className="bg-white p-5 rounded-2xl border border-slate-200">
-                    <h4 className="font-bold text-slate-900 mb-2">Almacén Farmacéutico</h4>
-                    <p className="text-sm text-slate-600 leading-relaxed">
-                      Establecimiento dirigido por un Práctico de Farmacia. Vende medicamentos de venta directa y un listado específico de medicamentos con receta (definidos en el Título X del reglamento). <strong>Tienen estrictamente prohibido preparar fórmulas magistrales.</strong>
-                    </p>
-                  </li>
-                  <li className="bg-white p-5 rounded-2xl border border-slate-200">
-                    <h4 className="font-bold text-slate-900 mb-2">Droguería</h4>
-                    <p className="text-sm text-slate-600 leading-relaxed">
-                      Se dedica a la importación, fraccionamiento y distribución mayorista de drogas, sustancias químicas y accesorios médicos. Vende principalmente a farmacias y laboratorios, no al público general.
-                    </p>
-                  </li>
-                  <li className="bg-white p-5 rounded-2xl border border-slate-200">
-                    <h4 className="font-bold text-slate-900 mb-2">Botiquín</h4>
-                    <p className="text-sm text-slate-600 leading-relaxed">
-                      Recinto con medicamentos destinados exclusivamente al uso interno de instituciones como clínicas, maternidades, campamentos mineros, navíos o enfermerías de colegios.
-                    </p>
-                  </li>
-                  <li className="bg-white p-5 rounded-2xl border border-slate-200">
-                    <h4 className="font-bold text-slate-900 mb-2">Depósito de Productos</h4>
-                    <p className="text-sm text-slate-600 leading-relaxed">
-                      Bodegas autorizadas para el almacenamiento y distribución de productos (pueden ser de uso humano, veterinario o dental).
-                    </p>
-                  </li>
-                </ul>
-              </div>
+            {/* 2. PROHIBICIÓN DE LA CANELA (INCENTIVOS) */}
+            <section className="break-inside-avoid">
+                <div className="flex items-center gap-3 mb-6">
+                    <div className="bg-red-100 p-3 rounded-lg text-red-600"><Ban size={28} /></div>
+                    <h2 className="text-2xl font-black text-slate-900">2. Fin a "La Canela" (Art. 100)</h2>
+                </div>
 
-              <div className="mb-12 break-inside-avoid">
-                <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <UserCheck className="text-blue-500" /> Módulo B: El Personal y sus Responsabilidades
-                </h3>
-                
-                <div className="space-y-6">
-                    <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                        <strong className="text-lg text-blue-700 block mb-2">1. Director Técnico (DT)</strong>
-                        <ul className="list-disc pl-5 text-sm text-slate-600 space-y-2">
-                            <li>Toda farmacia debe funcionar bajo la dirección de un Químico Farmacéutico.</li>
-                            <li>Debe ejercer su cargo al menos 8 horas diarias (o durante todo el horario si la farmacia atiende menos tiempo).</li>
-                            <li><strong>Responsabilidades:</strong> Despachar personalmente recetas de productos controlados (estupefacientes y psicotrópicos), velar por la correcta conservación de los medicamentos, capacitar al personal auxiliar y supervisar el fraccionamiento.</li>
+                <div className="bg-red-50 p-6 rounded-2xl border border-red-200 mb-6">
+                    <strong className="text-red-900 block text-lg mb-2 flex items-center gap-2">
+                        <AlertTriangle size={20}/> Prohibición Absoluta
+                    </strong>
+                    <p className="text-red-800 text-sm mb-4">
+                        Se prohíben los incentivos económicos (comisiones, bonos, premios) a los auxiliares de farmacia por la venta de productos específicos.
+                    </p>
+                    <ul className="list-disc pl-5 text-sm text-red-800 space-y-1">
+                        <li>No se puede pagar por vender la "marca propia" de la cadena.</li>
+                        <li>No se puede pagar por vender el laboratorio "X" en vez del "Y".</li>
+                        <li><strong>Objetivo:</strong> Que la recomendación sea técnica y sanitaria, no comercial.</li>
+                    </ul>
+                </div>
+            </section>
+
+            {/* 3. BIOEQUIVALENCIA E INTERCAMBIABILIDAD */}
+            <section className="break-inside-avoid">
+                <div className="flex items-center gap-3 mb-6">
+                    <div className="bg-yellow-100 p-3 rounded-lg text-yellow-600"><Scale size={28} /></div>
+                    <h2 className="text-2xl font-black text-slate-900">3. Bioequivalencia (La Franja Amarilla)</h2>
+                </div>
+
+                <div className="flex gap-6 flex-col md:flex-row items-center mb-6">
+                    <div className="flex-1">
+                        <p className="text-slate-600 text-sm leading-relaxed mb-4">
+                            La ley establece que el ISP debe garantizar que los medicamentos genéricos o similares tengan la misma eficacia terapéutica que el original (innovador).
+                        </p>
+                        <ul className="space-y-3 text-sm text-slate-700">
+                            <li className="flex gap-2"><CheckCircle size={16} className="text-emerald-500"/> <strong>Bioequivalente:</strong> Mismo principio activo, misma dosis, misma forma farmacéutica y misma velocidad de absorción que el original.</li>
+                            <li className="flex gap-2"><CheckCircle size={16} className="text-emerald-500"/> <strong>Intercambiabilidad:</strong> El auxiliar debe informar al paciente si existen alternativas bioequivalentes más económicas.</li>
                         </ul>
                     </div>
-
-                    <div className="bg-emerald-50 p-6 rounded-2xl border border-emerald-100 relative overflow-hidden">
-                        <div className="absolute top-0 right-0 bg-emerald-200 text-emerald-800 text-[10px] font-bold px-3 py-1 uppercase tracking-widest rounded-bl-xl">
-                            Tu Rol
-                        </div>
-                        <strong className="text-lg text-emerald-900 block mb-2">2. Auxiliar de Farmacia</strong>
-                        <p className="text-sm text-emerald-800 mb-3">Para obtener la autorización sanitaria como Auxiliar de Farmacia, se deben cumplir tres requisitos fundamentales:</p>
-                        <ul className="space-y-2 text-sm">
-                            <li className="flex gap-2 items-start"><CheckCircle size={16} className="text-emerald-600 shrink-0 mt-0.5"/> Haber rendido satisfactoriamente 4° año de enseñanza media.</li>
-                            <li className="flex gap-2 items-start"><CheckCircle size={16} className="text-emerald-600 shrink-0 mt-0.5"/> Haber trabajado al menos 1 año en farmacia realizando labores de bodegaje y reposición (certificado por el DT).</li>
-                            <li className="flex gap-2 items-start"><CheckCircle size={16} className="text-emerald-600 shrink-0 mt-0.5"/> Rendir y aprobar un examen de competencia ante la autoridad sanitaria (SEREMI de Salud). Este examen evalúa conocimientos sobre regulación sanitaria, almacenamiento y acción terapéutica de medicamentos de venta directa.</li>
-                        </ul>
-                    </div>
-
-                    <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                        <strong className="text-lg text-slate-700 block mb-2">3. Práctico de Farmacia</strong>
-                        <p className="text-sm text-slate-600">Es la persona autorizada para asumir la dirección técnica de un Almacén Farmacéutico.</p>
+                    <div className="w-full md:w-1/3 bg-yellow-400 h-24 rounded-xl flex items-center justify-center font-black text-yellow-900 text-center p-4 border-4 border-white shadow-lg rotate-1">
+                        BIOEQUIVALENTE <br/><span className="text-xs font-normal opacity-80">(Sello Oficial ISP)</span>
                     </div>
                 </div>
-              </div>
+            </section>
 
-              <div className="mb-12 break-inside-avoid">
-                <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <FileSignature className="text-blue-500" /> Módulo C: El Expendio y las Recetas
-                </h3>
-                <p className="mb-4 text-slate-600">La venta de medicamentos se rige estrictamente por la condición de venta aprobada en su registro sanitario:</p>
-                
-                <ol className="list-decimal pl-5 space-y-2 text-sm text-slate-700 mb-6 font-medium">
-                    <li><strong>Venta Directa (VD):</strong> Medicamentos que no requieren receta médica.</li>
-                    <li><strong>Receta Simple (R):</strong> La orden médica habitual.</li>
-                    <li><strong>Receta Retenida (RR):</strong> La farmacia debe archivar la receta tras el despacho.</li>
-                    <li><strong>Receta Cheque (RCH):</strong> Formulario oficial para estupefacientes y psicotrópicos de mayor control.</li>
-                </ol>
+            <hr className="border-slate-200" />
 
-                <div className="grid md:grid-cols-2 gap-4">
-                    <div className="bg-white p-5 rounded-xl border border-slate-200">
-                        <h4 className="font-bold text-slate-900 mb-2">Requisitos de la Receta</h4>
-                        <p className="text-sm text-slate-600 leading-relaxed">
-                            Toda receta debe ser clara y contener la identificación del profesional (incluyendo RUT y registro), identificación del paciente, nombre del medicamento, dosis, forma farmacéutica, posología y firma.
+            {/* 4. PRESCRIPCIÓN Y FRACCIONAMIENTO */}
+            <section className="break-inside-avoid">
+                <div className="flex items-center gap-3 mb-6">
+                    <div className="bg-purple-100 p-3 rounded-lg text-purple-600"><Pill size={28} /></div>
+                    <h2 className="text-2xl font-black text-slate-900">4. Recetas y Fraccionamiento</h2>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-6">
+                    {/* DCI */}
+                    <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 className="font-bold text-slate-900 mb-3 flex items-center gap-2">
+                            <FileText size={18} className="text-purple-500"/> Prescripción por DCI
+                        </h3>
+                        <p className="text-sm text-slate-600">
+                            Los médicos están <strong>obligados</strong> a anotar el nombre genérico (Denominación Común Internacional) en la receta. Pueden sugerir un nombre de fantasía, pero el DCI debe estar presente para permitir el intercambio.
                         </p>
                     </div>
-                    <div className="bg-white p-5 rounded-xl border border-slate-200">
-                        <h4 className="font-bold text-slate-900 mb-2">Bioequivalencia</h4>
-                        <p className="text-sm text-slate-600 leading-relaxed">
-                            Si un medicamento prescrito tiene alternativas bioequivalentes certificadas, la farmacia debe informar al paciente sobre su existencia y disponibilidad antes de finalizar la venta.
+
+                    {/* FRACCIONAMIENTO */}
+                    <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h3 className="font-bold text-slate-900 mb-3 flex items-center gap-2">
+                            <Syringe size={18} className="text-purple-500"/> Fraccionamiento
+                        </h3>
+                        <p className="text-sm text-slate-600">
+                            La ley habilita la venta de la cantidad <strong>exacta</strong> de unidades posológicas prescritas (ej: si la receta dice 5 pastillas, vender 5, no la caja de 30).
+                            <br/><em className="text-xs text-slate-400 mt-2 block">*Nota: Requiere zona de fraccionamiento habilitada en la farmacia.</em>
                         </p>
                     </div>
                 </div>
-              </div>
-
-              <div className="mb-12 break-inside-avoid">
-                <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <Book className="text-blue-500" /> Módulo D: Infraestructura y Libros Obligatorios
-                </h3>
-                <p className="mb-4 text-sm text-slate-600">Para asegurar el control sanitario, las farmacias deben mantener al día los siguientes Registros Oficiales (que pueden ser digitales o físicos):</p>
-                
-                <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
-                    <li className="bg-white p-3 rounded-lg border border-slate-100 text-sm flex items-center gap-2"><CheckCircle size={14} className="text-slate-400"/> 1. De Inspección.</li>
-                    <li className="bg-white p-3 rounded-lg border border-slate-100 text-sm flex items-center gap-2"><CheckCircle size={14} className="text-slate-400"/> 2. De Fraccionamiento (si corresponde).</li>
-                    <li className="bg-white p-3 rounded-lg border border-slate-100 text-sm flex items-center gap-2"><CheckCircle size={14} className="text-slate-400"/> 3. De Control de Estupefacientes.</li>
-                    <li className="bg-white p-3 rounded-lg border border-slate-100 text-sm flex items-center gap-2"><CheckCircle size={14} className="text-slate-400"/> 4. De Control de Productos Psicotrópicos.</li>
-                    <li className="bg-white p-3 rounded-lg border border-slate-100 text-sm flex items-center gap-2"><CheckCircle size={14} className="text-slate-400"/> 5. De Reclamos (siempre a disposición del público).</li>
-                </ul>
-                
-                <div className="bg-red-50 p-4 rounded-xl border border-red-100 flex gap-3 text-red-800 text-sm">
-                    <ShieldCheck className="shrink-0" size={20}/>
-                    <p><strong>Seguridad:</strong> Los productos estupefacientes y psicotrópicos deben almacenarse en una estantería exclusiva y bajo llave para evitar hurtos o extravíos.</p>
-                </div>
-              </div>
-
-              <div className="mb-12 break-inside-avoid">
-                <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <Scissors className="text-blue-500" /> Módulo E: Fraccionamiento de Medicamentos
-                </h3>
-                <p className="text-sm text-slate-600 mb-4">El fraccionamiento es el procedimiento mediante el cual se extraen dosis específicas de un envase clínico para entregarlas al paciente según su receta.</p>
-                <ul className="space-y-2 text-sm text-slate-700 mb-4">
-                    <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5"></span>
-                        Debe realizarse en un área separada y exclusiva dentro de la farmacia (o por un tercero autorizado).
-                    </li>
-                    <li className="flex items-start gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5"></span>
-                        El envase entregado al paciente debe estar sellado y rotulado con información clave (paciente, medicamento, lote, vencimiento).
-                    </li>
-                </ul>
-                <div className="p-4 bg-slate-100 rounded-xl text-xs font-medium text-slate-600">
-                    🚫 <strong>Prohibiciones:</strong> No se pueden fraccionar hormonas, productos oncológicos, radiofármacos, ni aquellos que requieran refrigeración.
-                </div>
-              </div>
-
             </section>
 
-            <section className="mb-10 break-inside-avoid">
-                <h2 className="text-2xl font-black text-slate-900 mb-4">
-                    3. Conclusión
-                </h2>
-                <p className="text-lg leading-relaxed text-slate-700 mb-4">
-                    El Decreto 466 organiza el funcionamiento farmacéutico en Chile, estableciendo jerarquías claras entre los tipos de establecimientos y definiendo roles precisos para el personal.
-                </p>
-                <p className="text-lg font-bold text-slate-900">
-                    Para quien aspira a certificarse como Auxiliar de Farmacia, es vital comprender que su labor siempre está bajo la supervisión del Químico Farmacéutico y que el manejo de medicamentos requiere un estricto apego a las normas de almacenamiento y venta para garantizar la seguridad del paciente.
-                </p>
-                <p className="mt-8 text-xs text-slate-400 uppercase tracking-widest leading-relaxed">
-                    Fuente utilizada: Ministerio de Salud de Chile. Decreto N° 466: Aprueba Reglamento de Farmacias, Droguerías, Almacenes Farmacéuticos, Botiquines y Depósitos Autorizados.
+            {/* 5. VISIBILIDAD DE PRECIOS */}
+            <section className="bg-emerald-50 p-6 rounded-2xl border border-emerald-100 mt-8">
+                <h3 className="font-bold text-emerald-900 mb-2">Obligación de Informar Precios</h3>
+                <p className="text-sm text-emerald-800">
+                    Todos los productos deben tener el precio visible en el envase (etiqueta) o en listados de fácil acceso para el público, garantizando la transparencia del mercado.
                 </p>
             </section>
 
           </div>
 
-          {/* 🔴 COLUMNA DERECHA: SIDEBAR STICKY CON QUIZ INTERACTIVO */}
+          {/* 🔴 COLUMNA DERECHA: SIDEBAR STICKY */}
           <div className="lg:col-span-4">
             <div className="sticky top-24 space-y-6">
               
+              {/* 1. QUIZ INTERACTIVO */}
               <div className="bg-slate-900 text-white p-6 md:p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500 rounded-full blur-3xl opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500 rounded-full blur-3xl opacity-20 group-hover:opacity-30 transition-opacity"></div>
                 
                 <div className="relative z-10">
-                  
                   {!quizActivo && !mostrarResultado && (
                     <>
-                        <span className="bg-blue-500 text-blue-50 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
-                            Quiz Express
+                        <span className="bg-emerald-500 text-emerald-50 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
+                            Test Legal
                         </span>
                         <h3 className="text-3xl font-black mb-4 leading-tight">
-                            ¿Sabes del Decreto 466?
+                            ¿Sabes lo que es legal?
                         </h3>
                         <p className="text-slate-400 mb-8 text-sm leading-relaxed">
-                            10 preguntas rápidas sobre roles, recetas y prohibiciones. ¿Podrás con todas?
+                            Pon a prueba tus conocimientos sobre la Ley de Fármacos I y la normativa vigente.
                         </p>
                         <button 
                             onClick={() => setQuizActivo(true)}
-                            className="w-full block bg-white text-slate-900 font-black text-center py-4 rounded-xl hover:bg-blue-400 transition-colors shadow-lg flex items-center justify-center gap-2"
+                            className="w-full block bg-white text-slate-900 font-black text-center py-4 rounded-xl hover:bg-emerald-400 transition-colors shadow-lg flex items-center justify-center gap-2"
                         >
                             COMENZAR TEST <ArrowRight size={18} />
                         </button>
@@ -383,11 +312,9 @@ export default function GuiaDecreto466() {
                             <span>Pregunta {preguntaActual + 1} de {preguntasQuiz.length}</span>
                             <button onClick={reiniciarQuiz}><XCircle size={20} className="hover:text-red-400"/></button>
                         </div>
-                        
                         <h4 className="font-bold text-lg mb-6 leading-tight">
                             {preguntasQuiz[preguntaActual].pregunta}
                         </h4>
-
                         <div className="space-y-3">
                             {preguntasQuiz[preguntaActual].opciones.map((opcion, index) => (
                                 <button
@@ -411,38 +338,27 @@ export default function GuiaDecreto466() {
 
                   {mostrarResultado && (
                     <div className="text-center animate-in zoom-in duration-300">
-                        <div className="bg-blue-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-400">
+                        <div className="bg-emerald-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-400">
                             <Trophy size={32} />
                         </div>
                         <h3 className="text-2xl font-black mb-2">¡Completado!</h3>
                         <p className="text-slate-400 mb-6">
                             Obtuviste <strong className="text-white">{puntaje}</strong> de <strong className="text-white">{preguntasQuiz.length}</strong> correctas.
                         </p>
-                        
                         <div className="space-y-3">
-                            {puntaje === preguntasQuiz.length ? (
-                                <div className="bg-blue-900/50 p-3 rounded-lg text-sm text-blue-200 border border-blue-800">
-                                    ¡Excelente! Estás listo para el módulo de Normativa.
-                                </div>
-                            ) : (
-                                <button 
-                                    onClick={reiniciarQuiz}
-                                    className="w-full bg-slate-800 text-white font-bold py-3 rounded-xl hover:bg-slate-700 text-sm"
-                                >
-                                    Intentar de nuevo
-                                </button>
-                            )}
-                            
-                            <Link href="/quiz" className="block w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-500 text-sm">
-                                Ir al Simulador Completo
-                            </Link>
+                            <button 
+                                onClick={reiniciarQuiz}
+                                className="w-full bg-slate-800 text-white font-bold py-3 rounded-xl hover:bg-slate-700 text-sm"
+                            >
+                                Intentar de nuevo
+                            </button>
                         </div>
                     </div>
                   )}
-
                 </div>
               </div>
 
+              {/* 2. TARJETA DESCARGAR PDF */}
               <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
                 <div className="flex items-center gap-4 mb-4">
                     <div className="bg-red-50 text-red-600 p-3 rounded-full">
@@ -454,9 +370,8 @@ export default function GuiaDecreto466() {
                     </div>
                 </div>
                 <p className="text-sm text-slate-600 mb-6 leading-relaxed">
-                    Convierte esta página en un archivo PDF automáticamente.
+                    Convierte esta página en un archivo PDF automáticamente para estudiar offline.
                 </p>
-                
                 <button 
                     onClick={generarPDF}
                     disabled={!isPdfReady}
@@ -466,6 +381,28 @@ export default function GuiaDecreto466() {
                     {isPdfReady ? 'DESCARGAR AHORA' : 'Cargando herramienta...'}
                 </button>
               </div>
+
+              {/* 3. TARJETA DERMOCHECK */}
+              <a 
+                href="https://www.dermocheck.cl/#calculator-section" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-sm group hover:ring-2 hover:ring-emerald-500 transition-all"
+              >
+                <div className="flex items-center gap-4 mb-4">
+                    <div className="bg-emerald-500/20 text-emerald-400 p-3 rounded-full group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+                        <Clock size={24} />
+                    </div>
+                    <div>
+                        <h4 className="font-bold text-white">DermoCheck</h4>
+                        <p className="text-xs text-slate-400">Herramienta Exclusiva</p>
+                    </div>
+                    <ExternalLink size={16} className="text-slate-500 ml-auto" />
+                </div>
+                <p className="text-sm text-slate-300 leading-relaxed mb-0">
+                    ¿Vendes Dermo? Verifica vencimientos por lote aquí.
+                </p>
+              </a>
 
             </div>
           </div>
