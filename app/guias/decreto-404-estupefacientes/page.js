@@ -3,10 +3,13 @@
 import { useState } from 'react';
 import Link from "next/link";
 import Script from "next/script"; 
-// 👇 CORRECCIÓN CRÍTICA: Asegúrate de que 'Scale' y 'Truck' estén en esta lista
-import { BookOpen, CheckCircle, AlertTriangle, ShieldCheck, FileText, Download, ArrowRight, Info, Package, Pill, Lock, FileSignature, Syringe, Trophy, XCircle, Truck, Scale } from "lucide-react";
+import { 
+  BookOpen, AlertTriangle, ShieldCheck, FileText, Download, 
+  ArrowRight, Scale, Truck, Lock, FileSignature, Trophy, 
+  XCircle, Clock, ExternalLink 
+} from "lucide-react";
 
-// 📝 PREGUNTAS DEL QUIZ (Específicas del Decreto 404)
+// 📝 PREGUNTAS DEL QUIZ (Decreto 404)
 const preguntasQuiz = [
   {
     pregunta: "¿Cuál es el objetivo principal del Decreto 404?",
@@ -62,7 +65,7 @@ const preguntasQuiz = [
 
 export default function GuiaDecreto404() {
   const [isPdfReady, setIsPdfReady] = useState(false);
-  
+   
   // ESTADOS DEL QUIZ
   const [quizActivo, setQuizActivo] = useState(false);
   const [preguntaActual, setPreguntaActual] = useState(0);
@@ -126,24 +129,24 @@ export default function GuiaDecreto404() {
         onLoad={() => setIsPdfReady(true)}
       />
 
-      {/* HEADER DE LA GUÍA */}
-      <header className="bg-white border-b border-slate-200 py-12 px-6">
+      {/* HEADER DE LA GUÍA (Estilo Emerald) */}
+      <header className="bg-emerald-900 border-b border-emerald-800 py-12 px-6 text-white">
         <div className="max-w-6xl mx-auto">
           <nav className="mb-6">
-            <Link href="/guias" className="text-slate-400 hover:text-blue-600 font-bold text-sm flex items-center gap-2 transition-colors">
+            <Link href="/guias" className="text-emerald-300 hover:text-white font-bold text-sm flex items-center gap-2 transition-colors">
               ← Volver a la Biblioteca
             </Link>
           </nav>
-          <div className="flex items-center gap-2 text-blue-600 font-bold text-sm uppercase tracking-wider mb-4">
+          <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm uppercase tracking-wider mb-4">
             <BookOpen size={18} />
-            Guía de Estudio Oficial
+            Módulo Legislativo
           </div>
           
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-slate-900 mb-6 leading-tight text-balance">
-            Reglamento de Estupefacientes <span className="text-blue-600 whitespace-nowrap">(Decreto 404)</span>
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight text-balance">
+            Reglamento de Estupefacientes <span className="text-emerald-400 whitespace-nowrap">(Decreto 404)</span>
           </h1>
           
-          <p className="text-xl text-slate-500 max-w-3xl">
+          <p className="text-xl text-emerald-100 max-w-3xl">
             La normativa estricta que regula el control, venta y almacenamiento de drogas con alto potencial de abuso en Chile.
           </p>
         </div>
@@ -170,10 +173,10 @@ export default function GuiaDecreto404() {
               <h2 className="text-2xl font-black text-slate-900 mb-4 flex items-center gap-3">
                 1. Introducción
               </h2>
-              <p className="text-lg leading-relaxed mb-4">
+              <p className="text-lg leading-relaxed mb-4 text-slate-600">
                 El Decreto 404, aprobado en 1983, es la normativa encargada de regular el control de los estupefacientes en Chile. Su objetivo principal es fiscalizar toda la "cadena de vida" de estas drogas: desde su importación o fabricación industrial hasta su entrega final al paciente.
               </p>
-              <p className="text-lg leading-relaxed mb-6">
+              <p className="text-lg leading-relaxed mb-6 text-slate-600">
                 Este reglamento busca evitar que sustancias con fines terapéuticos, pero con alto potencial de abuso y adicción, se desvíen hacia el tráfico ilícito o el uso indebido.
               </p>
             </section>
@@ -188,7 +191,7 @@ export default function GuiaDecreto404() {
               {/* MÓDULO A */}
               <div className="mb-12 break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <Scale className="text-blue-500" /> Módulo A: Definiciones y Autoridades
+                  <Scale className="text-blue-600" /> Módulo A: Definiciones y Autoridades
                 </h3>
                 
                 <div className="space-y-6">
@@ -226,7 +229,7 @@ export default function GuiaDecreto404() {
               {/* MÓDULO B */}
               <div className="mb-12 break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <Truck className="text-blue-500" /> Módulo B: Importación y Producción
+                  <Truck className="text-blue-600" /> Módulo B: Importación y Producción
                 </h3>
                 <p className="mb-4 text-sm text-slate-600">El manejo de estas sustancias es exclusivo de establecimientos autorizados (laboratorios, droguerías, farmacias, hospitales).</p>
                 
@@ -246,7 +249,7 @@ export default function GuiaDecreto404() {
               {/* MÓDULO C */}
               <div className="mb-12 break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <FileSignature className="text-blue-500" /> Módulo C: La Venta (Expendio) y Recetas
+                  <FileSignature className="text-blue-600" /> Módulo C: La Venta (Expendio) y Recetas
                 </h3>
                 <p className="mb-4 text-slate-600">
                     Este es el módulo más importante para el trabajo en farmacia. Los estupefacientes de las Listas I y II se venden principalmente mediante Receta Cheque o Receta Médica Retenida.
@@ -288,7 +291,7 @@ export default function GuiaDecreto404() {
               {/* MÓDULO D */}
               <div className="mb-12 break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <Lock className="text-blue-500" /> Módulo D: Control Interno y Almacenamiento
+                  <Lock className="text-blue-600" /> Módulo D: Control Interno y Almacenamiento
                 </h3>
                 <p className="mb-4 text-sm text-slate-600">Dentro de la farmacia, el manejo de estas drogas es estricto:</p>
                 
@@ -300,7 +303,7 @@ export default function GuiaDecreto404() {
                         <strong>Libro de Control:</strong> Es obligatorio llevar un Libro de Control de Estupefacientes (visado) donde se registra por separado cada producto (entradas, salidas y saldos).
                     </li>
                     <li>
-                        <strong>Identificación:</strong> Los envases de estos medicamentos deben tener una estrella roja de 5 puntas en su etiqueta y la leyenda "Sujeto a Control de Estupefacientes".
+                        <strong>Identificación:</strong> Los envases de estos medicamentos deben tener una estrella roja de 5 puntas en su etiqueta y la leyenda "Sujeto a Control de Estupefacientes". 
                     </li>
                     <li>
                         <strong>Muestras Médicas:</strong> Está prohibida la distribución de muestras médicas de estupefacientes (salvo autorización especial del ISP).
@@ -451,6 +454,28 @@ export default function GuiaDecreto404() {
                     {isPdfReady ? 'DESCARGAR AHORA' : 'Cargando herramienta...'}
                 </button>
               </div>
+
+              {/* 3. TARJETA DERMOCHECK (CROSS-SELLING) */}
+              <a 
+                href="https://www.dermocheck.cl/#calculator-section" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-sm group hover:ring-2 hover:ring-emerald-500 transition-all"
+              >
+                <div className="flex items-center gap-4 mb-4">
+                    <div className="bg-emerald-500/20 text-emerald-400 p-3 rounded-full group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+                        <Clock size={24} />
+                    </div>
+                    <div>
+                        <h4 className="font-bold text-white">DermoCheck</h4>
+                        <p className="text-xs text-slate-400">Herramienta Exclusiva</p>
+                    </div>
+                    <ExternalLink size={16} className="text-slate-500 ml-auto"/>
+                </div>
+                <p className="text-sm text-slate-300 leading-relaxed mb-0">
+                    ¿Vendes Dermo? Verifica vencimientos por lote aquí.
+                </p>
+              </a>
 
             </div>
           </div>
