@@ -9,7 +9,7 @@ import {
   XCircle, Droplets, Scale, Target, Users, BrainCircuit, ExternalLink, Heart
 } from "lucide-react";
 
-// 📝 PREGUNTAS DEL QUIZ (Basadas en los ejercicios de la guía)
+// 📝 PREGUNTAS DEL QUIZ (Verificadas)
 const preguntasQuiz = [
   {
     pregunta: "¿Cuál es la 'Regla de Oro' para la equivalencia de gotas?",
@@ -168,7 +168,7 @@ export default function GuiaPosologia() {
                 <span className="text-xs text-slate-400 font-bold uppercase tracking-widest">Guía Oficial 2026</span>
             </div>
 
-            {/* 1. INTRODUCCIÓN Y DEFINICIÓN (SEO MEJORADO) */}
+            {/* 1. INTRODUCCIÓN Y DEFINICIÓN */}
             <section className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm break-inside-avoid">
               <h2 className="text-2xl font-black text-slate-900 mb-4 flex items-center gap-3">
                 1. ¿Qué es la Posología?
@@ -206,7 +206,7 @@ export default function GuiaPosologia() {
                 </div>
             </section>
 
-            {/* 2. CONTENIDO PRINCIPAL (MATERIAL DEL PDF) */}
+            {/* 2. CONTENIDO PRINCIPAL */}
             <section>
               <h2 className="text-3xl font-black text-slate-900 mb-8 break-before-auto">
                 2. Contenido Práctico
@@ -235,7 +235,7 @@ export default function GuiaPosologia() {
                   <div className="bg-emerald-50 p-5 rounded-2xl border border-emerald-100">
                     <h4 className="font-bold text-emerald-900 mb-2">Equivalencias de Volumen (Líquidos)</h4>
                     <ul className="space-y-2 text-sm text-emerald-800">
-                        <li>• <strong>1 mililitro (ml)</strong> = 20 gotas (Regla de Oro).</li>
+                        <li>• <strong>1 mililitro (ml)</strong> = 20 gotas  (Regla de Oro).</li>
                         <li>• <strong>1 cucharadita (té)</strong> ≈ 5 ml.</li>
                         <li>• <strong>1 cucharada (sopera)</strong> ≈ 15 ml.</li>
                     </ul>
@@ -516,6 +516,28 @@ export default function GuiaPosologia() {
                     </div>
                     <ExternalLink size={16} className="text-amber-400 ml-auto opacity-50 group-hover:opacity-100"/>
                 </div>
+              </a>
+
+              {/* 3. TARJETA DERMOCHECK (CROSS-SELLING) */}
+              <a 
+                href="https://www.dermocheck.cl/#calculator-section" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-sm group hover:ring-2 hover:ring-emerald-500 transition-all"
+              >
+                <div className="flex items-center gap-4 mb-4">
+                    <div className="bg-emerald-500/20 text-emerald-400 p-3 rounded-full group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+                        <Clock size={24} />
+                    </div>
+                    <div>
+                        <h4 className="font-bold text-white">DermoCheck</h4>
+                        <p className="text-xs text-slate-400">Herramienta Exclusiva</p>
+                    </div>
+                    <ExternalLink size={16} className="text-slate-500 ml-auto"/>
+                </div>
+                <p className="text-sm text-slate-300 leading-relaxed mb-0">
+                    ¿Vendes Dermo? Verifica vencimientos por lote aquí.
+                </p>
               </a>
 
             </div>
