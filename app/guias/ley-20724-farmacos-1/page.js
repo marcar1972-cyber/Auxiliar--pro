@@ -6,7 +6,7 @@ import Script from "next/script";
 import { 
   BookOpen, AlertTriangle, Download, ArrowRight, Store, 
   Ban, Pill, FileText, CheckCircle, XCircle, Trophy, 
-  Scale, Syringe, Clock, ExternalLink 
+  Scale, Syringe, Clock, ExternalLink, Heart 
 } from "lucide-react";
 
 // 📝 PREGUNTAS DEL QUIZ (Ley 20.724)
@@ -58,6 +58,56 @@ const preguntasQuiz = [
       "Que el paciente compre la cantidad exacta recetada y pague lo justo.",
       "Romper los envases para reciclar.",
       "Mezclar pastillas de distintos tipos."
+    ],
+    correcta: 1
+  },
+  {
+    pregunta: "¿Quién está autorizado para realizar la intercambiabilidad de un medicamento?",
+    opciones: [
+      "El médico solamente.",
+      "El químico farmacéutico (a solicitud del paciente).",
+      "El auxiliar de farmacia por iniciativa propia.",
+      "Nadie, está prohibido."
+    ],
+    correcta: 1
+  },
+  {
+    pregunta: "¿Dónde deben estar visibles los precios de los medicamentos?",
+    opciones: [
+      "Solo en el sistema computacional.",
+      "En el envase o en listados de acceso directo al público.",
+      "No es obligatorio mostrarlos.",
+      "Solo en la bodega."
+    ],
+    correcta: 1
+  },
+  {
+    pregunta: "¿Qué organismo fiscaliza el cumplimiento de la Bioequivalencia?",
+    opciones: [
+      "El Sernac.",
+      "El Instituto de Salud Pública (ISP).",
+      "El Colegio Médico.",
+      "La Municipalidad."
+    ],
+    correcta: 1
+  },
+  {
+    pregunta: "¿Puede un laboratorio pagarle a la farmacia para que priorice sus productos?",
+    opciones: [
+      "Sí, es libre mercado.",
+      "No, está prohibido cualquier incentivo que induzca a privilegiar una marca.",
+      "Solo si es en Navidad.",
+      "Sí, si el producto es bueno."
+    ],
+    correcta: 1
+  },
+  {
+    pregunta: "¿Qué garantiza el sello de Bioequivalencia?",
+    opciones: [
+      "Que el medicamento es importado.",
+      "Que tiene la misma eficacia y seguridad que el innovador.",
+      "Que es un producto natural.",
+      "Que no tiene efectos adversos."
     ],
     correcta: 1
   }
@@ -381,6 +431,25 @@ export default function GuiaLeyFarmacos1() {
                     {isPdfReady ? 'DESCARGAR AHORA' : 'Cargando herramienta...'}
                 </button>
               </div>
+
+              {/* 🟢 NUEVO: TARJETA DE COLABORACIÓN (SUTIL CON REVENIU) */}
+              <a 
+                href="https://app.reveniu.com/checkout-custom-link/HvM4DkkkUpBnILnQv4abrZl5qYX7faqU" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="group block bg-gradient-to-r from-amber-50 to-orange-50 p-6 rounded-3xl border border-amber-100 shadow-sm hover:shadow-md transition-all hover:border-amber-200"
+              >
+                <div className="flex items-center gap-4">
+                    <div className="bg-white text-amber-500 p-3 rounded-full shadow-sm group-hover:scale-110 transition-transform">
+                        <Heart size={24} className="fill-amber-500 text-amber-500" />
+                    </div>
+                    <div>
+                        <h4 className="font-bold text-amber-900 text-sm">¿Te sirvió esta guía?</h4>
+                        <p className="text-xs text-amber-700/80">Ayúdame a mantener la web</p>
+                    </div>
+                    <ExternalLink size={16} className="text-amber-400 ml-auto opacity-50 group-hover:opacity-100"/>
+                </div>
+              </a>
 
               {/* 3. TARJETA DERMOCHECK */}
               <a 
