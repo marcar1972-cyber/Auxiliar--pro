@@ -3,7 +3,11 @@
 import { useState } from 'react';
 import Link from "next/link";
 import Script from "next/script"; 
-import { BookOpen, CheckCircle, AlertTriangle, Thermometer, ShieldCheck, FileText, Download, ArrowRight, Info, Package, XCircle, Trophy } from "lucide-react";
+import { 
+  BookOpen, CheckCircle, AlertTriangle, Thermometer, ShieldCheck, 
+  FileText, Download, ArrowRight, Info, Package, XCircle, Trophy, 
+  Clock, ExternalLink 
+} from "lucide-react";
 
 // 📝 10 PREGUNTAS CLAVE DEL DECRETO 3 (Expandido)
 const preguntasQuiz = [
@@ -61,7 +65,7 @@ const preguntasQuiz = [
 
 export default function GuiaDecreto3() {
   const [isPdfReady, setIsPdfReady] = useState(false);
-  
+   
   // ESTADOS DEL QUIZ
   const [quizActivo, setQuizActivo] = useState(false);
   const [preguntaActual, setPreguntaActual] = useState(0);
@@ -126,25 +130,24 @@ export default function GuiaDecreto3() {
         onLoad={() => setIsPdfReady(true)}
       />
 
-      {/* HEADER DE LA GUÍA */}
-      <header className="bg-white border-b border-slate-200 py-12 px-6">
+      {/* HEADER DE LA GUÍA (Estilo Emerald) */}
+      <header className="bg-emerald-900 border-b border-emerald-800 py-12 px-6 text-white">
         <div className="max-w-6xl mx-auto">
           <nav className="mb-6">
-            {/* 🟢 CORRECCIÓN: Apunta a /guias en lugar de /blog */}
-            <Link href="/guias" className="text-slate-400 hover:text-blue-600 font-bold text-sm flex items-center gap-2 transition-colors">
+            <Link href="/guias" className="text-emerald-300 hover:text-white font-bold text-sm flex items-center gap-2 transition-colors">
               ← Volver a la Biblioteca
             </Link>
           </nav>
-          <div className="flex items-center gap-2 text-blue-600 font-bold text-sm uppercase tracking-wider mb-4">
+          <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm uppercase tracking-wider mb-4">
             <BookOpen size={18} />
-            Guía de Estudio Oficial
+            Módulo Legislativo
           </div>
           
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-slate-900 mb-6 leading-tight text-balance">
-            Reglamento de Control de Productos <span className="text-blue-600 whitespace-nowrap">(Decreto 3)</span>
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight text-balance">
+            Reglamento de Control de Productos <span className="text-emerald-400 whitespace-nowrap">(Decreto 3)</span>
           </h1>
           
-          <p className="text-xl text-slate-500 max-w-3xl">
+          <p className="text-xl text-emerald-100 max-w-3xl">
             La base legal que garantiza que los medicamentos sean seguros, eficaces y de calidad. 
             Domina los conceptos de <strong>Registro ISP, Bioequivalencia y Cadena de Frío</strong>.
           </p>
@@ -172,10 +175,10 @@ export default function GuiaDecreto3() {
               <h2 className="text-2xl font-black text-slate-900 mb-4 flex items-center gap-3">
                 1. Introducción
               </h2>
-              <p className="text-lg leading-relaxed mb-4">
+              <p className="text-lg leading-relaxed mb-4 text-slate-600">
                 El <strong>Decreto Supremo N° 3 (2010)</strong> es la columna vertebral de la calidad farmacéutica en Chile. Mientras otros decretos regulan el local (466) o las drogas peligrosas (404), el Decreto 3 se encarga del <strong>PRODUCTO</strong>.
               </p>
-              <p className="text-lg leading-relaxed mb-6">
+              <p className="text-lg leading-relaxed mb-6 text-slate-600">
                 Este reglamento establece las exigencias de calidad que debe cumplir todo medicamento para ser distribuido en el país, asegurando que sea <strong>Seguro</strong> (no hace daño), <strong>Eficaz</strong> (sirve para lo que dice) y de <strong>Calidad</strong> (está bien fabricado).
               </p>
               
@@ -205,11 +208,11 @@ export default function GuiaDecreto3() {
                 <div className="grid md:grid-cols-2 gap-6 mb-6">
                   <div className="bg-white p-6 rounded-2xl border border-slate-200">
                     <h4 className="font-bold text-slate-900 mb-2 text-sm uppercase text-blue-600">¿Qué es?</h4>
-                    <p className="text-sm">Es la licencia que otorga el ISP a un producto específico, validando su fórmula, fabricación y estabilidad.</p>
+                    <p className="text-sm text-slate-600">Es la licencia que otorga el ISP a un producto específico, validando su fórmula, fabricación y estabilidad.</p>
                   </div>
                   <div className="bg-white p-6 rounded-2xl border border-slate-200">
                     <h4 className="font-bold text-slate-900 mb-2 text-sm uppercase text-blue-600">Identificación</h4>
-                    <p className="text-sm mb-2">En la caja verás un código (ej: <code>F-1234/15</code>).</p>
+                    <p className="text-sm text-slate-600 mb-2">En la caja verás un código (ej: <code>F-1234/15</code>).</p>
                     <ul className="text-xs text-slate-500 list-disc pl-4 space-y-1">
                         <li>F: Fármaco</li>
                         <li>B: Biológico</li>
@@ -235,18 +238,18 @@ export default function GuiaDecreto3() {
                 <ul className="space-y-4">
                     <li className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
                         <strong className="text-lg text-blue-700 block mb-1">1. Innovador (Referente)</strong>
-                        Es el medicamento original que patentó la molécula. Demostró seguridad y eficacia con estudios clínicos millonarios.
+                        <p className="text-sm text-slate-600">Es el medicamento original que patentó la molécula. Demostró seguridad y eficacia con estudios clínicos millonarios.</p>
                     </li>
                     <li className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
                         <strong className="text-lg text-slate-700 block mb-1">2. Genérico (Copia)</strong>
-                        Medicamento que contiene el mismo principio activo y dosis, pero que <strong>NO</strong> ha realizado estudios de bioequivalencia.
+                        <p className="text-sm text-slate-600">Medicamento que contiene el mismo principio activo y dosis, pero que <strong>NO</strong> ha realizado estudios de bioequivalencia.</p>
                     </li>
                     <li className="bg-yellow-50 p-5 rounded-2xl border-2 border-yellow-400 shadow-md relative overflow-hidden">
                         <div className="absolute top-0 right-0 bg-yellow-400 text-yellow-900 text-[10px] font-bold px-3 py-1 uppercase tracking-widest">
                             Clave Examen
                         </div>
                         <strong className="text-lg text-slate-900 block mb-1">3. Bioequivalente (BE)</strong>
-                        <p className="mb-3 text-sm">
+                        <p className="mb-3 text-sm text-slate-700">
                             Es un genérico que se sometió a estudios in vivo (en humanos) y <strong>demostró científicamente</strong> que se comporta exactamente igual que el innovador.
                         </p>
                         <div className="flex items-center gap-2 text-xs font-bold text-yellow-800 bg-yellow-100 p-2 rounded-lg inline-block">
@@ -272,7 +275,7 @@ export default function GuiaDecreto3() {
                         <th className="p-4 font-black text-slate-900 text-sm uppercase">Ejemplo</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-100 text-sm">
+                    <tbody className="divide-y divide-slate-100 text-sm text-slate-600">
                       <tr>
                         <td className="p-4 font-bold text-blue-600">Envase Primario</td>
                         <td className="p-4">Contacto directo. Protege de humedad y contaminación.</td>
@@ -344,7 +347,7 @@ export default function GuiaDecreto3() {
                     3. El Rol del Auxiliar según el Decreto 3
                 </h2>
                 <p className="mb-4 text-slate-600">Aunque el Químico Farmacéutico es el director técnico, el Auxiliar es el ejecutor de la calidad:</p>
-                <ul className="space-y-3">
+                <ul className="space-y-3 text-slate-700">
                     <li className="flex gap-3 items-start">
                         <CheckCircle className="text-emerald-500 shrink-0 mt-1" size={20} />
                         <div>
@@ -430,7 +433,7 @@ export default function GuiaDecreto3() {
                         <div className="space-y-3">
                             {preguntasQuiz[preguntaActual].opciones.map((opcion, index) => (
                                 <button
-                                    key={`${preguntaActual}-${index}`} // 👈 AQUÍ ESTÁ EL CAMBIO CLAVE
+                                    key={`${preguntaActual}-${index}`} 
                                     onClick={() => manejarRespuesta(index)}
                                     disabled={respuestaSeleccionada !== null}
                                     className={`w-full text-left p-3 rounded-xl text-sm font-medium transition-all ${
@@ -507,6 +510,28 @@ export default function GuiaDecreto3() {
                     {isPdfReady ? 'DESCARGAR AHORA' : 'Cargando herramienta...'}
                 </button>
               </div>
+
+              {/* 3. TARJETA DERMOCHECK (CROSS-SELLING) */}
+              <a 
+                href="https://www.dermocheck.cl/#calculator-section" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-sm group hover:ring-2 hover:ring-emerald-500 transition-all"
+              >
+                <div className="flex items-center gap-4 mb-4">
+                    <div className="bg-emerald-500/20 text-emerald-400 p-3 rounded-full group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+                        <Clock size={24} />
+                    </div>
+                    <div>
+                        <h4 className="font-bold text-white">DermoCheck</h4>
+                        <p className="text-xs text-slate-400">Herramienta Exclusiva</p>
+                    </div>
+                    <ExternalLink size={16} className="text-slate-500 ml-auto"/>
+                </div>
+                <p className="text-sm text-slate-300 leading-relaxed mb-0">
+                    ¿Vendes Dermo? Verifica vencimientos por lote aquí.
+                </p>
+              </a>
 
             </div>
           </div>
