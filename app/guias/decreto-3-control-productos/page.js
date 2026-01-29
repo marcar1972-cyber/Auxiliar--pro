@@ -6,7 +6,7 @@ import Script from "next/script";
 import { 
   BookOpen, CheckCircle, AlertTriangle, Thermometer, ShieldCheck, 
   FileText, Download, ArrowRight, Info, Package, XCircle, Trophy, 
-  Clock, ExternalLink, Heart, Coffee 
+  Clock, ExternalLink, Heart 
 } from "lucide-react";
 
 // 📝 10 PREGUNTAS CLAVE DEL DECRETO 3 (Expandido)
@@ -463,12 +463,22 @@ export default function GuiaDecreto3() {
                         </p>
                         
                         <div className="space-y-3">
-                            <button 
-                                onClick={reiniciarQuiz}
-                                className="w-full bg-slate-800 text-white font-bold py-3 rounded-xl hover:bg-slate-700 text-sm"
-                            >
-                                Intentar de nuevo
-                            </button>
+                            {puntaje === preguntasQuiz.length ? (
+                                <div className="bg-emerald-900/50 p-3 rounded-lg text-sm text-emerald-200 border border-emerald-800">
+                                    ¡Excelente! Dominas el Decreto 3.
+                                </div>
+                            ) : (
+                                <button 
+                                    onClick={reiniciarQuiz}
+                                    className="w-full bg-slate-800 text-white font-bold py-3 rounded-xl hover:bg-slate-700 text-sm"
+                                >
+                                    Intentar de nuevo
+                                </button>
+                            )}
+                            
+                            <Link href="/quiz" className="block w-full bg-emerald-600 text-white font-bold py-3 rounded-xl hover:bg-emerald-500 text-sm">
+                                Ir al Simulador Completo
+                            </Link>
                         </div>
                     </div>
                   )}
@@ -501,9 +511,9 @@ export default function GuiaDecreto3() {
                 </button>
               </div>
 
-              {/* 🟢 NUEVO: TARJETA DE COLABORACIÓN (SUTIL) */}
+              {/* 🟢 NUEVO: TARJETA DE COLABORACIÓN (SUTIL CON REVENIU) */}
               <a 
-                href="https://app.getrevu.com/links/2957582e-9907-4277-a877-623e8006497f" 
+                href="https://app.reveniu.com/checkout-custom-link/HvM4DkkkUpBnILnQv4abrZl5qYX7faqU" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="group block bg-gradient-to-r from-amber-50 to-orange-50 p-6 rounded-3xl border border-amber-100 shadow-sm hover:shadow-md transition-all hover:border-amber-200"
