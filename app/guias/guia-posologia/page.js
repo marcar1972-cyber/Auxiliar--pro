@@ -3,13 +3,14 @@
 import { useState } from 'react';
 import Link from "next/link";
 import Script from "next/script"; 
+// 🟢 CORRECCIÓN: Se agregó 'Clock' a los imports
 import { 
   BookOpen, CheckCircle, AlertTriangle, Calculator, ShieldCheck, 
   FileText, Download, ArrowRight, Info, Package, Syringe, Trophy, 
-  XCircle, Droplets, Scale, Target, Users, BrainCircuit, ExternalLink, Heart
+  XCircle, Droplets, Scale, Target, Users, BrainCircuit, ExternalLink, Heart, Clock
 } from "lucide-react";
 
-// 📝 PREGUNTAS DEL QUIZ (Verificadas)
+// 📝 PREGUNTAS DEL QUIZ (Basadas en los ejercicios de la guía)
 const preguntasQuiz = [
   {
     pregunta: "¿Cuál es la 'Regla de Oro' para la equivalencia de gotas?",
@@ -168,7 +169,7 @@ export default function GuiaPosologia() {
                 <span className="text-xs text-slate-400 font-bold uppercase tracking-widest">Guía Oficial 2026</span>
             </div>
 
-            {/* 1. INTRODUCCIÓN Y DEFINICIÓN */}
+            {/* 1. INTRODUCCIÓN Y DEFINICIÓN (SEO MEJORADO) */}
             <section className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm break-inside-avoid">
               <h2 className="text-2xl font-black text-slate-900 mb-4 flex items-center gap-3">
                 1. ¿Qué es la Posología?
@@ -206,7 +207,7 @@ export default function GuiaPosologia() {
                 </div>
             </section>
 
-            {/* 2. CONTENIDO PRINCIPAL */}
+            {/* 2. CONTENIDO PRINCIPAL (MATERIAL DEL PDF) */}
             <section>
               <h2 className="text-3xl font-black text-slate-900 mb-8 break-before-auto">
                 2. Contenido Práctico
@@ -235,7 +236,7 @@ export default function GuiaPosologia() {
                   <div className="bg-emerald-50 p-5 rounded-2xl border border-emerald-100">
                     <h4 className="font-bold text-emerald-900 mb-2">Equivalencias de Volumen (Líquidos)</h4>
                     <ul className="space-y-2 text-sm text-emerald-800">
-                        <li>• <strong>1 mililitro (ml)</strong> = 20 gotas  (Regla de Oro).</li>
+                        <li>• <strong>1 mililitro (ml)</strong> = 20 gotas (Regla de Oro).</li>
                         <li>• <strong>1 cucharadita (té)</strong> ≈ 5 ml.</li>
                         <li>• <strong>1 cucharada (sopera)</strong> ≈ 15 ml.</li>
                     </ul>
