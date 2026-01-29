@@ -3,9 +3,14 @@
 import { useState } from 'react';
 import Link from "next/link";
 import Script from "next/script"; 
-import { BookOpen, CheckCircle, AlertTriangle, ShieldCheck, FileText, Download, ArrowRight, Info, Package, Pill, Lock, FileSignature, Syringe, Trophy, XCircle, Truck, Scale, Zap, Activity, Clock, Thermometer, GraduationCap } from "lucide-react";
+import { 
+  BookOpen, CheckCircle, AlertTriangle, ShieldCheck, FileText, 
+  Download, ArrowRight, Info, Package, Pill, Lock, FileSignature, 
+  Syringe, Trophy, XCircle, Truck, Scale, Zap, Activity, Clock, 
+  Thermometer, GraduationCap, Heart, ExternalLink 
+} from "lucide-react";
 
-// 📝 PREGUNTAS DEL QUIZ (Específicas de Fundamentos de Farmacología)
+// 📝 PREGUNTAS DEL QUIZ (Verificadas)
 const preguntasQuiz = [
   {
     pregunta: "¿Qué diferencia técnica existe entre Fármaco y Medicamento?",
@@ -219,7 +224,7 @@ export default function GuiaFarmacologia() {
                 <h2 className="text-2xl font-black text-slate-900 mb-6 flex items-center gap-3">
                     <Pill className="text-emerald-600" /> 1. Farmacotecnia: La Ciencia de la Formulación
                 </h2>
-                <p className="text-lg leading-relaxed mb-6">
+                <p className="text-lg leading-relaxed mb-6 text-slate-600">
                     Es la disciplina que estudia la manipulación de las materias primas para darles una forma adecuada, que permita ser administrada a los seres vivos.
                 </p>
 
@@ -229,12 +234,12 @@ export default function GuiaFarmacologia() {
                     <ul className="space-y-4">
                         <li className="bg-white p-4 rounded-xl shadow-sm">
                             <strong className="text-emerald-700 block text-lg mb-1">Fármaco (o Principio Activo - API):</strong>
-                            <p className="text-sm">Es la sustancia química pura responsable del efecto terapéutico. Por sí sola, suele ser inestable o difícil de administrar.</p>
+                            <p className="text-sm text-slate-600">Es la sustancia química pura responsable del efecto terapéutico. Por sí sola, suele ser inestable o difícil de administrar.</p>
                             <em className="text-xs text-slate-500 block mt-1">Ejemplo: Paracetamol polvo.</em>
                         </li>
                         <li className="bg-white p-4 rounded-xl shadow-sm">
                             <strong className="text-emerald-700 block text-lg mb-1">Medicamento:</strong>
-                            <p className="text-sm">Es el producto tecnológico final. Es la suma de <strong>Fármaco + Excipientes + Técnica de Manufactura</strong>.</p>
+                            <p className="text-sm text-slate-600">Es el producto tecnológico final. Es la suma de <strong>Fármaco + Excipientes + Técnica de Manufactura</strong>.</p>
                             <em className="text-xs text-slate-500 block mt-1">Ejemplo: Comprimido de Paracetamol 500mg.</em>
                         </li>
                     </ul>
@@ -245,10 +250,10 @@ export default function GuiaFarmacologia() {
                     Los excipientes son sustancias auxiliares que permiten que el medicamento sea estable, eficaz y seguro. Aunque no tienen actividad terapéutica, <strong>determinan la calidad del producto</strong>.
                 </p>
                 <ul className="grid md:grid-cols-2 gap-4 mb-6">
-                    <li className="bg-slate-100 p-3 rounded-lg text-sm"><strong>Aglutinantes:</strong> Mantienen los polvos unidos para formar la pastilla.</li>
-                    <li className="bg-slate-100 p-3 rounded-lg text-sm"><strong>Desintegrantes:</strong> Hacen que la pastilla "explote" o se deshaga al contacto con el jugo gástrico.</li>
-                    <li className="bg-slate-100 p-3 rounded-lg text-sm"><strong>Correctores:</strong> Enmascaran sabores amargos (sacarosa, saborizantes).</li>
-                    <li className="bg-slate-100 p-3 rounded-lg text-sm"><strong>Conservantes:</strong> Evitan que crezcan bacterias en jarabes o cremas (parabenos).</li>
+                    <li className="bg-slate-100 p-3 rounded-lg text-sm text-slate-700"><strong>Aglutinantes:</strong> Mantienen los polvos unidos para formar la pastilla.</li>
+                    <li className="bg-slate-100 p-3 rounded-lg text-sm text-slate-700"><strong>Desintegrantes:</strong> Hacen que la pastilla "explote" o se deshaga al contacto con el jugo gástrico.</li>
+                    <li className="bg-slate-100 p-3 rounded-lg text-sm text-slate-700"><strong>Correctores:</strong> Enmascaran sabores amargos (sacarosa, saborizantes).</li>
+                    <li className="bg-slate-100 p-3 rounded-lg text-sm text-slate-700"><strong>Conservantes:</strong> Evitan que crezcan bacterias en jarabes o cremas (parabenos).</li>
                 </ul>
 
                 <div className="bg-amber-50 p-4 rounded-xl border-l-4 border-amber-400 flex gap-3">
@@ -293,7 +298,7 @@ export default function GuiaFarmacologia() {
                                 <li><strong>Desintegración:</strong> La pastilla se rompe en trozos pequeños.</li>
                                 <li><strong>Disolución:</strong> Las partículas se disuelven en los fluidos gástricos.</li>
                             </ul>
-                            <span className="text-xs bg-slate-100 px-2 py-1 rounded mt-2 inline-block">Nota: Los jarabes y soluciones IV se saltan este paso (actúan más rápido).</span>
+                            <span className="text-xs bg-slate-100 px-2 py-1 rounded mt-2 inline-block text-slate-500">Nota: Los jarabes y soluciones IV se saltan este paso (actúan más rápido).</span>
                         </div>
                     </div>
 
@@ -376,7 +381,7 @@ export default function GuiaFarmacologia() {
                 <div className="grid md:grid-cols-3 gap-6 mb-8">
                     <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                         <h4 className="font-bold text-purple-700 mb-2 border-b border-purple-100 pb-1">1. Sólidas</h4>
-                        <ul className="text-sm space-y-2">
+                        <ul className="text-sm space-y-2 text-slate-600">
                             <li><strong>Comprimidos:</strong> Recubiertos, Efervescentes, Sublinguales, Masticables.</li>
                             <li><strong>Cápsulas:</strong> Duras (polvo) y Blandas (líquido).</li>
                             <li><strong>Supositorios/Óvulos:</strong> Se funden a 37°C.</li>
@@ -384,16 +389,16 @@ export default function GuiaFarmacologia() {
                     </div>
                     <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                         <h4 className="font-bold text-blue-700 mb-2 border-b border-blue-100 pb-1">2. Líquidas</h4>
-                        <ul className="text-sm space-y-2">
+                        <ul className="text-sm space-y-2 text-slate-600">
                             <li><strong>Soluciones:</strong> Homogéneas (Gotas).</li>
-                            <li><strong>Suspensiones:</strong> Heterogéneas. <span className="bg-yellow-100 px-1 rounded font-bold text-xs">¡Agitar!</span></li>
+                            <li><strong>Suspensiones:</strong> Heterogéneas. <span className="bg-yellow-100 px-1 rounded font-bold text-xs text-yellow-800">¡Agitar!</span></li>
                             <li><strong>Emulsiones:</strong> Agua y aceite.</li>
                             <li><strong>Jarabes:</strong> Alta concentración de azúcar.</li>
                         </ul>
                     </div>
                     <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                         <h4 className="font-bold text-emerald-700 mb-2 border-b border-emerald-100 pb-1">3. Semisólidas</h4>
-                        <ul className="text-sm space-y-2">
+                        <ul className="text-sm space-y-2 text-slate-600">
                             <li><strong>Ungüentos:</strong> Base grasa, oclusivos.</li>
                             <li><strong>Cremas:</strong> Emulsión agua/aceite.</li>
                             <li><strong>Geles:</strong> Base agua/alcohol. Sin grasa.</li>
@@ -473,7 +478,7 @@ export default function GuiaFarmacologia() {
 
                 <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200">
                     <h3 className="font-bold text-slate-900 mb-3">Conceptos de Seguridad</h3>
-                    <ul className="space-y-3 text-sm">
+                    <ul className="space-y-3 text-sm text-slate-700">
                         <li className="flex gap-2"><span className="w-2 h-2 rounded-full bg-slate-400 mt-1.5"></span> <strong>Ventana Terapéutica:</strong> Margen entre dosis que cura y dosis que intoxica.</li>
                         <li className="flex gap-2"><span className="w-2 h-2 rounded-full bg-emerald-500 mt-1.5"></span> <strong>Ventana Amplia:</strong> Seguros (Paracetamol, Amoxicilina).</li>
                         <li className="flex gap-2"><span className="w-2 h-2 rounded-full bg-red-500 mt-1.5"></span> <strong>Ventana Estrecha:</strong> Peligrosos (Warfarina, Digoxina). Requieren monitoreo.</li>
@@ -560,7 +565,7 @@ export default function GuiaFarmacologia() {
                   {/* ESTADO 1: INICIO */}
                   {!quizActivo && !mostrarResultado && (
                     <>
-                        <span className="bg-emerald-500 text-emerald-50 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
+                        <span className="bg-emerald-500 text-emerald-950 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
                             Quiz Express
                         </span>
                         <h3 className="text-3xl font-black mb-4 leading-tight">
@@ -670,6 +675,47 @@ export default function GuiaFarmacologia() {
                     {isPdfReady ? 'DESCARGAR AHORA' : 'Cargando herramienta...'}
                 </button>
               </div>
+
+              {/* 🟢 NUEVO: TARJETA DE COLABORACIÓN (SUTIL CON REVENIU) */}
+              <a 
+                href="https://app.reveniu.com/checkout-custom-link/HvM4DkkkUpBnILnQv4abrZl5qYX7faqU" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="group block bg-gradient-to-r from-amber-50 to-orange-50 p-6 rounded-3xl border border-amber-100 shadow-sm hover:shadow-md transition-all hover:border-amber-200"
+              >
+                <div className="flex items-center gap-4">
+                    <div className="bg-white text-amber-500 p-3 rounded-full shadow-sm group-hover:scale-110 transition-transform">
+                        <Heart size={24} className="fill-amber-500 text-amber-500" />
+                    </div>
+                    <div>
+                        <h4 className="font-bold text-amber-900 text-sm">¿Te sirvió esta guía?</h4>
+                        <p className="text-xs text-amber-700/80">Ayúdame a mantener la web</p>
+                    </div>
+                    <ExternalLink size={16} className="text-amber-400 ml-auto opacity-50 group-hover:opacity-100"/>
+                </div>
+              </a>
+
+              {/* 3. TARJETA DERMOCHECK (CROSS-SELLING) */}
+              <a 
+                href="https://www.dermocheck.cl/#calculator-section" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-sm group hover:ring-2 hover:ring-emerald-500 transition-all"
+              >
+                <div className="flex items-center gap-4 mb-4">
+                    <div className="bg-emerald-500/20 text-emerald-400 p-3 rounded-full group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+                        <Clock size={24} />
+                    </div>
+                    <div>
+                        <h4 className="font-bold text-white">DermoCheck</h4>
+                        <p className="text-xs text-slate-400">Herramienta Exclusiva</p>
+                    </div>
+                    <ExternalLink size={16} className="text-slate-500 ml-auto"/>
+                </div>
+                <p className="text-sm text-slate-300 leading-relaxed mb-0">
+                    ¿Vendes Dermo? Verifica vencimientos por lote aquí.
+                </p>
+              </a>
 
             </div>
           </div>
