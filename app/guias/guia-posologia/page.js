@@ -3,7 +3,11 @@
 import { useState } from 'react';
 import Link from "next/link";
 import Script from "next/script"; 
-import { BookOpen, CheckCircle, AlertTriangle, Calculator, ShieldCheck, FileText, Download, ArrowRight, Info, Package, Syringe, Trophy, XCircle, Droplets, Scale, Target, Users, BrainCircuit } from "lucide-react";
+import { 
+  BookOpen, CheckCircle, AlertTriangle, Calculator, ShieldCheck, 
+  FileText, Download, ArrowRight, Info, Package, Syringe, Trophy, 
+  XCircle, Droplets, Scale, Target, Users, BrainCircuit, ExternalLink, Heart
+} from "lucide-react";
 
 // 📝 PREGUNTAS DEL QUIZ (Basadas en los ejercicios de la guía)
 const preguntasQuiz = [
@@ -61,7 +65,7 @@ const preguntasQuiz = [
 
 export default function GuiaPosologia() {
   const [isPdfReady, setIsPdfReady] = useState(false);
-  
+   
   // ESTADOS DEL QUIZ
   const [quizActivo, setQuizActivo] = useState(false);
   const [preguntaActual, setPreguntaActual] = useState(0);
@@ -126,23 +130,23 @@ export default function GuiaPosologia() {
       />
 
       {/* HEADER DE LA GUÍA */}
-      <header className="bg-white border-b border-slate-200 py-12 px-6">
+      <header className="bg-emerald-900 border-b border-emerald-800 py-12 px-6 text-white">
         <div className="max-w-6xl mx-auto">
           <nav className="mb-6">
-            <Link href="/guias" className="text-slate-400 hover:text-blue-600 font-bold text-sm flex items-center gap-2 transition-colors">
+            <Link href="/guias" className="text-emerald-300 hover:text-white font-bold text-sm flex items-center gap-2 transition-colors">
               ← Volver a la Biblioteca
             </Link>
           </nav>
-          <div className="flex items-center gap-2 text-blue-600 font-bold text-sm uppercase tracking-wider mb-4">
+          <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm uppercase tracking-wider mb-4">
             <BookOpen size={18} />
-            Guía de Estudio Oficial
+            Módulo Práctico
           </div>
           
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-slate-900 mb-6 leading-tight text-balance">
-            Guía Maestra de Posología <span className="text-blue-600 whitespace-nowrap">(Cálculo Farmacéutico)</span>
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight text-balance">
+            Guía Maestra de Posología <span className="text-emerald-400 whitespace-nowrap">(Cálculo Farmacéutico)</span>
           </h1>
           
-          <p className="text-xl text-slate-500 max-w-3xl">
+          <p className="text-xl text-emerald-100 max-w-3xl">
             Aprende a calcular dosis exactas sin perder la cabeza. La posología no es solo matemáticas; es la base de la seguridad para el paciente en farmacia.
           </p>
         </div>
@@ -169,10 +173,10 @@ export default function GuiaPosologia() {
               <h2 className="text-2xl font-black text-slate-900 mb-4 flex items-center gap-3">
                 1. ¿Qué es la Posología?
               </h2>
-              <p className="text-lg leading-relaxed mb-4">
+              <p className="text-lg leading-relaxed mb-4 text-slate-600">
                 La <strong>posología</strong> (del griego <em>posos</em> "cuánto" y <em>logos</em> "estudio") es la rama de la farmacología que se encarga de determinar las <strong>dosis</strong> de los medicamentos.
               </p>
-              <p className="text-lg leading-relaxed mb-6">
+              <p className="text-lg leading-relaxed mb-6 text-slate-600">
                 Para el Auxiliar de Farmacia, dominar el cálculo de dosis es una habilidad crítica. Un error en la conversión de miligramos a mililitros o una mala interpretación de la receta puede llevar a la <strong>ineficacia del tratamiento</strong> (dosis baja) o a la <strong>toxicidad</strong> (sobredosis).
               </p>
               
@@ -187,7 +191,7 @@ export default function GuiaPosologia() {
             {/* SECCIÓN SEO: FACTORES QUE MODIFICAN LA DOSIS */}
             <section className="break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <BrainCircuit className="text-blue-500" /> Factores que modifican la Dosis
+                  <BrainCircuit className="text-blue-600" /> Factores que modifican la Dosis
                 </h3>
                 <p className="mb-4 text-slate-600">No todos los pacientes son iguales. Aunque la guía se centra en el cálculo matemático, recuerda que la dosis varía según:</p>
                 <div className="grid md:grid-cols-2 gap-4 mb-8">
@@ -211,7 +215,7 @@ export default function GuiaPosologia() {
               {/* MÓDULO A: KIT DE HERRAMIENTAS */}
               <div className="mb-12 break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <Scale className="text-blue-500" /> Módulo A: El "Kit de Herramientas" Matemático
+                  <Scale className="text-blue-600" /> Módulo A: El "Kit de Herramientas" Matemático
                 </h3>
                 <p className="mb-6 text-slate-600">
                   Antes de calcular nada, debes tener estas equivalencias grabadas en tu memoria. Son la base de todo cálculo farmacéutico:
@@ -242,22 +246,22 @@ export default function GuiaPosologia() {
               {/* MÓDULO B: LA FÓRMULA */}
               <div className="mb-12 break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <Calculator className="text-blue-500" /> Módulo B: La Fórmula de los 3 Pasos
+                  <Calculator className="text-blue-600" /> Módulo B: La Fórmula de los 3 Pasos
                 </h3>
                 <p className="mb-4 text-slate-600">Para saber cuántas cajas o frascos vender, siempre sigue este orden lógico:</p>
                 
                 <div className="space-y-3">
                     <div className="flex items-center gap-4 bg-white p-4 rounded-xl border border-slate-200">
                         <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold">1</div>
-                        <p className="text-sm font-medium"><strong>Calcula la Dosis Diaria:</strong> ¿Cuánto toma el paciente en un solo día? (Ej: 2 pastillas x 3 veces = 6 al día).</p>
+                        <p className="text-sm font-medium text-slate-700"><strong>Calcula la Dosis Diaria:</strong> ¿Cuánto toma el paciente en un solo día? (Ej: 2 pastillas x 3 veces = 6 al día).</p>
                     </div>
                     <div className="flex items-center gap-4 bg-white p-4 rounded-xl border border-slate-200">
                         <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold">2</div>
-                        <p className="text-sm font-medium"><strong>Calcula la Dosis Total:</strong> Multiplica la dosis diaria por los días que dura el tratamiento.</p>
+                        <p className="text-sm font-medium text-slate-700"><strong>Calcula la Dosis Total:</strong> Multiplica la dosis diaria por los días que dura el tratamiento.</p>
                     </div>
                     <div className="flex items-center gap-4 bg-white p-4 rounded-xl border border-slate-200">
                         <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold">3</div>
-                        <p className="text-sm font-medium"><strong>Divide por la Presentación:</strong> Divide el total que necesita el paciente por la cantidad que trae el envase.</p>
+                        <p className="text-sm font-medium text-slate-700"><strong>Divide por la Presentación:</strong> Divide el total que necesita el paciente por la cantidad que trae el envase.</p>
                     </div>
                 </div>
               </div>
@@ -265,7 +269,7 @@ export default function GuiaPosologia() {
               {/* MÓDULO C: CASOS PRÁCTICOS */}
               <div className="mb-12 break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <Droplets className="text-blue-500" /> Módulo C: Casos Clásicos Explicados
+                  <Droplets className="text-blue-600" /> Módulo C: Casos Clásicos Explicados
                 </h3>
                 
                 {/* CASO A */}
@@ -275,7 +279,7 @@ export default function GuiaPosologia() {
                         <li><strong>Receta:</strong> "Tomar 23 gotas cada 12 horas durante 3 meses".</li>
                         <li><strong>Producto:</strong> Frasco de 25 ml.</li>
                     </ul>
-                    <div className="space-y-2 text-sm">
+                    <div className="space-y-2 text-sm text-slate-700">
                         <p><strong>1. Dosis Diaria:</strong> 23 gotas x 2 veces = <strong>46 gotas al día.</strong></p>
                         <p><strong>2. Dosis Total:</strong> 46 gotas/día x 90 días = <strong>4.140 gotas totales.</strong></p>
                         <p><strong>3. Conversión Frasco:</strong> 25 ml x 20 gotas = <strong>500 gotas por frasco.</strong></p>
@@ -290,7 +294,7 @@ export default function GuiaPosologia() {
                         <li><strong>Receta:</strong> "1/2 comprimido mañana y 1 comprimido noche, por 3 meses".</li>
                         <li><strong>Producto:</strong> Caja de 20 comprimidos.</li>
                     </ul>
-                    <div className="space-y-2 text-sm">
+                    <div className="space-y-2 text-sm text-slate-700">
                         <p><strong>1. Dosis Diaria:</strong> 0,5 + 1 = <strong>1,5 comprimidos al día.</strong></p>
                         <p><strong>2. Dosis Total:</strong> 1,5 x 90 días = <strong>135 comprimidos totales.</strong></p>
                         <p className="p-2 bg-white rounded border border-slate-200 mt-2"><strong>3. Cajas a vender:</strong> 135 ÷ 20 = 6,75 cajas. <br/> <span className="text-emerald-600 font-bold">Respuesta: Debes dispensar 7 cajas.</span></p>
@@ -304,7 +308,7 @@ export default function GuiaPosologia() {
                         <li><strong>Receta:</strong> "40 UI al día por 30 días".</li>
                         <li><strong>Producto:</strong> Lápiz de 3 ml (concentración 100 UI/ml).</li>
                     </ul>
-                    <div className="space-y-2 text-sm">
+                    <div className="space-y-2 text-sm text-slate-700">
                         <p><strong>1. Total Unidades:</strong> 40 UI x 30 días = <strong>1.200 UI totales.</strong></p>
                         <p><strong>2. Unidades por Lápiz:</strong> 3 ml x 100 UI = <strong>300 UI por lápiz.</strong></p>
                         <p className="p-2 bg-white rounded border border-slate-200 mt-2"><strong>3. Lápices a vender:</strong> 1.200 ÷ 300 = <strong>4 lápices exactos.</strong></p>
@@ -315,7 +319,7 @@ export default function GuiaPosologia() {
               {/* MÓDULO D: EJERCICIOS Y SOLUCIONES */}
               <div className="mb-12 break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <Trophy className="text-blue-500" /> Módulo D: Ponte a Prueba (Ejercicios y Soluciones)
+                  <Trophy className="text-blue-600" /> Módulo D: Ponte a Prueba (Ejercicios y Soluciones)
                 </h3>
                 
                 <div className="space-y-6">
@@ -323,7 +327,7 @@ export default function GuiaPosologia() {
                     <div className="bg-white p-5 rounded-2xl border border-slate-200">
                         <h4 className="font-bold text-blue-600 mb-2">Ejercicio 1: Antibiótico (Amoxicilina)</h4>
                         <p className="text-sm text-slate-700 mb-2">Receta: 5 ml cada 8 horas por 7 días. El frasco trae 60 ml.</p>
-                        <div className="bg-slate-100 p-3 rounded-xl text-sm">
+                        <div className="bg-slate-100 p-3 rounded-xl text-sm text-slate-700">
                             <p><strong>Solución:</strong></p>
                             <ul className="list-disc pl-4 mt-1 space-y-1">
                                 <li>Diario: 5 ml x 3 veces = 15 ml.</li>
@@ -338,7 +342,7 @@ export default function GuiaPosologia() {
                     <div className="bg-white p-5 rounded-2xl border border-slate-200">
                         <h4 className="font-bold text-blue-600 mb-2">Ejercicio 2: Colesterol (Atorvastatina)</h4>
                         <p className="text-sm text-slate-700 mb-2">Receta: 1 comp/noche por 6 meses. Hay cajas de 30 y 60.</p>
-                        <div className="bg-slate-100 p-3 rounded-xl text-sm">
+                        <div className="bg-slate-100 p-3 rounded-xl text-sm text-slate-700">
                             <p><strong>Solución:</strong></p>
                             <ul className="list-disc pl-4 mt-1 space-y-1">
                                 <li>Total días: 6 meses x 30 días = 180 días (180 comprimidos).</li>
@@ -353,7 +357,7 @@ export default function GuiaPosologia() {
                     <div className="bg-white p-5 rounded-2xl border border-slate-200">
                         <h4 className="font-bold text-blue-600 mb-2">Ejercicio 3: Dolor (Tramadol)</h4>
                         <p className="text-sm text-slate-700 mb-2">Receta: 20 gotas cada 8 horas por 5 días. Frasco de 10 ml.</p>
-                        <div className="bg-slate-100 p-3 rounded-xl text-sm">
+                        <div className="bg-slate-100 p-3 rounded-xl text-sm text-slate-700">
                             <p><strong>Solución:</strong></p>
                             <ul className="list-disc pl-4 mt-1 space-y-1">
                                 <li>Diario: 20 x 3 = 60 gotas.</li>
@@ -494,6 +498,25 @@ export default function GuiaPosologia() {
                     {isPdfReady ? 'DESCARGAR AHORA' : 'Cargando herramienta...'}
                 </button>
               </div>
+
+              {/* 🟢 NUEVO: TARJETA DE COLABORACIÓN (SUTIL CON REVENIU) */}
+              <a 
+                href="https://app.reveniu.com/checkout-custom-link/HvM4DkkkUpBnILnQv4abrZl5qYX7faqU" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="group block bg-gradient-to-r from-amber-50 to-orange-50 p-6 rounded-3xl border border-amber-100 shadow-sm hover:shadow-md transition-all hover:border-amber-200"
+              >
+                <div className="flex items-center gap-4">
+                    <div className="bg-white text-amber-500 p-3 rounded-full shadow-sm group-hover:scale-110 transition-transform">
+                        <Heart size={24} className="fill-amber-500 text-amber-500" />
+                    </div>
+                    <div>
+                        <h4 className="font-bold text-amber-900 text-sm">¿Te sirvió esta guía?</h4>
+                        <p className="text-xs text-amber-700/80">Ayúdame a mantener la web</p>
+                    </div>
+                    <ExternalLink size={16} className="text-amber-400 ml-auto opacity-50 group-hover:opacity-100"/>
+                </div>
+              </a>
 
             </div>
           </div>
