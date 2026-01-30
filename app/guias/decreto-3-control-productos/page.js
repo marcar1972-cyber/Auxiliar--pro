@@ -6,7 +6,7 @@ import Script from "next/script";
 import { 
   BookOpen, CheckCircle, AlertTriangle, Thermometer, ShieldCheck, 
   FileText, Download, ArrowRight, Info, Package, XCircle, Trophy, 
-  Clock, ExternalLink, Heart 
+  Clock, ExternalLink, Heart, Gavel 
 } from "lucide-react";
 
 // 📝 10 PREGUNTAS CLAVE DEL DECRETO 3 (Expandido)
@@ -380,9 +380,22 @@ export default function GuiaDecreto3() {
                 <p className="text-lg font-bold text-slate-900">
                     Para aprobar tu examen de competencia, recuerda: Sin Registro ISP no hay venta, y sin Cadena de Frío no hay eficacia.
                 </p>
-                <p className="mt-8 text-xs text-slate-400 uppercase tracking-widest">
-                    Fuente: Biblioteca del Congreso Nacional de Chile / Ministerio de Salud - Decreto 3.
-                </p>
+                
+                {/* 🔴 NUEVO: BLOQUE DE FUENTE LEGAL OBLIGATORIO */}
+                <div className="mt-8 border-t border-slate-200 pt-6 bg-gray-50 p-4 rounded-xl">
+                    <div className="flex items-center gap-2 mb-2 text-slate-900 font-bold uppercase text-xs tracking-wider">
+                        <Gavel size={14} className="text-slate-500" /> Fuente Legal Consultada
+                    </div>
+                    <a 
+                        href="https://www.bcn.cl/leychile/navegar?idNorma=1026879" 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="text-blue-600 hover:text-blue-800 hover:underline text-sm font-medium flex items-center gap-1"
+                    >
+                        Decreto Supremo N° 3: Reglamento del Sistema Nacional de Control de Productos Farmacéuticos <ExternalLink size={12} />
+                    </a>
+                    <p className="text-xs text-slate-500 mt-1">Biblioteca del Congreso Nacional de Chile (BCN).</p>
+                </div>
             </section>
 
           </div>

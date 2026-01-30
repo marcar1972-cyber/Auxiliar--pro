@@ -6,7 +6,7 @@ import Script from "next/script";
 import { 
   BookOpen, AlertTriangle, Download, ArrowRight, Store, 
   Ban, Pill, FileText, CheckCircle, XCircle, Trophy, 
-  Scale, Syringe, Clock, ExternalLink, Heart 
+  Scale, Syringe, Clock, ExternalLink, Heart, Gavel 
 } from "lucide-react";
 
 // 📝 PREGUNTAS DEL QUIZ (Ley 20.724)
@@ -271,7 +271,7 @@ export default function GuiaLeyFarmacos1() {
                 <div className="flex gap-6 flex-col md:flex-row items-center mb-6">
                     <div className="flex-1">
                         <p className="text-slate-600 text-sm leading-relaxed mb-4">
-                            La ley establece que el ISP debe garantizar que los medicamentos genéricos o similares tengan la misma eficacia terapéutica que el original (innovador).
+                            La ley establece que el <a href="https://www.ispch.cl/anamed/bioequivalencia/" target="_blank" rel="noopener noreferrer" className="text-blue-600 font-bold hover:underline">ISP</a> debe garantizar que los medicamentos genéricos o similares tengan la misma eficacia terapéutica que el original (innovador).
                         </p>
                         <ul className="space-y-3 text-sm text-slate-700">
                             <li className="flex gap-2"><CheckCircle size={16} className="text-emerald-500"/> <strong>Bioequivalente:</strong> Mismo principio activo, misma dosis, misma forma farmacéutica y misma velocidad de absorción que el original.</li>
@@ -321,9 +321,25 @@ export default function GuiaLeyFarmacos1() {
             <section className="bg-emerald-50 p-6 rounded-2xl border border-emerald-100 mt-8">
                 <h3 className="font-bold text-emerald-900 mb-2">Obligación de Informar Precios</h3>
                 <p className="text-sm text-emerald-800">
-                    Todos los productos deben tener el precio visible en el envase (etiqueta) o en listados de fácil acceso para el público, garantizando la transparencia del mercado.
+                    Todos los productos deben tener el precio visible en el envase (etiqueta) o en listados de fácil acceso para el público, garantizando la transparencia del mercado. (Más info en <a href="https://www.sernac.cl/" target="_blank" rel="noopener noreferrer" className="underline font-bold hover:text-emerald-950">SERNAC</a>).
                 </p>
             </section>
+            
+            {/* 🔴 NUEVO: BLOQUE DE FUENTE LEGAL OBLIGATORIO */}
+            <div className="mt-8 border-t border-slate-200 pt-6 bg-gray-50 p-4 rounded-xl break-inside-avoid">
+                <div className="flex items-center gap-2 mb-2 text-slate-900 font-bold uppercase text-xs tracking-wider">
+                    <Gavel size={14} className="text-slate-500" /> Fuente Legal Consultada
+                </div>
+                <a 
+                    href="https://www.bcn.cl/leychile/navegar?idNorma=1058373" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-blue-600 hover:text-blue-800 hover:underline text-sm font-medium flex items-center gap-1"
+                >
+                    Ley N° 20.724: Modifica el Código Sanitario en materia de farmacias y medicamentos <ExternalLink size={12} />
+                </a>
+                <p className="text-xs text-slate-500 mt-1">Biblioteca del Congreso Nacional de Chile (BCN).</p>
+            </div>
 
           </div>
 

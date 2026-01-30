@@ -6,7 +6,7 @@ import Script from "next/script";
 import { 
   BookOpen, CheckCircle, AlertTriangle, ShieldCheck, FileText, 
   Download, ArrowRight, Pill, Lock, FileSignature, Trophy, 
-  XCircle, Scale, Truck, Stethoscope, Clock, ExternalLink 
+  XCircle, Scale, Truck, Stethoscope, Clock, ExternalLink, Heart, Gavel 
 } from "lucide-react";
 
 // 📝 PREGUNTAS DEL QUIZ (Específicas del Decreto 405)
@@ -197,7 +197,7 @@ export default function GuiaDecreto405() {
                 
                 <ul className="space-y-4 text-sm text-slate-700">
                     <li className="bg-red-50 p-4 rounded-xl border border-red-100">
-                        <strong>Lista I:</strong> Sustancias de alto riesgo y sin uso médico aceptado (alucinógenos como LSD, MDMA/Éxtasis). Están prohibidas en Chile, salvo autorización del ISP para investigación científica.
+                        <strong>Lista I:</strong> Sustancias de alto riesgo y sin uso médico aceptado (alucinógenos como LSD, MDMA/Éxtasis). Están prohibidas en Chile, salvo autorización del <a href="https://www.ispch.cl/" target="_blank" rel="noopener noreferrer" className="underline font-bold hover:text-red-900">ISP</a> para investigación científica.
                     </li>
                     <li className="bg-white p-4 rounded-xl border border-slate-200">
                         <strong>Lista II:</strong> Estimulantes fuertes (anfetaminas).
@@ -214,7 +214,7 @@ export default function GuiaDecreto405() {
                     <CheckCircle className="text-emerald-500 shrink-0" size={32}/>
                     <div>
                         <h4 className="font-bold text-emerald-900">Identificación Visual</h4>
-                        <p className="text-sm text-emerald-800">Todo envase de producto psicotrópico debe tener en su etiqueta una estrella de cinco puntas de color <strong>VERDE</strong> y la leyenda "Sujeto a Control de Psicotrópicos". </p>
+                        <p className="text-sm text-emerald-800">Todo envase de producto psicotrópico debe tener en su etiqueta una estrella de cinco puntas de color <strong>VERDE</strong> y la leyenda "Sujeto a Control de Psicotrópicos".</p>
                     </div>
                 </div>
               </div>
@@ -315,9 +315,22 @@ export default function GuiaDecreto405() {
                 <p className="text-lg font-bold text-slate-900">
                     Para el personal de farmacia, las claves son recordar la Estrella Verde, diferenciar que la Lista II y III requieren Receta Cheque, mientras que la Lista IV requiere Receta Retenida, y mantener siempre los productos resguardados bajo llave y con sus registros al día.
                 </p>
-                <p className="mt-8 text-xs text-slate-400 uppercase tracking-widest leading-relaxed">
-                    Fuente utilizada: Ministerio de Salud Pública de Chile. Decreto N° 405: Reglamento de Productos Psicotrópicos.
-                </p>
+                
+                {/* 🔴 NUEVO: BLOQUE DE FUENTE LEGAL OBLIGATORIO */}
+                <div className="mt-8 border-t border-slate-200 pt-6 bg-gray-50 p-4 rounded-xl">
+                    <div className="flex items-center gap-2 mb-2 text-slate-900 font-bold uppercase text-xs tracking-wider">
+                        <Gavel size={14} className="text-slate-500" /> Fuente Legal Consultada
+                    </div>
+                    <a 
+                        href="https://www.bcn.cl/leychile/navegar?idNorma=13066&idParte=" 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="text-blue-600 hover:text-blue-800 hover:underline text-sm font-medium flex items-center gap-1"
+                    >
+                        Decreto Supremo N° 405: Reglamento de Productos Psicotrópicos <ExternalLink size={12} />
+                    </a>
+                    <p className="text-xs text-slate-500 mt-1">Biblioteca del Congreso Nacional de Chile (BCN).</p>
+                </div>
             </section>
 
           </div>
@@ -445,6 +458,25 @@ export default function GuiaDecreto405() {
                     {isPdfReady ? 'DESCARGAR AHORA' : 'Cargando herramienta...'}
                 </button>
               </div>
+
+              {/* 🟢 NUEVO: TARJETA DE COLABORACIÓN (SUTIL CON REVENIU) */}
+              <a 
+                href="https://app.reveniu.com/checkout-custom-link/HvM4DkkkUpBnILnQv4abrZl5qYX7faqU" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="group block bg-gradient-to-r from-amber-50 to-orange-50 p-6 rounded-3xl border border-amber-100 shadow-sm hover:shadow-md transition-all hover:border-amber-200"
+              >
+                <div className="flex items-center gap-4">
+                    <div className="bg-white text-amber-500 p-3 rounded-full shadow-sm group-hover:scale-110 transition-transform">
+                        <Heart size={24} className="fill-amber-500 text-amber-500" />
+                    </div>
+                    <div>
+                        <h4 className="font-bold text-amber-900 text-sm">¿Te sirvió esta guía?</h4>
+                        <p className="text-xs text-amber-700/80">Ayúdame a mantener la web</p>
+                    </div>
+                    <ExternalLink size={16} className="text-amber-400 ml-auto opacity-50 group-hover:opacity-100"/>
+                </div>
+              </a>
 
               {/* 3. TARJETA DERMOCHECK (CROSS-SELLING) */}
               <a 

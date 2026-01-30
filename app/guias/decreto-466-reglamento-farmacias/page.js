@@ -3,9 +3,14 @@
 import { useState } from 'react';
 import Link from "next/link";
 import Script from "next/script"; 
-import { BookOpen, CheckCircle, AlertTriangle, ShieldCheck, FileText, Download, ArrowRight, Info, Package, Store, UserCheck, FileSignature, Scissors, Book, Trophy, XCircle } from "lucide-react";
+import { 
+  BookOpen, CheckCircle, AlertTriangle, ShieldCheck, FileText, 
+  Download, ArrowRight, Info, Package, Store, UserCheck, 
+  FileSignature, Scissors, Book, Trophy, XCircle, Heart, 
+  ExternalLink, Clock, Gavel 
+} from "lucide-react";
 
-// 📝 PREGUNTAS DEL QUIZ
+// 📝 PREGUNTAS DEL QUIZ (Decreto 466)
 const preguntasQuiz = [
   {
     pregunta: "¿Qué profesional debe asumir la Dirección Técnica de una Farmacia?",
@@ -61,7 +66,7 @@ const preguntasQuiz = [
 
 export default function GuiaDecreto466() {
   const [isPdfReady, setIsPdfReady] = useState(false);
-  
+   
   // ESTADOS DEL QUIZ
   const [quizActivo, setQuizActivo] = useState(false);
   const [preguntaActual, setPreguntaActual] = useState(0);
@@ -125,34 +130,33 @@ export default function GuiaDecreto466() {
         onLoad={() => setIsPdfReady(true)}
       />
 
-      {/* HEADER DE LA GUÍA */}
-      <header className="bg-white border-b border-slate-200 py-12 px-6">
+      {/* HEADER DE LA GUÍA (Estilo Emerald para consistencia) */}
+      <header className="bg-emerald-900 border-b border-emerald-800 py-12 px-6 text-white">
         <div className="max-w-6xl mx-auto">
           <nav className="mb-6">
-            {/* 🟢 CORRECCIÓN: Ahora apunta a /guias (el índice que acabas de aprobar) */}
-            <Link href="/guias" className="text-slate-400 hover:text-blue-600 font-bold text-sm flex items-center gap-2 transition-colors">
+            <Link href="/guias" className="text-emerald-300 hover:text-white font-bold text-sm flex items-center gap-2 transition-colors">
               ← Volver a la Biblioteca
             </Link>
           </nav>
-          <div className="flex items-center gap-2 text-blue-600 font-bold text-sm uppercase tracking-wider mb-4">
+          <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm uppercase tracking-wider mb-4">
             <BookOpen size={18} />
-            Guía de Estudio Oficial
+            Módulo Legislativo
           </div>
           
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-slate-900 mb-6 leading-tight text-balance">
-            Reglamento de Farmacias <span className="text-blue-600 whitespace-nowrap">(Decreto 466)</span>
+          <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight text-balance">
+            Reglamento de Farmacias <span className="text-emerald-400 whitespace-nowrap">(Decreto 466)</span>
           </h1>
           
-          <p className="text-xl text-slate-500 max-w-3xl">
+          <p className="text-xl text-emerald-100 max-w-3xl">
             El reglamento fundamental que define las reglas del juego: Tipos de establecimientos, roles del personal y condiciones sanitarias para operar en Chile.
           </p>
         </div>
       </header>
 
-      {/* ... (El resto del contenido main se mantiene idéntico) ... */}
       <main className="max-w-6xl mx-auto px-6 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           
+          {/* 🟢 COLUMNA IZQUIERDA: CONTENIDO COMPLETO (8 columnas) */}
           <div id="contenido-pdf" className="lg:col-span-8 space-y-12 bg-white p-4 md:p-8 rounded-xl shadow-sm">
             
             <div className="mb-8 border-b pb-4 border-slate-100 flex justify-between items-center">
@@ -173,7 +177,7 @@ export default function GuiaDecreto466() {
                 El Decreto 466 es el reglamento fundamental que establece las condiciones sanitarias para la instalación, funcionamiento y fiscalización de los establecimientos farmacéuticos en Chile.
               </p>
               <p className="text-lg leading-relaxed mb-6">
-                Su propósito es asegurar que la distribución, preparación y venta de medicamentos se realicen bajo estándares de calidad para proteger la salud de la población.
+                Su propósito es asegurar que la distribución, preparación y venta de medicamentos se realicen bajo estándares de calidad para proteger la salud de la población, siguiendo lineamientos del <a href="https://www.ispch.cl/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-bold inline-flex items-center gap-1">ISP <ExternalLink size={12}/></a>.
               </p>
             </section>
 
@@ -185,7 +189,7 @@ export default function GuiaDecreto466() {
 
               <div className="mb-12 break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <Store className="text-blue-500" /> Módulo A: Tipos de Establecimientos
+                  <Store className="text-blue-600" /> Módulo A: Tipos de Establecimientos
                 </h3>
                 <p className="mb-6 text-lg text-slate-600">
                   El reglamento clasifica los lugares de expendio según sus funciones y complejidad:
@@ -227,7 +231,7 @@ export default function GuiaDecreto466() {
 
               <div className="mb-12 break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <UserCheck className="text-blue-500" /> Módulo B: El Personal y sus Responsabilidades
+                  <UserCheck className="text-blue-600" /> Módulo B: El Personal y sus Responsabilidades
                 </h3>
                 
                 <div className="space-y-6">
@@ -249,7 +253,12 @@ export default function GuiaDecreto466() {
                         <ul className="space-y-2 text-sm">
                             <li className="flex gap-2 items-start"><CheckCircle size={16} className="text-emerald-600 shrink-0 mt-0.5"/> Haber rendido satisfactoriamente 4° año de enseñanza media.</li>
                             <li className="flex gap-2 items-start"><CheckCircle size={16} className="text-emerald-600 shrink-0 mt-0.5"/> Haber trabajado al menos 1 año en farmacia realizando labores de bodegaje y reposición (certificado por el DT).</li>
-                            <li className="flex gap-2 items-start"><CheckCircle size={16} className="text-emerald-600 shrink-0 mt-0.5"/> Rendir y aprobar un examen de competencia ante la autoridad sanitaria (SEREMI de Salud). Este examen evalúa conocimientos sobre regulación sanitaria, almacenamiento y acción terapéutica de medicamentos de venta directa.</li>
+                            <li className="flex gap-2 items-start">
+                                <CheckCircle size={16} className="text-emerald-600 shrink-0 mt-0.5"/> 
+                                <span>
+                                    Rendir y aprobar un <a href="https://seremienlinea.minsal.cl/asdigital/manuales/1_Manual_de_Usuario_Externo_para_la_Certificacion_de_Competencias_de_Auxiliar_de_farmacia.pdf" target="_blank" rel="noopener noreferrer" className="underline hover:text-emerald-800 font-bold inline-flex items-center gap-1">examen de competencia ante la autoridad sanitaria (SEREMI de Salud) <ExternalLink size={12} /></a>. Este examen evalúa conocimientos sobre regulación sanitaria, almacenamiento y acción terapéutica de medicamentos de venta directa.
+                                </span>
+                            </li>
                         </ul>
                     </div>
 
@@ -262,7 +271,7 @@ export default function GuiaDecreto466() {
 
               <div className="mb-12 break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <FileSignature className="text-blue-500" /> Módulo C: El Expendio y las Recetas
+                  <FileSignature className="text-blue-600" /> Módulo C: El Expendio y las Recetas
                 </h3>
                 <p className="mb-4 text-slate-600">La venta de medicamentos se rige estrictamente por la condición de venta aprobada en su registro sanitario:</p>
                 
@@ -291,7 +300,7 @@ export default function GuiaDecreto466() {
 
               <div className="mb-12 break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <Book className="text-blue-500" /> Módulo D: Infraestructura y Libros Obligatorios
+                  <Book className="text-blue-600" /> Módulo D: Infraestructura y Libros Obligatorios
                 </h3>
                 <p className="mb-4 text-sm text-slate-600">Para asegurar el control sanitario, las farmacias deben mantener al día los siguientes Registros Oficiales (que pueden ser digitales o físicos):</p>
                 
@@ -311,7 +320,7 @@ export default function GuiaDecreto466() {
 
               <div className="mb-12 break-inside-avoid">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <Scissors className="text-blue-500" /> Módulo E: Fraccionamiento de Medicamentos
+                  <Scissors className="text-blue-600" /> Módulo E: Fraccionamiento de Medicamentos
                 </h3>
                 <p className="text-sm text-slate-600 mb-4">El fraccionamiento es el procedimiento mediante el cual se extraen dosis específicas de un envase clínico para entregarlas al paciente según su receta.</p>
                 <ul className="space-y-2 text-sm text-slate-700 mb-4">
@@ -341,9 +350,22 @@ export default function GuiaDecreto466() {
                 <p className="text-lg font-bold text-slate-900">
                     Para quien aspira a certificarse como Auxiliar de Farmacia, es vital comprender que su labor siempre está bajo la supervisión del Químico Farmacéutico y que el manejo de medicamentos requiere un estricto apego a las normas de almacenamiento y venta para garantizar la seguridad del paciente.
                 </p>
-                <p className="mt-8 text-xs text-slate-400 uppercase tracking-widest leading-relaxed">
-                    Fuente utilizada: Ministerio de Salud de Chile. Decreto N° 466: Aprueba Reglamento de Farmacias, Droguerías, Almacenes Farmacéuticos, Botiquines y Depósitos Autorizados.
-                </p>
+                
+                {/* 🔴 NUEVO: BLOQUE DE FUENTE LEGAL OBLIGATORIO */}
+                <div className="mt-8 border-t border-slate-200 pt-6 bg-gray-50 p-4 rounded-xl">
+                    <div className="flex items-center gap-2 mb-2 text-slate-900 font-bold uppercase text-xs tracking-wider">
+                        <Gavel size={14} className="text-slate-500" /> Fuente Legal Consultada
+                    </div>
+                    <a 
+                        href="https://www.bcn.cl/leychile/navegar?idNorma=13613" 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="text-blue-600 hover:text-blue-800 hover:underline text-sm font-medium flex items-center gap-1"
+                    >
+                        Decreto Supremo N° 466: Reglamento de Farmacias, Droguerías y Almacenes Farmacéuticos <ExternalLink size={12} />
+                    </a>
+                    <p className="text-xs text-slate-500 mt-1">Biblioteca del Congreso Nacional de Chile (BCN).</p>
+                </div>
             </section>
 
           </div>
@@ -352,14 +374,15 @@ export default function GuiaDecreto466() {
           <div className="lg:col-span-4">
             <div className="sticky top-24 space-y-6">
               
+              {/* TARJETA 1: QUIZ INTERACTIVO */}
               <div className="bg-slate-900 text-white p-6 md:p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500 rounded-full blur-3xl opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500 rounded-full blur-3xl opacity-20 group-hover:opacity-30 transition-opacity"></div>
                 
                 <div className="relative z-10">
                   
                   {!quizActivo && !mostrarResultado && (
                     <>
-                        <span className="bg-blue-500 text-blue-50 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
+                        <span className="bg-emerald-500 text-emerald-950 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
                             Quiz Express
                         </span>
                         <h3 className="text-3xl font-black mb-4 leading-tight">
@@ -370,7 +393,7 @@ export default function GuiaDecreto466() {
                         </p>
                         <button 
                             onClick={() => setQuizActivo(true)}
-                            className="w-full block bg-white text-slate-900 font-black text-center py-4 rounded-xl hover:bg-blue-400 transition-colors shadow-lg flex items-center justify-center gap-2"
+                            className="w-full block bg-white text-slate-900 font-black text-center py-4 rounded-xl hover:bg-emerald-400 transition-colors shadow-lg flex items-center justify-center gap-2"
                         >
                             COMENZAR TEST <ArrowRight size={18} />
                         </button>
@@ -411,7 +434,7 @@ export default function GuiaDecreto466() {
 
                   {mostrarResultado && (
                     <div className="text-center animate-in zoom-in duration-300">
-                        <div className="bg-blue-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-blue-400">
+                        <div className="bg-emerald-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-400">
                             <Trophy size={32} />
                         </div>
                         <h3 className="text-2xl font-black mb-2">¡Completado!</h3>
@@ -420,22 +443,12 @@ export default function GuiaDecreto466() {
                         </p>
                         
                         <div className="space-y-3">
-                            {puntaje === preguntasQuiz.length ? (
-                                <div className="bg-blue-900/50 p-3 rounded-lg text-sm text-blue-200 border border-blue-800">
-                                    ¡Excelente! Estás listo para el módulo de Normativa.
-                                </div>
-                            ) : (
-                                <button 
-                                    onClick={reiniciarQuiz}
-                                    className="w-full bg-slate-800 text-white font-bold py-3 rounded-xl hover:bg-slate-700 text-sm"
-                                >
-                                    Intentar de nuevo
-                                </button>
-                            )}
-                            
-                            <Link href="/quiz" className="block w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-500 text-sm">
-                                Ir al Simulador Completo
-                            </Link>
+                            <button 
+                                onClick={reiniciarQuiz}
+                                className="w-full bg-slate-800 text-white font-bold py-3 rounded-xl hover:bg-slate-700 text-sm"
+                            >
+                                Intentar de nuevo
+                            </button>
                         </div>
                     </div>
                   )}
@@ -443,6 +456,7 @@ export default function GuiaDecreto466() {
                 </div>
               </div>
 
+              {/* 2. TARJETA DESCARGAR PDF */}
               <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
                 <div className="flex items-center gap-4 mb-4">
                     <div className="bg-red-50 text-red-600 p-3 rounded-full">
@@ -466,6 +480,47 @@ export default function GuiaDecreto466() {
                     {isPdfReady ? 'DESCARGAR AHORA' : 'Cargando herramienta...'}
                 </button>
               </div>
+
+              {/* 🟢 NUEVO: TARJETA DE COLABORACIÓN (SUTIL CON REVENIU) */}
+              <a 
+                href="https://app.reveniu.com/checkout-custom-link/HvM4DkkkUpBnILnQv4abrZl5qYX7faqU" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="group block bg-gradient-to-r from-amber-50 to-orange-50 p-6 rounded-3xl border border-amber-100 shadow-sm hover:shadow-md transition-all hover:border-amber-200"
+              >
+                <div className="flex items-center gap-4">
+                    <div className="bg-white text-amber-500 p-3 rounded-full shadow-sm group-hover:scale-110 transition-transform">
+                        <Heart size={24} className="fill-amber-500 text-amber-500" />
+                    </div>
+                    <div>
+                        <h4 className="font-bold text-amber-900 text-sm">¿Te sirvió esta guía?</h4>
+                        <p className="text-xs text-amber-700/80">Ayúdame a mantener la web</p>
+                    </div>
+                    <ExternalLink size={16} className="text-amber-400 ml-auto opacity-50 group-hover:opacity-100"/>
+                </div>
+              </a>
+
+              {/* 3. TARJETA DERMOCHECK (CROSS-SELLING) */}
+              <a 
+                href="https://www.dermocheck.cl/#calculator-section" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-sm group hover:ring-2 hover:ring-emerald-500 transition-all"
+              >
+                <div className="flex items-center gap-4 mb-4">
+                    <div className="bg-emerald-500/20 text-emerald-400 p-3 rounded-full group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+                        <Clock size={24} />
+                    </div>
+                    <div>
+                        <h4 className="font-bold text-white">DermoCheck</h4>
+                        <p className="text-xs text-slate-400">Herramienta Exclusiva</p>
+                    </div>
+                    <ExternalLink size={16} className="text-slate-500 ml-auto"/>
+                </div>
+                <p className="text-sm text-slate-300 leading-relaxed mb-0">
+                    ¿Vendes Dermo? Verifica vencimientos por lote aquí.
+                </p>
+              </a>
 
             </div>
           </div>

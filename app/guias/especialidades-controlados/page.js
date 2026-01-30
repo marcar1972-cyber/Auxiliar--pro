@@ -6,7 +6,8 @@ import Script from "next/script";
 import { 
   BookOpen, AlertTriangle, Download, ArrowRight, Brain, 
   Sun, ShieldAlert, FileText, Trophy, XCircle, Clock, 
-  CheckCircle, Pill, AlertOctagon, ExternalLink, Sparkles 
+  CheckCircle, Pill, AlertOctagon, ExternalLink, Sparkles, 
+  Heart, Gavel 
 } from "lucide-react";
 
 // 📝 PREGUNTAS DEL QUIZ (SNC y Dermatológicos)
@@ -58,6 +59,56 @@ const preguntasQuiz = [
       "Bacterias.",
       "Hongos (Micosis).",
       "Parásitos."
+    ],
+    correcta: 2
+  },
+  {
+    pregunta: "¿Cuál es la condición de venta de los Antidepresivos ISRS (Sertralina, Fluoxetina)?",
+    opciones: [
+      "Venta Directa.",
+      "Receta Médica Simple (Se presenta y se devuelve).",
+      "Receta Cheque.",
+      "Receta Retenida."
+    ],
+    correcta: 1
+  },
+  {
+    pregunta: "¿Qué indica la 'Estrella Verde' en una caja de remedios?",
+    opciones: [
+      "Que es un producto natural.",
+      "Que es un Estupefaciente.",
+      "Que es un Psicotrópico (Sujeto a control).",
+      "Que es Bioequivalente."
+    ],
+    correcta: 2
+  },
+  {
+    pregunta: "¿Cuánto tiempo tarda en hacer efecto real un antidepresivo?",
+    opciones: [
+      "Inmediatamente.",
+      "2 a 3 horas.",
+      "2 a 3 semanas (Periodo de latencia).",
+      "1 año."
+    ],
+    correcta: 2
+  },
+  {
+    pregunta: "¿Qué factor es crítico verificar en productos de Dermocosmética?",
+    opciones: [
+      "El sabor.",
+      "El código de lote y vencimiento (Batch Code).",
+      "Que la caja sea bonita.",
+      "Que tenga receta cheque."
+    ],
+    correcta: 1
+  },
+  {
+    pregunta: "¿Se pueden consumir Benzodiazepinas con alcohol?",
+    opciones: [
+      "Sí, no pasa nada.",
+      "Solo cerveza.",
+      "No, nunca. Riesgo de depresión respiratoria.",
+      "Sí, si es de día."
     ],
     correcta: 2
   }
@@ -176,7 +227,7 @@ export default function GuiaEspecialidadesControlados() {
                 </div>
                 
                 <p className="mb-6 text-slate-600">
-                    El manejo de estos medicamentos requiere rigurosidad legal y ética. La mayoría son <strong>Psicotrópicos</strong> regulados por el <a href="https://www.ispch.cl/anamed/" target="_blank" rel="noopener noreferrer" className="text-blue-600 font-bold hover:underline">Decreto Supremo 405</a>.
+                    El manejo de estos medicamentos requiere rigurosidad legal y ética. La mayoría son <strong>Psicotrópicos</strong> regulados por el <Link href="/guias/decreto-405-psicotropicos" className="text-blue-600 font-bold hover:underline">Decreto Supremo 405</Link>.
                 </p>
 
                 {/* BENZODIAZEPINAS */}
@@ -194,8 +245,8 @@ export default function GuiaEspecialidadesControlados() {
                                 <AlertTriangle size={18}/> Control Legal: Receta Retenida
                             </strong>
                             <p className="text-sm text-amber-800">
-                                Pertenecen a la <strong>Lista IV de Psicotrópicos</strong>. Deben venderse con <strong>Receta Médica Retenida</strong> (sin control de stock en libro oficial).
-                                <br/><span className="text-xs mt-2 block font-semibold">⚠️ Diferencia clave: A diferencia de las Listas II y III, la Lista IV NO requiere registro en el Libro de Control de Psicotrópicos, pero la receta se debe retener, foliar y archivar para control de la autoridad.</span>
+                                Pertenecen a la <strong>Lista IV de Psicotrópicos</strong>. Deben venderse con <strong>Receta Médica Retenida</strong>.
+                                <br/><span className="text-xs mt-2 block font-semibold">⚠️ Diferencia clave: A diferencia de las Listas II y III, la Lista IV NO requiere registro en el Libro de Control de Psicotrópicos (en la mayoría de las farmacias comunitarias bajo régimen simplificado), pero la receta se debe retener, foliar y archivar.</span>
                             </p>
                         </div>
 
@@ -284,7 +335,7 @@ export default function GuiaEspecialidadesControlados() {
                     <div className="mt-4 bg-red-50 p-4 rounded-xl border border-red-200">
                         <strong className="text-red-900 flex items-center gap-2 text-sm"><AlertOctagon size={16}/> Precaución de Uso:</strong>
                         <p className="text-sm text-red-800 mt-1">
-                            El uso prolongado (más de 7 días) o en zonas extensas puede causar <strong>atrofia cutánea</strong> (adelgazamiento irreversible de la piel) y absorción sistémica. No usar en infecciones (hongos/virus) ya que las empeora.
+                            El uso prolongado (más de 7 días) o en zonas extensas puede causar <strong>atrofia cutánea</strong> (adelgazamiento irreversible de la piel) y absorción sistémica. No usar en infecciones (hongos/virus) ya que las empeora. Fuente: <a href="https://www.mayoclinic.org/es-es/diseases-conditions/dermatitis-eczema/diagnosis-treatment/drc-20352386" target="_blank" rel="noopener noreferrer" className="underline hover:text-red-950 font-bold">Mayo Clinic</a>.
                         </p>
                     </div>
                 </div>
@@ -342,6 +393,22 @@ export default function GuiaEspecialidadesControlados() {
                     </div>
                 </div>
             </section>
+            
+            {/* 🔴 NUEVO: BLOQUE DE FUENTE LEGAL OBLIGATORIO */}
+            <div className="mt-8 border-t border-slate-200 pt-6 bg-gray-50 p-4 rounded-xl break-inside-avoid">
+                <div className="flex items-center gap-2 mb-2 text-slate-900 font-bold uppercase text-xs tracking-wider">
+                    <Gavel size={14} className="text-slate-500" /> Fuente Legal Consultada
+                </div>
+                <a 
+                    href="https://www.bcn.cl/leychile/navegar?idNorma=13066" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-blue-600 hover:text-blue-800 hover:underline text-sm font-medium flex items-center gap-1"
+                >
+                    Decreto Supremo N° 405: Reglamento de Productos Psicotrópicos <ExternalLink size={12} />
+                </a>
+                <p className="text-xs text-slate-500 mt-1">Biblioteca del Congreso Nacional de Chile (BCN).</p>
+            </div>
 
           </div>
 
@@ -406,7 +473,7 @@ export default function GuiaEspecialidadesControlados() {
 
                   {mostrarResultado && (
                     <div className="text-center animate-in zoom-in duration-300">
-                        <div className="bg-emerald-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-400">
+                        <div className="bg-purple-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-purple-400">
                             <Trophy size={32} />
                         </div>
                         <h3 className="text-2xl font-black mb-2">¡Completado!</h3>
@@ -450,7 +517,26 @@ export default function GuiaEspecialidadesControlados() {
                 </button>
               </div>
 
-              {/* 3. TARJETA DERMOCHECK */}
+              {/* 🟢 NUEVO: TARJETA DE COLABORACIÓN (SUTIL CON REVENIU) */}
+              <a 
+                href="https://app.reveniu.com/checkout-custom-link/HvM4DkkkUpBnILnQv4abrZl5qYX7faqU" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="group block bg-gradient-to-r from-amber-50 to-orange-50 p-6 rounded-3xl border border-amber-100 shadow-sm hover:shadow-md transition-all hover:border-amber-200"
+              >
+                <div className="flex items-center gap-4">
+                    <div className="bg-white text-amber-500 p-3 rounded-full shadow-sm group-hover:scale-110 transition-transform">
+                        <Heart size={24} className="fill-amber-500 text-amber-500" />
+                    </div>
+                    <div>
+                        <h4 className="font-bold text-amber-900 text-sm">¿Te sirvió esta guía?</h4>
+                        <p className="text-xs text-amber-700/80">Ayúdame a mantener la web</p>
+                    </div>
+                    <ExternalLink size={16} className="text-amber-400 ml-auto opacity-50 group-hover:opacity-100"/>
+                </div>
+              </a>
+
+              {/* 3. TARJETA DERMOCHECK (CROSS-SELLING) */}
               <a 
                 href="https://www.dermocheck.cl/#calculator-section" 
                 target="_blank" 

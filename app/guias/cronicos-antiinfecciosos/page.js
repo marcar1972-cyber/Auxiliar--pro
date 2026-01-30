@@ -6,7 +6,8 @@ import Script from "next/script";
 import { 
   BookOpen, AlertTriangle, Download, ArrowRight, Pill, Heart, Activity, 
   Droplet, Thermometer, Clock, CheckCircle, ShieldAlert, Bug, 
-  Syringe, XCircle, Trophy, FileText, UserCheck, AlertOctagon 
+  Syringe, XCircle, Trophy, FileText, UserCheck, AlertOctagon, ExternalLink, 
+  Heart as HeartIcon 
 } from "lucide-react";
 
 // 📝 PREGUNTAS DEL QUIZ (Cardiovascular, Metabólico y Antibióticos)
@@ -219,6 +220,10 @@ export default function GuiaCronicosInfecciosos() {
                         </ul>
                     </div>
                 </div>
+                
+                <p className="mt-6 text-xs text-slate-500 flex items-center gap-1">
+                   Fuente de consulta: <a href="https://sochicar.cl" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">Sociedad Chilena de Cardiología <ExternalLink size={10}/></a>
+                </p>
             </section>
 
             {/* 2. METABÓLICO: DIABETES Y COLESTEROL */}
@@ -286,7 +291,7 @@ export default function GuiaCronicosInfecciosos() {
                         <ShieldAlert /> La Resistencia Bacteriana
                     </h3>
                     <p className="text-red-800 text-sm mb-4 leading-relaxed">
-                        Es una crisis mundial de salud pública. Las bacterias se vuelven "superpoderosas" porque la gente toma antibióticos mal (por resfríos virales) o no termina el tratamiento.
+                        Es una crisis mundial de salud pública declarada por la <a href="https://www.who.int/es/news-room/fact-sheets/detail/antimicrobial-resistance" target="_blank" rel="noopener noreferrer" className="underline font-bold hover:text-red-950 inline-flex items-center gap-1">OMS <ExternalLink size={10}/></a>. Las bacterias se vuelven "superpoderosas" porque la gente toma antibióticos mal (por resfríos virales) o no termina el tratamiento.
                     </p>
                     <strong className="text-red-900 block text-sm">Tu Rol como Auxiliar:</strong>
                     <ul className="list-disc pl-5 mt-2 text-red-800 text-sm space-y-1">
@@ -318,66 +323,22 @@ export default function GuiaCronicosInfecciosos() {
                 </div>
             </section>
 
-             {/* MÓDULO 4: ANAMNESIS Y SEGURIDAD (AGREGADO) */}
-            <hr className="border-slate-200 my-8" />
-            <section className="break-inside-avoid">
-                <h2 className="text-2xl font-black text-slate-900 mb-6 flex items-center gap-3">
-                    <UserCheck className="text-blue-600" /> Módulo 4: Seguridad Clínica y Protocolo
-                </h2>
-                
-                {/* Contraindicaciones */}
-                <div className="bg-white border border-slate-200 rounded-2xl p-6 mb-6 shadow-sm">
-                    <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-                        <AlertOctagon className="text-red-500" size={20} /> Contraindicaciones Absolutas
-                    </h3>
-                    <ul className="space-y-3 text-sm text-slate-700">
-                        <li className="flex gap-2">
-                            <XCircle className="text-red-500 shrink-0" size={16} />
-                            <span><strong>Alergia a la Penicilina:</strong> Riesgo de shock anafiláctico (mortal). Siempre preguntar antes de dispensar Amoxicilina.</span>
-                        </li>
-                        <li className="flex gap-2">
-                            <XCircle className="text-red-500 shrink-0" size={16} />
-                            <span><strong>Insuficiencia Renal:</strong> Ajustar dosis en diabéticos (Metformina) y evitar AINEs.</span>
-                        </li>
-                    </ul>
-                </div>
-
-                {/* Grupos de Riesgo y Anamnesis */}
-                <div className="grid md:grid-cols-2 gap-6">
-                    <div className="bg-blue-50 p-5 rounded-2xl border border-blue-100">
-                        <h4 className="font-bold text-blue-900 mb-3">Grupos de Riesgo</h4>
-                        <ul className="text-sm text-blue-800 space-y-2 list-disc pl-4">
-                            <li><strong>Diabéticos:</strong> Cuidado con jarabes con azúcar.</li>
-                            <li><strong>Hipertensos:</strong> Evitar antigripales con Pseudoefedrina.</li>
-                            <li><strong>Lactancia:</strong> Verificar compatibilidad en <a href="https://www.e-lactancia.org" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline font-bold hover:text-blue-800">e-lactancia.org</a>.</li>
-                        </ul>
-                    </div>
-
-                    <div className="bg-emerald-50 p-5 rounded-2xl border border-emerald-100">
-                        <h4 className="font-bold text-emerald-900 mb-3">Protocolo de Anamnesis (Qué preguntar)</h4>
-                        <ul className="text-sm text-emerald-800 space-y-2">
-                            <li><strong>1. ¿Es alérgico a algún medicamento?</strong> (Penicilina, Sulfa).</li>
-                            <li><strong>2. ¿Toma otros medicamentos de forma crónica?</strong> (Para evitar interacciones).</li>
-                            <li><strong>3. ¿Para quién es el medicamento?</strong> (Niño, embarazada, abuelo).</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-
           </div>
 
-          {/* 🔴 COLUMNA DERECHA: SIDEBAR STICKY */}
+          {/* 🔴 COLUMNA DERECHA: SIDEBAR STICKY CON QUIZ INTERACTIVO */}
           <div className="lg:col-span-4">
             <div className="sticky top-24 space-y-6">
               
-              {/* 1. QUIZ INTERACTIVO */}
+              {/* TARJETA 1: QUIZ INTERACTIVO */}
               <div className="bg-slate-900 text-white p-6 md:p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500 rounded-full blur-3xl opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500 rounded-full blur-3xl opacity-20 group-hover:opacity-30 transition-opacity"></div>
                 
                 <div className="relative z-10">
+                  
+                  {/* ESTADO 1: INICIO */}
                   {!quizActivo && !mostrarResultado && (
                     <>
-                        <span className="bg-blue-500 text-blue-50 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
+                        <span className="bg-emerald-500 text-emerald-50 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
                             Quiz Rápido
                         </span>
                         <h3 className="text-3xl font-black mb-4 leading-tight">
@@ -388,22 +349,25 @@ export default function GuiaCronicosInfecciosos() {
                         </p>
                         <button 
                             onClick={() => setQuizActivo(true)}
-                            className="w-full block bg-white text-slate-900 font-black text-center py-4 rounded-xl hover:bg-blue-400 transition-colors shadow-lg flex items-center justify-center gap-2"
+                            className="w-full block bg-white text-slate-900 font-black text-center py-4 rounded-xl hover:bg-emerald-400 transition-colors shadow-lg flex items-center justify-center gap-2"
                         >
                             COMENZAR TEST <ArrowRight size={18} />
                         </button>
                     </>
                   )}
 
+                  {/* ESTADO 2: PREGUNTAS */}
                   {quizActivo && (
                     <div className="animate-in fade-in slide-in-from-right-4 duration-300">
                         <div className="flex justify-between items-center mb-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
                             <span>Pregunta {preguntaActual + 1} de {preguntasQuiz.length}</span>
                             <button onClick={reiniciarQuiz}><XCircle size={20} className="hover:text-red-400"/></button>
                         </div>
+                        
                         <h4 className="font-bold text-lg mb-6 leading-tight">
                             {preguntasQuiz[preguntaActual].pregunta}
                         </h4>
+
                         <div className="space-y-3">
                             {preguntasQuiz[preguntaActual].opciones.map((opcion, index) => (
                                 <button
@@ -425,6 +389,7 @@ export default function GuiaCronicosInfecciosos() {
                     </div>
                   )}
 
+                  {/* ESTADO 3: RESULTADOS */}
                   {mostrarResultado && (
                     <div className="text-center animate-in zoom-in duration-300">
                         <div className="bg-emerald-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-400">
@@ -434,6 +399,7 @@ export default function GuiaCronicosInfecciosos() {
                         <p className="text-slate-400 mb-6">
                             Obtuviste <strong className="text-white">{puntaje}</strong> de <strong className="text-white">{preguntasQuiz.length}</strong> correctas.
                         </p>
+                        
                         <div className="space-y-3">
                             <button 
                                 onClick={reiniciarQuiz}
@@ -444,6 +410,7 @@ export default function GuiaCronicosInfecciosos() {
                         </div>
                     </div>
                   )}
+
                 </div>
               </div>
 
@@ -461,6 +428,7 @@ export default function GuiaCronicosInfecciosos() {
                 <p className="text-sm text-slate-600 mb-6 leading-relaxed">
                     Convierte esta página en un archivo PDF automáticamente.
                 </p>
+                
                 <button 
                     onClick={generarPDF}
                     disabled={!isPdfReady}
@@ -471,7 +439,26 @@ export default function GuiaCronicosInfecciosos() {
                 </button>
               </div>
 
-              {/* 3. TARJETA DERMOCHECK */}
+              {/* 🟢 NUEVO: TARJETA DE COLABORACIÓN (SUTIL CON REVENIU) */}
+              <a 
+                href="https://app.reveniu.com/checkout-custom-link/HvM4DkkkUpBnILnQv4abrZl5qYX7faqU" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="group block bg-gradient-to-r from-amber-50 to-orange-50 p-6 rounded-3xl border border-amber-100 shadow-sm hover:shadow-md transition-all hover:border-amber-200"
+              >
+                <div className="flex items-center gap-4">
+                    <div className="bg-white text-amber-500 p-3 rounded-full shadow-sm group-hover:scale-110 transition-transform">
+                        <HeartIcon size={24} className="fill-amber-500 text-amber-500" />
+                    </div>
+                    <div>
+                        <h4 className="font-bold text-amber-900 text-sm">¿Te sirvió esta guía?</h4>
+                        <p className="text-xs text-amber-700/80">Ayúdame a mantener la web</p>
+                    </div>
+                    <ExternalLink size={16} className="text-amber-400 ml-auto opacity-50 group-hover:opacity-100"/>
+                </div>
+              </a>
+
+              {/* 3. TARJETA DERMOCHECK (CROSS-SELLING) */}
               <a 
                 href="https://www.dermocheck.cl/#calculator-section" 
                 target="_blank" 
@@ -486,6 +473,7 @@ export default function GuiaCronicosInfecciosos() {
                         <h4 className="font-bold text-white">DermoCheck</h4>
                         <p className="text-xs text-slate-400">Herramienta Exclusiva</p>
                     </div>
+                    <ExternalLink size={16} className="text-slate-500 ml-auto"/>
                 </div>
                 <p className="text-sm text-slate-300 leading-relaxed mb-0">
                     ¿Vendes Dermo? Verifica vencimientos por lote aquí.

@@ -3,7 +3,13 @@
 import { useState } from 'react';
 import Link from "next/link";
 import Script from "next/script"; 
-import { BookOpen, AlertTriangle, Download, ArrowRight, Pill, Flame, Activity, ShieldAlert, Stethoscope, Zap, Wind, Thermometer, GraduationCap, FileText, Trophy, UserCheck, XCircle, Droplet, CheckCircle, Clock, AlertOctagon } from "lucide-react";
+import { 
+  BookOpen, AlertTriangle, Download, ArrowRight, Pill, 
+  Flame, Activity, ShieldAlert, Stethoscope, Zap, Wind, 
+  Thermometer, GraduationCap, FileText, Trophy, UserCheck, 
+  XCircle, Droplet, CheckCircle, Clock, AlertOctagon, Heart, 
+  ExternalLink 
+} from "lucide-react";
 
 // 📝 PREGUNTAS DEL QUIZ (Alta Rotación: Dolor, Respiratorio y Digestivo)
 const preguntasQuiz = [
@@ -447,7 +453,7 @@ export default function GuiaAltaRotacion() {
                         <ul className="text-sm text-blue-800 space-y-2 list-disc pl-4">
                             <li><strong>Tercera Edad:</strong> Mayor riesgo renal y gástrico. Evitar AINEs potentes.</li>
                             <li><strong>Embarazadas:</strong> AINEs prohibidos en 3er trimestre. Paracetamol es seguro.</li>
-                            <li><strong>Lactancia:</strong> Paracetamol e Ibuprofeno suelen ser compatibles (verificar en <a href="https://www.e-lactancia.org" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-600 font-semibold">e-lactancia.org</a>).</li>
+                            <li><strong>Lactancia:</strong> Paracetamol e Ibuprofeno suelen ser compatibles (verificar en <a href="https://www.e-lactancia.org" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-600 font-semibold inline-flex items-center gap-1">e-lactancia.org <ExternalLink size={12}/></a>).</li>
                             <li><strong>Hipertensos:</strong> Evitar antigripales con Pseudoefedrina (sube la presión).</li>
                         </ul>
                     </div>
@@ -559,7 +565,7 @@ export default function GuiaAltaRotacion() {
                     </div>
                 </div>
                 <p className="text-sm text-slate-600 mb-6 leading-relaxed">
-                    Convierte esta página en un archivo PDF automáticamente para repasar sin internet.
+                    Convierte esta página en un archivo PDF automáticamente.
                 </p>
                 <button 
                     onClick={generarPDF}
@@ -571,7 +577,26 @@ export default function GuiaAltaRotacion() {
                 </button>
               </div>
 
-              {/* 3. TARJETA DERMOCHECK */}
+              {/* 🟢 NUEVO: TARJETA DE COLABORACIÓN (SUTIL CON REVENIU) */}
+              <a 
+                href="https://app.reveniu.com/checkout-custom-link/HvM4DkkkUpBnILnQv4abrZl5qYX7faqU" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="group block bg-gradient-to-r from-amber-50 to-orange-50 p-6 rounded-3xl border border-amber-100 shadow-sm hover:shadow-md transition-all hover:border-amber-200"
+              >
+                <div className="flex items-center gap-4">
+                    <div className="bg-white text-amber-500 p-3 rounded-full shadow-sm group-hover:scale-110 transition-transform">
+                        <Heart size={24} className="fill-amber-500 text-amber-500" />
+                    </div>
+                    <div>
+                        <h4 className="font-bold text-amber-900 text-sm">¿Te sirvió esta guía?</h4>
+                        <p className="text-xs text-amber-700/80">Ayúdame a mantener la web</p>
+                    </div>
+                    <ExternalLink size={16} className="text-amber-400 ml-auto opacity-50 group-hover:opacity-100"/>
+                </div>
+              </a>
+
+              {/* 3. TARJETA DERMOCHECK (CROSS-SELLING) */}
               <a 
                 href="https://www.dermocheck.cl/#calculator-section" 
                 target="_blank" 
@@ -586,9 +611,10 @@ export default function GuiaAltaRotacion() {
                         <h4 className="font-bold text-white">DermoCheck</h4>
                         <p className="text-xs text-slate-400">Herramienta Exclusiva</p>
                     </div>
+                    <ExternalLink size={16} className="text-slate-500 ml-auto"/>
                 </div>
                 <p className="text-sm text-slate-300 leading-relaxed mb-0">
-                    Verifica vencimientos de dermocosmética mediante código de lote en segundos.
+                    ¿Vendes Dermo? Verifica vencimientos por lote aquí.
                 </p>
               </a>
 

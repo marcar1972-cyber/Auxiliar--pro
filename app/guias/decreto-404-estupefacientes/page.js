@@ -6,7 +6,7 @@ import Script from "next/script";
 import { 
   BookOpen, AlertTriangle, ShieldCheck, FileText, Download, 
   ArrowRight, Scale, Truck, Lock, FileSignature, Trophy, 
-  XCircle, Clock, ExternalLink 
+  XCircle, Clock, ExternalLink, Heart 
 } from "lucide-react";
 
 // 📝 PREGUNTAS DEL QUIZ (Decreto 404)
@@ -174,7 +174,7 @@ export default function GuiaDecreto404() {
                 1. Introducción
               </h2>
               <p className="text-lg leading-relaxed mb-4 text-slate-600">
-                El Decreto 404, aprobado en 1983, es la normativa encargada de regular el control de los estupefacientes en Chile. Su objetivo principal es fiscalizar toda la "cadena de vida" de estas drogas: desde su importación o fabricación industrial hasta su entrega final al paciente.
+                El <strong>Decreto 404</strong>, aprobado en 1983, es la normativa encargada de regular el control de los estupefacientes en Chile. Su objetivo principal es fiscalizar toda la "cadena de vida" de estas drogas: desde su importación o fabricación industrial hasta su entrega final al paciente.
               </p>
               <p className="text-lg leading-relaxed mb-6 text-slate-600">
                 Este reglamento busca evitar que sustancias con fines terapéuticos, pero con alto potencial de abuso y adicción, se desvíen hacia el tráfico ilícito o el uso indebido.
@@ -303,7 +303,7 @@ export default function GuiaDecreto404() {
                         <strong>Libro de Control:</strong> Es obligatorio llevar un Libro de Control de Estupefacientes (visado) donde se registra por separado cada producto (entradas, salidas y saldos).
                     </li>
                     <li>
-                        <strong>Identificación:</strong> Los envases de estos medicamentos deben tener una estrella roja de 5 puntas en su etiqueta y la leyenda "Sujeto a Control de Estupefacientes". 
+                        <strong>Identificación:</strong> Los envases de estos medicamentos deben tener una estrella roja de 5 puntas en su etiqueta y la leyenda "Sujeto a Control de Estupefacientes".
                     </li>
                     <li>
                         <strong>Muestras Médicas:</strong> Está prohibida la distribución de muestras médicas de estupefacientes (salvo autorización especial del ISP).
@@ -324,8 +324,11 @@ export default function GuiaDecreto404() {
                 <p className="text-lg font-bold text-slate-900">
                     Para el equipo de farmacia, las claves del éxito en el cumplimiento de esta norma son: seguridad física (armario bajo llave), seguridad administrativa (libros al día) y rigurosidad en el mesón (revisión exhaustiva de la Receta Cheque por parte del Químico Farmacéutico).
                 </p>
-                <p className="mt-8 text-xs text-slate-400 uppercase tracking-widest leading-relaxed">
-                    Fuente utilizada: Ministerio de Salud Pública de Chile. Decreto N° 404: Reglamento de Estupefacientes.
+                <p className="mt-8 text-xs text-slate-400 uppercase tracking-widest leading-relaxed flex items-center gap-2">
+                    Fuente utilizada: 
+                    <a href="https://www.bcn.cl/leychile/navegar?idNorma=16728" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1">
+                       Ministerio de Salud Pública de Chile. Decreto N° 404 <ExternalLink size={12} />
+                    </a>
                 </p>
             </section>
 
@@ -430,7 +433,7 @@ export default function GuiaDecreto404() {
                 </div>
               </div>
 
-              {/* TARJETA 2: DESCARGAR PDF AUTOMÁTICO */}
+              {/* 2. TARJETA DESCARGAR PDF */}
               <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
                 <div className="flex items-center gap-4 mb-4">
                     <div className="bg-red-50 text-red-600 p-3 rounded-full">
@@ -442,7 +445,7 @@ export default function GuiaDecreto404() {
                     </div>
                 </div>
                 <p className="text-sm text-slate-600 mb-6 leading-relaxed">
-                    Convierte esta página en un archivo PDF automáticamente.
+                    Convierte esta página en un archivo PDF automáticamente para estudiar offline.
                 </p>
                 
                 <button 
@@ -454,6 +457,25 @@ export default function GuiaDecreto404() {
                     {isPdfReady ? 'DESCARGAR AHORA' : 'Cargando herramienta...'}
                 </button>
               </div>
+
+              {/* 🟢 NUEVO: TARJETA DE COLABORACIÓN (SUTIL CON REVENIU) */}
+              <a 
+                href="https://app.reveniu.com/checkout-custom-link/HvM4DkkkUpBnILnQv4abrZl5qYX7faqU" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="group block bg-gradient-to-r from-amber-50 to-orange-50 p-6 rounded-3xl border border-amber-100 shadow-sm hover:shadow-md transition-all hover:border-amber-200"
+              >
+                <div className="flex items-center gap-4">
+                    <div className="bg-white text-amber-500 p-3 rounded-full shadow-sm group-hover:scale-110 transition-transform">
+                        <Heart size={24} className="fill-amber-500 text-amber-500" />
+                    </div>
+                    <div>
+                        <h4 className="font-bold text-amber-900 text-sm">¿Te sirvió esta guía?</h4>
+                        <p className="text-xs text-amber-700/80">Ayúdame a mantener la web</p>
+                    </div>
+                    <ExternalLink size={16} className="text-amber-400 ml-auto opacity-50 group-hover:opacity-100"/>
+                </div>
+              </a>
 
               {/* 3. TARJETA DERMOCHECK (CROSS-SELLING) */}
               <a 

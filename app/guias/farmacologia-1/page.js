@@ -7,7 +7,7 @@ import {
   BookOpen, CheckCircle, AlertTriangle, ShieldCheck, FileText, 
   Download, ArrowRight, Info, Package, Pill, Lock, FileSignature, 
   Syringe, Trophy, XCircle, Truck, Scale, Zap, Activity, Clock, 
-  Thermometer, GraduationCap, Heart, ExternalLink 
+  Thermometer, GraduationCap, Heart, ExternalLink, Gavel 
 } from "lucide-react";
 
 // 📝 PREGUNTAS DEL QUIZ (Verificadas)
@@ -501,7 +501,7 @@ export default function GuiaFarmacologia() {
                         <span className="text-sm text-slate-600">Estudio clínico que compara la curva de concentración en sangre del Referente vs. el Test.</span>
                     </div>
                     <div className="bg-teal-50 p-4 rounded-xl border border-teal-200 text-teal-900 text-sm font-medium">
-                        <p><strong>Conclusión:</strong> Un Bioequivalente garantiza el mismo efecto terapéutico (Farmacodinamia) porque tiene la misma Farmacocinética que el original. Es 100% intercambiable.</p>
+                        <p><strong>Conclusión:</strong> Un Bioequivalente garantiza el mismo efecto terapéutico (Farmacodinamia) porque tiene la misma Farmacocinética que el original. Es 100% intercambiable. <a href="https://www.ispch.cl/anamed/bioequivalencia/" target="_blank" rel="noopener noreferrer" className="text-teal-700 underline font-bold hover:text-teal-900 inline-flex items-center gap-1">Más info en ISP <ExternalLink size={10} /></a></p>
                     </div>
                 </div>
             </section>
@@ -547,6 +547,22 @@ export default function GuiaFarmacologia() {
                         <dt className="text-white font-bold">Vida Media (t1/2)</dt>
                         <dd>Tiempo para que la concentración baje a la mitad.</dd>
                     </div>
+                </div>
+                
+                {/* 🔴 NUEVO: BLOQUE DE FUENTE LEGAL OBLIGATORIO */}
+                <div className="mt-8 border-t border-slate-700 pt-6">
+                    <div className="flex items-center gap-2 mb-2 text-slate-400 font-bold uppercase text-xs tracking-wider">
+                        <Gavel size={14} className="text-slate-500" /> Fuente Legal Consultada
+                    </div>
+                    <a 
+                        href="https://www.bcn.cl/leychile/navegar?idNorma=13613" 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="text-emerald-400 hover:text-emerald-300 hover:underline text-sm font-medium flex items-center gap-1"
+                    >
+                        Decreto Supremo N° 466: Reglamento de Farmacias <ExternalLink size={12} />
+                    </a>
+                    <p className="text-xs text-slate-500 mt-1">Referencia al rol del auxiliar en la dispensación.</p>
                 </div>
             </section>
 
