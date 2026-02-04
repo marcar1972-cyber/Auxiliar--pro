@@ -147,7 +147,7 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* 👇 SECCIÓN SOBRE NOSOTROS (MACZDEV) - RESTAURADA */}
+        {/* 👇 SECCIÓN SOBRE NOSOTROS (MACZDEV) - ACTUALIZADA CON AUXILIARPRO */}
         <div className="mt-32 max-w-5xl mx-auto bg-slate-900 rounded-[3rem] p-8 md:p-12 shadow-2xl relative overflow-hidden">
           {/* Fondo decorativo */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500 rounded-full blur-[100px] opacity-20 -mr-20 -mt-20"></div>
@@ -176,7 +176,7 @@ export default function LandingPage() {
                   Actualmente trabajo en el rubro y, al igual que tú, me estoy preparando para rendir la prueba de competencia <strong>SEREMI 2026</strong>.
                 </p>
                 <p>
-                  Mientras estudiaba, me di cuenta de un gran vacío: <strong>no existían ensayos tipo prueba disponibles en la red</strong>. Esa frustración fue mi motor. Decidí no quedarme de brazos cruzados. Uní mis conocimientos en farmacia y tecnología, y con la ayuda de <strong>Inteligencia Artificial (Gemini)</strong>, construí esta plataforma y generé guías de estudio propias.
+                  Mientras estudiaba, me di cuenta de un gran vacío: <strong>no existían ensayos tipo prueba disponibles en la red</strong>. Esa frustración fue mi motor. Decidí no quedarme de brazos cruzados. Uní mis conocimientos en farmacia y tecnología, y con la ayuda de <strong>Inteligencia Artificial (Gemini)</strong>, creé <strong>AuxiliarPro</strong>, construyendo esta plataforma y generando guías de estudio propias para potenciar a los futuros colegas de Chile.
                 </p>
                 <p>
                   Lanzamos en diciembre de 2025 y ver la gran afluencia de usuarios me confirma que esto era necesario.
