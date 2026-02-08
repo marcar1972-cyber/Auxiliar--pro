@@ -65,7 +65,7 @@ const preguntasQuiz = [
 
 export default function GuiaDecreto404() {
   const [isPdfReady, setIsPdfReady] = useState(false);
-   
+    
   // ESTADOS DEL QUIZ
   const [quizActivo, setQuizActivo] = useState(false);
   const [preguntaActual, setPreguntaActual] = useState(0);
@@ -327,7 +327,7 @@ export default function GuiaDecreto404() {
                 <p className="mt-8 text-xs text-slate-400 uppercase tracking-widest leading-relaxed flex items-center gap-2">
                     Fuente utilizada: 
                     <a href="https://www.bcn.cl/leychile/navegar?idNorma=16728" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1">
-                       Ministerio de Salud Pública de Chile. Decreto N° 404 <ExternalLink size={12} />
+                        Ministerio de Salud Pública de Chile. Decreto N° 404 <ExternalLink size={12} />
                     </a>
                 </p>
             </section>
@@ -386,7 +386,7 @@ export default function GuiaDecreto404() {
                                     className={`w-full text-left p-3 rounded-xl text-sm font-medium transition-all ${
                                         respuestaSeleccionada === index 
                                             ? index === preguntasQuiz[preguntaActual].correcta 
-                                                ? 'bg-emerald-500 text-emerald-950 font-bold' 
+                                                ? 'bg-blue-500 text-white font-bold' 
                                                 : 'bg-red-500 text-white'
                                             : 'bg-slate-800 hover:bg-slate-700 text-slate-200'
                                     }`}
@@ -458,7 +458,30 @@ export default function GuiaDecreto404() {
                 </button>
               </div>
 
-              {/* 🟢 NUEVO: TARJETA DE COLABORACIÓN (SUTIL CON REVENIU) */}
+              {/* 🟢 BOTÓN WHATSAPP ESTÁNDAR (AÑADIDO) */}
+              <a 
+                href="https://wa.me/?text=¡Mira%20este%20resumen%20del%20Decreto%20404!%20Ideal%20para%20estudiar:%20https://www.auxiliaresdefarmacia.cl/guias/decreto-404-estupefacientes" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="group block bg-[#25D366] p-6 rounded-3xl shadow-sm hover:shadow-md transition-all hover:bg-[#20bd5a]"
+              >
+                <div className="flex items-center gap-4">
+                    <div className="shrink-0">
+                        <img 
+                            src="/whatsapp.webp" 
+                            alt="WhatsApp" 
+                            className="w-10 h-10 object-contain" 
+                        />
+                    </div>
+                    <div>
+                        <h4 className="font-bold text-white text-sm">Compartir con Colegas</h4>
+                        <p className="text-xs text-white/90">Enviar al grupo del turno</p>
+                    </div>
+                    <ArrowRight size={20} className="text-white ml-auto opacity-70 group-hover:translate-x-1 transition-transform"/>
+                </div>
+              </a>
+
+              {/* 3. TARJETA DE COLABORACIÓN (SUTIL CON REVENIU) */}
               <a 
                 href="https://app.reveniu.com/checkout-custom-link/HvM4DkkkUpBnILnQv4abrZl5qYX7faqU" 
                 target="_blank" 
@@ -477,7 +500,7 @@ export default function GuiaDecreto404() {
                 </div>
               </a>
 
-              {/* 3. TARJETA DERMOCHECK (CROSS-SELLING) */}
+              {/* 4. TARJETA DERMOCHECK (CROSS-SELLING) */}
               <a 
                 href="https://www.dermocheck.cl/#calculator-section" 
                 target="_blank" 

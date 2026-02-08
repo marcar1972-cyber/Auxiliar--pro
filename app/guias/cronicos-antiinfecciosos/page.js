@@ -66,7 +66,7 @@ const preguntasQuiz = [
 
 export default function GuiaCronicosInfecciosos() {
   const [isPdfReady, setIsPdfReady] = useState(false);
-   
+    
   // ESTADOS DEL QUIZ
   const [quizActivo, setQuizActivo] = useState(false);
   const [preguntaActual, setPreguntaActual] = useState(0);
@@ -222,7 +222,7 @@ export default function GuiaCronicosInfecciosos() {
                 </div>
                 
                 <p className="mt-6 text-xs text-slate-500 flex items-center gap-1">
-                   Fuente de consulta: <a href="https://sochicar.cl" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">Sociedad Chilena de Cardiología <ExternalLink size={10}/></a>
+                    Fuente de consulta: <a href="https://sochicar.cl" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">Sociedad Chilena de Cardiología <ExternalLink size={10}/></a>
                 </p>
             </section>
 
@@ -439,7 +439,30 @@ export default function GuiaCronicosInfecciosos() {
                 </button>
               </div>
 
-              {/* 🟢 NUEVO: TARJETA DE COLABORACIÓN (SUTIL CON REVENIU) */}
+              {/* 🟢 NUEVO: BOTÓN WHATSAPP COMPARTIR (Insertado aquí) */}
+              <a 
+                href="https://wa.me/?text=%C2%A1Mira%20este%20resumen%20de%20Cr%C3%B3nicos%20y%20Antibi%C3%B3ticos!%20Ideal%20para%20estudiar%20%F0%9F%91%89%20https://www.auxiliaresdefarmacia.cl/guias/cronicos-antiinfecciosos" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="group block bg-[#25D366] p-6 rounded-3xl shadow-sm hover:shadow-md transition-all hover:bg-[#20bd5a]"
+              >
+                <div className="flex items-center gap-4">
+                    <div className="shrink-0">
+                        <img 
+                            src="/whatsapp.webp" 
+                            alt="WhatsApp" 
+                            className="w-10 h-10 object-contain" 
+                        />
+                    </div>
+                    <div>
+                        <h4 className="font-bold text-white text-sm">Compartir con Colegas</h4>
+                        <p className="text-xs text-white/90">Enviar al grupo del turno</p>
+                    </div>
+                    <ArrowRight size={20} className="text-white ml-auto opacity-70 group-hover:translate-x-1 transition-transform"/>
+                </div>
+              </a>
+
+              {/* 3. TARJETA DE COLABORACIÓN (REVENIU) */}
               <a 
                 href="https://app.reveniu.com/checkout-custom-link/HvM4DkkkUpBnILnQv4abrZl5qYX7faqU" 
                 target="_blank" 
@@ -458,7 +481,7 @@ export default function GuiaCronicosInfecciosos() {
                 </div>
               </a>
 
-              {/* 3. TARJETA DERMOCHECK (CROSS-SELLING) */}
+              {/* 4. TARJETA DERMOCHECK (CROSS-SELLING) */}
               <a 
                 href="https://www.dermocheck.cl/#calculator-section" 
                 target="_blank" 

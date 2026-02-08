@@ -6,15 +6,15 @@ import { LEVELS } from "../quizData/index";
 import Link from "next/link";
 import { 
   Lock, CheckCircle, XCircle, ChevronLeft, Clock, ShieldCheck, Trophy, Loader2, Library, 
-  GraduationCap, BookOpen, Scale, ThermometerSnowflake, ArrowRight, BrainCircuit,
-  LogIn, ExternalLink, Store, Calculator, Medal
+  BookOpen, ThermometerSnowflake, BrainCircuit, ExternalLink, Store, Calculator, Medal,
+  ArrowRight // Importamos ArrowRight para el botón de WhatsApp
 } from "lucide-react"; 
 
 import { auth, db } from "../firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, setDoc, updateDoc, arrayUnion, serverTimestamp } from "firebase/firestore";
 
-// Icono de WhatsApp
+// Icono de WhatsApp optimizado (SVG) para el botón del foro (no el de compartir)
 const WhatsAppIcon = ({ size = 22, className = "" }) => (
   <svg viewBox="0 0 24 24" fill="currentColor" width={size} height={size} className={className}>
     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.72.94 3.659 1.437 5.634 1.437h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
@@ -47,8 +47,7 @@ export default function QuizPage() {
   const [showAuthModal, setShowAuthModal] = useState(false); 
   const [showForumModal, setShowForumModal] = useState(false); 
 
-  // 🟢 LÓGICA DE AUTENTICACIÓN CORREGIDA
-  // No redirige automáticamente. Solo carga el estado del usuario.
+  // AUTENTICACIÓN
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       try {
@@ -66,7 +65,7 @@ export default function QuizPage() {
             }, { merge: true });
           }
         } else {
-          setUser(null); // Modo visitante activado
+          setUser(null);
         }
       } catch (e) {
         console.error("Error cargando perfil:", e);
@@ -77,7 +76,7 @@ export default function QuizPage() {
     return () => unsubscribe();
   }, []);
 
-  // Lógica del Temporizador
+  // TEMPORIZADOR
   useEffect(() => {
     if (activeLevelId && !showResult && timeLeft > 0) {
       const timerId = setInterval(() => {
@@ -99,7 +98,6 @@ export default function QuizPage() {
     const level = LEVELS.find(l => l.id === id);
     if (!level) return;
 
-    // 🔒 SI NO ESTÁ LOGUEADO, MUESTRA EL MODAL (Bloqueo solo al intentar jugar)
     if (!user) {
       setShowAuthModal(true);
       return;
@@ -288,7 +286,7 @@ export default function QuizPage() {
   return (
     <main className="min-h-screen bg-slate-50 pb-24 font-sans relative">
       
-      {/* 🟢 MODAL DE AUTENTICACIÓN (Restaurado) */}
+      {/* 🟢 MODAL DE AUTENTICACIÓN */}
       {showAuthModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4 animate-in fade-in">
           <div className="bg-white rounded-[2rem] p-8 max-w-sm w-full text-center shadow-2xl">
@@ -317,7 +315,7 @@ export default function QuizPage() {
         </div>
       )}
 
-      {/* 🟢 MODAL DE CONFIRMACIÓN FORO (Restaurado) */}
+      {/* 🟢 MODAL DE CONFIRMACIÓN FORO */}
       {showForumModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm p-4 animate-in fade-in">
           <div className="bg-white rounded-[2rem] p-8 max-w-sm w-full text-center shadow-2xl">
@@ -347,13 +345,13 @@ export default function QuizPage() {
         </div>
       )}
 
-      {/* HEADER STICKY */}
+      {/* HEADER STICKY (Con Span para mantener jerarquía) */}
       <div className="bg-white p-6 shadow-sm sticky top-0 z-10 flex items-center justify-between border-b border-slate-100">
         <div className="flex items-center gap-4">
           <Link href="/" className="text-slate-400 hover:text-slate-900 cursor-pointer">
             <ChevronLeft size={28} />
           </Link>
-          <h1 className="text-xl font-black text-slate-900 tracking-tighter">Mi Ruta 2026</h1>
+          <span className="text-xl font-black text-slate-900 tracking-tighter">Mi Ruta 2026</span>
         </div>
         <div className="bg-slate-100 px-4 py-2 rounded-full text-sm font-black text-slate-700 flex items-center gap-3">
           <Trophy size={18} className="text-yellow-500"/> 
@@ -363,7 +361,17 @@ export default function QuizPage() {
 
       <div className="p-6 max-w-xl mx-auto space-y-8 mt-6">
         
-        {/* TARJETA DE PERFIL (Interactiva si Invitado) */}
+        {/* 🟢 NUEVO BLOQUE SEO: BRANDING + KEYWORDS */}
+        <header className="mb-2">
+            <h1 className="text-3xl md:text-4xl font-black text-slate-900 mb-4 tracking-tight leading-tight">
+              Simulador <span className="text-emerald-600">AuxiliarPro</span>: Ensayo General de Farmacia (Seremi 2026)
+            </h1>
+            <p className="text-slate-600 text-lg leading-relaxed">
+              Mide tus conocimientos en todas las áreas clave: Decreto 466, Código Sanitario y Farmacología General. Un repaso integral para saber si estás listo para la certificación.
+            </p>
+        </header>
+
+        {/* TARJETA DE PERFIL */}
         <div 
           onClick={() => !user && setShowAuthModal(true)} 
           className={`bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 flex items-center gap-5 ${!user ? 'cursor-pointer hover:bg-slate-50 transition-colors' : ''}`}
@@ -393,7 +401,7 @@ export default function QuizPage() {
           </div>
         </div>
         
-        {/* LISTA DE NIVELES DINÁMICA */}
+        {/* LISTA DE NIVELES */}
         <div className="space-y-4">
           {LEVELS.map((l) => {
             const isUnlocked = user ? unlockedLevels.includes(l.id) : (l.id === 1); 
@@ -409,7 +417,6 @@ export default function QuizPage() {
                   "bg-slate-100 opacity-60 grayscale cursor-default"
                 }`}
               >
-                {/* ÍCONO DEL NIVEL */}
                 <div className={`w-16 h-16 rounded-full flex items-center justify-center text-3xl shadow-inner shrink-0 ${
                   isPassed ? "bg-emerald-500 text-white" : 
                   isUnlocked ? "bg-blue-500 text-white" : 
@@ -418,7 +425,6 @@ export default function QuizPage() {
                   {isPassed ? <CheckCircle size={32} /> : isUnlocked ? (iconMap[l.icon] || l.icon) : <Lock size={28}/>}
                 </div>
 
-                {/* TEXTOS */}
                 <div className="flex-1 text-left z-10">
                     <h3 className="font-black text-lg text-slate-800 leading-tight">{l.title}</h3>
                     <p className="text-xs text-slate-500 mt-1 line-clamp-1">{l.description}</p>
@@ -443,7 +449,6 @@ export default function QuizPage() {
 
         {/* ACCESOS RÁPIDOS */}
         <div className="grid grid-cols-1 gap-4 mt-10">
-            {/* 🟢 ENLACE A GUÍAS */}
             <Link href="/guias" className="bg-white p-6 rounded-[2rem] border-2 border-slate-100 shadow-sm hover:border-blue-400 transition-all flex items-center gap-6 group cursor-pointer">
                 <div className="w-14 h-14 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                   <Library size={28} />
@@ -454,7 +459,6 @@ export default function QuizPage() {
                 </div>
             </Link>
 
-            {/* FORO */}
             <div 
               onClick={() => setShowForumModal(true)} 
               className="bg-[#0f172a] p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden group hover:scale-[1.01] transition-all cursor-pointer border border-white/10"
@@ -471,25 +475,28 @@ export default function QuizPage() {
             </div>
         </div>
 
-        {/* SECTION SEO INYECTADA */}
-        <section className="mt-16 pt-16 border-t border-slate-200">
-          <h2 className="text-2xl font-black text-slate-900 mb-6 flex items-center gap-2">
-            <BrainCircuit className="text-emerald-500"/>
-            Sobre el Simulador SEREMI 2026
-          </h2>
-          <div className="prose prose-sm prose-slate text-slate-600 leading-relaxed">
-            <p>
-              El <strong>Simulador de Examen de Competencia</strong> de AuxiliarPro es la herramienta más avanzada para preparar tu acreditación ante la autoridad sanitaria. Diseñado siguiendo estrictamente el temario de los <strong>Decretos Supremos 466, 404, 405 y 3</strong>, además de la Ley 20.724.
-            </p>
-            <h3 className="text-lg font-bold text-slate-800 mt-4">¿Qué evalúan los niveles?</h3>
-            <ul className="list-disc pl-5 space-y-2 mt-2">
-              <li><strong>Normativa Farmacéutica:</strong> Roles, prohibiciones y tipos de establecimientos.</li>
-              <li><strong>Gestión de Calidad:</strong> Cadena de frío, control de vencimientos y bioequivalencia.</li>
-              <li><strong>Sustancias Controladas:</strong> Estupefacientes (D.404) y Psicotrópicos (D.405).</li>
-              <li><strong>Cálculo de Dosis:</strong> Posología matemática para la dispensación segura.</li>
-            </ul>
+        {/* 🟢 NUEVO: BOTÓN WHATSAPP COMPARTIR */}
+        <a 
+          href="https://wa.me/?text=¡Hola!%20Encontré%20este%20ensayo%20general%20para%20el%20examen%20de%20farmacia.%20Está%20buenísimo:%20https://www.auxiliaresdefarmacia.cl/ruta" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="group block bg-[#25D366] p-6 rounded-3xl shadow-sm hover:shadow-md transition-all hover:bg-[#20bd5a] mt-8"
+        >
+          <div className="flex items-center gap-4">
+              <div className="shrink-0">
+                  <img 
+                      src="/whatsapp.webp" 
+                      alt="WhatsApp" 
+                      className="w-10 h-10 object-contain" 
+                  />
+              </div>
+              <div>
+                  <h4 className="font-bold text-white text-sm">Compartir con Colegas</h4>
+                  <p className="text-xs text-white/90">Enviar al grupo del turno</p>
+              </div>
+              <ArrowRight size={20} className="text-white ml-auto opacity-70 group-hover:translate-x-1 transition-transform"/>
           </div>
-        </section>
+        </a>
 
       </div>
     </main>

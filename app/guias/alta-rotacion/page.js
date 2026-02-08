@@ -117,7 +117,7 @@ const preguntasQuiz = [
 
 export default function GuiaAltaRotacion() {
   const [isPdfReady, setIsPdfReady] = useState(false);
-   
+    
   // ESTADOS DEL QUIZ
   const [quizActivo, setQuizActivo] = useState(false);
   const [preguntaActual, setPreguntaActual] = useState(0);
@@ -577,7 +577,31 @@ export default function GuiaAltaRotacion() {
                 </button>
               </div>
 
-              {/* 🟢 NUEVO: TARJETA DE COLABORACIÓN (SUTIL CON REVENIU) */}
+              {/* 🟢 NUEVO: BOTÓN WHATSAPP COMPARTIR (CORREGIDO: SIN FILTROS FEOS) */}
+              <a 
+                href="https://wa.me/?text=%C2%A1Mira%20este%20resumen%20de%20Medicamentos%20de%20Alta%20Rotaci%C3%B3n!%20Ideal%20para%20estudiar%20%F0%9F%91%89%20https://www.auxiliaresdefarmacia.cl/guias/medicamentos-alta-rotacion" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="group block bg-[#25D366] p-6 rounded-3xl shadow-sm hover:shadow-md transition-all hover:bg-[#20bd5a]"
+              >
+                <div className="flex items-center gap-4">
+                    {/* Le quité el fondo blanco y los filtros de inversión al logo para que se vea real */}
+                    <div className="shrink-0">
+                        <img 
+                            src="/whatsapp.webp" 
+                            alt="WhatsApp" 
+                            className="w-10 h-10 object-contain" 
+                        />
+                    </div>
+                    <div>
+                        <h4 className="font-bold text-white text-sm">Compartir con Colegas</h4>
+                        <p className="text-xs text-white/90">Enviar al grupo del turno</p>
+                    </div>
+                    <ArrowRight size={20} className="text-white ml-auto opacity-70 group-hover:translate-x-1 transition-transform"/>
+                </div>
+              </a>
+
+              {/* 3. TARJETA DE COLABORACIÓN (REVENIU) */}
               <a 
                 href="https://app.reveniu.com/checkout-custom-link/HvM4DkkkUpBnILnQv4abrZl5qYX7faqU" 
                 target="_blank" 
@@ -596,7 +620,7 @@ export default function GuiaAltaRotacion() {
                 </div>
               </a>
 
-              {/* 3. TARJETA DERMOCHECK (CROSS-SELLING) */}
+              {/* 4. TARJETA DERMOCHECK (CROSS-SELLING) */}
               <a 
                 href="https://www.dermocheck.cl/#calculator-section" 
                 target="_blank" 

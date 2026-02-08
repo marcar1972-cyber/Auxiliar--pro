@@ -66,7 +66,7 @@ const preguntasQuiz = [
 
 export default function GuiaDecreto466() {
   const [isPdfReady, setIsPdfReady] = useState(false);
-   
+    
   // ESTADOS DEL QUIZ
   const [quizActivo, setQuizActivo] = useState(false);
   const [preguntaActual, setPreguntaActual] = useState(0);
@@ -380,6 +380,7 @@ export default function GuiaDecreto466() {
                 
                 <div className="relative z-10">
                   
+                  {/* ESTADO 1: INICIO */}
                   {!quizActivo && !mostrarResultado && (
                     <>
                         <span className="bg-emerald-500 text-emerald-950 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
@@ -400,6 +401,7 @@ export default function GuiaDecreto466() {
                     </>
                   )}
 
+                  {/* ESTADO 2: PREGUNTAS */}
                   {quizActivo && (
                     <div className="animate-in fade-in slide-in-from-right-4 duration-300">
                         <div className="flex justify-between items-center mb-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
@@ -432,6 +434,7 @@ export default function GuiaDecreto466() {
                     </div>
                   )}
 
+                  {/* ESTADO 3: RESULTADOS */}
                   {mostrarResultado && (
                     <div className="text-center animate-in zoom-in duration-300">
                         <div className="bg-emerald-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-400">
@@ -481,7 +484,30 @@ export default function GuiaDecreto466() {
                 </button>
               </div>
 
-              {/* 🟢 NUEVO: TARJETA DE COLABORACIÓN (SUTIL CON REVENIU) */}
+              {/* 🟢 BOTÓN WHATSAPP ESTÁNDAR (AÑADIDO) */}
+              <a 
+                href="https://wa.me/?text=¡Mira%20este%20resumen%20del%20Decreto%20466!%20Ideal%20para%20estudiar:%20https://www.auxiliaresdefarmacia.cl/guias/decreto-466-reglamento-farmacias" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="group block bg-[#25D366] p-6 rounded-3xl shadow-sm hover:shadow-md transition-all hover:bg-[#20bd5a]"
+              >
+                <div className="flex items-center gap-4">
+                    <div className="shrink-0">
+                        <img 
+                            src="/whatsapp.webp" 
+                            alt="WhatsApp" 
+                            className="w-10 h-10 object-contain" 
+                        />
+                    </div>
+                    <div>
+                        <h4 className="font-bold text-white text-sm">Compartir con Colegas</h4>
+                        <p className="text-xs text-white/90">Enviar al grupo del turno</p>
+                    </div>
+                    <ArrowRight size={20} className="text-white ml-auto opacity-70 group-hover:translate-x-1 transition-transform"/>
+                </div>
+              </a>
+
+              {/* 3. TARJETA DE COLABORACIÓN (SUTIL CON REVENIU) */}
               <a 
                 href="https://app.reveniu.com/checkout-custom-link/HvM4DkkkUpBnILnQv4abrZl5qYX7faqU" 
                 target="_blank" 
@@ -500,7 +526,7 @@ export default function GuiaDecreto466() {
                 </div>
               </a>
 
-              {/* 3. TARJETA DERMOCHECK (CROSS-SELLING) */}
+              {/* 4. TARJETA DERMOCHECK (CROSS-SELLING) */}
               <a 
                 href="https://www.dermocheck.cl/#calculator-section" 
                 target="_blank" 
