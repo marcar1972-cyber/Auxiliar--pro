@@ -182,7 +182,7 @@ export default function LandingPage() {
                   Lanzamos en diciembre de 2025 y ver la gran afluencia de usuarios me confirma que esto era necesario.
                 </p>
                 <blockquote className="border-l-4 border-emerald-500 pl-4 italic text-white my-4">
-                  "Creo firmemente que el conocimiento que nos permite crecer profesional y espiritualmente debe ser libre y gratuito para todos."
+                  "Creo firmemente que el conocimiento que nos permite crecer profesional y espiritualmente debe ser accesible para todos."
                 </blockquote>
               </div>
 
