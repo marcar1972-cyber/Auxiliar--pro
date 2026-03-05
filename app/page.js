@@ -194,10 +194,10 @@ export default function LandingPage() {
                 </div>
                 <div>
                   <h5 className="text-white font-bold mb-1 flex items-center gap-2"><BookOpen size={16} className="text-blue-400"/> Nuestra Visión</h5>
-                  <p className="text-xs text-slate-400">Crear la comunidad de apoyo más grande de Chile. Que nadie repruebe por falta de recursos.</p>
+                  <p className="text-xs text-slate-400">Crear la comunidad de apoyo más grande de Chile. Que nadie repruebe por falta de conocimientos.</p>
                 </div>
                 <div>
-                  <h5 className="text-white font-bold mb-1 flex items-center gap-2"><CheckCircle size={16} className="text-purple-400"/> Gratuidad Real</h5>
+                  <h5 className="text-white font-bold mb-1 flex items-center gap-2"><CheckCircle size={16} className="text-purple-400"/> Compromiso Real</h5>
                   <p className="text-xs text-slate-400">Sin letra chica. No vendemos tus datos. Un aporte personal para devolver la mano.</p>
                 </div>
               </div>
