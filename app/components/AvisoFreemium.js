@@ -74,7 +74,7 @@ export default function AvisoFreemium() {
 
     } catch (error) {
       console.error(error);
-      alert("Error de conexión al procesar el cupón.");
+      alert("Error de conexión al procesar el beneficio.");
     } finally {
       setCargandoCupon(false);
     }
@@ -166,7 +166,7 @@ export default function AvisoFreemium() {
 
           <div className="mt-auto flex flex-col gap-3">
             <p className="text-center text-emerald-400 font-bold text-sm">
-              Asegura tu cupón del 30% de descuento
+              Asegura tu beneficio del 30% de descuento
             </p>
             
             <button 
@@ -181,10 +181,10 @@ export default function AvisoFreemium() {
               }`}
             >
               {inscrito 
-                ? 'YA TIENES TU CUPÓN ✓' 
+                ? '¡BENEFICIO RESERVADO! ✓' 
                 : cargandoCupon 
                   ? <><Loader2 className="w-5 h-5 animate-spin" /> PROCESANDO...</>
-                  : 'QUIERO MI CUPÓN 30%'}
+                  : 'ASEGURAR MI 30% DCTO.'}
             </button>
           </div>
         </div>

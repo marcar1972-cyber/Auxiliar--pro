@@ -107,7 +107,7 @@ export default function BannerUrgencia() {
         </span>
         <span className="hidden md:inline opacity-30 text-emerald-500">|</span>
         <span className="leading-tight text-yellow-300 font-black animate-pulse">
-          Cupón 30% Dcto.
+          30% Dcto. Preventa
         </span>
       </div>
       
@@ -139,7 +139,7 @@ export default function BannerUrgencia() {
             ? '¡RESERVADO! ✓' 
             : cargando 
               ? '...' 
-              : 'QUIERO MI CUPÓN →'}
+              : 'ASEGURAR MI 30% →'}
         </button>
       </div>
 

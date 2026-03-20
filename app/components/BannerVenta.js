@@ -88,7 +88,7 @@ export default function BannerVenta() {
         
         <div className="relative z-10 w-full">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest mb-4 border bg-emerald-500/10 text-emerald-400 border-emerald-500/30">
-                <Sparkles size={12} /> Evolucionamos
+                <Sparkles size={12} /> 30% Dcto. Preventa
             </div>
             
             <h3 className="text-xl md:text-2xl font-black text-white mb-4 flex items-center gap-3 leading-tight">
@@ -145,10 +145,10 @@ export default function BannerVenta() {
                       }`}
                     >
                       {inscrito 
-                        ? '¡CUPÓN RESERVADO! ✓' 
+                        ? '¡BENEFICIO RESERVADO! ✓' 
                         : cargando 
                           ? <><Loader2 className="w-4 h-4 animate-spin" /> PROCESANDO...</>
-                          : <>QUIERO MI CUPÓN 30% <ArrowRight size={16} /></>}
+                          : <>ASEGURAR MI 30% DCTO. <ArrowRight size={16} /></>}
                     </button>
                   </div>
               </div>
