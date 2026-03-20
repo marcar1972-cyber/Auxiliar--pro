@@ -103,21 +103,21 @@ export default function BannerVenta() {
             </p>
             
             <ul className="space-y-3 mb-6 ml-1 text-sm md:text-base">
-              <li className="flex items-start text-slate-300">
-                <CheckCircle size={18} className="mr-3 mt-1 md:mt-0.5 shrink-0 text-emerald-400" />
-                <span><strong className="text-white">Simulador Inicial Completo:</strong> Niveles 1 al 7.</span>
+              <li className="flex items-start gap-3 text-slate-300">
+                <CheckCircle size={18} className="shrink-0 mt-0.5 text-emerald-400" />
+                <span className="text-left"><strong className="text-white">Simulador Inicial Completo:</strong> Niveles 1 al 7.</span>
               </li>
-              <li className="flex items-start text-slate-300">
-                <CheckCircle size={18} className="mr-3 mt-1 md:mt-0.5 shrink-0 text-emerald-400" />
-                <span><strong className="text-white">Simulador Avanzado:</strong> Preguntas complejas tipo SEREMI.</span>
+              <li className="flex items-start gap-3 text-slate-300">
+                <CheckCircle size={18} className="shrink-0 mt-0.5 text-emerald-400" />
+                <span className="text-left"><strong className="text-white">Simulador Avanzado:</strong> Preguntas complejas tipo SEREMI.</span>
               </li>
-              <li className="flex items-start text-slate-300">
-                <CheckCircle size={18} className="mr-3 mt-1 md:mt-0.5 shrink-0 text-emerald-400" />
-                <span><strong className="text-white">Vademécum Profesional (Beta)</strong>.</span>
+              <li className="flex items-start gap-3 text-slate-300">
+                <CheckCircle size={18} className="shrink-0 mt-0.5 text-emerald-400" />
+                <span className="text-left"><strong className="text-white">Vademécum Profesional (Beta)</strong>.</span>
               </li>
-              <li className="flex items-start text-slate-300">
-                <CheckCircle size={18} className="mr-3 mt-1 md:mt-0.5 shrink-0 text-emerald-400" />
-                <span><strong className="text-white">Próximamente (Abril):</strong> Asistente IA y Módulo Psicología.</span>
+              <li className="flex items-start gap-3 text-slate-300">
+                <CheckCircle size={18} className="shrink-0 mt-0.5 text-emerald-400" />
+                <span className="text-left"><strong className="text-white">Próximamente (Abril):</strong> Asistente IA y Módulo Psicología.</span>
               </li>
             </ul>
             
