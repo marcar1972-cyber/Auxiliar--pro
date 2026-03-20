@@ -267,7 +267,7 @@ export default function QuizPage() {
             <div className="mt-16 max-w-2xl mx-auto">
               <article className="bg-[#0f172a] rounded-[2.5rem] p-8 shadow-xl border border-slate-800 flex flex-col relative overflow-hidden">
                 <div className="absolute top-6 right-6"><span className="bg-gradient-to-r from-amber-400 to-amber-600 text-white text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest shadow-lg flex items-center gap-1"><Sparkles size={12} /> 31 de Marzo</span></div>
-                <h2 className="text-2xl font-black text-white mb-2 flex items-center gap-3"><ShieldCheck size={28} className="text-emerald-400"/> La Experiencia PRO</h2>
+                <h2 className="text-2xl font-black text-white mb-2 flex items-center gap-3 mt-10 md:mt-0"><ShieldCheck size={28} className="text-emerald-400"/> La Experiencia PRO</h2>
                 <p className="text-slate-400 mb-6 text-sm leading-relaxed">El ecosistema definitivo para toda tu vida laboral. No solo apruebes el examen, conviértete en el mejor profesional del mesón.</p>
                 <div className="bg-slate-900/50 p-5 rounded-2xl border border-slate-800 mb-8">
                   <h4 className="text-emerald-400 text-xs font-bold uppercase tracking-wider mb-4 border-b border-slate-700/50 pb-2">Simulador Avanzado + Herramientas</h4>
