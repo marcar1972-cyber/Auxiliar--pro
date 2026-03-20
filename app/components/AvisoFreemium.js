@@ -91,7 +91,7 @@ export default function AvisoFreemium() {
         </p>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto items-stretch">
+      <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto items-stretch mt-6">
         
         {/* Plan Base */}
         <div className="bg-white border-2 border-slate-100 rounded-2xl p-8 shadow-sm flex flex-col relative">
@@ -130,12 +130,12 @@ export default function AvisoFreemium() {
         </div>
 
         {/* Nivel PRO */}
-        <div className="bg-slate-900 border-2 border-emerald-500 rounded-2xl p-8 shadow-xl flex flex-col relative transform md:-translate-y-4">
-          <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-emerald-500 text-slate-900 px-4 py-1.5 rounded-full text-sm font-black flex items-center gap-1 shadow-[0_0_15px_rgba(16,185,129,0.4)] tracking-wide uppercase whitespace-nowrap">
+        <div className="bg-slate-900 border-2 border-emerald-500 rounded-2xl p-8 pt-10 shadow-xl flex flex-col relative transform md:-translate-y-4">
+          <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-emerald-500 text-slate-900 px-4 py-1.5 rounded-full text-sm font-black flex items-center gap-1 shadow-[0_0_15px_rgba(16,185,129,0.4)] tracking-wide uppercase whitespace-nowrap z-10">
             <Zap className="w-4 h-4 fill-current" /> Lanzamiento 31 de Marzo
           </div>
           
-          <h3 className="text-2xl font-bold text-white mb-2 mt-2">Nivel PRO</h3>
+          <h3 className="text-2xl font-bold text-white mb-2 mt-4 relative z-0">Nivel PRO</h3>
           
           <p className="text-slate-300 mb-6 min-h-[48px] text-sm leading-relaxed">
             El <strong className="text-emerald-400">31 de marzo de 2026</strong> evolucionamos. La plataforma se mantendrá <strong className="text-white">gratis en los niveles 1, 2, Guías y DermoCheck</strong>. Los niveles 3 al 7 y las nuevas herramientas pasarán a suscripción.

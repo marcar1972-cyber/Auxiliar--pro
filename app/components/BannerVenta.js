@@ -92,7 +92,7 @@ export default function BannerVenta() {
             </div>
             
             <h3 className="text-xl md:text-2xl font-black text-white mb-4 flex items-center gap-3 leading-tight">
-                <Lock className="text-emerald-400" size={24} /> AuxiliarPro evoluciona
+                <Lock className="text-emerald-400 shrink-0" size={24} /> AuxiliarPro evoluciona
             </h3>
             
             <p className="text-slate-300 text-sm md:text-base leading-relaxed mb-4">
@@ -104,19 +104,19 @@ export default function BannerVenta() {
             
             <ul className="space-y-3 mb-6 ml-1 text-sm md:text-base">
               <li className="flex items-start text-slate-300">
-                <CheckCircle size={18} className="mr-3 mt-0.5 shrink-0 text-emerald-400" />
+                <CheckCircle size={18} className="mr-3 mt-1 md:mt-0.5 shrink-0 text-emerald-400" />
                 <span><strong className="text-white">Simulador Inicial Completo:</strong> Niveles 1 al 7.</span>
               </li>
               <li className="flex items-start text-slate-300">
-                <CheckCircle size={18} className="mr-3 mt-0.5 shrink-0 text-emerald-400" />
+                <CheckCircle size={18} className="mr-3 mt-1 md:mt-0.5 shrink-0 text-emerald-400" />
                 <span><strong className="text-white">Simulador Avanzado:</strong> Preguntas complejas tipo SEREMI.</span>
               </li>
               <li className="flex items-start text-slate-300">
-                <CheckCircle size={18} className="mr-3 mt-0.5 shrink-0 text-emerald-400" />
+                <CheckCircle size={18} className="mr-3 mt-1 md:mt-0.5 shrink-0 text-emerald-400" />
                 <span><strong className="text-white">Vademécum Profesional (Beta)</strong>.</span>
               </li>
               <li className="flex items-start text-slate-300">
-                <CheckCircle size={18} className="mr-3 mt-0.5 shrink-0 text-emerald-400" />
+                <CheckCircle size={18} className="mr-3 mt-1 md:mt-0.5 shrink-0 text-emerald-400" />
                 <span><strong className="text-white">Próximamente (Abril):</strong> Asistente IA y Módulo Psicología.</span>
               </li>
             </ul>
