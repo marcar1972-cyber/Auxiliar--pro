@@ -1,14 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from "next/link";
 import Script from "next/script"; 
+import BannerVenta from '../../components/BannerVenta'; 
 import { 
   BookOpen, AlertTriangle, Download, ArrowRight, Pill, 
   Flame, Activity, ShieldAlert, Stethoscope, Zap, Wind, 
   Thermometer, GraduationCap, FileText, Trophy, UserCheck, 
   XCircle, Droplet, CheckCircle, Clock, AlertOctagon, Heart, 
-  ExternalLink 
+  ExternalLink, RefreshCw, Lock, Sparkles
 } from "lucide-react";
 
 // 📝 PREGUNTAS DEL QUIZ (Alta Rotación: Dolor, Respiratorio y Digestivo)
@@ -117,6 +118,7 @@ const preguntasQuiz = [
 
 export default function GuiaAltaRotacion() {
   const [isPdfReady, setIsPdfReady] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false); 
     
   // ESTADOS DEL QUIZ
   const [quizActivo, setQuizActivo] = useState(false);
@@ -152,9 +154,10 @@ export default function GuiaAltaRotacion() {
     setRespuestaSeleccionada(null);
   };
 
-  // 🖨️ FUNCIÓN PARA GENERAR EL PDF
-  const generarPDF = () => {
+  // 🖨️ FUNCIÓN PARA GENERAR EL PDF CORREGIDA
+  const generarPDF = async () => {
     if (typeof window !== 'undefined' && window.html2pdf) {
+      setIsGenerating(true); 
       const elemento = document.getElementById('contenido-pdf');
       
       const opciones = {
@@ -166,15 +169,23 @@ export default function GuiaAltaRotacion() {
         pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
       };
 
-      window.html2pdf().from(elemento).set(opciones).save();
+      try {
+        await window.html2pdf().from(elemento).set(opciones).save();
+      } catch (error) {
+        console.error("Error generating PDF:", error);
+        alert("Hubo un problema al generar el PDF. Por favor, intenta nuevamente.");
+      } finally {
+        setIsGenerating(false); 
+      }
     } else {
-      alert("La herramienta de PDF se está cargando, intenta de nuevo en 2 segundos.");
+      alert("La herramienta de PDF aún se está cargando. Por favor, espera un momento.");
     }
   };
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-700 font-sans">
       
+      {/* Script optimizado de Next.js para cargar html2pdf */}
       <Script 
         src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" 
         strategy="lazyOnload"
@@ -208,282 +219,295 @@ export default function GuiaAltaRotacion() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           
           {/* 🟢 COLUMNA IZQUIERDA: CONTENIDO COMPLETO (8 columnas) */}
-          <div id="contenido-pdf" className="lg:col-span-8 space-y-12 bg-white p-4 md:p-8 rounded-xl shadow-sm">
-            
-            <div className="mb-8 border-b pb-4 border-slate-100 flex justify-between items-center">
-                <img 
-                    src="/logo.webp" 
-                    alt="AuxiliarPro Logo" 
-                    className="w-32" 
-                    crossOrigin="anonymous" 
-                />
-                <span className="text-xs text-slate-400 font-bold uppercase tracking-widest">Manual Integral 2026</span>
+          <div className="lg:col-span-8 space-y-12">
+            <div id="contenido-pdf" className="bg-white p-4 md:p-8 rounded-xl shadow-sm space-y-12">
+              <div className="mb-8 border-b pb-4 border-slate-100 flex justify-between items-center">
+                  <img 
+                      src="/logo.webp" 
+                      alt="AuxiliarPro Logo" 
+                      className="w-32" 
+                      crossOrigin="anonymous" 
+                  />
+                  <span className="text-xs text-slate-400 font-bold uppercase tracking-widest">Manual Integral 2026</span>
+              </div>
+
+              {/* INTRODUCCIÓN */}
+              <section className="break-inside-avoid">
+                  <h2 className="text-2xl font-black text-slate-900 mb-4">Introducción: La Regla del 80/20</h2>
+                  <p className="text-lg leading-relaxed text-slate-600">
+                      En farmacia se cumple el Principio de Pareto: el 80% de las consultas de mostrador se resuelven con el 20% de los medicamentos. Esta guía cubre ese 20% crítico. Si dominas estos tres sistemas (Dolor, Respiratorio, Digestivo), podrás manejar la gran mayoría de las atenciones diarias con seguridad y profesionalismo.
+                  </p>
+              </section>
+
+              <hr className="border-slate-200" />
+
+              {/* MÓDULO 1: DOLOR E INFLAMACIÓN */}
+              <section className="break-inside-avoid">
+                  <div className="flex items-center gap-3 mb-6">
+                      <div className="bg-red-100 p-3 rounded-lg text-red-600"><Flame size={28} /></div>
+                      <h2 className="text-2xl font-black text-slate-900">Módulo 1: Dolor e Inflamación</h2>
+                  </div>
+                  
+                  <p className="mb-6 text-slate-600">
+                      Es vital distinguir entre Analgésicos puros (solo dolor/fiebre) y AINEs (Antiinflamatorios). El error más común es dar AINEs a pacientes con problemas gástricos.
+                  </p>
+
+                  {/* COMPARATIVA DE ANALGÉSICOS */}
+                  <div className="space-y-6">
+                      
+                      {/* PARACETAMOL */}
+                      <div className="bg-white border-l-4 border-emerald-500 p-5 rounded-r-xl shadow-sm">
+                          <h3 className="font-bold text-slate-900 text-lg flex justify-between">
+                              1. Paracetamol (Acetaminofén)
+                              <span className="text-xs bg-emerald-100 text-emerald-800 px-2 py-1 rounded-full uppercase">Seguridad</span>
+                          </h3>
+                          <ul className="mt-3 space-y-2 text-sm text-slate-700">
+                              <li><strong>Acción:</strong> Analgésico y Antipirético (baja la fiebre). NO desinflama significativamente.</li>
+                              <li><strong>Uso ideal:</strong> Niños, embarazadas, dolor de cabeza leve, pacientes con gastritis.</li>
+                              <li><strong>Riesgo:</strong> Hepatotoxicidad (daño al hígado) en sobredosis. Máximo 4g al día en adultos sanos.</li>
+                          </ul>
+                      </div>
+
+                      {/* IBUPROFENO */}
+                      <div className="bg-white border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
+                          <h3 className="font-bold text-slate-900 text-lg flex justify-between">
+                              2. Ibuprofeno
+                              <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full uppercase">Versátil</span>
+                          </h3>
+                          <ul className="mt-3 space-y-2 text-sm text-slate-700">
+                              <li><strong>Acción:</strong> AINE completo (Dolor, Fiebre e Inflamación).</li>
+                              <li><strong>Uso ideal:</strong> Dolor de garganta, dolor menstrual, golpes, dolor dental moderado.</li>
+                              <li><strong>Riesgo:</strong> Gastrolesivo (daña el estómago). Siempre con comida. Sube la presión arterial.</li>
+                          </ul>
+                      </div>
+
+                      {/* KETOROLACO */}
+                      <div className="bg-white border-l-4 border-red-500 p-5 rounded-r-xl shadow-sm">
+                          <h3 className="font-bold text-slate-900 text-lg flex justify-between">
+                              3. Ketorolaco
+                              <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full uppercase">Potencia</span>
+                          </h3>
+                          <ul className="mt-3 space-y-2 text-sm text-slate-700">
+                              <li><strong>Acción:</strong> Analgésico muy potente (nivel post-quirúrgico).</li>
+                              <li><strong>Uso ideal:</strong> Dolor de muelas severo, cólicos renales, migrañas fuertes.</li>
+                              <li><strong>Riesgo Extremo:</strong> Daño renal y gástrico rápido. <strong>¡Máximo 5 días de uso!</strong> Prohibido en adultos mayores por riesgo de hemorragia.</li>
+                          </ul>
+                      </div>
+
+                      {/* DICLOFENACO */}
+                      <div className="bg-white border-l-4 border-purple-500 p-5 rounded-r-xl shadow-sm">
+                          <h3 className="font-bold text-slate-900 text-lg flex justify-between">
+                              4. Diclofenaco
+                              <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full uppercase">Muscular</span>
+                          </h3>
+                          <ul className="mt-3 space-y-2 text-sm text-slate-700">
+                              <li><strong>Acción:</strong> Preferencia por tejido muscular y articular.</li>
+                              <li><strong>Uso ideal:</strong> Lumbago, esguinces, tendinitis, dolor de rodilla.</li>
+                              <li><strong>Riesgo:</strong> Alto riesgo cardiovascular en uso crónico. Irrita el estómago.</li>
+                          </ul>
+                      </div>
+                  </div>
+
+                  <div className="mt-6 bg-red-50 p-4 rounded-xl border border-red-200">
+                      <h4 className="font-bold text-red-900 flex items-center gap-2 mb-2"><ShieldAlert size={20}/> Advertencia de Seguridad: AINEs</h4>
+                      <p className="text-sm text-red-800">
+                          Todos los AINEs (Ibuprofeno, Ketorolaco, Diclofenaco, Naproxeno) bloquean la protección natural del estómago y reducen el flujo de sangre al riñón. 
+                          <strong>Nunca recomendar a pacientes con úlcera activa o insuficiencia renal.</strong>
+                      </p>
+                  </div>
+              </section>
+
+              <hr className="border-slate-200" />
+
+              {/* MÓDULO 2: SISTEMA RESPIRATORIO */}
+              <section className="break-inside-avoid">
+                  <div className="flex items-center gap-3 mb-6">
+                      <div className="bg-cyan-100 p-3 rounded-lg text-cyan-600"><Wind size={28} /></div>
+                      <h2 className="text-2xl font-black text-slate-900">Módulo 2: Respiratorio y Alergias</h2>
+                  </div>
+
+                  {/* ANTIHISTAMÍNICOS */}
+                  <h3 className="text-lg font-bold text-slate-800 mb-3">1. Antihistamínicos (Alergias)</h3>
+                  <div className="grid md:grid-cols-2 gap-4 mb-6">
+                      <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                          <strong className="block text-slate-900 mb-1">Clorfenamina (1ª Generación)</strong>
+                          <p className="text-sm text-slate-600">Efectiva pero atraviesa la barrera hematoencefálica. <strong>Produce mucho sueño.</strong> Útil para picazones intensas nocturnas o resfríos fuertes para dormir mejor.</p>
+                      </div>
+                      <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                          <strong className="block text-slate-900 mb-1">Loratadina / Desloratadina (2ª Gen)</strong>
+                          <p className="text-sm text-slate-600">No producen sueño (o muy poco). Ideales para alergias estacionales (rinitis, primavera) que requieren tratamiento diario durante el día.</p>
+                      </div>
+                  </div>
+
+                  {/* JARABES PARA LA TOS */}
+                  <h3 className="text-lg font-bold text-slate-800 mb-3">2. El Dilema de la Tos</h3>
+                  <p className="text-sm text-slate-600 mb-4">Es la pregunta más importante: <em>"¿Tiene flema o es tos seca?"</em></p>
+                  
+                  <div className="flex flex-col md:flex-row gap-6 mb-6">
+                      <div className="flex-1 bg-green-50 p-5 rounded-2xl border border-green-200">
+                          <h4 className="font-bold text-green-900 mb-2 flex items-center gap-2"><Droplet size={18}/> Tos con Flema (Productiva)</h4>
+                          <p className="text-sm text-green-800 mb-3">El cuerpo necesita expulsar el moco. NO debemos cortar la tos.</p>
+                          <strong className="text-sm text-green-900 block">Recomendación: Mucolíticos</strong>
+                          <ul className="text-sm text-green-800 list-disc pl-4 mt-1">
+                              <li><strong>Ambroxol / Bromhexina:</strong> Rompen la flema para que sea más fácil botarla.</li>
+                              <li>Aumentar ingesta de agua.</li>
+                          </ul>
+                      </div>
+
+                      <div className="flex-1 bg-yellow-50 p-5 rounded-2xl border border-yellow-200">
+                          <h4 className="font-bold text-yellow-900 mb-2 flex items-center gap-2"><XCircle size={18}/> Tos Seca (Irritativa)</h4>
+                          <p className="text-sm text-yellow-800 mb-3">Es una tos molesta, que pica, sin desgarro. Impide dormir.</p>
+                          <strong className="text-sm text-yellow-900 block">Recomendación: Antitusivos</strong>
+                          <ul className="text-sm text-yellow-800 list-disc pl-4 mt-1">
+                              <li><strong>Oxolamina / Codeína:</strong> Actúan calmando la irritación periférica o inhibiendo el reflejo de la tos.</li>
+                              <li>Nunca dar si hay flema (provocaría retención e infección).</li>
+                          </ul>
+                      </div>
+                  </div>
+
+                  {/* INHALADORES */}
+                  <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                      <h4 className="font-bold text-slate-900 mb-2">3. Inhaladores Básicos: Salbutamol</h4>
+                      <p className="text-sm text-slate-700">Es un <strong>Broncodilatador de acción rápida</strong>. Se usa "a demanda" (SOS) cuando el paciente siente el pecho apretado. No es un tratamiento de fondo, es un "rescate".</p>
+                  </div>
+              </section>
+
+              <hr className="border-slate-200" />
+
+              {/* MÓDULO 3: SISTEMA DIGESTIVO */}
+              <section className="break-inside-avoid">
+                  <div className="flex items-center gap-3 mb-6">
+                      <div className="bg-purple-100 p-3 rounded-lg text-purple-600"><Stethoscope size={28} /></div>
+                      <h2 className="text-2xl font-black text-slate-900">Módulo 3: Sistema Digestivo</h2>
+                  </div>
+
+                  <div className="space-y-6">
+                      
+                      {/* GASTRITIS Y ACIDEZ */}
+                      <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                          <h3 className="font-bold text-slate-900 mb-3">Acidez y Protección Gástrica</h3>
+                          <div className="grid md:grid-cols-2 gap-4">
+                              <div className="bg-slate-50 p-3 rounded-lg">
+                                  <strong className="text-slate-800 block text-sm">Antiácidos (Sales, Famotidina)</strong>
+                                  <p className="text-xs text-slate-600">Acción química inmediata. Neutralizan el ácido que ya está ahí. Efecto corto. Para alivio sintomático rápido.</p>
+                              </div>
+                              <div className="bg-slate-50 p-3 rounded-lg">
+                                  <strong className="text-slate-800 block text-sm">Inhibidores (Omeprazol)</strong>
+                                  <p className="text-xs text-slate-600">Evitan que se produzca ácido. Prevención y tratamiento de úlceras. <strong>Regla de Oro: Tomar en ayunas</strong> (30 min antes del desayuno) para que funcione.</p>
+                              </div>
+                          </div>
+                      </div>
+
+                      {/* CÓLICOS */}
+                      <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-start gap-4">
+                          <div className="bg-purple-50 text-purple-600 p-2 rounded-lg"><Activity size={24}/></div>
+                          <div>
+                              <h4 className="font-bold text-slate-900">Cólicos: Antiespasmódicos</h4>
+                              <p className="text-sm text-slate-600 mt-1">
+                                  Para el dolor tipo "retortijón". El líder es el <strong>Viadil (Propinoxato)</strong>. Relaja la musculatura del intestino.
+                                  <br/><span className="text-xs text-slate-500 italic">Ojo: Viadil Compuesto incluye Metamizol (analgésico) para mayor potencia.</span>
+                              </p>
+                          </div>
+                      </div>
+
+                      {/* DIARREA Y FLORA */}
+                      <div className="grid md:grid-cols-2 gap-4">
+                          <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                              <strong className="text-slate-900 block mb-1">Antidiarreicos (Loperamida)</strong>
+                              <p className="text-sm text-slate-600">"Paralizan" el intestino para frenar la diarrea. No usar si hay fiebre o sangre (podría ser una infección bacteriana que necesita salir).</p>
+                          </div>
+                          <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                              <strong className="text-slate-900 block mb-1">Probióticos (Perenteryl, Bioflora)</strong>
+                              <p className="text-sm text-slate-600">Son microorganismos vivos que restauran la flora intestinal perdida por la diarrea o antibióticos. Fundamentales en niños.</p>
+                          </div>
+                      </div>
+
+                  </div>
+              </section>
+
+              {/* MÓDULO 4: ANAMNESIS Y SEGURIDAD */}
+              <hr className="border-slate-200 my-8" />
+              <section className="break-inside-avoid">
+                  <h2 className="text-2xl font-black text-slate-900 mb-6 flex items-center gap-3">
+                      <UserCheck className="text-blue-600" /> Módulo 4: Seguridad Clínica y Protocolo
+                  </h2>
+                  
+                  {/* Contraindicaciones */}
+                  <div className="bg-white border border-slate-200 rounded-2xl p-6 mb-6 shadow-sm">
+                      <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                          <AlertOctagon className="text-red-500" size={20} /> Contraindicaciones Absolutas
+                      </h3>
+                      <ul className="space-y-3 text-sm text-slate-700">
+                          <li className="flex gap-2">
+                              <XCircle className="text-red-500 shrink-0" size={16} />
+                              <span><strong>Alergia a la Aspirina (AAS):</strong> Riesgo de reacción cruzada con otros AINEs.</span>
+                          </li>
+                          <li className="flex gap-2">
+                              <XCircle className="text-red-500 shrink-0" size={16} />
+                              <span><strong>Úlcera Gástrica Activa:</strong> Nunca vender AINEs. Preferir Paracetamol.</span>
+                          </li>
+                          <li className="flex gap-2">
+                              <XCircle className="text-red-500 shrink-0" size={16} />
+                              <span><strong>Insuficiencia Renal Grave:</strong> Los AINEs empeoran la función renal.</span>
+                          </li>
+                          <li className="flex gap-2">
+                              <XCircle className="text-red-500 shrink-0" size={16} />
+                              <span><strong>Tos Productiva + Antitusivo:</strong> Nunca inhibir la tos si hay flema, ya que puede causar neumonía por retención.</span>
+                          </li>
+                      </ul>
+                  </div>
+
+                  {/* Grupos de Riesgo y Anamnesis */}
+                  <div className="grid md:grid-cols-2 gap-6">
+                      <div className="bg-blue-50 p-5 rounded-2xl border border-blue-100">
+                          <h4 className="font-bold text-blue-900 mb-3">Grupos de Riesgo</h4>
+                          <ul className="text-sm text-blue-800 space-y-2 list-disc pl-4">
+                              <li><strong>Tercera Edad:</strong> Mayor riesgo renal y gástrico. Evitar AINEs potentes.</li>
+                              <li><strong>Embarazadas:</strong> AINEs prohibidos en 3er trimestre. Paracetamol es seguro.</li>
+                              <li><strong>Lactancia:</strong> Paracetamol e Ibuprofeno suelen ser compatibles (verificar en <a href="https://www.e-lactancia.org" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-600 font-semibold inline-flex items-center gap-1">e-lactancia.org <ExternalLink size={12}/></a>).</li>
+                              <li><strong>Hipertensos:</strong> Evitar antigripales con Pseudoefedrina (sube la presión).</li>
+                          </ul>
+                      </div>
+
+                      <div className="bg-emerald-50 p-5 rounded-2xl border border-emerald-100">
+                          <h4 className="font-bold text-emerald-900 mb-3">Protocolo de Anamnesis</h4>
+                          <ul className="text-sm text-emerald-800 space-y-2">
+                              <li><strong>1. ¿Para quién es?</strong> (Niño, adulto, embarazada, abuelo).</li>
+                              <li><strong>2. ¿Tiene alguna enfermedad crónica?</strong> (HTA, Diabetes, Gastritis).</li>
+                              <li><strong>3. ¿Toma otros medicamentos?</strong> (Para evitar interacciones).</li>
+                              <li><strong>4. Síntoma Clave:</strong> "¿La tos es seca o con flema?", "¿Le duele el estómago al comer?".</li>
+                          </ul>
+                      </div>
+                  </div>
+              </section>
             </div>
 
-            {/* INTRODUCCIÓN */}
-            <section className="break-inside-avoid">
-                <h2 className="text-2xl font-black text-slate-900 mb-4">Introducción: La Regla del 80/20</h2>
-                <p className="text-lg leading-relaxed text-slate-600">
-                    En farmacia se cumple el Principio de Pareto: el 80% de las consultas de mostrador se resuelven con el 20% de los medicamentos. Esta guía cubre ese 20% crítico. Si dominas estos tres sistemas (Dolor, Respiratorio, Digestivo), podrás manejar la gran mayoría de las atenciones diarias con seguridad y profesionalismo.
+            {/* Aviso Legal Desktop */}
+            <div className="bg-slate-800/5 p-5 rounded-2xl border border-slate-200 mt-8 hidden lg:block">
+                <p className="text-sm text-slate-500 leading-relaxed flex gap-3">
+                    <AlertTriangle className="shrink-0 text-amber-500 mt-0.5" size={20} />
+                    <span>
+                        <strong>Advertencia Legal:</strong> Estudiar por tu cuenta en esta plataforma es válido y recomendado para <em>preparar</em> tu examen. Sin embargo, para inscribirte oficialmente en la SEREMI necesitarás acreditar tu experiencia laboral o un certificado de práctica. El "estudio teórico" no reemplaza el requisito legal de experiencia exigido por el Decreto 90.
+                    </span>
                 </p>
-            </section>
-
-            <hr className="border-slate-200" />
-
-            {/* MÓDULO 1: DOLOR E INFLAMACIÓN */}
-            <section className="break-inside-avoid">
-                <div className="flex items-center gap-3 mb-6">
-                    <div className="bg-red-100 p-3 rounded-lg text-red-600"><Flame size={28} /></div>
-                    <h2 className="text-2xl font-black text-slate-900">Módulo 1: Dolor e Inflamación</h2>
-                </div>
-                
-                <p className="mb-6 text-slate-600">
-                    Es vital distinguir entre Analgésicos puros (solo dolor/fiebre) y AINEs (Antiinflamatorios). El error más común es dar AINEs a pacientes con problemas gástricos.
-                </p>
-
-                {/* COMPARATIVA DE ANALGÉSICOS */}
-                <div className="space-y-6">
-                    
-                    {/* PARACETAMOL */}
-                    <div className="bg-white border-l-4 border-emerald-500 p-5 rounded-r-xl shadow-sm">
-                        <h3 className="font-bold text-slate-900 text-lg flex justify-between">
-                            1. Paracetamol (Acetaminofén)
-                            <span className="text-xs bg-emerald-100 text-emerald-800 px-2 py-1 rounded-full uppercase">Seguridad</span>
-                        </h3>
-                        <ul className="mt-3 space-y-2 text-sm text-slate-700">
-                            <li><strong>Acción:</strong> Analgésico y Antipirético (baja la fiebre). NO desinflama significativamente.</li>
-                            <li><strong>Uso ideal:</strong> Niños, embarazadas, dolor de cabeza leve, pacientes con gastritis.</li>
-                            <li><strong>Riesgo:</strong> Hepatotoxicidad (daño al hígado) en sobredosis. Máximo 4g al día en adultos sanos.</li>
-                        </ul>
-                    </div>
-
-                    {/* IBUPROFENO */}
-                    <div className="bg-white border-l-4 border-blue-500 p-5 rounded-r-xl shadow-sm">
-                        <h3 className="font-bold text-slate-900 text-lg flex justify-between">
-                            2. Ibuprofeno
-                            <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full uppercase">Versátil</span>
-                        </h3>
-                        <ul className="mt-3 space-y-2 text-sm text-slate-700">
-                            <li><strong>Acción:</strong> AINE completo (Dolor, Fiebre e Inflamación).</li>
-                            <li><strong>Uso ideal:</strong> Dolor de garganta, dolor menstrual, golpes, dolor dental moderado.</li>
-                            <li><strong>Riesgo:</strong> Gastrolesivo (daña el estómago). Siempre con comida. Sube la presión arterial.</li>
-                        </ul>
-                    </div>
-
-                    {/* KETOROLACO */}
-                    <div className="bg-white border-l-4 border-red-500 p-5 rounded-r-xl shadow-sm">
-                        <h3 className="font-bold text-slate-900 text-lg flex justify-between">
-                            3. Ketorolaco
-                            <span className="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full uppercase">Potencia</span>
-                        </h3>
-                        <ul className="mt-3 space-y-2 text-sm text-slate-700">
-                            <li><strong>Acción:</strong> Analgésico muy potente (nivel post-quirúrgico).</li>
-                            <li><strong>Uso ideal:</strong> Dolor de muelas severo, cólicos renales, migrañas fuertes.</li>
-                            <li><strong>Riesgo Extremo:</strong> Daño renal y gástrico rápido. <strong>¡Máximo 5 días de uso!</strong> Prohibido en adultos mayores por riesgo de hemorragia.</li>
-                        </ul>
-                    </div>
-
-                    {/* DICLOFENACO */}
-                    <div className="bg-white border-l-4 border-purple-500 p-5 rounded-r-xl shadow-sm">
-                        <h3 className="font-bold text-slate-900 text-lg flex justify-between">
-                            4. Diclofenaco
-                            <span className="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full uppercase">Muscular</span>
-                        </h3>
-                        <ul className="mt-3 space-y-2 text-sm text-slate-700">
-                            <li><strong>Acción:</strong> Preferencia por tejido muscular y articular.</li>
-                            <li><strong>Uso ideal:</strong> Lumbago, esguinces, tendinitis, dolor de rodilla.</li>
-                            <li><strong>Riesgo:</strong> Alto riesgo cardiovascular en uso crónico. Irrita el estómago.</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div className="mt-6 bg-red-50 p-4 rounded-xl border border-red-200">
-                    <h4 className="font-bold text-red-900 flex items-center gap-2 mb-2"><ShieldAlert size={20}/> Advertencia de Seguridad: AINEs</h4>
-                    <p className="text-sm text-red-800">
-                        Todos los AINEs (Ibuprofeno, Ketorolaco, Diclofenaco, Naproxeno) bloquean la protección natural del estómago y reducen el flujo de sangre al riñón. 
-                        <strong>Nunca recomendar a pacientes con úlcera activa o insuficiencia renal.</strong>
-                    </p>
-                </div>
-            </section>
-
-            <hr className="border-slate-200" />
-
-            {/* MÓDULO 2: SISTEMA RESPIRATORIO */}
-            <section className="break-inside-avoid">
-                <div className="flex items-center gap-3 mb-6">
-                    <div className="bg-cyan-100 p-3 rounded-lg text-cyan-600"><Wind size={28} /></div>
-                    <h2 className="text-2xl font-black text-slate-900">Módulo 2: Respiratorio y Alergias</h2>
-                </div>
-
-                {/* ANTIHISTAMÍNICOS */}
-                <h3 className="text-lg font-bold text-slate-800 mb-3">1. Antihistamínicos (Alergias)</h3>
-                <div className="grid md:grid-cols-2 gap-4 mb-6">
-                    <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                        <strong className="block text-slate-900 mb-1">Clorfenamina (1ª Generación)</strong>
-                        <p className="text-sm text-slate-600">Efectiva pero atraviesa la barrera hematoencefálica. <strong>Produce mucho sueño.</strong> Útil para picazones intensas nocturnas o resfríos fuertes para dormir mejor.</p>
-                    </div>
-                    <div className="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                        <strong className="block text-slate-900 mb-1">Loratadina / Desloratadina (2ª Gen)</strong>
-                        <p className="text-sm text-slate-600">No producen sueño (o muy poco). Ideales para alergias estacionales (rinitis, primavera) que requieren tratamiento diario durante el día.</p>
-                    </div>
-                </div>
-
-                {/* JARABES PARA LA TOS */}
-                <h3 className="text-lg font-bold text-slate-800 mb-3">2. El Dilema de la Tos</h3>
-                <p className="text-sm text-slate-600 mb-4">Es la pregunta más importante: <em>"¿Tiene flema o es tos seca?"</em></p>
-                
-                <div className="flex flex-col md:flex-row gap-6 mb-6">
-                    <div className="flex-1 bg-green-50 p-5 rounded-2xl border border-green-200">
-                        <h4 className="font-bold text-green-900 mb-2 flex items-center gap-2"><Droplet size={18}/> Tos con Flema (Productiva)</h4>
-                        <p className="text-sm text-green-800 mb-3">El cuerpo necesita expulsar el moco. NO debemos cortar la tos.</p>
-                        <strong className="text-sm text-green-900 block">Recomendación: Mucolíticos</strong>
-                        <ul className="text-sm text-green-800 list-disc pl-4 mt-1">
-                            <li><strong>Ambroxol / Bromhexina:</strong> Rompen la flema para que sea más fácil botarla.</li>
-                            <li>Aumentar ingesta de agua.</li>
-                        </ul>
-                    </div>
-
-                    <div className="flex-1 bg-yellow-50 p-5 rounded-2xl border border-yellow-200">
-                        <h4 className="font-bold text-yellow-900 mb-2 flex items-center gap-2"><XCircle size={18}/> Tos Seca (Irritativa)</h4>
-                        <p className="text-sm text-yellow-800 mb-3">Es una tos molesta, que pica, sin desgarro. Impide dormir.</p>
-                        <strong className="text-sm text-yellow-900 block">Recomendación: Antitusivos</strong>
-                        <ul className="text-sm text-yellow-800 list-disc pl-4 mt-1">
-                            <li><strong>Oxolamina / Codeína:</strong> Actúan calmando la irritación periférica o inhibiendo el reflejo de la tos.</li>
-                            <li>Nunca dar si hay flema (provocaría retención e infección).</li>
-                        </ul>
-                    </div>
-                </div>
-
-                {/* INHALADORES */}
-                <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                    <h4 className="font-bold text-slate-900 mb-2">3. Inhaladores Básicos: Salbutamol</h4>
-                    <p className="text-sm text-slate-700">Es un <strong>Broncodilatador de acción rápida</strong>. Se usa "a demanda" (SOS) cuando el paciente siente el pecho apretado. No es un tratamiento de fondo, es un "rescate".</p>
-                </div>
-            </section>
-
-            <hr className="border-slate-200" />
-
-            {/* MÓDULO 3: SISTEMA DIGESTIVO */}
-            <section className="break-inside-avoid">
-                <div className="flex items-center gap-3 mb-6">
-                    <div className="bg-purple-100 p-3 rounded-lg text-purple-600"><Stethoscope size={28} /></div>
-                    <h2 className="text-2xl font-black text-slate-900">Módulo 3: Sistema Digestivo</h2>
-                </div>
-
-                <div className="space-y-6">
-                    
-                    {/* GASTRITIS Y ACIDEZ */}
-                    <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-                        <h3 className="font-bold text-slate-900 mb-3">Acidez y Protección Gástrica</h3>
-                        <div className="grid md:grid-cols-2 gap-4">
-                            <div className="bg-slate-50 p-3 rounded-lg">
-                                <strong className="text-slate-800 block text-sm">Antiácidos (Sales, Famotidina)</strong>
-                                <p className="text-xs text-slate-600">Acción química inmediata. Neutralizan el ácido que ya está ahí. Efecto corto. Para alivio sintomático rápido.</p>
-                            </div>
-                            <div className="bg-slate-50 p-3 rounded-lg">
-                                <strong className="text-slate-800 block text-sm">Inhibidores (Omeprazol)</strong>
-                                <p className="text-xs text-slate-600">Evitan que se produzca ácido. Prevención y tratamiento de úlceras. <strong>Regla de Oro: Tomar en ayunas</strong> (30 min antes del desayuno) para que funcione.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* CÓLICOS */}
-                    <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex items-start gap-4">
-                        <div className="bg-purple-50 text-purple-600 p-2 rounded-lg"><Activity size={24}/></div>
-                        <div>
-                            <h4 className="font-bold text-slate-900">Cólicos: Antiespasmódicos</h4>
-                            <p className="text-sm text-slate-600 mt-1">
-                                Para el dolor tipo "retortijón". El líder es el <strong>Viadil (Propinoxato)</strong>. Relaja la musculatura del intestino.
-                                <br/><span className="text-xs text-slate-500 italic">Ojo: Viadil Compuesto incluye Metamizol (analgésico) para mayor potencia.</span>
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* DIARREA Y FLORA */}
-                    <div className="grid md:grid-cols-2 gap-4">
-                        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                            <strong className="text-slate-900 block mb-1">Antidiarreicos (Loperamida)</strong>
-                            <p className="text-sm text-slate-600">"Paralizan" el intestino para frenar la diarrea. No usar si hay fiebre o sangre (podría ser una infección bacteriana que necesita salir).</p>
-                        </div>
-                        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                            <strong className="text-slate-900 block mb-1">Probióticos (Perenteryl, Bioflora)</strong>
-                            <p className="text-sm text-slate-600">Son microorganismos vivos que restauran la flora intestinal perdida por la diarrea o antibióticos. Fundamentales en niños.</p>
-                        </div>
-                    </div>
-
-                </div>
-            </section>
-
-            {/* MÓDULO 4: ANAMNESIS Y SEGURIDAD (AGREGADO) */}
-            <hr className="border-slate-200 my-8" />
-            <section className="break-inside-avoid">
-                <h2 className="text-2xl font-black text-slate-900 mb-6 flex items-center gap-3">
-                    <UserCheck className="text-blue-600" /> Módulo 4: Seguridad Clínica y Protocolo
-                </h2>
-                
-                {/* Contraindicaciones */}
-                <div className="bg-white border border-slate-200 rounded-2xl p-6 mb-6 shadow-sm">
-                    <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-                        <AlertOctagon className="text-red-500" size={20} /> Contraindicaciones Absolutas
-                    </h3>
-                    <ul className="space-y-3 text-sm text-slate-700">
-                        <li className="flex gap-2">
-                            <XCircle className="text-red-500 shrink-0" size={16} />
-                            <span><strong>Alergia a la Aspirina (AAS):</strong> Riesgo de reacción cruzada con otros AINEs.</span>
-                        </li>
-                        <li className="flex gap-2">
-                            <XCircle className="text-red-500 shrink-0" size={16} />
-                            <span><strong>Úlcera Gástrica Activa:</strong> Nunca vender AINEs. Preferir Paracetamol.</span>
-                        </li>
-                        <li className="flex gap-2">
-                            <XCircle className="text-red-500 shrink-0" size={16} />
-                            <span><strong>Insuficiencia Renal Grave:</strong> Los AINEs empeoran la función renal.</span>
-                        </li>
-                        <li className="flex gap-2">
-                            <XCircle className="text-red-500 shrink-0" size={16} />
-                            <span><strong>Tos Productiva + Antitusivo:</strong> Nunca inhibir la tos si hay flema, ya que puede causar neumonía por retención.</span>
-                        </li>
-                    </ul>
-                </div>
-
-                {/* Grupos de Riesgo y Anamnesis */}
-                <div className="grid md:grid-cols-2 gap-6">
-                    <div className="bg-blue-50 p-5 rounded-2xl border border-blue-100">
-                        <h4 className="font-bold text-blue-900 mb-3">Grupos de Riesgo</h4>
-                        <ul className="text-sm text-blue-800 space-y-2 list-disc pl-4">
-                            <li><strong>Tercera Edad:</strong> Mayor riesgo renal y gástrico. Evitar AINEs potentes.</li>
-                            <li><strong>Embarazadas:</strong> AINEs prohibidos en 3er trimestre. Paracetamol es seguro.</li>
-                            <li><strong>Lactancia:</strong> Paracetamol e Ibuprofeno suelen ser compatibles (verificar en <a href="https://www.e-lactancia.org" target="_blank" rel="noopener noreferrer" className="underline hover:text-blue-600 font-semibold inline-flex items-center gap-1">e-lactancia.org <ExternalLink size={12}/></a>).</li>
-                            <li><strong>Hipertensos:</strong> Evitar antigripales con Pseudoefedrina (sube la presión).</li>
-                        </ul>
-                    </div>
-
-                    <div className="bg-emerald-50 p-5 rounded-2xl border border-emerald-100">
-                        <h4 className="font-bold text-emerald-900 mb-3">Protocolo de Anamnesis (Qué preguntar)</h4>
-                        <ul className="text-sm text-emerald-800 space-y-2">
-                            <li><strong>1. ¿Para quién es?</strong> (Niño, adulto, embarazada, abuelo).</li>
-                            <li><strong>2. ¿Tiene alguna enfermedad crónica?</strong> (HTA, Diabetes, Gastritis).</li>
-                            <li><strong>3. ¿Toma otros medicamentos?</strong> (Para evitar interacciones).</li>
-                            <li><strong>4. Síntoma Clave:</strong> "¿La tos es seca o con flema?", "¿Le duele el estómago al comer?".</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
+            </div>
 
           </div>
 
           {/* 🔴 COLUMNA DERECHA: SIDEBAR STICKY */}
           <div className="lg:col-span-4">
-            <div className="sticky top-24 space-y-6">
+            <div className="block lg:sticky lg:top-24 space-y-6">
               
-              {/* 1. QUIZ INTERACTIVO */}
+              {/* TARJETA 1: QUIZ INTERACTIVO */}
               <div className="bg-slate-900 text-white p-6 md:p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500 rounded-full blur-3xl opacity-20 group-hover:opacity-30 transition-opacity"></div>
                 
                 <div className="relative z-10">
+                  
+                  {/* ESTADO 1: INICIO */}
                   {!quizActivo && !mostrarResultado && (
                     <>
-                        <span className="bg-emerald-500 text-emerald-50 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
+                        <span className="bg-emerald-500 text-emerald-950 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
                             Quiz Express
                         </span>
                         <h3 className="text-3xl font-black mb-4 leading-tight">
@@ -501,15 +525,18 @@ export default function GuiaAltaRotacion() {
                     </>
                   )}
 
+                  {/* ESTADO 2: PREGUNTAS */}
                   {quizActivo && (
                     <div className="animate-in fade-in slide-in-from-right-4 duration-300">
                         <div className="flex justify-between items-center mb-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
                             <span>Pregunta {preguntaActual + 1} de {preguntasQuiz.length}</span>
                             <button onClick={reiniciarQuiz}><XCircle size={20} className="hover:text-red-400"/></button>
                         </div>
+                        
                         <h4 className="font-bold text-lg mb-6 leading-tight">
                             {preguntasQuiz[preguntaActual].pregunta}
                         </h4>
+
                         <div className="space-y-3">
                             {preguntasQuiz[preguntaActual].opciones.map((opcion, index) => (
                                 <button
@@ -531,6 +558,7 @@ export default function GuiaAltaRotacion() {
                     </div>
                   )}
 
+                  {/* ESTADO 3: RESULTADOS */}
                   {mostrarResultado && (
                     <div className="text-center animate-in zoom-in duration-300">
                         <div className="bg-emerald-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-400">
@@ -540,20 +568,32 @@ export default function GuiaAltaRotacion() {
                         <p className="text-slate-400 mb-6">
                             Obtuviste <strong className="text-white">{puntaje}</strong> de <strong className="text-white">{preguntasQuiz.length}</strong> correctas.
                         </p>
+                        
                         <div className="space-y-3">
-                            <button 
-                                onClick={reiniciarQuiz}
-                                className="w-full bg-slate-800 text-white font-bold py-3 rounded-xl hover:bg-slate-700 text-sm"
-                            >
-                                Intentar de nuevo
-                            </button>
+                            {puntaje === preguntasQuiz.length ? (
+                                <div className="bg-emerald-900/50 p-3 rounded-lg text-sm text-emerald-200 border border-emerald-800">
+                                    ¡Excelente! Estás listo para el mesón.
+                                </div>
+                            ) : (
+                                <button 
+                                    onClick={reiniciarQuiz}
+                                    className="w-full bg-slate-800 text-white font-bold py-3 rounded-xl hover:bg-slate-700 text-sm"
+                                >
+                                    Intentar de nuevo
+                                </button>
+                            )}
+                            
+                            <Link href="/quiz" className="block w-full bg-emerald-600 text-white font-bold py-3 rounded-xl hover:bg-emerald-500 text-sm flex items-center justify-center">
+                                Ir al Simulador Completo
+                            </Link>
                         </div>
                     </div>
                   )}
+
                 </div>
               </div>
 
-              {/* 2. TARJETA DESCARGAR PDF */}
+              {/* 🟢 TARJETA DESCARGAR PDF */}
               <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
                 <div className="flex items-center gap-4 mb-4">
                     <div className="bg-red-50 text-red-600 p-3 rounded-full">
@@ -565,27 +605,56 @@ export default function GuiaAltaRotacion() {
                     </div>
                 </div>
                 <p className="text-sm text-slate-600 mb-6 leading-relaxed">
-                    Convierte esta página en un archivo PDF automáticamente.
+                    Convierte esta página en un archivo PDF automáticamente para estudiar offline.
                 </p>
+                
                 <button 
                     onClick={generarPDF}
-                    disabled={!isPdfReady}
-                    className={`w-full border-2 border-slate-200 text-slate-600 font-bold text-center py-3 rounded-xl transition-colors flex items-center justify-center gap-2 text-sm ${isPdfReady ? 'hover:border-red-500 hover:text-red-600 cursor-pointer' : 'opacity-50 cursor-not-allowed'}`}
+                    disabled={!isPdfReady || isGenerating}
+                    className={`w-full border-2 border-slate-200 text-slate-600 font-bold text-center py-3 rounded-xl transition-colors flex items-center justify-center gap-2 text-sm 
+                      ${isPdfReady && !isGenerating ? 'hover:border-red-500 hover:text-red-600 hover:bg-red-50 cursor-pointer' : 'opacity-50 cursor-not-allowed'}`}
                 >
-                    <Download size={16} /> 
-                    {isPdfReady ? 'DESCARGAR AHORA' : 'Cargando herramienta...'}
+                    {isGenerating ? (
+                        <>
+                          <RefreshCw className="animate-spin" size={16} /> Generando...
+                        </>
+                    ) : (
+                        <>
+                          <Download size={16} /> 
+                          {isPdfReady ? 'DESCARGAR PDF' : 'Cargando...'}
+                        </>
+                    )}
                 </button>
               </div>
 
-              {/* 🟢 NUEVO: BOTÓN WHATSAPP COMPARTIR (CORREGIDO: SIN FILTROS FEOS) */}
+              {/* 🟢 TARJETA DERMOCHECK */}
               <a 
-                href="https://wa.me/?text=%C2%A1Mira%20este%20resumen%20de%20Medicamentos%20de%20Alta%20Rotaci%C3%B3n!%20Ideal%20para%20estudiar%20%F0%9F%91%89%20https://www.auxiliaresdefarmacia.cl/guias/medicamentos-alta-rotacion" 
+                href="https://www.dermocheck.cl/#calculator-section" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-sm group hover:ring-2 hover:ring-emerald-500 transition-all text-slate-300"
+              >
+                <div className="flex items-center gap-4 mb-4">
+                    <div className="bg-emerald-500/20 text-emerald-400 p-3 rounded-full group-hover:bg-emerald-500 group-hover:text-white transition-colors"><Clock size={24} /></div>
+                    <div>
+                        <h4 className="font-bold text-white text-sm">DermoCheck</h4>
+                        <p className="text-xs text-slate-400">Verifica vencimientos</p>
+                    </div>
+                    <ExternalLink size={16} className="ml-auto text-slate-500"/>
+                </div>
+                <p className="text-sm text-slate-300 leading-relaxed mb-0">
+                    ¿Vendes Dermo? Verifica vencimientos por lote aquí.
+                </p>
+              </a>
+
+              {/* 🟢 BOTÓN WHATSAPP COMPARTIR */}
+              <a 
+                href="https://wa.me/?text=¡Mira%20este%20resumen%20de%20Medicamentos%20de%20Alta%20Rotación!%20Ideal%20para%20estudiar:%20https://www.auxiliaresdefarmacia.cl/guias/alta-rotacion" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="group block bg-[#25D366] p-6 rounded-3xl shadow-sm hover:shadow-md transition-all hover:bg-[#20bd5a]"
               >
                 <div className="flex items-center gap-4">
-                    {/* Le quité el fondo blanco y los filtros de inversión al logo para que se vea real */}
                     <div className="shrink-0">
                         <img 
                             src="/whatsapp.webp" 
@@ -601,46 +670,8 @@ export default function GuiaAltaRotacion() {
                 </div>
               </a>
 
-              {/* 3. TARJETA DE COLABORACIÓN (REVENIU) */}
-              <a 
-                href="https://app.reveniu.com/checkout-custom-link/HvM4DkkkUpBnILnQv4abrZl5qYX7faqU" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="group block bg-gradient-to-r from-amber-50 to-orange-50 p-6 rounded-3xl border border-amber-100 shadow-sm hover:shadow-md transition-all hover:border-amber-200"
-              >
-                <div className="flex items-center gap-4">
-                    <div className="bg-white text-amber-500 p-3 rounded-full shadow-sm group-hover:scale-110 transition-transform">
-                        <Heart size={24} className="fill-amber-500 text-amber-500" />
-                    </div>
-                    <div>
-                        <h4 className="font-bold text-amber-900 text-sm">¿Te sirvió esta guía?</h4>
-                        <p className="text-xs text-amber-700/80">Ayúdame a mantener la web</p>
-                    </div>
-                    <ExternalLink size={16} className="text-amber-400 ml-auto opacity-50 group-hover:opacity-100"/>
-                </div>
-              </a>
-
-              {/* 4. TARJETA DERMOCHECK (CROSS-SELLING) */}
-              <a 
-                href="https://www.dermocheck.cl/#calculator-section" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="block bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-sm group hover:ring-2 hover:ring-emerald-500 transition-all"
-              >
-                <div className="flex items-center gap-4 mb-4">
-                    <div className="bg-emerald-500/20 text-emerald-400 p-3 rounded-full group-hover:bg-emerald-500 group-hover:text-white transition-colors">
-                        <Clock size={24} />
-                    </div>
-                    <div>
-                        <h4 className="font-bold text-white">DermoCheck</h4>
-                        <p className="text-xs text-slate-400">Herramienta Exclusiva</p>
-                    </div>
-                    <ExternalLink size={16} className="text-slate-500 ml-auto"/>
-                </div>
-                <p className="text-sm text-slate-300 leading-relaxed mb-0">
-                    ¿Vendes Dermo? Verifica vencimientos por lote aquí.
-                </p>
-              </a>
+              {/* 🚀 AQUÍ ESTÁ LA MAGIA DEL DRY: LLAMAMOS AL COMPONENTE CON LA RUTA CORREGIDA */}
+              <BannerVenta colorTheme="orange" />
 
             </div>
           </div>

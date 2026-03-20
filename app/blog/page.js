@@ -1,19 +1,10 @@
-import Link from "next/link";
-import { Calendar, BookOpen, FileText, DollarSign, Scale, Users, ArrowRight, GraduationCap, Lightbulb } from "lucide-react";
+"use client";
 
-// 🟢 METADATOS
-export const metadata = {
-  title: "Blog y Noticias | Auxiliar de Farmacia Chile",
-  description: "Artículos educativos, noticias sobre el examen de competencia SEREMI y consejos legales (Decreto 466) para auxiliares de farmacia en Chile.",
-  keywords: ["blog farmacia chile", "guias auxiliar farmacia", "noticias seremi salud", "decreto 466 resumen"],
-  alternates: {
-    canonical: './',
-  },
-};
+import Link from "next/link";
+import { Calendar, BookOpen, FileText, DollarSign, Scale, Users, ArrowRight, GraduationCap, Lightbulb, Share2 } from "lucide-react";
 
 // LISTADO DE ARTÍCULOS
 const articles = [
-  // 👇 AQUÍ AGREGAMOS EL NUEVO ARTÍCULO (TOP 1)
   {
     slug: "vision-ley-farmacos",
     title: "Ley de Fármacos II: Mi visión y por qué creé DermoCheck",
@@ -89,47 +80,80 @@ const articles = [
 ];
 
 export default function BlogIndex() {
+
+  // 🟢 FUNCIÓN UNIVERSAL PARA COMPARTIR
+  const handleShare = async () => {
+    const shareData = {
+      title: 'Blog AuxiliarPro - Noticias y Guías para Farmacia',
+      text: '¡Mira estos artículos! Tienen toda la info sobre sueldos, requisitos y exámenes SEREMI para auxiliares de farmacia.',
+      url: window.location.href,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(shareData.url);
+        alert("Enlace del blog copiado al portapapeles.");
+      }
+    } catch (err) {
+      console.log("Error al compartir", err);
+    }
+  };
+
   return (
-    <div className="max-w-6xl mx-auto px-6 py-12 md:py-20 text-slate-700">
+    <div className="max-w-6xl mx-auto px-6 py-12 md:py-20 text-slate-700 font-sans">
       
       {/* HEADER DEL BLOG */}
-      <header className="mb-12 text-center">
-        <h1 className="text-3xl md:text-5xl font-black text-slate-900 mb-4">
+      <header className="mb-14 text-center">
+        <div className="flex items-center justify-center gap-3 mb-6">
+           <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Contenido Educativo</span>
+           <button 
+              onClick={handleShare}
+              className="bg-white border border-slate-200 text-slate-500 hover:text-emerald-600 p-2 rounded-full shadow-sm hover:shadow-md transition-all active:scale-95"
+              title="Compartir Blog"
+           >
+              <Share2 size={16} />
+           </button>
+        </div>
+
+        <h1 className="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight text-balance">
           Blog para <span className="text-emerald-600">Auxiliar de Farmacia</span>
         </h1>
-        <p className="text-slate-500 text-lg max-w-2xl mx-auto">
+        <p className="text-slate-500 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed text-balance">
           Mantente al día con las normativas, fechas de examen y consejos de estudio para asegurar tu registro en la SEREMI.
         </p>
       </header>
 
       {/* GRILLA DE ARTÍCULOS */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
         
         {articles.map((post, index) => (
-          <article key={index} className="bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-xl transition-shadow flex flex-col h-full">
+          <article key={index} className="bg-white border border-slate-200 rounded-3xl overflow-hidden hover:shadow-xl transition-all flex flex-col h-full hover:-translate-y-1 group">
             
-            {/* Icono / Imagen */}
-            <div className={`h-48 ${post.bgIcon} flex items-center justify-center`}>
-               {post.icon}
+            <div className={`h-48 ${post.bgIcon} flex items-center justify-center group-hover:bg-opacity-80 transition-all duration-300`}>
+               <div className="transform group-hover:scale-110 transition-transform duration-300">
+                 {post.icon}
+               </div>
             </div>
             
-            <div className="p-6 flex-grow flex flex-col">
-              <div className={`flex items-center gap-2 text-xs font-bold ${post.color} mb-3 uppercase tracking-wider`}>
+            <div className="p-8 flex-grow flex flex-col">
+              <div className={`flex items-center gap-2 text-[10px] font-black ${post.color} mb-3 uppercase tracking-widest bg-slate-50 px-3 py-1 rounded-full w-fit`}>
                 {post.category}
               </div>
-              <h2 className="text-xl font-bold text-slate-900 mb-3 leading-tight">
+              <h2 className="text-xl font-black text-slate-900 mb-3 leading-tight group-hover:text-emerald-600 transition-colors">
                 {post.title}
               </h2>
-              <p className="text-slate-500 text-sm mb-6 line-clamp-3">
+              <p className="text-slate-500 text-sm mb-8 leading-relaxed line-clamp-3">
                 {post.desc}
               </p>
               
               <div className="mt-auto">
                 <Link 
                   href={`/blog/${post.slug}`} 
-                  className="inline-flex items-center gap-2 text-slate-900 font-bold hover:text-emerald-600 transition-colors"
+                  className="inline-flex items-center gap-2 text-slate-900 font-bold hover:text-emerald-600 transition-colors text-sm"
                 >
-                  Leer Artículo <ArrowRight size={16} />
+                  Leer Artículo <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>
             </div>
@@ -137,6 +161,7 @@ export default function BlogIndex() {
         ))}
 
       </div>
+
     </div>
   );
 }

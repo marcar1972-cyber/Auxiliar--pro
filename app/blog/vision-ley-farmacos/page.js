@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, Quote, CheckCircle, ExternalLink } from "lucide-react";
+import { ArrowLeft, Quote, CheckCircle } from "lucide-react";
 
 // 🟢 SEO OPTIMIZADO: Integra "Ley de Fármacos" + Palabras Clave de Dermo (KD Easy/High Vol)
 export const metadata = {
@@ -130,37 +130,11 @@ export default function BlogPost() {
             Por eso, te cuento en primicia que <strong>tengo el proyecto de estructurar guías de estudio</strong> sobre dermocosmética y gestión, pensadas por un auxiliar para auxiliares. Aún es una idea en desarrollo, pero nace de la misma convicción: <strong>El conocimiento es nuestro mejor seguro.</strong>
         </p>
 
-        {/* CONCLUSIÓN Y CTA */}
-        <div className="bg-slate-900 text-white rounded-[2rem] p-8 md:p-12 mt-16 shadow-2xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-
-            <h3 className="text-2xl font-black mb-6 relative z-10">Mi invitación</h3>
-            <p className="text-slate-300 mb-8 leading-relaxed relative z-10">
-                Mientras avanzo con el proyecto de las guías, te invito a no esperar sentados. Usa lo que ya es una realidad: <strong>DermoCheck</strong>. Aplícalo en tu turno, revisa esos lotes dudosos, limpia tu stock y evita mermas.
+        <div className="bg-emerald-50 border-l-4 border-emerald-500 p-6 mt-8 rounded-r-xl">
+            <Quote className="text-emerald-400 mb-2 opacity-70" size={24} />
+            <p className="font-medium italic text-emerald-900">
+                "Puede que me equivoque sobre los efectos de la Ley, pero estoy seguro de una cosa: un auxiliar que se especializa constantemente y usa tecnología para cuidar los recursos de su farmacia, <strong>se convertirá en un profesional indispensable y altamente valorado en cualquier equipo.</strong>"
             </p>
-            
-            <div className="bg-white/5 border border-white/10 p-6 rounded-xl mb-8 relative z-10 text-sm md:text-base">
-                 <p className="font-medium text-slate-300 leading-relaxed">
-                    Y llévate esta reflexión final: El entorno cambia y exige nuevas competencias. Aunque nuestro rol actual es fundamental, <strong>si nos limitamos exclusivamente a la dispensación tradicional sin sumar nuevas habilidades, corremos el riesgo de quedar en una posición de mayor vulnerabilidad</strong>, expuestos a ser reemplazados ante cualquier ajuste de estructura o presupuesto.
-                 </p>
-            </div>
-
-            <div className="bg-emerald-900/40 border border-emerald-500/20 p-6 rounded-xl mb-8 relative z-10">
-                <Quote className="text-emerald-400 mb-2 opacity-50" size={24} />
-                <p className="font-medium italic text-emerald-100">
-                    "Puede que me equivoque sobre los efectos de la Ley, pero estoy seguro de una cosa: un auxiliar que se especializa constantemente y usa tecnología para cuidar los recursos de su farmacia, <strong>se convertirá en un profesional indispensable y altamente valorado en cualquier equipo.</strong>"
-                </p>
-            </div>
-
-            {/* 👇 LINK CORREGIDO DIRECTO A LA CALCULADORA */}
-            <a 
-                href="https://www.dermocheck.cl/#calculator-section" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-3 bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-black px-8 py-4 rounded-full text-lg transition-all w-full md:w-auto shadow-lg hover:shadow-emerald-500/20 relative z-10"
-            >
-                Prueba la herramienta aquí: DermoCheck.cl <ExternalLink size={20} />
-            </a>
         </div>
 
       </div>

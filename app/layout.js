@@ -1,9 +1,10 @@
 import { Analytics } from '@vercel/analytics/react';
 import { Inter } from "next/font/google";
 import "./globals.css";
-// 👇 Importamos el componente Navbar que acabamos de crear
+// 👇 Importamos componentes
 import Navbar from "./components/Navbar"; 
 import Footer from "./components/Footer";
+import ScrollToTop from "./components/ScrollToTop"; // 🟢 AQUÍ ESTÁ LA IMPORTACIÓN DE LA FLECHA
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -89,7 +90,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="es">
+    // 🟢 Agregamos scroll-smooth para que la subida sea suave y no de golpe
+    <html lang="es" className="scroll-smooth"> 
       <body className={`${inter.className} min-h-screen flex flex-col bg-white`}>
         
         {/* Navbar Global */}
@@ -101,6 +103,9 @@ export default function RootLayout({ children }) {
         
         {/* Footer Global */}
         <Footer />
+        
+        {/* 🟢 AQUÍ ESTÁ EL BOTÓN FLOTANTE RENDERIZADO */}
+        <ScrollToTop />
         
         {/* Analíticas Vercel */}
         <Analytics />

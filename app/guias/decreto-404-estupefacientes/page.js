@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from "next/link";
 import Script from "next/script"; 
+import BannerVenta from '../../components/BannerVenta'; 
 import { 
   BookOpen, AlertTriangle, ShieldCheck, FileText, Download, 
   ArrowRight, Scale, Truck, Lock, FileSignature, Trophy, 
-  XCircle, Clock, ExternalLink, Heart 
+  XCircle, Clock, ExternalLink, Heart, Sparkles, ShieldAlert
 } from "lucide-react";
 
 // 📝 PREGUNTAS DEL QUIZ (Decreto 404)
@@ -65,6 +66,7 @@ const preguntasQuiz = [
 
 export default function GuiaDecreto404() {
   const [isPdfReady, setIsPdfReady] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false); 
     
   // ESTADOS DEL QUIZ
   const [quizActivo, setQuizActivo] = useState(false);
@@ -101,8 +103,9 @@ export default function GuiaDecreto404() {
   };
 
   // 🖨️ FUNCIÓN PARA GENERAR EL PDF
-  const generarPDF = () => {
+  const generarPDF = async () => {
     if (typeof window !== 'undefined' && window.html2pdf) {
+      setIsGenerating(true); 
       const elemento = document.getElementById('contenido-pdf');
       
       const opciones = {
@@ -114,15 +117,24 @@ export default function GuiaDecreto404() {
         pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
       };
 
-      window.html2pdf().from(elemento).set(opciones).save();
+      try {
+        await window.html2pdf().from(elemento).set(opciones).save();
+      } catch (error) {
+        console.error("Error generando PDF:", error);
+        alert("Hubo un problema al generar el PDF. Por favor, intenta nuevamente.");
+      } finally {
+        setIsGenerating(false); 
+      }
+
     } else {
-      alert("La herramienta de PDF se está cargando, intenta de nuevo en 2 segundos.");
+      alert("La herramienta de PDF aún se está cargando. Por favor, espera un momento.");
     }
   };
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-700 font-sans">
       
+      {/* Script optimizado de Next.js para cargar html2pdf */}
       <Script 
         src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" 
         strategy="lazyOnload"
@@ -156,187 +168,200 @@ export default function GuiaDecreto404() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           
           {/* 🟢 COLUMNA IZQUIERDA: CONTENIDO COMPLETO (8 columnas) */}
-          <div id="contenido-pdf" className="lg:col-span-8 space-y-12 bg-white p-4 md:p-8 rounded-xl shadow-sm">
+          <div className="lg:col-span-8 space-y-12">
+            <div id="contenido-pdf" className="bg-white p-4 md:p-8 rounded-xl shadow-sm space-y-12">
             
-            <div className="mb-8 border-b pb-4 border-slate-100 flex justify-between items-center">
-                <img 
-                    src="/logo.webp" 
-                    alt="AuxiliarPro Logo" 
-                    className="w-32" 
-                    crossOrigin="anonymous" 
-                />
-                <span className="text-xs text-slate-400 font-bold uppercase tracking-widest">Guía Oficial 2026</span>
+              <div className="mb-8 border-b pb-4 border-slate-100 flex justify-between items-center">
+                  <img 
+                      src="/logo.webp" 
+                      alt="AuxiliarPro Logo" 
+                      className="w-32" 
+                      crossOrigin="anonymous" 
+                  />
+                  <span className="text-xs text-slate-400 font-bold uppercase tracking-widest">Guía Oficial 2026</span>
+              </div>
+
+              {/* 1. INTRODUCCIÓN */}
+              <section className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm break-inside-avoid">
+                <h2 className="text-2xl font-black text-slate-900 mb-4 flex items-center gap-3">
+                  1. Introducción
+                </h2>
+                <p className="text-lg leading-relaxed mb-4 text-slate-600">
+                  El <strong>Decreto 404</strong>, aprobado en 1983, es la normativa encargada de regular el control de los estupefacientes en Chile. Su objetivo principal es fiscalizar toda la "cadena de vida" de estas drogas: desde su importación o fabricación industrial hasta su entrega final al paciente.
+                </p>
+                <p className="text-lg leading-relaxed mb-6 text-slate-600">
+                  Este reglamento busca evitar que sustancias con fines terapéuticos, pero con alto potencial de abuso y adicción, se desvíen hacia el tráfico ilícito o el uso indebido.
+                </p>
+              </section>
+
+              {/* 2. CONTENIDO PRINCIPAL */}
+              <section>
+                <h2 className="text-3xl font-black text-slate-900 mb-8 break-before-auto">
+                  2. Contenido Principal
+                </h2>
+                <p className="mb-6 text-slate-600">Para facilitar tu estudio, hemos dividido el contenido en 4 Módulos Esenciales:</p>
+
+                {/* MÓDULO A */}
+                <div className="mb-12 break-inside-avoid">
+                  <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
+                    <Scale className="text-blue-600" /> Módulo A: Definiciones y Autoridades
+                  </h3>
+                  
+                  <div className="space-y-6">
+                      <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200">
+                          <h4 className="font-bold text-slate-900 mb-2">¿Qué se considera estupefaciente?</h4>
+                          <p className="text-sm text-slate-700">
+                              Cualquier sustancia (droga) o preparado que esté incluido en las Listas I y II que aparecen al final de este reglamento (como la morfina, fentanilo, codeína, etc.).
+                          </p>
+                      </div>
+
+                      <div className="bg-white p-5 rounded-2xl border border-slate-200">
+                          <h4 className="font-bold text-slate-900 mb-3">¿Quién fiscaliza?</h4>
+                          <p className="text-sm text-slate-600 mb-3">El control se divide en dos niveles:</p>
+                          <ul className="space-y-2 text-sm text-slate-700">
+                              <li className="flex items-start gap-2">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5"></span>
+                                  <strong>Instituto de Salud Pública (ISP):</strong> Controla la etapa "macro" o industrial (importación, exportación, producción, fabricación y distribución mayorista).
+                              </li>
+                              <li className="flex items-start gap-2">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5"></span>
+                                  <strong>Servicios de Salud (SEREMI):</strong> Controlan la etapa "local" (transporte, venta en farmacias, tenencia y uso final).
+                              </li>
+                          </ul>
+                      </div>
+
+                      <div className="bg-red-50 p-5 rounded-2xl border border-red-100">
+                          <h4 className="font-bold text-red-900 mb-2">Prohibiciones</h4>
+                          <p className="text-sm text-red-800 leading-relaxed">
+                              En Chile está prohibida la producción, tráfico y posesión de heroína, cocaína y cannabis, entre otros. Sin embargo, existen excepciones estrictas para investigación científica o para la elaboración de productos farmacéuticos (como en el caso del cannabis), siempre con autorización del ISP.
+                          </p>
+                      </div>
+                  </div>
+                </div>
+
+                {/* MÓDULO B */}
+                <div className="mb-12 break-inside-avoid">
+                  <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
+                    <Truck className="text-blue-600" /> Módulo B: Importación y Producción
+                  </h3>
+                  <p className="mb-4 text-sm text-slate-600">El manejo de estas sustancias es exclusivo de establecimientos autorizados (laboratorios, droguerías, farmacias, hospitales).</p>
+                  
+                  <ul className="space-y-3 text-sm text-slate-700">
+                      <li className="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+                          <strong>Previsiones (Cuotas):</strong> En octubre de cada año, los establecimientos deben informar al ISP cuánto estiman importar o producir para el año siguiente. El ISP aprueba esas cuotas.
+                      </li>
+                      <li className="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+                          <strong>Certificados Oficiales:</strong> Para importar o exportar, se requiere un "Certificado Oficial" específico para cada partida, el cual tiene una validez de 4 meses.
+                      </li>
+                      <li className="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+                          <strong>Seguridad en Aduana:</strong> Una vez que la droga llega a Chile, no puede moverse de la aduana al lugar de depósito sin un certificado del Servicio de Salud que autorice la ruta y el transporte seguro.
+                      </li>
+                  </ul>
+                </div>
+
+                {/* MÓDULO C */}
+                <div className="mb-12 break-inside-avoid">
+                  <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
+                    <FileSignature className="text-blue-600" /> Módulo C: La Venta (Expendio) y Recetas
+                  </h3>
+                  <p className="mb-4 text-slate-600">
+                      Este es el módulo más importante para el trabajo en farmacia. Los estupefacientes de las Listas I y II se venden principalmente mediante Receta Cheque o Receta Médica Retenida.
+                  </p>
+                  
+                  <div className="bg-blue-50 p-6 rounded-2xl border border-blue-100 mb-6 relative">
+                      <div className="absolute top-0 right-0 bg-blue-500 text-white text-[10px] font-bold px-3 py-1 uppercase tracking-widest rounded-bl-xl">Clave Examen</div>
+                      <h4 className="font-bold text-blue-900 mb-3">La Regla de la Codeína</h4>
+                      <p className="text-sm text-blue-800 mb-3">La condición de venta cambia según la cantidad de droga por unidad posológica:</p>
+                      <ul className="space-y-2 text-sm text-blue-900 font-medium">
+                          <li>• Hasta 10 mg: Se vende con <strong>Receta Médica Simple</strong>.</li>
+                          <li>• Más de 10 mg e inferior a 60 mg: Se vende con <strong>Receta Retenida</strong>.</li>
+                          <li>• 60 mg o más: Se vende con <strong>Receta Cheque</strong>.</li>
+                      </ul>
+                  </div>
+
+                  <h4 className="font-bold text-slate-900 mb-3">Sobre la Receta Cheque:</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="bg-white p-4 rounded-xl border border-slate-200 text-sm">
+                          <strong>Formato:</strong> Son formularios oficiales impresos por la autoridad (con folio).
+                      </div>
+                      <div className="bg-white p-4 rounded-xl border border-slate-200 text-sm">
+                          <strong>Validez:</strong> 30 días desde la fecha de emisión.
+                      </div>
+                      <div className="bg-white p-4 rounded-xl border border-slate-200 text-sm md:col-span-2">
+                          <strong>Colores:</strong> Café claro (Médicos), Amarillo (Farmacias), Rojo (Hospitales Psiquiátricos).
+                      </div>
+                  </div>
+
+                  <div className="mt-6 space-y-3 text-sm text-slate-700">
+                      <p><strong>Llenado:</strong> Debe ser manuscrita íntegramente por el médico, sin dejar espacios en blanco ni tener enmiendas. Solo se puede prescribir UN producto estupefaciente por receta.</p>
+                      <p><strong>Despacho:</strong> Debe hacerlo personalmente el Director Técnico (DT). Se entrega solo a mayores de 18 años, quienes deben exhibir su Cédula de Identidad.</p>
+                      <div className="bg-red-50 p-3 rounded-lg border border-red-100 text-red-800">
+                          <strong>Seguridad:</strong> Si el DT sospecha que una receta es falsa o está adulterada, no debe despacharla. Su deber es retenerla, tomar los datos del portador y denunciar al Servicio de Salud.
+                      </div>
+                  </div>
+                </div>
+
+                {/* MÓDULO D */}
+                <div className="mb-12 break-inside-avoid">
+                  <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
+                    <Lock className="text-blue-600" /> Módulo D: Control Interno y Almacenamiento
+                  </h3>
+                  <p className="mb-4 text-sm text-slate-600">Dentro de la farmacia, el manejo de estas drogas es estricto:</p>
+                  
+                  <ol className="list-decimal pl-5 space-y-4 text-sm text-slate-700">
+                      <li>
+                          <strong>Almacenamiento:</strong> Los estupefacientes deben guardarse obligatoriamente bajo llave para prevenir robos o pérdidas.
+                      </li>
+                      <li>
+                          <strong>Libro de Control:</strong> Es obligatorio llevar un Libro de Control de Estupefacientes (visado) donde se registra por separado cada producto (entradas, salidas y saldos).
+                      </li>
+                      <li>
+                          <strong>Identificación:</strong> Los envases de estos medicamentos deben tener una estrella roja de 5 puntas en su etiqueta y la leyenda "Sujeto a Control de Estupefacientes".
+                      </li>
+                      <li>
+                          <strong>Muestras Médicas:</strong> Está prohibida la distribución de muestras médicas de estupefacientes (salvo autorización especial del ISP).
+                      </li>
+                  </ol>
+                </div>
+
+              </section>
+
+              {/* 3. CONCLUSIÓN */}
+              <section className="mb-10 break-inside-avoid">
+                  <h2 className="text-2xl font-black text-slate-900 mb-4">
+                      3. Conclusión
+                  </h2>
+                  <p className="text-lg leading-relaxed text-slate-700 mb-4">
+                      El Decreto 404 establece un sistema de "circuito cerrado" para los estupefacientes. Nada entra, sale o se vende sin dejar un registro documental.
+                  </p>
+                  <p className="text-lg font-bold text-slate-900">
+                      Para el equipo de farmacia, las claves del éxito en el cumplimiento de esta norma son: seguridad física (armario bajo llave), seguridad administrativa (libros al día) y rigurosidad en el mesón (revisión exhaustiva de la Receta Cheque por parte del Químico Farmacéutico).
+                  </p>
+                  <p className="mt-8 text-xs text-slate-400 uppercase tracking-widest leading-relaxed flex items-center gap-2">
+                      Fuente utilizada: 
+                      <a href="https://www.bcn.cl/leychile/navegar?idNorma=16728" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1">
+                          Ministerio de Salud Pública de Chile. Decreto N° 404 <ExternalLink size={12} />
+                      </a>
+                  </p>
+              </section>
+
             </div>
 
-            {/* 1. INTRODUCCIÓN */}
-            <section className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm break-inside-avoid">
-              <h2 className="text-2xl font-black text-slate-900 mb-4 flex items-center gap-3">
-                1. Introducción
-              </h2>
-              <p className="text-lg leading-relaxed mb-4 text-slate-600">
-                El <strong>Decreto 404</strong>, aprobado en 1983, es la normativa encargada de regular el control de los estupefacientes en Chile. Su objetivo principal es fiscalizar toda la "cadena de vida" de estas drogas: desde su importación o fabricación industrial hasta su entrega final al paciente.
-              </p>
-              <p className="text-lg leading-relaxed mb-6 text-slate-600">
-                Este reglamento busca evitar que sustancias con fines terapéuticos, pero con alto potencial de abuso y adicción, se desvíen hacia el tráfico ilícito o el uso indebido.
-              </p>
-            </section>
-
-            {/* 2. CONTENIDO PRINCIPAL */}
-            <section>
-              <h2 className="text-3xl font-black text-slate-900 mb-8 break-before-auto">
-                2. Contenido Principal
-              </h2>
-              <p className="mb-6 text-slate-600">Para facilitar tu estudio, hemos dividido el contenido en 4 Módulos Esenciales:</p>
-
-              {/* MÓDULO A */}
-              <div className="mb-12 break-inside-avoid">
-                <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <Scale className="text-blue-600" /> Módulo A: Definiciones y Autoridades
-                </h3>
-                
-                <div className="space-y-6">
-                    <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200">
-                        <h4 className="font-bold text-slate-900 mb-2">¿Qué se considera estupefaciente?</h4>
-                        <p className="text-sm text-slate-700">
-                            Cualquier sustancia (droga) o preparado que esté incluido en las Listas I y II que aparecen al final de este reglamento (como la morfina, fentanilo, codeína, etc.).
-                        </p>
-                    </div>
-
-                    <div className="bg-white p-5 rounded-2xl border border-slate-200">
-                        <h4 className="font-bold text-slate-900 mb-3">¿Quién fiscaliza?</h4>
-                        <p className="text-sm text-slate-600 mb-3">El control se divide en dos niveles:</p>
-                        <ul className="space-y-2 text-sm text-slate-700">
-                            <li className="flex items-start gap-2">
-                                <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5"></span>
-                                <strong>Instituto de Salud Pública (ISP):</strong> Controla la etapa "macro" o industrial (importación, exportación, producción, fabricación y distribución mayorista).
-                            </li>
-                            <li className="flex items-start gap-2">
-                                <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5"></span>
-                                <strong>Servicios de Salud (SEREMI):</strong> Controlan la etapa "local" (transporte, venta en farmacias, tenencia y uso final).
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div className="bg-red-50 p-5 rounded-2xl border border-red-100">
-                        <h4 className="font-bold text-red-900 mb-2">Prohibiciones</h4>
-                        <p className="text-sm text-red-800 leading-relaxed">
-                            En Chile está prohibida la producción, tráfico y posesión de heroína, cocaína y cannabis, entre otros. Sin embargo, existen excepciones estrictas para investigación científica o para la elaboración de productos farmacéuticos (como en el caso del cannabis), siempre con autorización del ISP.
-                        </p>
-                    </div>
-                </div>
-              </div>
-
-              {/* MÓDULO B */}
-              <div className="mb-12 break-inside-avoid">
-                <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <Truck className="text-blue-600" /> Módulo B: Importación y Producción
-                </h3>
-                <p className="mb-4 text-sm text-slate-600">El manejo de estas sustancias es exclusivo de establecimientos autorizados (laboratorios, droguerías, farmacias, hospitales).</p>
-                
-                <ul className="space-y-3 text-sm text-slate-700">
-                    <li className="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
-                        <strong>Previsiones (Cuotas):</strong> En octubre de cada año, los establecimientos deben informar al ISP cuánto estiman importar o producir para el año siguiente. El ISP aprueba esas cuotas.
-                    </li>
-                    <li className="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
-                        <strong>Certificados Oficiales:</strong> Para importar o exportar, se requiere un "Certificado Oficial" específico para cada partida, el cual tiene una validez de 4 meses.
-                    </li>
-                    <li className="bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
-                        <strong>Seguridad en Aduana:</strong> Una vez que la droga llega a Chile, no puede moverse de la aduana al lugar de depósito sin un certificado del Servicio de Salud que autorice la ruta y el transporte seguro.
-                    </li>
-                </ul>
-              </div>
-
-              {/* MÓDULO C */}
-              <div className="mb-12 break-inside-avoid">
-                <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <FileSignature className="text-blue-600" /> Módulo C: La Venta (Expendio) y Recetas
-                </h3>
-                <p className="mb-4 text-slate-600">
-                    Este es el módulo más importante para el trabajo en farmacia. Los estupefacientes de las Listas I y II se venden principalmente mediante Receta Cheque o Receta Médica Retenida.
+            {/* AVISO LEGAL MOVIL */}
+            <div className="bg-slate-800/5 p-5 rounded-2xl border border-slate-200 mt-8 hidden lg:block">
+                <p className="text-sm text-slate-500 leading-relaxed flex gap-3">
+                    <AlertTriangle className="shrink-0 text-amber-500 mt-0.5" size={20} />
+                    <span>
+                        <strong>Advertencia Legal:</strong> Estudiar por tu cuenta en esta plataforma es válido y recomendado para <em>preparar</em> tu examen. Sin embargo, para inscribirte oficialmente en la SEREMI necesitarás acreditar tu experiencia laboral o un certificado de práctica. El "estudio teórico" no reemplaza el requisito legal exigido por el Decreto 90.
+                    </span>
                 </p>
-                
-                <div className="bg-blue-50 p-6 rounded-2xl border border-blue-100 mb-6 relative">
-                    <div className="absolute top-0 right-0 bg-blue-500 text-white text-[10px] font-bold px-3 py-1 uppercase tracking-widest rounded-bl-xl">Clave Examen</div>
-                    <h4 className="font-bold text-blue-900 mb-3">La Regla de la Codeína</h4>
-                    <p className="text-sm text-blue-800 mb-3">La condición de venta cambia según la cantidad de droga por unidad posológica:</p>
-                    <ul className="space-y-2 text-sm text-blue-900 font-medium">
-                        <li>• Hasta 10 mg: Se vende con <strong>Receta Médica Simple</strong>.</li>
-                        <li>• Más de 10 mg e inferior a 60 mg: Se vende con <strong>Receta Retenida</strong>.</li>
-                        <li>• 60 mg o más: Se vende con <strong>Receta Cheque</strong>.</li>
-                    </ul>
-                </div>
-
-                <h4 className="font-bold text-slate-900 mb-3">Sobre la Receta Cheque:</h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="bg-white p-4 rounded-xl border border-slate-200 text-sm">
-                        <strong>Formato:</strong> Son formularios oficiales impresos por la autoridad (con folio).
-                    </div>
-                    <div className="bg-white p-4 rounded-xl border border-slate-200 text-sm">
-                        <strong>Validez:</strong> 30 días desde la fecha de emisión.
-                    </div>
-                    <div className="bg-white p-4 rounded-xl border border-slate-200 text-sm md:col-span-2">
-                        <strong>Colores:</strong> Café claro (Médicos), Amarillo (Farmacias), Rojo (Hospitales Psiquiátricos).
-                    </div>
-                </div>
-
-                <div className="mt-6 space-y-3 text-sm text-slate-700">
-                    <p><strong>Llenado:</strong> Debe ser manuscrita íntegramente por el médico, sin dejar espacios en blanco ni tener enmiendas. Solo se puede prescribir UN producto estupefaciente por receta.</p>
-                    <p><strong>Despacho:</strong> Debe hacerlo personalmente el Director Técnico (DT). Se entrega solo a mayores de 18 años, quienes deben exhibir su Cédula de Identidad.</p>
-                    <div className="bg-red-50 p-3 rounded-lg border border-red-100 text-red-800">
-                        <strong>Seguridad:</strong> Si el DT sospecha que una receta es falsa o está adulterada, no debe despacharla. Su deber es retenerla, tomar los datos del portador y denunciar al Servicio de Salud.
-                    </div>
-                </div>
-              </div>
-
-              {/* MÓDULO D */}
-              <div className="mb-12 break-inside-avoid">
-                <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
-                  <Lock className="text-blue-600" /> Módulo D: Control Interno y Almacenamiento
-                </h3>
-                <p className="mb-4 text-sm text-slate-600">Dentro de la farmacia, el manejo de estas drogas es estricto:</p>
-                
-                <ol className="list-decimal pl-5 space-y-4 text-sm text-slate-700">
-                    <li>
-                        <strong>Almacenamiento:</strong> Los estupefacientes deben guardarse obligatoriamente bajo llave para prevenir robos o pérdidas.
-                    </li>
-                    <li>
-                        <strong>Libro de Control:</strong> Es obligatorio llevar un Libro de Control de Estupefacientes (visado) donde se registra por separado cada producto (entradas, salidas y saldos).
-                    </li>
-                    <li>
-                        <strong>Identificación:</strong> Los envases de estos medicamentos deben tener una estrella roja de 5 puntas en su etiqueta y la leyenda "Sujeto a Control de Estupefacientes".
-                    </li>
-                    <li>
-                        <strong>Muestras Médicas:</strong> Está prohibida la distribución de muestras médicas de estupefacientes (salvo autorización especial del ISP).
-                    </li>
-                </ol>
-              </div>
-
-            </section>
-
-            {/* 3. CONCLUSIÓN */}
-            <section className="mb-10 break-inside-avoid">
-                <h2 className="text-2xl font-black text-slate-900 mb-4">
-                    3. Conclusión
-                </h2>
-                <p className="text-lg leading-relaxed text-slate-700 mb-4">
-                    El Decreto 404 establece un sistema de "circuito cerrado" para los estupefacientes. Nada entra, sale o se vende sin dejar un registro documental.
-                </p>
-                <p className="text-lg font-bold text-slate-900">
-                    Para el equipo de farmacia, las claves del éxito en el cumplimiento de esta norma son: seguridad física (armario bajo llave), seguridad administrativa (libros al día) y rigurosidad en el mesón (revisión exhaustiva de la Receta Cheque por parte del Químico Farmacéutico).
-                </p>
-                <p className="mt-8 text-xs text-slate-400 uppercase tracking-widest leading-relaxed flex items-center gap-2">
-                    Fuente utilizada: 
-                    <a href="https://www.bcn.cl/leychile/navegar?idNorma=16728" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1">
-                        Ministerio de Salud Pública de Chile. Decreto N° 404 <ExternalLink size={12} />
-                    </a>
-                </p>
-            </section>
+            </div>
 
           </div>
 
-          {/* 🔴 COLUMNA DERECHA: SIDEBAR STICKY CON QUIZ INTERACTIVO */}
+          {/* 🔴 COLUMNA DERECHA: SIDEBAR STICKY */}
           <div className="lg:col-span-4">
-            <div className="sticky top-24 space-y-6">
+            <div className="block lg:sticky lg:top-24 space-y-6">
               
               {/* TARJETA 1: QUIZ INTERACTIVO */}
               <div className="bg-slate-900 text-white p-6 md:p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
@@ -422,10 +447,6 @@ export default function GuiaDecreto404() {
                                     Intentar de nuevo
                                 </button>
                             )}
-                            
-                            <Link href="/quiz" className="block w-full bg-blue-600 text-white font-bold py-3 rounded-xl hover:bg-blue-500 text-sm">
-                                Ir al Simulador Completo
-                            </Link>
                         </div>
                     </div>
                   )}
@@ -433,7 +454,7 @@ export default function GuiaDecreto404() {
                 </div>
               </div>
 
-              {/* 2. TARJETA DESCARGAR PDF */}
+              {/* 🟢 TARJETA 2: DESCARGAR PDF */}
               <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
                 <div className="flex items-center gap-4 mb-4">
                     <div className="bg-red-50 text-red-600 p-3 rounded-full">
@@ -450,15 +471,44 @@ export default function GuiaDecreto404() {
                 
                 <button 
                     onClick={generarPDF}
-                    disabled={!isPdfReady}
-                    className={`w-full border-2 border-slate-200 text-slate-600 font-bold text-center py-3 rounded-xl transition-colors flex items-center justify-center gap-2 text-sm ${isPdfReady ? 'hover:border-red-500 hover:text-red-600 cursor-pointer' : 'opacity-50 cursor-not-allowed'}`}
+                    disabled={!isPdfReady || isGenerating}
+                    className={`w-full border-2 border-slate-200 text-slate-600 font-bold text-center py-3 rounded-xl transition-colors flex items-center justify-center gap-2 text-sm 
+                      ${isPdfReady && !isGenerating ? 'hover:border-red-500 hover:text-red-600 hover:bg-red-50 cursor-pointer' : 'opacity-50 cursor-not-allowed'}`}
                 >
-                    <Download size={16} /> 
-                    {isPdfReady ? 'DESCARGAR AHORA' : 'Cargando herramienta...'}
+                    {isGenerating ? (
+                        <>
+                          <RefreshCw className="animate-spin" size={16} /> Generando...
+                        </>
+                    ) : (
+                        <>
+                          <Download size={16} /> 
+                          {isPdfReady ? 'DESCARGAR PDF' : 'Cargando...'}
+                        </>
+                    )}
                 </button>
               </div>
 
-              {/* 🟢 BOTÓN WHATSAPP ESTÁNDAR (AÑADIDO) */}
+              {/* 🟢 TARJETA 3: DERMOCHECK */}
+              <a 
+                href="https://www.dermocheck.cl/#calculator-section" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-sm group hover:ring-2 hover:ring-emerald-500 transition-all text-slate-300"
+              >
+                <div className="flex items-center gap-4 mb-4">
+                    <div className="bg-emerald-500/20 text-emerald-400 p-3 rounded-full group-hover:bg-emerald-500 group-hover:text-white transition-colors"><Clock size={24} /></div>
+                    <div>
+                        <h4 className="font-bold text-white text-sm">DermoCheck</h4>
+                        <p className="text-xs text-slate-400">Verifica vencimientos</p>
+                    </div>
+                    <ExternalLink size={16} className="ml-auto text-slate-500"/>
+                </div>
+                <p className="text-sm text-slate-300 leading-relaxed mb-0">
+                    ¿Vendes Dermo? Verifica vencimientos por lote aquí.
+                </p>
+              </a>
+
+              {/* 🟢 TARJETA 4: BOTÓN WHATSAPP COMPARTIR */}
               <a 
                 href="https://wa.me/?text=¡Mira%20este%20resumen%20del%20Decreto%20404!%20Ideal%20para%20estudiar:%20https://www.auxiliaresdefarmacia.cl/guias/decreto-404-estupefacientes" 
                 target="_blank" 
@@ -481,46 +531,8 @@ export default function GuiaDecreto404() {
                 </div>
               </a>
 
-              {/* 3. TARJETA DE COLABORACIÓN (SUTIL CON REVENIU) */}
-              <a 
-                href="https://app.reveniu.com/checkout-custom-link/HvM4DkkkUpBnILnQv4abrZl5qYX7faqU" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="group block bg-gradient-to-r from-amber-50 to-orange-50 p-6 rounded-3xl border border-amber-100 shadow-sm hover:shadow-md transition-all hover:border-amber-200"
-              >
-                <div className="flex items-center gap-4">
-                    <div className="bg-white text-amber-500 p-3 rounded-full shadow-sm group-hover:scale-110 transition-transform">
-                        <Heart size={24} className="fill-amber-500 text-amber-500" />
-                    </div>
-                    <div>
-                        <h4 className="font-bold text-amber-900 text-sm">¿Te sirvió esta guía?</h4>
-                        <p className="text-xs text-amber-700/80">Ayúdame a mantener la web</p>
-                    </div>
-                    <ExternalLink size={16} className="text-amber-400 ml-auto opacity-50 group-hover:opacity-100"/>
-                </div>
-              </a>
-
-              {/* 4. TARJETA DERMOCHECK (CROSS-SELLING) */}
-              <a 
-                href="https://www.dermocheck.cl/#calculator-section" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="block bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-sm group hover:ring-2 hover:ring-emerald-500 transition-all"
-              >
-                <div className="flex items-center gap-4 mb-4">
-                    <div className="bg-emerald-500/20 text-emerald-400 p-3 rounded-full group-hover:bg-emerald-500 group-hover:text-white transition-colors">
-                        <Clock size={24} />
-                    </div>
-                    <div>
-                        <h4 className="font-bold text-white">DermoCheck</h4>
-                        <p className="text-xs text-slate-400">Herramienta Exclusiva</p>
-                    </div>
-                    <ExternalLink size={16} className="text-slate-500 ml-auto"/>
-                </div>
-                <p className="text-sm text-slate-300 leading-relaxed mb-0">
-                    ¿Vendes Dermo? Verifica vencimientos por lote aquí.
-                </p>
-              </a>
+              {/* 🚀 5. BANNER DE VENTA COMPONENTE DRY */}
+              <BannerVenta colorTheme="red" />
 
             </div>
           </div>

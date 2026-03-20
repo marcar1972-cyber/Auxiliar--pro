@@ -31,6 +31,21 @@ export const level7 = {
     { text: "Codeína 10mg requiere:", options: ["Receta Simple", "Retenida", "Cheque", "Directa"], correctIndex: 0, studyGuide: "D.404" },
     { text: "Codeína 40mg requiere:", options: ["Simple", "Retenida", "Cheque", "Directa"], correctIndex: 1, studyGuide: "D.404" },
     { text: "Codeína 80mg requiere:", options: ["Simple", "Retenida", "Cheque", "Directa"], correctIndex: 2, studyGuide: "D.404" },
-    { text: "Registro ISP F-1234 corresponde a:", options: ["Fármaco", "Cosmético", "Biológico", "Alimento"], correctIndex: 0, studyGuide: "D.3" }
+    { text: "Registro ISP F-1234 corresponde a:", options: ["Fármaco", "Cosmético", "Biológico", "Alimento"], correctIndex: 0, studyGuide: "D.3" },
+    { text: "¿Qué es el Formulario Nacional de Medicamentos?", options: ["Un libro de reclamos", "La nómina de medicamentos esenciales", "Una lista de precios máxima", "Un recetario magistral"], correctIndex: 1, studyGuide: "Ley de Fármacos" },
+    { text: "Por regla general, la venta de antibióticos sistémicos (como Amoxicilina) requiere:", options: ["Venta Directa", "Receta Médica Simple", "Receta Médica Retenida", "Receta Cheque"], correctIndex: 1, studyGuide: "D.3" },
+    { text: "¿Qué leyenda obligatoria debe llevar una muestra médica?", options: ["Uso institucional", "Muestra médica prohibida su venta", "Venta exclusiva farmacias", "Uso intrahospitalario"], correctIndex: 1, studyGuide: "D.3" },
+    { text: "Forma farmacéutica adecuada para un paciente con dificultad para tragar comprimidos:", options: ["Solución líquida", "Cápsula dura", "Píldora recubierta", "Comprimido ranurado"], correctIndex: 0, studyGuide: "Manual de Procedimientos" },
+    { text: "¿Qué vía de administración permite una absorción más rápida en el organismo?", options: ["Vía oral", "Vía tópica", "Vía intravenosa", "Vía oftálmica"], correctIndex: 2, studyGuide: "Manual de Procedimientos" },
+    { text: "Temperatura ambiente controlada estándar para almacenar medicamentos:", options: ["0 a 5°C", "15 a 25°C", "2 a 8°C", "Más de 30°C"], correctIndex: 1, studyGuide: "D.3" },
+    { text: "¿Quién es el único responsable legal de llevar los libros de controlados?", options: ["El auxiliar de farmacia", "El Químico Farmacéutico (DT)", "El dueño del establecimiento", "Cualquier empleado"], correctIndex: 1, studyGuide: "D.404 / 405" },
+    { text: "La sigla DCI en un medicamento significa:", options: ["Dosis Clínica Inicial", "Denominación Común Internacional", "Distribución Central Interna", "Dosis Común Internacional"], correctIndex: 1, studyGuide: "Ley 20.724" },
+    { text: "¿Están obligadas las farmacias a disponer permanentemente de un Petitorio Mínimo?", options: ["Sí, siempre", "No, es opcional", "Solo cuando están de turno", "Solo las farmacias independientes"], correctIndex: 0, studyGuide: "D.466" },
+    { text: "¿Quién determina los turnos que deben cumplir las farmacias?", options: ["La SEREMI de Salud", "La municipalidad", "El dueño de la farmacia", "Carabineros"], correctIndex: 0, studyGuide: "D.466" },
+    { text: "¿Cuál de las siguientes es una función permitida del Auxiliar de Farmacia?", options: ["Diagnosticar a los pacientes", "Modificar las recetas médicas", "Dispensar bajo supervisión del Químico Farmacéutico", "Vender psicotrópicos sin receta"], correctIndex: 2, studyGuide: "D.466 / Manual" },
+    { text: "¿Qué letra antecede al número de registro en el ISP de un producto cosmético?", options: ["F", "B", "C", "A"], correctIndex: 2, studyGuide: "D.3" },
+    { text: "1 cucharada sopera equivale aproximadamente a:", options: ["5 ml", "10 ml", "15 ml", "20 ml"], correctIndex: 2, studyGuide: "Posología" },
+    { text: "¿Qué profesionales están legalmente habilitados para emitir recetas médicas de uso humano en Chile?", options: ["Solo Médicos", "Médicos, Cirujano Dentistas y Matronas", "Enfermeras y Médicos", "Químicos Farmacéuticos"], correctIndex: 1, studyGuide: "D.466" },
+    { text: "Si un fármaco es fotosensible (debe protegerse de la luz), su envase primario ideal es:", options: ["Transparente", "Plástico delgado transparente", "De color ámbar u opaco", "De vidrio común"], correctIndex: 2, studyGuide: "Manual de Procedimientos" }
   ]
 };

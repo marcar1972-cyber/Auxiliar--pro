@@ -60,7 +60,7 @@ export default function BlogPost() {
           2. ¿Cuánto tarda la SEREMI en dar fecha?
         </h2>
         <p>
-          Depende de la carga de trabajo de tu región. Según usuarios de nuestro <Link href="/simulador" className="text-blue-600 font-bold hover:underline">Simulador de Examen</Link>:
+          Depende de la carga de trabajo de tu región. Según usuarios de nuestro <Link href="/quiz" className="text-blue-600 font-bold hover:underline">Simulador de Examen</Link>:
         </p>
         <div className="bg-slate-50 p-6 rounded-xl border border-slate-100 my-6">
           <ul className="space-y-3">
@@ -121,7 +121,7 @@ export default function BlogPost() {
               Ir a Biblioteca
             </Link>
             <Link 
-              href="/simulador" 
+              href="/quiz" 
               className="flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-white font-bold py-3 px-6 rounded-full shadow-lg shadow-emerald-500/20 transition-all transform hover:-translate-y-1"
             >
               <CheckCircle size={20} />

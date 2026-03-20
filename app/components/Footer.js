@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Mail, Instagram, Facebook, ShieldAlert, Scale, ChevronUp } from "lucide-react";
@@ -13,8 +12,6 @@ const WhatsAppIcon = ({ size = 20 }) => (
 );
 
 export default function Footer() {
-  const [activeTab, setActiveTab] = useState(null);
-
   return (
     <footer className="bg-[#0f172a] text-slate-300 py-10 px-6 border-t border-white/5 font-sans">
       <div className="max-w-6xl mx-auto">
@@ -29,18 +26,19 @@ export default function Footer() {
           </div>
 
           <div className="w-full md:w-2/4 flex justify-center gap-6">
-            <button 
-              onClick={() => setActiveTab(activeTab === 'terms' ? null : 'terms')}
-              className={`text-[10px] font-black uppercase tracking-widest transition-colors ${activeTab === 'terms' ? 'text-emerald-400' : 'text-slate-400 hover:text-white'}`}
+            {/* ENLACES CORREGIDOS A LAS RUTAS EXACTAS */}
+            <Link 
+              href="/legal/terminos"
+              className="text-[10px] font-black uppercase tracking-widest transition-colors text-slate-400 hover:text-white"
             >
               Términos de Uso
-            </button>
-            <button 
-              onClick={() => setActiveTab(activeTab === 'legal' ? null : 'legal')}
-              className={`text-[10px] font-black uppercase tracking-widest transition-colors ${activeTab === 'legal' ? 'text-emerald-400' : 'text-slate-400 hover:text-white'}`}
+            </Link>
+            <Link 
+              href="/legal/descargos"
+              className="text-[10px] font-black uppercase tracking-widest transition-colors text-slate-400 hover:text-white"
             >
               Descargos Legales
-            </button>
+            </Link>
           </div>
 
           <div className="w-full md:w-1/4 flex justify-center md:justify-end">
@@ -54,32 +52,6 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* CONTENIDO DESPLEGABLE */}
-        {activeTab && (
-          <div className="max-w-4xl mx-auto mb-8 bg-white/5 p-8 rounded-[2rem] border border-white/5 animate-in fade-in slide-in-from-top-1 text-left">
-            {activeTab === 'terms' ? (
-              <div className="text-[11px] leading-relaxed space-y-4 text-slate-300">
-                <h4 className="text-white font-black text-[9px] uppercase tracking-widest flex items-center gap-2 mb-2 italic">
-                  <Scale size={14} className="text-emerald-500" /> Términos de Uso
-                </h4>
-                <p>Bienvenido a <strong>AuxiliarPro Chile</strong>. Al utilizar esta plataforma, aceptas las siguientes condiciones:</p>
-                <div className="space-y-3">
-                  <p><strong>1. Uso Educativo:</strong> Esta plataforma es exclusivamente una herramienta de estudio y preparación.</p>
-                  <p><strong>2. Propiedad Intelectual:</strong> El código fuente, diseño y estructura son propiedad de Marcelo (AuxiliarPro).</p>
-                </div>
-                <button onClick={() => setActiveTab(null)} className="text-emerald-400 font-bold hover:underline flex items-center gap-1 mt-4 text-[10px] uppercase">Cerrar Ventana</button>
-              </div>
-            ) : (
-              <div className="text-[11px] leading-relaxed space-y-4 text-slate-300">
-                <h4 className="text-white font-black text-[9px] uppercase tracking-widest flex items-center gap-2 mb-2 italic">
-                  <ShieldAlert size={14} className="text-emerald-500" /> Descargos Legales
-                </h4>
-                <p>AuxiliarPro Chile declara explícitamente que NO representa al Ministerio de Salud (MINSAL) ni al ISP.</p>
-              </div>
-            )}
-          </div>
-        )}
-
         {/* FILA INFERIOR: Iconos y Copyright */}
         <div className="flex flex-col items-center gap-6 pt-6 border-t border-white/5">
           <div className="flex justify-center gap-10 text-white/40">
@@ -89,7 +61,7 @@ export default function Footer() {
             <a href="https://www.instagram.com/auxiliarpro/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-all transform hover:scale-110">
               <Instagram size={24}/>
             </a>
-            <a href="https://chat.whatsapp.com/Gm30JCRLvx9HoSZ4JTipQX" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-500 transition-all transform hover:scale-110">
+            <a href="https://wa.me/56934238151" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-500 transition-all transform hover:scale-110">
               <WhatsAppIcon size={24}/>
             </a>
           </div>
@@ -99,7 +71,7 @@ export default function Footer() {
               AuxiliarPro Chile © 2026 | Excelencia Farmacéutica
             </div>
             
-            {/* NUEVA FIRMA MACZDEV */}
+            {/* FIRMA MACZDEV */}
             <div className="flex flex-col items-center gap-1">
               <p className="text-[10px] font-bold text-emerald-500/80 tracking-widest">
                 Desarrollado por MaczDev • 2025
@@ -114,4 +86,3 @@ export default function Footer() {
     </footer>
   );
 }
-

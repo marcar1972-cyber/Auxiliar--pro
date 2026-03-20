@@ -1,13 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from "next/link";
 import Script from "next/script"; 
+import BannerVenta from '../../components/BannerVenta'; 
 import { 
   BookOpen, AlertTriangle, Download, ArrowRight, Pill, Heart, Activity, 
   Droplet, Thermometer, Clock, CheckCircle, ShieldAlert, Bug, 
   Syringe, XCircle, Trophy, FileText, UserCheck, AlertOctagon, ExternalLink, 
-  Heart as HeartIcon 
+  Heart as HeartIcon, Lock, Sparkles
 } from "lucide-react";
 
 // 📝 PREGUNTAS DEL QUIZ (Cardiovascular, Metabólico y Antibióticos)
@@ -46,7 +47,7 @@ const preguntasQuiz = [
     pregunta: "¿A qué temperatura se deben almacenar las insulinas en la farmacia?",
     opciones: [
       "Temperatura ambiente (25°C).",
-      "En el congelador (-18°C).",
+      "En un congelador (-18°C).",
       "Refrigeradas entre 2°C y 8°C.",
       "En un lugar seco y oscuro."
     ],
@@ -66,6 +67,7 @@ const preguntasQuiz = [
 
 export default function GuiaCronicosInfecciosos() {
   const [isPdfReady, setIsPdfReady] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
     
   // ESTADOS DEL QUIZ
   const [quizActivo, setQuizActivo] = useState(false);
@@ -102,8 +104,9 @@ export default function GuiaCronicosInfecciosos() {
   };
 
   // 🖨️ FUNCIÓN PARA GENERAR EL PDF
-  const generarPDF = () => {
+  const generarPDF = async () => {
     if (typeof window !== 'undefined' && window.html2pdf) {
+      setIsGenerating(true);
       const elemento = document.getElementById('contenido-pdf');
       
       const opciones = {
@@ -115,9 +118,15 @@ export default function GuiaCronicosInfecciosos() {
         pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
       };
 
-      window.html2pdf().from(elemento).set(opciones).save();
+      try {
+        await window.html2pdf().from(elemento).set(opciones).save();
+      } catch (error) {
+        console.error("Error generando PDF:", error);
+      } finally {
+        setIsGenerating(false);
+      }
     } else {
-      alert("La herramienta de PDF se está cargando, intenta de nuevo en 2 segundos.");
+      alert("La herramienta de PDF se está cargando, intenta de nuevo en un momento.");
     }
   };
 
@@ -157,193 +166,193 @@ export default function GuiaCronicosInfecciosos() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           
           {/* 🟢 COLUMNA IZQUIERDA: CONTENIDO COMPLETO (8 columnas) */}
-          <div id="contenido-pdf" className="lg:col-span-8 space-y-12 bg-white p-4 md:p-8 rounded-xl shadow-sm">
-            
-            <div className="mb-8 border-b pb-4 border-slate-100 flex justify-between items-center">
-                <img 
-                    src="/logo.webp" 
-                    alt="AuxiliarPro Logo" 
-                    className="w-32" 
-                    crossOrigin="anonymous" 
-                />
-                <span className="text-xs text-slate-400 font-bold uppercase tracking-widest">Manual Oficial 2026</span>
+          <div className="lg:col-span-8 space-y-12">
+            <div id="contenido-pdf" className="bg-white p-4 md:p-8 rounded-xl shadow-sm space-y-12">
+              
+              <div className="mb-8 border-b pb-4 border-slate-100 flex justify-between items-center">
+                  <img 
+                      src="/logo.webp" 
+                      alt="AuxiliarPro Logo" 
+                      className="w-32" 
+                      crossOrigin="anonymous" 
+                  />
+                  <span className="text-xs text-slate-400 font-bold uppercase tracking-widest">Manual Oficial 2026</span>
+              </div>
+
+              {/* 1. CARDIOVASCULAR */}
+              <section className="break-inside-avoid">
+                  <div className="flex items-center gap-3 mb-6">
+                      <div className="bg-red-100 p-3 rounded-lg text-red-600"><Heart size={28} /></div>
+                      <h2 className="text-2xl font-black text-slate-900">1. Salud Cardiovascular</h2>
+                  </div>
+                  
+                  <p className="mb-6 text-slate-600 text-lg">
+                      La hipertensión es el "asesino silencioso". La adherencia al tratamiento es vital. El paciente crónico vendrá todos los meses; fidelízalo con conocimiento.
+                  </p>
+
+                  <div className="space-y-6">
+                      {/* ENALAPRIL */}
+                      <div className="bg-white border border-slate-200 p-5 rounded-xl shadow-sm">
+                          <h3 className="font-bold text-slate-900 text-lg mb-2 flex items-center justify-between">
+                              A. Enalapril
+                              <span className="text-xs bg-slate-100 px-2 py-1 rounded">IECA</span>
+                          </h3>
+                          <p className="text-sm text-slate-600 mb-3">Medicamento de primera línea, económico y efectivo.</p>
+                          <div className="bg-orange-50 p-3 rounded-lg border-l-4 border-orange-400 flex gap-3">
+                              <AlertTriangle className="text-orange-600 shrink-0" size={18} />
+                              <div>
+                                  <strong className="text-orange-900 text-sm block">Efecto Adverso Clásico: TOS SECA</strong>
+                                  <p className="text-xs text-orange-800">Si el paciente relata tos persistente sin resfrío, es probable que sea el Enalapril. Debe consultar al médico para cambio de terapia.</p>
+                              </div>
+                          </div>
+                      </div>
+
+                      {/* LOSARTÁN */}
+                      <div className="bg-white border border-slate-200 p-5 rounded-xl shadow-sm">
+                          <h3 className="font-bold text-slate-900 text-lg mb-2 flex items-center justify-between">
+                              B. Losartán
+                              <span className="text-xs bg-slate-100 px-2 py-1 rounded">ARA II</span>
+                          </h3>
+                          <p className="text-sm text-slate-600">
+                              Generalmente es la alternativa cuando el paciente no tolera el Enalapril. <strong>No produce tos.</strong> Es muy importante verificar la dosis (50mg o 100mg) y la frecuencia.
+                          </p>
+                      </div>
+
+                      {/* AMLODIPINO */}
+                      <div className="bg-white border border-slate-200 p-5 rounded-xl shadow-sm">
+                          <h3 className="font-bold text-slate-900 text-lg mb-2 flex items-center justify-between">
+                              C. Amlodipino
+                              <span className="text-xs bg-slate-100 px-2 py-1 rounded">Calcio Antagonista</span>
+                          </h3>
+                          <p className="text-sm text-slate-600 mb-3">Potente vasodilatador.</p>
+                          <ul className="text-sm text-slate-700 list-disc pl-4">
+                              <li><strong>Efecto Adverso:</strong> Edema (hinchazón) de tobillos y piernas, especialmente en verano o al estar mucho tiempo de pie.</li>
+                          </ul>
+                      </div>
+                  </div>
+                  
+                  <p className="mt-6 text-xs text-slate-500 flex items-center gap-1">
+                      Fuente de consulta: <a href="https://sochicar.cl" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">Sociedad Chilena de Cardiología <ExternalLink size={10}/></a>
+                  </p>
+              </section>
+
+              {/* 2. METABÓLICO: DIABETES Y COLESTEROL */}
+              <hr className="border-slate-200" />
+              <section className="break-inside-avoid">
+                  <div className="flex items-center gap-3 mb-6">
+                      <div className="bg-blue-100 p-3 rounded-lg text-blue-600"><Droplet size={28} /></div>
+                      <h2 className="text-2xl font-black text-slate-900">2. Diabetes y Colesterol</h2>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-6 mb-8">
+                      <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                          <h4 className="font-bold text-blue-900 mb-2">Metformina</h4>
+                          <p className="text-sm text-slate-600 mb-3">La base del tratamiento diabético tipo 2.</p>
+                          <div className="bg-blue-50 p-3 rounded-lg text-sm text-blue-800">
+                              <strong>Tip de experto:</strong> Recomendar tomar <strong>CON las comidas</strong>. Esto reduce drásticamente las molestias gástricas (dolor, diarrea) que produce al inicio.
+                          </div>
+                      </div>
+
+                      <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                          <h4 className="font-bold text-orange-900 mb-2">Glibenclamida</h4>
+                          <p className="text-sm text-slate-600 mb-3">Estimula la liberación de insulina.</p>
+                          <div className="bg-orange-50 p-3 rounded-lg text-sm text-orange-800">
+                              <strong>Riesgo: Hipoglicemia.</strong> El paciente NUNCA debe tomarla si no va a comer, ya que puede bajarle el azúcar peligrosamente.
+                          </div>
+                      </div>
+                  </div>
+
+                  <div className="bg-slate-900 text-white p-6 rounded-2xl mb-8">
+                      <h4 className="font-bold text-lg mb-3 flex items-center gap-2">
+                          <Thermometer className="text-blue-400" /> Cadena de Frío: Insulinas
+                      </h4>
+                      <p className="text-sm text-slate-300 mb-4">
+                          Es responsabilidad del auxiliar garantizar que la insulina no pierda su efecto por temperatura.
+                      </p>
+                      <ul className="space-y-2 text-sm">
+                          <li className="flex gap-2 items-center"><CheckCircle size={16} className="text-emerald-400"/> <strong>Almacenamiento (Farmacia):</strong> Refrigerada entre 2°C y 8°C. Nunca congelar.</li>
+                          <li className="flex gap-2 items-center"><CheckCircle size={16} className="text-emerald-400"/> <strong>En uso (Paciente):</strong> Puede estar a temperatura ambiente (hasta 25°C-30°C) por aprox. 4 semanas.</li>
+                      </ul>
+                  </div>
+
+                  <div className="bg-white p-5 rounded-2xl border-l-4 border-yellow-500 shadow-sm">
+                      <h4 className="font-bold text-slate-900 mb-2 flex items-center gap-2"><Activity className="text-yellow-600"/> Atorvastatina (Colesterol)</h4>
+                      <p className="text-sm text-slate-600">
+                          La síntesis de colesterol en el cuerpo es mayor durante la noche.
+                          <br/><strong>Recomendación:</strong> Indicar al paciente que la tome preferentemente en la <strong>CENA</strong> o antes de dormir para mayor eficacia.
+                      </p>
+                  </div>
+              </section>
+
+              {/* 3. ANTIINFECCIOSOS */}
+              <hr className="border-slate-200" />
+              <section className="break-inside-avoid">
+                  <div className="flex items-center gap-3 mb-6">
+                      <div className="bg-purple-100 p-3 rounded-lg text-purple-600"><Bug size={28} /></div>
+                      <h2 className="text-2xl font-black text-slate-900">3. Antiinfecciosos (Antibióticos)</h2>
+                  </div>
+
+                  <div className="bg-red-50 p-6 rounded-2xl border border-red-200 mb-8">
+                      <h3 className="text-xl font-bold text-red-900 mb-3 flex items-center gap-2">
+                          <ShieldAlert /> La Resistencia Bacteriana
+                      </h3>
+                      <p className="text-red-800 text-sm mb-4 leading-relaxed">
+                          Es una crisis mundial de salud pública declarada por la OMS. Las bacterias se vuelven "superpoderosas" porque la gente toma antibióticos mal o no termina el tratamiento.
+                      </p>
+                      <strong className="text-red-900 block text-sm">Tu Rol como Auxiliar:</strong>
+                      <ul className="list-disc pl-5 mt-2 text-red-800 text-sm space-y-1">
+                          <li><strong>Exigir Receta Médica:</strong> No es capricho, es ley y salud pública.</li>
+                          <li><strong>Educar:</strong> "Debe tomarlo por los días indicados, aunque se sienta bien al tercer día".</li>
+                      </ul>
+                  </div>
+
+                  <div className="space-y-6">
+                      <div className="grid md:grid-cols-2 gap-6">
+                          <div className="bg-white p-5 rounded-xl border border-slate-200">
+                              <strong className="text-slate-900 block mb-1 text-lg">Amoxicilina</strong>
+                              <span className="text-xs bg-purple-100 text-purple-800 px-2 py-0.5 rounded">Familia Penicilinas</span>
+                              <p className="text-sm text-slate-600 mt-2">
+                                  Antibiótico de amplio espectro común. Cuidado con pacientes alérgicos a la Penicilina.
+                              </p>
+                          </div>
+                          <div className="bg-white p-5 rounded-xl border border-slate-200">
+                              <strong className="text-slate-900 block mb-1 text-lg">Azitromicina</strong>
+                              <span className="text-xs bg-purple-100 text-purple-800 px-2 py-0.5 rounded">Familia Macrólidos</span>
+                              <p className="text-sm text-slate-600 mt-2">
+                                  Cómoda posología (1 al día). Suele usarse en alérgicos a la penicilina.
+                              </p>
+                          </div>
+                      </div>
+                  </div>
+              </section>
             </div>
 
-            {/* 1. CARDIOVASCULAR */}
-            <section className="break-inside-avoid">
-                <div className="flex items-center gap-3 mb-6">
-                    <div className="bg-red-100 p-3 rounded-lg text-red-600"><Heart size={28} /></div>
-                    <h2 className="text-2xl font-black text-slate-900">1. Salud Cardiovascular</h2>
-                </div>
-                
-                <p className="mb-6 text-slate-600 text-lg">
-                    La hipertensión es el "asesino silencioso". La adherencia al tratamiento es vital. El paciente crónico vendrá todos los meses; fidelízalo con conocimiento.
+            {/* AVISO LEGAL MOVIL */}
+            <div className="bg-slate-800/5 p-5 rounded-2xl border border-slate-200 mt-8 hidden lg:block">
+                <p className="text-sm text-slate-500 leading-relaxed flex gap-3">
+                    <AlertTriangle className="shrink-0 text-amber-500 mt-0.5" size={20} />
+                    <span>
+                        <strong>Advertencia Legal:</strong> Estudiar por tu cuenta en esta plataforma es válido y recomendado para <em>preparar</em> tu examen. Sin embargo, para inscribirte oficialmente en la SEREMI necesitarás acreditar tu experiencia laboral o un certificado de práctica. El "estudio teórico" no reemplaza el requisito legal exigido por el Decreto 90.
+                    </span>
                 </p>
-
-                <div className="space-y-6">
-                    {/* ENALAPRIL */}
-                    <div className="bg-white border border-slate-200 p-5 rounded-xl shadow-sm">
-                        <h3 className="font-bold text-slate-900 text-lg mb-2 flex items-center justify-between">
-                            A. Enalapril
-                            <span className="text-xs bg-slate-100 px-2 py-1 rounded">IECA</span>
-                        </h3>
-                        <p className="text-sm text-slate-600 mb-3">Medicamento de primera línea, económico y efectivo.</p>
-                        <div className="bg-orange-50 p-3 rounded-lg border-l-4 border-orange-400 flex gap-3">
-                            <AlertTriangle className="text-orange-600 shrink-0" size={18} />
-                            <div>
-                                <strong className="text-orange-900 text-sm block">Efecto Adverso Clásico: TOS SECA</strong>
-                                <p className="text-xs text-orange-800">Si el paciente relata tos persistente sin resfrío, es probable que sea el Enalapril. Debe consultar al médico para cambio de terapia.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* LOSARTÁN */}
-                    <div className="bg-white border border-slate-200 p-5 rounded-xl shadow-sm">
-                        <h3 className="font-bold text-slate-900 text-lg mb-2 flex items-center justify-between">
-                            B. Losartán
-                            <span className="text-xs bg-slate-100 px-2 py-1 rounded">ARA II</span>
-                        </h3>
-                        <p className="text-sm text-slate-600">
-                            Generalmente es la alternativa cuando el paciente no tolera el Enalapril. <strong>No produce tos.</strong> Es muy importante verificar la dosis (50mg o 100mg) y la frecuencia.
-                        </p>
-                    </div>
-
-                    {/* AMLODIPINO */}
-                    <div className="bg-white border border-slate-200 p-5 rounded-xl shadow-sm">
-                        <h3 className="font-bold text-slate-900 text-lg mb-2 flex items-center justify-between">
-                            C. Amlodipino
-                            <span className="text-xs bg-slate-100 px-2 py-1 rounded">Calcio Antagonista</span>
-                        </h3>
-                        <p className="text-sm text-slate-600 mb-3">Potente vasodilatador.</p>
-                        <ul className="text-sm text-slate-700 list-disc pl-4">
-                            <li><strong>Efecto Adverso:</strong> Edema (hinchazón) de tobillos y piernas, especialmente en verano o al estar mucho tiempo de pie.</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <p className="mt-6 text-xs text-slate-500 flex items-center gap-1">
-                    Fuente de consulta: <a href="https://sochicar.cl" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">Sociedad Chilena de Cardiología <ExternalLink size={10}/></a>
-                </p>
-            </section>
-
-            {/* 2. METABÓLICO: DIABETES Y COLESTEROL */}
-            <hr className="border-slate-200" />
-            <section className="break-inside-avoid">
-                <div className="flex items-center gap-3 mb-6">
-                    <div className="bg-blue-100 p-3 rounded-lg text-blue-600"><Droplet size={28} /></div>
-                    <h2 className="text-2xl font-black text-slate-900">2. Diabetes y Colesterol</h2>
-                </div>
-
-                <div className="grid md:grid-cols-2 gap-6 mb-8">
-                    {/* METFORMINA */}
-                    <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                        <h4 className="font-bold text-blue-900 mb-2">Metformina</h4>
-                        <p className="text-sm text-slate-600 mb-3">La base del tratamiento diabético tipo 2.</p>
-                        <div className="bg-blue-50 p-3 rounded-lg text-sm text-blue-800">
-                            <strong>Tip de experto:</strong> Recomendar tomar <strong>CON las comidas</strong>. Esto reduce drásticamente las molestias gástricas (dolor, diarrea) que produce al inicio.
-                        </div>
-                    </div>
-
-                    {/* GLIBENCLAMIDA */}
-                    <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
-                        <h4 className="font-bold text-orange-900 mb-2">Glibenclamida</h4>
-                        <p className="text-sm text-slate-600 mb-3">Estimula la liberación de insulina.</p>
-                        <div className="bg-orange-50 p-3 rounded-lg text-sm text-orange-800">
-                            <strong>Riesgo: Hipoglicemia.</strong> El paciente NUNCA debe tomarla si no va a comer, ya que puede bajarle el azúcar peligrosamente.
-                        </div>
-                    </div>
-                </div>
-
-                {/* INSULINA */}
-                <div className="bg-slate-900 text-white p-6 rounded-2xl mb-8">
-                    <h4 className="font-bold text-lg mb-3 flex items-center gap-2">
-                        <Thermometer className="text-blue-400" /> Cadena de Frío: Insulinas
-                    </h4>
-                    <p className="text-sm text-slate-300 mb-4">
-                        Es responsabilidad del auxiliar garantizar que la insulina no pierda su efecto por temperatura.
-                    </p>
-                    <ul className="space-y-2 text-sm">
-                        <li className="flex gap-2 items-center"><CheckCircle size={16} className="text-emerald-400"/> <strong>Almacenamiento (Farmacia):</strong> Refrigerada entre 2°C y 8°C. Nunca congelar.</li>
-                        <li className="flex gap-2 items-center"><CheckCircle size={16} className="text-emerald-400"/> <strong>En uso (Paciente):</strong> Puede estar a temperatura ambiente (hasta 25°C-30°C) por aprox. 4 semanas.</li>
-                    </ul>
-                </div>
-
-                {/* COLESTEROL */}
-                <div className="bg-white p-5 rounded-2xl border-l-4 border-yellow-500 shadow-sm">
-                    <h4 className="font-bold text-slate-900 mb-2 flex items-center gap-2"><Activity className="text-yellow-600"/> Atorvastatina (Colesterol)</h4>
-                    <p className="text-sm text-slate-600">
-                        La síntesis de colesterol en el cuerpo es mayor durante la noche.
-                        <br/><strong>Recomendación:</strong> Indicar al paciente que la tome preferentemente en la <strong>CENA</strong> o antes de dormir para mayor eficacia.
-                    </p>
-                </div>
-            </section>
-
-            {/* 3. ANTIINFECCIOSOS */}
-            <hr className="border-slate-200" />
-            <section className="break-inside-avoid">
-                <div className="flex items-center gap-3 mb-6">
-                    <div className="bg-purple-100 p-3 rounded-lg text-purple-600"><Bug size={28} /></div>
-                    <h2 className="text-2xl font-black text-slate-900">3. Antiinfecciosos (Antibióticos)</h2>
-                </div>
-
-                <div className="bg-red-50 p-6 rounded-2xl border border-red-200 mb-8">
-                    <h3 className="text-xl font-bold text-red-900 mb-3 flex items-center gap-2">
-                        <ShieldAlert /> La Resistencia Bacteriana
-                    </h3>
-                    <p className="text-red-800 text-sm mb-4 leading-relaxed">
-                        Es una crisis mundial de salud pública declarada por la <a href="https://www.who.int/es/news-room/fact-sheets/detail/antimicrobial-resistance" target="_blank" rel="noopener noreferrer" className="underline font-bold hover:text-red-950 inline-flex items-center gap-1">OMS <ExternalLink size={10}/></a>. Las bacterias se vuelven "superpoderosas" porque la gente toma antibióticos mal (por resfríos virales) o no termina el tratamiento.
-                    </p>
-                    <strong className="text-red-900 block text-sm">Tu Rol como Auxiliar:</strong>
-                    <ul className="list-disc pl-5 mt-2 text-red-800 text-sm space-y-1">
-                        <li><strong>Exigir Receta Médica:</strong> No es capricho, es ley y salud pública.</li>
-                        <li><strong>Educar:</strong> "Debe tomarlo por los días indicados (7, 10, 14), aunque se sienta bien al tercer día".</li>
-                    </ul>
-                </div>
-
-                <div className="space-y-6">
-                    <div className="grid md:grid-cols-2 gap-6">
-                        {/* AMOXICILINA */}
-                        <div className="bg-white p-5 rounded-xl border border-slate-200">
-                            <strong className="text-slate-900 block mb-1 text-lg">Amoxicilina</strong>
-                            <span className="text-xs bg-purple-100 text-purple-800 px-2 py-0.5 rounded">Familia Penicilinas</span>
-                            <p className="text-sm text-slate-600 mt-2">
-                                Antibiótico de amplio espectro muy común. Cuidado con pacientes alérgicos a la Penicilina (preguntar siempre).
-                            </p>
-                        </div>
-
-                        {/* AZITROMICINA */}
-                        <div className="bg-white p-5 rounded-xl border border-slate-200">
-                            <strong className="text-slate-900 block mb-1 text-lg">Azitromicina</strong>
-                            <span className="text-xs bg-purple-100 text-purple-800 px-2 py-0.5 rounded">Familia Macrólidos</span>
-                            <p className="text-sm text-slate-600 mt-2">
-                                Cómoda posología (1 al día por 3-5 días). Suele usarse en alérgicos a la penicilina.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            </div>
 
           </div>
 
-          {/* 🔴 COLUMNA DERECHA: SIDEBAR STICKY CON QUIZ INTERACTIVO */}
+          {/* 🔴 COLUMNA DERECHA: SIDEBAR STICKY */}
           <div className="lg:col-span-4">
-            <div className="sticky top-24 space-y-6">
+            <div className="block lg:sticky lg:top-24 space-y-6">
               
-              {/* TARJETA 1: QUIZ INTERACTIVO */}
+              {/* 1. QUIZ INTERACTIVO */}
               <div className="bg-slate-900 text-white p-6 md:p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500 rounded-full blur-3xl opacity-20 group-hover:opacity-30 transition-opacity"></div>
-                
                 <div className="relative z-10">
-                  
-                  {/* ESTADO 1: INICIO */}
                   {!quizActivo && !mostrarResultado && (
                     <>
                         <span className="bg-emerald-500 text-emerald-50 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
                             Quiz Rápido
                         </span>
-                        <h3 className="text-3xl font-black mb-4 leading-tight">
-                            ¿Manejas Crónicos?
-                        </h3>
+                        <h3 className="text-3xl font-black mb-4 leading-tight">¿Manejas Crónicos?</h3>
                         <p className="text-slate-400 mb-8 text-sm leading-relaxed">
                             Pon a prueba tus conocimientos sobre medicamentos de uso diario y antibióticos.
                         </p>
@@ -356,18 +365,13 @@ export default function GuiaCronicosInfecciosos() {
                     </>
                   )}
 
-                  {/* ESTADO 2: PREGUNTAS */}
                   {quizActivo && (
                     <div className="animate-in fade-in slide-in-from-right-4 duration-300">
                         <div className="flex justify-between items-center mb-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
                             <span>Pregunta {preguntaActual + 1} de {preguntasQuiz.length}</span>
                             <button onClick={reiniciarQuiz}><XCircle size={20} className="hover:text-red-400"/></button>
                         </div>
-                        
-                        <h4 className="font-bold text-lg mb-6 leading-tight">
-                            {preguntasQuiz[preguntaActual].pregunta}
-                        </h4>
-
+                        <h4 className="font-bold text-lg mb-6 leading-tight">{preguntasQuiz[preguntaActual].pregunta}</h4>
                         <div className="space-y-3">
                             {preguntasQuiz[preguntaActual].opciones.map((opcion, index) => (
                                 <button
@@ -389,7 +393,6 @@ export default function GuiaCronicosInfecciosos() {
                     </div>
                   )}
 
-                  {/* ESTADO 3: RESULTADOS */}
                   {mostrarResultado && (
                     <div className="text-center animate-in zoom-in duration-300">
                         <div className="bg-emerald-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-400">
@@ -399,109 +402,69 @@ export default function GuiaCronicosInfecciosos() {
                         <p className="text-slate-400 mb-6">
                             Obtuviste <strong className="text-white">{puntaje}</strong> de <strong className="text-white">{preguntasQuiz.length}</strong> correctas.
                         </p>
-                        
-                        <div className="space-y-3">
-                            <button 
-                                onClick={reiniciarQuiz}
-                                className="w-full bg-slate-800 text-white font-bold py-3 rounded-xl hover:bg-slate-700 text-sm"
-                            >
-                                Intentar de nuevo
-                            </button>
-                        </div>
+                        <button onClick={reiniciarQuiz} className="w-full bg-slate-800 text-white font-bold py-3 rounded-xl hover:bg-slate-700 text-sm">
+                            Intentar de nuevo
+                        </button>
                     </div>
                   )}
-
                 </div>
               </div>
 
-              {/* 2. TARJETA DESCARGAR PDF */}
+              {/* 2. PDF CARD */}
               <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
                 <div className="flex items-center gap-4 mb-4">
-                    <div className="bg-red-50 text-red-600 p-3 rounded-full">
-                        <FileText size={24} />
-                    </div>
+                    <div className="bg-red-50 text-red-600 p-3 rounded-full"><FileText size={24} /></div>
                     <div>
                         <h4 className="font-bold text-slate-900">Guía en PDF</h4>
                         <p className="text-xs text-slate-500">Guardar para estudiar</p>
                     </div>
                 </div>
-                <p className="text-sm text-slate-600 mb-6 leading-relaxed">
-                    Convierte esta página en un archivo PDF automáticamente.
-                </p>
-                
                 <button 
                     onClick={generarPDF}
-                    disabled={!isPdfReady}
-                    className={`w-full border-2 border-slate-200 text-slate-600 font-bold text-center py-3 rounded-xl transition-colors flex items-center justify-center gap-2 text-sm ${isPdfReady ? 'hover:border-red-500 hover:text-red-600 cursor-pointer' : 'opacity-50 cursor-not-allowed'}`}
+                    disabled={!isPdfReady || isGenerating}
+                    className={`w-full border-2 border-slate-200 text-slate-600 font-bold text-center py-3 rounded-xl transition-colors flex items-center justify-center gap-2 text-sm ${isPdfReady && !isGenerating ? 'hover:border-red-500 hover:text-red-600 cursor-pointer' : 'opacity-50'}`}
                 >
-                    <Download size={16} /> 
-                    {isPdfReady ? 'DESCARGAR AHORA' : 'Cargando herramienta...'}
+                    {isGenerating ? <RefreshCw className="animate-spin" size={16} /> : <Download size={16} />}
+                    {isGenerating ? 'Generando...' : isPdfReady ? 'DESCARGAR AHORA' : 'Cargando...'}
                 </button>
               </div>
 
-              {/* 🟢 NUEVO: BOTÓN WHATSAPP COMPARTIR (Insertado aquí) */}
+              {/* 3. DERMO CARD (VALOR GRATUITO) */}
+              <a 
+                href="https://www.dermocheck.cl/#calculator-section" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-sm group hover:ring-2 hover:ring-emerald-500 transition-all text-slate-300"
+              >
+                <div className="flex items-center gap-4 mb-4">
+                    <div className="bg-emerald-500/20 text-emerald-400 p-3 rounded-full group-hover:bg-emerald-500 group-hover:text-white transition-colors"><Clock size={24} /></div>
+                    <div>
+                        <h4 className="font-bold text-white text-sm">DermoCheck</h4>
+                        <p className="text-xs text-slate-400">Verifica vencimientos</p>
+                    </div>
+                    <ExternalLink size={16} className="ml-auto text-slate-500"/>
+                </div>
+              </a>
+
+              {/* 4. WHATSAPP CARD */}
               <a 
                 href="https://wa.me/?text=%C2%A1Mira%20este%20resumen%20de%20Cr%C3%B3nicos%20y%20Antibi%C3%B3ticos!%20Ideal%20para%20estudiar%20%F0%9F%91%89%20https://www.auxiliaresdefarmacia.cl/guias/cronicos-antiinfecciosos" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="group block bg-[#25D366] p-6 rounded-3xl shadow-sm hover:shadow-md transition-all hover:bg-[#20bd5a]"
               >
-                <div className="flex items-center gap-4">
-                    <div className="shrink-0">
-                        <img 
-                            src="/whatsapp.webp" 
-                            alt="WhatsApp" 
-                            className="w-10 h-10 object-contain" 
-                        />
-                    </div>
+                <div className="flex items-center gap-4 text-white">
+                    <img src="/whatsapp.webp" alt="WhatsApp" className="w-10 h-10 object-contain" />
                     <div>
-                        <h4 className="font-bold text-white text-sm">Compartir con Colegas</h4>
+                        <h4 className="font-bold text-sm">Compartir con Colegas</h4>
                         <p className="text-xs text-white/90">Enviar al grupo del turno</p>
                     </div>
-                    <ArrowRight size={20} className="text-white ml-auto opacity-70 group-hover:translate-x-1 transition-transform"/>
+                    <ArrowRight size={20} className="ml-auto opacity-70 group-hover:translate-x-1 transition-transform"/>
                 </div>
               </a>
 
-              {/* 3. TARJETA DE COLABORACIÓN (REVENIU) */}
-              <a 
-                href="https://app.reveniu.com/checkout-custom-link/HvM4DkkkUpBnILnQv4abrZl5qYX7faqU" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="group block bg-gradient-to-r from-amber-50 to-orange-50 p-6 rounded-3xl border border-amber-100 shadow-sm hover:shadow-md transition-all hover:border-amber-200"
-              >
-                <div className="flex items-center gap-4">
-                    <div className="bg-white text-amber-500 p-3 rounded-full shadow-sm group-hover:scale-110 transition-transform">
-                        <HeartIcon size={24} className="fill-amber-500 text-amber-500" />
-                    </div>
-                    <div>
-                        <h4 className="font-bold text-amber-900 text-sm">¿Te sirvió esta guía?</h4>
-                        <p className="text-xs text-amber-700/80">Ayúdame a mantener la web</p>
-                    </div>
-                    <ExternalLink size={16} className="text-amber-400 ml-auto opacity-50 group-hover:opacity-100"/>
-                </div>
-              </a>
-
-              {/* 4. TARJETA DERMOCHECK (CROSS-SELLING) */}
-              <a 
-                href="https://www.dermocheck.cl/#calculator-section" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="block bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-sm group hover:ring-2 hover:ring-emerald-500 transition-all"
-              >
-                <div className="flex items-center gap-4 mb-4">
-                    <div className="bg-emerald-500/20 text-emerald-400 p-3 rounded-full group-hover:bg-emerald-500 group-hover:text-white transition-colors">
-                        <Clock size={24} />
-                    </div>
-                    <div>
-                        <h4 className="font-bold text-white">DermoCheck</h4>
-                        <p className="text-xs text-slate-400">Herramienta Exclusiva</p>
-                    </div>
-                    <ExternalLink size={16} className="text-slate-500 ml-auto"/>
-                </div>
-                <p className="text-sm text-slate-300 leading-relaxed mb-0">
-                    ¿Vendes Dermo? Verifica vencimientos por lote aquí.
-                </p>
-              </a>
+              {/* 🚀 5. BANNER DE VENTA COMPONENTE DRY */}
+              <BannerVenta colorTheme="rose" />
 
             </div>
           </div>

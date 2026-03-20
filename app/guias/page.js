@@ -1,17 +1,34 @@
+"use client"; // Añadimos esto para manejar la función de compartir
+
 import Link from "next/link";
 import { 
   BookOpen, Pill, Lock, ArrowRight, Library, GraduationCap, 
-  BrainCircuit, Store, Calculator, Microscope, Flame, Heart, Brain 
+  BrainCircuit, Store, Calculator, Microscope, Flame, Heart, Brain, Share2 
 } from "lucide-react";
-
-// 🟢 METADATOS (Optimizados para Búsqueda Local)
-export const metadata = {
-  title: 'Guías de Estudio Auxiliar de Farmacia | Apoyo Seremi 2026',
-  description: 'Material de apoyo para la certificación de Auxiliar de Farmacia en Chile. Resúmenes del Decreto 466, Farmacología y Normativa Sanitaria.',
-  keywords: ['guias auxiliar farmacia', 'examen seremi salud chile', 'resumen decreto 466', 'farmacologia basica', 'temario auxiliar farmacia', 'material de estudio farmacia'],
-};
+import BannerVenta from '../components/BannerVenta';
 
 export default function GuiasIndex() {
+  
+  // 🟢 FUNCIÓN UNIVERSAL PARA COMPARTIR
+  const handleShare = async () => {
+    const shareData = {
+      title: 'Guías de Estudio Auxiliar de Farmacia 2026',
+      text: '¡Mira este material de estudio! Está súper ordenado para preparar el examen de Auxiliar de Farmacia ante la SEREMI.',
+      url: window.location.href,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(shareData.url);
+        alert("Enlace copiado al portapapeles. ¡Ya puedes pegarlo donde quieras!");
+      }
+    } catch (err) {
+      console.log("Error al compartir", err);
+    }
+  };
+
   const guias = [
     {
       slug: "ley-20724-farmacos-1",
@@ -91,10 +108,18 @@ export default function GuiasIndex() {
         
         {/* HEADER SEO OPTIMIZADO */}
         <div className="text-center mb-16">
-          <div className="flex items-center justify-center gap-2 mb-4">
+          <div className="flex items-center justify-center gap-3 mb-4">
              <span className="bg-emerald-100 text-emerald-800 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-2">
                 <Library size={14} /> BIBLIOTECA AUXILIARPRO 2026
              </span>
+             {/* BOTÓN COMPARTIR UNIVERSAL */}
+             <button 
+                onClick={handleShare}
+                className="bg-white border border-slate-200 text-slate-500 hover:text-emerald-600 p-2 rounded-full shadow-sm hover:shadow-md transition-all active:scale-95"
+                title="Compartir Biblioteca"
+             >
+                <Share2 size={16} />
+             </button>
           </div>
           
           <h1 className="text-3xl md:text-5xl font-black text-slate-900 mb-6 leading-tight text-balance">
@@ -106,7 +131,6 @@ export default function GuiasIndex() {
             Descarga material de estudio ordenado y actualizado para preparar tu examen ante la SEREMI. Repasa la Normativa (Decreto 466) y Farmacología con resúmenes claros y directos al grano.
           </p>
 
-          {/* 🟢 BOTÓN WHATSAPP - COMPARTIR DATO */}
           <a 
             href="https://wa.me/?text=¡Hola!%20Encontré%20estos%20resúmenes%20para%20estudiar%20farmacia,%20se%20ven%20buenos:%20https://www.auxiliaresdefarmacia.cl/guias" 
             target="_blank" 
@@ -166,7 +190,6 @@ export default function GuiasIndex() {
         <div className="mb-20 w-full max-w-4xl mx-auto bg-slate-50 border border-slate-200 rounded-3xl p-8 shadow-sm">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             
-            {/* Copywriting: Filtro de Usuario */}
             <div className="text-center md:text-left space-y-2 flex-1">
               <h3 className="text-xl font-bold text-slate-900 leading-tight">
                 ¿Ya cumpliste el año en farmacia? 🕒
@@ -176,15 +199,11 @@ export default function GuiasIndex() {
               </p>
             </div>
 
-            {/* Botonera de Acciones */}
             <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-                
-                {/* Botón A: LEER GUÍA (Retención - Enlace Interno) */}
                 <Link href="/blog/fecha-examen-auxiliar-farmacia-seremi" className="group flex items-center justify-center gap-2 px-5 py-3 rounded-xl border border-slate-300 bg-white text-slate-700 font-semibold hover:bg-slate-50 hover:border-slate-400 transition-all text-sm">
                     <span>📄 Ver Guía Paso a Paso</span>
                 </Link>
 
-                {/* Botón B: IR A SEREMI (Salida - Enlace Externo) */}
                 <a 
                     href="https://seremienlinea.minsal.cl" 
                     target="_blank"
@@ -202,13 +221,15 @@ export default function GuiasIndex() {
 
           </div>
           
-          {/* Nota Legal */}
           <p className="text-[10px] text-slate-400 mt-6 text-center md:text-left">
             *AuxiliarPro te orienta, pero el trámite final se realiza en el portal oficial del Minsal.
           </p>
         </div>
 
-        {/* SECCIÓN INFORMATIVA SEO */}
+        <div className="mb-20 max-w-4xl mx-auto">
+            <BannerVenta colorTheme="blue" />
+        </div>
+
         <div className="border-t border-slate-200 pt-16 text-center">
             <h3 className="text-xl font-bold text-slate-800 mb-4 flex items-center justify-center gap-2">
                 <GraduationCap className="text-slate-400"/>
