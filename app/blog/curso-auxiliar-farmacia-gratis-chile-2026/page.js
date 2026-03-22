@@ -115,7 +115,7 @@ export default function CursoGratisPage() {
               <MonitorPlay /> Tu Herramienta Gratuita
             </h3>
             <p className="text-emerald-700 mb-6">
-              Hemos desarrollado un simulador que imita las condiciones del examen real. Sin costos ocultos, sin suscripciones. Solo entra y practica.
+              Hemos desarrollado un simulador que imita las condiciones del examen real. Sin costos ocultos. Solo entra y practica.
             </p>
             <Link 
               href="/quiz"
