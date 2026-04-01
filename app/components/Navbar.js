@@ -55,15 +55,19 @@ export default function Navbar() {
               <Gamepad2 size={16} /> SIMULADOR
            </Link>
 
+           {/* SECCIÓN PLANES (ESCRITORIO) */}
+           <Link href="/planes" className="flex items-center gap-1 xl:gap-2 text-amber-600 hover:text-amber-700 font-bold text-xs tracking-wider px-2 xl:px-3 py-2 rounded-lg hover:bg-amber-50 transition-all">
+              <Star size={16} fill="currentColor" /> PLANES
+           </Link>
+
            <Link href="/guias" className="flex items-center gap-1 xl:gap-2 text-slate-600 hover:text-blue-600 font-bold text-xs tracking-wider px-2 xl:px-3 py-2 rounded-lg hover:bg-blue-50 transition-all">
               <GraduationCap size={16} /> GUÍAS
            </Link>
 
-           {/* REPOSICIÓN DE BOTONES PRÓXIMAMENTE (ESCRITORIO) */}
-           <div className="relative group opacity-70 pointer-events-none mt-1">
-              <div className="flex items-center gap-1 xl:gap-2 text-slate-500 font-bold text-xs tracking-wider px-2 xl:px-3 py-2 rounded-lg"><Pill size={16} /> VADEMÉCUM</div>
-              <span className="absolute -top-1 right-0 bg-amber-100 text-amber-700 text-[8px] font-black px-1.5 py-0.5 rounded-full border border-amber-200">PRÓXIMO</span>
-           </div>
+           {/* VADEMÉCUM ACTIVADO (ESCRITORIO) */}
+           <Link href="/vademecum" className="flex items-center gap-1 xl:gap-2 text-slate-600 hover:text-emerald-600 font-bold text-xs tracking-wider px-2 xl:px-3 py-2 rounded-lg hover:bg-emerald-50 transition-all">
+              <Pill size={16} /> VADEMÉCUM
+           </Link>
 
            <div className="relative group opacity-70 pointer-events-none mt-1">
               <div className="flex items-center gap-1 xl:gap-2 text-slate-500 font-bold text-xs tracking-wider px-2 xl:px-3 py-2 rounded-lg"><Bot size={16} /> IA</div>
@@ -135,22 +139,25 @@ export default function Navbar() {
               <Gamepad2 size={24} className="text-emerald-400"/> Simulador Examen
             </Link>
 
+            {/* SECCIÓN PLANES (MÓVIL) */}
+            <Link href="/planes" onClick={() => setIsOpen(false)} className="flex items-center gap-4 text-amber-700 font-bold text-base p-4 rounded-2xl bg-amber-50 border border-amber-100 shadow-sm">
+              <div className="bg-amber-100 p-2 rounded-lg text-amber-600"><Star size={20} fill="currentColor" /></div>
+              Planes y Suscripción PRO
+            </Link>
+
             <Link href="/guias" onClick={() => setIsOpen(false)} className="flex items-center gap-4 text-slate-700 font-bold text-base p-4 rounded-2xl hover:bg-blue-50 border border-slate-100">
               <div className="bg-blue-100 p-2 rounded-lg text-blue-600"><GraduationCap size={20} /></div>
               Guías de Estudio
             </Link>
 
-            {/* REPOSICIÓN DE SECCIÓN PRÓXIMAMENTE (MÓVIL) */}
+            {/* VADEMÉCUM ACTIVADO (MÓVIL) */}
+            <Link href="/vademecum" onClick={() => setIsOpen(false)} className="flex items-center gap-4 text-slate-700 font-bold text-base p-4 rounded-2xl hover:bg-emerald-50 border border-slate-100">
+              <div className="bg-emerald-100 p-2 rounded-lg text-emerald-600"><Pill size={20} /></div>
+              Vademécum Profesional
+            </Link>
+
             <div className="mt-4 mb-2">
                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Próximas Herramientas PRO</span>
-            </div>
-
-            <div className="flex items-center justify-between p-4 rounded-2xl border border-slate-100 bg-slate-50 opacity-70 pointer-events-none">
-              <div className="flex items-center gap-4 text-slate-500 font-bold text-base">
-                <div className="bg-slate-200 p-2 rounded-lg text-slate-500"><Pill size={20} /></div>
-                Vademécum Pro
-              </div>
-              <span className="bg-amber-100 text-amber-700 text-[9px] font-black px-2 py-1 rounded-full">PRÓXIMAMENTE</span>
             </div>
 
             <div className="flex items-center justify-between p-4 rounded-2xl border border-slate-100 bg-slate-50 opacity-70 pointer-events-none">

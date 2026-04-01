@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Pill, Calculator, Gamepad2 } from "lucide-react";
 
 export default function Hero() {
   return (
@@ -22,14 +22,35 @@ export default function Hero() {
           Contenido técnico y jurídico validado para el proceso de certificación 2026.
         </p>
         
-        {/* Botón de Acción (Mobile friendly) */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        {/* Botones de Acción - Ecosistema Completo */}
+        <div className="flex flex-col items-center gap-6">
+          {/* Botón Principal: Simulador */}
           <Link 
             href="/quiz" 
-            className="inline-flex items-center justify-center w-full sm:w-auto gap-3 bg-slate-900 text-white px-12 py-5 rounded-full font-black text-base md:text-lg hover:bg-emerald-500 transition-all shadow-xl hover:-translate-y-1"
+            className="inline-flex items-center justify-center w-full sm:w-auto gap-3 bg-slate-900 text-white px-12 py-5 rounded-full font-black text-base md:text-lg hover:bg-emerald-600 transition-all shadow-xl hover:-translate-y-1 group"
           >
-            EMPEZAR AHORA <ArrowRight size={20} />
+            <Gamepad2 size={24} className="text-emerald-400 group-hover:text-white transition-colors" />
+            EMPEZAR SIMULADOR <ArrowRight size={20} />
           </Link>
+
+          {/* Accesos Secundarios: Herramientas de Mesón */}
+          <div className="flex flex-wrap justify-center gap-3 w-full">
+            <Link 
+              href="/vademecum" 
+              className="inline-flex items-center gap-2 bg-white text-slate-700 px-6 py-3 rounded-2xl font-bold text-sm border border-slate-200 hover:border-emerald-500 hover:text-emerald-600 transition-all shadow-sm"
+            >
+              <Pill size={18} className="text-emerald-500" />
+              Vademécum Profesional
+            </Link>
+
+            <Link 
+              href="/dermocheck" 
+              className="inline-flex items-center gap-2 bg-white text-slate-700 px-6 py-3 rounded-2xl font-bold text-sm border border-slate-200 hover:border-pink-500 hover:text-pink-600 transition-all shadow-sm"
+            >
+              <Calculator size={18} className="text-pink-500" />
+              DermoCheck (Vencimientos)
+            </Link>
+          </div>
         </div>
 
       </div>

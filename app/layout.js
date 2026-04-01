@@ -4,19 +4,22 @@ import "./globals.css";
 // 👇 Importamos componentes
 import Navbar from "./components/Navbar"; 
 import Footer from "./components/Footer";
-import ScrollToTop from "./components/ScrollToTop"; // 🟢 AQUÍ ESTÁ LA IMPORTACIÓN DE LA FLECHA
+import BannerUrgencia from "./components/BannerUrgencia"; // 🟢 ESTE ES EL ÚNICO QUE DEBE QUEDAR
+import ScrollToTop from "./components/ScrollToTop"; 
+import dynamic from "next/dynamic";
+
+// 🛡️ INYECCIÓN DE SEGURIDAD (CTO): Importación dinámica para evitar colapsos de servidor (SSR)
+const AuthGuard = dynamic(() => import("./components/AuthGuard"), { ssr: false });
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   metadataBase: new URL('https://www.auxiliaresdefarmacia.cl'),
   
-  // 🟢 SEO: Canonical para evitar contenido duplicado
   alternates: {
     canonical: '/',
   },
 
-  // 🟢 SEO: Instrucciones para robots
   robots: {
     index: true,
     follow: true,
@@ -29,7 +32,6 @@ export const metadata = {
     },
   },
 
-  // 🟢 BRANDING: Títulos optimizados
   title: {
     default: "AuxiliarPro | Simulador Examen Farmacia Chile",
     template: "%s | AuxiliarPro"
@@ -37,7 +39,6 @@ export const metadata = {
   
   description: "Plataforma líder de estudio para Auxiliares de Farmacia en Chile. Simulador de examen SEREMI, guías del Decreto 466, 404, 405, Decreto 3 y bolsa de empleo farmacéutico.",
   
-  // 🟢 KEYWORDS: Agregamos términos del ecosistema y nuevas guías
   keywords: [
     "Auxiliar de farmacia", 
     "Examen competencia", 
@@ -54,7 +55,6 @@ export const metadata = {
     "Dermocosmética"
   ],
 
-  // 🟢 AUTORÍA: Vinculación de marca
   authors: [{ name: "AuxiliarPro", url: "https://www.auxiliaresdefarmacia.cl" }],
   creator: "MaczDev Ecosistema Digital",
   publisher: "AuxiliarPro",
@@ -65,7 +65,6 @@ export const metadata = {
     apple: '/logo-favicon.ico', 
   },
 
-  // 🟢 SOCIAL: Cómo se ve al compartir en WhatsApp/LinkedIn
   openGraph: {
     title: "AuxiliarPro | Capacitación Farmacéutica Chile",
     description: "Prepara tu examen de competencia gratis con el simulador real y guías actualizadas.",
@@ -90,24 +89,25 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    // 🟢 Agregamos scroll-smooth para que la subida sea suave y no de golpe
     <html lang="es" className="scroll-smooth"> 
       <body className={`${inter.className} min-h-screen flex flex-col bg-white`}>
         
-        {/* Navbar Global */}
-        <Navbar />
+        <AuthGuard>
+          
+          {/* 🔔 ÚNICA LLAMADA GLOBAL: Al estar aquí, ya cubre el Home y todas las rutas internas */}
+          <BannerUrgencia />
 
-        <main className="flex-grow">
-          {children}
-        </main>
+          <Navbar />
+
+          <main className="flex-grow">
+            {children}
+          </main>
+          
+          <Footer />
+          
+          <ScrollToTop />
+        </AuthGuard>
         
-        {/* Footer Global */}
-        <Footer />
-        
-        {/* 🟢 AQUÍ ESTÁ EL BOTÓN FLOTANTE RENDERIZADO */}
-        <ScrollToTop />
-        
-        {/* Analíticas Vercel */}
         <Analytics />
       </body>
     </html>

@@ -1,169 +1,82 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Lock, Sparkles, ArrowRight, CheckCircle, Loader2 } from "lucide-react";
-import { db, auth } from '../firebase/config'; 
-import { collection, addDoc, query, where, getDocs } from 'firebase/firestore';
-import { onAuthStateChanged } from 'firebase/auth';
+import { Lock, ArrowRight, CheckCircle } from "lucide-react";
 
 export default function BannerVenta() {
-  const router = useRouter();
-  const [usuario, setUsuario] = useState(null);
-  const [cargando, setCargando] = useState(false);
-  const [inscrito, setInscrito] = useState(false);
-
-  // Lógica de Autenticación y Verificación de Registro Previo
-  useEffect(() => {
-    const unsubscribeAuth = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        setUsuario(user);
-        
-        // Verificar si ya existe en la lista de espera
-        const q = query(
-          collection(db, "lista_espera_pro"), 
-          where("email", "==", user.email)
-        );
-        
-        const querySnapshot = await getDocs(q);
-        if (!querySnapshot.empty) {
-          setInscrito(true);
-        }
-      } else {
-        setUsuario(null);
-      }
-    });
-    return () => unsubscribeAuth();
-  }, []);
-
-  // Lógica de Captura de Lead (Cupón) + Envío a Make
-  const handleAccionBoton = async () => {
-    if (!usuario) {
-      router.push('/login'); 
-      return;
-    }
-
-    if (inscrito) return;
-
-    setCargando(true);
-    try {
-      // 1. Registro en Firebase
-      const listaEsperaRef = collection(db, 'lista_espera_pro');
-      await addDoc(listaEsperaRef, {
-        nombre: usuario.displayName || 'Usuario AuxiliarPro',
-        email: usuario.email,
-        uid: usuario.uid,
-        fechaRegistro: new Date(),
-        origen: 'banner_venta_home',
-        cuponAsignado: 'PRO30_MARZO'
-      });
-
-      // 2. Aviso a Make para envío de email
-      await fetch('https://hook.us2.make.com/r8r94dlmw5a6l4kvwfshfqu7byu3q3h7', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          nombre: usuario.displayName || 'Usuario AuxiliarPro',
-          email: usuario.email,
-          cupon: 'PRO30_MARZO'
-        })
-      });
-
-      setInscrito(true);
-    } catch (error) {
-      console.error("Error al inscribir:", error);
-      alert("Hubo un problema de conexión. Inténtalo de nuevo.");
-    } finally {
-      setCargando(false);
-    }
-  };
-
   return (
     <>
-      {/* BANNER PRINCIPAL - IDENTIDAD AUXILIARPRO (SLATE + EMERALD) */}
-      <div className="bg-[#0f172a] rounded-[2.5rem] p-6 shadow-2xl border border-slate-800 mt-8 relative overflow-hidden w-full">
-        {/* Glow Esmeralda de fondo */}
-        <div className="absolute top-0 right-0 w-32 md:w-64 h-32 md:h-64 rounded-full blur-[70px] md:blur-[100px] opacity-20 md:opacity-10 bg-emerald-500"></div>
+      {/* BANNER BLACK SALE - TRÁFICO A PLANES (DARK TECH / RED AESTHETIC) */}
+      <div className="bg-slate-950 rounded-[2.5rem] p-6 shadow-2xl border-2 border-red-600/40 mt-8 relative overflow-hidden w-full transition-all hover:border-red-500/60">
+        
+        {/* Resplandor Rojo de fondo para el Black Sale */}
+        <div className="absolute top-0 right-0 w-32 md:w-64 h-32 md:h-64 rounded-full blur-[80px] md:blur-[120px] opacity-20 bg-red-600 pointer-events-none"></div>
         
         <div className="relative z-10 w-full">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest mb-4 border bg-emerald-500/10 text-emerald-400 border-emerald-500/30">
-                <Sparkles size={12} /> 30% Dcto. Preventa
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[10px] md:text-xs font-black uppercase tracking-widest mb-4 border bg-red-600/10 text-red-500 border-red-500/30 animate-pulse">
+                🔥 Black Sale: Hasta el 07 de Abril
             </div>
             
-            <h3 className="text-xl md:text-2xl font-black text-white mb-4 flex items-center gap-3 leading-tight">
-                <Lock className="text-emerald-400 shrink-0" size={24} /> AuxiliarPro evoluciona
+            <h3 className="text-xl md:text-2xl font-black text-white mb-4 flex items-center gap-3 leading-tight uppercase tracking-tighter">
+                <Lock className="text-emerald-500 shrink-0" size={24} /> Desbloquea tu potencial
             </h3>
             
             <p className="text-slate-300 text-sm md:text-base leading-relaxed mb-4">
-                Seguiremos siendo <strong className="text-white">gratis en Niveles 1, 2, Guías y DermoCheck</strong>.
-            </p>
-            <p className="text-slate-300 text-sm md:text-base leading-relaxed mb-4">
-                El <strong className="text-emerald-400">31 de marzo llega el Nivel PRO</strong> con herramientas avanzadas para tu certificación y trabajo diario.
+                Toma el control de tu certificación SEREMI. Accede al arsenal completo de AuxiliarPro con hasta un <strong className="text-red-400">40% de descuento</strong>.
             </p>
             
             <ul className="space-y-3 mb-6 ml-1 text-sm md:text-base">
               <li className="flex items-start gap-3 text-slate-300">
-                <CheckCircle size={18} className="shrink-0 mt-0.5 text-emerald-400" />
+                <CheckCircle size={18} className="shrink-0 mt-0.5 text-emerald-500" />
                 <span className="text-left"><strong className="text-white">Simulador Inicial Completo:</strong> Niveles 1 al 7.</span>
               </li>
               <li className="flex items-start gap-3 text-slate-300">
-                <CheckCircle size={18} className="shrink-0 mt-0.5 text-emerald-400" />
+                <CheckCircle size={18} className="shrink-0 mt-0.5 text-emerald-500" />
                 <span className="text-left"><strong className="text-white">Simulador Avanzado:</strong> Preguntas complejas tipo SEREMI.</span>
               </li>
               <li className="flex items-start gap-3 text-slate-300">
-                <CheckCircle size={18} className="shrink-0 mt-0.5 text-emerald-400" />
+                <CheckCircle size={18} className="shrink-0 mt-0.5 text-emerald-500" />
                 <span className="text-left"><strong className="text-white">Vademécum Profesional (Beta)</strong>.</span>
               </li>
-              <li className="flex items-start gap-3 text-slate-300">
-                <CheckCircle size={18} className="shrink-0 mt-0.5 text-emerald-400" />
-                <span className="text-left"><strong className="text-white">Próximamente (Abril):</strong> Asistente IA y Módulo Psicología.</span>
+              <li className="flex items-start gap-3 text-slate-400">
+                <CheckCircle size={18} className="shrink-0 mt-0.5 text-slate-600" />
+                <span className="text-left">Próximamente (Abril): Asistente IA y Módulo Psicología.</span>
               </li>
             </ul>
             
-            <div className="block bg-slate-900/60 p-5 rounded-2xl border border-slate-800 shadow-md mb-6 w-full text-center">
+            <div className="block bg-slate-900/80 p-5 rounded-2xl border border-slate-800 shadow-inner mb-6 w-full text-center">
               <div className="flex flex-col gap-4 w-full">
                   <div className="w-full">
-                    <span className="text-white font-black text-lg block mb-1 leading-tight">
-                      Reserva Nivel PRO con 30% de descuento
+                    <span className="text-white font-black text-lg block mb-1 leading-tight uppercase">
+                      Asegura tu Nivel PRO
                     </span>
-                    <span className="text-xs uppercase tracking-wider font-bold text-emerald-500">
-                      Oferta exclusiva de preventa
+                    <span className="text-xs uppercase tracking-widest font-bold text-red-500">
+                      Oferta por tiempo limitado
                     </span>
                   </div>
                   
                   <div className="w-full mt-1">
-                    <button 
-                      onClick={handleAccionBoton}
-                      disabled={cargando || inscrito}
-                      className={`w-full font-black py-4 px-4 rounded-xl text-sm transition-all flex items-center justify-center gap-2 shadow-lg ${
-                        inscrito 
-                          ? 'bg-emerald-500 text-slate-950 cursor-default' 
-                          : cargando
-                            ? 'bg-slate-700 text-slate-400 cursor-wait'
-                            : 'bg-emerald-500 hover:bg-emerald-400 text-slate-950 transform hover:-translate-y-1 cursor-pointer active:scale-95'
-                      }`}
+                    <Link 
+                      href="/planes"
+                      className="w-full font-black py-4 px-4 rounded-xl text-sm transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(220,38,38,0.2)] bg-red-600 hover:bg-red-500 text-white transform hover:-translate-y-1 active:scale-95"
                     >
-                      {inscrito 
-                        ? '¡BENEFICIO RESERVADO! ✓' 
-                        : cargando 
-                          ? <><Loader2 className="w-4 h-4 animate-spin" /> PROCESANDO...</>
-                          : <>ASEGURAR MI 30% DCTO. <ArrowRight size={16} /></>}
-                    </button>
+                      VER PLANES Y DESCUENTOS <ArrowRight size={16} />
+                    </Link>
                   </div>
               </div>
             </div>
 
-            <Link href="/quiz" className="block w-full text-center font-bold py-3.5 rounded-xl text-sm transition-all flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 text-white border border-slate-700">
-                IR AL SIMULADOR
+            <Link href="/quiz" className="block w-full text-center font-bold py-3.5 rounded-xl text-xs md:text-sm transition-all flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 uppercase tracking-widest">
+                Continuar en versión gratis
             </Link>
         </div>
       </div>
       
-      {/* AVISO LEGAL */}
+      {/* AVISO LEGAL MINIMALISTA */}
       <div className="mt-8 text-center px-4 w-full">
-          <p className="text-[11px] text-slate-500 leading-relaxed max-w-xl mx-auto">
-              Estudiar por tu cuenta es recomendado para preparar tu examen, pero para inscribirte oficialmente en la SEREMI necesitarás acreditar experiencia laboral.
+          <p className="text-[10px] md:text-[11px] text-slate-500 leading-relaxed max-w-xl mx-auto uppercase tracking-widest font-bold">
+              La preparación teórica no reemplaza la acreditación de experiencia laboral exigida por SEREMI.
           </p>
       </div>
     </>

@@ -43,11 +43,11 @@ export default function Footer() {
 
           <div className="w-full md:w-1/4 flex justify-center md:justify-end">
             <a 
-              href="mailto:auxiliarprofarna@gmail.com" 
+              href="mailto:hola@auxiliarpro.cl" 
               className="text-[10px] font-bold text-slate-400 hover:text-emerald-400 transition-colors flex items-center gap-2 whitespace-nowrap"
             >
               <Mail size={14} className="text-emerald-500" />
-              auxiliarprofarna@gmail.com <span className="text-slate-600 font-medium tracking-tight ml-1">(Sugerencia)</span>
+              hola@auxiliarpro.cl <span className="text-slate-600 font-medium tracking-tight ml-1">(Sugerencia)</span>
             </a>
           </div>
         </div>

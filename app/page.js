@@ -1,20 +1,12 @@
+"use client";
+
 import Hero from "./components/Hero";
 import ModulosLegales from "./components/ModulosLegales";
 import Metodologia from "./components/Metodologia";
 import FaqSeccion from "./components/FaqSeccion";
 import Creador from "./components/Creador";
-import AvisoFreemium from "./components/AvisoFreemium"; 
-import BannerUrgencia from "./components/BannerUrgencia"; 
+import PlanesSuscripcion from "./components/PlanesSuscripcion";
 import { CheckCircle, Star } from "lucide-react";
-
-export const metadata = {
-  title: "Examen Auxiliar de Farmacia SEREMI | Simulador y Normativa 2026",
-  description: "Aprueba tu examen de competencia SEREMI. Estudia gratis los Decretos 466, 404 y 405. Simulador de preguntas reales y material de estudio validado en Chile.",
-  keywords: ["examen auxiliar farmacia", "seremi salud", "decreto 466", "test farmacia chile", "simulador competencia"],
-  alternates: {
-    canonical: './', 
-  },
-};
 
 export default function LandingPage() {
   // Arreglo de testimonios integrado directamente en la página
@@ -38,8 +30,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-white font-sans text-slate-800">
       
-      {/* 1. Alerta de Cierre / Inscripción 1 Clic */}
-      <BannerUrgencia /> 
+      {/* 1. Alerta de Cierre - ELIMINADO (Ahora se maneja desde RootLayout) */}
       
       {/* 2. Hero Section (El Gancho) */}
       <Hero />
@@ -51,8 +42,8 @@ export default function LandingPage() {
         {/* 4. Metodología de Estudio */}
         <Metodologia />
         
-        {/* 5. AVISO NUEVO MODELO */}
-        <AvisoFreemium /> 
+        {/* 5. PLANES DE SUSCRIPCIÓN (Reemplaza a AvisoFreemium) */}
+        <PlanesSuscripcion /> 
         
         {/* 6. Testimonios (Código incrustado con SEO optimizado) */}
         <section id="testimonios" className="bg-white py-24 px-6 w-full border-t border-slate-100">

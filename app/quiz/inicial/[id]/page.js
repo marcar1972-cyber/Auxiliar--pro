@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { LEVELS } from "../../data"; 
+import { LEVELS } from "../../../data"; 
 import Link from "next/link";
 import { ArrowLeft, Check, X, Clock, BookOpen } from "lucide-react";
 
 // NUEVO: Importaciones de Firebase para guardar el progreso
-import { auth, db } from "../../firebase/config";
+import { auth, db } from "../../../firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 
@@ -321,4 +321,4 @@ export default function GameRoom({ params }) {
       </footer>
     </main>
   );
-}
+} 
