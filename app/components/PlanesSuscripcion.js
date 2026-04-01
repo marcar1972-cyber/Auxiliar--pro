@@ -67,7 +67,7 @@ export default function PlanesSuscripcion() {
 
   return (
     <div className="w-full bg-white py-12">
-      <div className="max-w-5xl mx-auto px-6">
+      <div className="max-w-6xl mx-auto px-6">
         
         {/* ENCABEZADO: URGENCIA BLACK SALE + SEO DE NICHO */}
         <div className="text-center mb-16">
@@ -91,8 +91,63 @@ export default function PlanesSuscripcion() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto items-stretch">
+        {/* CONTENEDOR DE TARJETAS (AHORA SON 3) */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch">
           
+          {/* PLAN INICIAL (GRATUITO) */}
+          <div className="bg-white rounded-[2.5rem] p-8 md:p-10 border border-slate-200 flex flex-col relative transition-all hover:border-slate-300 shadow-sm">
+            <div className="mb-6">
+              <span className="bg-slate-100 text-slate-500 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">Plan Base</span>
+              <h3 className="text-2xl font-black text-slate-700 mt-4 mb-2">Inicial</h3>
+              <p className="text-slate-500 text-sm leading-relaxed font-medium">Acceso básico a las herramientas fundamentales para iniciar tu estudio.</p>
+            </div>
+            
+            <div className="mb-8">
+              <div className="text-transparent text-lg line-through font-black select-none">&nbsp;</div>
+              <div className="flex items-baseline gap-1">
+                <span className="text-5xl font-black text-slate-700">Gratis</span>
+              </div>
+              <p className="text-slate-400 text-[11px] font-black mt-2 uppercase tracking-widest">Para siempre</p>
+            </div>
+
+            <ul className="space-y-5 mb-10 flex-1 border-t border-slate-100 pt-8">
+              <li className="flex items-start gap-3 text-sm font-bold text-slate-600">
+                <span className="text-slate-400 text-xl leading-none">✓</span> 
+                <span><span className="text-slate-800">Simulador Inicial:</span> Acceso solo a Niveles 1 y 2.</span>
+              </li>
+              <li className="flex items-start gap-3 text-sm font-bold text-slate-600">
+                <span className="text-slate-400 text-xl leading-none">✓</span> 
+                <span><span className="text-slate-800">Guías de Estudio:</span> Resúmenes esenciales.</span>
+              </li>
+              <li className="flex items-start gap-3 text-sm font-bold text-slate-600">
+                <span className="text-slate-400 text-xl leading-none">✓</span> 
+                <span><span className="text-slate-800">DermoCheck:</span> Calculadora de vencimientos.</span>
+              </li>
+              <li className="flex items-start gap-3 text-sm font-bold text-slate-400 opacity-50">
+                <span className="text-slate-300 text-xl leading-none">✗</span> 
+                <span>Simulador Avanzado (Bloqueado)</span>
+              </li>
+              <li className="flex items-start gap-3 text-sm font-bold text-slate-400 opacity-50">
+                <span className="text-slate-300 text-xl leading-none">✗</span> 
+                <span>Vademécum Profesional (Bloqueado)</span>
+              </li>
+            </ul>
+
+            {loadingAuth ? (
+              <div className="w-full bg-slate-50 text-slate-400 font-black py-4 rounded-xl flex items-center justify-center gap-2">
+                <Loader2 className="animate-spin" size={20} />
+              </div>
+            ) : user ? (
+              <Link href="/quiz/inicial" className="w-full block bg-slate-100 text-slate-600 hover:bg-slate-200 font-black py-4 rounded-xl transition-all text-center text-sm uppercase tracking-wider">
+                Ir al Simulador
+              </Link>
+            ) : (
+              <Link href="/login" className="w-full block bg-slate-100 text-slate-600 hover:bg-slate-200 font-black py-4 rounded-xl transition-all text-center text-sm uppercase tracking-wider">
+                Crear Cuenta Gratis
+              </Link>
+            )}
+          </div>
+
           {/* PLAN MENSUAL (BLACK SALE) */}
           <div className="bg-white rounded-[2.5rem] p-8 md:p-10 border-4 border-slate-100 flex flex-col relative transition-all hover:border-slate-300 shadow-xl">
             <div className="mb-6">
@@ -113,7 +168,7 @@ export default function PlanesSuscripcion() {
             <ul className="space-y-5 mb-10 flex-1 border-t border-slate-100 pt-8">
               <li className="flex items-start gap-3 text-sm font-bold text-slate-700">
                 <span className="text-emerald-500 text-xl leading-none">✓</span> 
-                <span><span className="text-slate-900">Simulador Inicial Completo:</span> Acceso total Niveles 1 al 7 + guías de estudio.</span>
+                <span><span className="text-slate-900">Simulador Inicial Completo:</span> Acceso total Niveles 1 al 7.</span>
               </li>
               <li className="flex items-start gap-3 text-sm font-bold text-slate-700">
                 <span className="text-emerald-500 text-xl leading-none">✓</span> 
@@ -178,7 +233,7 @@ export default function PlanesSuscripcion() {
             <ul className="space-y-5 mb-10 flex-1 border-t border-slate-800 pt-8">
               <li className="flex items-start gap-3 text-sm font-bold text-slate-300">
                 <span className="text-emerald-400 text-xl leading-none">✓</span> 
-                <span><span className="text-white">Simulador Inicial Completo:</span> Acceso total Niveles 1 al 7 + guías de estudio.</span>
+                <span><span className="text-white">Simulador Inicial Completo:</span> Acceso total Niveles 1 al 7.</span>
               </li>
               <li className="flex items-start gap-3 text-sm font-bold text-slate-300">
                 <span className="text-emerald-400 text-xl leading-none">✓</span> 
