@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-// CORRECCIÓN APLICADA: Subimos 3 niveles (admin -> reset -> page)
-import { auth, db } from "../../../firebase/config";
+// CORRECCIÓN DEFINITIVA: Usamos alias @ para apuntar a la raíz del proyecto
+import { auth, db } from "@/firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, addDoc } from "firebase/firestore";
 import Link from "next/link";
