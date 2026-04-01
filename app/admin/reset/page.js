@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-// CORRECCIÓN APLICADA: Subimos 4 niveles para llegar a la raíz y entrar a firebase
-import { auth, db } from "../../../../firebase/config";
+// CORRECCIÓN APLICADA: Subimos 3 niveles (admin -> reset -> page)
+import { auth, db } from "../../../firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, addDoc } from "firebase/firestore";
 import Link from "next/link";
