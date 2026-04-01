@@ -1,9 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-// CORRECCIÓN QUIRÚRGICA: Subimos 3 niveles exactamente.
-// admin/reset/page.js -> admin/reset -> admin -> app -> (aquí está firebase)
-import { auth, db } from "../../../firebase/config"; 
+// CORRECCIÓN FINAL: Subimos 2 niveles para llegar a 'app' y entrar a 'firebase'
+import { auth, db } from "../../firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, addDoc } from "firebase/firestore";
 import Link from "next/link";
