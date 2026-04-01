@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-// CORRECCIÓN DEFINITIVA: Usamos alias @ para apuntar a la raíz del proyecto
-import { auth, db } from "@/firebase/config";
+// CORRECCIÓN QUIRÚRGICA: Subimos 3 niveles exactamente.
+// admin/reset/page.js -> admin/reset -> admin -> app -> (aquí está firebase)
+import { auth, db } from "../../../firebase/config"; 
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, addDoc } from "firebase/firestore";
 import Link from "next/link";
@@ -16,7 +17,7 @@ export default function AdminVademecum() {
 
   const ADMIN_EMAIL = "marcar1972@gmail.com";
 
-  // Bloque de datos estratégicos MILAB - Información densa para mesón
+  // Bloque de datos estratégicos MILAB
   const nuevosMedicamentosMilab = [
     {
       nombre: "Desloratadina 5mg",
