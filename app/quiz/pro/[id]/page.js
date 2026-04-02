@@ -25,7 +25,7 @@ export default function QuizProDetailPage() {
   const [selectedOption, setSelectedOption] = useState(null);
   const [isAnswered, setIsAnswered] = useState(false);
   const [user, setUser] = useState(null);
-  const [isAuthorized, setIsAuthorized] = useState(false); // Estado para controlar si renderizamos o no
+  const [isAuthorized, setIsAuthorized] = useState(false);
 
   // --- LÓGICA DE TIEMPOS ESTRATÉGICA MACZDEV ---
   const getDurationByLevel = (id) => {
@@ -66,7 +66,6 @@ export default function QuizProDetailPage() {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
       if (currentUser) {
-        
         // --- PROTECCIÓN ESTRICTA CONTRA BYPASS POR URL EN TODO EL MODO PRO ---
         try {
           const userRef = doc(db, "users", currentUser.uid);
@@ -80,13 +79,22 @@ export default function QuizProDetailPage() {
             const hasActiveSubscription = isAdmin || isPro || (proUntil && new Date() <= proUntil);
             const IS_LAUNCH_DAY = new Date() > new Date("2026-03-31T23:59:59");
             
-            // Si ya fue el lanzamiento y NO tiene suscripción activa, se va a planes, sin importar si es el Nivel 1.
+            // --- NUEVO: AUTO-SANACIÓN DEL ARRAY DE NIVELES (Blindaje Nivel 1) ---
+            if (hasActiveSubscription) {
+              const currentLevels = data.unlockedLevelsPro || [];
+              if (!currentLevels.includes(1)) {
+                await updateDoc(userRef, {
+                  unlockedLevelsPro: arrayUnion(1)
+                });
+              }
+            }
+            // -------------------------------------------------------------------
+
             if (IS_LAUNCH_DAY && !hasActiveSubscription) {
               router.push('/planes');
-              return; // Detenemos aquí
+              return; 
             }
             
-            // Si pasó las validaciones, está autorizado
             setUser(currentUser);
             setIsAuthorized(true);
 
@@ -114,7 +122,6 @@ export default function QuizProDetailPage() {
     );
   }
 
-  // Prevenir parpadeo de contenido mientras valida la suscripción
   if (!isAuthorized) {
     return null; 
   }
@@ -158,6 +165,7 @@ export default function QuizProDetailPage() {
     if (isAnswered) return;
     setSelectedOption(index);
     setIsAnswered(true);
+    // El score se actualiza de forma asíncrona pero segura aquí
     if (index === level.questions[currentQuestion].correctAnswer) {
       setScore(prev => prev + 1);
     }
@@ -170,7 +178,12 @@ export default function QuizProDetailPage() {
       setIsAnswered(false);
     } else {
       setShowResults(true);
-      if (user && score + (selectedOption === level.questions[currentQuestion].correctAnswer ? 1 : 0) === level.questions.length) {
+      
+      // Lógica de validación de progreso corregida (Umbral: 80%)
+      const passThreshold = Math.ceil(level.questions.length * 0.8);
+      
+      // NOTA: Como React ya actualizó el score en handleAnswer, usamos directamente 'score'
+      if (user && score >= passThreshold) {
         try {
           const userRef = doc(db, "users", user.uid);
           await updateDoc(userRef, {
@@ -184,18 +197,39 @@ export default function QuizProDetailPage() {
   };
 
   if (showResults) {
+    const passThreshold = Math.ceil(level.questions.length * 0.8);
+    const isApproved = score >= passThreshold;
+
     return (
       <main className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-[2.5rem] p-10 max-w-lg w-full shadow-2xl text-center border border-slate-100">
-          <Trophy size={64} className="mx-auto mb-6 text-yellow-500" />
-          <h2 className="text-3xl font-black text-slate-900 mb-2">¡Cuestionario PRO Terminado!</h2>
-          <p className="text-slate-500 mb-8 font-medium">Lograste <span className="text-emerald-600 font-black">{score}</span> de <span className="text-slate-900 font-black">{level.questions.length}</span> correctas.</p>
+          
+          {isApproved ? (
+             <Trophy size={64} className="mx-auto mb-6 text-amber-500" />
+          ) : (
+             <AlertCircle size={64} className="mx-auto mb-6 text-red-500" />
+          )}
+
+          <h2 className="text-3xl font-black text-slate-900 mb-2">
+            {isApproved ? "¡Nivel Aprobado!" : "Sigue Intentando"}
+          </h2>
+          
+          <p className="text-slate-500 mb-2 font-medium">
+            Lograste <span className="text-emerald-600 font-black">{score}</span> de <span className="text-slate-900 font-black">{level.questions.length}</span> correctas.
+          </p>
+
+          <p className={`text-sm font-bold mb-8 ${isApproved ? "text-emerald-600" : "text-red-500"}`}>
+            {isApproved ? "¡Siguiente nivel desbloqueado!" : `Necesitas al menos ${passThreshold} correctas para avanzar.`}
+          </p>
+
           <div className="space-y-3">
-            <button onClick={() => window.location.reload()} className="w-full bg-slate-900 text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2">
-              <RotateCcw size={20} /> REINTENTAR
-            </button>
-            <Link href="/quiz/pro" className="block w-full bg-slate-100 text-slate-600 font-black py-4 rounded-2xl text-center">
-              VOLVER AL MENÚ PRO
+            {!isApproved && (
+              <button onClick={() => window.location.reload()} className="w-full bg-slate-900 text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition hover:bg-black">
+                <RotateCcw size={20} /> REINTENTAR
+              </button>
+            )}
+            <Link href="/quiz/pro" className="block w-full bg-slate-100 text-slate-600 font-black py-4 rounded-2xl text-center transition hover:bg-slate-200">
+              {isApproved ? "CONTINUAR RUTA PRO" : "VOLVER AL MENÚ"}
             </Link>
           </div>
         </div>
