@@ -6,12 +6,15 @@ import { PRO_LEVELS } from "../../quizData/index";
 import Link from "next/link";
 import { 
   Lock, CheckCircle, ChevronLeft, ShieldCheck, Trophy, Loader2, Library, 
-  Gamepad2, Sparkles, Facebook, Instagram, Medal 
+  Gamepad2, Sparkles, Facebook, Instagram, Medal, Share2, Info
 } from "lucide-react"; 
 
 import { auth, db } from "../../firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, setDoc, serverTimestamp, collection, addDoc, query, where, getDocs } from "firebase/firestore";
+
+// Asume la ruta de tu componente, ajusta si está en otro directorio
+import SocialContact from "../../components/SocialContact";
 
 const DEADLINE_PRO = new Date("2026-03-31T00:00:00");
 const IS_LAUNCH_DAY = new Date() >= DEADLINE_PRO;
@@ -112,6 +115,22 @@ export default function QuizProPage() {
     finally { setCargandoCupon(false); }
   };
 
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'AuxiliarPro - Modo PRO SEREMI',
+          text: 'Prepárate para tu examen SEREMI con el Simulador PRO de AuxiliarPro. ¡Recomendado!',
+          url: window.location.origin,
+        });
+      } catch (error) {
+        console.log('Error compartiendo', error);
+      }
+    } else {
+      alert("La función de compartir no está soportada en tu navegador actual.");
+    }
+  };
+
   const getMedalNameForLevel = (levelId) => {
     const names = ["Zafiro", "Rubí", "Esmeralda", "Amatista", "Topacio", "Ópalo", "Diamante"];
     return names[levelId - 1] || "Gema PRO";
@@ -175,8 +194,15 @@ export default function QuizProPage() {
 
       <section className="p-6 max-w-3xl mx-auto mt-6">
         <header className="mb-10 text-center">
-          <h1 className="text-3xl md:text-4xl font-black text-slate-900 mb-4 tracking-tight leading-tight">
+          <h1 className="text-3xl md:text-4xl font-black text-slate-900 mb-4 tracking-tight leading-tight flex items-center justify-center gap-3">
             Modo <span className="text-amber-500">PRO SEREMI</span>
+            <button 
+              onClick={handleShare}
+              className="text-slate-400 hover:text-amber-500 transition-colors p-2 rounded-full hover:bg-slate-100"
+              aria-label="Compartir"
+            >
+              <Share2 size={28} />
+            </button>
           </h1>
         </header>
 
@@ -234,6 +260,18 @@ export default function QuizProPage() {
             })}
           </div>
 
+          {/* MENSAJE DE SOPORTE TÉCNICO PARA USUARIOS PRO */}
+          {hasActiveSubscription() && (
+            <div className="max-w-2xl mx-auto mt-6">
+              <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4 flex items-start gap-3">
+                <Info size={20} className="text-blue-500 shrink-0 mt-0.5" />
+                <p className="text-sm text-blue-800 font-medium">
+                  Estamos mejorando para ti. Si tienes problemas con tus niveles, escríbenos a <a href="mailto:hola@auxiliarpro.cl" className="font-bold underline hover:text-blue-600">hola@auxiliarpro.cl</a> y lo resolvemos en el transcurso del día.
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Secciones inferiores */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-10 max-w-2xl mx-auto">
               <Link href="/guias" className="bg-white p-6 rounded-[2rem] border-2 border-slate-100 shadow-sm hover:border-amber-400 transition-all flex items-center gap-4 group cursor-pointer w-full">
@@ -256,6 +294,11 @@ export default function QuizProPage() {
               </button>
             </article>
           </div>
+          
+          <div className="mt-12 max-w-2xl mx-auto">
+            <SocialContact />
+          </div>
+
         </div>
       </section>
     </main>

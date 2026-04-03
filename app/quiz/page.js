@@ -101,15 +101,20 @@ export default function QuizLobbyPage() {
       </nav>
 
       <section className="p-6 max-w-3xl mx-auto mt-6">
-        <header className="mb-10 text-center">
+        
+        {/* HEADER OPTIMIZADO PARA SEO */}
+        <header className="mb-12 text-center">
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-4">
             <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight">
               Simulador de Examen <span className="text-emerald-600">Auxiliar de Farmacia</span> SEREMI
             </h1>
-            <button onClick={handleShare} className="shrink-0 flex items-center justify-center p-3 bg-white text-slate-600 rounded-2xl hover:bg-emerald-600 hover:text-white transition-all border border-slate-200 shadow-sm">
+            <button onClick={handleShare} className="shrink-0 flex items-center justify-center p-3 bg-white text-slate-600 rounded-2xl hover:bg-emerald-600 hover:text-white transition-all border border-slate-200 shadow-sm" aria-label="Compartir Simulador SEREMI">
               <Share2 size={24} strokeWidth={2.5} />
             </button>
           </div>
+          <p className="text-slate-500 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
+            Prepárate para la certificación del MINSAL en Chile. Practica con casos reales y preguntas de prueba para asegurar tu título como Auxiliar de Farmacia.
+          </p>
         </header>
 
         <div className="w-full space-y-6">
