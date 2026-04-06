@@ -1,14 +1,34 @@
-"use client"; // Añadimos esto para manejar la función de compartir
+"use client";
 
+import { useState, useEffect } from "react"; // Añadimos useEffect y useState
+import { auth } from "../firebase/config"; // Importamos auth
+import { onAuthStateChanged } from "firebase/auth";
+import { useRouter } from "next/navigation"; // Para redireccionar
 import Link from "next/link";
 import { 
   BookOpen, Pill, Lock, ArrowRight, Library, GraduationCap, 
-  BrainCircuit, Store, Calculator, Microscope, Flame, Heart, Brain, Share2 
+  BrainCircuit, Store, Calculator, Microscope, Flame, Heart, Brain, Share2,
+  Loader2 
 } from "lucide-react";
 import BannerVenta from '../components/BannerVenta';
 
 export default function GuiasIndex() {
-  
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  // 🛡️ GUARDIÁN DE RUTA: Solo permite ver si está logueado
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        // Si no hay usuario, lo mandamos al login con un parámetro para que vuelva aquí después
+        router.push("/login?redirect=/guias");
+      } else {
+        setLoading(false);
+      }
+    });
+    return () => unsubscribe();
+  }, [router]);
+
   // 🟢 FUNCIÓN UNIVERSAL PARA COMPARTIR
   const handleShare = async () => {
     const shareData = {
@@ -102,6 +122,15 @@ export default function GuiasIndex() {
     }
   ];
 
+  // Si está cargando la sesión, mostramos un spinner profesional
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <Loader2 className="animate-spin text-blue-600" size={48} />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 font-sans">
       <div className="max-w-6xl mx-auto">
@@ -112,7 +141,6 @@ export default function GuiasIndex() {
              <span className="bg-emerald-100 text-emerald-800 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-2">
                 <Library size={14} /> BIBLIOTECA AUXILIARPRO 2026
              </span>
-             {/* BOTÓN COMPARTIR UNIVERSAL */}
              <button 
                 onClick={handleShare}
                 className="bg-white border border-slate-200 text-slate-500 hover:text-emerald-600 p-2 rounded-full shadow-sm hover:shadow-md transition-all active:scale-95"
@@ -186,10 +214,9 @@ export default function GuiasIndex() {
           ))}
         </div>
 
-        {/* 🏛️ SECCIÓN TRÁMITE SEREMI (Doble Opción) */}
+        {/* 🏛️ SECCIÓN TRÁMITE SEREMI */}
         <div className="mb-20 w-full max-w-4xl mx-auto bg-slate-50 border border-slate-200 rounded-3xl p-8 shadow-sm">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            
             <div className="text-center md:text-left space-y-2 flex-1">
               <h3 className="text-xl font-bold text-slate-900 leading-tight">
                 ¿Ya cumpliste el año en farmacia? 🕒
@@ -218,9 +245,7 @@ export default function GuiasIndex() {
                     </svg>
                 </a>
             </div>
-
           </div>
-          
           <p className="text-[10px] text-slate-400 mt-6 text-center md:text-left">
             *AuxiliarPro te orienta, pero el trámite final se realiza en el portal oficial del Minsal.
           </p>

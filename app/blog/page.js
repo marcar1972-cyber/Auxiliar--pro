@@ -1,7 +1,13 @@
 "use client";
 
+import { useState, useEffect } from "react"; // <-- Añadido para los estados y el guardián
+import { auth } from "../firebase/config"; // <-- Añadido para verificar sesión
+import { onAuthStateChanged } from "firebase/auth";
+import { useRouter } from "next/navigation"; // <-- Añadido para redirigir
 import Link from "next/link";
-import { Calendar, BookOpen, FileText, DollarSign, Scale, Users, ArrowRight, GraduationCap, Lightbulb, Share2 } from "lucide-react";
+import { 
+  Calendar, BookOpen, FileText, DollarSign, Scale, Users, ArrowRight, GraduationCap, Lightbulb, Share2, Loader2 
+} from "lucide-react"; // <-- Añadimos Loader2 para el spinner
 
 // LISTADO DE ARTÍCULOS
 const articles = [
@@ -80,6 +86,21 @@ const articles = [
 ];
 
 export default function BlogIndex() {
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  // 🛡️ GUARDIÁN DE RUTA: Solo permite ver si está logueado
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        // Si no hay usuario, lo mandamos al login
+        router.push("/login?redirect=/blog");
+      } else {
+        setLoading(false);
+      }
+    });
+    return () => unsubscribe();
+  }, [router]);
 
   // 🟢 FUNCIÓN UNIVERSAL PARA COMPARTIR
   const handleShare = async () => {
@@ -100,6 +121,15 @@ export default function BlogIndex() {
       console.log("Error al compartir", err);
     }
   };
+
+  // Spinner de carga mientras verifica la sesión
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        <Loader2 className="animate-spin text-emerald-600" size={48} />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-12 md:py-20 text-slate-700 font-sans">

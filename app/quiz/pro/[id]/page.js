@@ -5,17 +5,33 @@ import { useParams, useRouter } from "next/navigation";
 import { PRO_LEVELS } from "../../../quizData/index"; 
 import { 
   ChevronLeft, CheckCircle, XCircle, ArrowRight, Trophy, 
-  RotateCcw, BookOpen, Clock, AlertCircle, ShieldCheck
+  RotateCcw, BookOpen, Clock, AlertCircle, ShieldCheck, Lock
 } from "lucide-react";
 import Link from "next/link";
 import { auth, db } from "../../../firebase/config";
 import { doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
 
+// --- FUNCIÓN DE BARAJADO DE CTO (FISHER-YATES) ---
+const shuffleArray = (array) => {
+  let currentIndex = array.length, randomIndex;
+  while (currentIndex !== 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+    [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+  }
+  return array;
+};
+
+// --- FUNCIÓN LIMPIADORA DE TEXTO (CTO FIX) ---
+// Elimina prefijos manuales como "A) ", "B. ", "c - " para evitar letras repetidas.
+const cleanOptionText = (text) => {
+  return text.replace(/^[A-Za-z][\.\)\-\s]+/, '').trim();
+};
+
 export default function QuizProDetailPage() {
   const params = useParams();
   const router = useRouter();
   const levelId = parseInt(params.id);
-  
   const level = PRO_LEVELS.find(l => l.id === levelId);
   
   const [quizStarted, setQuizStarted] = useState(false); 
@@ -26,34 +42,23 @@ export default function QuizProDetailPage() {
   const [isAnswered, setIsAnswered] = useState(false);
   const [user, setUser] = useState(null);
   const [isAuthorized, setIsAuthorized] = useState(false);
+  const [shuffledQuestions, setShuffledQuestions] = useState([]);
 
-  // --- LÓGICA DE TIEMPOS ESTRATÉGICA MACZDEV ---
-  const getDurationByLevel = (id) => {
-    const map = {
-      1: 20, // Zafiro
-      2: 25, // Rubí
-      3: 30, // Esmeralda
-      4: 40, // Amatista
-      5: 45, // Topacio
-      6: 50, // Ópalo
-      7: 60  // Diamante
-    };
-    return map[id] || 15;
-  };
+  // --- ESTADOS DE INTENTOS Y BLOQUEO ---
+  const [attemptsLeft, setAttemptsLeft] = useState(3);
+  const [isLocked, setIsLocked] = useState(false);
+  const [lockedUntil, setLockedUntil] = useState(null);
+  const [checkingAttempts, setCheckingAttempts] = useState(true);
+  const [isSavingRecord, setIsSavingRecord] = useState(false);
 
-  const durationMins = getDurationByLevel(levelId);
-  const [timeLeft, setTimeLeft] = useState(durationMins * 60);
+  const durationMins = (id) => ({1:20, 2:25, 3:30, 4:40, 5:45, 6:50, 7:60}[id] || 15);
+  const [timeLeft, setTimeLeft] = useState(durationMins(levelId) * 60);
 
+  // --- TIMER ---
   useEffect(() => {
     if (!quizStarted || showResults || !isAuthorized) return; 
-
-    if (timeLeft <= 0) {
-      setShowResults(true);
-      return;
-    }
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => prev - 1);
-    }, 1000);
+    if (timeLeft <= 0) { setShowResults(true); return; }
+    const timer = setInterval(() => setTimeLeft((prev) => prev - 1), 1000);
     return () => clearInterval(timer);
   }, [timeLeft, quizStarted, showResults, isAuthorized]);
 
@@ -63,172 +68,135 @@ export default function QuizProDetailPage() {
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
+  // --- AUTH Y CARGA DE INTENTOS ---
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
       if (currentUser) {
-        // --- PROTECCIÓN ESTRICTA CONTRA BYPASS POR URL EN TODO EL MODO PRO ---
         try {
           const userRef = doc(db, "users", currentUser.uid);
           const docSnap = await getDoc(userRef);
-          
           if (docSnap.exists()) {
             const data = docSnap.data();
-            const isPro = data.isPro || false;
             const isAdmin = currentUser.email === "marcar1972@gmail.com";
-            const proUntil = data.proUntil ? data.proUntil.toDate() : null;
-            const hasActiveSubscription = isAdmin || isPro || (proUntil && new Date() <= proUntil);
-            const IS_LAUNCH_DAY = new Date() > new Date("2026-03-31T23:59:59");
+            const hasActiveSubscription = isAdmin || data.isPro || (data.proUntil?.toDate() >= new Date());
             
-            // --- NUEVO: AUTO-SANACIÓN DEL ARRAY DE NIVELES (Blindaje Nivel 1) ---
             if (hasActiveSubscription) {
               const currentLevels = data.unlockedLevelsPro || [];
               if (!currentLevels.includes(1)) {
-                await updateDoc(userRef, {
-                  unlockedLevelsPro: arrayUnion(1)
-                });
+                await updateDoc(userRef, { unlockedLevelsPro: arrayUnion(1) });
+              }
+              const attemptsData = data.proAttempts || {};
+              const currentLevelAttempts = attemptsData[levelId] || { left: 3, lockedUntil: null };
+              setAttemptsLeft(currentLevelAttempts.left);
+
+              if (currentLevelAttempts.lockedUntil) {
+                const lockDate = typeof currentLevelAttempts.lockedUntil.toDate === 'function' 
+                  ? currentLevelAttempts.lockedUntil.toDate() 
+                  : new Date(currentLevelAttempts.lockedUntil);
+
+                if (new Date() < lockDate && !isAdmin) {
+                  setIsLocked(true);
+                  setLockedUntil(lockDate);
+                } else if (new Date() >= lockDate) {
+                  setAttemptsLeft(3);
+                  setIsLocked(false);
+                  await updateDoc(userRef, { [`proAttempts.${levelId}`]: { left: 3, lockedUntil: null } });
+                }
               }
             }
-            // -------------------------------------------------------------------
-
-            if (IS_LAUNCH_DAY && !hasActiveSubscription) {
-              router.push('/planes');
-              return; 
-            }
-            
+            if (new Date() > new Date("2026-03-31T23:59:59") && !hasActiveSubscription) { router.push('/planes'); return; }
             setUser(currentUser);
             setIsAuthorized(true);
-
-          } else {
-            router.push('/planes');
-          }
-        } catch (e) {
-          console.error("Error validando acceso PRO:", e);
-          router.push('/planes');
-        }
-      } else {
-        setUser(null);
-        router.push('/login');
-      }
+          } else { router.push('/planes'); }
+        } catch (e) { console.error(e); router.push('/planes'); } finally { setCheckingAttempts(false); }
+      } else { router.push('/login'); }
     });
     return () => unsubscribe();
-  }, [router]);
+  }, [router, levelId]);
 
-  if (!level) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50">
-        <h1 className="text-xl font-bold text-slate-800">Nivel no encontrado</h1>
-        <Link href="/quiz/pro" className="mt-4 text-emerald-600 underline">Volver al Simulador PRO</Link>
-      </div>
-    );
-  }
-
-  if (!isAuthorized) {
-    return null; 
-  }
-
-  if (!quizStarted) {
-    return (
-      <main className="min-h-screen bg-slate-50 flex items-center justify-center p-6">
-        <div className="bg-white rounded-[2.5rem] p-8 md:p-12 max-w-md w-full shadow-2xl text-center border border-slate-100">
-          <div className="w-20 h-20 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-6">
-            <ShieldCheck size={40} />
-          </div>
-          <h2 className="text-3xl font-black text-slate-900 mb-4">{level.title}</h2>
-          <div className="space-y-4 mb-10 text-left bg-slate-50 p-6 rounded-2xl border border-slate-100">
-            <div className="flex items-center gap-3 text-slate-600 font-bold">
-              <Clock size={18} className="text-emerald-500" /> Tiempo: {durationMins}:00 min
-            </div>
-            <div className="flex items-center gap-3 text-slate-600 font-bold">
-              <BookOpen size={18} className="text-emerald-500" /> Preguntas: {level.questions.length}
-            </div>
-          </div>
-          <div className="space-y-3">
-            <button 
-              onClick={() => setQuizStarted(true)} 
-              className="w-full bg-emerald-600 text-white font-black py-5 rounded-2xl hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-100 uppercase tracking-widest"
-            >
-              Iniciar Examen
-            </button>
-            <Link 
-              href="/quiz/pro" 
-              className="block w-full bg-slate-100 text-slate-500 font-bold py-4 rounded-2xl hover:bg-slate-200 transition-all uppercase text-sm"
-            >
-              Abandonar / Volver
-            </Link>
-          </div>
-        </div>
-      </main>
-    );
-  }
+  // --- LÓGICA DE INICIO CON SHUFFLE ---
+  const startQuizWithShuffle = () => {
+    const clonedQuestions = JSON.parse(JSON.stringify(level.questions));
+    const randomizedQuestions = clonedQuestions.map(q => {
+      const correctText = q.options[q.correctAnswer];
+      const shuffledOptions = shuffleArray([...q.options]);
+      return {
+        ...q,
+        options: shuffledOptions,
+        correctAnswer: shuffledOptions.indexOf(correctText)
+      };
+    });
+    setShuffledQuestions(shuffleArray(randomizedQuestions));
+    setQuizStarted(true);
+  };
 
   const handleAnswer = (index) => {
     if (isAnswered) return;
     setSelectedOption(index);
     setIsAnswered(true);
-    // El score se actualiza de forma asíncrona pero segura aquí
-    if (index === level.questions[currentQuestion].correctAnswer) {
-      setScore(prev => prev + 1);
-    }
+    if (index === shuffledQuestions[currentQuestion].correctAnswer) setScore(prev => prev + 1);
   };
 
   const nextQuestion = async () => {
-    if (currentQuestion + 1 < level.questions.length) {
+    if (isSavingRecord) return;
+    if (currentQuestion + 1 < shuffledQuestions.length) {
       setCurrentQuestion(currentQuestion + 1);
       setSelectedOption(null);
       setIsAnswered(false);
     } else {
-      setShowResults(true);
-      
-      // Lógica de validación de progreso corregida (Umbral: 80%)
-      const passThreshold = Math.ceil(level.questions.length * 0.8);
-      
-      // NOTA: Como React ya actualizó el score en handleAnswer, usamos directamente 'score'
-      if (user && score >= passThreshold) {
+      setIsSavingRecord(true);
+      const isApproved = score >= Math.ceil(shuffledQuestions.length * 0.8);
+      if (user) {
         try {
           const userRef = doc(db, "users", user.uid);
-          await updateDoc(userRef, {
-            unlockedLevelsPro: arrayUnion(levelId + 1)
-          });
-        } catch (e) {
-          console.error("Error guardando progreso PRO:", e);
-        }
+          const docSnap = await getDoc(userRef);
+          if (docSnap.exists()) {
+            const proAttemptsObj = docSnap.data().proAttempts || {};
+            if (isApproved) {
+              await updateDoc(userRef, {
+                unlockedLevelsPro: arrayUnion(levelId + 1),
+                proAttempts: { ...proAttemptsObj, [levelId]: { left: 3, lockedUntil: null } }
+              });
+            } else {
+              const currentAt = proAttemptsObj[levelId]?.left ?? 3;
+              const newLeft = currentAt - 1;
+              const newLock = newLeft <= 0 ? new Date(Date.now() + 86400000) : null;
+              await updateDoc(userRef, {
+                proAttempts: { ...proAttemptsObj, [levelId]: { left: Math.max(0, newLeft), lockedUntil: newLock } }
+              });
+              setAttemptsLeft(Math.max(0, newLeft));
+              if (newLock) { setIsLocked(true); setLockedUntil(newLock); }
+            }
+          }
+        } catch (e) { console.error(e); } finally { setIsSavingRecord(false); setShowResults(true); }
       }
     }
   };
 
-  if (showResults) {
-    const passThreshold = Math.ceil(level.questions.length * 0.8);
-    const isApproved = score >= passThreshold;
+  if (!level) return null;
+  if (!isAuthorized || checkingAttempts) return null;
 
+  // --- PANTALLA DE RESULTADOS ---
+  if (showResults) {
+    const isApproved = score >= Math.ceil(shuffledQuestions.length * 0.8);
     return (
       <main className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-[2.5rem] p-10 max-w-lg w-full shadow-2xl text-center border border-slate-100">
-          
-          {isApproved ? (
-             <Trophy size={64} className="mx-auto mb-6 text-amber-500" />
-          ) : (
-             <AlertCircle size={64} className="mx-auto mb-6 text-red-500" />
-          )}
-
-          <h2 className="text-3xl font-black text-slate-900 mb-2">
-            {isApproved ? "¡Nivel Aprobado!" : "Sigue Intentando"}
-          </h2>
-          
-          <p className="text-slate-500 mb-2 font-medium">
-            Lograste <span className="text-emerald-600 font-black">{score}</span> de <span className="text-slate-900 font-black">{level.questions.length}</span> correctas.
-          </p>
-
-          <p className={`text-sm font-bold mb-8 ${isApproved ? "text-emerald-600" : "text-red-500"}`}>
-            {isApproved ? "¡Siguiente nivel desbloqueado!" : `Necesitas al menos ${passThreshold} correctas para avanzar.`}
-          </p>
-
+          {isApproved ? <Trophy size={64} className="mx-auto mb-6 text-amber-500" /> : <AlertCircle size={64} className="mx-auto mb-6 text-red-500" />}
+          <h2 className="text-3xl font-black text-slate-900 mb-2">{isApproved ? "¡Nivel Aprobado!" : "Sigue Intentando"}</h2>
+          <p className="text-slate-500 mb-8 font-medium">Lograste <span className="text-emerald-600 font-black">{score}</span> de {shuffledQuestions.length} correctas.</p>
           <div className="space-y-3">
-            {!isApproved && (
-              <button onClick={() => window.location.reload()} className="w-full bg-slate-900 text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 transition hover:bg-black">
-                <RotateCcw size={20} /> REINTENTAR
+            {!isApproved && !isLocked && (
+              <button onClick={() => window.location.reload()} className="w-full bg-slate-900 text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2">
+                <RotateCcw size={20} /> REINTENTAR ({attemptsLeft} INTENTOS)
               </button>
             )}
-            <Link href="/quiz/pro" className="block w-full bg-slate-100 text-slate-600 font-black py-4 rounded-2xl text-center transition hover:bg-slate-200">
+            {!isApproved && isLocked && (
+              <Link href={`/guias/nivel-${levelId}`} className="block w-full bg-red-600 text-white font-black py-4 rounded-2xl text-center uppercase text-sm">
+                REPASAR GUÍA PARA DESBLOQUEAR
+              </Link>
+            )}
+            <Link href="/quiz/pro" className="block w-full bg-slate-100 text-slate-600 font-black py-4 rounded-2xl text-center uppercase text-sm">
               {isApproved ? "CONTINUAR RUTA PRO" : "VOLVER AL MENÚ"}
             </Link>
           </div>
@@ -237,25 +205,49 @@ export default function QuizProDetailPage() {
     );
   }
 
-  const q = level.questions[currentQuestion];
+  // --- PANTALLA DE INICIO (PRE-QUIZ) ---
+  if (!quizStarted) {
+    return (
+      <main className="min-h-screen bg-slate-50 flex items-center justify-center p-6 text-center">
+        <div className="bg-white rounded-[2.5rem] p-8 max-w-md w-full shadow-2xl border border-slate-100">
+          <div className="w-20 h-20 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-6">
+            {isLocked ? <Lock size={40} /> : <ShieldCheck size={40} />}
+          </div>
+          <h2 className="text-3xl font-black text-slate-900 mb-4">{level.title}</h2>
+          <div className="space-y-4 mb-8 text-left bg-slate-50 p-6 rounded-2xl border border-slate-100 font-bold text-slate-600">
+             <div className="flex items-center gap-3"><Clock size={18} className="text-emerald-500" /> Tiempo: {durationMins(levelId)}:00 min</div>
+             <div className="flex items-center gap-3"><BookOpen size={18} className="text-emerald-500" /> Preguntas: {level.questions.length}</div>
+             {!isLocked && <div className="flex items-center gap-3 border-t pt-3 mt-3"><RotateCcw size={18} className="text-blue-500" /> Intentos: {attemptsLeft}</div>}
+          </div>
+          {isLocked ? (
+             <div className="space-y-4">
+                <div className="bg-red-50 text-red-700 p-4 rounded-xl text-sm font-bold">Bloqueado hasta: {lockedUntil?.toLocaleString()}</div>
+                <Link href={`/guias/nivel-${levelId}`} className="block w-full bg-slate-900 text-white font-black py-4 rounded-2xl text-center">REPASAR GUÍA</Link>
+             </div>
+          ) : (
+            <button onClick={startQuizWithShuffle} className="w-full bg-emerald-600 text-white font-black py-5 rounded-2xl uppercase tracking-widest shadow-lg shadow-emerald-100">Iniciar Examen</button>
+          )}
+          <Link href="/quiz/pro" className="block mt-6 text-slate-400 font-bold text-sm uppercase tracking-widest">Abandonar</Link>
+        </div>
+      </main>
+    );
+  }
+
+  // --- VISTA DEL EXAMEN ACTIVO ---
+  const q = shuffledQuestions[currentQuestion];
+  const getLetter = (index) => String.fromCharCode(65 + index) + ")";
 
   return (
     <main className="min-h-screen bg-white font-sans">
       <div className="max-w-4xl mx-auto p-6 flex items-center justify-between">
-        <div className="text-[11px] font-black text-slate-400 uppercase tracking-widest">
-          PREGUNTA {currentQuestion + 1} DE {level.questions.length}
-        </div>
+        <div className="text-[11px] font-black text-slate-400 uppercase tracking-widest">PREGUNTA {currentQuestion + 1} DE {shuffledQuestions.length}</div>
         <div className="flex items-center gap-2 bg-emerald-50 text-emerald-600 px-4 py-2 rounded-full font-black text-sm border border-emerald-100 shadow-sm">
-          <Clock size={16} />
-          {formatTime(timeLeft)}
+          <Clock size={16} /> {formatTime(timeLeft)}
         </div>
       </div>
 
       <div className="max-w-2xl mx-auto p-6 mt-4">
-        <h2 className="text-3xl font-black text-slate-900 mb-10 leading-tight">
-          {q.question}
-        </h2>
-        
+        <h2 className="text-3xl font-black text-slate-900 mb-10 leading-tight">{q.question}</h2>
         <div className="space-y-4">
           {q.options.map((option, index) => (
             <button 
@@ -267,39 +259,38 @@ export default function QuizProDetailPage() {
                   index === selectedOption ? "bg-red-50 border-red-500 text-red-700" : "bg-white border-slate-50 text-slate-300"}
               `}
             >
-              <span className="flex-1 pr-4">{option}</span>
+              <span className="flex-1 pr-4">
+                {/* AQUÍ APLICAMOS EL CTO FIX PARA LIMPIAR EL TEXTO */}
+                <span className="text-emerald-600 mr-2">{getLetter(index)}</span> {cleanOptionText(option)}
+              </span>
               {isAnswered && index === q.correctAnswer && <CheckCircle className="text-emerald-500 shrink-0" />}
               {isAnswered && index === selectedOption && index !== q.correctAnswer && <XCircle className="text-red-500 shrink-0" />}
             </button>
           ))}
         </div>
 
-        {isAnswered ? (
-          <div className="mt-10 animate-in fade-in slide-in-from-bottom-4">
-            <div className="bg-slate-50 border border-slate-100 rounded-3xl p-6 mb-8 shadow-inner">
-              <h4 className="font-black text-slate-900 flex items-center gap-2 mb-2 uppercase text-xs tracking-tighter">
-                <BookOpen size={16} /> Explicación Técnica
-              </h4>
-              <p className="text-slate-600 text-sm font-medium leading-relaxed">{q.explanation}</p>
-            </div>
-            <button onClick={nextQuestion} className="w-full bg-slate-900 text-white font-black py-6 rounded-[2rem] shadow-xl hover:bg-black transition-all flex items-center justify-center gap-3 text-lg">
-              {currentQuestion + 1 === level.questions.length ? "FINALIZAR EXAMEN" : "CONTINUAR"} <ArrowRight size={22} />
-            </button>
-          </div>
-        ) : (
+        {!isAnswered && (
           <div className="mt-12 text-center">
-            <Link href="/quiz/pro" className="text-slate-400 font-bold hover:text-red-500 transition-colors text-sm uppercase tracking-widest">
-              Abandonar Examen
+            <Link href="/quiz/pro" className="text-slate-400 font-bold hover:text-red-500 transition-colors text-sm uppercase tracking-widest flex items-center justify-center gap-2 mx-auto">
+              <XCircle size={16} /> Abandonar Examen
             </Link>
           </div>
         )}
-      </div>
 
-      <footer className="fixed bottom-4 w-full text-center">
-        <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">
-          AuxiliarPro v3.0 Engine | &lt; macz.dev /&gt;
-        </p>
-      </footer>
+        {isAnswered && (
+          <div className="mt-10 animate-in fade-in slide-in-from-bottom-4">
+            <div className="bg-slate-50 border border-slate-100 rounded-3xl p-6 mb-8 shadow-inner">
+              <h4 className="font-black text-slate-900 flex items-center gap-2 mb-2 uppercase text-xs tracking-tighter"><BookOpen size={16} /> Explicación Técnica</h4>
+              <p className="text-slate-600 text-sm font-medium leading-relaxed">{q.explanation}</p>
+            </div>
+            <button onClick={nextQuestion} disabled={isSavingRecord} className={`w-full text-white font-black py-6 rounded-[2rem] shadow-xl transition-all flex items-center justify-center gap-3 text-lg ${isSavingRecord ? 'bg-slate-400' : 'bg-slate-900 hover:bg-black'}`}>
+              {isSavingRecord ? "GUARDANDO..." : (currentQuestion + 1 === shuffledQuestions.length ? "FINALIZAR EXAMEN" : "CONTINUAR")}
+              {!isSavingRecord && <ArrowRight size={22} />}
+            </button>
+          </div>
+        )}
+      </div>
+      <footer className="fixed bottom-4 w-full text-center text-[10px] font-black text-slate-300 uppercase tracking-widest">AuxiliarPro v4.0 | &lt; macz.dev /&gt;</footer>
     </main>
   );
 }

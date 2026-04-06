@@ -59,8 +59,8 @@ export default function PlanesSuscripcion() {
 
   const getCheckoutLink = (baseLink) => {
     if (!user) return "/login"; // Redirige a login si no hay sesión
-    // Adjuntamos el email para facilitar el macheo en el Webhook de Make
-    return `${baseLink}?email=${encodeURIComponent(user.email)}`;
+    // Adjuntamos el email Y el UID para macheo perfecto en el Webhook de Make
+    return `${baseLink}?email=${encodeURIComponent(user.email)}&external_id=${user.uid}`;
   };
 
   const isActive = hasActiveSubscription();
