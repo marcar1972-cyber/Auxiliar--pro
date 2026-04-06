@@ -102,7 +102,7 @@ export default function GameRoom({ params }) {
             Los niveles 3 al 7 requieren una suscripción activa para preparar tu examen SEREMI.
           </p>
           <Link
-            href="/quiz"
+            href="/quiz/inicial"
             className="mt-8 block w-full bg-slate-900 text-white font-bold py-4 rounded-2xl shadow-lg transition-transform hover:scale-[1.02]"
           >
             Volver al menú
@@ -117,7 +117,7 @@ export default function GameRoom({ params }) {
     return (
         <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-slate-50 text-center">
             <h1 className="text-xl font-bold text-slate-400">Nivel no encontrado</h1>
-            <Link href="/quiz" className="mt-4 text-emerald-600 font-bold hover:underline">Volver al Menú</Link>
+            <Link href="/quiz/inicial" className="mt-4 text-emerald-600 font-bold hover:underline">Volver al Menú</Link>
         </div>
     );
   }
@@ -214,7 +214,7 @@ export default function GameRoom({ params }) {
                 </div>
             )}
 
-            <Link href="/quiz" className="block text-center w-full bg-slate-900 text-white font-bold py-4 rounded-2xl shadow-lg transition-transform hover:scale-[1.02] uppercase tracking-widest text-sm">
+            <Link href="/quiz/inicial" className="block text-center w-full bg-slate-900 text-white font-bold py-4 rounded-2xl shadow-lg transition-transform hover:scale-[1.02] uppercase tracking-widest text-sm">
                 Volver al Menú Principal
             </Link>
         </div>
@@ -229,7 +229,7 @@ export default function GameRoom({ params }) {
     <main className="min-h-screen bg-white font-sans flex flex-col">
       {/* Header del Simulador */}
       <div className="p-4 flex justify-between items-center border-b border-slate-100 sticky top-0 bg-white z-10">
-        <Link href="/quiz" className="text-slate-400 hover:text-slate-900 p-2 transition-colors">
+        <Link href="/quiz/inicial" className="text-slate-400 hover:text-slate-900 p-2 transition-colors">
             <ArrowLeft size={24} />
         </Link>
         <span className="font-black text-emerald-600 text-[10px] uppercase tracking-[0.2em]">
@@ -308,7 +308,7 @@ export default function GameRoom({ params }) {
         {/* Botón de Abandonar Examen */}
         <div className="mt-8 text-center animate-in fade-in duration-500">
             <button 
-                onClick={() => router.push('/quiz')} 
+                onClick={() => router.push('/quiz/inicial')} 
                 className="text-slate-400 font-bold text-sm hover:text-red-500 transition-colors cursor-pointer"
             >
                 Abandonar Examen
@@ -321,4 +321,4 @@ export default function GameRoom({ params }) {
       </footer>
     </main>
   );
-} 
+}

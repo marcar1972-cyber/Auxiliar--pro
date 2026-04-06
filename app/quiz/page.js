@@ -23,7 +23,19 @@ export default function QuizLobbyPage() {
   const [isVerifying, setIsVerifying] = useState(false);
 
   const handleShare = async () => {
-    // ... tu código de share normal ...
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'AuxiliarPro - Simulador Examen MINSAL',
+          text: 'Prepárate para tu examen de Auxiliar de Farmacia con este simulador. ¡Está buenísimo!',
+          url: window.location.origin,
+        });
+      } catch (error) {
+        console.log('Error compartiendo', error);
+      }
+    } else {
+      alert("La función de compartir no está soportada en tu navegador actual.");
+    }
   };
 
   // --- CORTAFUEGOS MODO PARANOICO ---
@@ -43,9 +55,10 @@ export default function QuizLobbyPage() {
       
       const isAdmin = currentUser.email === ADMIN_EMAIL;
       
-      // 2. LÓGICA DE SUSCRIPCIÓN ESTRICTA
+      // 2. LÓGICA DE SUSCRIPCIÓN Y PORTERO DE NIVELES
       let userIsProFirebase = false;
       let userProDateValid = false;
+      let accesoPorteroPermitido = isAdmin; // Admin pasa siempre por defecto
 
       if (docSnap.exists()) {
          const data = docSnap.data();
@@ -57,6 +70,14 @@ export default function QuizLobbyPage() {
                  userProDateValid = true;
              }
          }
+
+         // LÓGICA GATING: Solo pasa si tiene 7 niveles o si es un "usuario fundador" del Pro
+         const pasoInicialCompleto = (data.unlockedLevels && data.unlockedLevels.length > 7);
+         const esUsuarioFundador = (data.unlockedLevelsPro && data.unlockedLevelsPro.length > 1);
+
+         if (pasoInicialCompleto || esUsuarioFundador) {
+             accesoPorteroPermitido = true;
+         }
       }
 
       const hasActiveSub = isAdmin || userIsProFirebase || userProDateValid;
@@ -67,10 +88,20 @@ export default function QuizLobbyPage() {
       console.log("Es Admin?", isAdmin);
       console.log("isPro en BD?", userIsProFirebase);
       console.log("Fecha Pro Válida?", userProDateValid);
+      console.log("ACCESO PORTERO (Tiene los 7 niveles)?", accesoPorteroPermitido);
       console.log("TIENE SUSCRIPCIÓN ACTIVA TOTAL?", hasActiveSub);
       console.log("PASÓ FECHA LANZAMIENTO?", isPastLaunch());
 
       // 4. LA SENTENCIA
+
+      // 4.1 Validación de Secuencia (El Portero)
+      if (!accesoPorteroPermitido) {
+          alert("🔒 ¡Aún no estás listo! Para acceder al Simulador PRO debes completar primero los 7 niveles del Simulador Inicial.");
+          router.push('/quiz/inicial');
+          return;
+      }
+
+      // 4.2 Validación Comercial
       if (isPastLaunch() && !hasActiveSub) {
          console.log("FALLO: Mandando a /planes");
          // Usamos window.location para forzar la recarga y evitar cachés raros de Next Router
@@ -125,7 +156,7 @@ export default function QuizLobbyPage() {
               </div>
               <div className="flex-1 text-center md:text-left z-10">
                   <h3 className="font-black text-2xl text-slate-800 leading-tight mb-2">Simulador Inicial</h3>
-                  <p className="text-sm text-slate-500 mb-4">La ruta de calentamiento definitiva. 7 niveles gratuitos para dominar conceptos básicos.</p>
+                  <p className="text-sm text-slate-500 mb-4">La ruta de entrenamiento definitiva. 7 niveles gratuitos para dominar conceptos básicos.</p>
               </div>
             </button>
           </article>

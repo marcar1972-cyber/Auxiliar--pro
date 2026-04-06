@@ -78,6 +78,17 @@ export default function QuizProDetailPage() {
           if (docSnap.exists()) {
             const data = docSnap.data();
             const isAdmin = currentUser.email === "marcar1972@gmail.com";
+            
+            // --- LÓGICA DEL PORTERO (GATING) ---
+            const pasoInicialCompleto = (data.unlockedLevels && data.unlockedLevels.length > 7);
+            const esUsuarioFundador = (data.unlockedLevelsPro && data.unlockedLevelsPro.length > 1);
+
+            if (!isAdmin && !pasoInicialCompleto && !esUsuarioFundador) {
+                router.push('/quiz/pro'); 
+                return;
+            }
+            // ------------------------------------
+
             const hasActiveSubscription = isAdmin || data.isPro || (data.proUntil?.toDate() >= new Date());
             
             if (hasActiveSubscription) {

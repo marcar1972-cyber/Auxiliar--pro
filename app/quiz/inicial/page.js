@@ -236,7 +236,7 @@ export default function QuizPage() {
         <section className="p-6 max-w-3xl mx-auto mt-6">
           <header className="mb-10 text-center">
             <h1 className="text-3xl md:text-4xl font-black text-slate-900 mb-4 tracking-tight leading-tight">
-              Calentamiento <span className="text-emerald-600">AuxiliarPro</span>
+              Entrenamiento <span className="text-emerald-600">Auxiliar de Farmacia</span>
             </h1>
             <p className="text-slate-600 text-lg leading-relaxed max-w-2xl mx-auto">
               Mide tus conocimientos en todas las áreas clave: Decreto 466, Código Sanitario y Farmacología General.
