@@ -123,9 +123,13 @@ export default function PlanesSuscripcion() {
                 <span className="text-slate-400 text-xl leading-none">✓</span> 
                 <span><span className="text-slate-800">Guías de Estudio:</span> Resúmenes esenciales.</span>
               </li>
-              <li className="flex items-start gap-3 text-sm font-bold text-slate-600">
-                <span className="text-slate-400 text-xl leading-none">✓</span> 
-                <span><span className="text-slate-800">DermoCheck:</span> Calculadora de vencimientos.</span>
+              <li className="flex items-start gap-3 text-sm font-bold text-slate-600 opacity-50">
+                <span className="text-slate-300 text-xl leading-none">✗</span> 
+                <span><span className="text-slate-400 line-through">Simulador PRO Completo</span></span>
+              </li>
+              <li className="flex items-start gap-3 text-sm font-bold text-slate-600 opacity-50">
+                <span className="text-slate-300 text-xl leading-none">✗</span> 
+                <span><span className="text-slate-400 line-through">Vademécum Profesional</span></span>
               </li>
             </ul>
 
@@ -161,14 +165,26 @@ export default function PlanesSuscripcion() {
               <p className="text-slate-400 text-[11px] font-black mt-2 uppercase tracking-widest">Cancela cuando quieras</p>
             </div>
 
-            <ul className="space-y-5 mb-10 flex-1 border-t border-slate-100 pt-8">
+            <ul className="space-y-4 mb-10 flex-1 border-t border-slate-100 pt-8">
               <li className="flex items-start gap-3 text-sm font-bold text-slate-700">
                 <span className="text-emerald-500 text-xl leading-none">✓</span> 
-                <span><span className="text-slate-900">Simulador Completo:</span> Niveles 1 al 7 y Avanzado.</span>
+                <span><span className="text-slate-900">Simulador Inicial Completo</span></span>
               </li>
               <li className="flex items-start gap-3 text-sm font-bold text-slate-700">
                 <span className="text-emerald-500 text-xl leading-none">✓</span> 
-                <span><span className="text-slate-900">Vademécum Profesional.</span></span>
+                <span><span className="text-slate-900">Simulador PRO Completo</span></span>
+              </li>
+              <li className="flex items-start gap-3 text-sm font-bold text-slate-700">
+                <span className="text-emerald-500 text-xl leading-none">✓</span> 
+                <span><span className="text-slate-900">Vademécum Profesional</span></span>
+              </li>
+              <li className="flex items-start gap-3 text-sm font-bold text-slate-500">
+                <span className="text-amber-500 text-lg leading-none">⚡</span> 
+                <span className="italic">Asistente IA (Próximamente)</span>
+              </li>
+              <li className="flex items-start gap-3 text-sm font-bold text-slate-500">
+                <span className="text-amber-500 text-lg leading-none">⚡</span> 
+                <span className="italic">Módulo Psicología (Próximamente)</span>
               </li>
             </ul>
 
@@ -214,10 +230,26 @@ export default function PlanesSuscripcion() {
               <p className="text-emerald-400 text-[11px] font-black mt-2 uppercase tracking-widest">Ahorra 2 meses</p>
             </div>
 
-            <ul className="space-y-5 mb-10 flex-1 border-t border-slate-800 pt-8">
+            <ul className="space-y-4 mb-10 flex-1 border-t border-slate-800 pt-8">
               <li className="flex items-start gap-3 text-sm font-bold text-slate-300">
                 <span className="text-emerald-400 text-xl leading-none">✓</span> 
-                <span><span className="text-white">Todo el contenido PRO</span> por 12 meses.</span>
+                <span><span className="text-white">Simulador Inicial Completo</span></span>
+              </li>
+              <li className="flex items-start gap-3 text-sm font-bold text-slate-300">
+                <span className="text-emerald-400 text-xl leading-none">✓</span> 
+                <span><span className="text-white">Simulador PRO Completo</span></span>
+              </li>
+              <li className="flex items-start gap-3 text-sm font-bold text-slate-300">
+                <span className="text-emerald-400 text-xl leading-none">✓</span> 
+                <span><span className="text-white">Vademécum Profesional</span></span>
+              </li>
+              <li className="flex items-start gap-3 text-sm font-bold text-slate-400">
+                <span className="text-amber-400 text-lg leading-none">⚡</span> 
+                <span className="italic">Asistente IA (Próximamente)</span>
+              </li>
+              <li className="flex items-start gap-3 text-sm font-bold text-slate-400">
+                <span className="text-amber-400 text-lg leading-none">⚡</span> 
+                <span className="italic">Módulo Psicología (Próximamente)</span>
               </li>
             </ul>
 
