@@ -283,17 +283,6 @@ export default function QuizProPage() {
                 <div><h3 className="font-black text-white tracking-tight">Compartir</h3><p className="text-[10px] text-white/90 font-bold uppercase italic">Con tus Colegas</p></div>
               </a>
           </div>
-
-          <div className="mt-16 max-w-2xl mx-auto">
-            <article className="bg-[#0f172a] rounded-[2.5rem] p-8 shadow-xl border border-slate-800 flex flex-col relative overflow-hidden">
-              <div className="absolute top-6 right-6"><span className="bg-gradient-to-r from-amber-400 to-amber-600 text-white text-[10px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest shadow-lg flex items-center gap-1"><Sparkles size={12} /> Black Sale</span></div>
-              <h2 className="text-2xl font-black text-white mb-2 flex items-center gap-3 mt-10 md:mt-0"><ShieldCheck size={28} className="text-amber-400"/> Beneficios PRO</h2>
-              <p className="text-slate-400 mb-6 text-sm leading-relaxed">Accede al simulador completo, vademécum profesional y mucho más.</p>
-              <button onClick={handleAccionCupon} disabled={cargandoCupon || inscrito} className={`w-full font-black py-4 rounded-xl flex items-center justify-center gap-2 transition-all uppercase tracking-widest text-sm shadow-lg ${inscrito ? "bg-amber-500 text-slate-900" : "bg-amber-500 text-slate-900 hover:bg-amber-400"}`}>
-                {inscrito ? '¡30% DCTO RESERVADO!' : 'Reservar Descuento'}
-              </button>
-            </article>
-          </div>
           
           <div className="mt-12 max-w-2xl mx-auto">
             <SocialContact />
