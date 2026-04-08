@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { auth, db } from "../../../firebase/config";
-import { doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
+import { doc, getDoc, updateDoc, arrayUnion, collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 // --- FUNCIÓN LIMPIADORA DE TEXTO (CTO FIX) ---
 // Elimina prefijos manuales como "A) ", "B. ", "c - " para evitar letras repetidas.
@@ -115,17 +115,34 @@ export default function QuizProDetailPage() {
     } else {
       setIsSavingRecord(true);
       
-      // MODO DIOS: Si el admin está logueado, siempre aprueba.
       const isAdmin = user?.email === "marcar1972@gmail.com";
-      const isApproved = score >= Math.ceil(quizQuestions.length * 0.8) || isAdmin;
+      const totalQuestions = quizQuestions.length;
+      const percentage = (score / totalQuestions) * 100;
+      const isApproved = score >= Math.ceil(totalQuestions * 0.8) || isAdmin;
       
-      // Solo actualizamos Firebase si aprobó (o es admin), para desbloquear el siguiente nivel
-      if (user && isApproved) {
+      if (user) {
         try {
-          const userRef = doc(db, "users", user.uid);
-          await updateDoc(userRef, {
-            unlockedLevelsPro: arrayUnion(levelId + 1)
+          // 1. REGISTRO DE AUDITORÍA PARA FIRESTORE
+          const attemptRef = collection(db, "exam_logs");
+          await addDoc(attemptRef, {
+            uid: user.uid,
+            email: user.email,
+            levelId: levelId,
+            score: score,
+            totalQuestions: totalQuestions,
+            percentage: percentage.toFixed(2) + "%",
+            status: isApproved ? "APROBADO" : "REPROBADO",
+            date: new Date().toLocaleString("es-CL"),
+            createdAt: serverTimestamp()
           });
+
+          // 2. ACTUALIZACIÓN DE NIVEL DEL USUARIO
+          const userRef = doc(db, "users", user.uid);
+          if (isApproved) {
+            await updateDoc(userRef, {
+              unlockedLevelsPro: arrayUnion(levelId + 1)
+            });
+          }
         } catch (e) { console.error(e); } 
       }
       setIsSavingRecord(false); 
