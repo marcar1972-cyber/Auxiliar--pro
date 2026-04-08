@@ -7,15 +7,15 @@ import { Lock, ArrowRight, CheckCircle } from "lucide-react";
 export default function BannerVenta() {
   return (
     <>
-      {/* BANNER BLACK SALE - TRÁFICO A PLANES (DARK TECH / RED AESTHETIC) */}
-      <div className="bg-slate-950 rounded-[2.5rem] p-6 shadow-2xl border-2 border-red-600/40 mt-8 relative overflow-hidden w-full transition-all hover:border-red-500/60">
+      {/* BANNER TRÁFICO A PLANES (DARK TECH / EMERALD AESTHETIC) */}
+      <div className="bg-slate-950 rounded-[2.5rem] p-6 shadow-2xl border-2 border-emerald-600/40 mt-8 relative overflow-hidden w-full transition-all hover:border-emerald-500/60">
         
-        {/* Resplandor Rojo de fondo para el Black Sale */}
-        <div className="absolute top-0 right-0 w-32 md:w-64 h-32 md:h-64 rounded-full blur-[80px] md:blur-[120px] opacity-20 bg-red-600 pointer-events-none"></div>
+        {/* Resplandor Verde de fondo corporativo */}
+        <div className="absolute top-0 right-0 w-32 md:w-64 h-32 md:h-64 rounded-full blur-[80px] md:blur-[120px] opacity-20 bg-emerald-600 pointer-events-none"></div>
         
         <div className="relative z-10 w-full">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[10px] md:text-xs font-black uppercase tracking-widest mb-4 border bg-red-600/10 text-red-500 border-red-500/30 animate-pulse">
-                🔥 Black Sale: Hasta el 07 de Abril
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[10px] md:text-xs font-black uppercase tracking-widest mb-4 border bg-emerald-500/10 text-emerald-400 border-emerald-500/30">
+                🌟 Plataforma de Entrenamiento
             </div>
             
             <h3 className="text-xl md:text-2xl font-black text-white mb-4 flex items-center gap-3 leading-tight uppercase tracking-tighter">
@@ -23,7 +23,7 @@ export default function BannerVenta() {
             </h3>
             
             <p className="text-slate-300 text-sm md:text-base leading-relaxed mb-4">
-                Toma el control de tu certificación SEREMI. Accede al arsenal completo de AuxiliarPro con hasta un <strong className="text-red-400">40% de descuento</strong>.
+                Toma el control de tu certificación SEREMI. Accede al arsenal completo de AuxiliarPro y obtén <strong className="text-emerald-400">preparación total</strong> para el mesón.
             </p>
             
             <ul className="space-y-3 mb-6 ml-1 text-sm md:text-base">
@@ -51,17 +51,17 @@ export default function BannerVenta() {
                     <span className="text-white font-black text-lg block mb-1 leading-tight uppercase">
                       Asegura tu Nivel PRO
                     </span>
-                    <span className="text-xs uppercase tracking-widest font-bold text-red-500">
-                      Oferta por tiempo limitado
+                    <span className="text-xs uppercase tracking-widest font-bold text-emerald-500">
+                      Entrenamiento Oficial
                     </span>
                   </div>
                   
                   <div className="w-full mt-1">
                     <Link 
                       href="/planes"
-                      className="w-full font-black py-4 px-4 rounded-xl text-sm transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(220,38,38,0.2)] bg-red-600 hover:bg-red-500 text-white transform hover:-translate-y-1 active:scale-95"
+                      className="w-full font-black py-4 px-4 rounded-xl text-sm transition-all flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.2)] bg-emerald-600 hover:bg-emerald-500 text-white transform hover:-translate-y-1 active:scale-95"
                     >
-                      VER PLANES Y DESCUENTOS <ArrowRight size={16} />
+                      VER PLANES PRO <ArrowRight size={16} />
                     </Link>
                   </div>
               </div>

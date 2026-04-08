@@ -9,6 +9,8 @@ import { onAuthStateChanged } from 'firebase/auth';
 export default function BannerUrgencia() {
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
+  
+  // Mantenemos el estado del tiempo para no alterar los hooks originales
   const [timeLeft, setTimeLeft] = useState({ dias: 0, horas: 0, min: 0, seg: 0 });
   
   const [usuario, setUsuario] = useState(null);
@@ -16,7 +18,6 @@ export default function BannerUrgencia() {
   const [inscrito, setInscrito] = useState(false);
 
   function calculateTimeLeft() {
-    // ⚡ OBJETIVO: 07 de Abril 2026
     const targetDate = new Date("2026-04-07T23:59:59");
     const difference = targetDate - new Date();
     let newTimeLeft = { dias: 0, horas: 0, min: 0, seg: 0 };
@@ -61,7 +62,7 @@ export default function BannerUrgencia() {
   const handleAccionBoton = async () => {
     if (!usuario) { router.push('/login'); return; }
     
-    // Si ya está inscrito, el botón funciona como acceso directo a planes
+    // Si ya interactuó antes, acceso directo a planes
     if (inscrito) {
         router.push('/planes');
         return;
@@ -74,23 +75,23 @@ export default function BannerUrgencia() {
         email: usuario.email,
         uid: usuario.uid,
         fechaRegistro: new Date(),
-        origen: 'banner_urgencia_top_blacksale',
-        cuponAsignado: 'BLACKSALE_ABRIL'
+        origen: 'banner_top_regular',
+        cuponAsignado: 'INTERESADO_PRO'
       });
 
-      // Integración con Make/Webhook
+      // Integración con Make/Webhook (Etiqueta actualizada)
       await fetch('https://hook.us2.make.com/r8r94dlmw5a6l4kvwfshfqu7byu3q3h7', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           nombre: usuario.displayName || 'Usuario AuxiliarPro',
           email: usuario.email,
-          cupon: 'BLACKSALE_ABRIL_40'
+          cupon: 'INTERESADO_PRO'
         })
       });
 
       setInscrito(true);
-      // Redirección inmediata tras éxito para cerrar la venta
+      // Redirección inmediata tras registrar el clic
       router.push('/planes');
 
     } catch (error) {
@@ -108,30 +109,19 @@ export default function BannerUrgencia() {
 
       <div className="flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 text-center max-w-full relative z-10">
         <span className="leading-tight text-slate-300">
-          🔥 <strong className="text-white uppercase tracking-widest">Black Sale</strong>
+          🚀 <strong className="text-white uppercase tracking-widest">AuxiliarPro</strong>
         </span>
         <span className="hidden md:inline opacity-30 text-emerald-500">|</span>
         <span className="leading-tight text-emerald-400 font-bold">
-          Hasta 40% OFF en Nivel PRO
+          Asegura tu examen SEREMI y domina el mesón
         </span>
         <span className="hidden md:inline opacity-30 text-emerald-500">|</span>
-        <span className="leading-tight text-yellow-300 font-black animate-pulse">
-          Quedan {timeLeft.dias} días para que termine esta oferta
+        <span className="leading-tight text-slate-300 font-medium">
+          Conoce el entrenamiento PRO
         </span>
       </div>
       
       <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0 relative z-10">
-        
-        <div className="flex gap-1.5 font-mono bg-black px-3 py-1.5 rounded-lg text-sm md:text-base border border-slate-800 shadow-inner text-emerald-400">
-          <span className="font-bold">{timeLeft.dias}d</span>
-          <span className="opacity-50">:</span>
-          <span>{formatTime(timeLeft.horas)}h</span>
-          <span className="opacity-50">:</span>
-          <span>{formatTime(timeLeft.min)}m</span>
-          <span className="opacity-50">:</span>
-          <span>{formatTime(timeLeft.seg)}s</span>
-        </div>
-
         <button 
           onClick={handleAccionBoton}
           disabled={cargando}
@@ -142,10 +132,10 @@ export default function BannerUrgencia() {
           }`}
         >
           {inscrito 
-            ? 'VER PLANES PRO ✓' 
+            ? 'IR A PLANES PRO ✓' 
             : cargando 
               ? 'PROCESANDO...' 
-              : 'QUIERO EL DESCUENTO →'}
+              : 'VER PLANES PRO →'}
         </button>
       </div>
     </div>
