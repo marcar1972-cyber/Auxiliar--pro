@@ -5,22 +5,11 @@ import { useParams, useRouter } from "next/navigation";
 import { PRO_LEVELS } from "../../../quizData/index"; 
 import { 
   ChevronLeft, CheckCircle, XCircle, ArrowRight, Trophy, 
-  RotateCcw, BookOpen, Clock, AlertCircle, ShieldCheck, Lock
+  RotateCcw, BookOpen, Clock, AlertCircle, ShieldCheck
 } from "lucide-react";
 import Link from "next/link";
 import { auth, db } from "../../../firebase/config";
 import { doc, getDoc, updateDoc, arrayUnion } from "firebase/firestore";
-
-// --- FUNCIÓN DE BARAJADO DE CTO (FISHER-YATES) ---
-const shuffleArray = (array) => {
-  let currentIndex = array.length, randomIndex;
-  while (currentIndex !== 0) {
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
-    [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
-  }
-  return array;
-};
 
 // --- FUNCIÓN LIMPIADORA DE TEXTO (CTO FIX) ---
 // Elimina prefijos manuales como "A) ", "B. ", "c - " para evitar letras repetidas.
@@ -42,13 +31,7 @@ export default function QuizProDetailPage() {
   const [isAnswered, setIsAnswered] = useState(false);
   const [user, setUser] = useState(null);
   const [isAuthorized, setIsAuthorized] = useState(false);
-  const [shuffledQuestions, setShuffledQuestions] = useState([]);
-
-  // --- ESTADOS DE INTENTOS Y BLOQUEO ---
-  const [attemptsLeft, setAttemptsLeft] = useState(3);
-  const [isLocked, setIsLocked] = useState(false);
-  const [lockedUntil, setLockedUntil] = useState(null);
-  const [checkingAttempts, setCheckingAttempts] = useState(true);
+  const [quizQuestions, setQuizQuestions] = useState([]);
   const [isSavingRecord, setIsSavingRecord] = useState(false);
 
   const durationMins = (id) => ({1:20, 2:25, 3:30, 4:40, 5:45, 6:50, 7:60}[id] || 15);
@@ -68,7 +51,7 @@ export default function QuizProDetailPage() {
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
-  // --- AUTH Y CARGA DE INTENTOS ---
+  // --- AUTH ---
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
       if (currentUser) {
@@ -96,48 +79,23 @@ export default function QuizProDetailPage() {
               if (!currentLevels.includes(1)) {
                 await updateDoc(userRef, { unlockedLevelsPro: arrayUnion(1) });
               }
-              const attemptsData = data.proAttempts || {};
-              const currentLevelAttempts = attemptsData[levelId] || { left: 3, lockedUntil: null };
-              setAttemptsLeft(currentLevelAttempts.left);
-
-              if (currentLevelAttempts.lockedUntil) {
-                const lockDate = typeof currentLevelAttempts.lockedUntil.toDate === 'function' 
-                  ? currentLevelAttempts.lockedUntil.toDate() 
-                  : new Date(currentLevelAttempts.lockedUntil);
-
-                if (new Date() < lockDate && !isAdmin) {
-                  setIsLocked(true);
-                  setLockedUntil(lockDate);
-                } else if (new Date() >= lockDate) {
-                  setAttemptsLeft(3);
-                  setIsLocked(false);
-                  await updateDoc(userRef, { [`proAttempts.${levelId}`]: { left: 3, lockedUntil: null } });
-                }
-              }
+            } else if (new Date() > new Date("2026-03-31T23:59:59")) {
+              router.push('/planes'); 
+              return; 
             }
-            if (new Date() > new Date("2026-03-31T23:59:59") && !hasActiveSubscription) { router.push('/planes'); return; }
             setUser(currentUser);
             setIsAuthorized(true);
           } else { router.push('/planes'); }
-        } catch (e) { console.error(e); router.push('/planes'); } finally { setCheckingAttempts(false); }
+        } catch (e) { console.error(e); router.push('/planes'); }
       } else { router.push('/login'); }
     });
     return () => unsubscribe();
   }, [router, levelId]);
 
-  // --- LÓGICA DE INICIO CON SHUFFLE ---
-  const startQuizWithShuffle = () => {
-    const clonedQuestions = JSON.parse(JSON.stringify(level.questions));
-    const randomizedQuestions = clonedQuestions.map(q => {
-      const correctText = q.options[q.correctAnswer];
-      const shuffledOptions = shuffleArray([...q.options]);
-      return {
-        ...q,
-        options: shuffledOptions,
-        correctAnswer: shuffledOptions.indexOf(correctText)
-      };
-    });
-    setShuffledQuestions(shuffleArray(randomizedQuestions));
+  // --- LÓGICA DE INICIO NORMAL (SIN SHUFFLE) ---
+  const startQuiz = () => {
+    // Cargamos las preguntas tal como vienen en el JSON para no romper las opciones "A y B son correctas"
+    setQuizQuestions(level.questions);
     setQuizStarted(true);
   };
 
@@ -145,67 +103,56 @@ export default function QuizProDetailPage() {
     if (isAnswered) return;
     setSelectedOption(index);
     setIsAnswered(true);
-    if (index === shuffledQuestions[currentQuestion].correctAnswer) setScore(prev => prev + 1);
+    if (index === quizQuestions[currentQuestion].correctAnswer) setScore(prev => prev + 1);
   };
 
   const nextQuestion = async () => {
     if (isSavingRecord) return;
-    if (currentQuestion + 1 < shuffledQuestions.length) {
+    if (currentQuestion + 1 < quizQuestions.length) {
       setCurrentQuestion(currentQuestion + 1);
       setSelectedOption(null);
       setIsAnswered(false);
     } else {
       setIsSavingRecord(true);
-      const isApproved = score >= Math.ceil(shuffledQuestions.length * 0.8);
-      if (user) {
+      
+      // MODO DIOS: Si el admin está logueado, siempre aprueba.
+      const isAdmin = user?.email === "marcar1972@gmail.com";
+      const isApproved = score >= Math.ceil(quizQuestions.length * 0.8) || isAdmin;
+      
+      // Solo actualizamos Firebase si aprobó (o es admin), para desbloquear el siguiente nivel
+      if (user && isApproved) {
         try {
           const userRef = doc(db, "users", user.uid);
-          const docSnap = await getDoc(userRef);
-          if (docSnap.exists()) {
-            const proAttemptsObj = docSnap.data().proAttempts || {};
-            if (isApproved) {
-              await updateDoc(userRef, {
-                unlockedLevelsPro: arrayUnion(levelId + 1),
-                proAttempts: { ...proAttemptsObj, [levelId]: { left: 3, lockedUntil: null } }
-              });
-            } else {
-              const currentAt = proAttemptsObj[levelId]?.left ?? 3;
-              const newLeft = currentAt - 1;
-              const newLock = newLeft <= 0 ? new Date(Date.now() + 86400000) : null;
-              await updateDoc(userRef, {
-                proAttempts: { ...proAttemptsObj, [levelId]: { left: Math.max(0, newLeft), lockedUntil: newLock } }
-              });
-              setAttemptsLeft(Math.max(0, newLeft));
-              if (newLock) { setIsLocked(true); setLockedUntil(newLock); }
-            }
-          }
-        } catch (e) { console.error(e); } finally { setIsSavingRecord(false); setShowResults(true); }
+          await updateDoc(userRef, {
+            unlockedLevelsPro: arrayUnion(levelId + 1)
+          });
+        } catch (e) { console.error(e); } 
       }
+      setIsSavingRecord(false); 
+      setShowResults(true);
     }
   };
 
   if (!level) return null;
-  if (!isAuthorized || checkingAttempts) return null;
+  if (!isAuthorized) return null;
 
   // --- PANTALLA DE RESULTADOS ---
   if (showResults) {
-    const isApproved = score >= Math.ceil(shuffledQuestions.length * 0.8);
+    // MODO DIOS: Reflejar la aprobación en la UI para el admin.
+    const isAdmin = user?.email === "marcar1972@gmail.com";
+    const isApproved = score >= Math.ceil(quizQuestions.length * 0.8) || isAdmin;
+    
     return (
       <main className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-[2.5rem] p-10 max-w-lg w-full shadow-2xl text-center border border-slate-100">
           {isApproved ? <Trophy size={64} className="mx-auto mb-6 text-amber-500" /> : <AlertCircle size={64} className="mx-auto mb-6 text-red-500" />}
           <h2 className="text-3xl font-black text-slate-900 mb-2">{isApproved ? "¡Nivel Aprobado!" : "Sigue Intentando"}</h2>
-          <p className="text-slate-500 mb-8 font-medium">Lograste <span className="text-emerald-600 font-black">{score}</span> de {shuffledQuestions.length} correctas.</p>
+          <p className="text-slate-500 mb-8 font-medium">Lograste <span className="text-emerald-600 font-black">{score}</span> de {quizQuestions.length} correctas.</p>
           <div className="space-y-3">
-            {!isApproved && !isLocked && (
+            {!isApproved && (
               <button onClick={() => window.location.reload()} className="w-full bg-slate-900 text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2">
-                <RotateCcw size={20} /> REINTENTAR ({attemptsLeft} INTENTOS)
+                <RotateCcw size={20} /> REINTENTAR
               </button>
-            )}
-            {!isApproved && isLocked && (
-              <Link href={`/guias/nivel-${levelId}`} className="block w-full bg-red-600 text-white font-black py-4 rounded-2xl text-center uppercase text-sm">
-                REPASAR GUÍA PARA DESBLOQUEAR
-              </Link>
             )}
             <Link href="/quiz/pro" className="block w-full bg-slate-100 text-slate-600 font-black py-4 rounded-2xl text-center uppercase text-sm">
               {isApproved ? "CONTINUAR RUTA PRO" : "VOLVER AL MENÚ"}
@@ -221,37 +168,32 @@ export default function QuizProDetailPage() {
     return (
       <main className="min-h-screen bg-slate-50 flex items-center justify-center p-6 text-center">
         <div className="bg-white rounded-[2.5rem] p-8 max-w-md w-full shadow-2xl border border-slate-100">
-          <div className="w-20 h-20 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-6">
-            {isLocked ? <Lock size={40} /> : <ShieldCheck size={40} />}
+          <div className="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
+            <ShieldCheck size={40} />
           </div>
           <h2 className="text-3xl font-black text-slate-900 mb-4">{level.title}</h2>
           <div className="space-y-4 mb-8 text-left bg-slate-50 p-6 rounded-2xl border border-slate-100 font-bold text-slate-600">
              <div className="flex items-center gap-3"><Clock size={18} className="text-emerald-500" /> Tiempo: {durationMins(levelId)}:00 min</div>
              <div className="flex items-center gap-3"><BookOpen size={18} className="text-emerald-500" /> Preguntas: {level.questions.length}</div>
-             {!isLocked && <div className="flex items-center gap-3 border-t pt-3 mt-3"><RotateCcw size={18} className="text-blue-500" /> Intentos: {attemptsLeft}</div>}
+             <div className="flex items-center gap-3 border-t pt-3 mt-3 text-blue-500"><RotateCcw size={18} /> Intentos Ilimitados</div>
           </div>
-          {isLocked ? (
-             <div className="space-y-4">
-                <div className="bg-red-50 text-red-700 p-4 rounded-xl text-sm font-bold">Bloqueado hasta: {lockedUntil?.toLocaleString()}</div>
-                <Link href={`/guias/nivel-${levelId}`} className="block w-full bg-slate-900 text-white font-black py-4 rounded-2xl text-center">REPASAR GUÍA</Link>
-             </div>
-          ) : (
-            <button onClick={startQuizWithShuffle} className="w-full bg-emerald-600 text-white font-black py-5 rounded-2xl uppercase tracking-widest shadow-lg shadow-emerald-100">Iniciar Examen</button>
-          )}
-          <Link href="/quiz/pro" className="block mt-6 text-slate-400 font-bold text-sm uppercase tracking-widest">Abandonar</Link>
+          <button onClick={startQuiz} className="w-full bg-emerald-600 text-white font-black py-5 rounded-2xl uppercase tracking-widest shadow-lg shadow-emerald-100 hover:bg-emerald-700 transition-colors">
+            Iniciar Examen
+          </button>
+          <Link href="/quiz/pro" className="block mt-6 text-slate-400 font-bold text-sm uppercase tracking-widest hover:text-slate-600 transition-colors">Abandonar</Link>
         </div>
       </main>
     );
   }
 
   // --- VISTA DEL EXAMEN ACTIVO ---
-  const q = shuffledQuestions[currentQuestion];
+  const q = quizQuestions[currentQuestion];
   const getLetter = (index) => String.fromCharCode(65 + index) + ")";
 
   return (
     <main className="min-h-screen bg-white font-sans">
       <div className="max-w-4xl mx-auto p-6 flex items-center justify-between">
-        <div className="text-[11px] font-black text-slate-400 uppercase tracking-widest">PREGUNTA {currentQuestion + 1} DE {shuffledQuestions.length}</div>
+        <div className="text-[11px] font-black text-slate-400 uppercase tracking-widest">PREGUNTA {currentQuestion + 1} DE {quizQuestions.length}</div>
         <div className="flex items-center gap-2 bg-emerald-50 text-emerald-600 px-4 py-2 rounded-full font-black text-sm border border-emerald-100 shadow-sm">
           <Clock size={16} /> {formatTime(timeLeft)}
         </div>
@@ -271,7 +213,6 @@ export default function QuizProDetailPage() {
               `}
             >
               <span className="flex-1 pr-4">
-                {/* AQUÍ APLICAMOS EL CTO FIX PARA LIMPIAR EL TEXTO */}
                 <span className="text-emerald-600 mr-2">{getLetter(index)}</span> {cleanOptionText(option)}
               </span>
               {isAnswered && index === q.correctAnswer && <CheckCircle className="text-emerald-500 shrink-0" />}
@@ -295,7 +236,7 @@ export default function QuizProDetailPage() {
               <p className="text-slate-600 text-sm font-medium leading-relaxed">{q.explanation}</p>
             </div>
             <button onClick={nextQuestion} disabled={isSavingRecord} className={`w-full text-white font-black py-6 rounded-[2rem] shadow-xl transition-all flex items-center justify-center gap-3 text-lg ${isSavingRecord ? 'bg-slate-400' : 'bg-slate-900 hover:bg-black'}`}>
-              {isSavingRecord ? "GUARDANDO..." : (currentQuestion + 1 === shuffledQuestions.length ? "FINALIZAR EXAMEN" : "CONTINUAR")}
+              {isSavingRecord ? "GUARDANDO..." : (currentQuestion + 1 === quizQuestions.length ? "FINALIZAR EXAMEN" : "CONTINUAR")}
               {!isSavingRecord && <ArrowRight size={22} />}
             </button>
           </div>
