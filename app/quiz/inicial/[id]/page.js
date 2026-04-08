@@ -4,31 +4,27 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { LEVELS } from "../../../data"; 
 import Link from "next/link";
-import { ArrowLeft, Check, X, Clock, BookOpen } from "lucide-react";
+import { ArrowLeft, Check, X, Clock, BookOpen, Loader2 } from "lucide-react";
 
-// NUEVO: Importaciones de Firebase para guardar el progreso
+// NUEVO: Importaciones de Firebase para guardar el progreso y auditoría
 import { auth, db } from "../../../firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
-import { doc, updateDoc, arrayUnion } from "firebase/firestore";
+import { doc, updateDoc, arrayUnion, collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 /**
  * < macz.dev />
- * ARCHIVO: GameRoom - Simulador AuxiliarPro v4.0
- * ESTADO: Prueba Transitoria de Acceso Pro
+ * ARCHIVO: GameRoom - Simulador AuxiliarPro v4.0 (Inicial)
+ * ESTADO: Con Auditoría exam_logs y 80% de exigencia unificada
  */
 
 export default function GameRoom({ params }) {
   const router = useRouter();
 
   // --- CONFIGURACIÓN DE PRUEBA TRANSITORIA ---
-  // Seteamos la fecha al 16 de marzo para estar "dentro del plazo"
   const now = new Date("2026-03-16");
-
-  // Activamos el flag isPro para abrir los candados del 3 al 7
   const isPro = true;
   // -------------------------------------------
 
-  // 1. Identificamos el nivel
   const levelId = parseInt(params.id);
   const level = LEVELS.find((l) => l.id === levelId);
 
@@ -39,36 +35,19 @@ export default function GameRoom({ params }) {
   const [score, setScore] = useState(0);
   const [showFeedback, setShowFeedback] = useState(false);
   const [timeLeft, setTimeLeft] = useState(level?.timeLimit || 0);
-  
   const [mistakes, setMistakes] = useState([]);
-
-  // NUEVO: Estado del usuario para poder escribir en su perfil
+  
+  // Estado para evitar doble guardado
+  const [isSavingRecord, setIsSavingRecord] = useState(false);
+  
   const [user, setUser] = useState(null);
 
-  // NUEVO: Recuperar al usuario activo
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
     });
     return () => unsubscribe();
   }, []);
-
-  // NUEVO: Guardar en Firebase cuando el examen termina y está aprobado
-  useEffect(() => {
-    if (isFinished && level && score >= level.passingScore && user) {
-      const saveProgress = async () => {
-        try {
-          const nextLevel = levelId + 1;
-          const docRef = doc(db, "users", user.uid);
-          await updateDoc(docRef, { unlockedLevels: arrayUnion(nextLevel) });
-          console.log("Progreso guardado en Firebase exitosamente.");
-        } catch (error) {
-          console.error("Error al guardar progreso:", error);
-        }
-      };
-      saveProgress();
-    }
-  }, [isFinished, score, level, levelId, user]);
 
   // TEMPORIZADOR
   useEffect(() => {
@@ -77,7 +56,11 @@ export default function GameRoom({ params }) {
         setTimeLeft((prev) => { 
           if (prev <= 1) { 
             clearInterval(timerId); 
-            setIsFinished(true); 
+            
+            // Si el tiempo se acaba, forzamos el final pero guardamos el progreso
+            if (!isSavingRecord) {
+                finalizeQuiz(true);
+            }
             return 0; 
           } 
           return prev - 1; 
@@ -85,7 +68,7 @@ export default function GameRoom({ params }) {
       }, 1000);
       return () => clearInterval(timerId);
     }
-  }, [level, isFinished, timeLeft]);
+  }, [level, isFinished, timeLeft, isSavingRecord]);
 
   // BLOQUEO DE NIVELES PRO
   if (now >= new Date("2026-03-31") && levelId >= 3 && !isPro) {
@@ -112,7 +95,6 @@ export default function GameRoom({ params }) {
     );
   }
 
-  // Si el nivel no existe
   if (!level) {
     return (
         <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-slate-50 text-center">
@@ -126,12 +108,12 @@ export default function GameRoom({ params }) {
   const isLastQuestion = currentQ === level.questions.length - 1;
 
   const handleOptionClick = (index) => {
-    if (showFeedback) return;
+    if (showFeedback || isSavingRecord) return;
     setSelected(index);
     setShowFeedback(true);
     
     if (index === question.correctIndex) {
-      setScore(score + 1);
+      setScore(prev => prev + 1);
     } else {
       setMistakes((prev) => [
         ...prev,
@@ -145,9 +127,55 @@ export default function GameRoom({ params }) {
     }
   };
 
-  const handleNext = () => {
-    if (isLastQuestion) {
+  // --- CTO FIX: Lógica centralizada de Guardado (Auditoría + 80% Fijo) ---
+  const finalizeQuiz = async (timeOut = false) => {
+      setIsSavingRecord(true);
+      
+      const totalQuestions = level.questions.length;
+      const isAdmin = user?.email === "marcar1972@gmail.com";
+      
+      // La regla del 80% (igual que en el PRO)
+      const isApproved = score >= Math.ceil(totalQuestions * 0.8) || isAdmin;
+      const percentage = (score / totalQuestions) * 100;
+
+      if (user) {
+          try {
+              // 1. REGISTRO DE AUDITORÍA (Aquí se crea la carpeta en Firestore)
+              const attemptRef = collection(db, "exam_logs");
+              await addDoc(attemptRef, {
+                  uid: user.uid,
+                  email: user.email,
+                  levelId: levelId,
+                  mode: "inicial", // Identificador para separar de los PRO
+                  score: score,
+                  totalQuestions: totalQuestions,
+                  percentage: percentage.toFixed(2) + "%",
+                  status: timeOut ? "TIEMPO AGOTADO" : (isApproved ? "APROBADO" : "REPROBADO"),
+                  date: new Date().toLocaleString("es-CL"),
+                  createdAt: serverTimestamp()
+              });
+
+              // 2. DESBLOQUEO DE NIVEL SI APRUEBA
+              if (isApproved) {
+                  const nextLevel = levelId + 1;
+                  const userRef = doc(db, "users", user.uid);
+                  await updateDoc(userRef, { unlockedLevels: arrayUnion(nextLevel) });
+              }
+          } catch (error) {
+              console.error("Error guardando auditoría en Firebase:", error);
+          }
+      }
+      
+      setIsSavingRecord(false);
       setIsFinished(true);
+  };
+
+  const handleNext = () => {
+    if (isSavingRecord) return;
+    
+    if (isLastQuestion) {
+      // Disparamos la lógica de finalización
+      finalizeQuiz(false);
     } else {
       setCurrentQ(currentQ + 1);
       setSelected(null);
@@ -159,8 +187,13 @@ export default function GameRoom({ params }) {
   // PANTALLA DE RESULTADOS (Escenario B)
   // ----------------------------------------------------------------------
   if (isFinished) {
-    const passed = score >= level.passingScore;
-    const timeOut = timeLeft === 0;
+    const totalQuestions = level.questions.length;
+    const isAdmin = user?.email === "marcar1972@gmail.com";
+    
+    // Mostramos el resultado visual basado en el 80% o si es Admin
+    const passed = score >= Math.ceil(totalQuestions * 0.8) || isAdmin;
+    const timeOut = timeLeft <= 0;
+    const passingScoreCalculated = Math.ceil(totalQuestions * 0.8);
 
     return (
       <main className="min-h-screen flex flex-col items-center p-6 bg-slate-50 font-sans py-12">
@@ -175,10 +208,10 @@ export default function GameRoom({ params }) {
                     {timeOut ? "¡TIEMPO AGOTADO!" : passed ? "¡NIVEL SUPERADO!" : "INTÉNTALO DE NUEVO"}
                 </h1>
                 <p className="text-slate-500 text-lg">
-                    Lograste <span className="font-bold text-slate-900">{score}</span> de {level.questions.length} respuestas correctas.
+                    Lograste <span className="font-bold text-slate-900">{score}</span> de {totalQuestions} respuestas correctas.
                 </p>
                 <p className="text-xs text-slate-400 mt-2 uppercase tracking-widest font-bold">
-                    Puntaje de aprobación: {level.passingScore}
+                    Puntaje de aprobación (80%): {passingScoreCalculated}
                 </p>
             </div>
 
@@ -201,7 +234,6 @@ export default function GameRoom({ params }) {
                                         <Check size={16} className="shrink-0 mt-0.5" /> {mistake.correctAnswer}
                                     </p>
                                 </div>
-                                {/* Enlace Salvavidas */}
                                 <Link 
                                     href="/guias" 
                                     className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1.5 rounded-lg hover:bg-blue-100 transition-colors"
@@ -214,9 +246,16 @@ export default function GameRoom({ params }) {
                 </div>
             )}
 
-            <Link href="/quiz/inicial" className="block text-center w-full bg-slate-900 text-white font-bold py-4 rounded-2xl shadow-lg transition-transform hover:scale-[1.02] uppercase tracking-widest text-sm">
-                Volver al Menú Principal
-            </Link>
+            <div className="space-y-3">
+                {!passed && (
+                   <button onClick={() => window.location.reload()} className="w-full bg-slate-900 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 shadow-lg hover:bg-black transition-colors">
+                     REINTENTAR NIVEL
+                   </button>
+                )}
+                <Link href="/quiz/inicial" className="block text-center w-full bg-slate-100 text-slate-600 font-bold py-4 rounded-2xl hover:bg-slate-200 transition-colors uppercase tracking-widest text-sm">
+                    Volver al Menú Principal
+                </Link>
+            </div>
         </div>
       </main>
     );
@@ -227,7 +266,6 @@ export default function GameRoom({ params }) {
   // ----------------------------------------------------------------------
   return (
     <main className="min-h-screen bg-white font-sans flex flex-col">
-      {/* Header del Simulador */}
       <div className="p-4 flex justify-between items-center border-b border-slate-100 sticky top-0 bg-white z-10">
         <Link href="/quiz/inicial" className="text-slate-400 hover:text-slate-900 p-2 transition-colors">
             <ArrowLeft size={24} />
@@ -238,7 +276,6 @@ export default function GameRoom({ params }) {
         <div className="w-8"></div>
       </div>
 
-      {/* Barra de Progreso */}
       <div className="w-full bg-slate-100 h-1.5">
         <div 
             className="bg-emerald-500 h-1.5 transition-all duration-500 ease-out" 
@@ -247,7 +284,6 @@ export default function GameRoom({ params }) {
       </div>
 
       <div className="flex-1 flex flex-col p-6 max-w-md mx-auto w-full">
-        {/* Encabezado: Pregunta y Reloj */}
         <div className="flex justify-between items-center mb-6 mt-4">
             <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
                 Pregunta {currentQ + 1} de {level.questions.length}
@@ -264,7 +300,6 @@ export default function GameRoom({ params }) {
             {question.text}
         </h2>
 
-        {/* Opciones */}
         <div className="space-y-3 flex-1">
             {question.options.map((option, index) => {
                 let style = "bg-white border-2 border-slate-100 text-slate-600 hover:border-slate-200"; 
@@ -281,7 +316,7 @@ export default function GameRoom({ params }) {
                     <button
                         key={index}
                         onClick={() => handleOptionClick(index)}
-                        disabled={showFeedback}
+                        disabled={showFeedback || isSavingRecord}
                         className={`w-full text-left p-5 rounded-2xl text-sm md:text-base transition-all duration-200 ${style}`}
                     >
                         {option}
@@ -290,30 +325,39 @@ export default function GameRoom({ params }) {
             })}
         </div>
 
-        {/* Botón de Siguiente */}
         {showFeedback && (
             <div className="mt-8 pt-4 animate-in fade-in slide-in-from-bottom-4 duration-300">
                 <button 
                     onClick={handleNext}
-                    className="w-full bg-slate-900 text-white font-bold py-5 rounded-2xl shadow-xl flex justify-center items-center gap-3 hover:bg-black transition-colors"
+                    disabled={isSavingRecord}
+                    className={`w-full text-white font-bold py-5 rounded-2xl shadow-xl flex justify-center items-center gap-3 transition-colors ${isSavingRecord ? 'bg-slate-400' : 'bg-slate-900 hover:bg-black'}`}
                 >
-                    <span className="uppercase tracking-widest text-xs">
-                      {isLastQuestion ? "Ver resultados finales" : "Siguiente pregunta"} 
-                    </span>
-                    {!isLastQuestion && <ArrowLeft size={16} className="rotate-180" />}
+                    {isSavingRecord ? (
+                        <>
+                           <Loader2 className="animate-spin" size={16} /> GUARDANDO...
+                        </>
+                    ) : (
+                        <>
+                           <span className="uppercase tracking-widest text-xs">
+                             {isLastQuestion ? "Ver resultados finales" : "Siguiente pregunta"} 
+                           </span>
+                           {!isLastQuestion && <ArrowLeft size={16} className="rotate-180" />}
+                        </>
+                    )}
                 </button>
             </div>
         )}
 
-        {/* Botón de Abandonar Examen */}
-        <div className="mt-8 text-center animate-in fade-in duration-500">
-            <button 
-                onClick={() => router.push('/quiz/inicial')} 
-                className="text-slate-400 font-bold text-sm hover:text-red-500 transition-colors cursor-pointer"
-            >
-                Abandonar Examen
-            </button>
-        </div>
+        {!showFeedback && !isSavingRecord && (
+            <div className="mt-8 text-center animate-in fade-in duration-500">
+                <button 
+                    onClick={() => router.push('/quiz/inicial')} 
+                    className="text-slate-400 font-bold text-sm hover:text-red-500 transition-colors cursor-pointer"
+                >
+                    Abandonar Examen
+                </button>
+            </div>
+        )}
       </div>
 
       <footer className="p-4 text-center">
