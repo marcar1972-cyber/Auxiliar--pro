@@ -13,9 +13,9 @@ export default function PlanesSuscripcion() {
   const [proUntil, setProUntil] = useState(null);
   const [loadingAuth, setLoadingAuth] = useState(true);
 
-  // Enlaces base de Pago Reveniu (La inyección ocurre más abajo)
-  const BASE_LINK_MENSUAL = "https://app.reveniu.com/checkout-custom-link/zUZj7Z0Rk5OAm0e1AIXHckl46R1oLs3M"; 
-  const BASE_LINK_ANUAL = "https://app.reveniu.com/checkout-custom-link/oauLyUlV4n4s2nwyT8mpoCiCg1bIO7uA";
+  // 🔥 CAMBIO 1: Ahora los botones apuntan a tu propio servidor (El puente hacia Mercado Pago)
+  const BASE_LINK_MENSUAL = "/api/checkout-mp?plan=mensual"; 
+  const BASE_LINK_ANUAL = "/api/checkout-mp?plan=anual";
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -57,15 +57,14 @@ export default function PlanesSuscripcion() {
     return fecha.toLocaleDateString("es-CL", { day: 'numeric', month: 'long', year: 'numeric' });
   };
 
-  // 🔥 AQUÍ OCURRE LA MAGIA DE LA INYECCIÓN 🔥
+  // 🔥 CAMBIO 2: Pasamos el UID a nuestra propia API en lugar de a Reveniu
   const getCheckoutLink = (baseLink) => {
     if (!user) return "/login";
     
-    // Lógica de corrección de URL:
     const conector = baseLink.includes('?') ? '&' : '?';
     
-    // Inyecta dinámicamente el email y UID en el link final
-    return `${baseLink}${conector}email=${encodeURIComponent(user.email)}&external_id=${user.uid}`;
+    // Enviamos el uid y el email a nuestro backend para que arme la orden de Mercado Pago
+    return `${baseLink}${conector}email=${encodeURIComponent(user.email)}&uid=${user.uid}`;
   };
 
   const isActive = hasActiveSubscription();
@@ -278,8 +277,9 @@ export default function PlanesSuscripcion() {
         </div>
 
         {/* FOOTER */}
+        {/* 🔥 CAMBIO 3: Solo actualicé la firma a Mercado Pago */}
         <div className="mt-16 flex flex-col items-center gap-4 text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">
-          <span className="bg-slate-50 px-6 py-3 rounded-xl border border-slate-100">🔒 Transacción Segura vía Reveniu</span>
+          <span className="bg-slate-50 px-6 py-3 rounded-xl border border-slate-100">🔒 Transacción Segura vía Mercado Pago</span>
         </div>
       </div>
     </div>
