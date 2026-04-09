@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     if (uid) {
       // 1. EL DISFRAZ: Vercel inicia sesión con tus credenciales de Admin
       // OJO MARCELO: Reemplaza "TU_CLAVE_DE_ACCESO_AQUI" por tu clave real de Firebase
-      await signInWithEmailAndPassword(auth, "marcar1972@gmail.com", "Quefuncie72$");
+      await signInWithEmailAndPassword(auth, "marcar1972@gmail.com", "quefuncie");
 
       // 2. LA MAGIA: Actualizamos Firestore ahora que tenemos permisos
       const userRef = doc(db, "users", uid);
