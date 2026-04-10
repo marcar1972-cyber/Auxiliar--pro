@@ -1,15 +1,16 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import SocialContact from "../components/SocialContact";
 import BannerVenta from "../components/BannerVenta";
 import { 
-  ChevronLeft, ShieldCheck, Trophy, BrainCircuit, Share2, Loader2 
+  ChevronLeft, ShieldCheck, Trophy, BrainCircuit, Share2, Loader2, AlertTriangle, Clock, Info
 } from "lucide-react"; 
 import { auth, db } from "../firebase/config";
 import { doc, getDoc } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 
 const isPastLaunch = () => {
   const launchDate = new Date("2026-03-31T23:59:59");
@@ -21,6 +22,44 @@ const ADMIN_EMAIL = "marcar1972@gmail.com";
 export default function QuizLobbyPage() {
   const router = useRouter();
   const [isVerifying, setIsVerifying] = useState(false);
+  const [daysRemaining, setDaysRemaining] = useState(null);
+  const [showWarning, setShowWarning] = useState(false);
+
+  // --- CÁLCULO DE DÍAS RESTANTES AL CARGAR ---
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          const userRef = doc(db, "users", user.uid);
+          const docSnap = await getDoc(userRef);
+
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            
+            if (data.proUntil) {
+              const proDate = data.proUntil.toDate();
+              const now = new Date();
+              
+              // Calcula la diferencia en milisegundos y la pasa a días
+              const diffTime = proDate.getTime() - now.getTime();
+              const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+              if (diffDays >= 0) {
+                setDaysRemaining(diffDays);
+                setShowWarning(true); // Se muestra SIEMPRE desde el primer momento
+              } else {
+                setDaysRemaining(0); // Expirado
+              }
+            }
+          }
+        } catch (error) {
+          console.error("Error obteniendo días PRO:", error);
+        }
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -80,6 +119,7 @@ export default function QuizLobbyPage() {
          }
       }
 
+      // IMPORTANTE: Aquí se ejecuta el BLOQUEO AUTOMÁTICO si userProDateValid es false
       const hasActiveSub = isAdmin || userIsProFirebase || userProDateValid;
 
       // 3. DEBUG EXTREMO (Abre la consola F12 de tu navegador)
@@ -96,7 +136,11 @@ export default function QuizLobbyPage() {
 
       // 4.1 Validación de Secuencia (El Portero)
       if (!accesoPorteroPermitido) {
-          alert("🔒 ¡Aún no estás listo! Para acceder al Simulador PRO debes completar primero los 7 niveles del Simulador Inicial.");
+          const msg = userIsProFirebase 
+            ? "¡Excelente elección ser PRO! 🚀 Pero antes de enfrentar el Modo Fiscalizador, debes demostrar tu base técnica completando los 7 niveles del Simulador Inicial. ¡Vamos por ese título!"
+            : "🔒 ¡Alto ahí! El Simulador PRO exige una base sólida. Completa primero los 7 niveles del Simulador Inicial para desbloquear el Modo SEREMI.";
+          
+          alert(msg);
           router.push('/quiz/inicial');
           return;
       }
@@ -104,7 +148,6 @@ export default function QuizLobbyPage() {
       // 4.2 Validación Comercial
       if (isPastLaunch() && !hasActiveSub) {
          console.log("FALLO: Mandando a /planes");
-         // Usamos window.location para forzar la recarga y evitar cachés raros de Next Router
          window.location.href = '/planes'; 
       } else {
          console.log("ÉXITO: Mandando a /quiz/pro");
@@ -133,8 +176,7 @@ export default function QuizLobbyPage() {
 
       <section className="p-6 max-w-3xl mx-auto mt-6">
         
-        {/* HEADER OPTIMIZADO PARA SEO */}
-        <header className="mb-12 text-center">
+        <header className="mb-8 text-center">
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-4">
             <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight">
               Simulador de Examen <span className="text-emerald-600">Auxiliar de Farmacia</span> SEREMI
@@ -143,9 +185,34 @@ export default function QuizLobbyPage() {
               <Share2 size={24} strokeWidth={2.5} />
             </button>
           </div>
-          <p className="text-slate-500 text-sm md:text-base max-w-2xl mx-auto leading-relaxed">
+          <p className="text-slate-500 text-sm md:text-base max-w-2xl mx-auto leading-relaxed mb-6">
             Prepárate para la certificación del MINSAL en Chile. Practica con casos reales y preguntas de prueba para asegurar tu título como Auxiliar de Farmacia.
           </p>
+
+          {/* ⚡ REGLAS DEL JUEGO (PRO LOGIC) */}
+          <div className="max-w-xl mx-auto mb-8 bg-blue-50 border border-blue-100 rounded-[2rem] p-6 text-left shadow-sm">
+            <h4 className="flex items-center gap-2 text-blue-900 font-black text-sm uppercase mb-3 tracking-wider">
+              <Info size={18} /> Reglas del Modo PRO
+            </h4>
+            <ul className="space-y-3">
+              <li className="flex items-start gap-3 text-blue-800 text-sm font-medium">
+                <div className="bg-blue-200 p-1 rounded-lg mt-0.5"><Trophy size={14} /></div>
+                <span>Aprobar requiere un <strong>80% de precisión</strong> en cada nivel.</span>
+              </li>
+              <li className="flex items-start gap-3 text-blue-800 text-sm font-medium">
+                <div className="bg-blue-200 p-1 rounded-lg mt-0.5"><Clock size={14} /></div>
+                <span><strong>Sistema de 3 Intentos:</strong> Si repruebas 3 veces el mismo nivel, el sistema se bloqueará por <strong>30 minutos</strong> para obligarte a repasar las guías antes de volver a intentar.</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* ESTADO DE ADVERTENCIA MOVIDO AQUÍ */}
+          {showWarning && daysRemaining !== null && (
+            <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 px-5 py-2.5 rounded-full text-sm font-black tracking-wide border border-emerald-200 shadow-sm">
+              <AlertTriangle size={16} />
+              {daysRemaining === 0 ? "¡Suscripción expirada hoy!" : `¡Quedan ${daysRemaining} días de acceso PRO!`}
+            </div>
+          )}
         </header>
 
         <div className="w-full space-y-6">
@@ -162,11 +229,10 @@ export default function QuizLobbyPage() {
           </article>
 
           <article>
-            {/* OJO: El onClick está en el button principal */}
             <button 
               onClick={handleProAccess} 
               disabled={isVerifying}
-              className="w-full group rounded-[2rem] border-2 transition-all p-8 flex flex-col md:flex-row items-center gap-6 bg-slate-900 border-slate-800 shadow-xl hover:-translate-y-1 cursor-pointer relative overflow-hidden"
+              className="w-full group rounded-[2rem] border-2 transition-all p-8 flex flex-col md:flex-row items-center gap-6 bg-slate-900 border-slate-800 shadow-xl hover:-translate-y-1 cursor-pointer relative overflow-hidden mt-2"
             >
               {isVerifying && (
                 <div className="absolute inset-0 bg-slate-900/80 z-20 flex items-center justify-center rounded-[2rem]">

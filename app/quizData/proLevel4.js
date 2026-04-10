@@ -2,14 +2,14 @@
 
 /**
  * < macz.dev />
- * ARCHIVO: Nivel 4 PRO
- * TEMA: Estupefacientes y Psicotrópicos - Decretos 404 y 405
+ * ARCHIVO: Nivel 4 PRO (Actualizado v4.1)
+ * TEMA: Estupefacientes y Psicotrópicos - Decretos 404 y 405 + Farmacología Respiratoria Aplicada
  */
 
 export const proLevel4 = {
   id: 4,
   title: "Nivel 4 PRO: Controlados Dto. 404 y 405",
-  description: "Examen crítico sobre manejo de estupefacientes, psicotrópicos, estrellas de seguridad y Receta Cheque.",
+  description: "Examen crítico sobre manejo de estupefacientes, psicotrópicos, estrellas de seguridad y diferenciación de jarabes antitusivos.",
   questions: [
     {
       question: "Respecto a los envases de los productos estupefacientes (Decreto 404), señale la afirmación CORRECTA:",
@@ -100,15 +100,15 @@ export const proLevel4 = {
       explanation: "El reglamento exige expresamente que las previsiones de importación se envíen al ISP en el mes de OCTUBRE de cada año, no en diciembre."
     },
     {
-      question: "Según las Listas del Decreto 404 (Estupefacientes), identifique la droga que está clasificada de forma INCORRECTA:",
+      question: "Respecto a los productos farmacéuticos que contienen Codeína (Jarabe), según el Decreto 404, señale la afirmación CORRECTA sobre su condición de venta:",
       options: [
-        "Heroína (Diacetilmorfina) pertenece a la Lista I.",
-        "Fentanilo pertenece a la Lista I.",
-        "Codeína pertenece a la Lista I.",
-        "Opio pertenece a la Lista I."
+        "Todos los jarabes con codeína son de Venta Directa por ser antitusivos.",
+        "Si la dosis no supera los 10 mg por unidad de administración mezclada con otros ingredientes, su condición de venta es Receta Médica Simple.",
+        "La codeína siempre requiere Receta Cheque sin importar la dosis o asociación.",
+        "Solo los jarabes pediátricos de codeína son de venta libre (Venta Directa)."
       ],
-      correctAnswer: 2,
-      explanation: "La Codeína es un derivado menor y pertenece a la Lista II. La Lista I está reservada para drogas de altísimo riesgo y potencial de abuso (Heroína, Fentanilo, Opio)."
+      correctAnswer: 1,
+      explanation: "Según el Dto. 404, si la Codeína no supera los 10 mg por unidad y está asociada, es Receta Simple. Sobre 10 mg e inferior a 60 mg es Receta Retenida. Igual o superior a 60 mg es Receta Cheque."
     },
     {
       question: "Según las Listas del Decreto 405 (Psicotrópicos), señale la droga que está clasificada de forma CORRECTA:",
@@ -166,15 +166,15 @@ export const proLevel4 = {
       explanation: "Los productos psicotrópicos clasificados en la Lista II (como las Anfetaminas o el Metilfenidato) tienen como condición de venta estricta la Receta Cheque."
     },
     {
-      question: "Identifique la afirmación INCORRECTA sobre la Lista III de Psicotrópicos (Decreto 405):",
+      question: "En el mesón de farmacia, llega un paciente consultando por un jarabe para tos con flema (productiva). ¿Cuál de los siguientes principios activos es el adecuado según su acción terapéutica?",
       options: [
-        "Incluye medicamentos como el Fenobarbital y el Pentobarbital.",
-        "Su condición de venta obligatoria es mediante Receta Médica Retenida.",
-        "La condición de venta legal de los productos que contengan estas drogas o sus sales es 'BAJO RECETA CHEQUE'.",
-        "Las sales de las sustancias enumeradas en esta lista están igualmente controladas."
+        "Oxolamina (Jarabe).",
+        "Levodropropizina (Jarabe).",
+        "Ambroxol o Bromhexina.",
+        "Codeína fosfato."
       ],
-      correctAnswer: 1,
-      explanation: "La Lista III (que incluye barbitúricos fuertes como Pentobarbital) exige legalmente RECETA CHEQUE, al igual que la Lista II. Es un error común pensar que solo la Lista II usa Receta Cheque."
+      correctAnswer: 2,
+      explanation: "Para la tos con flema se requieren mucolíticos o expectorantes como Ambroxol o Bromhexina. Oxolamina, Levodropropizina y Codeína son antitusivos, indicados para tos SECA (no productiva)."
     },
     {
       question: "De acuerdo con el Decreto 405, respecto a la Lista IV de Psicotrópicos, señale la alternativa CORRECTA:",
@@ -188,26 +188,26 @@ export const proLevel4 = {
       explanation: "La Lista IV agrupa a las benzodiazepinas e inductores del sueño comunes (Alprazolam, Diazepam, Zolpidem), cuya condición de expendio en farmacia es bajo Receta Médica Retenida."
     },
     {
-      question: "En relación con las definiciones del proceso farmacéutico (Art. 2, Dtos. 404 y 405), identifique la afirmación INCORRECTA:",
+      question: "Sobre la administración de Oxolamina en jarabe, señale la afirmación CORRECTA respecto a su dosificación y características:",
       options: [
-        "'Preparación' es la elaboración, por medio de operaciones farmacéuticas, de un producto destinado a ser usado como medicamento.",
-        "'Extracción' es la separación de uno o varios principios activos desde materias primas.",
-        "'Expendio' es la transferencia a cualquier título que efectúa el laboratorio a la farmacia.",
-        "'Tránsito' es cuando la mercancía atraviesa un país situado entre el país de origen y el de destino."
-      ],
-      correctAnswer: 2,
-      explanation: "'Expendio' se define legalmente como la venta al detalle y a título oneroso directamente al usuario final (paciente). La transferencia desde un laboratorio a una farmacia se denomina 'Distribución'."
-    },
-    {
-      question: "Sobre la aplicación general de la normativa de Psicotrópicos (Decreto 405), indique la afirmación CORRECTA:",
-      options: [
-        "Los precursores químicos para fabricar psicotrópicos no están sometidos a ningún control en Chile.",
-        "La importación, fraccionamiento, expendio y uso de psicotrópicos se someterán íntegramente a las normas de este reglamento.",
-        "Los medicamentos psicotrópicos importados para uso compasivo están exentos de la retención de receta en la farmacia.",
-        "Las farmacias no tienen límite de unidades para el expendio de un psicotrópico, siempre que la receta esté firmada."
+        "La dosis es idéntica para adultos y niños (10 ml cada 8 horas).",
+        "La concentración pediátrica habitual es de 14 mg / 5 ml, ajustándose la dosis según el peso y edad del menor.",
+        "La Oxolamina es un mucolítico potente que ayuda a eliminar flemas.",
+        "Es un estupefaciente que requiere Receta Cheque para su venta."
       ],
       correctAnswer: 1,
-      explanation: "El Dto. 405 establece que todas las etapas (importación, fraccionamiento, expendio y uso) quedan sometidas íntegramente a sus normas, sin exenciones para el uso compasivo ni expendio ilimitado."
+      explanation: "La Oxolamina es un antitusivo de venta directa. Su dosificación pediátrica (14mg/5ml) es menor a la de adultos (28mg/5ml). Es vital diferenciar estas concentraciones para evitar sobredosis en niños."
+    },
+    {
+      question: "Respecto a la Levodropropizina, fármaco comúnmente consultado para cuadros respiratorios, identifique su característica principal:",
+      options: [
+        "Es un antitusivo de acción periférica indicado para tos no productiva (seca).",
+        "Es un antibiótico de amplio espectro para infecciones bronquiales.",
+        "Pertenece a la Lista I de Estupefacientes y requiere Receta Cheque.",
+        "Se utiliza exclusivamente para disolver y expulsar la mucosidad (flema)."
+      ],
+      correctAnswer: 0,
+      explanation: "La Levodropropizina es un antitusivo que actúa a nivel periférico (no central como la codeína), siendo muy efectivo para la tos seca irritativa sin los efectos sedantes de los opioides."
     },
     {
       question: "Si se requiere modificar la clasificación de una droga pasándola de la Lista IV a la Lista II (ej. aumento de control), identifique la alternativa INCORRECTA según la ley:",

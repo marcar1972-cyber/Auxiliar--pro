@@ -5,14 +5,12 @@ import { useParams, useRouter } from "next/navigation";
 import { PRO_LEVELS } from "../../../quizData/index"; 
 import { 
   ChevronLeft, CheckCircle, XCircle, ArrowRight, Trophy, 
-  RotateCcw, BookOpen, Clock, AlertCircle, ShieldCheck
+  RotateCcw, BookOpen, Clock, AlertCircle, ShieldCheck, Timer
 } from "lucide-react";
 import Link from "next/link";
 import { auth, db } from "../../../firebase/config";
 import { doc, getDoc, updateDoc, arrayUnion, collection, addDoc, serverTimestamp } from "firebase/firestore";
 
-// --- FUNCIÓN LIMPIADORA DE TEXTO (CTO FIX) ---
-// Elimina prefijos manuales como "A) ", "B. ", "c - " para evitar letras repetidas.
 const cleanOptionText = (text) => {
   return text.replace(/^[A-Za-z][\.\)\-\s]+/, '').trim();
 };
@@ -34,10 +32,13 @@ export default function QuizProDetailPage() {
   const [quizQuestions, setQuizQuestions] = useState([]);
   const [isSavingRecord, setIsSavingRecord] = useState(false);
 
+  // --- NUEVOS ESTADOS PARA INTENTOS Y BLOQUEO ---
+  const [intentosActuales, setIntentosActuales] = useState(0);
+  const [bloqueadoHasta, setBloqueadoHasta] = useState(null);
+
   const durationMins = (id) => ({1:20, 2:25, 3:30, 4:40, 5:45, 6:50, 7:60}[id] || 15);
   const [timeLeft, setTimeLeft] = useState(durationMins(levelId) * 60);
 
-  // --- TIMER ---
   useEffect(() => {
     if (!quizStarted || showResults || !isAuthorized) return; 
     if (timeLeft <= 0) { setShowResults(true); return; }
@@ -51,7 +52,6 @@ export default function QuizProDetailPage() {
     return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
   };
 
-  // --- AUTH ---
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
       if (currentUser) {
@@ -62,7 +62,16 @@ export default function QuizProDetailPage() {
             const data = docSnap.data();
             const isAdmin = currentUser.email === "marcar1972@gmail.com";
             
-            // --- LÓGICA DEL PORTERO (GATING) ---
+            // --- VERIFICACIÓN DE BLOQUEO POR TIEMPO ---
+            if (data.lockUntilPro && data.lockUntilPro.toDate() > new Date() && !isAdmin) {
+                router.push('/quiz/pro');
+                return;
+            }
+
+            // Sincronizar intentos fallidos de este nivel
+            const failedAttempts = data.failedAttemptsPro || {};
+            setIntentosActuales(failedAttempts[levelId] || 0);
+
             const pasoInicialCompleto = (data.unlockedLevels && data.unlockedLevels.length > 7);
             const esUsuarioFundador = (data.unlockedLevelsPro && data.unlockedLevelsPro.length > 1);
 
@@ -70,7 +79,6 @@ export default function QuizProDetailPage() {
                 router.push('/quiz/pro'); 
                 return;
             }
-            // ------------------------------------
 
             const hasActiveSubscription = isAdmin || data.isPro || (data.proUntil?.toDate() >= new Date());
             
@@ -92,9 +100,7 @@ export default function QuizProDetailPage() {
     return () => unsubscribe();
   }, [router, levelId]);
 
-  // --- LÓGICA DE INICIO NORMAL (SIN SHUFFLE) ---
   const startQuiz = () => {
-    // Cargamos las preguntas tal como vienen en el JSON para no romper las opciones "A y B son correctas"
     setQuizQuestions(level.questions);
     setQuizStarted(true);
   };
@@ -122,8 +128,9 @@ export default function QuizProDetailPage() {
       
       if (user) {
         try {
-          // 1. REGISTRO DE AUDITORÍA PARA FIRESTORE
+          const userRef = doc(db, "users", user.uid);
           const attemptRef = collection(db, "exam_logs");
+          
           await addDoc(attemptRef, {
             uid: user.uid,
             email: user.email,
@@ -136,12 +143,31 @@ export default function QuizProDetailPage() {
             createdAt: serverTimestamp()
           });
 
-          // 2. ACTUALIZACIÓN DE NIVEL DEL USUARIO
-          const userRef = doc(db, "users", user.uid);
           if (isApproved) {
+            // SI APRUEBA: Limpiamos intentos fallidos de este nivel y desbloqueamos el siguiente
+            const failedAttempts = (await getDoc(userRef)).data().failedAttemptsPro || {};
+            failedAttempts[levelId] = 0;
+            
             await updateDoc(userRef, {
-              unlockedLevelsPro: arrayUnion(levelId + 1)
+              unlockedLevelsPro: arrayUnion(levelId + 1),
+              failedAttemptsPro: failedAttempts
             });
+          } else if (!isAdmin) {
+            // SI REPRUEBA: Aumentamos contador de intentos
+            const newAttempts = intentosActuales + 1;
+            const failedAttempts = (await getDoc(userRef)).data().failedAttemptsPro || {};
+            failedAttempts[levelId] = newAttempts;
+
+            let updatePayload = { failedAttemptsPro: failedAttempts };
+
+            // Si llega a 3 intentos fallidos, bloqueamos 30 minutos
+            if (newAttempts >= 3) {
+                const lockoutTime = new Date(Date.now() + 30 * 60000); // 30 mins
+                updatePayload.lockUntilPro = lockoutTime;
+                updatePayload.failedAttemptsPro[levelId] = 0; // Reiniciamos para después del bloqueo
+            }
+
+            await updateDoc(userRef, updatePayload);
           }
         } catch (e) { console.error(e); } 
       }
@@ -153,9 +179,7 @@ export default function QuizProDetailPage() {
   if (!level) return null;
   if (!isAuthorized) return null;
 
-  // --- PANTALLA DE RESULTADOS ---
   if (showResults) {
-    // MODO DIOS: Reflejar la aprobación en la UI para el admin.
     const isAdmin = user?.email === "marcar1972@gmail.com";
     const isApproved = score >= Math.ceil(quizQuestions.length * 0.8) || isAdmin;
     
@@ -168,7 +192,7 @@ export default function QuizProDetailPage() {
           <div className="space-y-3">
             {!isApproved && (
               <button onClick={() => window.location.reload()} className="w-full bg-slate-900 text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2">
-                <RotateCcw size={20} /> REINTENTAR
+                <RotateCcw size={20} /> REINTENTAR ({3 - intentosActuales - 1} de 3 intentos restantes)
               </button>
             )}
             <Link href="/quiz/pro" className="block w-full bg-slate-100 text-slate-600 font-black py-4 rounded-2xl text-center uppercase text-sm">
@@ -180,7 +204,6 @@ export default function QuizProDetailPage() {
     );
   }
 
-  // --- PANTALLA DE INICIO (PRE-QUIZ) ---
   if (!quizStarted) {
     return (
       <main className="min-h-screen bg-slate-50 flex items-center justify-center p-6 text-center">
@@ -192,7 +215,10 @@ export default function QuizProDetailPage() {
           <div className="space-y-4 mb-8 text-left bg-slate-50 p-6 rounded-2xl border border-slate-100 font-bold text-slate-600">
              <div className="flex items-center gap-3"><Clock size={18} className="text-emerald-500" /> Tiempo: {durationMins(levelId)}:00 min</div>
              <div className="flex items-center gap-3"><BookOpen size={18} className="text-emerald-500" /> Preguntas: {level.questions.length}</div>
-             <div className="flex items-center gap-3 border-t pt-3 mt-3 text-blue-500"><RotateCcw size={18} /> Intentos Ilimitados</div>
+             <div className="flex items-center gap-3 border-t pt-3 mt-3 text-red-500 font-black">
+                <Timer size={18} /> Intentos: {intentosActuales}/3 
+                <span className="text-[10px] bg-red-100 px-2 py-0.5 rounded-lg ml-auto">BLOQUEO SI FALLAS 3</span>
+             </div>
           </div>
           <button onClick={startQuiz} className="w-full bg-emerald-600 text-white font-black py-5 rounded-2xl uppercase tracking-widest shadow-lg shadow-emerald-100 hover:bg-emerald-700 transition-colors">
             Iniciar Examen
@@ -203,7 +229,6 @@ export default function QuizProDetailPage() {
     );
   }
 
-  // --- VISTA DEL EXAMEN ACTIVO ---
   const q = quizQuestions[currentQuestion];
   const getLetter = (index) => String.fromCharCode(65 + index) + ")";
 

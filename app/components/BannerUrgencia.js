@@ -113,15 +113,15 @@ export default function BannerUrgencia() {
         </span>
         <span className="hidden md:inline opacity-30 text-emerald-500">|</span>
         <span className="leading-tight text-emerald-400 font-bold">
-          Asegura tu examen SEREMI y domina el mesón
+          Asegura tu examen SEREMI
         </span>
         <span className="hidden md:inline opacity-30 text-emerald-500">|</span>
-        <span className="leading-tight text-slate-300 font-medium">
-          Conoce el entrenamiento PRO
+        <span className="leading-tight text-slate-400 font-medium hidden md:inline">
+          🔒 Sin cobros automáticos
         </span>
       </div>
       
-      <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0 relative z-10">
+      <div className="flex flex-row items-center gap-2 shrink-0 relative z-10 mt-2 md:mt-0">
         <button 
           onClick={handleAccionBoton}
           disabled={cargando}

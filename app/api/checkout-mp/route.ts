@@ -38,7 +38,7 @@ export async function GET(request: Request) {
         external_reference: uid, 
         
         back_urls: {
-          success: "https://www.auxiliaresdefarmacia.cl/dashboard",
+          success: "https://www.auxiliaresdefarmacia.cl/success",
           failure: "https://www.auxiliaresdefarmacia.cl/planes",
           pending: "https://www.auxiliaresdefarmacia.cl/planes",
         },

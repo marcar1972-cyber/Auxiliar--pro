@@ -33,7 +33,6 @@ export default function BuscadorVademecum() {
   const PLANES_LINK = "/planes";
   const router = useRouter();
 
-  // 🛡️ FUNCIÓN DE NORMALIZACIÓN (Elimina tildes y diacríticos)
   const normalizarTexto = (texto) => {
     return texto
       .toLowerCase()
@@ -90,7 +89,6 @@ export default function BuscadorVademecum() {
     fetchCatalogo();
   }, []);
 
-  // 🔍 BUSCADOR OPTIMIZADO (Sin tildes)
   const handleBuscar = async (e) => {
     if (e) e.preventDefault();
     if (!busqueda.trim()) return;
@@ -100,11 +98,11 @@ export default function BuscadorVademecum() {
     try {
       const querySnapshot = await getDocs(collection(db, "vademecum"));
       const datosFiltrados = [];
-      const terminoBusqueda = normalizarTexto(busqueda); // Normalizamos búsqueda
+      const terminoBusqueda = normalizarTexto(busqueda);
 
       querySnapshot.forEach((doc) => {
         const item = { id: doc.id, ...doc.data() };
-        const nombreNormalizado = normalizarTexto(item.nombre); // Normalizamos dato DB
+        const nombreNormalizado = normalizarTexto(item.nombre);
         
         if (nombreNormalizado.includes(terminoBusqueda)) {
           datosFiltrados.push(item);
@@ -154,129 +152,129 @@ export default function BuscadorVademecum() {
   };
 
   const handleCargaMasivaYPurga = async () => {
-    if (!window.confirm("⚠️ ¿Ejecutar SINCRONIZACIÓN PRO? Bloque 4 (Cardio Complejo) con principios activos.")) return;
+    if (!window.confirm("⚠️ ¿Ejecutar SINCRONIZACIÓN PRO? Bloque A (Salud Mental y Sistema Nervioso) con Venta Complementaria OTC.")) return;
     setCargandoAuditoria(true);
 
     const dataMasiva = [
       {
-        nombre: "Rosuvastatina 20 mg",
-        principio_activo: "Rosuvastatina Cálcica",
-        categoria: "Hipolipemiante (Estatina de alta intensidad)",
-        lista_control: "N/A",
-        condicion_venta: "Receta Médica Simple (R)",
-        para_que_sirve: "Reducción agresiva de los niveles de colesterol LDL y triglicéridos en pacientes con alto riesgo cardiovascular. Retrasa la progresión de la ateroesclerosis al inhibir la enzima HMG-CoA reductasa.",
-        posologia: "Dosis habitual: 10 mg a 20 mg una vez al día. Puede administrarse en cualquier momento del día, con o sin alimentos (a diferencia de otras estatinas, su larga vida media no exige toma nocturna obligatoria).",
-        contraindicaciones: "Enfermedad hepática activa, embarazo y lactancia, o miopatía preexistente. Precaución severa en pacientes con insuficiencia renal grave.",
-        tips_venta: "ALERTA MUSCULAR: Instruir al paciente que debe informar al médico si siente dolores musculares, debilidad o calambres sin explicación aparente (riesgo de rabdomiólisis).",
-        cross_selling: "Coenzima Q10 (para atenuar molestias musculares asociadas a estatinas) y Omega 3."
+        nombre: "Diazepam 10 mg",
+        principio_activo: "Diazepam 10 mg",
+        categoria: "Ansiolítico / Anticonvulsivante",
+        lista_control: "Lista IV (Psicotrópico - D.S. 404)",
+        condicion_venta: "Receta Médica Retenida con Control de Existencia",
+        para_que_sirve: "Tratamiento de estados de ansiedad, espasmos musculares de origen central, coadyuvante en trastornos convulsivos y sedación previa a procedimientos médicos. Actúa potenciando la inhibición del neurotransmisor GABA.",
+        posologia: "Adultos: 2 a 10 mg, 2 a 4 veces al día. Geriátricos: Iniciar con 2 a 2,5 mg, 1 o 2 veces al día para evitar sedación excesiva. No exceder dosis en pacientes con insuficiencia renal.",
+        contraindicaciones: "Hipersensibilidad a benzodiazepinas, miastenia gravis, insuficiencia respiratoria severa, síndrome de apnea del sueño e insuficiencia hepática grave.",
+        tips_venta: "LEY 404: Solo dispensar con receta médica retenida. Advertir sobre riesgo de dependencia y evitar consumo de alcohol por potenciación de efecto depresor del SNC.",
+        cross_selling: "Infusiones naturales de Melisa o Pasiflora para favorecer el relax, y suplementos de Magnesio para la función muscular si existe contractura."
       },
       {
-        nombre: "Fenofibrato 160 mg",
-        principio_activo: "Fenofibrato Micronizado",
-        categoria: "Hipolipemiante (Fibrato)",
-        lista_control: "N/A",
-        condicion_venta: "Receta Médica Simple (R)",
-        para_que_sirve: "Tratamiento de la hipertrigliceridemia severa (aislada o mixta). Actúa reduciendo la producción hepática de triglicéridos y acelerando su eliminación del plasma.",
-        posologia: "1 cápsula o comprimido al día, estrictamente administrado durante una comida principal para asegurar una óptima absorción gastrointestinal.",
-        contraindicaciones: "Insuficiencia hepática o renal grave, enfermedad de la vesícula biliar preexistente. No asociar con estatinas a menos que haya estricto control médico.",
-        tips_venta: "TOMA CON COMIDA: El tip clínico más importante aquí es que si el paciente lo toma con el estómago vacío, el medicamento casi no se absorbe. Debe tomarse en la cena o almuerzo contundente.",
-        cross_selling: "Fórmulas de Omega 3 concentradas (EPA/DHA) y educación sobre dieta baja en grasas saturadas."
+        nombre: "Lorazepam 2 mg",
+        principio_activo: "Lorazepam 2 mg",
+        categoria: "Ansiolítico / Sedante",
+        lista_control: "Lista IV (Psicotrópico - D.S. 404)",
+        condicion_venta: "Receta Médica Retenida con Control de Existencia",
+        para_que_sirve: "Alivio de síntomas de ansiedad severa e insomnio asociado a ansiedad. Utilizado también como medicación preanestésica. Posee una vida media intermedia sin metabolitos activos de larga duración.",
+        posologia: "Ansiedad: 2 a 3 mg diarios en dosis divididas. Insomnio: 2 a 4 mg al acostarse. Ancianos: Reducir dosis a la mitad para minimizar riesgos de caídas y desorientación.",
+        contraindicaciones: "Glaucoma de ángulo estrecho, insuficiencia respiratoria aguda, embarazo (especialmente 1er trimestre) y lactancia.",
+        tips_venta: "SEGURIDAD: Informar que puede causar amnesia anterógrada. El retiro debe ser gradual bajo supervisión para evitar síndrome de abstinencia.",
+        cross_selling: "Melatonina OTC para regular el ciclo circadiano y antifaces de descanso para mejorar la higiene del sueño."
       },
       {
-        nombre: "Ácido Acetilsalicílico 100 mg (Aspirina EC)",
-        principio_activo: "Ácido Acetilsalicílico",
-        categoria: "Antiagregante Plaquetario",
+        nombre: "Escitalopram 10 mg",
+        principio_activo: "Escitalopram 10 mg",
+        categoria: "Antidepresivo (ISRS)",
         lista_control: "N/A",
-        condicion_venta: "Venta Directa (VD)",
-        para_que_sirve: "Prevención secundaria de eventos cardiovasculares mayores (infarto agudo de miocardio, accidente cerebrovascular). Inhibe la agregación de las plaquetas al bloquear la enzima COX-1.",
-        posologia: "1 comprimido al día, usualmente después de la comida. La presentación EC (Capa Entérica) debe tragarse entera, sin partir ni masticar, para que se libere en el intestino y no irrite el estómago.",
-        contraindicaciones: "Úlcera gastroduodenal activa, hemofilia u otros trastornos hemorrágicos. Hipersensibilidad a los AINEs. No dar a niños con cuadros virales (Riesgo de Síndrome de Reye).",
-        tips_venta: "CUIDADO CON EL ESTÓMAGO: Aunque tenga capa entérica, recalcar que se debe tomar con el estómago lleno. Si el paciente se someterá a una cirugía o extracción dental, debe avisar al médico, ya que se suele suspender días antes.",
-        cross_selling: "Inhibidores de la bomba de protones (Omeprazol) si hay susceptibilidad gástrica (bajo recomendación médica)."
+        condicion_venta: "Receta Médica Simple",
+        para_que_sirve: "Tratamiento de episodios depresivos mayores, trastorno de pánico con o sin agorafobia, trastorno de ansiedad social y trastorno obsesivo-compulsivo. Inhibidor altamente selectivo de la recaptación de serotonina.",
+        posologia: "Dosis habitual: 10 mg una vez al día. Dosis máxima: 20 mg. En pacientes geriátricos o con insuficiencia hepática, la dosis inicial debe ser de 5 mg diarios.",
+        contraindicaciones: "Uso concomitante con IMAO no selectivos o irreversibles, antecedentes de prolongación del intervalo QT o uso con fármacos que prolonguen el QT.",
+        tips_venta: "PACIENCIA TERAPÉUTICA: Explicar al usuario que la respuesta terapéutica suele aparecer después de 2 a 4 semanas de tratamiento continuo.",
+        cross_selling: "Multivitamínicos con Vitamina B12 para la energía diaria y bloqueador solar FPS 50+ debido a posible fotosensibilidad."
       },
       {
-        nombre: "Clopidogrel 75 mg",
-        principio_activo: "Clopidogrel Bisulfato",
-        categoria: "Antiagregante Plaquetario",
+        nombre: "Amitriptilina 25 mg",
+        principio_activo: "Amitriptilina Clorhidrato 25 mg",
+        categoria: "Antidepresivo Tricíclico",
         lista_control: "N/A",
-        condicion_venta: "Receta Médica Simple (R)",
-        para_que_sirve: "Prevención de la trombosis arterial, especialmente utilizado en pacientes a los que se les ha colocado un stent coronario, o aquellos intolerantes al ácido acetilsalicílico.",
-        posologia: "1 comprimido (75 mg) al día, con o sin alimentos, siempre a la misma hora.",
-        contraindicaciones: "Sangrado patológico activo (ej. úlcera péptica o hemorragia intracraneal). Insuficiencia hepática grave.",
-        tips_venta: "ALERTA DE SANGRADO: Explicar al paciente que los moretones aparecerán con mayor facilidad y los sangrados por cortes demorarán más en coagular. Evitar deportes de contacto extremo.",
-        cross_selling: "Gasa estéril y apósitos hemostáticos para botiquín casero por si ocurre algún corte accidental."
+        condicion_venta: "Receta Médica Simple",
+        para_que_sirve: "Depresión mayor, tratamiento del dolor neuropático crónico y profilaxis de la cefalea tensional o migraña. Posee marcadas propiedades anticolinérgicas y sedantes.",
+        posologia: "Adultos: Iniciar con 25 a 50 mg en la noche. Dolor neuropático: 10 a 25 mg al acostarse, aumentando según tolerancia. Dosis máxima ambulatoria: 150 mg.",
+        contraindicaciones: "Infarto de miocardio reciente, cualquier grado de bloqueo cardíaco, trastornos del ritmo cardíaco e insuficiencia coronaria. Uso con IMAO.",
+        tips_venta: "EFECTOS SECUNDARIOS: Advertir sobre sequedad bucal, visión borrosa y estreñimiento. Se recomienda tomar antes de dormir por su fuerte efecto sedante.",
+        cross_selling: "Lágrimas artificiales OTC para la sequedad ocular y chicles sin azúcar o caramelos de limón para estimular la saliva."
       },
       {
-        nombre: "Warfarina 5 mg",
-        principio_activo: "Warfarina Sódica",
-        categoria: "Anticoagulante Oral (Antagonista de la Vitamina K)",
+        nombre: "Duloxetina 30 mg",
+        principio_activo: "Duloxetina 30 mg",
+        categoria: "Antidepresivo (IRSN)",
         lista_control: "N/A",
-        condicion_venta: "Receta Médica Simple (R)",
-        para_que_sirve: "Prevención y tratamiento de la trombosis venosa profunda, embolismo pulmonar y tromboembolismo asociado a fibrilación auricular o válvulas cardíacas mecánicas.",
-        posologia: "Posología extremadamente variable basada en el control del INR (Razón Internacional Normalizada) en la sangre. Habitualmente en toma única diaria a la misma hora.",
-        contraindicaciones: "Embarazo (altamente teratogénico). Hemorragia activa, hipertensión severa no controlada o cirugía reciente del sistema nervioso central.",
-        tips_venta: "EL RIESGO VERDE: Instruir obligatoriamente sobre la interacción con la dieta: vegetales de hoja verde (espinaca, brócoli, lechuga) tienen vitamina K y contrarrestan el medicamento. La dieta debe ser constante, no eliminar bruscamente ni aumentar su consumo.",
-        cross_selling: "Pastilleros semanales rígidos (la adherencia aquí es asunto de vida o muerte) y alertar que JAMÁS automedique ibuprofeno o aspirina por riesgo de hemorragia."
+        condicion_venta: "Receta Médica Simple",
+        para_que_sirve: "Tratamiento de depresión mayor, dolor neuropático periférico diabético, fibromialgia y trastorno de ansiedad generalizada. Inhibidor de la recaptación de serotonina y noradrenalina.",
+        posologia: "Dosis inicial y de mantenimiento: 60 mg una vez al día. En pacientes con trastorno de ansiedad social, iniciar con 30 mg para mejorar tolerancia gástrica.",
+        contraindicaciones: "Enfermedad hepática que produzca insuficiencia hepática, insuficiencia renal grave, hipertensión no controlada.",
+        tips_venta: "TOMA CON ALIMENTOS: Para reducir la incidencia de náuseas al inicio del tratamiento. No abrir ni masticar las cápsulas (son de liberación entérica).",
+        cross_selling: "Compresas de gel frío/calor para el manejo de dolores musculares en fibromialgia y suplementos de Vitamina D."
       },
       {
-        nombre: "Acenocumarol 4 mg",
-        principio_activo: "Acenocumarol",
-        categoria: "Anticoagulante Oral (Derivado de la Cumarina)",
+        nombre: "Quetiapina 100 mg",
+        principio_activo: "Quetiapina 100 mg",
+        categoria: "Antipsicótico Atípico",
         lista_control: "N/A",
-        condicion_venta: "Receta Médica Simple (R)",
-        para_que_sirve: "Indicación idéntica a la warfarina (Trombosis, embolias, fibrilación). Es el anticoagulante oral más comúnmente prescrito en la práctica clínica chilena bajo el nombre de Neosintrom.",
-        posologia: "Dosis ajustada exclusivamente por el médico según exámenes de coagulación (Tiempo de Protrombina/INR). La toma debe ser rigurosamente a la misma hora todos los días.",
-        contraindicaciones: "Diátesis hemorrágica, lesiones de riesgo hemorrágico orgánico (úlceras), y embarazo. Falta de cooperación del paciente para hacerse controles sanguíneos rutinarios.",
-        tips_venta: "CUIDADO CON LOS ANTIBIÓTICOS: Advertir al paciente que múltiples medicamentos (especialmente antibióticos o antifúngicos) alteran drásticamente el efecto del acenocumarol. Siempre debe avisar al médico/dentista que toma este fármaco.",
-        cross_selling: "Cepillos de dientes de cerdas ultra suaves (para evitar sangrado gingival) y pastilleros partidores de pastillas (las dosis suelen ser de 1/4 o 1/2 comprimido)."
+        condicion_venta: "Receta Médica Simple",
+        para_que_sirve: "Tratamiento de la esquizofrenia, trastorno bipolar (episodios maníacos y depresivos) y como adyuvante en depresión mayor. Actúa sobre receptores de dopamina y serotonina.",
+        posologia: "Esquizofrenia: 300-450 mg/día. Trastorno Bipolar: 400-800 mg/día. En dosis bajas (25-50 mg) se usa off-label para el insomnio refractario.",
+        contraindicaciones: "Hipersensibilidad, administración con inhibidores potentes del citocromo P450 3A4 (antifúngicos azólicos, macrólidos).",
+        tips_venta: "ALERTA METABÓLICA: El uso crónico requiere control de peso, glicemia y lípidos. Puede causar somnolencia intensa y mareos ortostáticos.",
+        cross_selling: "Edulcorantes naturales (Stevia) para el control calórico y balanzas de pesaje personal para monitorear variaciones de peso."
       },
       {
-        nombre: "Amiodarona 200 mg",
-        principio_activo: "Amiodarona Clorhidrato",
-        categoria: "Antiarrítmico (Clase III)",
+        nombre: "Risperidona 2 mg",
+        principio_activo: "Risperidona 2 mg",
+        categoria: "Antipsicótico Atípico",
         lista_control: "N/A",
-        condicion_venta: "Receta Médica Simple (R)",
-        para_que_sirve: "Control de arritmias ventriculares y supraventriculares severas (incluyendo fibrilación auricular) que no responden a otros tratamientos. Actúa prolongando el potencial de acción del tejido cardíaco.",
-        posologia: "Dosis de carga inicial alta en hospital, seguida de una dosis de mantenimiento que suele ser 200 mg diarios o pasando un día (según control médico). Administrar preferentemente con o después de comer.",
-        contraindicaciones: "Bradicardia sinusal severa, bloqueo auriculoventricular. Disfunción tiroidea previa (el fármaco contiene gran cantidad de yodo y puede causar hipo o hipertiroidismo).",
-        tips_venta: "FOTOSENSIBILIDAD EXTREMA: Informar al paciente que su piel se volverá muy sensible al sol; la exposición sin protección puede causar que la piel tome una coloración gris azulada irreversible.",
-        cross_selling: "Bloqueadores solares dermatológicos de FPS 50+ o 100+ de amplio espectro físico/químico."
+        condicion_venta: "Receta Médica Simple",
+        para_que_sirve: "Esquizofrenia, episodios maníacos asociados a trastorno bipolar y tratamiento a corto plazo de la agresión persistente en pacientes con demencia tipo Alzheimer.",
+        posologia: "Esquizofrenia: Iniciar con 2 mg, dosis óptima 4-6 mg/día. Ancianos: Iniciar con 0,5 mg dos veces al día para evitar efectos extrapiramidales e hipotensión.",
+        contraindicaciones: "Hipersensibilidad al principio activo o a los componentes de la fórmula.",
+        tips_venta: "HIDRATACIÓN: Recomendar beber abundante agua. Controlar síntomas como rigidez muscular o temblores involuntarios y reportar al médico.",
+        cross_selling: "Botellas de agua reutilizables para fomentar la hidratación y cremas hidratantes para la sequedad cutánea ocasional."
       },
       {
-        nombre: "Digoxina 0.25 mg",
-        principio_activo: "Digoxina",
-        categoria: "Cardiotónico (Glucósido digitálico)",
+        nombre: "Haloperidol 5 mg",
+        principio_activo: "Haloperidol 5 mg",
+        categoria: "Antipsicótico Típico (Butirofenona)",
         lista_control: "N/A",
-        condicion_venta: "Receta Médica Simple (R)",
-        para_que_sirve: "Tratamiento de la insuficiencia cardíaca crónica y control de la frecuencia ventricular en pacientes con fibrilación auricular. Mejora la fuerza de contracción del corazón (efecto inotrópico positivo) y disminuye el ritmo.",
-        posologia: "Dosis de mantenimiento habitual: 0.125 a 0.25 mg diarios. El margen terapéutico es muy estrecho, por lo que el médico lo ajusta con extrema precisión.",
-        contraindicaciones: "Bloqueo auriculoventricular intermitente o completo, taquicardia ventricular o fibrilación ventricular.",
-        tips_venta: "INTOXICACIÓN DIGITÁLICA: Advertir sobre los signos tempranos de sobredosis: náuseas intensas, pérdida de apetito, confusión y alteraciones visuales (ver las cosas con un halo o tinte amarillo/verde). Derivar a urgencias de inmediato si ocurre.",
-        cross_selling: "Monitores de presión arterial que incluyan detector automático de arritmias/fibrilación."
+        condicion_venta: "Receta Médica Simple",
+        para_que_sirve: "Control de trastornos psicóticos agudos y crónicos, agitación psicomotriz, tics severos y síndrome de Gilles de la Tourette. Potente antagonista dopaminérgico.",
+        posologia: "Dosis moderada: 2 a 5 mg, 2 o 3 veces al día. Casos severos: hasta 20 mg/día. Geriátricos: Dosis muy bajas (0,5 mg) para evitar sedación profunda.",
+        contraindicaciones: "Estado de coma, depresión del SNC por alcohol u otros fármacos, enfermedad de Parkinson, lesión de los ganglios basales.",
+        tips_venta: "SÍNTOMAS EXTRAPIRAMIDALES: Advertir sobre riesgo de rigidez o movimientos anormales. Es uno de los fármacos más potentes y antiguos del arsenal público.",
+        cross_selling: "Jabones de glicerina neutros para pieles sensibles y suplementos de fibra para prevenir el enlentecimiento intestinal."
       },
       {
-        nombre: "Nifedipino 20 mg",
-        principio_activo: "Nifedipino",
-        categoria: "Antihipertensivo (Bloqueador de Canales de Calcio)",
+        nombre: "Ácido Valproico 500 mg",
+        principio_activo: "Valproato de Sodio / Ácido Valproico 500 mg",
+        categoria: "Anticonvulsivante / Estabilizador del Ánimo",
         lista_control: "N/A",
-        condicion_venta: "Receta Médica Simple (R)",
-        para_que_sirve: "Tratamiento de hipertensión arterial y angina de pecho crónica estable. Induce relajación muscular en los vasos sanguíneos (vasodilatador), reduciendo el esfuerzo del corazón.",
-        posologia: "Generalmente 1 comprimido de acción retardada (Retard) cada 12 o 24 horas, dependiendo de la prescripción. No se debe partir ni masticar el comprimido retardado.",
-        contraindicaciones: "Shock cardiovascular, hipotensión severa. No usar la forma de liberación rápida para crisis hipertensivas por riesgo de accidentes isquémicos.",
-        tips_venta: "EFECTOS SECUNDARIOS COMUNES: Informar al paciente que los primeros días es normal sentir dolor de cabeza, rubor facial (cara roja) y, a veces, notar hinchazón (edema) en los tobillos por la vasodilatación.",
-        cross_selling: "Cremas para piernas cansadas o calcetines/medias de compresión suave para ayudar con el edema de tobillos."
+        condicion_venta: "Receta Médica Simple",
+        para_que_sirve: "Tratamiento de epilepsias (ausencias, crisis tónico-clónicas) y episodios maníacos asociados a trastorno bipolar. También profilaxis de migraña.",
+        posologia: "Adultos: 15 mg/kg/día, aumentando semanalmente hasta alcanzar respuesta (máx 60 mg/kg/día). Se debe monitorear niveles plasmáticos.",
+        contraindicaciones: "Enfermedad hepática aguda o crónica, antecedentes familiares de disfunción hepática grave, trastornos del ciclo de la urea y embarazo.",
+        tips_venta: "PROTECCIÓN HEPÁTICA: Es mandatorio realizar pruebas de función hepática periódicas. No suspender bruscamente por riesgo de estatus epiléptico.",
+        cross_selling: "Champú anticaída o vitaminas para el cabello (Biotina), dado que el valproato puede causar alopecia transitoria en algunos pacientes."
       },
       {
-        nombre: "Valsartán 80 mg",
-        principio_activo: "Valsartán",
-        categoria: "Antihipertensivo (Antagonista de Receptores de Angiotensina II - ARA II)",
+        nombre: "Paroxetina 20 mg",
+        principio_activo: "Paroxetina 20 mg",
+        categoria: "Antidepresivo (ISRS)",
         lista_control: "N/A",
-        condicion_venta: "Receta Médica Simple (R)",
-        para_que_sirve: "Tratamiento de la hipertensión arterial, insuficiencia cardíaca y post-infarto de miocardio. Generalmente es la excelente alternativa para pacientes que presentan 'tos seca' intolerable con el Enalapril.",
-        posologia: "Dosis inicial usual: 80 mg a 160 mg una vez al día. Tomar siempre a la misma hora, con o sin alimentos.",
-        contraindicaciones: "Embarazo (altamente fetotóxico en el segundo y tercer trimestre), insuficiencia hepática grave o cirrosis biliar.",
-        tips_venta: "ADHERENCIA DE POR VIDA: Como todo antihipertensivo, recalcar que la presión no duele y el tratamiento no se suspende aunque el paciente 'se sienta bien'. Levantarse de la cama lentamente para evitar mareos.",
-        cross_selling: "Sal sin sodio (Potasio), tensiómetros digitales e infusiones para ayudar a manejar el estrés diario."
+        condicion_venta: "Receta Médica Simple",
+        para_que_sirve: "Tratamiento de depresión mayor, TOC, trastorno de pánico, trastorno de ansiedad social y trastorno de estrés postraumático.",
+        posologia: "Depresión y Ansiedad: 20 mg/día. TOC y Pánico: 40 mg/día. Se administra en una sola toma matinal para evitar insomnio.",
+        contraindicaciones: "Uso con IMAO, pimozida o tioridazina.",
+        tips_venta: "DISFUNCIÓN SEXUAL: Es un efecto secundario común. El retiro debe ser extremadamente gradual para evitar el síndrome de discontinuación.",
+        cross_selling: "Lubricantes íntimos OTC para sequedad vaginal asociada y cremas corporales para el manejo de la hipersudoración."
       }
     ];
 
@@ -295,10 +293,13 @@ export default function BuscadorVademecum() {
         const docId = item.nombre.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
         await setDoc(doc(db, "vademecum", docId), item);
       }
-      alert("✅ Sincronización Bloque 4 + Buscador Inteligente.");
+      alert("✅ Bloque A Sincronizado: Venta Complementaria Refulmulada (OTC/Consumo).");
       window.location.reload();
-    } catch (error) { console.error(error); alert("❌ Error."); }
-    setCargandoAuditoria(false);
+    } catch (error) { 
+      console.error(error); 
+      alert("❌ Error en carga masiva."); 
+      setCargandoAuditoria(false);
+    }
   };
 
   const renderTarjetaMedicamento = (item) => (
@@ -318,7 +319,7 @@ export default function BuscadorVademecum() {
           <div className="p-8 grid grid-cols-1 lg:grid-cols-2 gap-10">
             <div className="space-y-6">
                 <div><h3 className="font-black text-emerald-600 text-xs mb-2 uppercase">¿Para qué sirve?</h3><p className="text-slate-700 font-medium">{item.para_que_sirve}</p></div>
-                <div><h3 className="font-black text-emerald-600 text-xs mb-2 uppercase">Posología</h3><p className="text-slate-700 font-medium whitespace-pre-line">{item.posologia}</p></div>
+                <div><h3 className="font-black text-emerald-600 text-xs mb-2 uppercase">Dosificación / Posología</h3><p className="text-slate-700 font-medium whitespace-pre-line">{item.posologia}</p></div>
                 <div><h3 className="font-black text-rose-500 text-xs mb-2 uppercase">Contraindicaciones</h3><p className="text-slate-700 font-medium text-sm">{item.contraindicaciones}</p></div>
             </div>
             <div className="bg-slate-50 p-8 rounded-[2rem]">
@@ -330,18 +331,18 @@ export default function BuscadorVademecum() {
                 </div>
                 )}
                 <div className="bg-amber-50 p-5 rounded-2xl border border-amber-100 mb-4">
-                    <h3 className="font-black text-amber-700 text-sm mb-2">💡 TIPS DE MESÓN</h3>
+                    <h3 className="font-black text-amber-700 text-sm mb-2">💡 TIPS DE MESÓN (CONSEJO PRO)</h3>
                     <p className="text-amber-900 text-sm">{item.tips_venta}</p>
                 </div>
                 <div className="bg-emerald-50 p-5 rounded-2xl border border-emerald-100">
-                  <h3 className="font-black text-emerald-700 text-sm mb-2 uppercase">🔄 CROSS-SELLING</h3>
+                  <h3 className="font-black text-emerald-700 text-sm mb-2 uppercase">🔄 VENTA COMPLEMENTARIA (OTC/Consumo)</h3>
                   <p className="text-emerald-900 font-medium text-sm whitespace-pre-line">{item.cross_selling}</p>
                 </div>
             </div>
           </div>
           <div className="bg-slate-100 px-8 py-4 border-t border-slate-200">
             <p className="text-slate-500 text-xs text-center font-medium italic">
-              ⚠️ Importante: La posología final siempre debe ser determinada por el médico tratante.
+              ⚠️ Aviso: La información contenida en este vademécum es referencial para profesionales de la salud. La posología final la determina el médico.
             </p>
           </div>
         </>
@@ -349,31 +350,31 @@ export default function BuscadorVademecum() {
         <div className="p-8 bg-slate-50 relative">
           <form onSubmit={guardarEdicion} className="space-y-6">
             <div className="flex justify-between items-center mb-4 sticky top-0 bg-slate-50 py-4 z-10 border-b border-slate-200">
-              <h2 className="text-xl font-black text-slate-900">✏️ Editando: {editForm.nombre}</h2>
+              <h2 className="text-xl font-black text-slate-900">✏️ Editar: {editForm.nombre}</h2>
               <div className="flex gap-4">
                 <button type="button" onClick={cancelarEdicion} className="text-slate-500 font-black uppercase text-xs">✖ Cancelar</button>
-                <button type="submit" className="bg-slate-900 text-white font-black px-6 py-2 rounded-xl">💾 Guardar</button>
+                <button type="submit" className="bg-slate-900 text-white font-black px-6 py-2 rounded-xl">💾 Guardar Cambios</button>
               </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-xs font-bold text-slate-400 mb-1 uppercase">Nombre Comercial</label>
+                <label className="block text-xs font-bold text-slate-400 mb-1 uppercase">Denominación</label>
                 <input type="text" name="nombre" value={editForm.nombre || ""} onChange={handleEditChange} className="w-full p-3 rounded-xl border-2" />
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-400 mb-1 uppercase">Principio Activo</label>
+                <label className="block text-xs font-bold text-slate-400 mb-1 uppercase">Composición</label>
                 <input type="text" name="principio_activo" value={editForm.principio_activo || ""} onChange={handleEditChange} className="w-full p-3 rounded-xl border-2 border-emerald-200" />
               </div>
             </div>
             <div>
-              <label className="block text-xs font-bold text-slate-400 mb-1 uppercase">¿Para qué sirve?</label>
+              <label className="block text-xs font-bold text-slate-400 mb-1 uppercase">Acción Terapéutica</label>
               <textarea name="para_que_sirve" value={editForm.para_que_sirve || ""} onChange={handleEditChange} className="w-full p-3 rounded-xl border-2" rows="3"></textarea>
             </div>
             <div>
-              <label className="block text-xs font-bold text-slate-400 mb-1 uppercase">Posología</label>
+              <label className="block text-xs font-bold text-slate-400 mb-1 uppercase">Dosificación</label>
               <textarea name="posologia" value={editForm.posologia || ""} onChange={handleEditChange} className="w-full p-3 rounded-xl border-2" rows="3"></textarea>
             </div>
-            <button type="submit" className="w-full bg-slate-900 text-white font-black py-4 rounded-xl shadow-lg text-lg">💾 Guardar Medicamento</button>
+            <button type="submit" className="w-full bg-slate-900 text-white font-black py-4 rounded-xl shadow-lg text-lg">💾 Guardar Registro</button>
           </form>
         </div>
       )}
@@ -383,21 +384,29 @@ export default function BuscadorVademecum() {
   if (checkingAuth) return <div className="min-h-screen flex items-center justify-center bg-white"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div></div>;
 
   return (
-    <div className="min-h-screen bg-white p-6">
+    <div className="min-h-screen bg-white p-6 relative">
+      {/* 🔄 SPINNER DE CARGA MASIVA */}
+      {cargandoAuditoria && (
+        <div className="fixed inset-0 bg-white/80 backdrop-blur-sm z-[100] flex flex-col items-center justify-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-emerald-500 mb-4"></div>
+          <p className="text-slate-900 font-black text-xl animate-pulse">Sincronizando Base de Datos PRO...</p>
+        </div>
+      )}
+
       <div className="max-w-5xl mx-auto">
         <div className="bg-slate-50 p-10 rounded-[3rem] border border-slate-100 mb-12">
           <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
             <h1 className="text-4xl font-black text-slate-900">Vademécum <span className="text-emerald-500">PRO</span></h1>
             {isAdmin && (
               <div className="flex gap-3">
-                <button onClick={handleCargaMasivaYPurga} className="bg-slate-900 text-white px-6 py-3 rounded-full font-black text-sm">🚀 Sync Bloque 4</button>
+                <button onClick={handleCargaMasivaYPurga} className="bg-slate-900 text-white px-6 py-3 rounded-full font-black text-sm">🚀 Sync Bloque A</button>
                 <button onClick={toggleAuditoria} className="bg-emerald-500 text-white px-6 py-3 rounded-full font-black text-sm">{modoAuditoria ? "❌ Cerrar" : "⚡ Ver Todo"}</button>
               </div>
             )}
           </div>
           {!modoAuditoria && (
             <form onSubmit={handleBuscar} className="flex gap-3">
-              <input type="text" value={busqueda} onChange={(e) => {setBusqueda(e.target.value); setBuscado(false);}} placeholder="Ej: valsartan, atorvastatina..." className="flex-1 border-2 rounded-2xl p-4 text-lg outline-none focus:border-emerald-500 transition-colors" />
+              <input type="text" value={busqueda} onChange={(e) => {setBusqueda(e.target.value); setBuscado(false);}} placeholder="Buscar por fármaco o acción..." className="flex-1 border-2 rounded-2xl p-4 text-lg outline-none focus:border-emerald-500 transition-colors" />
               <button type="submit" className="bg-slate-900 text-white font-black px-10 rounded-2xl hover:bg-emerald-600 transition-all">Buscar 🔍</button>
             </form>
           )}

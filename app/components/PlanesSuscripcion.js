@@ -132,19 +132,21 @@ export default function PlanesSuscripcion() {
               </li>
             </ul>
 
-            {loadingAuth ? (
-              <div className="w-full bg-slate-50 text-slate-400 font-black py-4 rounded-xl flex items-center justify-center gap-2">
-                <Loader2 className="animate-spin" size={20} />
-              </div>
-            ) : user ? (
-              <Link href="/quiz/inicial" className="w-full block bg-slate-100 text-slate-600 hover:bg-slate-200 font-black py-4 rounded-xl transition-all text-center text-sm uppercase tracking-wider">
-                Ir al Simulador
-              </Link>
-            ) : (
-              <Link href="/login" className="w-full block bg-slate-100 text-slate-600 hover:bg-slate-200 font-black py-4 rounded-xl transition-all text-center text-sm uppercase tracking-wider">
-                Crear Cuenta Gratis
-              </Link>
-            )}
+            <div className="flex flex-col items-center gap-2 w-full mt-auto">
+              {loadingAuth ? (
+                <div className="w-full bg-slate-50 text-slate-400 font-black py-4 rounded-xl flex items-center justify-center gap-2">
+                  <Loader2 className="animate-spin" size={20} />
+                </div>
+              ) : user ? (
+                <Link href="/quiz/inicial" className="w-full block bg-slate-100 text-slate-600 hover:bg-slate-200 font-black py-4 rounded-xl transition-all text-center text-sm uppercase tracking-wider">
+                  Ir al Simulador
+                </Link>
+              ) : (
+                <Link href="/login" className="w-full block bg-slate-100 text-slate-600 hover:bg-slate-200 font-black py-4 rounded-xl transition-all text-center text-sm uppercase tracking-wider">
+                  Crear Cuenta Gratis
+                </Link>
+              )}
+            </div>
           </div>
 
           {/* PLAN MENSUAL */}
@@ -187,26 +189,32 @@ export default function PlanesSuscripcion() {
               </li>
             </ul>
 
-            {loadingAuth ? (
-              <div className="w-full bg-slate-100 text-slate-400 font-black py-4 rounded-xl flex items-center justify-center gap-2">
-                <Loader2 className="animate-spin" size={20} /> Verificando...
-              </div>
-            ) : isActive ? (
-              <button disabled className="w-full bg-slate-100 text-slate-400 font-black py-4 rounded-xl border border-slate-200 cursor-not-allowed">
-                Suscripción Activa
-              </button>
-            ) : !user ? (
-              <Link href="/login" className="w-full block bg-slate-900 text-white hover:bg-slate-800 font-black py-4 rounded-xl transition-all text-center text-sm uppercase tracking-wider">
-                Crear Cuenta
-              </Link>
-            ) : (
-              <a 
-                href={getCheckoutLink(BASE_LINK_MENSUAL)}
-                className="w-full block bg-slate-900 text-white hover:bg-black font-black py-5 rounded-2xl transition-all text-center text-lg shadow-lg transform hover:-translate-y-1"
-              >
-                Obtener Plan Mensual
-              </a>
-            )}
+            <div className="flex flex-col items-center gap-2 w-full mt-auto">
+              {loadingAuth ? (
+                <div className="w-full bg-slate-100 text-slate-400 font-black py-4 rounded-xl flex items-center justify-center gap-2">
+                  <Loader2 className="animate-spin" size={20} /> Verificando...
+                </div>
+              ) : isActive ? (
+                <button disabled className="w-full bg-slate-100 text-slate-400 font-black py-4 rounded-xl border border-slate-200 cursor-not-allowed">
+                  Suscripción Activa
+                </button>
+              ) : !user ? (
+                <Link href="/login" className="w-full block bg-slate-900 text-white hover:bg-slate-800 font-black py-4 rounded-xl transition-all text-center text-sm uppercase tracking-wider">
+                  Crear Cuenta
+                </Link>
+              ) : (
+                <a 
+                  href={getCheckoutLink(BASE_LINK_MENSUAL)}
+                  className="w-full block bg-slate-900 text-white hover:bg-black font-black py-5 rounded-2xl transition-all text-center text-lg shadow-lg transform hover:-translate-y-1"
+                >
+                  Obtener Plan Mensual
+                </a>
+              )}
+              
+              <span className="text-[10px] text-slate-400 text-center leading-tight mt-1">
+                🔒 Pago único por 30 días. Sin renovación automática, sin amarras. Tú decides si renuevas.
+              </span>
+            </div>
           </div>
 
           {/* PLAN ANUAL */}
@@ -252,26 +260,32 @@ export default function PlanesSuscripcion() {
               </li>
             </ul>
 
-            {loadingAuth ? (
-              <div className="w-full bg-slate-800 text-slate-500 font-black py-4 rounded-xl flex items-center justify-center gap-2">
-                <Loader2 className="animate-spin" size={20} /> Verificando...
-              </div>
-            ) : isActive ? (
-              <button disabled className="w-full bg-slate-800 text-emerald-500 font-black py-4 rounded-xl border border-emerald-900 cursor-not-allowed">
-                Suscripción Activa
-              </button>
-            ) : !user ? (
-              <Link href="/login" className="w-full block bg-emerald-500 text-slate-900 hover:bg-emerald-400 font-black py-4 rounded-xl transition-all text-center text-sm uppercase tracking-wider shadow-lg shadow-emerald-900/20">
-                Crear Cuenta
-              </Link>
-            ) : (
-              <a 
-                href={getCheckoutLink(BASE_LINK_ANUAL)}
-                className="w-full block bg-emerald-500 text-slate-900 hover:bg-emerald-400 font-black py-6 rounded-2xl transition-all text-center text-xl shadow-[0_0_30px_rgba(16,185,129,0.4)] transform hover:scale-105"
-              >
-                Obtener Plan Anual
-              </a>
-            )}
+            <div className="flex flex-col items-center gap-2 w-full mt-auto">
+              {loadingAuth ? (
+                <div className="w-full bg-slate-800 text-slate-500 font-black py-4 rounded-xl flex items-center justify-center gap-2">
+                  <Loader2 className="animate-spin" size={20} /> Verificando...
+                </div>
+              ) : isActive ? (
+                <button disabled className="w-full bg-slate-800 text-emerald-500 font-black py-4 rounded-xl border border-emerald-900 cursor-not-allowed">
+                  Suscripción Activa
+                </button>
+              ) : !user ? (
+                <Link href="/login" className="w-full block bg-emerald-500 text-slate-900 hover:bg-emerald-400 font-black py-4 rounded-xl transition-all text-center text-sm uppercase tracking-wider shadow-lg shadow-emerald-900/20">
+                  Crear Cuenta
+                </Link>
+              ) : (
+                <a 
+                  href={getCheckoutLink(BASE_LINK_ANUAL)}
+                  className="w-full block bg-emerald-500 text-slate-900 hover:bg-emerald-400 font-black py-6 rounded-2xl transition-all text-center text-xl shadow-[0_0_30px_rgba(16,185,129,0.4)] transform hover:scale-105"
+                >
+                  Obtener Plan Anual
+                </a>
+              )}
+              
+              <span className="text-[10px] text-slate-400 text-center leading-tight mt-1 opacity-80">
+                🔒 Pago único por 365 días. Sin renovación automática, sin amarras. Tú decides si renuevas.
+              </span>
+            </div>
           </div>
 
         </div>
