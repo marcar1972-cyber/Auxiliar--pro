@@ -1,349 +1,340 @@
 "use client";
 
 import { useState, useEffect } from "react";
-// CORRECCIÓN FINAL: Subimos 2 niveles para llegar a 'app' y entrar a 'firebase'
-import { auth, db } from "../../firebase/config";
+import { collection, getDocs, doc, updateDoc, getDoc, setDoc, deleteDoc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
-import { collection, addDoc } from "firebase/firestore";
-import Link from "next/link";
-import { Loader2, ShieldCheck, Database, ArrowLeft } from "lucide-react";
+import { auth, db } from "../firebase/config"; 
+import { useRouter } from "next/navigation"; 
+import BannerVenta from "../components/BannerVenta";
 
-export default function AdminVademecum() {
+// IMPORTAMOS LA DATA Y LOS DESPLEGABLES DESDE EL ARCHIVO EXTERNO
+import { BLOQUE_G, OPCIONES_DESPLEGABLES } from "./vademecumData";
+
+export default function BuscadorVademecum() {
   const [isAdmin, setIsAdmin] = useState(false);
-  const [loadingAuth, setLoadingAuth] = useState(true);
-  const [subiendo, setSubiendo] = useState(false);
-  const [progreso, setProgreso] = useState(0);
+  const [isPro, setIsPro] = useState(false);
+  const [user, setUser] = useState(null);
+  const [checkingAuth, setCheckingAuth] = useState(true);
+  const [esFechaBloqueo, setEsFechaBloqueo] = useState(false);
+
+  const [busqueda, setBusqueda] = useState("");
+  const [resultados, setResultados] = useState([]);
+  const [cargando, setCargando] = useState(false);
+  const [buscado, setBuscado] = useState(false);
+
+  const [editandoId, setEditandoId] = useState(null);
+  const [editForm, setEditForm] = useState({});
+
+  const [modoAuditoria, setModoAuditoria] = useState(false);
+  const [todosMedicamentos, setTodosMedicamentos] = useState([]);
+  const [cargandoAuditoria, setCargandoAuditoria] = useState(false);
 
   const ADMIN_EMAIL = "marcar1972@gmail.com";
+  const PLANES_LINK = "/planes";
+  const router = useRouter();
 
-  // Bloque de datos estratégicos MILAB
-  const nuevosMedicamentosMilab = [
-    {
-      nombre: "Desloratadina 5mg",
-      categoria: "Antihistamínico de 2da Generación",
-      lista_control: "N/A",
-      condicion_venta: "Venta Directa",
-      para_que_sirve: "Alivio rápido de síntomas de alergia, rinitis alérgica (estornudos, secreción nasal, picor) y urticaria. No produce sueño en la mayoría de los pacientes.",
-      posologia: "Adultos y mayores de 12 años: 1 comprimido (5mg) al día. Se puede tomar con o sin alimentos.",
-      contraindicaciones: "Hipersensibilidad a la loratadina o desloratadina. Precaución en insuficiencia renal grave.",
-      tips_venta: "Destacar que es 'No sedante', ideal para personas que trabajan o manejan. Efecto prolongado por 24 horas.",
-      cross_selling: "Ofrecer suero fisiológico nasal para lavados, o lágrimas artificiales si reporta picor ocular."
-    },
-    {
-      nombre: "Ácido Mefenámico 500mg",
-      categoria: "AINEs / Analgésico Antiinflamatorio",
-      lista_control: "N/A",
-      condicion_venta: "Receta Médica",
-      para_que_sirve: "Manejo del dolor agudo leve a moderado, especialmente dolor menstrual (dismenorrea) y dolor dental.",
-      posologia: "Adultos: 500 mg como dosis inicial, seguida de 250 mg o 500 mg cada 6-8 horas según indicación médica.",
-      contraindicaciones: "Úlcera péptica activa, insuficiencia renal grave, alergia a AINEs o aspirina. No usar en el tercer trimestre de embarazo.",
-      tips_venta: "Advertir estrictamente que debe tomarse SIEMPRE después de las comidas para evitar gastritis profunda.",
-      cross_selling: "Protectores gástricos (Omeprazol) si el tratamiento supera los 5 días, o guateros de semillas para dolores menstruales."
-    },
-    {
-      nombre: "Pregabalina 75mg",
-      categoria: "Sistema Nervioso / Anticonvulsivante y Neuropático",
-      lista_control: "N/A",
-      condicion_venta: "Receta Médica",
-      para_que_sirve: "Tratamiento del dolor neuropático periférico y central (ej. diabetes, herpes), fibromialgia y trastorno de ansiedad generalizada.",
-      posologia: "La dosis debe ajustarse por el médico. Generalmente inicia entre 75 y 150 mg diarios divididos en 2 o 3 tomas.",
-      contraindicaciones: "Hipersensibilidad al principio activo. Precaución en ancianos por riesgo de mareos y caídas.",
-      tips_venta: "Advertir al paciente sobre la posible somnolencia o mareo en los primeros días. Evitar suspender abruptamente.",
-      cross_selling: "Vitaminas del Complejo B (Neurobionta) como coadyuvante natural en reparación de nervios periféricos."
-    },
-    {
-      nombre: "Alprazolam 0.5mg",
-      categoria: "Sistema Nervioso / Ansiolítico Benzodiacepínico",
-      lista_control: "Decreto 405",
-      condicion_venta: "Receta Retenida",
-      para_que_sirve: "Manejo a corto plazo de los trastornos de ansiedad, crisis de pánico y estrés severo con agitación.",
-      posologia: "Estrictamente médica. Rango habitual: 0.25 a 0.5 mg tres veces al día. Dosis máxima determinada por psiquiatra.",
-      contraindicaciones: "Miastenia gravis, glaucoma de ángulo cerrado, insuficiencia respiratoria aguda, apnea del sueño. Prohibido mezclar con alcohol.",
-      tips_venta: "Verificar folio de receta, RUN y firma. Advertir tajantemente sobre no conducir maquinaria ni mezclar con alcohol por depresión respiratoria.",
-      cross_selling: "Higiene del sueño: infusiones relajantes (melisa/pasiflora) o melatonina si el médico lo autoriza para regular el ciclo nocturno."
-    },
-    {
-      nombre: "Clotrimazol 1% Crema",
-      categoria: "Antimicótico Tópico",
-      lista_control: "N/A",
-      condicion_venta: "Venta Directa",
-      para_que_sirve: "Tratamiento de infecciones por hongos en la piel (tiña del pie/pie de atleta, tiña corporal, candidiasis cutánea).",
-      posologia: "Aplicar una capa fina sobre la zona afectada y masajear suavemente 2 a 3 veces al día durante 2 a 4 semanas.",
-      contraindicaciones: "Hipersensibilidad al clotrimazol. No aplicar en ojos ni mucosas profundas.",
-      tips_venta: "Explicar la regla de oro: 'Siga aplicándolo 1 semana después de que desaparezcan los síntomas para matar la espora'.",
-      cross_selling: "Talco antimicótico para los zapatos, jabón de ph neutro para mantener seca la zona."
-    },
-    {
-      nombre: "Sildenafil 50mg",
-      categoria: "Cardiovascular / Vasodilatador (Disfunción Eréctil)",
-      lista_control: "N/A",
-      condicion_venta: "Receta Médica",
-      para_que_sirve: "Tratamiento de la disfunción eréctil en hombres adultos, facilitando el flujo sanguíneo peneano bajo estímulo sexual.",
-      posologia: "50 mg tomados a demanda, aproximadamente una hora antes de la actividad sexual. No superar 1 dosis diaria.",
-      contraindicaciones: "ABSOLUTAMENTE CONTRAINDICADO en pacientes que toman nitratos (ej. Nitroglicerina, Isosorbide) por riesgo de caída fatal de presión arterial.",
-      tips_venta: "Informar que los alimentos muy ricos en grasas pueden retrasar el efecto del medicamento.",
-      cross_selling: "Preservativos, lubricantes a base de agua, o suplementos energéticos (Maca/Ginseng)."
-    },
-    {
-      nombre: "Escitalopram 10mg",
-      categoria: "Sistema Nervioso / Antidepresivo (ISRS)",
-      lista_control: "N/A",
-      condicion_venta: "Receta Médica",
-      para_que_sirve: "Tratamiento de episodios depresivos mayores, trastorno de pánico, fobia social y trastorno de ansiedad generalizada.",
-      posologia: "Habitualmente 10 mg una vez al día. El médico puede aumentarla a 20 mg. Toma en la mañana o noche según tolerancia.",
-      contraindicaciones: "No administrar junto a inhibidores de la MAO. Riesgo de síndrome serotoninérgico. Precaución en epilepsia.",
-      tips_venta: "Advertir al paciente: 'El efecto antidepresivo no es inmediato, suele tardar entre 2 a 4 semanas en notarse. No suspenda el tratamiento'.",
-      cross_selling: "Analgésicos simples para posibles cefaleas los primeros días (Paracetamol), autorizado por el QF."
-    },
-    {
-      nombre: "Celecoxib 200mg",
-      categoria: "AINEs / Analgésico Inhibidor COX-2",
-      lista_control: "N/A",
-      condicion_venta: "Receta Médica",
-      para_que_sirve: "Alivio de los signos y síntomas de la artrosis, artritis reumatoide y espondilitis anquilosante. Dolor musculoesquelético.",
-      posologia: "Osteoartritis: 200 mg una vez al día o 100 mg dos veces al día. Artritis: 100 a 200 mg dos veces al día.",
-      contraindicaciones: "Pacientes con enfermedad isquémica cardíaca severa o accidentes cerebrovasculares previos. Alergia a sulfonamidas.",
-      tips_venta: "Destacar que es más amigable con el estómago que el Ibuprofeno/Diclofenaco, pero aún requiere evaluación cardiovascular médica.",
-      cross_selling: "Suplementos articulares a base de Colágeno Hidrolizado, Glucosamina o Condroitina."
-    },
-    {
-      nombre: "Quetiapina 25mg",
-      categoria: "Sistema Nervioso / Antipsicótico Atípico",
-      lista_control: "N/A",
-      condicion_venta: "Receta Médica",
-      para_que_sirve: "En dosis bajas (25mg) se usa comúnmente off-label para insomnio crónico severo o ansiedad. En dosis altas, esquizofrenia y bipolaridad.",
-      posologia: "Para regulación del sueño: 1 comprimido 30 a 60 minutos antes de acostarse, según receta psiquiátrica.",
-      contraindicaciones: "Depresión severa del SNC. Precaución en adultos mayores por riesgo de hipotensión ortostática (caídas al levantarse).",
-      tips_venta: "Aconsejar al paciente que se levante lentamente de la cama por las mañanas para evitar mareos (hipotensión).",
-      cross_selling: "Humectantes bucales o chicles sin azúcar (suele causar mucha resequedad en la boca)."
-    },
-    {
-      nombre: "Cetirizina 10mg",
-      categoria: "Antihistamínico de 2da Generación",
-      lista_control: "N/A",
-      condicion_venta: "Venta Directa",
-      para_que_sirve: "Control de rinitis alérgica estacional y perenne, picazón, estornudos y urticaria crónica idiopática.",
-      posologia: "Adultos y niños mayores de 6 años: 10 mg (1 comprimido) una vez al día.",
-      contraindicaciones: "Insuficiencia renal grave. Precaución en epilepsia.",
-      tips_venta: "A diferencia de la desloratadina, la cetirizina puede causar ligera somnolencia en algunas personas; sugerir tomarla en la noche.",
-      cross_selling: "Vitamina C con Zinc para fortalecer el sistema inmune frente a cambios de estación."
-    },
-    {
-      nombre: "Betametasona 0.1% Crema",
-      categoria: "Dermatológico / Corticoide Tópico de Alta Potencia",
-      lista_control: "N/A",
-      condicion_venta: "Receta Médica",
-      para_que_sirve: "Alivio rápido de la inflamación, enrojecimiento y picazón de dermatosis severas, psoriasis, y reacciones alérgicas cutáneas.",
-      posologia: "Aplicar una capa muy fina sobre el área afectada 1 a 2 veces al día. Tratamiento corto (máximo 1-2 semanas).",
-      contraindicaciones: "NO usar en infecciones virales (herpes, varicela), infecciones por hongos, ni acné rosácea. No usar en cara ni pliegues por tiempo prolongado.",
-      tips_venta: "Advertir el uso excesivo: adelgaza la piel y produce estrías. Usar capa fina y lavar manos post-aplicación.",
-      cross_selling: "Cremas hidratantes hipoalergénicas (tipo Eucerin pH5 o Cerave) para recuperar la barrera cutánea sana."
-    },
-    {
-      nombre: "Ácido Fólico 5mg",
-      categoria: "Vitamina B9 / Suplemento Nutricional",
-      lista_control: "N/A",
-      condicion_venta: "Venta Directa",
-      para_que_sirve: "Prevención de defectos del tubo neural en el desarrollo fetal (embarazo) y tratamiento de la anemia megaloblástica.",
-      posologia: "Prevención en embarazo: 1 a 5 mg al día (según riesgo) desde antes de la concepción hasta las 12 semanas. Tomar con agua.",
-      contraindicaciones: "Anemia perniciosa no diagnosticada (el ácido fólico puede enmascarar deficiencia de B12).",
-      tips_venta: "Felicitar a la paciente si está en búsqueda de embarazo, genera empatía clínica.",
-      cross_selling: "Vitaminas prenatales completas, cremas anti-estrías preventivas para el embarazo."
-    },
-    {
-      nombre: "Sulfato Ferroso 200mg",
-      categoria: "Minerales / Antianémico",
-      lista_control: "N/A",
-      condicion_venta: "Venta Directa",
-      para_que_sirve: "Tratamiento y prevención de la anemia por deficiencia de hierro (ferropénica).",
-      posologia: "1 o 2 comprimidos al día. Fundamental tomarlo EN AYUNAS o lejos de lácteos y té/café para asegurar absorción.",
-      contraindicaciones: "Hemocromatosis, hemosiderosis, anemia hemolítica. No administrar si no hay carencia de hierro demostrada.",
-      tips_venta: "Advertir que las heces se teñirán de color negro (es normal). Recordar que el té y el café bloquean su absorción.",
-      cross_selling: "Vitamina C (jugo de naranja natural o suplemento) para aumentar exponencialmente la absorción del hierro en el intestino."
-    },
-    {
-      nombre: "Tramadol / Paracetamol 37.5/325mg",
-      categoria: "Sistema Nervioso / Analgésico Opioide + AINE",
-      lista_control: "N/A",
-      condicion_venta: "Receta Retenida",
-      para_que_sirve: "Tratamiento del dolor moderado a severo que no responde a analgésicos comunes (post-operatorios, lumbagos agudos).",
-      posologia: "Adultos: 1 a 2 comprimidos cada 6-8 horas según intensidad del dolor. Máximo 8 comprimidos al día.",
-      contraindicaciones: "Intoxicación aguda con alcohol, hipnóticos o psicofármacos. Insuficiencia hepática grave. Cuidado en epilépticos.",
-      tips_venta: "Pedir receta retenida. Advertir que puede causar náuseas o mareos fuertes en la primera toma; sugerir tomar recostado.",
-      cross_selling: "Antieméticos (Ondansetrón o Domperidona) autorizados por médico si el paciente es propenso a vómitos por opioides."
-    },
-    {
-      nombre: "Ketorolaco 10mg",
-      categoria: "AINEs / Analgésico Potente",
-      lista_control: "N/A",
-      condicion_venta: "Receta Médica",
-      para_que_sirve: "Manejo a corto plazo (máximo 5 días) del dolor agudo de moderado a severo, excelente en dolores dentales agudos o cólicos renales.",
-      posologia: "1 comprimido de 10 mg cada 4 a 6 horas. Dosis máxima diaria recomendada: 40 mg.",
-      contraindicaciones: "Ulcera gástrica activa, riesgo de hemorragia severa, insuficiencia renal moderada/grave. No mezclar con otros AINEs.",
-      tips_venta: "Remarcar la regla de los 5 días: el Ketorolaco destruye la mucosa gástrica y renal si se toma por más de 5 días seguidos.",
-      cross_selling: "Cepillos post-quirúrgicos o enjuagues con Clorhexidina si el origen del dolor es una extracción dental."
-    },
-    {
-      nombre: "Fluoxetina 20mg",
-      categoria: "Sistema Nervioso / Antidepresivo (ISRS)",
-      lista_control: "N/A",
-      condicion_venta: "Receta Médica",
-      para_que_sirve: "Tratamiento de depresión, trastorno obsesivo-compulsivo (TOC) y bulimia nerviosa.",
-      posologia: "20 mg al día, idealmente administrados por la MAÑANA para evitar el insomnio secundario.",
-      contraindicaciones: "Uso concomitante con IMAOs. Precaución en pacientes con riesgo de sangrado y convulsiones.",
-      tips_venta: "Explicar que la ansiedad puede aumentar ligeramente los primeros días antes de mejorar. Constancia es clave.",
-      cross_selling: "Multivitamínicos para recuperar niveles de energía física mermados por la depresión inicial."
-    },
-    {
-      nombre: "Aspirina (Ácido Acetilsalicílico) 100mg",
-      categoria: "Cardiovascular / Antiagregante Plaquetario",
-      lista_control: "N/A",
-      condicion_venta: "Venta Directa",
-      para_que_sirve: "Prevención de eventos trombóticos cardiovasculares y cerebrovasculares (infartos) en pacientes de riesgo.",
-      posologia: "1 comprimido (100mg) diario, preferentemente después de almuerzo. Ingerir con abundante agua.",
-      contraindicaciones: "Úlceras gástricas activas, hemofilia, alergia a salicilatos. NO dar a menores de 16 años con fiebre (Síndrome de Reye).",
-      tips_venta: "Consultar si van a someterse a cirugías o extracciones dentales; deben suspenderla días antes por orden de su dentista/médico.",
-      cross_selling: "Pastilleros semanales para pacientes crónicos polimedicados; facilita la adherencia."
-    },
-    {
-      nombre: "Simeticona 40mg",
-      categoria: "Gastrointestinal / Antiflatulento",
-      lista_control: "N/A",
-      condicion_venta: "Venta Directa",
-      para_que_sirve: "Alivio de la distensión abdominal, meteorismo, retención de gases y dispepsia (hinchazón).",
-      posologia: "Masticar 1 o 2 comprimidos después de las comidas principales y al acostarse.",
-      contraindicaciones: "Obstrucción intestinal o perforación gastrointestinal confirmada.",
-      tips_venta: "Aclarar que su efecto es romper las burbujas de gas atrapadas en el intestino, el alivio es puramente físico y rápido.",
-      cross_selling: "Probióticos para restaurar la flora intestinal si el paciente sufre de distensión por estrés o comida irritante."
-    },
-    {
-      nombre: "Losartán / Hidroclorotiazida 50/12.5mg",
-      categoria: "Cardiovascular / Antihipertensivo + Diurético",
-      lista_control: "N/A",
-      condicion_venta: "Receta Médica",
-      para_que_sirve: "Tratamiento de la hipertensión arterial en pacientes cuya presión no está adecuadamente controlada con Losartán solo.",
-      posologia: "1 comprimido al día, de preferencia por la MAÑANA (por el efecto diurético, para no interrumpir el sueño nocturno).",
-      contraindicaciones: "Embarazo (teratogénico). Anuria, hipersensibilidad a tiazidas, gota activa grave.",
-      tips_venta: "Enfatizar que causará aumento en la micción (orina) las primeras semanas. Advertir consumo moderado de sal.",
-      cross_selling: "Tensiómetros digitales de brazo para llevar un control seguro en el domicilio (educar al paciente crónico)."
-    },
-    {
-      nombre: "Levocetirizina 5mg",
-      categoria: "Antihistamínico de 3ra Generación",
-      lista_control: "N/A",
-      condicion_venta: "Venta Directa",
-      para_que_sirve: "Tratamiento potente de alergias persistentes, rinitis alérgica severa y urticarias. Versión purificada de la cetirizina, más rápida.",
-      posologia: "Adultos: 5 mg (1 comprimido) al día. Puede tomarse con o sin comida.",
-      contraindicaciones: "Enfermedad renal en fase terminal.",
-      tips_venta: "Genera aún menos sueño que la cetirizina normal. Es el antialérgico más potente de venta libre actual.",
-      cross_selling: "Spray nasal de corticoides (ej. Fluticasona - requiere receta) si la congestión nasal no cede solo con pastillas."
-    }
-  ];
+  const normalizarTexto = (texto) => {
+    return texto
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim();
+  };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser && currentUser.email === ADMIN_EMAIL) {
-        setIsAdmin(true);
-      } else {
-        setIsAdmin(false);
-      }
-      setLoadingAuth(false);
-    });
-    return () => unsubscribe();
+    const ahora = new Date();
+    const fechaLimite = new Date(2026, 3, 1, 0, 0, 0); 
+    if (ahora >= fechaLimite) {
+      setEsFechaBloqueo(true);
+    }
   }, []);
 
-  const inyectarMedicamentosMilab = async () => {
-    if (!confirm("¿Seguro que deseas inyectar los 20 medicamentos de MILAB a la base de datos?")) return;
-    
-    setSubiendo(true);
-    let count = 0;
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        setIsAdmin(currentUser.email === ADMIN_EMAIL);
+        const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+        
+        let currentIsPro = false;
+        if (userDoc.exists()) {
+          currentIsPro = userDoc.data().isPro || currentUser.email === ADMIN_EMAIL;
+          setIsPro(currentIsPro);
+        }
+        
+        if (!currentIsPro) {
+          router.push(PLANES_LINK);
+        } else {
+          setCheckingAuth(false);
+        }
+      } else {
+        setUser(null);
+        router.push("/login");
+      }
+    });
+    return () => unsubscribe();
+  }, [router]);
+
+  const handleBuscar = async (e) => {
+    if (e) e.preventDefault();
+    if (!busqueda.trim()) return;
+    setCargando(true);
+    setBuscado(true);
     
     try {
-      const vademecumRef = collection(db, "vademecum");
-      for (const medicamento of nuevosMedicamentosMilab) {
-        await addDoc(vademecumRef, medicamento);
-        count++;
-        setProgreso(count);
-      }
-      alert(`¡Éxito! Se han subido ${count} medicamentos a Firestore.`);
-    } catch (error) {
-      console.error("Error en la carga masiva:", error);
-      alert("Error al subir los datos. Revisa la consola.");
-    } finally {
-      setSubiendo(false);
-      setProgreso(0);
+      const querySnapshot = await getDocs(collection(db, "vademecum"));
+      const datosFiltrados = [];
+      const terminoBusqueda = normalizarTexto(busqueda);
+
+      querySnapshot.forEach((doc) => {
+        const item = { id: doc.id, ...doc.data() };
+        const nombreNormalizado = normalizarTexto(item.nombre);
+        
+        if (nombreNormalizado.includes(terminoBusqueda)) {
+          datosFiltrados.push(item);
+        }
+      });
+      setResultados(datosFiltrados);
+    } catch (error) { console.error(error); }
+    setCargando(false);
+  };
+
+  const iniciarEdicion = (item) => {
+    setEditandoId(item.id);
+    setEditForm(item);
+  };
+
+  const cancelarEdicion = () => {
+    setEditandoId(null);
+    setEditForm({});
+  };
+
+  const handleEditChange = (e) => {
+    setEditForm({ ...editForm, [e.target.name]: e.target.value });
+  };
+
+  const guardarEdicion = async (e) => {
+    e.preventDefault();
+    try {
+      const docRef = doc(db, "vademecum", editandoId);
+      await updateDoc(docRef, editForm);
+      alert("✅ Medicamento actualizado.");
+      setResultados(resultados.map(r => r.id === editandoId ? { ...r, ...editForm } : r));
+      setTodosMedicamentos(todosMedicamentos.map(r => r.id === editandoId ? { ...r, ...editForm } : r));
+      setEditandoId(null);
+    } catch (error) { alert("❌ Error."); }
+  };
+
+  const toggleAuditoria = async () => {
+    setModoAuditoria(!modoAuditoria);
+    if (!modoAuditoria && todosMedicamentos.length === 0) {
+      setCargandoAuditoria(true);
+      const querySnapshot = await getDocs(collection(db, "vademecum"));
+      const datos = [];
+      querySnapshot.forEach((doc) => datos.push({ id: doc.id, ...doc.data() }));
+      setTodosMedicamentos(datos.sort((a, b) => a.nombre.localeCompare(b.nombre)));
+      setCargandoAuditoria(false);
     }
   };
 
-  if (loadingAuth) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
-        <Loader2 className="animate-spin text-emerald-500" size={48} />
-      </div>
-    );
-  }
+  const handleCargaMasivaYPurga = async () => {
+    if (!window.confirm("⚠️ ¿Ejecutar SINCRONIZACIÓN PRO? Cargar Bloque G desde archivo externo.")) return;
+    setCargandoAuditoria(true);
 
-  if (!isAdmin) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 p-6 text-center">
-        <ShieldCheck size={64} className="text-rose-500 mb-4" />
-        <h1 className="text-3xl font-black text-slate-900 mb-2">Acceso Restringido</h1>
-        <p className="text-slate-500 mb-8">Esta área es exclusiva para la administración del Vademécum AuxiliarPro.</p>
-        <Link href="/" className="bg-slate-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-slate-800 transition-colors">
-          Volver al Inicio
-        </Link>
-      </div>
-    );
-  }
+    try {
+      const vademecumRef = collection(db, "vademecum");
+      const todosLosDocsSnapshot = await getDocs(vademecumRef);
+
+      for (const item of BLOQUE_G) {
+        const nombreLimpioNuevo = item.nombre.replace(/\s+/g, '').toLowerCase();
+        
+        // Purgar duplicados existentes
+        todosLosDocsSnapshot.forEach(async (docSnap) => {
+          const data = docSnap.data();
+          if (data.nombre && data.nombre.replace(/\s+/g, '').toLowerCase() === nombreLimpioNuevo) {
+            await deleteDoc(doc(db, "vademecum", docSnap.id));
+          }
+        });
+        
+        // Insertar el nuevo registro
+        const docId = item.nombre.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+        await setDoc(doc(db, "vademecum", docId), item);
+      }
+      alert("✅ Bloque G Sincronizado correctamente desde archivo de datos.");
+      window.location.reload();
+    } catch (error) { 
+      console.error(error); 
+      alert("❌ Error en carga masiva."); 
+      setCargandoAuditoria(false);
+    }
+  };
+
+  const renderTarjetaMedicamento = (item) => (
+    <div key={item.id} className="bg-white rounded-[2.5rem] shadow-lg border border-slate-100 overflow-hidden relative transition-all hover:border-emerald-200">
+      {editandoId !== item.id ? (
+        <>
+          <div className="bg-slate-900 text-white p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+              <h2 className="text-3xl font-black">{item.nombre}</h2>
+              <p className="text-emerald-400 font-bold text-sm uppercase mt-1">P. Activo: {item.principio_activo}</p>
+            </div>
+            <div className="flex gap-3 items-center">
+              <span className="bg-emerald-500 text-white text-xs font-black px-4 py-2 rounded-full uppercase">{item.categoria}</span>
+              {isAdmin && <button onClick={() => iniciarEdicion(item)} className="bg-white text-slate-900 text-xs font-black px-4 py-2 rounded-full shadow-md hover:bg-emerald-400 transition-colors">✏️ Editar</button>}
+            </div>
+          </div>
+          <div className="p-8 grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <div className="space-y-6">
+                <div><h3 className="font-black text-emerald-600 text-xs mb-2 uppercase">¿Para qué sirve?</h3><p className="text-slate-700 font-medium">{item.para_que_sirve}</p></div>
+                <div><h3 className="font-black text-emerald-600 text-xs mb-2 uppercase">Dosificación / Posología</h3><p className="text-slate-700 font-medium whitespace-pre-line">{item.posologia}</p></div>
+                <div><h3 className="font-black text-rose-500 text-xs mb-2 uppercase">Contraindicaciones</h3><p className="text-slate-700 font-medium text-sm">{item.contraindicaciones}</p></div>
+            </div>
+            <div className="bg-slate-50 p-8 rounded-[2rem]">
+                <h3 className="font-black text-slate-400 text-xs mb-2 uppercase">Venta</h3>
+                <p className="text-slate-900 font-black mb-4 text-xl">🏷️ {item.condicion_venta}</p>
+                {item.lista_control && item.lista_control !== "N/A" && (
+                <div className="mb-4 inline-flex items-center gap-2 bg-rose-50 border border-rose-200 px-4 py-2 rounded-xl">
+                  <span className="text-rose-700 font-black text-xs uppercase">⚖️ {item.lista_control}</span>
+                </div>
+                )}
+                <div className="bg-amber-50 p-5 rounded-2xl border border-amber-100 mb-4">
+                    <h3 className="font-black text-amber-700 text-sm mb-2">💡 TIPS DE MESÓN (CONSEJO PRO)</h3>
+                    <p className="text-amber-900 text-sm">{item.tips_venta}</p>
+                </div>
+                <div className="bg-emerald-50 p-5 rounded-2xl border border-emerald-100">
+                  <h3 className="font-black text-emerald-700 text-sm mb-2 uppercase">🔄 VENTA COMPLEMENTARIA (OTC/Consumo)</h3>
+                  <p className="text-emerald-900 font-medium text-sm whitespace-pre-line">{item.cross_selling}</p>
+                </div>
+            </div>
+          </div>
+          <div className="bg-slate-100 px-8 py-4 border-t border-slate-200">
+            <p className="text-slate-500 text-xs text-center font-medium italic">
+              ⚠️ Aviso: La información contenida en este vademécum es referencial para profesionales de la salud. La posología final la determina el médico.
+            </p>
+          </div>
+        </>
+      ) : (
+        <div className="p-8 bg-slate-50 relative rounded-b-[2.5rem]">
+          <form onSubmit={guardarEdicion} className="space-y-6">
+            <div className="flex justify-between items-center mb-6 sticky top-0 bg-slate-50 py-4 z-10 border-b border-slate-200">
+              <h2 className="text-2xl font-black text-slate-900">✏️ Modo Edición PRO</h2>
+              <div className="flex gap-4">
+                <button type="button" onClick={cancelarEdicion} className="text-slate-500 hover:text-rose-500 font-black uppercase text-xs transition-colors">✖ Cancelar</button>
+                <button type="submit" className="bg-emerald-500 hover:bg-emerald-600 text-white font-black px-6 py-2 rounded-xl shadow-lg transition-colors">💾 Guardar Cambios</button>
+              </div>
+            </div>
+
+            {/* SECCIÓN 1: DATOS GENERALES */}
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+              <h3 className="text-sm font-black text-slate-400 uppercase border-b pb-2">1. Identificación y Formato</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Denominación / Nombre</label>
+                  <input type="text" name="nombre" value={editForm.nombre || ""} onChange={handleEditChange} className="w-full p-3 rounded-xl border-2 border-slate-200 focus:border-emerald-500 outline-none transition-colors" />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Principio Activo y Composición</label>
+                  <input type="text" name="principio_activo" value={editForm.principio_activo || ""} onChange={handleEditChange} className="w-full p-3 rounded-xl border-2 border-slate-200 focus:border-emerald-500 outline-none transition-colors" />
+                </div>
+                <div className="md:col-span-2">
+                  <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Categoría Terapéutica</label>
+                  <input type="text" name="categoria" value={editForm.categoria || ""} onChange={handleEditChange} className="w-full p-3 rounded-xl border-2 border-slate-200 focus:border-emerald-500 outline-none transition-colors" />
+                </div>
+              </div>
+            </div>
+
+            {/* SECCIÓN 2: INFORMACIÓN CLÍNICA */}
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+              <h3 className="text-sm font-black text-slate-400 uppercase border-b pb-2">2. Información Clínica</h3>
+              <div>
+                <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">¿Para qué sirve? (Acción Terapéutica)</label>
+                <textarea name="para_que_sirve" value={editForm.para_que_sirve || ""} onChange={handleEditChange} className="w-full p-3 rounded-xl border-2 border-slate-200 focus:border-emerald-500 outline-none transition-colors" rows="2"></textarea>
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Dosificación / Posología</label>
+                <textarea name="posologia" value={editForm.posologia || ""} onChange={handleEditChange} className="w-full p-3 rounded-xl border-2 border-slate-200 focus:border-emerald-500 outline-none transition-colors" rows="2"></textarea>
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Contraindicaciones (Riesgos)</label>
+                <textarea name="contraindicaciones" value={editForm.contraindicaciones || ""} onChange={handleEditChange} className="w-full p-3 rounded-xl border-2 border-rose-200 focus:border-rose-500 outline-none transition-colors" rows="2"></textarea>
+              </div>
+            </div>
+
+            {/* SECCIÓN 3: NORMATIVA Y VENTAS */}
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+              <h3 className="text-sm font-black text-slate-400 uppercase border-b pb-2">3. Normativa Legal y Estrategia Comercial</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                {/* AQUI ESTÁN LOS SELECTS CONECTADOS AL ARCHIVO EXTERNO */}
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Condición de Venta</label>
+                  <select name="condicion_venta" value={editForm.condicion_venta || ""} onChange={handleEditChange} className="w-full p-3 rounded-xl border-2 border-slate-200 focus:border-emerald-500 outline-none transition-colors">
+                    <option value="">Seleccione una opción...</option>
+                    {OPCIONES_DESPLEGABLES.condicionVenta.map((opcion) => (
+                      <option key={opcion} value={opcion}>{opcion}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Lista de Control (D.S. 404/405)</label>
+                  <select name="lista_control" value={editForm.lista_control || ""} onChange={handleEditChange} className="w-full p-3 rounded-xl border-2 border-slate-200 focus:border-emerald-500 outline-none transition-colors">
+                    <option value="">Seleccione una opción...</option>
+                    {OPCIONES_DESPLEGABLES.listaControl.map((opcion) => (
+                      <option key={opcion} value={opcion}>{opcion}</option>
+                    ))}
+                  </select>
+                </div>
+
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-amber-600 mb-1 uppercase">💡 Tips de Mesón (Consejo PRO)</label>
+                <textarea name="tips_venta" value={editForm.tips_venta || ""} onChange={handleEditChange} className="w-full p-3 rounded-xl border-2 border-amber-200 focus:border-amber-500 outline-none transition-colors bg-amber-50" rows="2"></textarea>
+              </div>
+              <div>
+                <label className="block text-xs font-bold text-emerald-600 mb-1 uppercase">🔄 Venta Complementaria (Cross-Selling)</label>
+                <textarea name="cross_selling" value={editForm.cross_selling || ""} onChange={handleEditChange} className="w-full p-3 rounded-xl border-2 border-emerald-200 focus:border-emerald-500 outline-none transition-colors bg-emerald-50" rows="2"></textarea>
+              </div>
+            </div>
+            
+            <button type="submit" className="w-full bg-slate-900 hover:bg-slate-800 text-white font-black py-4 rounded-xl shadow-xl text-lg transition-colors">💾 Confirmar y Actualizar Base de Datos</button>
+          </form>
+        </div>
+      )}
+    </div>
+  );
+
+  if (checkingAuth) return <div className="min-h-screen flex items-center justify-center bg-white"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div></div>;
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6 md:p-12 font-sans">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center gap-4 mb-10">
-          <Link href="/vademecum" className="text-slate-400 hover:text-slate-900 transition-colors">
-            <ArrowLeft size={28} />
-          </Link>
-          <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">
-            Terminal <span className="text-emerald-500">Administrativo</span>
-          </h1>
+    <div className="min-h-screen bg-white p-6 relative">
+      {cargandoAuditoria && (
+        <div className="fixed inset-0 bg-white/80 backdrop-blur-sm z-[100] flex flex-col items-center justify-center">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-emerald-500 mb-4"></div>
+          <p className="text-slate-900 font-black text-xl animate-pulse">Sincronizando Base de Datos PRO...</p>
         </div>
+      )}
 
-        <div className="bg-white p-8 md:p-12 rounded-[2.5rem] shadow-xl border border-slate-200">
-          <div className="flex items-center gap-4 mb-6">
-            <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center shadow-inner">
-              <Database size={32} />
-            </div>
-            <div>
-              <h2 className="text-2xl font-black text-slate-900">Carga Masiva MILAB</h2>
-              <p className="text-sm font-medium text-slate-500">Inyección directa de 20 perfiles farmacológicos validados a Firestore.</p>
-            </div>
-          </div>
-
-          <div className="bg-slate-50 rounded-2xl p-6 border border-slate-100 mb-8 max-h-64 overflow-y-auto">
-            <ul className="space-y-2 text-sm text-slate-600 font-medium">
-              {nuevosMedicamentosMilab.map((med, index) => (
-                <li key={index} className="flex items-center gap-2">
-                  <span className="text-emerald-500">✓</span> {med.nombre} <span className="text-[10px] bg-slate-200 px-2 py-0.5 rounded-full">{med.condicion_venta}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <button 
-            onClick={inyectarMedicamentosMilab} 
-            disabled={subiendo}
-            className={`w-full py-5 rounded-2xl font-black text-lg transition-all flex items-center justify-center gap-3 shadow-lg ${subiendo ? 'bg-slate-200 text-slate-400 cursor-not-allowed' : 'bg-slate-900 text-white hover:bg-emerald-600 transform hover:-translate-y-1'}`}
-          >
-            {subiendo ? (
-              <>
-                <Loader2 className="animate-spin" size={24} /> 
-                Subiendo a Firebase... {progreso} / {nuevosMedicamentosMilab.length}
-              </>
-            ) : (
-              <>🚀 Inyectar Lote a Vademécum</>
+      <div className="max-w-5xl mx-auto">
+        <div className="bg-slate-50 p-10 rounded-[3rem] border border-slate-100 mb-12 shadow-sm">
+          <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+            <h1 className="text-4xl font-black text-slate-900">Vademécum <span className="text-emerald-500">PRO</span></h1>
+            {isAdmin && (
+              <div className="flex gap-3">
+                <button onClick={handleCargaMasivaYPurga} className="bg-slate-900 hover:bg-slate-800 transition-colors text-white px-6 py-3 rounded-full font-black text-sm shadow-md">🚀 Sync Bloque G</button>
+                <button onClick={toggleAuditoria} className="bg-emerald-500 hover:bg-emerald-400 transition-colors text-white px-6 py-3 rounded-full font-black text-sm shadow-md">{modoAuditoria ? "❌ Cerrar" : "⚡ Ver Todo"}</button>
+              </div>
             )}
-          </button>
+          </div>
+          {!modoAuditoria && (
+            <form onSubmit={handleBuscar} className="flex gap-3">
+              <input type="text" value={busqueda} onChange={(e) => {setBusqueda(e.target.value); setBuscado(false);}} placeholder="Buscar por fármaco, categoría o acción..." className="flex-1 border-2 rounded-2xl p-4 text-lg outline-none focus:border-emerald-500 transition-colors shadow-sm" />
+              <button type="submit" className="bg-slate-900 text-white font-black px-10 rounded-2xl hover:bg-emerald-600 transition-all shadow-md">Buscar 🔍</button>
+            </form>
+          )}
         </div>
+        <div className="space-y-8">{modoAuditoria ? todosMedicamentos.map(renderTarjetaMedicamento) : resultados.map(renderTarjetaMedicamento)}</div>
+        <div className="mt-8"><BannerVenta /></div>
       </div>
     </div>
   );

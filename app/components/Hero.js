@@ -1,11 +1,25 @@
 import Link from "next/link";
-import { ArrowRight, Pill, Calculator, Gamepad2 } from "lucide-react";
+import { ArrowRight, Pill, Calculator, Gamepad2, GraduationCap, Download } from "lucide-react";
 
 export default function Hero() {
   return (
     <header className="py-24 px-6 bg-gradient-to-b from-slate-50 to-white text-center w-full">
       <div className="max-w-4xl mx-auto">
         
+        {/* Banner Evolución a Academia AuxiliarPro */}
+        <div className="flex justify-center mb-4">
+          <a 
+            href="/malla-curricular-auxiliarpro.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-5 py-2 rounded-full text-xs font-bold shadow-md animate-pulse hover:animate-none hover:scale-105 transition-all cursor-pointer group"
+          >
+            <GraduationCap size={16} className="text-white shrink-0" />
+            <span>🚀 Muy pronto: Academia AuxiliarPro. Módulos de estudio + Simulador Global. <span className="underline decoration-white/40 group-hover:decoration-white underline-offset-2 ml-1">Descarga el programa PDF</span></span>
+            <Download size={14} className="text-white shrink-0" />
+          </a>
+        </div>
+
         {/* Etiqueta de Autoridad */}
         <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 px-4 py-2 rounded-full text-[10px] md:text-xs font-black uppercase tracking-widest mb-10 border border-emerald-100 italic shadow-sm">
           Comunidad activa de +400 alumnos capacitándose bajo normativa vigente
