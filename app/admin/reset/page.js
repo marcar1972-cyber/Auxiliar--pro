@@ -3,12 +3,14 @@
 import { useState, useEffect } from "react";
 import { collection, getDocs, doc, updateDoc, getDoc, setDoc, deleteDoc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
+// RUTA AJUSTADA: Subimos un nivel para ir a /firebase/config
 import { auth, db } from "../firebase/config"; 
 import { useRouter } from "next/navigation"; 
+// RUTA AJUSTADA: Subimos un nivel para ir a /components/BannerVenta
 import BannerVenta from "../components/BannerVenta";
 
-// IMPORTAMOS LA DATA Y LOS DESPLEGABLES DESDE EL ARCHIVO EXTERNO
-import { BLOQUE_G, OPCIONES_DESPLEGABLES } from "./vademecumData";
+// RUTA AJUSTADA: Apuntamos a la ubicación real en /admin-vademecum/vademecumData
+import { BLOQUE_G, OPCIONES_DESPLEGABLES } from "../admin-vademecum/vademecumData";
 
 export default function BuscadorVademecum() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -35,10 +37,12 @@ export default function BuscadorVademecum() {
 
   const normalizarTexto = (texto) => {
     return texto
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .trim();
+      ? texto
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .trim()
+      : "";
   };
 
   useEffect(() => {
@@ -132,7 +136,7 @@ export default function BuscadorVademecum() {
       const querySnapshot = await getDocs(collection(db, "vademecum"));
       const datos = [];
       querySnapshot.forEach((doc) => datos.push({ id: doc.id, ...doc.data() }));
-      setTodosMedicamentos(datos.sort((a, b) => a.nombre.localeCompare(b.nombre)));
+      setTodosMedicamentos(datos.sort((a, b) => (a.nombre || "").localeCompare(b.nombre || "")));
       setCargandoAuditoria(false);
     }
   };
@@ -224,7 +228,6 @@ export default function BuscadorVademecum() {
               </div>
             </div>
 
-            {/* SECCIÓN 1: DATOS GENERALES */}
             <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
               <h3 className="text-sm font-black text-slate-400 uppercase border-b pb-2">1. Identificación y Formato</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -243,7 +246,6 @@ export default function BuscadorVademecum() {
               </div>
             </div>
 
-            {/* SECCIÓN 2: INFORMACIÓN CLÍNICA */}
             <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
               <h3 className="text-sm font-black text-slate-400 uppercase border-b pb-2">2. Información Clínica</h3>
               <div>
@@ -260,12 +262,9 @@ export default function BuscadorVademecum() {
               </div>
             </div>
 
-            {/* SECCIÓN 3: NORMATIVA Y VENTAS */}
             <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
               <h3 className="text-sm font-black text-slate-400 uppercase border-b pb-2">3. Normativa Legal y Estrategia Comercial</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                
-                {/* AQUI ESTÁN LOS SELECTS CONECTADOS AL ARCHIVO EXTERNO */}
                 <div>
                   <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Condición de Venta</label>
                   <select name="condicion_venta" value={editForm.condicion_venta || ""} onChange={handleEditChange} className="w-full p-3 rounded-xl border-2 border-slate-200 focus:border-emerald-500 outline-none transition-colors">
