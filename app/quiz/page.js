@@ -110,8 +110,8 @@ export default function QuizLobbyPage() {
              }
          }
 
-         // LÓGICA GATING: Solo pasa si tiene 7 niveles o si es un "usuario fundador" del Pro
-         const pasoInicialCompleto = (data.unlockedLevels && data.unlockedLevels.length > 7);
+         // LÓGICA GATING: Solo pasa si tiene 2 niveles o si es un "usuario fundador" del Pro
+         const pasoInicialCompleto = (data.unlockedLevels && data.unlockedLevels.length > 2);
          const esUsuarioFundador = (data.unlockedLevelsPro && data.unlockedLevelsPro.length > 1);
 
          if (pasoInicialCompleto || esUsuarioFundador) {
@@ -128,7 +128,7 @@ export default function QuizLobbyPage() {
       console.log("Es Admin?", isAdmin);
       console.log("isPro en BD?", userIsProFirebase);
       console.log("Fecha Pro Válida?", userProDateValid);
-      console.log("ACCESO PORTERO (Tiene los 7 niveles)?", accesoPorteroPermitido);
+      console.log("ACCESO PORTERO (Tiene los 2 niveles)?", accesoPorteroPermitido);
       console.log("TIENE SUSCRIPCIÓN ACTIVA TOTAL?", hasActiveSub);
       console.log("PASÓ FECHA LANZAMIENTO?", isPastLaunch());
 
@@ -137,8 +137,8 @@ export default function QuizLobbyPage() {
       // 4.1 Validación de Secuencia (El Portero)
       if (!accesoPorteroPermitido) {
           const msg = userIsProFirebase 
-            ? "¡Excelente elección ser PRO! 🚀 Pero antes de enfrentar el Modo Fiscalizador, debes demostrar tu base técnica completando los 7 niveles del Simulador Inicial. ¡Vamos por ese título!"
-            : "🔒 ¡Alto ahí! El Simulador PRO exige una base sólida. Completa primero los 7 niveles del Simulador Inicial para desbloquear el Modo SEREMI.";
+            ? "¡Excelente elección ser PRO! 🚀 Pero antes de enfrentar el Modo Fiscalizador, debes demostrar tu base técnica completando los 2 niveles del Simulador Inicial. ¡Vamos por ese título!"
+            : "🔒 ¡Alto ahí! El Simulador PRO exige una base sólida. Completa primero los 2 niveles del Simulador Inicial para desbloquear el Modo SEREMI.";
           
           alert(msg);
           router.push('/quiz/inicial');
@@ -223,7 +223,7 @@ export default function QuizLobbyPage() {
               </div>
               <div className="flex-1 text-center md:text-left z-10">
                   <h3 className="font-black text-2xl text-slate-800 leading-tight mb-2">Simulador Inicial</h3>
-                  <p className="text-sm text-slate-500 mb-4">La ruta de entrenamiento definitiva. 7 niveles gratuitos para dominar conceptos básicos.</p>
+                  <p className="text-sm text-slate-500 mb-4">La ruta de entrenamiento definitiva. 2 niveles gratuitos para dominar conceptos básicos.</p>
               </div>
             </button>
           </article>
@@ -261,7 +261,7 @@ export default function QuizLobbyPage() {
       </section>
 
       <footer className="p-8 text-center text-[10px] font-mono text-slate-300 uppercase tracking-widest">
-        AuxiliarPro v4.0 | &lt; macz.dev /&gt;
+        AuxiliarPro App | &lt; macz.dev /&gt;
       </footer>
     </main>
   );
