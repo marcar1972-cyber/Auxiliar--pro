@@ -23,7 +23,7 @@ export default function SocialContact() {
       </a>
 
       {/* Facebook */}
-      <a href="https://www.facebook.com/profile.php?id=61584679565188" target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-[#1877F2] text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+      <a href="https://www.facebook.com/profile.php?id=61574303045937" target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-[#1877F2] text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
         <Facebook size={30} />
       </a>
       
