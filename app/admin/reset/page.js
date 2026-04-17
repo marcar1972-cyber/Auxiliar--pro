@@ -3,14 +3,14 @@
 import { useState, useEffect } from "react";
 import { collection, getDocs, doc, updateDoc, getDoc, setDoc, deleteDoc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
-// RUTA AJUSTADA: Subimos un nivel para ir a /firebase/config
-import { auth, db } from "../firebase/config"; 
+// RUTA CORREGIDA: Subimos DOS niveles (../../) porque este archivo está en admin/reset
+import { auth, db } from "../../firebase/config"; 
 import { useRouter } from "next/navigation"; 
-// RUTA AJUSTADA: Subimos un nivel para ir a /components/BannerVenta
-import BannerVenta from "../components/BannerVenta";
+// RUTA CORREGIDA: Subimos DOS niveles (../../)
+import BannerVenta from "../../components/BannerVenta";
 
-// RUTA AJUSTADA: Apuntamos a la ubicación real en /admin-vademecum/vademecumData
-import { BLOQUE_G, OPCIONES_DESPLEGABLES } from "../admin-vademecum/vademecumData";
+// RUTA CORREGIDA: Subimos DOS niveles (../../) para llegar a admin-vademecum
+import { BLOQUE_G, OPCIONES_DESPLEGABLES } from "../../admin-vademecum/vademecumData";
 
 export default function BuscadorVademecum() {
   const [isAdmin, setIsAdmin] = useState(false);
