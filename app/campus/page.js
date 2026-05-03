@@ -1,0 +1,204 @@
+"use client";
+import { useEffect, useState } from "react";
+import { db, auth } from "../firebase/config"; 
+import { collection, getDocs, query, orderBy, doc, getDoc } from "firebase/firestore"; 
+import Link from "next/link";
+import { BookOpen, ShieldCheck, Loader2, Lock, Trophy, Share2 } from "lucide-react"; 
+import SocialContact from "../components/SocialContact";
+
+export default function CampusPage() {
+  const [modulesByGroup, setModulesByGroup] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [userProgress, setUserProgress] = useState([]); 
+  const [hasActiveSub, setHasActiveSub] = useState(false); 
+
+  useEffect(() => {
+    const fetchModules = async () => {
+      try {
+        const user = auth.currentUser;
+        if (user) {
+          const userSnap = await getDoc(doc(db, "users", user.uid));
+          if (userSnap.exists()) {
+            const data = userSnap.data();
+            setUserProgress(data.unlockedLevels || []);
+
+            let isSubValid = false;
+            if (data.untilPro) {
+              let expiryDate;
+              if (typeof data.untilPro?.toDate === 'function') {
+                expiryDate = data.untilPro.toDate();
+              } else {
+                const dateStr = String(data.untilPro).toLowerCase();
+                const months = { enero:0, febrero:1, marzo:2, abril:3, mayo:4, junio:5, julio:6, agosto:7, septiembre:8, octubre:9, noviembre:10, diciembre:11 };
+                const parts = dateStr.replace(/de /g, "").split(" ");
+                if (parts.length >= 3 && months[parts[1]] !== undefined) {
+                  expiryDate = new Date(parseInt(parts[2]), months[parts[1]], parseInt(parts[0]), 23, 59, 59);
+                } else {
+                  expiryDate = new Date(data.untilPro);
+                }
+              }
+
+              if (expiryDate instanceof Date && !isNaN(expiryDate) && expiryDate > new Date()) {
+                isSubValid = true;
+              }
+            }
+            setHasActiveSub(isSubValid);
+          }
+        }
+
+        const q = query(collection(db, "modules"), orderBy("modId", "asc"));
+        const snapshot = await getDocs(q);
+        
+        const grouped = {};
+        snapshot.docs.forEach(doc => {
+          const data = doc.data();
+          const groupName = data.modId.toUpperCase().replace("-", " "); 
+          
+          if (!grouped[groupName]) {
+            grouped[groupName] = [];
+          }
+          grouped[groupName].push(data);
+        });
+        
+        setModulesByGroup(grouped);
+      } catch (error) {
+        console.error("Error cargando módulos:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchModules();
+  }, []);
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'AuxiliarPro - Campus Virtual PRO',
+          text: 'Conoce el temario oficial y prepárate para la certificación SEREMI de Auxiliar de Farmacia.',
+          url: window.location.origin + '/campus',
+        });
+      } catch (error) {
+        console.log('Error compartiendo', error);
+      }
+    } else {
+      alert("La función de compartir no está soportada en tu navegador actual.");
+    }
+  };
+
+  const isModuleLocked = (modName) => {
+    if (!hasActiveSub) return true; 
+    const num = parseInt(modName.replace("MOD ", ""));
+    if (num === 1) return false;
+    return !userProgress.includes(num - 1);
+  };
+
+  if (loading) return <div className="flex justify-center items-center p-20 min-h-screen bg-slate-50"><Loader2 className="animate-spin text-[#003366]" size={32} /></div>;
+
+  const isFinalExamLocked = !hasActiveSub;
+
+  return (
+    <main className="min-h-screen bg-slate-50 pb-20">
+      <div className="bg-[#003366] py-16 px-6 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+        <div className="max-w-4xl mx-auto relative z-10 text-center flex flex-col items-center">
+          <span className="bg-[#28a745] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
+            Exclusivo Pro
+          </span>
+          <div className="flex items-center justify-center gap-4 mb-4">
+            <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight"> Campus Virtual PRO </h1>
+            <button onClick={handleShare} className="text-white/80 hover:text-white transition-colors bg-white/20 p-2.5 rounded-full" title="Compartir Campus">
+              <Share2 size={24} />
+            </button>
+          </div>
+          <p className="text-slate-200 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed"> Accede a todo el material oficial estructurado para tu certificación SEREMI. Estudia a tu ritmo y asegura tu título como Auxiliar de Farmacia. </p>
+        </div>
+      </div>
+
+      <div className="max-w-4xl mx-auto px-6 -mt-8 relative z-20">
+        <div className="grid gap-6">
+          {Object.keys(modulesByGroup).sort().map((group) => {
+            const locked = isModuleLocked(group); 
+            const descriptions = {
+              "MOD 1": "Higiene, reglamentación y ética profesional.",
+              "MOD 2": "Farmacología clínica y mecanismos de acción.",
+              "MOD 3": "Gestión de farmacia, inventarios y atención al cliente.",
+              "MOD 4": "Casos prácticos de fiscalización y rendición SEREMI."
+            };
+            const defaultDescription = "Material oficial completo para tu certificación SEREMI.";
+
+            return (
+              <div key={group} className={`bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden transition-all ${locked ? "opacity-60 cursor-not-allowed grayscale" : "hover:border-[#28a745] hover:shadow-lg"}`}>
+                <div className="bg-slate-100 px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className={`p-2 rounded-lg shrink-0 text-white ${locked ? "bg-slate-400" : "bg-[#003366]"}`}>
+                      {locked ? <Lock size={20} /> : <BookOpen size={20} />}
+                    </div>
+                    <h2 className="text-xl font-black text-[#003366] leading-tight">Módulo {group.replace("MOD ", "")}: Fundamentos</h2>
+                  </div>
+                  {!hasActiveSub && (
+                    <div className="bg-slate-300 text-slate-600 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-1.5 shadow-md">
+                      <Lock size={14} /> Requiere PRO
+                    </div>
+                  )}
+                  {hasActiveSub && !locked && (
+                    <div className="bg-gradient-to-br from-[#28a745] to-[#218838] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-1.5 shadow-md">
+                      <ShieldCheck size={14} /> Verificado Pro
+                    </div>
+                  )}
+                </div>
+
+                <div className="p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 hover:bg-slate-50 transition-colors">
+                  <div className="flex-1 text-center md:text-left z-10">
+                    <h3 className="font-bold text-slate-800 text-lg capitalize mb-1.5">{group.replace("MOD ", "Módulo ")}: Introducción Técnica</h3>
+                    <p className="text-slate-500 text-sm md:text-base max-w-2xl mb-5 leading-relaxed">
+                       {descriptions[group] || defaultDescription}
+                    </p>
+                  </div>
+                  
+                  <Link href={locked ? "#" : `/campus/${group.toLowerCase().replace(" ", "-")}`} className="w-full md:w-auto">
+                    <button 
+                      disabled={locked}
+                      className="flex items-center justify-center gap-2 bg-white border-2 border-[#003366] text-[#003366] px-6 py-3 rounded-xl font-bold transition-all w-full md:w-auto shadow-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#003366] hover:text-white"
+                    >
+                        {locked ? <Lock size={18} /> : <BookOpen size={18} />} 
+                        {!hasActiveSub ? "Adquirir PRO para Desbloquear" : locked ? "Completa el módulo anterior" : "Estudiar Módulo"}
+                    </button>
+                  </Link>
+                </div>
+              </div>
+            );
+          })}
+
+          {/* EVALUACIÓN FINAL SEREMI BLINDADA */}
+          <div className={`rounded-3xl shadow-lg border border-slate-200 overflow-hidden p-8 flex flex-col md:flex-row items-center justify-between gap-6 mt-4 transition-all ${isFinalExamLocked ? 'bg-slate-800 text-white opacity-90' : 'bg-gradient-to-r from-[#003366] to-[#004a99] text-white'}`}>
+              <div className="flex-1">
+                  <h2 className="text-2xl font-black mb-2 flex items-center gap-3">
+                    {isFinalExamLocked ? <Lock size={28} className="text-slate-400" /> : <Trophy size={28} className="text-amber-400" />}
+                    Examen Final SEREMI
+                  </h2>
+                  <p className={isFinalExamLocked ? "text-slate-400" : "text-blue-100"}>
+                    {isFinalExamLocked 
+                      ? "Evaluación global restringida. Requiere una suscripción PRO activa para desbloquear el simulador de certificación." 
+                      : "Evaluación global de todos los módulos. ¡Demuestra que estás listo para tu certificación!"}
+                  </p>
+              </div>
+              
+              <Link href={isFinalExamLocked ? "/planes" : "/quiz/pro/pro-eval-global"} className="w-full md:w-auto">
+                  <button className={`w-full flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold shadow-md transition-all whitespace-nowrap ${isFinalExamLocked ? 'bg-slate-700 hover:bg-slate-600 text-slate-200 border border-slate-500' : 'bg-[#28a745] hover:bg-[#218838] text-white'}`}>
+                      {isFinalExamLocked ? <><Lock size={18} /> Obtener PRO</> : "Rendir Evaluación Final"}
+                  </button>
+              </Link>
+          </div>
+
+          {/* COMPONENTE SOCIAL ANCLADO AL PIE DE LA VISTA DEL CAMPUS */}
+          <div className="mt-8 pt-8 border-t border-slate-200">
+            <SocialContact />
+          </div>
+
+        </div>
+      </div>
+    </main>
+  );
+}

@@ -13,26 +13,24 @@ export default function SocialContact() {
   return (
     <div className="flex justify-center gap-4 md:gap-6 mt-8 flex-wrap">
       {/* WhatsApp */}
-      <a href="https://wa.me/56934238151" target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
-        <WhatsAppIcon size={30} />
+      <a href="https://wa.me/56934238151" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+        <WhatsAppIcon size={26} />
       </a>
 
       {/* Email */}
-      <a href="mailto:hola@auxiliarpro.cl" className="w-14 h-14 bg-slate-800 text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
-        <Mail size={26} />
+      <a href="mailto:hola@auxiliarpro.cl" className="w-12 h-12 bg-slate-800 text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+        <Mail size={24} />
       </a>
 
       {/* Facebook */}
-      <a href="https://www.facebook.com/profile.php?id=61574303045937" target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-[#1877F2] text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
-        <Facebook size={30} />
+      <a href="https://www.facebook.com/profile.php?id=61574303045937" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-[#1877F2] text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+        <Facebook size={26} />
       </a>
       
       {/* Instagram */}
-      <a href="https://www.instagram.com/auxiliarpro/" target="_blank" rel="noopener noreferrer" className="w-14 h-14 bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
-        <Instagram size={30} />
+      <a href="https://www.instagram.com/auxiliarpro/" target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+        <Instagram size={26} />
       </a>
     </div>
   );
 }
-
-{/* < macz.dev /> */}

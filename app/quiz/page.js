@@ -6,7 +6,7 @@ import Link from "next/link";
 import SocialContact from "../components/SocialContact";
 import BannerVenta from "../components/BannerVenta";
 import { 
-  ChevronLeft, ShieldCheck, Trophy, BrainCircuit, Share2, Loader2, AlertTriangle, Clock, Info
+  ChevronLeft, ShieldCheck, Trophy, BrainCircuit, Share2, Loader2, AlertTriangle, BookOpen, Lock, ChevronRight, Sparkles
 } from "lucide-react"; 
 import { auth, db } from "../firebase/config";
 import { doc, getDoc } from "firebase/firestore";
@@ -22,10 +22,14 @@ const ADMIN_EMAIL = "marcar1972@gmail.com";
 export default function QuizLobbyPage() {
   const router = useRouter();
   const [isVerifying, setIsVerifying] = useState(false);
-  const [daysRemaining, setDaysRemaining] = useState(null);
+  const [daysRemaining, setDaysRemaining] = useState(null); 
   const [showWarning, setShowWarning] = useState(false);
+  
+  // ESTADOS DE ACCESO Y CARGA
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true); 
+  const [isProUser, setIsProUser] = useState(false); 
+  const [canAccessSimulator, setCanAccessSimulator] = useState(false);
 
-  // --- CÁLCULO DE DÍAS RESTANTES AL CARGAR ---
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -35,26 +39,64 @@ export default function QuizLobbyPage() {
 
           if (docSnap.exists()) {
             const data = docSnap.data();
+            const isAdmin = user.email === ADMIN_EMAIL;
+            let userHasActivePro = data.isPro === true;
             
-            if (data.proUntil) {
-              const proDate = data.proUntil.toDate();
+            // 1. GATEKEEPER 2.0: Lectura Robusta de Vigencia
+            const rawFields = [data.untilPro, data.untilpro, data.proUntil, data.prountil];
+            
+            const parseDate = (val) => {
+              if (!val) return null;
+              if (typeof val.toDate === 'function') return val.toDate(); // Firebase Timestamp
+              const d = new Date(val); // ISO String o formato estándar
+              return isNaN(d.getTime()) ? null : d;
+            };
+
+            const validDates = rawFields.map(parseDate).filter(d => d !== null);
+
+            if (validDates.length > 0) {
+              const expiryDate = new Date(Math.max(...validDates));
               const now = new Date();
               
-              // Calcula la diferencia en milisegundos y la pasa a días
-              const diffTime = proDate.getTime() - now.getTime();
+              if (expiryDate > now) {
+                userHasActivePro = true;
+              }
+              
+              // Cálculo de días restantes
+              const diffTime = expiryDate.getTime() - now.getTime();
               const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
               if (diffDays >= 0) {
                 setDaysRemaining(diffDays);
-                setShowWarning(true); // Se muestra SIEMPRE desde el primer momento
+                setShowWarning(true); 
               } else {
-                setDaysRemaining(0); // Expirado
+                setDaysRemaining(0); 
+                userHasActivePro = false;
               }
             }
+
+            if (isAdmin) userHasActivePro = true;
+            setIsProUser(userHasActivePro);
+
+            // 2. REGLA DE ORO MACZDEV: Verificar si pasó el Módulo 4
+            let passedMod4 = false;
+            if (data.unlockedLevels && data.unlockedLevels.length >= 4) {
+              passedMod4 = true;
+            }
+            if (data.unlockedLevelsPro && data.unlockedLevelsPro.length > 1) {
+              passedMod4 = true; // Legado usuarios fundadores
+            }
+            if (isAdmin) passedMod4 = true;
+
+            setCanAccessSimulator(passedMod4);
           }
         } catch (error) {
-          console.error("Error obteniendo días PRO:", error);
+          console.error("Error obteniendo estado de usuario:", error);
+        } finally {
+          setIsCheckingAuth(false);
         }
+      } else {
+        setIsCheckingAuth(false);
       }
     });
 
@@ -65,7 +107,7 @@ export default function QuizLobbyPage() {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'AuxiliarPro - Simulador Examen MINSAL',
+          title: 'AuxiliarPro App - Simulador Examen MINSAL',
           text: 'Prepárate para tu examen de Auxiliar de Farmacia con este simulador. ¡Está buenísimo!',
           url: window.location.origin,
         });
@@ -77,7 +119,15 @@ export default function QuizLobbyPage() {
     }
   };
 
-  // --- CORTAFUEGOS MODO PARANOICO ---
+  const handleBasicAccess = (route) => {
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      router.push('/login');
+      return;
+    }
+    router.push(route);
+  };
+
   const handleProAccess = async () => {
     const currentUser = auth.currentUser;
 
@@ -88,72 +138,11 @@ export default function QuizLobbyPage() {
 
     setIsVerifying(true);
     try {
-      // 1. OBTENEMOS DATOS FRESCOS
-      const userRef = doc(db, "users", currentUser.uid);
-      const docSnap = await getDoc(userRef);
-      
-      const isAdmin = currentUser.email === ADMIN_EMAIL;
-      
-      // 2. LÓGICA DE SUSCRIPCIÓN Y PORTERO DE NIVELES
-      let userIsProFirebase = false;
-      let userProDateValid = false;
-      let accesoPorteroPermitido = isAdmin; // Admin pasa siempre por defecto
-
-      if (docSnap.exists()) {
-         const data = docSnap.data();
-         userIsProFirebase = data.isPro === true;
-         
-         if (data.proUntil) {
-             const proDate = data.proUntil.toDate();
-             if (proDate >= new Date()) {
-                 userProDateValid = true;
-             }
-         }
-
-         // LÓGICA GATING: Solo pasa si tiene 2 niveles o si es un "usuario fundador" del Pro
-         const pasoInicialCompleto = (data.unlockedLevels && data.unlockedLevels.length > 2);
-         const esUsuarioFundador = (data.unlockedLevelsPro && data.unlockedLevelsPro.length > 1);
-
-         if (pasoInicialCompleto || esUsuarioFundador) {
-             accesoPorteroPermitido = true;
-         }
-      }
-
-      // IMPORTANTE: Aquí se ejecuta el BLOQUEO AUTOMÁTICO si userProDateValid es false
-      const hasActiveSub = isAdmin || userIsProFirebase || userProDateValid;
-
-      // 3. DEBUG EXTREMO (Abre la consola F12 de tu navegador)
-      console.log("=== DEBUG ACCESO PRO ===");
-      console.log("Email:", currentUser.email);
-      console.log("Es Admin?", isAdmin);
-      console.log("isPro en BD?", userIsProFirebase);
-      console.log("Fecha Pro Válida?", userProDateValid);
-      console.log("ACCESO PORTERO (Tiene los 2 niveles)?", accesoPorteroPermitido);
-      console.log("TIENE SUSCRIPCIÓN ACTIVA TOTAL?", hasActiveSub);
-      console.log("PASÓ FECHA LANZAMIENTO?", isPastLaunch());
-
-      // 4. LA SENTENCIA
-
-      // 4.1 Validación de Secuencia (El Portero)
-      if (!accesoPorteroPermitido) {
-          const msg = userIsProFirebase 
-            ? "¡Excelente elección ser PRO! 🚀 Pero antes de enfrentar el Modo Fiscalizador, debes demostrar tu base técnica completando los 2 niveles del Simulador Inicial. ¡Vamos por ese título!"
-            : "🔒 ¡Alto ahí! El Simulador PRO exige una base sólida. Completa primero los 2 niveles del Simulador Inicial para desbloquear el Modo SEREMI.";
-          
-          alert(msg);
-          router.push('/quiz/inicial');
-          return;
-      }
-
-      // 4.2 Validación Comercial
-      if (isPastLaunch() && !hasActiveSub) {
-         console.log("FALLO: Mandando a /planes");
+      if (isPastLaunch() && !isProUser && currentUser.email !== ADMIN_EMAIL) {
          window.location.href = '/planes'; 
       } else {
-         console.log("ÉXITO: Mandando a /quiz/pro");
-         router.push('/quiz/pro');
+         router.push('/quiz/pro/pro-eval-1');
       }
-
     } catch (error) {
       console.error("Error validando acceso PRO:", error);
       window.location.href = '/planes';
@@ -162,15 +151,26 @@ export default function QuizLobbyPage() {
     }
   };
 
+  const handleCampusAccess = () => {
+    const currentUser = auth.currentUser;
+
+    if (!currentUser) {
+       router.push('/login');
+       return;
+    }
+
+    router.push('/campus');
+  };
+
   return (
     <main className="min-h-screen bg-slate-50 pb-24 font-sans relative">
       
       <nav className="bg-white p-6 shadow-sm sticky top-0 z-50 border-b border-slate-100">
         <div className="max-w-3xl mx-auto flex items-center gap-4">
-          <Link href="/" className="text-slate-400 hover:text-slate-900 cursor-pointer transition-colors">
+          <Link href="/" className="text-slate-400 hover:text-[#003366] cursor-pointer transition-colors">
             <ChevronLeft size={28} />
           </Link>
-          <span className="text-xl font-black text-slate-900 tracking-tighter">Entrenamiento</span>
+          <span className="text-xl font-black text-[#003366] tracking-tighter">Lobby de Entrenamiento</span>
         </div>
       </nav>
 
@@ -178,10 +178,10 @@ export default function QuizLobbyPage() {
         
         <header className="mb-8 text-center">
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-4">
-            <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight leading-tight">
-              Simulador de Examen <span className="text-emerald-600">Auxiliar de Farmacia</span> SEREMI
+            <h1 className="text-3xl md:text-4xl font-black text-[#003366] tracking-tight leading-tight">
+              Simulador de Examen <span className="text-[#28a745]">Auxiliar de Farmacia</span> SEREMI
             </h1>
-            <button onClick={handleShare} className="shrink-0 flex items-center justify-center p-3 bg-white text-slate-600 rounded-2xl hover:bg-emerald-600 hover:text-white transition-all border border-slate-200 shadow-sm" aria-label="Compartir Simulador SEREMI">
+            <button onClick={handleShare} className="shrink-0 flex items-center justify-center p-3 bg-white text-slate-600 rounded-2xl hover:bg-[#28a745] hover:text-white transition-all border border-slate-200 shadow-sm" aria-label="Compartir Simulador">
               <Share2 size={24} strokeWidth={2.5} />
             </button>
           </div>
@@ -189,26 +189,34 @@ export default function QuizLobbyPage() {
             Prepárate para la certificación del MINSAL en Chile. Practica con casos reales y preguntas de prueba para asegurar tu título como Auxiliar de Farmacia.
           </p>
 
-          {/* ⚡ REGLAS DEL JUEGO (PRO LOGIC) */}
-          <div className="max-w-xl mx-auto mb-8 bg-blue-50 border border-blue-100 rounded-[2rem] p-6 text-left shadow-sm">
-            <h4 className="flex items-center gap-2 text-blue-900 font-black text-sm uppercase mb-3 tracking-wider">
-              <Info size={18} /> Reglas del Modo PRO
-            </h4>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-3 text-blue-800 text-sm font-medium">
-                <div className="bg-blue-200 p-1 rounded-lg mt-0.5"><Trophy size={14} /></div>
-                <span>Aprobar requiere un <strong>80% de precisión</strong> en cada nivel.</span>
-              </li>
-              <li className="flex items-start gap-3 text-blue-800 text-sm font-medium">
-                <div className="bg-blue-200 p-1 rounded-lg mt-0.5"><Clock size={14} /></div>
-                <span><strong>Sistema de 3 Intentos:</strong> Si repruebas 3 veces el mismo nivel, el sistema se bloqueará por <strong>30 minutos</strong> para obligarte a repasar las guías antes de volver a intentar.</span>
-              </li>
-            </ul>
+          {/* ANUNCIO ESTRATÉGICO ACTUALIZACIÓN V5.0 REFINADO */}
+          <div className="text-left bg-blue-50 border border-blue-200 p-5 md:p-6 rounded-2xl shadow-sm mb-8 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-1.5 h-full bg-[#003366]"></div>
+            <div className="flex flex-col sm:flex-row gap-4 items-start">
+              <div className="bg-blue-100 p-3 rounded-xl shrink-0 text-[#003366] shadow-sm">
+                <Sparkles size={24} />
+              </div>
+              <div className="w-full">
+                <h3 className="font-black text-[#003366] text-base md:text-lg uppercase tracking-wide mb-2">¡Evolucionamos a la v5.0! 🚀</h3>
+                <p className="text-sm text-slate-600 leading-relaxed mb-3">
+                  Acabamos de implementar la mayor actualización de nuestra plataforma para optimizar tu tiempo de estudio:
+                </p>
+                <ul className="text-sm text-slate-600 space-y-2 list-disc pl-5 font-medium mb-4">
+                  <li>El <strong>Simulador Inicial</strong> se ha optimizado: pasamos de 7 niveles dispersos a <strong>3 niveles fundamentales <span className="text-[#28a745] font-black">100% gratis</span></strong>, yendo directo a lo que importa.</li>
+                  <li>El acceso PRO se transformó en el nuevo <strong className="text-[#003366]">Campus Virtual PRO</strong>: un ecosistema de estudio formativo, <strong>con estructura de CFT</strong>, diseñado para llevarte paso a paso a la aprobación.</li>
+                </ul>
+                
+                <div className="bg-white/60 p-4 rounded-xl border border-blue-100/50 mt-2">
+                  <p className="text-xs text-[#003366] font-medium leading-relaxed">
+                    <strong className="text-[#003366] font-black">Nuestro Compromiso:</strong> AuxiliarPro App seguirá en continua evolución. Ya seas un aspirante buscando su credencial o un colega activo de mesón, nuestra meta es entregarte siempre la herramienta tecnológica más precisa y actualizada del rubro en Chile.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
 
-          {/* ESTADO DE ADVERTENCIA MOVIDO AQUÍ */}
           {showWarning && daysRemaining !== null && (
-            <div className="inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 px-5 py-2.5 rounded-full text-sm font-black tracking-wide border border-emerald-200 shadow-sm">
+            <div className="inline-flex items-center gap-2 bg-[#f0fdf4] text-[#166534] px-5 py-2.5 rounded-full text-sm font-black tracking-wide border border-[#bbf7d0] shadow-sm">
               <AlertTriangle size={16} />
               {daysRemaining === 0 ? "¡Suscripción expirada hoy!" : `¡Quedan ${daysRemaining} días de acceso PRO!`}
             </div>
@@ -216,51 +224,103 @@ export default function QuizLobbyPage() {
         </header>
 
         <div className="w-full space-y-6">
-          <article>
-            <button onClick={() => router.push('/quiz/inicial')} className="w-full group rounded-[2rem] border-2 transition-all p-8 flex flex-col md:flex-row items-center gap-6 bg-white border-emerald-100 shadow-xl hover:-translate-y-1 cursor-pointer">
-              <div className="w-20 h-20 rounded-full flex items-center justify-center text-4xl shrink-0 bg-gradient-to-br from-emerald-400 to-emerald-600 text-white shadow-lg">
-                <BrainCircuit size={40} />
-              </div>
-              <div className="flex-1 text-center md:text-left z-10">
-                  <h3 className="font-black text-2xl text-slate-800 leading-tight mb-2">Simulador Inicial</h3>
-                  <p className="text-sm text-slate-500 mb-4">La ruta de entrenamiento definitiva. 2 niveles gratuitos para dominar conceptos básicos.</p>
-              </div>
-            </button>
-          </article>
+          
+          {/* NUEVA TARJETA SIMULADOR INICIAL - CLICKABLE COMPLETA */}
+          <button 
+            onClick={() => handleBasicAccess('/quiz/basic')}
+            className="w-full text-left rounded-[2rem] border-2 transition-all p-8 bg-white border-slate-200 shadow-sm hover:border-[#28a745] hover:shadow-lg group flex flex-col md:flex-row items-center gap-6"
+          >
+            <div className="w-20 h-20 rounded-full flex items-center justify-center text-4xl shrink-0 bg-[#28a745] text-white shadow-md group-hover:scale-105 transition-transform">
+              <BrainCircuit size={40} />
+            </div>
+            <div className="flex-1 text-center md:text-left">
+                <h3 className="font-black text-2xl text-[#003366] leading-tight mb-2 group-hover:text-[#28a745] transition-colors">Simulador Inicial</h3>
+                <p className="text-sm text-slate-500">La ruta de entrenamiento definitiva. <strong className="text-[#28a745]">100% gratis</strong> para dominar los conceptos básicos.</p>
+            </div>
+            <div className="hidden md:flex shrink-0 text-[#28a745] items-center gap-2 font-bold opacity-50 group-hover:opacity-100 transition-opacity bg-emerald-50 px-4 py-2 rounded-full">
+              Entrar <ChevronRight size={20} />
+            </div>
+          </button>
 
+          {/* TARJETA CAMPUS VIRTUAL PRO */}
           <article>
-            <button 
-              onClick={handleProAccess} 
-              disabled={isVerifying}
-              className="w-full group rounded-[2rem] border-2 transition-all p-8 flex flex-col md:flex-row items-center gap-6 bg-slate-900 border-slate-800 shadow-xl hover:-translate-y-1 cursor-pointer relative overflow-hidden mt-2"
-            >
-              {isVerifying && (
-                <div className="absolute inset-0 bg-slate-900/80 z-20 flex items-center justify-center rounded-[2rem]">
-                  <Loader2 className="animate-spin text-amber-500" size={32} />
+            <div className="w-full rounded-[2rem] border-2 border-[#001122] transition-all p-8 bg-[#002244] shadow-xl relative overflow-hidden mt-2">
+              <div className="absolute -top-24 -right-24 w-64 h-64 bg-[#003366] rounded-full blur-3xl opacity-50 pointer-events-none"></div>
+
+              <div className="relative z-10 flex flex-col md:flex-row items-center gap-6">
+                <div className="w-20 h-20 rounded-full flex items-center justify-center text-4xl shrink-0 bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-[0_0_20px_rgba(255,153,0,0.3)]">
+                  <ShieldCheck size={40} />
                 </div>
-              )}
-              <div className="w-20 h-20 rounded-full flex items-center justify-center text-4xl shrink-0 bg-gradient-to-br from-amber-400 to-orange-600 text-white shadow-lg">
-                <ShieldCheck size={40} />
+                
+                <div className="flex-1 text-center md:text-left">
+                    <div className="flex items-center justify-center md:justify-start gap-3 mb-2">
+                      <h3 className="font-black text-2xl text-white leading-tight">Campus Virtual PRO</h3>
+                      <button onClick={handleShare} className="text-blue-300 hover:text-amber-400 transition-colors bg-white/10 p-2 rounded-full" title="Compartir Campus PRO">
+                        <Share2 size={16} />
+                      </button>
+                    </div>
+                    
+                    <p className="text-sm text-blue-100 mb-5">
+                      {isCheckingAuth 
+                        ? "Verificando tu nivel de acceso..." 
+                        : !isProUser
+                          ? "Descubre el temario oficial en el Campus y entusiasmate a dar el paso PRO."
+                          : canAccessSimulator 
+                            ? "Acceso total a los módulos y al Simulador Fiscalizador. Estás listo para el desafío final." 
+                            : "Acceso PRO activo. El Simulador SEREMI se desbloqueará automáticamente al aprobar el Módulo 4."}
+                    </p>
+                    
+                    {isCheckingAuth ? (
+                      <div className="inline-flex items-center justify-center gap-2 px-6 py-3 text-amber-400 font-bold w-full md:w-auto">
+                        <Loader2 className="animate-spin" size={24} /> Validando credenciales...
+                      </div>
+                    ) : (
+                      <div className="flex flex-col sm:flex-row gap-3">
+                        <button 
+                          onClick={handleCampusAccess} 
+                          className="flex items-center justify-center gap-2 bg-white text-[#002244] font-bold px-6 py-3 rounded-xl hover:bg-slate-100 transition-all flex-1"
+                        >
+                          <BookOpen size={18} />
+                          Ingresar al Campus
+                        </button>
+                        
+                        {!isProUser ? (
+                          <button 
+                            onClick={() => router.push('/planes')} 
+                            className="flex items-center justify-center gap-2 bg-slate-800/80 border border-slate-600 text-amber-400 font-bold px-6 py-3 rounded-xl hover:bg-slate-700 transition-colors flex-1"
+                          >
+                            <Lock size={18} /> Obtener PRO
+                          </button>
+                        ) : canAccessSimulator && (
+                          <button 
+                            onClick={handleProAccess}
+                            disabled={isVerifying}
+                            className="flex items-center justify-center gap-2 bg-[#28a745] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#218838] shadow-[0_0_15px_rgba(40,167,69,0.4)] transition-all flex-1 disabled:opacity-70"
+                          >
+                            {isVerifying ? <Loader2 className="animate-spin" size={18} /> : <><BrainCircuit size={18} /> Iniciar Simulador</>}
+                          </button>
+                        )}
+                      </div>
+                    )}
+                </div>
               </div>
-              <div className="flex-1 text-center md:text-left z-10">
-                  <h3 className="font-black text-2xl text-white leading-tight mb-2">Simulador PRO <span className="text-amber-400">SEREMI</span></h3>
-                  <p className="text-sm text-slate-400 mb-4">Modo Fiscalizador. Casos complejos para aprobar a la primera.</p>
-                  <span className="inline-flex items-center gap-2 text-xs font-bold text-amber-400 bg-amber-400/10 border border-amber-400/20 px-3 py-1 rounded-full uppercase tracking-wider">
-                    Nivel Examen de Competencia <Trophy size={12} />
-                  </span>
-              </div>
-            </button>
+            </div>
           </article>
+
+          {/* COMPONENTE SOCIAL ANCLADO AL PIE DE LOS MÓDULOS */}
+          <div className="pt-4">
+            <SocialContact />
+          </div>
+
         </div>
 
-        <BannerVenta />
-        
-        <div className="mt-12 pt-12 border-t border-slate-200">
-          <SocialContact />
+        <div className="mt-8">
+          <BannerVenta />
         </div>
+        
       </section>
 
-      <footer className="p-8 text-center text-[10px] font-mono text-slate-300 uppercase tracking-widest">
+      <footer className="p-8 text-center text-[10px] font-mono text-slate-400 uppercase tracking-widest">
         AuxiliarPro App | &lt; macz.dev /&gt;
       </footer>
     </main>

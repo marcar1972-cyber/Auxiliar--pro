@@ -8,14 +8,14 @@ export default function AboutSection() {
         
         {/* Encabezado */}
         <div className="text-center mb-16">
-          <span className="bg-emerald-100 text-emerald-700 font-black tracking-widest text-[10px] uppercase px-3 py-1 rounded-full">
+          <span className="bg-[#28a745]/10 text-[#28a745] font-black tracking-widest text-[10px] uppercase px-3 py-1 rounded-full">
             Transparencia Total
           </span>
-          <h2 className="text-3xl md:text-5xl font-black text-slate-900 mt-4 tracking-tight">
+          <h2 className="text-3xl md:text-5xl font-black text-[#003366] mt-4 tracking-tight">
             De un Auxiliar para Auxiliares
           </h2>
           <p className="text-lg text-slate-500 mt-6 max-w-2xl mx-auto font-medium">
-            <span className="text-emerald-600 font-bold">auxiliaresdefarmacia.cl</span> nace de una necesidad real, creado por alguien que está en la misma trinchera que tú.
+            <span className="text-[#28a745] font-bold">auxiliaresdefarmacia.cl</span> nace de una necesidad real, creado por alguien que está en la misma trinchera que tú.
           </p>
         </div>
 
@@ -24,8 +24,8 @@ export default function AboutSection() {
             
             {/* FOTO DE PERFIL */}
             <div className="relative w-32 h-32 md:w-40 md:h-40 flex-shrink-0">
-                <div className="absolute inset-0 bg-emerald-200 rounded-full blur-lg opacity-50"></div>
-                {/* 👇 AQUÍ ESTABA EL ERROR: AGREGAMOS LA 'z' */}
+                {/* Aura de resplandor usando Verde Brand */}
+                <div className="absolute inset-0 bg-[#28a745]/20 rounded-full blur-lg opacity-50"></div>
                 <img 
                     src="/maczdev.webp" 
                     alt="MaczDev" 
@@ -34,10 +34,10 @@ export default function AboutSection() {
             </div>
 
             <div className="flex-1 text-center md:text-left">
-                <h3 className="text-2xl font-black text-slate-900 mb-4">Hola, soy MaczDev 👋</h3>
+                <h3 className="text-2xl font-black text-[#003366] mb-4">Hola, soy MaczDev 👋</h3>
                 <div className="space-y-4 text-slate-600 leading-relaxed">
                     <p>
-                        Soy <strong>Auxiliar Trainee de Farmacia</strong> y <strong>Desarrollador Web & Maker</strong>. Actualmente trabajo en el rubro y, al igual que tú, me estoy preparando para rendir la prueba de competencia <strong>SEREMI 2026</strong>.
+                        Soy <strong>Auxiliar de Farmacia certificado por SEREMI</strong> y <strong>Desarrollador Web & Maker</strong>. Actualmente trabajo en el rubro y, al igual que tú, recorrí el camino para rendir la prueba de competencia con éxito.
                     </p>
                     <p>
                         Mientras estudiaba, me di cuenta de un gran vacío: <strong>no existían ensayos tipo prueba disponibles en la red</strong>. Esa frustración fue mi motor.
@@ -48,7 +48,8 @@ export default function AboutSection() {
                     <p>
                         Lanzamos en diciembre de 2025 y ver la gran afluencia de usuarios me confirma que esto era necesario.
                     </p>
-                    <p className="font-bold text-slate-800 border-l-4 border-emerald-500 pl-4 italic">
+                    {/* Borde izquierdo destacado en Verde Brand */}
+                    <p className="font-bold text-slate-800 border-l-4 border-[#28a745] pl-4 italic">
                         "Creo firmemente que el conocimiento que nos permite crecer profesional y espiritualmente debe ser libre y gratuito para todos."
                     </p>
                 </div>
@@ -58,29 +59,31 @@ export default function AboutSection() {
         {/* Grid de Valores */}
         <div className="grid md:grid-cols-3 gap-6">
             <div className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-md transition-all group hover:-translate-y-1">
-                <div className="w-14 h-14 bg-indigo-50 rounded-2xl flex items-center justify-center text-indigo-600 mb-6 group-hover:scale-110 transition-transform">
+                {/* Fondo de icono sutil en Azul Médico */}
+                <div className="w-14 h-14 bg-[#003366]/5 rounded-2xl flex items-center justify-center text-[#003366] mb-6 group-hover:scale-110 transition-transform">
                     <Code size={28} />
                 </div>
-                <h4 className="font-black text-lg text-slate-900 mb-3">Tecnología + Salud</h4>
+                <h4 className="font-black text-lg text-[#003366] mb-3">Tecnología + Salud</h4>
                 <p className="text-sm text-slate-500 leading-relaxed">
                     Plataforma programada con asistencia de IA para estructurar contenido legal complejo de forma simple y didáctica.
                 </p>
             </div>
             <div className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-md transition-all group hover:-translate-y-1">
-                <div className="w-14 h-14 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-600 mb-6 group-hover:scale-110 transition-transform">
+                <div className="w-14 h-14 bg-[#003366]/5 rounded-2xl flex items-center justify-center text-[#003366] mb-6 group-hover:scale-110 transition-transform">
                     <Lightbulb size={28} />
                 </div>
-                <h4 className="font-black text-lg text-slate-900 mb-3">Nuestra Visión</h4>
+                <h4 className="font-black text-lg text-[#003366] mb-3">Nuestra Visión</h4>
                 <p className="text-sm text-slate-500 leading-relaxed">
                     Crear la comunidad de apoyo más grande de Chile. Que nadie repruebe por falta de recursos de estudio.
                 </p>
             </div>
-            <div className="bg-emerald-50 p-8 rounded-[2rem] border border-emerald-100 shadow-sm hover:shadow-md transition-all group hover:-translate-y-1">
-                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-emerald-600 mb-6 group-hover:scale-110 transition-transform shadow-sm">
+            {/* Tarjeta destacada usando Verde Brand al 5% */}
+            <div className="bg-[#28a745]/5 p-8 rounded-[2rem] border border-[#28a745]/10 shadow-sm hover:shadow-md transition-all group hover:-translate-y-1">
+                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-[#28a745] mb-6 group-hover:scale-110 transition-transform shadow-sm">
                     <Heart size={28} fill="currentColor" />
                 </div>
-                <h4 className="font-black text-lg text-emerald-900 mb-3">Gratuidad Real</h4>
-                <p className="text-sm text-emerald-800 leading-relaxed font-medium">
+                <h4 className="font-black text-lg text-[#003366] mb-3">Gratuidad Real</h4>
+                <p className="text-sm text-slate-600 leading-relaxed font-medium">
                     Sin letra chica. No vendemos tus datos. Un aporte personal para devolver la mano a la comunidad.
                 </p>
             </div>

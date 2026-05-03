@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Mail, Instagram, Facebook, ShieldAlert, Scale, ChevronUp } from "lucide-react";
+import { Mail, Instagram, Facebook } from "lucide-react";
 
 // Icono de WhatsApp oficial
 const WhatsAppIcon = ({ size = 20 }) => (
@@ -13,29 +13,29 @@ const WhatsAppIcon = ({ size = 20 }) => (
 
 export default function Footer() {
   return (
-    <footer className="bg-[#0f172a] text-slate-300 py-10 px-6 border-t border-white/5 font-sans">
+    <footer className="bg-[#003366] text-white py-10 px-6 border-t border-white/10 font-sans">
       <div className="max-w-6xl mx-auto">
         
         {/* FILA SUPERIOR: Logo (Izq) - Links (Centro) - Email (Der) */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-8">
           
           <div className="w-full md:w-1/4 flex justify-center md:justify-start">
-            <div className="relative w-36 h-10 grayscale invert opacity-70">
-              <Image src="/logo.webp" alt="AuxiliarPro" fill className="object-contain object-left" />
+            {/* Contenedor del logo ampliado al doble: de w-36 h-10 a w-72 h-20 */}
+            <div className="relative w-72 h-20">
+              <Image src="/logo_auxiliarpro.png" alt="AuxiliarPro" fill className="object-contain object-left rounded-sm" />
             </div>
           </div>
 
           <div className="w-full md:w-2/4 flex justify-center gap-6">
-            {/* ENLACES CORREGIDOS A LAS RUTAS EXACTAS */}
             <Link 
               href="/legal/terminos"
-              className="text-[10px] font-black uppercase tracking-widest transition-colors text-slate-400 hover:text-white"
+              className="text-[10px] font-black uppercase tracking-widest transition-colors text-white/70 hover:text-white"
             >
               Términos de Uso
             </Link>
             <Link 
               href="/legal/descargos"
-              className="text-[10px] font-black uppercase tracking-widest transition-colors text-slate-400 hover:text-white"
+              className="text-[10px] font-black uppercase tracking-widest transition-colors text-white/70 hover:text-white"
             >
               Descargos Legales
             </Link>
@@ -44,39 +44,39 @@ export default function Footer() {
           <div className="w-full md:w-1/4 flex justify-center md:justify-end">
             <a 
               href="mailto:hola@auxiliarpro.cl" 
-              className="text-[10px] font-bold text-slate-400 hover:text-emerald-400 transition-colors flex items-center gap-2 whitespace-nowrap"
+              className="text-[10px] font-bold text-white/80 hover:text-[#28a745] transition-colors flex items-center gap-2 whitespace-nowrap"
             >
-              <Mail size={14} className="text-emerald-500" />
-              hola@auxiliarpro.cl <span className="text-slate-600 font-medium tracking-tight ml-1">(Sugerencia)</span>
+              <Mail size={14} className="text-[#28a745]" />
+              hola@auxiliarpro.cl <span className="text-white/50 font-medium tracking-tight ml-1">(Sugerencia)</span>
             </a>
           </div>
         </div>
 
         {/* FILA INFERIOR: Iconos y Copyright */}
-        <div className="flex flex-col items-center gap-6 pt-6 border-t border-white/5">
-          <div className="flex justify-center gap-10 text-white/40">
-            <a href="https://www.facebook.com/profile.php?id=61584679565188" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-all transform hover:scale-110">
+        <div className="flex flex-col items-center gap-6 pt-6 border-t border-white/10">
+          <div className="flex justify-center gap-10 text-white/70">
+            <a href="https://www.facebook.com/profile.php?id=61574303045937" target="_blank" rel="noopener noreferrer" className="hover:text-[#28a745] transition-all transform hover:scale-110">
               <Facebook size={24}/>
             </a>
-            <a href="https://www.instagram.com/auxiliarpro/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-all transform hover:scale-110">
+            <a href="https://www.instagram.com/auxiliarpro/" target="_blank" rel="noopener noreferrer" className="hover:text-[#28a745] transition-all transform hover:scale-110">
               <Instagram size={24}/>
             </a>
-            <a href="https://wa.me/56934238151" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-500 transition-all transform hover:scale-110">
+            <a href="https://wa.me/56934238151" target="_blank" rel="noopener noreferrer" className="hover:text-[#28a745] transition-all transform hover:scale-110">
               <WhatsAppIcon size={24}/>
             </a>
           </div>
 
           <div className="flex flex-col items-center gap-3 text-center">
-            <div className="text-[9px] font-black uppercase tracking-[0.4em] text-slate-600">
+            <div className="text-[9px] font-black uppercase tracking-[0.4em] text-white/60">
               AuxiliarPro Chile © 2026 | Excelencia Farmacéutica
             </div>
             
             {/* FIRMA MACZDEV */}
             <div className="flex flex-col items-center gap-1">
-              <p className="text-[10px] font-bold text-emerald-500/80 tracking-widest">
-                Desarrollado por MaczDev • 2025
+              <p className="text-[10px] font-bold text-[#28a745] tracking-widest">
+                Desarrollado por MaczDev • Core v5.0
               </p>
-              <p className="text-[9px] text-slate-500 italic font-medium">
+              <p className="text-[9px] text-white/40 italic font-medium">
                 Hecho con 80% de curiosidad humana y 20% de IA.
               </p>
             </div>

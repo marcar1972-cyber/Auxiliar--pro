@@ -23,7 +23,7 @@ export default function Testimonios() {
     <section id="testimonios" className="bg-white py-24 px-6 w-full border-t border-slate-100">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="font-black text-3xl md:text-4xl text-slate-900 tracking-tight">Casos de Éxito Reales</h2>
+          <h2 className="font-black text-3xl md:text-4xl text-[#003366] tracking-tight">Casos de Éxito Reales</h2>
           <p className="text-slate-500 mt-4 max-w-2xl mx-auto font-medium">Conoce lo que opinan quienes ya están preparándose y logrando sus metas con nosotros.</p>
         </div>
 
@@ -32,23 +32,24 @@ export default function Testimonios() {
           {testimoniosData.map((testimonio) => (
             <div 
               key={testimonio.id} 
-              className="bg-emerald-50 p-8 md:p-12 rounded-[2.5rem] border border-emerald-100 shadow-sm relative flex flex-col justify-between transform hover:-translate-y-1 transition-all duration-300"
+              /* Fondo Verde Brand al 5% para diferenciar las tarjetas del fondo blanco */
+              className="bg-[#28a745]/5 p-8 md:p-12 rounded-[2.5rem] border border-[#28a745]/10 shadow-sm relative flex flex-col justify-between transform hover:-translate-y-1 transition-all duration-300"
             >
               <div>
-                <div className="flex gap-1 mb-6 text-emerald-500">
+                <div className="flex gap-1 mb-6 text-[#28a745]">
                   {[...Array(testimonio.estrellas)].map((_, i) => (
                     <Star key={i} fill="currentColor" size={20} />
                   ))}
                 </div>
-                <blockquote className="text-lg md:text-xl font-medium text-slate-700 leading-relaxed mb-8 italic">
+                <blockquote className="text-lg md:text-xl font-medium text-[#003366]/80 leading-relaxed mb-8 italic">
                   "{testimonio.texto}"
                 </blockquote>
               </div>
               
-              <div className="flex flex-col items-start border-t border-emerald-200/50 pt-6 mt-auto">
-                <p className="font-black text-slate-900 text-lg">{testimonio.nombre}</p>
-                <div className="flex items-center gap-2 mt-2 bg-white text-emerald-800 px-4 py-1.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-widest shadow-sm border border-emerald-100">
-                  <CheckCircle size={14} className="text-emerald-500 flex-shrink-0" />
+              <div className="flex flex-col items-start border-t border-[#28a745]/20 pt-6 mt-auto">
+                <p className="font-black text-[#003366] text-lg">{testimonio.nombre}</p>
+                <div className="flex items-center gap-2 mt-2 bg-white text-[#003366] px-4 py-1.5 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-widest shadow-sm border border-slate-100">
+                  <CheckCircle size={14} className="text-[#28a745] flex-shrink-0" />
                   <span className="truncate">{testimonio.etiqueta}</span>
                 </div>
               </div>

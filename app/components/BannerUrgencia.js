@@ -10,7 +10,7 @@ export default function BannerUrgencia() {
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
   
-  // Mantenemos el estado del tiempo para no alterar los hooks originales
+  // Contador ajustado al 10 de mayo
   const [timeLeft, setTimeLeft] = useState({ dias: 0, horas: 0, min: 0, seg: 0 });
   
   const [usuario, setUsuario] = useState(null);
@@ -18,7 +18,8 @@ export default function BannerUrgencia() {
   const [inscrito, setInscrito] = useState(false);
 
   function calculateTimeLeft() {
-    const targetDate = new Date("2026-04-07T23:59:59");
+    // FECHA OBJETIVO: 10 de mayo 2026
+    const targetDate = new Date("2026-05-10T00:00:00");
     const difference = targetDate - new Date();
     let newTimeLeft = { dias: 0, horas: 0, min: 0, seg: 0 };
     
@@ -57,17 +58,20 @@ export default function BannerUrgencia() {
     return () => { clearInterval(timer); unsubscribeAuth(); };
   }, []);
 
-  const formatTime = (time) => time < 10 ? `0${time}` : time;
-
   const handleAccionBoton = async () => {
-    if (!usuario) { router.push('/login'); return; }
+    // 1. Si no hay usuario, redirigir al login
+    if (!usuario) { 
+        router.push('/login'); 
+        return; 
+    }
     
-    // Si ya interactuó antes, acceso directo a planes
+    // 2. Si ya está inscrito, ir directo a planes
     if (inscrito) {
         router.push('/planes');
         return;
     }
 
+    // 3. Registrar interacción
     setCargando(true);
     try {
       await addDoc(collection(db, 'lista_espera_pro'), {
@@ -75,49 +79,49 @@ export default function BannerUrgencia() {
         email: usuario.email,
         uid: usuario.uid,
         fechaRegistro: new Date(),
-        origen: 'banner_top_regular',
-        cuponAsignado: 'INTERESADO_PRO'
+        origen: 'banner_top_dia_madre',
+        cuponAsignado: 'DIAMADRE_PRO'
       });
 
-      // Integración con Make/Webhook (Etiqueta actualizada)
-      await fetch('https://hook.us2.make.com/r8r94dlmw5a6l4kvwfshfqu7byu3q3h7', {
+      // Intentar Webhook, pero no bloquear la navegación si falla
+      fetch('https://hook.us2.make.com/r8r94dlmw5a6l4kvwfshfqu7byu3q3h7', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           nombre: usuario.displayName || 'Usuario AuxiliarPro',
           email: usuario.email,
-          cupon: 'INTERESADO_PRO'
+          cupon: 'DIAMADRE_PRO'
         })
-      });
+      }).catch(err => console.error("Webhook skip:", err));
 
       setInscrito(true);
-      // Redirección inmediata tras registrar el clic
       router.push('/planes');
 
     } catch (error) {
-      console.error(error);
-      alert("Error de conexión.");
-    } finally { setCargando(false); }
+      console.error("Error en registro:", error);
+      // Forzar redirección aunque el registro de datos falle (UX primero)
+      router.push('/planes');
+    } finally { 
+      setCargando(false); 
+    }
   };
 
   if (!isMounted) return null;
 
   return (
-    <div className="bg-slate-950 text-white py-3 px-4 text-center text-xs md:text-sm font-medium flex flex-col lg:flex-row items-center justify-center gap-3 lg:gap-6 shadow-xl z-50 relative w-full overflow-hidden border-b border-emerald-500/30">
+    /* Aplicamos Azul Médico (#003366) como base de autoridad y borde Verde Brand (#28a745) */
+    <div className="bg-[#003366] text-white py-3 px-4 text-center text-xs md:text-sm font-medium flex flex-col lg:flex-row items-center justify-center gap-3 lg:gap-6 shadow-xl z-50 relative w-full overflow-hidden border-b border-[#28a745]/40">
       
-      <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500 rounded-full blur-[120px] opacity-20 -mr-20 -mt-20 pointer-events-none"></div>
+      {/* Resplandor ambiental usando Verde Brand para dinamismo profesional */}
+      <div className="absolute top-0 right-0 w-64 h-64 bg-[#28a745] rounded-full blur-[120px] opacity-20 -mr-20 -mt-20 pointer-events-none"></div>
 
-      <div className="flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 text-center max-w-full relative z-10">
-        <span className="leading-tight text-slate-300">
-          🚀 <strong className="text-white uppercase tracking-widest">AuxiliarPro</strong>
+      <div className="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 text-center max-w-full relative z-10">
+        <span className="leading-tight text-white font-bold uppercase tracking-tight">
+            Cuidas la salud de todos, ahora cuida tu futuro.
         </span>
-        <span className="hidden md:inline opacity-30 text-emerald-500">|</span>
-        <span className="leading-tight text-emerald-400 font-bold">
-          Asegura tu examen SEREMI
-        </span>
-        <span className="hidden md:inline opacity-30 text-emerald-500">|</span>
-        <span className="leading-tight text-slate-400 font-medium hidden md:inline">
-          🔒 Sin cobros automáticos
+        <span className="hidden md:inline opacity-30 text-[#28a745]">|</span>
+        <span className="leading-tight text-white font-black italic">
+            Porque sabemos el esfuerzo que haces cada día. <span className="bg-gradient-to-r from-pink-400 to-rose-400 bg-clip-text text-transparent px-1 text-base md:text-lg">¡Feliz Día Mamá!</span>
         </span>
       </div>
       
@@ -125,10 +129,11 @@ export default function BannerUrgencia() {
         <button 
           onClick={handleAccionBoton}
           disabled={cargando}
-          className={`shrink-0 px-5 py-2 rounded-full text-xs md:text-sm font-black transition-all shadow-[0_0_15px_rgba(16,185,129,0.2)] uppercase tracking-wider ${
+          /* Botón principal en Verde Brand (#28a745) para llamadas a la acción secundarias/éxito */
+          className={`shrink-0 px-5 py-2 rounded-full text-xs md:text-sm font-black transition-all shadow-[0_0_15px_rgba(40,167,69,0.3)] uppercase tracking-widest ${
             cargando
                 ? 'bg-slate-800 text-slate-500 cursor-not-allowed'
-                : 'bg-emerald-500 text-slate-900 hover:bg-emerald-400 hover:scale-105 cursor-pointer active:scale-95 shadow-emerald-500/20'
+                : 'bg-[#28a745] text-white hover:bg-[#218838] hover:scale-105 cursor-pointer active:scale-95 shadow-[#28a745]/20'
           }`}
         >
           {inscrito 

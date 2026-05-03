@@ -1,38 +1,53 @@
-import { level1 } from './level1.js';
-import { level2 } from './level2.js';
-import { level3 } from './level3.js';
-import { level4 } from './level4.js';
-import { level5 } from './level5.js';
-import { level6 } from './level6.js';
-import { level7 } from './level7.js';
+// app/quizData/index.js
 
-// Importaciones del Simulador PRO
-import { proLevel1 } from './proLevel1.js';
-import { proLevel2 } from './proLevel2.js';
-import { proLevel3 } from './proLevel3.js';
-import { proLevel4 } from './proLevel4.js';
-import { proLevel5 } from './proLevel5.js';
-import { proLevel6 } from './proLevel6.js';
-import { proLevel7 } from './proLevel7.js';
+// Importaciones del Nivel Básico (Gratis) - Reducido a 3 niveles
+// Importamos sin llaves (export default)
+import basicEval1 from './basic-eval-1.js';
+import basicEval2 from './basic-eval-2.js';
+import basicEval3 from './basic-eval-3.js';
 
+// Importaciones del Nivel PRO - Escalado a 15 evaluaciones + Global SEREMI
+// Importamos con llaves porque este archivo usa 'export const'
+import { proEval1 } from './pro-eval-1.js';
+import { proEval2 } from './pro-eval-2.js';
+import { proEval3 } from './pro-eval-3.js';
+import { proEval4 } from './pro-eval-4.js';
+import { proEval5 } from './pro-eval-5.js';
+import { proEval6 } from './pro-eval-6.js';
+import { proEval7 } from './pro-eval-7.js';
+import { proEval8 } from './pro-eval-8.js';
+import { proEval9 } from './pro-eval-9.js';
+import { proEval10 } from './pro-eval-10.js';
+import { proEval11 } from './pro-eval-11.js';
+import { proEval12 } from './pro-eval-12.js';
+import { proEval13 } from './pro-eval-13.js';
+import { proEval14 } from './pro-eval-14.js';
+import { proEval15 } from './pro-eval-15.js';
+import { proEvalGlobal } from './pro-eval-global.js';
+
+// Mantenemos los nombres de las constantes exportadas (LEVELS y PRO_LEVELS)
+// ESTRATEGIA CTO: .filter(Boolean) elimina cualquier 'undefined' evitando caídas.
 export const LEVELS = [
-  level1,
-  level2,
-  level3,
-  level4,
-  level5,
-  level6,
-  level7
-];
+  basicEval1,
+  basicEval2,
+  basicEval3
+].filter(Boolean);
 
 export const PRO_LEVELS = [
-  proLevel1,
-  proLevel2,
-  proLevel3,
-  proLevel4,
-  proLevel5,
-  proLevel6,
-  proLevel7
-];
-
-// < macz.dev />
+  proEval1,
+  proEval2,
+  proEval3,
+  proEval4,
+  proEval5,
+  proEval6,
+  proEval7,
+  proEval8,
+  proEval9,
+  proEval10,
+  proEval11,
+  proEval12,
+  proEval13,
+  proEval14,
+  proEval15,
+  proEvalGlobal
+].filter(Boolean);

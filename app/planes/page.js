@@ -12,14 +12,15 @@ export default function PaginaPlanes() {
       {/* CONTENIDO PRINCIPAL */}
       <main className="flex-1 flex flex-col items-center justify-start py-8 md:py-16">
         
-        {/* SECCIÓN DE LANZAMIENTOS ELIMINADA PARA MEJORAR CONVERSIÓN */}
-
+        {/* SECCIÓN DE PLANES */}
         <PlanesSuscripcion />
         
         {/* BLOQUE DE CONFIANZA */}
-        <div className="mt-8 mb-4 text-center bg-white border border-slate-200 px-8 py-4 rounded-2xl shadow-sm">
-          <p className="text-slate-700 text-sm font-bold">
-            Si deseas cancelar tu suscripción envíanos un correo a <span className="text-emerald-600">hola@auxiliarpro.cl</span>
+        <div className="mt-8 mb-4 text-center bg-white border border-slate-200 px-8 py-5 rounded-2xl shadow-sm max-w-xl mx-auto">
+          <p className="text-slate-700 text-sm font-bold leading-relaxed">
+            Tus pagos están protegidos por <span className="text-blue-500">Mercado Pago</span>. 
+            <br />
+            <span className="text-emerald-600">Cero cobros automáticos:</span> No realizamos renovaciones forzosas. Al terminar tu suscripción, tú decides si deseas comprar un nuevo periodo para continuar estudiando.
           </p>
         </div>
       </main>

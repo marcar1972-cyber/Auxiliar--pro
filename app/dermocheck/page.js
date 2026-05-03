@@ -5,7 +5,7 @@ import { calculateBatch } from "./batchCalculator";
 import { 
   ChevronLeft, Search, AlertCircle, Beaker, CheckCircle2, 
   BookOpen, Type, Hash, ShieldCheck, Sparkles, Zap, Share2,
-  Facebook, Instagram
+  Facebook, Instagram, ChevronDown
 } from "lucide-react";
 import Link from "next/link";
 import BannerVenta from "../components/BannerVenta";
@@ -92,15 +92,19 @@ export default function DermoCheckPage() {
             </div>
 
             <div className="p-8 md:p-12 space-y-8">
+              {/* FIX UX/UI: Contenedor Relativo y Flecha para el Select */}
               <div>
                 <label className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 block">1. Selecciona Marca</label>
-                <select 
-                  value={brand}
-                  onChange={(e) => setBrand(e.target.value)}
-                  className="w-full bg-slate-50 border-2 border-slate-100 p-5 rounded-2xl text-lg text-slate-900 font-bold focus:border-emerald-500 outline-none transition-all appearance-none cursor-pointer"
-                >
-                  {brands.map(b => <option key={b} value={b}>{b}</option>)}
-                </select>
+                <div className="relative group">
+                  <select 
+                    value={brand}
+                    onChange={(e) => setBrand(e.target.value)}
+                    className="w-full bg-slate-50 border-2 border-slate-200 pr-12 p-5 rounded-2xl text-lg text-slate-900 font-bold group-hover:border-emerald-500 focus:border-emerald-500 outline-none transition-all appearance-none cursor-pointer shadow-sm"
+                  >
+                    {brands.map(b => <option key={b} value={b}>{b}</option>)}
+                  </select>
+                  <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none group-hover:text-emerald-500 transition-colors" size={24} />
+                </div>
               </div>
 
               <div className="bg-rose-50/50 border border-rose-100 p-5 rounded-2xl flex items-center gap-4">
@@ -124,11 +128,11 @@ export default function DermoCheckPage() {
                   value={code}
                   onChange={(e) => setCode(e.target.value.toUpperCase())}
                   placeholder="EJ: 40229376"
-                  className="w-full bg-slate-50 border-2 border-slate-100 p-6 rounded-2xl text-2xl text-slate-900 font-black focus:border-emerald-500 outline-none transition-all"
+                  className="w-full bg-slate-50 border-2 border-slate-100 p-6 rounded-2xl text-2xl text-slate-900 font-black focus:border-emerald-500 outline-none transition-all shadow-sm"
                 />
               </div>
 
-              <button type="submit" className="w-full bg-[#0f172a] text-white font-black py-6 rounded-2xl shadow-xl hover:bg-black transition-all uppercase tracking-[0.2em] text-base flex justify-center items-center gap-3">
+              <button type="submit" className="w-full bg-[#0f172a] text-white font-black py-6 rounded-2xl shadow-xl hover:bg-emerald-600 transition-all uppercase tracking-[0.2em] text-base flex justify-center items-center gap-3">
                 Verificar Ahora
               </button>
             </div>

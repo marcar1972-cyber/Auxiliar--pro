@@ -3,34 +3,68 @@ import { ChevronLeft, AlertTriangle } from "lucide-react";
 
 export default function DescargosPage() {
   return (
-    <main className="min-h-screen bg-white p-6 md:p-12 font-sans text-slate-700">
-      <div className="max-w-2xl mx-auto">
-        <Link href="/" className="inline-flex items-center text-slate-400 hover:text-aux-dark mb-8 transition-colors">
-          <ChevronLeft size={20} /> Volver al Inicio
-        </Link>
+    <main className="min-h-screen bg-white p-6 md:p-12 font-sans text-slate-700 selection:bg-emerald-500/30">
+      <div className="max-w-3xl mx-auto">
         
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8">
-            <div className="flex gap-3">
-                <AlertTriangle className="text-yellow-600 shrink-0" />
-                <p className="text-sm text-yellow-800 font-bold">Aviso Importante de No Afiliación</p>
+        {/* Navegación Semántica */}
+        <nav aria-label="Navegación">
+          <Link 
+            href="/" 
+            className="inline-flex items-center gap-2 text-slate-400 hover:text-[#003366] mb-8 transition-colors font-bold text-sm"
+            title="Volver a la página principal de AuxiliarPro"
+          >
+            <ChevronLeft size={20} aria-hidden="true" /> Volver al Inicio
+          </Link>
+        </nav>
+        
+        <article aria-labelledby="titulo-legal">
+          <header className="mb-8">
+            <div className="bg-amber-50 border-l-4 border-amber-500 p-4 mb-8 rounded-r-lg shadow-sm">
+                <div className="flex gap-3 items-center">
+                    <AlertTriangle className="text-amber-600 shrink-0" aria-hidden="true" />
+                    <h2 className="text-sm text-amber-900 font-black uppercase tracking-wide">
+                      Aviso Importante de Independencia Institucional
+                    </h2>
+                </div>
             </div>
-        </div>
 
-        <h1 className="text-3xl font-black text-aux-dark mb-6">Descargos Legales</h1>
-        
-        <div className="space-y-6 text-sm leading-relaxed">
-          <p><strong>AuxiliarPro Chile</strong> declara explícitamente que:</p>
+            <h1 id="titulo-legal" className="text-3xl md:text-4xl font-black text-[#003366] mb-4 tracking-tight">
+              Descargos Legales y Términos de Uso
+            </h1>
+            <p className="text-slate-500 text-lg leading-relaxed">
+              Transparencia y claridad sobre la naturaleza de nuestros servicios de preparación para el <strong className="text-[#003366]">Examen de Auxiliar de Farmacia</strong>.
+            </p>
+          </header>
           
-          <ul className="list-disc pl-5 space-y-2">
-            <li><strong>NO representa al Ministerio de Salud (MINSAL)</strong>, ni al Instituto de Salud Pública (ISP), ni a las Secretarías Regionales Ministeriales (SEREMI) de Salud.</li>
-            <li>No tiene la facultad de otorgar credenciales, títulos ni certificados oficiales de competencia.</li>
-            <li>Cualquier cobro o trámite oficial debe realizarse única y exclusivamente a través de los canales del Estado (seremienlinea.minsal.cl).</li>
-          </ul>
+          <section className="space-y-6 text-base leading-relaxed bg-slate-50 p-6 md:p-8 rounded-3xl border border-slate-100 shadow-inner">
+            <p>
+              <strong>AuxiliarPro Chile</strong> es una plataforma EdTech (tecnología educativa) privada e independiente, creada por profesionales para facilitar el estudio y la preparación de futuros colegas en el rubro farmacéutico.
+            </p>
+            
+            <p className="font-bold text-[#003366]">
+              Declaramos explícitamente y para todos los efectos legales que:
+            </p>
+            
+            <ul className="list-disc pl-6 space-y-4 marker:text-[#28a745]">
+              <li>
+                <strong>NO representamos ni tenemos afiliación gubernamental</strong> con el Ministerio de Salud de Chile (<strong className="text-[#003366]">MINSAL</strong>), el Instituto de Salud Pública (<strong className="text-[#003366]">ISP</strong>), ni las Secretarías Regionales Ministeriales (<strong className="text-[#28a745]">SEREMI</strong>) de Salud.
+              </li>
+              <li>
+                Nuestra plataforma funciona exclusivamente como una herramienta de entrenamiento, educación y simulación basada en la normativa vigente. <strong>No tenemos la facultad legal</strong> de otorgar credenciales, títulos ni certificados oficiales de competencia para ejercer en farmacias.
+              </li>
+              <li>
+                Todo trámite legal, postulación al examen de competencia y pago de aranceles oficiales debe realizarse única y exclusivamente a través de los canales formales del Estado de Chile, específicamente en el portal oficial: <a href="https://seremienlinea.minsal.cl" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline font-bold">seremienlinea.minsal.cl</a>.
+              </li>
+            </ul>
 
-          <p className="mt-6 border-t pt-6 text-slate-500 italic">
-            Esta web es una iniciativa independiente creada por profesionales para facilitar el acceso al estudio y la preparación de futuros colegas.
-          </p>
-        </div>
+            <footer className="mt-10 border-t border-slate-200 pt-6">
+              <p className="text-slate-500 italic text-sm">
+                El uso de la plataforma AuxiliarPro no garantiza la aprobación automática del examen oficial, pero proporciona un entorno de estudio riguroso diseñado bajo las exigencias teóricas y normativas de la autoridad sanitaria chilena.
+              </p>
+            </footer>
+          </section>
+        </article>
+
       </div>
     </main>
   );

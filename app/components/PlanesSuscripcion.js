@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import { auth, db } from "../firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-import Link from "next/link";
 import { Loader2, CheckCircle } from "lucide-react";
+import Link from "next/link";
 
 export default function PlanesSuscripcion() {
   const [user, setUser] = useState(null);
@@ -57,7 +57,6 @@ export default function PlanesSuscripcion() {
     return fecha.toLocaleDateString("es-CL", { day: 'numeric', month: 'long', year: 'numeric' });
   };
 
-  // 🔥 CAMBIO 2: Pasamos el UID a nuestra propia API en lugar de a Reveniu
   const getCheckoutLink = (baseLink) => {
     if (!user) return "/login";
     
@@ -76,7 +75,7 @@ export default function PlanesSuscripcion() {
         {/* ENCABEZADO */}
         <div className="text-center mb-16">
           {isActive ? (
-            <div className="inline-flex items-center gap-2 bg-emerald-100 text-emerald-800 px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest mb-6 border border-emerald-200 shadow-sm">
+            <div className="inline-flex items-center gap-2 bg-[#28a745]/10 text-[#003366] px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest mb-6 border border-[#28a745]/20 shadow-sm">
               <CheckCircle size={16} />
               Eres miembro PRO hasta el {proUntil ? formatearFecha(proUntil) : "Indefinido"}
             </div>
@@ -87,7 +86,7 @@ export default function PlanesSuscripcion() {
           )}
           
           <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight">
-            Asegura tu examen SEREMI y <span className="text-emerald-500">domina el mesón</span>
+            Asegura tu examen SEREMI y <span className="text-[#28a745]">domina el mesón</span>
           </h2>
           <p className="text-slate-500 font-bold max-w-2xl mx-auto text-lg leading-relaxed">
             Accede a la plataforma definitiva para aprobar tu certificación y consultar normativa legal sin dudas. Todo el ecosistema AuxiliarPro.
@@ -115,16 +114,16 @@ export default function PlanesSuscripcion() {
 
             <ul className="space-y-5 mb-10 flex-1 border-t border-slate-100 pt-8">
               <li className="flex items-start gap-3 text-sm font-bold text-slate-600">
-                <span className="text-slate-400 text-xl leading-none">✓</span> 
-                <span><span className="text-slate-800">Simulador Inicial:</span> Acceso solo a Niveles 1 y 2.</span>
+                <span className="text-emerald-500 text-xl leading-none">✓</span> 
+                <span>Simulador Inicial: 3 Niveles de preguntas para practicar</span>
               </li>
               <li className="flex items-start gap-3 text-sm font-bold text-slate-600">
-                <span className="text-slate-400 text-xl leading-none">✓</span> 
-                <span><span className="text-slate-800">Guías de Estudio:</span> Resúmenes esenciales.</span>
+                <span className="text-emerald-500 text-xl leading-none">✓</span> 
+                <span>Guías de Estudio: Resúmenes esenciales.</span>
               </li>
               <li className="flex items-start gap-3 text-sm font-bold text-slate-600 opacity-50">
                 <span className="text-slate-300 text-xl leading-none">✗</span> 
-                <span><span className="text-slate-400 line-through">Simulador PRO Completo</span></span>
+                <span><span className="text-slate-400 line-through">Campus Virtual + Simulador PRO Completo</span></span>
               </li>
               <li className="flex items-start gap-3 text-sm font-bold text-slate-600 opacity-50">
                 <span className="text-slate-300 text-xl leading-none">✗</span> 
@@ -138,7 +137,7 @@ export default function PlanesSuscripcion() {
                   <Loader2 className="animate-spin" size={20} />
                 </div>
               ) : user ? (
-                <Link href="/quiz/inicial" className="w-full block bg-slate-100 text-slate-600 hover:bg-slate-200 font-black py-4 rounded-xl transition-all text-center text-sm uppercase tracking-wider">
+                <Link href="/quiz" className="w-full block bg-slate-100 text-slate-600 hover:bg-slate-200 font-black py-4 rounded-xl transition-all text-center text-sm uppercase tracking-wider">
                   Ir al Simulador
                 </Link>
               ) : (
@@ -158,7 +157,6 @@ export default function PlanesSuscripcion() {
             </div>
             
             <div className="mb-8">
-              <div className="text-transparent text-lg line-through font-black select-none">&nbsp;</div>
               <div className="flex items-baseline gap-1">
                 <span className="text-5xl font-black text-slate-900">$5.990</span>
                 <span className="text-slate-500 font-bold text-sm">/mes</span>
@@ -168,24 +166,16 @@ export default function PlanesSuscripcion() {
 
             <ul className="space-y-4 mb-10 flex-1 border-t border-slate-100 pt-8">
               <li className="flex items-start gap-3 text-sm font-bold text-slate-700">
-                <span className="text-emerald-500 text-xl leading-none">✓</span> 
-                <span><span className="text-slate-900">Simulador Inicial Completo</span></span>
+                <span className="text-[#28a745] text-xl leading-none">✓</span> 
+                <span>Simulador Inicial</span>
               </li>
               <li className="flex items-start gap-3 text-sm font-bold text-slate-700">
-                <span className="text-emerald-500 text-xl leading-none">✓</span> 
-                <span><span className="text-slate-900">Simulador PRO Completo</span></span>
+                <span className="text-[#28a745] text-xl leading-none">✓</span> 
+                <span>Campus Virtual + Simulador PRO Completo</span>
               </li>
               <li className="flex items-start gap-3 text-sm font-bold text-slate-700">
-                <span className="text-emerald-500 text-xl leading-none">✓</span> 
-                <span><span className="text-slate-900">Vademécum Profesional</span></span>
-              </li>
-              <li className="flex items-start gap-3 text-sm font-bold text-slate-500">
-                <span className="text-amber-500 text-lg leading-none">⚡</span> 
-                <span className="italic">Asistente IA (Próximamente)</span>
-              </li>
-              <li className="flex items-start gap-3 text-sm font-bold text-slate-500">
-                <span className="text-amber-500 text-lg leading-none">⚡</span> 
-                <span className="italic">Módulo Psicología (Próximamente)</span>
+                <span className="text-[#28a745] text-xl leading-none">✓</span> 
+                <span>Vademécum Profesional</span>
               </li>
             </ul>
 
@@ -199,27 +189,23 @@ export default function PlanesSuscripcion() {
                   Suscripción Activa
                 </button>
               ) : !user ? (
-                <Link href="/login" className="w-full block bg-slate-900 text-white hover:bg-slate-800 font-black py-4 rounded-xl transition-all text-center text-sm uppercase tracking-wider">
+                <Link href="/login" className="w-full block bg-[#003366] text-white hover:bg-[#002244] font-black py-4 rounded-xl transition-all text-center text-sm uppercase tracking-wider">
                   Crear Cuenta
                 </Link>
               ) : (
                 <a 
                   href={getCheckoutLink(BASE_LINK_MENSUAL)}
-                  className="w-full block bg-slate-900 text-white hover:bg-black font-black py-5 rounded-2xl transition-all text-center text-lg shadow-lg transform hover:-translate-y-1"
+                  className="w-full block bg-[#003366] text-white hover:bg-[#002244] font-black py-5 rounded-2xl transition-all text-center text-lg shadow-lg transform hover:-translate-y-1"
                 >
                   Obtener Plan Mensual
                 </a>
               )}
-              
-              <span className="text-[10px] text-slate-400 text-center leading-tight mt-1">
-                🔒 Pago único por 30 días. Sin renovación automática, sin amarras. Tú decides si renuevas.
-              </span>
             </div>
           </div>
 
           {/* PLAN ANUAL */}
-          <div className="bg-slate-900 rounded-[2.5rem] p-8 md:p-10 border-4 border-emerald-500 flex flex-col relative shadow-[0_20px_50px_rgba(16,185,129,0.3)]">
-            <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 bg-emerald-500 text-slate-900 px-6 py-2 rounded-full text-[12px] font-black uppercase tracking-[0.2em] shadow-2xl whitespace-nowrap border-2 border-slate-900">
+          <div className="bg-[#003366] rounded-[2.5rem] p-8 md:p-10 border-4 border-[#28a745] flex flex-col relative shadow-[0_20px_50px_rgba(40,167,69,0.3)]">
+            <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 bg-[#28a745] text-white px-6 py-2 rounded-full text-[12px] font-black uppercase tracking-[0.2em] shadow-2xl whitespace-nowrap border-2 border-[#003366]">
               MEJOR VALOR
             </div>
 
@@ -229,71 +215,52 @@ export default function PlanesSuscripcion() {
             </div>
             
             <div className="mb-8">
-              <div className="text-transparent text-lg line-through font-black select-none">&nbsp;</div>
               <div className="flex items-baseline gap-2">
                 <span className="text-6xl font-black text-white">$49.990</span>
                 <span className="text-slate-400 font-bold text-sm">/año</span>
               </div>
-              <p className="text-emerald-400 text-[11px] font-black mt-2 uppercase tracking-widest">Ahorra 2 meses</p>
+              <p className="text-[#28a745] text-[11px] font-black mt-2 uppercase tracking-widest">Ahorra 2 meses</p>
             </div>
 
             <ul className="space-y-4 mb-10 flex-1 border-t border-slate-800 pt-8">
               <li className="flex items-start gap-3 text-sm font-bold text-slate-300">
-                <span className="text-emerald-400 text-xl leading-none">✓</span> 
-                <span><span className="text-white">Simulador Inicial Completo</span></span>
+                <span className="text-[#28a745] text-xl leading-none">✓</span> 
+                <span>Simulador Inicial</span>
               </li>
               <li className="flex items-start gap-3 text-sm font-bold text-slate-300">
-                <span className="text-emerald-400 text-xl leading-none">✓</span> 
-                <span><span className="text-white">Simulador PRO Completo</span></span>
+                <span className="text-[#28a745] text-xl leading-none">✓</span> 
+                <span>Campus Virtual + Simulador PRO Completo</span>
               </li>
               <li className="flex items-start gap-3 text-sm font-bold text-slate-300">
-                <span className="text-emerald-400 text-xl leading-none">✓</span> 
-                <span><span className="text-white">Vademécum Profesional</span></span>
-              </li>
-              <li className="flex items-start gap-3 text-sm font-bold text-slate-400">
-                <span className="text-amber-400 text-lg leading-none">⚡</span> 
-                <span className="italic">Asistente IA (Próximamente)</span>
-              </li>
-              <li className="flex items-start gap-3 text-sm font-bold text-slate-400">
-                <span className="text-amber-400 text-lg leading-none">⚡</span> 
-                <span className="italic">Módulo Psicología (Próximamente)</span>
+                <span className="text-[#28a745] text-xl leading-none">✓</span> 
+                <span>Vademécum Profesional</span>
               </li>
             </ul>
 
             <div className="flex flex-col items-center gap-2 w-full mt-auto">
               {loadingAuth ? (
-                <div className="w-full bg-slate-800 text-slate-500 font-black py-4 rounded-xl flex items-center justify-center gap-2">
+                <div className="w-full bg-[#002244] text-slate-500 font-black py-4 rounded-xl flex items-center justify-center gap-2">
                   <Loader2 className="animate-spin" size={20} /> Verificando...
                 </div>
               ) : isActive ? (
-                <button disabled className="w-full bg-slate-800 text-emerald-500 font-black py-4 rounded-xl border border-emerald-900 cursor-not-allowed">
+                <button disabled className="w-full bg-[#002244] text-[#28a745] font-black py-4 rounded-xl border border-[#28a745]/30 cursor-not-allowed">
                   Suscripción Activa
                 </button>
               ) : !user ? (
-                <Link href="/login" className="w-full block bg-emerald-500 text-slate-900 hover:bg-emerald-400 font-black py-4 rounded-xl transition-all text-center text-sm uppercase tracking-wider shadow-lg shadow-emerald-900/20">
+                <Link href="/login" className="w-full block bg-[#28a745] text-white hover:bg-[#218838] font-black py-4 rounded-xl transition-all text-center text-sm uppercase tracking-wider shadow-lg shadow-[#28a745]/20">
                   Crear Cuenta
                 </Link>
               ) : (
                 <a 
                   href={getCheckoutLink(BASE_LINK_ANUAL)}
-                  className="w-full block bg-emerald-500 text-slate-900 hover:bg-emerald-400 font-black py-6 rounded-2xl transition-all text-center text-xl shadow-[0_0_30px_rgba(16,185,129,0.4)] transform hover:scale-105"
+                  className="w-full block bg-[#28a745] text-white hover:bg-[#218838] font-black py-6 rounded-2xl transition-all text-center text-xl shadow-[0_0_30px_rgba(40,167,69,0.4)] transform hover:scale-105"
                 >
                   Obtener Plan Anual
                 </a>
               )}
-              
-              <span className="text-[10px] text-slate-400 text-center leading-tight mt-1 opacity-80">
-                🔒 Pago único por 365 días. Sin renovación automática, sin amarras. Tú decides si renuevas.
-              </span>
             </div>
           </div>
 
-        </div>
-
-        {/* FOOTER */}
-        {/* 🔥 CAMBIO 3: Solo actualicé la firma a Mercado Pago */}
-        <div className="mt-16 flex flex-col items-center gap-4 text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">
-          <span className="bg-slate-50 px-6 py-3 rounded-xl border border-slate-100">🔒 Transacción Segura vía Mercado Pago</span>
         </div>
       </div>
     </div>
