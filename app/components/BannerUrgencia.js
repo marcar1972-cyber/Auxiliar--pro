@@ -121,7 +121,7 @@ export default function BannerUrgencia() {
         </span>
         <span className="hidden md:inline opacity-30 text-[#28a745]">|</span>
         <span className="leading-tight text-white font-black italic">
-            Porque sabemos el esfuerzo que haces cada día. <span className="bg-gradient-to-r from-pink-400 to-rose-400 bg-clip-text text-transparent px-1 text-base md:text-lg">¡Feliz Día Mamá!</span>
+            Porque sabemos el esfuerzo que haces cada día. <span className="bg-gradient-to-r from-pink-400 to-rose-400 bg-clip-text text-transparent px-1 text-base md:text-lg whitespace-nowrap">¡Feliz Día Mamá!</span>
         </span>
       </div>
       
