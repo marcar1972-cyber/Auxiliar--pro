@@ -38,8 +38,8 @@ export default function ModuloDetalle() {
     if (modNumber === 3) evalId = lessonNumber + 10; // Módulo 3 inicia en eval 11
     if (modNumber === 4) evalId = lessonNumber + 13; // Módulo 4 inicia en eval 14
     
-    // Genera la URL exacta hacia el ID del quiz
-    return `/quiz/pro-eval-${evalId}`; 
+    // Genera la URL exacta hacia la nueva ruta dinámica /quiz/pro/[id]
+    return `/quiz/pro/pro-eval-${evalId}`; 
   };
 
   useEffect(() => {
@@ -49,7 +49,9 @@ export default function ModuloDetalle() {
         let moduleUnlocked = false;
         
         if (user) {
+          const isAdmin = user.email === "marcar1972@gmail.com"; // CTO FIX: Modo Dios activado
           const userSnap = await getDoc(doc(db, "users", user.uid));
+          
           if (userSnap.exists()) {
             const data = userSnap.data();
             
@@ -71,6 +73,8 @@ export default function ModuloDetalle() {
               }
             }
 
+            if (isAdmin) isSubValid = true; // Override suscripción para Admin
+
             if (isSubValid) {
               const currentModNum = parseInt(modId.replace(/\D/g, ""));
               if (currentModNum === 1 || modId === "mod-1") {
@@ -86,6 +90,13 @@ export default function ModuloDetalle() {
                 moduleUnlocked = true; 
               }
             }
+            
+            if (isAdmin) moduleUnlocked = true; // Override progreso para Admin
+            
+          } else if (isAdmin) {
+            // Si por algún motivo el admin no tiene documento, igual lo dejamos pasar
+            isSubValid = true;
+            moduleUnlocked = true;
           }
         }
         setHasActiveSub(isSubValid);
@@ -216,7 +227,8 @@ export default function ModuloDetalle() {
               <p className="text-slate-500 text-sm md:text-base max-w-xl">Pone a prueba tus conocimientos antes de enfrentar el Examen SEREMI Oficial.</p>
             </div>
             
-            <Link href={!isModuleUnlocked ? "#" : `/quiz/pro-eval-global`} className="w-full md:w-auto z-10">
+            {/* CTO FIX: Ruta actualizada para la Evaluación Final */}
+            <Link href={!isModuleUnlocked ? "#" : `/quiz/pro/pro-eval-global`} className="w-full md:w-auto z-10">
               <button 
                 disabled={!isModuleUnlocked}
                 className={`flex items-center justify-center gap-2 font-bold px-6 py-3 rounded-xl transition-all w-full md:w-auto ${!isModuleUnlocked ? "bg-slate-300 text-slate-500 cursor-not-allowed" : "bg-[#28a745] text-white hover:bg-[#218838] shadow-[0_0_15px_rgba(40,167,69,0.4)]"}`}
