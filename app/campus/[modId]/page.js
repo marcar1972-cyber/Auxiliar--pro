@@ -55,11 +55,23 @@ export default function ModuloDetalle() {
           if (userSnap.exists()) {
             const data = userSnap.data();
             
+            // CTO FIX: Validación Pro Robusta (Sincronizada con CampusPage)
+            isSubValid = data.isPro === true;
+            
             const rawFields = [data.untilPro, data.untilpro, data.proUntil, data.prountil];
             
             const parseDate = (val) => {
               if (!val) return null;
               if (typeof val.toDate === 'function') return val.toDate(); 
+              
+              if (typeof val === 'string') {
+                const dateStr = val.toLowerCase();
+                const months = { enero:0, febrero:1, marzo:2, abril:3, mayo:4, junio:5, julio:6, agosto:7, septiembre:8, octubre:9, noviembre:10, diciembre:11 };
+                const parts = dateStr.replace(/de /g, "").split(" ");
+                if (parts.length >= 3 && months[parts[1]] !== undefined) {
+                  return new Date(parseInt(parts[2]), months[parts[1]], parseInt(parts[0]), 23, 59, 59);
+                }
+              }
               const d = new Date(val); 
               return isNaN(d.getTime()) ? null : d;
             };
@@ -80,10 +92,11 @@ export default function ModuloDetalle() {
               if (currentModNum === 1 || modId === "mod-1") {
                 moduleUnlocked = true; 
               } else if (currentModNum > 1) {
-                const approvedModules = data.approvedModules || data.completedModules || data.modulosAprobados || [];
+                // CTO FIX: Lectura ampliada para compatibilidad de base de datos
+                const approvedModules = data.approvedModules || data.completedModules || data.unlockedLevels || [];
                 const prevModId = `mod-${currentModNum - 1}`;
                 
-                if (approvedModules.includes(prevModId)) {
+                if (approvedModules.includes(prevModId) || approvedModules.includes(currentModNum - 1)) {
                   moduleUnlocked = true;
                 }
               } else {
