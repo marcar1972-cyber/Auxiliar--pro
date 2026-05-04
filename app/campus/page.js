@@ -11,38 +11,58 @@ export default function CampusPage() {
   const [loading, setLoading] = useState(true);
   const [userProgress, setUserProgress] = useState([]); 
   const [hasActiveSub, setHasActiveSub] = useState(false); 
+  const [isAdminUser, setIsAdminUser] = useState(false); // CTO FIX: Estado para Admin
 
   useEffect(() => {
     const fetchModules = async () => {
       try {
         const user = auth.currentUser;
         if (user) {
+          const isAdmin = user.email === "marcar1972@gmail.com";
+          setIsAdminUser(isAdmin);
+
           const userSnap = await getDoc(doc(db, "users", user.uid));
           if (userSnap.exists()) {
             const data = userSnap.data();
-            setUserProgress(data.unlockedLevels || []);
+            
+            // CTO FIX: Ampliamos la lectura de progreso para ser compatibles con distintas versiones de la app
+            setUserProgress(data.approvedModules || data.completedModules || data.unlockedLevels || []);
 
-            let isSubValid = false;
-            if (data.untilPro) {
-              let expiryDate;
-              if (typeof data.untilPro?.toDate === 'function') {
-                expiryDate = data.untilPro.toDate();
-              } else {
-                const dateStr = String(data.untilPro).toLowerCase();
+            // CTO FIX: Validación Pro Robusta (Igual que en QuizLobby)
+            let isSubValid = data.isPro === true; 
+
+            const rawFields = [data.untilPro, data.untilpro, data.proUntil, data.prountil];
+            
+            const parseDate = (val) => {
+              if (!val) return null;
+              if (typeof val.toDate === 'function') return val.toDate();
+              
+              if (typeof val === 'string') {
+                const dateStr = val.toLowerCase();
                 const months = { enero:0, febrero:1, marzo:2, abril:3, mayo:4, junio:5, julio:6, agosto:7, septiembre:8, octubre:9, noviembre:10, diciembre:11 };
                 const parts = dateStr.replace(/de /g, "").split(" ");
                 if (parts.length >= 3 && months[parts[1]] !== undefined) {
-                  expiryDate = new Date(parseInt(parts[2]), months[parts[1]], parseInt(parts[0]), 23, 59, 59);
-                } else {
-                  expiryDate = new Date(data.untilPro);
+                  return new Date(parseInt(parts[2]), months[parts[1]], parseInt(parts[0]), 23, 59, 59);
                 }
               }
+              const d = new Date(val);
+              return isNaN(d.getTime()) ? null : d;
+            };
 
-              if (expiryDate instanceof Date && !isNaN(expiryDate) && expiryDate > new Date()) {
+            const validDates = rawFields.map(parseDate).filter(d => d !== null);
+
+            if (validDates.length > 0) {
+              const expiryDate = new Date(Math.max(...validDates));
+              if (expiryDate > new Date()) {
                 isSubValid = true;
               }
             }
+
+            if (isAdmin) isSubValid = true; // Override Admin
+            
             setHasActiveSub(isSubValid);
+          } else if (isAdmin) {
+             setHasActiveSub(true);
           }
         }
 
@@ -88,15 +108,22 @@ export default function CampusPage() {
   };
 
   const isModuleLocked = (modName) => {
+    if (isAdminUser) return false; // CTO FIX: Admin ve todo desbloqueado
     if (!hasActiveSub) return true; 
+    
     const num = parseInt(modName.replace("MOD ", ""));
     if (num === 1) return false;
-    return !userProgress.includes(num - 1);
+
+    // CTO FIX: Verifica tanto formato numérico (ej: 1) como string (ej: "mod-1")
+    const hasNumericProgress = userProgress.includes(num - 1);
+    const hasStringProgress = userProgress.includes(`mod-${num - 1}`);
+
+    return !(hasNumericProgress || hasStringProgress);
   };
 
   if (loading) return <div className="flex justify-center items-center p-20 min-h-screen bg-slate-50"><Loader2 className="animate-spin text-[#003366]" size={32} /></div>;
 
-  const isFinalExamLocked = !hasActiveSub;
+  const isFinalExamLocked = !hasActiveSub && !isAdminUser;
 
   return (
     <main className="min-h-screen bg-slate-50 pb-20">
@@ -137,12 +164,12 @@ export default function CampusPage() {
                     </div>
                     <h2 className="text-xl font-black text-[#003366] leading-tight">Módulo {group.replace("MOD ", "")}: Fundamentos</h2>
                   </div>
-                  {!hasActiveSub && (
+                  {!hasActiveSub && !isAdminUser && (
                     <div className="bg-slate-300 text-slate-600 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-1.5 shadow-md">
                       <Lock size={14} /> Requiere PRO
                     </div>
                   )}
-                  {hasActiveSub && !locked && (
+                  {(hasActiveSub || isAdminUser) && !locked && (
                     <div className="bg-gradient-to-br from-[#28a745] to-[#218838] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-1.5 shadow-md">
                       <ShieldCheck size={14} /> Verificado Pro
                     </div>
@@ -163,7 +190,7 @@ export default function CampusPage() {
                       className="flex items-center justify-center gap-2 bg-white border-2 border-[#003366] text-[#003366] px-6 py-3 rounded-xl font-bold transition-all w-full md:w-auto shadow-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#003366] hover:text-white"
                     >
                         {locked ? <Lock size={18} /> : <BookOpen size={18} />} 
-                        {!hasActiveSub ? "Adquirir PRO para Desbloquear" : locked ? "Completa el módulo anterior" : "Estudiar Módulo"}
+                        {!hasActiveSub && !isAdminUser ? "Adquirir PRO para Desbloquear" : locked ? "Completa el módulo anterior" : "Estudiar Módulo"}
                     </button>
                   </Link>
                 </div>
