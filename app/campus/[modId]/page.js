@@ -5,8 +5,28 @@ import { db, auth } from "../../firebase/config";
 import { collection, query, where, getDocs, doc, getDoc } from "firebase/firestore"; 
 import { ref, getDownloadURL, getStorage } from "firebase/storage"; 
 import { onAuthStateChanged } from "firebase/auth"; 
-import { FileText, Download, Loader2, ChevronLeft, BrainCircuit, ShieldCheck, Lock } from "lucide-react"; 
+import { FileText, Download, Loader2, ChevronLeft, BrainCircuit, ShieldCheck, Lock, CheckCircle2 } from "lucide-react"; 
 import Link from "next/link";
+
+// --- COMPONENTE DE BARRA DE PROGRESO PROFESIONAL (CTO FIX) ---
+const ProfessionalProgress = ({ percentage }) => (
+  <div className="w-full bg-white p-4 rounded-2xl border border-slate-200 mb-8 shadow-sm">
+    <div className="flex justify-between items-center mb-2">
+      <span className="text-[10px] font-black text-[#003366] uppercase tracking-wider flex items-center gap-2">
+        <CheckCircle2 size={14} className="text-[#28a745]" /> Estado de Formación Técnica
+      </span>
+      <span className="text-xs font-bold text-[#28a745] bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-100">
+        {percentage}% Completado
+      </span>
+    </div>
+    <div className="w-full bg-slate-100 h-3 rounded-full overflow-hidden border border-slate-200 p-[2px]">
+      <div 
+        className="h-full bg-gradient-to-r from-[#003366] to-[#28a745] rounded-full transition-all duration-1000 ease-out shadow-[0_0_8px_rgba(40,167,69,0.3)]"
+        style={{ width: `${percentage}%` }}
+      />
+    </div>
+  </div>
+);
 
 export default function ModuloDetalle() {
   const { modId } = useParams();
@@ -14,6 +34,7 @@ export default function ModuloDetalle() {
   const [loading, setLoading] = useState(true);
   const [hasActiveSub, setHasActiveSub] = useState(false);
   const [isModuleUnlocked, setIsModuleUnlocked] = useState(false); 
+  const [globalProgress, setGlobalProgress] = useState(0);
 
   const cleanName = (fileName, index) => {
     let name = fileName.replace(/\.pdf$/i, "").trim(); 
@@ -87,27 +108,29 @@ export default function ModuloDetalle() {
 
             if (isAdmin) isSubValid = true; // Override suscripción para Admin
 
+            // --- LÓGICA DE BARRA DE PROGRESO (CTO FIX) ---
+            const approved = data.approvedModules || [];
+            const count = approved.filter(m => ["mod-1", "mod-2", "mod-3", "mod-4"].includes(m)).length;
+            setGlobalProgress(isAdmin ? 100 : (count / 4) * 100);
+
             if (isSubValid) {
               const currentModNum = parseInt(modId.replace(/\D/g, ""));
+              
+              // REGLA DE DESBLOQUEO ESTRICTA:
               if (currentModNum === 1 || modId === "mod-1") {
                 moduleUnlocked = true; 
-              } else if (currentModNum > 1) {
-                // CTO FIX: Lectura ampliada para compatibilidad de base de datos
-                const approvedModules = data.approvedModules || data.completedModules || data.unlockedLevels || [];
+              } else {
+                // Para Módulos 2, 3 y 4: Solo desbloquea si el módulo anterior está en approvedModules
                 const prevModId = `mod-${currentModNum - 1}`;
-                
-                if (approvedModules.includes(prevModId) || approvedModules.includes(currentModNum - 1)) {
+                if (approved.includes(prevModId)) {
                   moduleUnlocked = true;
                 }
-              } else {
-                moduleUnlocked = true; 
               }
             }
             
             if (isAdmin) moduleUnlocked = true; // Override progreso para Admin
             
           } else if (isAdmin) {
-            // Si por algún motivo el admin no tiene documento, igual lo dejamos pasar
             isSubValid = true;
             moduleUnlocked = true;
           }
@@ -118,7 +141,6 @@ export default function ModuloDetalle() {
         const q = query(collection(db, "modules"), where("modId", "==", modId));
         const snapshot = await getDocs(q);
         
-        // CTO FIX: Ordenamos los archivos numéricamente
         const fetchedFiles = snapshot.docs.map(doc => doc.data());
         fetchedFiles.sort((a, b) => {
           const numA = parseInt(a.title.match(/^(\d+)/)?.[1] || 0);
@@ -169,6 +191,9 @@ export default function ModuloDetalle() {
           <ChevronLeft size={20} /> Volver al Campus
         </Link>
         
+        {/* BARRA DE PROGRESO (CTO FIX) */}
+        {(hasActiveSub || isAdminUser) && <ProfessionalProgress percentage={globalProgress} />}
+
         <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex-1 text-center md:text-left z-10">
             <span className="bg-[#003366] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2.5 inline-block"> Verificado Pro </span>
@@ -190,7 +215,7 @@ export default function ModuloDetalle() {
         <div className="bg-white rounded-3xl shadow-sm border border-slate-200 divide-y divide-slate-100 overflow-hidden">
           {files.map((file, index) => {
             return (
-              <div key={file.id} className={`p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 transition-colors ${!isModuleUnlocked ? "opacity-70 grayscale" : "hover:bg-slate-50"}`}>
+              <div key={file.id} className={`p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 transition-colors ${!isModuleUnlocked ? "opacity-70 grayscale pointer-events-none" : "hover:bg-slate-50"}`}>
                 <div className="flex items-start gap-4 flex-1">
                   <div className={`w-16 h-16 rounded-full flex items-center justify-center text-3xl shrink-0 text-white shadow-md ${!isModuleUnlocked ? "bg-slate-400" : "bg-[#28a745]"}`}>
                     {!isModuleUnlocked ? <Lock size={28} /> : <FileText size={32} />}
@@ -240,7 +265,6 @@ export default function ModuloDetalle() {
               <p className="text-slate-500 text-sm md:text-base max-w-xl">Pone a prueba tus conocimientos antes de enfrentar el Examen SEREMI Oficial.</p>
             </div>
             
-            {/* CTO FIX: Ruta actualizada para la Evaluación Final */}
             <Link href={!isModuleUnlocked ? "#" : `/quiz/pro/pro-eval-global`} className="w-full md:w-auto z-10">
               <button 
                 disabled={!isModuleUnlocked}
