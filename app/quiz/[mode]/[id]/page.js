@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { LEVELS, PRO_LEVELS } from "../../../quizData/index"; 
-import { Trophy, Clock, AlertCircle, X, ChevronRight, Share2, ArrowRight, ChevronLeft } from "lucide-react";
+import { Trophy, Clock, AlertCircle, X, ChevronRight, Share2, ArrowRight, ChevronLeft, ShieldAlert } from "lucide-react";
 import Link from "next/link";
 import { auth, db } from "../../../firebase/config";
 import { doc, getDoc, updateDoc, collection, addDoc, serverTimestamp, increment, arrayUnion } from "firebase/firestore";
@@ -41,6 +41,7 @@ export default function QuizEnginePage() {
   const [isAnswered, setIsAnswered] = useState(false);
   const [user, setUser] = useState(null);
   const [lockout, setLockout] = useState(false);
+  const [isGlobalLocked, setIsGlobalLocked] = useState(false); // CTO FIX: Estado de bloqueo para examen global
   
   // --- AQUI ESTA LA LOGICA DEL TIEMPO SIN MUTILAR EL RESTO ---
   const initialTime = level?.timeLimit ? level.timeLimit * 60 : 15 * 60;
@@ -65,18 +66,28 @@ export default function QuizEnginePage() {
           if (data.lockoutUntil && data.lockoutUntil.toDate().getTime() > now) {
             setLockout(true);
           }
+
+          // CTO FIX: Validación estricta para Evaluación Global
+          if (rawId === 'pro-eval-global') {
+            const approved = data.approvedModules || data.completedModules || data.unlockedLevelsPro || data.unlockedLevels || [];
+            // Verificamos si tiene los 4 módulos aprobados
+            const count = [1, 2, 3, 4].filter(num => approved.includes(num) || approved.includes(`mod-${num}`)).length;
+            if (count < 4) {
+              setIsGlobalLocked(true);
+            }
+          }
         }
       }
     });
     return () => unsubscribe();
-  }, []);
+  }, [rawId]);
 
   useEffect(() => {
-    if (!quizStarted || showResults || lockout) return;
+    if (!quizStarted || showResults || lockout || isGlobalLocked) return;
     if (timeLeft <= 0) { handleFinish(false); return; }
     const timer = setInterval(() => setTimeLeft(prev => prev - 1), 1000);
     return () => clearInterval(timer);
-  }, [timeLeft, quizStarted, showResults, lockout]);
+  }, [timeLeft, quizStarted, showResults, lockout, isGlobalLocked]);
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -163,6 +174,18 @@ export default function QuizEnginePage() {
     );
   }
 
+  if (isGlobalLocked) return (
+    <div className="min-h-screen flex flex-col items-center justify-center p-10 text-center bg-slate-50">
+        <ShieldAlert size={64} className="text-amber-500 mb-6" />
+        <h2 className="text-2xl font-black mb-4 text-[#003366]">Evaluación Final Bloqueada</h2>
+        <p className="text-slate-600 max-w-sm mb-6">Debes aprobar todos los módulos técnicos (1 al 4) para asegurar que tienes los conocimientos necesarios antes de rendir la evaluación final para tu certificación SEREMI.</p>
+        <Link href="/campus" className="bg-[#003366] text-white px-8 py-3 rounded-xl font-bold mb-12">Volver al Campus</Link>
+        <div className="w-full max-w-lg border-t border-slate-200 pt-8 mt-4">
+           <SocialContact />
+        </div>
+    </div>
+  );
+
   if (lockout) return (
     <div className="min-h-screen flex flex-col items-center justify-center p-10 text-center bg-slate-50">
         <AlertCircle size={64} className="text-red-500 mb-6" />
@@ -179,7 +202,7 @@ export default function QuizEnginePage() {
     const passingLogic = level?.passingScore ? Math.ceil(level.questions.length * (level.passingScore / 100)) : Math.ceil(level.questions.length * 0.8);
     const isApproved = score >= passingLogic;
     const nextLevel = parseInt(numericId) + 1;
-    const canGoToNext = isApproved && mode !== 'pro' && nextLevel <= 3;
+    const canGoToNext = isApproved && mode !== 'pro' && nextLevel <= 6;
 
     return (
       <main className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
