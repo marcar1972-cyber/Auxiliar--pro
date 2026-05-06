@@ -4,8 +4,8 @@ export const proEval1 = {
   id: "pro-eval-1",
   title: "Evaluación PRO 1: Marco Legal y Normativo",
   description: "Fundamentos del Código Sanitario, Ley de Fármacos y Decretos Supremos que rigen la actividad farmacéutica en Chile.",
-  timeLimit: 15, // 15 minutos
-  passingScore: 80, // 80% para aprobar
+  timeLimit: 15, 
+  passingScore: 80, 
   questions: [
     {
       question: "Según el triángulo normativo del sector farmacéutico en Chile, ¿cuál es la 'norma madre' que rige todas las actividades de salud en el país?",
@@ -15,7 +15,7 @@ export const proEval1 = {
         "C) Decreto Supremo 466",
         "D) Norma Técnica 147"
       ],
-      correctAnswer: 1, // B
+      correctAnswer: 1, 
       explanation: "El DFL 725 o Código Sanitario es la norma madre y principal que rige todas las acciones relacionadas con el fomento, protección y recuperación de la salud en Chile. Define a las farmacias como centros de salud."
     },
     {
@@ -26,7 +26,7 @@ export const proEval1 = {
         "C) Un Químico Farmacéutico.",
         "D) El dueño del establecimiento."
       ],
-      correctAnswer: 2, // C
+      correctAnswer: 2, 
       explanation: "La ley establece de forma obligatoria que toda farmacia debe contar con la dirección técnica de un Químico Farmacéutico de forma permanente durante todo el horario en que el establecimiento se encuentre abierto al público."
     },
     {
@@ -37,7 +37,7 @@ export const proEval1 = {
         "C) La prohibición de nombres de fantasía.",
         "D) El despacho gratuito para adultos mayores."
       ],
-      correctAnswer: 1, // B
+      correctAnswer: 1, 
       explanation: "La Ley 20.724 introdujo la obligatoriedad de que la receta incluya la Denominación Común Internacional (DCI) o nombre genérico del fármaco, con el objetivo de evitar la asimetría de información y permitir al paciente conocer alternativas bioequivalentes."
     },
     {
@@ -48,19 +48,19 @@ export const proEval1 = {
         "C) En un espacio de libre acceso y a disposición del público.",
         "D) En la bodega de medicamentos controlados."
       ],
-      correctAnswer: 2, // C
+      correctAnswer: 2, 
       explanation: "El marco regulatorio exige que el material de consulta, incluido el reglamento aplicable, esté a libre disposición y fácil acceso para cualquier paciente o cliente que desee consultarlo en la sala de ventas."
     },
     {
       question: "Al recibir un pedido de medicamentos de cadena de frío (refrigerados), notas que el camión no tiene control de temperatura. ¿Cuál es el procedimiento correcto?",
       options: [
-        "A) Rechazar la recepción por incumplimiento de las Buenas Prácticas de Distribución.",
+        "A) No aceptar el pedido para la venta, segregar en cuarentena, registrar la irregularidad e informar al Director Técnico para gestionar el reclamo y notificación.",
         "B) Aceptar el pedido e ingresarlo rápidamente al refrigerador.",
         "C) Aceptarlo, pero anotar la observación en la factura.",
         "D) Llamar al proveedor para pedir un descuento por el riesgo."
       ],
-      correctAnswer: 0, // A
-      explanation: "El transporte debe garantizar que los medicamentos no sufran alteraciones de calidad (Art. 87 H). La pérdida de cadena de frío amerita el rechazo inmediato, ya que se compromete la estabilidad y eficacia del producto."
+      correctAnswer: 0, 
+      explanation: "Según las Buenas Prácticas de Almacenamiento y Distribución (NT 147), ante un quiebre de la cadena de frío, el producto no se debe aceptar para la venta. Debe ser segregado en cuarentena, registrando la irregularidad para que el DT gestione el reclamo y la notificación a la autoridad sanitaria."
     },
     {
       question: "¿Qué tipo de establecimiento tiene expresamente prohibida la preparación de fórmulas magistrales y oficinales según el Art. 57 del DTO 466?",
@@ -70,7 +70,7 @@ export const proEval1 = {
         "C) Almacenes Farmacéuticos",
         "D) Farmacias Asistenciales (de Hospital)"
       ],
-      correctAnswer: 2, // C
+      correctAnswer: 2, 
       explanation: "El Artículo 57 del DTO 466 prohíbe de manera expresa la elaboración de preparaciones magistrales u oficinales a los almacenes farmacéuticos, limitando esta facultad a las farmacias que cuenten con un recetario autorizado."
     },
     {
@@ -81,7 +81,7 @@ export const proEval1 = {
         "C) 5 días hábiles",
         "D) 10 días"
       ],
-      correctAnswer: 1, // B
+      correctAnswer: 1, 
       explanation: "Según la reglamentación vigente sobre los procedimientos de atención al paciente, el Director Técnico tiene un plazo máximo de 3 días para emitir una respuesta frente a un reclamo escrito."
     },
     {
@@ -92,7 +92,7 @@ export const proEval1 = {
         "C) El uso racional de medicamentos y disminuir el gasto de bolsillo del paciente.",
         "D) Que el auxiliar recete alternativas más económicas."
       ],
-      correctAnswer: 2, // C
+      correctAnswer: 2, 
       explanation: "Informar sobre alternativas bioequivalentes certificadas permite ejercer la intercambiabilidad garantizando misma eficacia y seguridad, lo que propende al uso racional y beneficia económicamente al paciente."
     },
     {
@@ -103,7 +103,7 @@ export const proEval1 = {
         "C) Una función sanitaria crítica y un centro de salud.",
         "D) Una tienda de conveniencia con expendio médico."
       ],
-      correctAnswer: 2, // C
+      correctAnswer: 2, 
       explanation: "La legislación define a las farmacias no como simples comercios, sino como verdaderos 'centros de salud' responsables de la conservación, fomento y restablecimiento de la salud pública, lo que exige un rigor ético y técnico elevado."
     },
     {
@@ -114,7 +114,7 @@ export const proEval1 = {
         "C) El Decreto Supremo 404",
         "D) El Decreto Supremo 405"
       ],
-      correctAnswer: 0, // A
+      correctAnswer: 0, 
       explanation: "El Decreto Supremo 466 (Reglamento de Farmacias) es la normativa que aterriza el Código Sanitario estableciendo todos los requisitos de infraestructura, equipamiento, petitorio y administración de las farmacias."
     }
   ]

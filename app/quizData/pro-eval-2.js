@@ -4,8 +4,8 @@ export const proEval2 = {
   id: "pro-eval-2",
   title: "Evaluación PRO 2: Almacenamiento y Condiciones Sanitarias (Módulo 1.2)",
   description: "Resolución de casos situacionales sobre cadena de frío, cuarentena, fraccionamiento y el Decreto Supremo 594.",
-  timeLimit: 15, // 15 minutos
-  passingScore: 80, // 80% para aprobar
+  timeLimit: 15, 
+  passingScore: 80, 
   questions: [
     {
       question: "(Situacional) Durante el turno de tarde, el auxiliar nota que el termohigrómetro de la bodega marca un 75% de humedad relativa. ¿Cuál es el riesgo técnico inmediato?",
@@ -15,7 +15,7 @@ export const proEval2 = {
         "C) El exceso de humedad puede afectar la estabilidad y velocidad de disolución de formas sólidas.",
         "D) Solo deben preocuparse por los productos de cadena de frío."
       ],
-      correctAnswer: 2, // C
+      correctAnswer: 2, 
       explanation: "El control de humedad es crítico. Una humedad relativa alta (generalmente sobre el 65%) puede degradar los principios activos por hidrólisis, afectando gravemente la estabilidad, eficacia y disolución, especialmente en comprimidos y cápsulas."
     },
     {
@@ -26,7 +26,7 @@ export const proEval2 = {
         "C) Área de Cuarentena, pues es un producto que debe estar aislado de la venta.",
         "D) Oficina del DT bajo llave por ser un error administrativo."
       ],
-      correctAnswer: 2, // C
+      correctAnswer: 2, 
       explanation: "El Área de Cuarentena (Art. 13 DS 466) es el sector físicamente separado y señalizado donde debe ubicarse cualquier producto rechazado, devuelto, vencido o recibido por error, asegurando que no llegue a la sala de ventas."
     },
     {
@@ -37,18 +37,18 @@ export const proEval2 = {
         "C) A 50 centímetros del suelo.",
         "D) En el mostrador principal solamente."
       ],
-      correctAnswer: 1, // B
+      correctAnswer: 1, 
       explanation: "El Artículo 14 A del Decreto 466 establece que, por medidas de seguridad sanitaria y para evitar la manipulación o ingesta accidental por parte de niños pequeños, los medicamentos OTC en góndolas no pueden ubicarse a menos de 1 metro del suelo."
     },
     {
-      question: "(Situacional) El refrigerador de la farmacia marca 10°C debido a que se dejó la puerta mal cerrada. ¿Qué fármaco del vademécum Milab está en riesgo crítico de perder su potencia?",
+      question: "(Situacional) El refrigerador de la farmacia marca 10°C debido a que se dejó la puerta mal cerrada. ¿Qué fármaco está en riesgo crítico de perder su potencia?",
       options: [
         "A) Amoxicilina en cápsulas.",
         "B) Losartán potásico.",
         "C) Insulina Humana, por ser un producto termolábil.",
         "D) Atorvastatina comprimidos."
       ],
-      correctAnswer: 2, // C
+      correctAnswer: 2, 
       explanation: "La Insulina es un medicamento termolábil que requiere estrictamente Cadena de Frío. Una temperatura de 10°C rompe este protocolo, lo que puede inactivar la proteína y dejar al paciente diabético sin el efecto terapéutico vital."
     },
     {
@@ -59,7 +59,7 @@ export const proEval2 = {
         "C) La oficina administrativa.",
         "D) La bodega de psicotrópicos."
       ],
-      correctAnswer: 1, // B
+      correctAnswer: 1, 
       explanation: "El fraccionamiento de medicamentos exige un área específica que cumpla con altos estándares de higiene para evitar la contaminación cruzada, incluyendo mesones lisos, lavables e impermeables, y un lavamanos cercano."
     },
     {
@@ -70,7 +70,7 @@ export const proEval2 = {
         "C) \"Solo si el Químico Farmacéutico firma la receta ahora mismo\".",
         "D) \"Sí, pero se cobra un recargo por el envase de entrega\"."
       ],
-      correctAnswer: 1, // B
+      correctAnswer: 1, 
       explanation: "El reglamento prohíbe expresamente el fraccionamiento de medicamentos estupefacientes y psicotrópicos sujetos a controles legales especiales (Receta Retenida y Receta Cheque), debido al riesgo de desviación y control de inventario."
     },
     {
@@ -78,10 +78,10 @@ export const proEval2 = {
       options: [
         "A) 0°C a 10°C.",
         "B) -2°C a 8°C.",
-        "C) 2°C a 8°C.",
+        "C) +2°C a +8°C.",
         "D) 8°C a 15°C."
       ],
-      correctAnswer: 2, // C
+      correctAnswer: 2, 
       explanation: "La normativa chilena y las Buenas Prácticas de Almacenamiento (BPA) definen la cadena de frío para productos farmacéuticos refrigerados en un rango estricto y sin variaciones de entre +2°C y +8°C."
     },
     {
@@ -92,7 +92,7 @@ export const proEval2 = {
         "C) El reglamento de recetario magistral.",
         "D) El petitorio mínimo farmacéutico."
       ],
-      correctAnswer: 1, // B
+      correctAnswer: 1, 
       explanation: "El Decreto Supremo 594 es el reglamento sobre condiciones sanitarias y ambientales básicas en los lugares de trabajo, el cual exige explícitamente contar con servicios higiénicos provistos de papel, jabón y sistemas de secado."
     },
     {
@@ -103,18 +103,18 @@ export const proEval2 = {
         "C) Trasladarlo a Cuarentena por sospecha de falla de envase primario.",
         "D) Devolverlo al camión sin registrar nada."
       ],
-      correctAnswer: 2, // C
+      correctAnswer: 2, 
       explanation: "Una caja manchada es un indicador visual crítico de que el envase primario (el frasco que toca el líquido) podría estar filtrando o contaminado. Debe ir inmediatamente a cuarentena para evitar su venta y gestionar la merma."
     },
     {
       question: "(Crítico) ¿Qué documento debe custodiar el DT en su oficina y tener disponible \"en todo momento y circunstancia\" para la autoridad?",
       options: [
-        "A) El catálogo comercial de Milab.",
+        "A) El catálogo comercial del laboratorio.",
         "B) Los Registros Oficiales (Inspección, Reclamos, Control de Stock).",
         "C) Los contratos de trabajo de los auxiliares.",
         "D) El manual de marketing de la cadena."
       ],
-      correctAnswer: 1, // B
+      correctAnswer: 1, 
       explanation: "El Director Técnico es el responsable legal de mantener actualizados y a disposición de la autoridad sanitaria todos los registros oficiales, tales como el libro de estupefacientes, reclamos, recetas y actas de inspección."
     }
   ]

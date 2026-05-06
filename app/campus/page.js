@@ -11,7 +11,7 @@ export default function CampusPage() {
   const [loading, setLoading] = useState(true);
   const [userProgress, setUserProgress] = useState([]); 
   const [hasActiveSub, setHasActiveSub] = useState(false); 
-  const [isAdminUser, setIsAdminUser] = useState(false); // CTO FIX: Estado para Admin
+  const [isAdminUser, setIsAdminUser] = useState(false);
 
   useEffect(() => {
     const fetchModules = async () => {
@@ -25,10 +25,10 @@ export default function CampusPage() {
           if (userSnap.exists()) {
             const data = userSnap.data();
             
-            // CTO FIX: Ampliamos la lectura de progreso para ser compatibles con distintas versiones de la app
-            setUserProgress(data.approvedModules || data.completedModules || data.unlockedLevels || []);
+            // CTO FIX: Ampliamos la lectura de progreso para cubrir todas las estructuras históricas y actuales
+            setUserProgress(data.approvedModules || data.completedModules || data.unlockedLevelsPro || data.unlockedLevels || []);
 
-            // CTO FIX: Validación Pro Robusta (Igual que en QuizLobby)
+            // CTO FIX: Validación Pro Robusta
             let isSubValid = data.isPro === true; 
 
             const rawFields = [data.untilPro, data.untilpro, data.proUntil, data.prountil];
@@ -58,7 +58,7 @@ export default function CampusPage() {
               }
             }
 
-            if (isAdmin) isSubValid = true; // Override Admin
+            if (isAdmin) isSubValid = true;
             
             setHasActiveSub(isSubValid);
           } else if (isAdmin) {
@@ -108,13 +108,13 @@ export default function CampusPage() {
   };
 
   const isModuleLocked = (modName) => {
-    if (isAdminUser) return false; // CTO FIX: Admin ve todo desbloqueado
+    if (isAdminUser) return false;
     if (!hasActiveSub) return true; 
     
     const num = parseInt(modName.replace("MOD ", ""));
     if (num === 1) return false;
 
-    // CTO FIX: Verifica tanto formato numérico (ej: 1) como string (ej: "mod-1")
+    // CTO FIX: Verifica tanto formato numérico como string de acuerdo al progreso unificado
     const hasNumericProgress = userProgress.includes(num - 1);
     const hasStringProgress = userProgress.includes(`mod-${num - 1}`);
 
@@ -219,7 +219,6 @@ export default function CampusPage() {
               </Link>
           </div>
 
-          {/* COMPONENTE SOCIAL ANCLADO AL PIE DE LA VISTA DEL CAMPUS */}
           <div className="mt-8 pt-8 border-t border-slate-200">
             <SocialContact />
           </div>

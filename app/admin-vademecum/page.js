@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import BannerVenta from "../components/BannerVenta";
 
 // IMPORTAMOS LA DATA DESDE EL OTRO ARCHIVO
-import { BLOQUE_G, OPCIONES_DESPLEGABLES } from "./vademecumData";
+import { BLOQUE_I, OPCIONES_DESPLEGABLES } from "./vademecumData";
 
 export default function BuscadorVademecum() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -132,14 +132,14 @@ export default function BuscadorVademecum() {
   };
 
   const handleCargaMasivaYPurga = async () => {
-    if (!window.confirm("⚠️ ¿Ejecutar SINCRONIZACIÓN PRO? Se cargará el Bloque G desde el archivo externo.")) return;
+    if (!window.confirm("⚠️ ¿Ejecutar SINCRONIZACIÓN PRO? Se cargará el Bloque I (Digestivo y Respiratorio).")) return;
     setCargandoAuditoria(true);
 
     try {
       const vademecumRef = collection(db, "vademecum");
       const todosLosDocsSnapshot = await getDocs(vademecumRef);
 
-      for (const item of BLOQUE_G) {
+      for (const item of BLOQUE_I) {
         const nombreLimpioNuevo = normalizarTexto(item.nombre).replace(/\s+/g, '');
         
         todosLosDocsSnapshot.forEach(async (docSnap) => {
@@ -152,7 +152,7 @@ export default function BuscadorVademecum() {
         const docId = normalizarTexto(item.nombre).replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
         await setDoc(doc(db, "vademecum", docId), item);
       }
-      alert("✅ Bloque G Sincronizado correctamente.");
+      alert("✅ Bloque I Sincronizado correctamente.");
       window.location.reload();
     } catch (error) { 
       console.error(error); 
@@ -307,7 +307,7 @@ export default function BuscadorVademecum() {
             <h1 className="text-4xl font-black text-slate-900">Vademécum <span className="text-emerald-500">PRO</span></h1>
             {isAdmin && (
               <div className="flex gap-3">
-                <button onClick={handleCargaMasivaYPurga} className="bg-slate-900 hover:bg-slate-800 transition-colors text-white px-6 py-3 rounded-full font-black text-sm shadow-md">🚀 Sync Bloque G</button>
+                <button onClick={handleCargaMasivaYPurga} className="bg-slate-900 hover:bg-slate-800 transition-colors text-white px-6 py-3 rounded-full font-black text-sm shadow-md">🚀 Sync Bloque I</button>
                 <button onClick={toggleAuditoria} className="bg-emerald-500 hover:bg-emerald-400 transition-colors text-white px-6 py-3 rounded-full font-black text-sm shadow-md">{modoAuditoria ? "❌ Cerrar" : "⚡ Ver Todo"}</button>
               </div>
             )}
