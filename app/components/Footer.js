@@ -22,7 +22,7 @@ export default function Footer() {
           <div className="w-full md:w-1/4 flex justify-center md:justify-start">
             {/* Contenedor del logo ampliado al doble: de w-36 h-10 a w-72 h-20 */}
             <div className="relative w-72 h-20">
-              <Image src="/logo_auxiliarpro.png" alt="AuxiliarPro" fill className="object-contain object-left rounded-sm" />
+              <Image src="/logo_auxiliarpro.png" alt="AuxiliarPro" fill className="object-contain object-center md:object-left rounded-sm" />
             </div>
           </div>
 
