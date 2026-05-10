@@ -20,7 +20,7 @@ export default function PaginaPlanes() {
           <p className="text-slate-700 text-sm font-bold leading-relaxed">
             Tus pagos están protegidos por <span className="text-blue-500">Mercado Pago</span>. 
             <br />
-            <span className="text-emerald-600">Cero cobros automáticos:</span> No realizamos renovaciones forzosas. Al terminar tu suscripción, tú decides si deseas comprar un nuevo periodo para continuar estudiando.
+            <span className="text-emerald-600">Cero cobros automáticos:</span> No realizamos renovaciones forzosas. Al terminar tu pase de 15 días o suscripción, tú decides si deseas comprar un nuevo periodo para continuar estudiando.
           </p>
         </div>
       </main>

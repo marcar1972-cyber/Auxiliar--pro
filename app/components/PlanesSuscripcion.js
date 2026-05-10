@@ -13,9 +13,10 @@ export default function PlanesSuscripcion() {
   const [proUntil, setProUntil] = useState(null);
   const [loadingAuth, setLoadingAuth] = useState(true);
 
-  // 🔥 CAMBIO 1: Ahora los botones apuntan a tu propio servidor (El puente hacia Mercado Pago)
+  // 🔥 Enlaces de pago (Conectados a tu API)
   const BASE_LINK_MENSUAL = "/api/checkout-mp?plan=mensual"; 
   const BASE_LINK_ANUAL = "/api/checkout-mp?plan=anual";
+  const BASE_LINK_SPRINT = "/api/checkout-mp?plan=sprint";
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -70,7 +71,7 @@ export default function PlanesSuscripcion() {
 
   return (
     <div className="w-full bg-white py-12">
-      <div className="max-w-6xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         
         {/* ENCABEZADO */}
         <div className="text-center mb-16">
@@ -89,44 +90,44 @@ export default function PlanesSuscripcion() {
             Asegura tu examen SEREMI y <span className="text-[#28a745]">domina el mesón</span>
           </h2>
           <p className="text-slate-500 font-bold max-w-2xl mx-auto text-lg leading-relaxed">
-            Accede a la plataforma definitiva para aprobar tu certificación y consultar normativa legal sin dudas. Todo el ecosistema AuxiliarPro.
+            Accede a la plataforma definitiva para aprobar tu certificación y consultar normativa legal sin dudas. Todo el ecosistema AuxiliarPro App.
           </p>
         </div>
 
         {/* CONTENEDOR DE TARJETAS */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 items-stretch">
           
           {/* PLAN INICIAL */}
-          <div className="bg-white rounded-[2.5rem] p-8 md:p-10 border border-slate-200 flex flex-col relative transition-all hover:border-slate-300 shadow-sm">
+          <div className="bg-white rounded-[2rem] p-6 md:p-8 border border-slate-200 flex flex-col relative transition-all hover:border-slate-300 shadow-sm">
             <div className="mb-6">
               <span className="bg-slate-100 text-slate-500 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">Plan Base</span>
-              <h3 className="text-2xl font-black text-slate-700 mt-4 mb-2">Inicial</h3>
-              <p className="text-slate-500 text-sm leading-relaxed font-medium">Acceso básico a las herramientas fundamentales.</p>
+              <h3 className="text-xl font-black text-slate-700 mt-4 mb-2">Inicial</h3>
+              <p className="text-slate-500 text-xs leading-relaxed font-medium">Acceso básico a las herramientas fundamentales.</p>
             </div>
             
             <div className="mb-8">
-              <div className="text-transparent text-lg line-through font-black select-none">&nbsp;</div>
+              <div className="text-transparent text-sm line-through font-black select-none">&nbsp;</div>
               <div className="flex items-baseline gap-1">
-                <span className="text-5xl font-black text-slate-700">Gratis</span>
+                <span className="text-4xl font-black text-slate-700">Gratis</span>
               </div>
-              <p className="text-slate-400 text-[11px] font-black mt-2 uppercase tracking-widest">Para siempre</p>
+              <p className="text-slate-400 text-[10px] font-black mt-2 uppercase tracking-widest">Para siempre</p>
             </div>
 
-            <ul className="space-y-5 mb-10 flex-1 border-t border-slate-100 pt-8">
-              <li className="flex items-start gap-3 text-sm font-bold text-slate-600">
-                <span className="text-emerald-500 text-xl leading-none">✓</span> 
+            <ul className="space-y-4 mb-10 flex-1 border-t border-slate-100 pt-6">
+              <li className="flex items-start gap-3 text-xs font-bold text-slate-600">
+                <span className="text-emerald-500 text-lg leading-none">✓</span> 
                 <span>Simulador Inicial: 3 Niveles de preguntas para practicar</span>
               </li>
-              <li className="flex items-start gap-3 text-sm font-bold text-slate-600">
-                <span className="text-emerald-500 text-xl leading-none">✓</span> 
+              <li className="flex items-start gap-3 text-xs font-bold text-slate-600">
+                <span className="text-emerald-500 text-lg leading-none">✓</span> 
                 <span>Guías de Estudio: Resúmenes esenciales.</span>
               </li>
-              <li className="flex items-start gap-3 text-sm font-bold text-slate-600 opacity-50">
-                <span className="text-slate-300 text-xl leading-none">✗</span> 
+              <li className="flex items-start gap-3 text-xs font-bold text-slate-600 opacity-50">
+                <span className="text-slate-300 text-lg leading-none">✗</span> 
                 <span><span className="text-slate-400 line-through">Campus Virtual + Simulador PRO Completo</span></span>
               </li>
-              <li className="flex items-start gap-3 text-sm font-bold text-slate-600 opacity-50">
-                <span className="text-slate-300 text-xl leading-none">✗</span> 
+              <li className="flex items-start gap-3 text-xs font-bold text-slate-600 opacity-50">
+                <span className="text-slate-300 text-lg leading-none">✗</span> 
                 <span><span className="text-slate-400 line-through">Vademécum Profesional</span></span>
               </li>
             </ul>
@@ -137,44 +138,47 @@ export default function PlanesSuscripcion() {
                   <Loader2 className="animate-spin" size={20} />
                 </div>
               ) : user ? (
-                <Link href="/quiz" className="w-full block bg-slate-100 text-slate-600 hover:bg-slate-200 font-black py-4 rounded-xl transition-all text-center text-sm uppercase tracking-wider">
+                <Link href="/quiz" className="w-full block bg-slate-100 text-slate-600 hover:bg-slate-200 font-black py-4 rounded-xl transition-all text-center text-[11px] uppercase tracking-wider">
                   Ir al Simulador
                 </Link>
               ) : (
-                <Link href="/login" className="w-full block bg-slate-100 text-slate-600 hover:bg-slate-200 font-black py-4 rounded-xl transition-all text-center text-sm uppercase tracking-wider">
+                <Link href="/login" className="w-full block bg-slate-100 text-slate-600 hover:bg-slate-200 font-black py-4 rounded-xl transition-all text-center text-[11px] uppercase tracking-wider">
                   Crear Cuenta Gratis
                 </Link>
               )}
             </div>
           </div>
 
-          {/* PLAN MENSUAL */}
-          <div className="bg-white rounded-[2.5rem] p-8 md:p-10 border border-slate-200 flex flex-col relative transition-all hover:border-slate-300 shadow-xl">
-            <div className="mb-6">
-              <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">Estudio Intensivo</span>
-              <h3 className="text-2xl font-black text-slate-900 mt-4 mb-2">Suscripción Mensual</h3>
-              <p className="text-slate-500 text-sm leading-relaxed font-medium">Entrenamiento técnico diario.</p>
+          {/* PLAN SPRINT 15 DÍAS (NUEVO AUTOMATIZADO) */}
+          <div className="bg-white rounded-[2rem] p-6 md:p-8 border-2 border-orange-400 flex flex-col relative transition-all hover:border-orange-500 shadow-lg overflow-hidden">
+            <div className="absolute top-0 left-0 w-full bg-orange-400 text-white text-center py-1 text-[9px] font-black uppercase tracking-widest">
+              Examen Próximo
+            </div>
+            <div className="mb-6 mt-3">
+              <span className="bg-orange-50 text-orange-600 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">Urgencia</span>
+              <h3 className="text-xl font-black text-slate-900 mt-4 mb-2">Pase 15 Días</h3>
+              <p className="text-slate-500 text-xs leading-relaxed font-medium">Estudio intensivo de última hora.</p>
             </div>
             
             <div className="mb-8">
+              <div className="text-transparent text-sm line-through font-black select-none">&nbsp;</div>
               <div className="flex items-baseline gap-1">
-                <span className="text-5xl font-black text-slate-900">$5.990</span>
-                <span className="text-slate-500 font-bold text-sm">/mes</span>
+                <span className="text-4xl font-black text-slate-900">$3.990</span>
               </div>
-              <p className="text-slate-400 text-[11px] font-black mt-2 uppercase tracking-widest">Cancela cuando quieras</p>
+              <p className="text-orange-500 text-[10px] font-black mt-2 uppercase tracking-widest">Pago Único (No se renueva)</p>
             </div>
 
-            <ul className="space-y-4 mb-10 flex-1 border-t border-slate-100 pt-8">
-              <li className="flex items-start gap-3 text-sm font-bold text-slate-700">
-                <span className="text-[#28a745] text-xl leading-none">✓</span> 
+            <ul className="space-y-4 mb-10 flex-1 border-t border-slate-100 pt-6">
+              <li className="flex items-start gap-3 text-xs font-bold text-slate-700">
+                <span className="text-[#28a745] text-lg leading-none">✓</span> 
                 <span>Simulador Inicial</span>
               </li>
-              <li className="flex items-start gap-3 text-sm font-bold text-slate-700">
-                <span className="text-[#28a745] text-xl leading-none">✓</span> 
+              <li className="flex items-start gap-3 text-xs font-bold text-slate-700">
+                <span className="text-[#28a745] text-lg leading-none">✓</span> 
                 <span>Campus Virtual + Simulador PRO Completo</span>
               </li>
-              <li className="flex items-start gap-3 text-sm font-bold text-slate-700">
-                <span className="text-[#28a745] text-xl leading-none">✓</span> 
+              <li className="flex items-start gap-3 text-xs font-bold text-slate-700">
+                <span className="text-[#28a745] text-lg leading-none">✓</span> 
                 <span>Vademécum Profesional</span>
               </li>
             </ul>
@@ -182,57 +186,113 @@ export default function PlanesSuscripcion() {
             <div className="flex flex-col items-center gap-2 w-full mt-auto">
               {loadingAuth ? (
                 <div className="w-full bg-slate-100 text-slate-400 font-black py-4 rounded-xl flex items-center justify-center gap-2">
-                  <Loader2 className="animate-spin" size={20} /> Verificando...
+                  <Loader2 className="animate-spin" size={20} />
                 </div>
               ) : isActive ? (
-                <button disabled className="w-full bg-slate-100 text-slate-400 font-black py-4 rounded-xl border border-slate-200 cursor-not-allowed">
+                <button disabled className="w-full bg-slate-100 text-slate-400 font-black py-4 rounded-xl border border-slate-200 cursor-not-allowed text-[11px] uppercase tracking-wider">
                   Suscripción Activa
                 </button>
               ) : !user ? (
-                <Link href="/login" className="w-full block bg-[#003366] text-white hover:bg-[#002244] font-black py-4 rounded-xl transition-all text-center text-sm uppercase tracking-wider">
+                <Link href="/login" className="w-full block bg-orange-500 text-white hover:bg-orange-600 font-black py-4 rounded-xl transition-all text-center text-[11px] uppercase tracking-wider">
+                  Crear Cuenta
+                </Link>
+              ) : (
+                <a 
+                  href={getCheckoutLink(BASE_LINK_SPRINT)}
+                  className="w-full block bg-orange-500 text-white hover:bg-orange-600 font-black py-4 rounded-xl transition-all text-center text-sm shadow-lg shadow-orange-500/30 transform hover:-translate-y-1"
+                >
+                  Obtener Pase
+                </a>
+              )}
+            </div>
+          </div>
+
+          {/* PLAN MENSUAL */}
+          <div className="bg-white rounded-[2rem] p-6 md:p-8 border border-slate-200 flex flex-col relative transition-all hover:border-slate-300 shadow-xl">
+            <div className="mb-6">
+              <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">Estudio Intensivo</span>
+              <h3 className="text-xl font-black text-slate-900 mt-4 mb-2">Suscripción Mensual</h3>
+              <p className="text-slate-500 text-xs leading-relaxed font-medium">Entrenamiento técnico diario.</p>
+            </div>
+            
+            <div className="mb-8">
+              <div className="text-transparent text-sm line-through font-black select-none">&nbsp;</div>
+              <div className="flex items-baseline gap-1">
+                <span className="text-4xl font-black text-slate-900">$5.990</span>
+                <span className="text-slate-500 font-bold text-xs">/mes</span>
+              </div>
+              <p className="text-slate-400 text-[10px] font-black mt-2 uppercase tracking-widest">Cancela cuando quieras</p>
+            </div>
+
+            <ul className="space-y-4 mb-10 flex-1 border-t border-slate-100 pt-6">
+              <li className="flex items-start gap-3 text-xs font-bold text-slate-700">
+                <span className="text-[#28a745] text-lg leading-none">✓</span> 
+                <span>Simulador Inicial</span>
+              </li>
+              <li className="flex items-start gap-3 text-xs font-bold text-slate-700">
+                <span className="text-[#28a745] text-lg leading-none">✓</span> 
+                <span>Campus Virtual + Simulador PRO Completo</span>
+              </li>
+              <li className="flex items-start gap-3 text-xs font-bold text-slate-700">
+                <span className="text-[#28a745] text-lg leading-none">✓</span> 
+                <span>Vademécum Profesional</span>
+              </li>
+            </ul>
+
+            <div className="flex flex-col items-center gap-2 w-full mt-auto">
+              {loadingAuth ? (
+                <div className="w-full bg-slate-100 text-slate-400 font-black py-4 rounded-xl flex items-center justify-center gap-2">
+                  <Loader2 className="animate-spin" size={20} />
+                </div>
+              ) : isActive ? (
+                <button disabled className="w-full bg-slate-100 text-slate-400 font-black py-4 rounded-xl border border-slate-200 cursor-not-allowed text-[11px] uppercase tracking-wider">
+                  Suscripción Activa
+                </button>
+              ) : !user ? (
+                <Link href="/login" className="w-full block bg-[#003366] text-white hover:bg-[#002244] font-black py-4 rounded-xl transition-all text-center text-[11px] uppercase tracking-wider">
                   Crear Cuenta
                 </Link>
               ) : (
                 <a 
                   href={getCheckoutLink(BASE_LINK_MENSUAL)}
-                  className="w-full block bg-[#003366] text-white hover:bg-[#002244] font-black py-5 rounded-2xl transition-all text-center text-lg shadow-lg transform hover:-translate-y-1"
+                  className="w-full block bg-[#003366] text-white hover:bg-[#002244] font-black py-4 rounded-xl transition-all text-center text-sm shadow-lg transform hover:-translate-y-1"
                 >
-                  Obtener Plan Mensual
+                  Plan Mensual
                 </a>
               )}
             </div>
           </div>
 
           {/* PLAN ANUAL */}
-          <div className="bg-[#003366] rounded-[2.5rem] p-8 md:p-10 border-4 border-[#28a745] flex flex-col relative shadow-[0_20px_50px_rgba(40,167,69,0.3)]">
-            <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 bg-[#28a745] text-white px-6 py-2 rounded-full text-[12px] font-black uppercase tracking-[0.2em] shadow-2xl whitespace-nowrap border-2 border-[#003366]">
+          <div className="bg-[#003366] rounded-[2rem] p-6 md:p-8 border-4 border-[#28a745] flex flex-col relative shadow-[0_20px_50px_rgba(40,167,69,0.3)] mt-6 xl:mt-0">
+            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-[#28a745] text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-2xl whitespace-nowrap border-2 border-[#003366]">
               MEJOR VALOR
             </div>
 
             <div className="mb-6 mt-2">
-              <h3 className="text-3xl font-black text-white mb-2 tracking-tight">Plan Anual PRO</h3>
-              <p className="text-slate-400 text-sm font-medium leading-relaxed">Arsenal completo con ahorro máximo.</p>
+              <h3 className="text-2xl font-black text-white mb-2 tracking-tight">Plan Anual PRO</h3>
+              <p className="text-slate-400 text-xs font-medium leading-relaxed">Arsenal completo con ahorro máximo.</p>
             </div>
             
             <div className="mb-8">
-              <div className="flex items-baseline gap-2">
-                <span className="text-6xl font-black text-white">$49.990</span>
-                <span className="text-slate-400 font-bold text-sm">/año</span>
+              <div className="flex items-baseline gap-1">
+                {/* CTO FIX: Corrección del precio anual */}
+                <span className="text-5xl font-black text-white">$49.990</span>
               </div>
-              <p className="text-[#28a745] text-[11px] font-black mt-2 uppercase tracking-widest">Ahorra 2 meses</p>
+              <p className="text-[#28a745] text-[10px] font-black mt-2 uppercase tracking-widest">Ahorra 2 meses</p>
             </div>
 
-            <ul className="space-y-4 mb-10 flex-1 border-t border-slate-800 pt-8">
-              <li className="flex items-start gap-3 text-sm font-bold text-slate-300">
-                <span className="text-[#28a745] text-xl leading-none">✓</span> 
+            <ul className="space-y-4 mb-10 flex-1 border-t border-slate-800 pt-6">
+              <li className="flex items-start gap-3 text-xs font-bold text-slate-300">
+                <span className="text-[#28a745] text-lg leading-none">✓</span> 
                 <span>Simulador Inicial</span>
               </li>
-              <li className="flex items-start gap-3 text-sm font-bold text-slate-300">
-                <span className="text-[#28a745] text-xl leading-none">✓</span> 
+              <li className="flex items-start gap-3 text-xs font-bold text-slate-300">
+                <span className="text-[#28a745] text-lg leading-none">✓</span> 
                 <span>Campus Virtual + Simulador PRO Completo</span>
               </li>
-              <li className="flex items-start gap-3 text-sm font-bold text-slate-300">
-                <span className="text-[#28a745] text-xl leading-none">✓</span> 
+              <li className="flex items-start gap-3 text-xs font-bold text-slate-300">
+                <span className="text-[#28a745] text-lg leading-none">✓</span> 
                 <span>Vademécum Profesional</span>
               </li>
             </ul>
@@ -240,22 +300,22 @@ export default function PlanesSuscripcion() {
             <div className="flex flex-col items-center gap-2 w-full mt-auto">
               {loadingAuth ? (
                 <div className="w-full bg-[#002244] text-slate-500 font-black py-4 rounded-xl flex items-center justify-center gap-2">
-                  <Loader2 className="animate-spin" size={20} /> Verificando...
+                  <Loader2 className="animate-spin" size={20} />
                 </div>
               ) : isActive ? (
-                <button disabled className="w-full bg-[#002244] text-[#28a745] font-black py-4 rounded-xl border border-[#28a745]/30 cursor-not-allowed">
+                <button disabled className="w-full bg-[#002244] text-[#28a745] font-black py-4 rounded-xl border border-[#28a745]/30 cursor-not-allowed text-[11px] uppercase tracking-wider">
                   Suscripción Activa
                 </button>
               ) : !user ? (
-                <Link href="/login" className="w-full block bg-[#28a745] text-white hover:bg-[#218838] font-black py-4 rounded-xl transition-all text-center text-sm uppercase tracking-wider shadow-lg shadow-[#28a745]/20">
+                <Link href="/login" className="w-full block bg-[#28a745] text-white hover:bg-[#218838] font-black py-4 rounded-xl transition-all text-center text-[11px] uppercase tracking-wider shadow-lg shadow-[#28a745]/20">
                   Crear Cuenta
                 </Link>
               ) : (
                 <a 
                   href={getCheckoutLink(BASE_LINK_ANUAL)}
-                  className="w-full block bg-[#28a745] text-white hover:bg-[#218838] font-black py-6 rounded-2xl transition-all text-center text-xl shadow-[0_0_30px_rgba(40,167,69,0.4)] transform hover:scale-105"
+                  className="w-full block bg-[#28a745] text-white hover:bg-[#218838] font-black py-5 rounded-xl transition-all text-center text-sm shadow-[0_0_30px_rgba(40,167,69,0.4)] transform hover:scale-105"
                 >
-                  Obtener Plan Anual
+                  Obtener Anual
                 </a>
               )}
             </div>

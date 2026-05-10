@@ -1,16 +1,43 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from "next/link";
 import Image from "next/image";
 import { 
   BookOpen, GraduationCap, Calculator, Menu, X, Gamepad2, 
-  User, Star, Pill, HelpCircle, Share2 
+  Star, Pill, HelpCircle, Share2 
 } from "lucide-react";
 import UserIcon from "../UserIcon"; 
+import StreakCounter from "./StreakCounter"; // 🔥 Importamos el nuevo componente
+import { auth, db } from "../firebase/config"; // Necesitamos acceso a la racha
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, onSnapshot } from "firebase/firestore";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [streak, setStreak] = useState(0);
+  const [user, setUser] = useState(null);
+
+  // 🔥 Lógica para escuchar la racha en tiempo real
+  useEffect(() => {
+    const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        // Escuchamos los cambios en el documento del usuario para la racha
+        const userRef = doc(db, "users", currentUser.uid);
+        const unsubscribeDoc = onSnapshot(userRef, (docSnap) => {
+          if (docSnap.exists()) {
+            setStreak(docSnap.data().streakCount || 0);
+          }
+        });
+        return () => unsubscribeDoc();
+      } else {
+        setUser(null);
+        setStreak(0);
+      }
+    });
+    return () => unsubscribeAuth();
+  }, []);
 
   // Función de compartir universal
   const handleShare = async () => {
@@ -50,12 +77,11 @@ export default function Navbar() {
 
         {/* 🖥️ MENÚ DE ESCRITORIO */}
         <div className="hidden lg:flex items-center gap-1 xl:gap-2">
-           
+            
            <Link href="/quiz" className="flex items-center gap-2 text-white bg-slate-900 hover:bg-emerald-600 font-black text-[10px] uppercase tracking-widest px-4 py-2 rounded-full transition-all shadow-md mr-1">
              <Gamepad2 size={16} /> SIMULADOR
            </Link>
 
-           {/* SECCIÓN PLANES (ESCRITORIO) */}
            <Link href="/planes" className="flex items-center gap-1 xl:gap-2 text-amber-600 hover:text-amber-700 font-bold text-xs tracking-wider px-2 xl:px-3 py-2 rounded-lg hover:bg-amber-50 transition-all">
              <Star size={16} fill="currentColor" /> PLANES
            </Link>
@@ -64,7 +90,6 @@ export default function Navbar() {
              <GraduationCap size={16} /> GUÍAS
            </Link>
 
-           {/* VADEMÉCUM ACTIVADO (ESCRITORIO) */}
            <Link href="/vademecum" className="flex items-center gap-1 xl:gap-2 text-slate-600 hover:text-emerald-600 font-bold text-xs tracking-wider px-2 xl:px-3 py-2 rounded-lg hover:bg-emerald-50 transition-all">
              <Pill size={16} /> VADEMÉCUM
            </Link>
@@ -93,11 +118,17 @@ export default function Navbar() {
              <Share2 size={20} />
            </button>
 
+           {/* 🔥 RACHA EN ESCRITORIO */}
+           {user && <StreakCounter count={streak} />}
+
            <UserIcon />
         </div>
 
         {/* 📱 BOTÓN HAMBURGUESA (MÓVIL) */}
         <div className="lg:hidden flex items-center gap-2">
+          {/* 🔥 RACHA EN MÓVIL (Compacta) */}
+          {user && <StreakCounter count={streak} />}
+
           <button onClick={handleShare} className="p-2 text-slate-400">
             <Share2 size={22} />
           </button>
@@ -140,7 +171,6 @@ export default function Navbar() {
               Guías de Estudio
             </Link>
 
-            {/* VADEMÉCUM ACTIVADO (MÓVIL) */}
             <Link href="/vademecum" onClick={() => setIsOpen(false)} className="flex items-center gap-4 text-slate-700 font-bold text-base p-4 rounded-2xl hover:bg-emerald-50 border border-slate-100">
               <div className="bg-emerald-100 p-2 rounded-lg text-emerald-600"><Pill size={20} /></div>
               Vademécum Profesional

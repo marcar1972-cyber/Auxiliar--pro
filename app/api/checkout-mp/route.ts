@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-export async function GET(request: Request) {
+export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const uid = searchParams.get("uid");
   const email = searchParams.get("email");
@@ -11,9 +11,19 @@ export async function GET(request: Request) {
   }
 
   // Configuración del plan según lo que pinchó el alumno
-  const esAnual = plan === "anual";
-  const nombrePlan = esAnual ? "Plan Anual AuxiliarPro PRO" : "Plan Mensual AuxiliarPro PRO";
-  const precio = esAnual ? 49990 : 5990;
+  let nombrePlan = "";
+  let precio = 0;
+
+  if (plan === "anual") {
+    nombrePlan = "Plan Anual AuxiliarPro PRO";
+    precio = 49990;
+  } else if (plan === "sprint") {
+    nombrePlan = "Pase Sprint Final - AuxiliarPro (15 Días)";
+    precio = 3990;
+  } else {
+    nombrePlan = "Plan Mensual AuxiliarPro PRO";
+    precio = 5990;
+  }
 
   try {
     const response = await fetch("https://api.mercadopago.com/checkout/preferences", {
@@ -55,7 +65,7 @@ export async function GET(request: Request) {
     } else {
       throw new Error("No se pudo generar el punto de inicio de pago");
     }
-  } catch (error: any) {
+  } catch (error) {
     console.error("❌ Error creando preferencia:", error.message);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
