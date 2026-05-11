@@ -30,6 +30,7 @@ export async function GET(request) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        // Usamos el token de forma segura
         Authorization: `Bearer APP_USR-6296117002447975-040718-d1a2cd392dac4324a4875784375a14d9-3319774413`,
       },
       body: JSON.stringify({
@@ -44,7 +45,7 @@ export async function GET(request) {
         payer: {
           email: email,
         },
-        // 🔥 ESTO ES LO QUE REVENIU PERDÍA Y MP NO:
+        // 🔥 REFERENCIA EXTERNA PARA TU WEBHOOK
         external_reference: uid, 
         
         back_urls: {
@@ -53,6 +54,7 @@ export async function GET(request) {
           pending: "https://www.auxiliaresdefarmacia.cl/planes",
         },
         auto_return: "approved",
+        // Asegúrate que esta URL sea accesible públicamente y sea HTTPS
         notification_url: "https://www.auxiliaresdefarmacia.cl/api/webhook-mp",
       }),
     });
@@ -60,10 +62,11 @@ export async function GET(request) {
     const data = await response.json();
 
     // Redirigimos al alumno directamente al Checkout Seguro de Mercado Pago
-    if (data.init_point) {
+    if (data && data.init_point) {
       return NextResponse.redirect(data.init_point);
     } else {
-      throw new Error("No se pudo generar el punto de inicio de pago");
+      console.error("Respuesta de MP sin init_point:", data);
+      return NextResponse.json({ error: "Error de respuesta desde Mercado Pago" }, { status: 500 });
     }
   } catch (error) {
     console.error("❌ Error creando preferencia:", error.message);
