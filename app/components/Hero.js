@@ -1,10 +1,10 @@
 'use client';
 import Link from "next/link";
-import { ArrowRight, Pill, Calculator, Gamepad2 } from "lucide-react";
+import { ArrowRight, Pill, Calculator, Gamepad2, ShieldCheck } from "lucide-react";
 
 export default function Hero() {
   return (
-    /* Fondo con degradado elegante de Slate-50 a Blanco para diferenciar de la sección siguiente */
+    /* Fondo con degradado elegante de Slate-50 a Blanco */
     <header className="py-24 px-6 bg-gradient-to-b from-slate-50 to-white text-center w-full relative overflow-hidden">
       
       {/* Detalle visual sutil de marca en el fondo */}
@@ -12,49 +12,50 @@ export default function Hero() {
 
       <div className="max-w-4xl mx-auto relative z-10">
 
-        {/* Etiqueta de Autoridad - Actualizada a +900 alumnos */}
-        <div className="inline-flex items-center gap-2 bg-[#28a745]/5 text-[#28a745] px-4 py-2 rounded-full text-[10px] md:text-xs font-black uppercase tracking-widest mb-10 border border-[#28a745]/10 italic shadow-sm">
-          Comunidad activa de +900 alumnos capacitándose bajo normativa vigente
+        {/* Etiqueta de Autoridad - CTR Mejorado con Icono */}
+        <div className="inline-flex items-center gap-2 bg-emerald-50 text-[#28a745] px-5 py-2.5 rounded-full text-[10px] md:text-xs font-black uppercase tracking-widest mb-10 border border-emerald-100 italic shadow-sm">
+          <ShieldCheck size={14} className="animate-pulse" />
+          Comunidad de +900 alumnos aprobando bajo normativa SEREMI 2026
         </div>
         
-        {/* Título Principal - Azul Médico y Verde Brand */}
-        <h1 className="text-5xl md:text-6xl lg:text-7xl font-black text-[#003366] mb-8 leading-[1.05] tracking-tighter">
-          Tu examen <span className="text-[#28a745]">SEREMI</span> <br className="hidden md:block" />comienza aquí.
+        {/* Título Principal - Optimizado para capturar búsquedas de "Examen Auxiliar" */}
+        <h1 className="text-5xl md:text-6xl lg:text-8xl font-black text-[#003366] mb-8 leading-[1.05] tracking-tighter">
+          Aprueba tu examen <span className="text-[#28a745]">SEREMI</span> <br className="hidden md:block" /> a la primera.
         </h1>
         
-        {/* Subtítulo */}
-        <p className="text-lg md:text-xl text-slate-500 mb-12 max-w-2xl mx-auto font-medium leading-relaxed">
-          Entrena con bases legales extraídas directamente de los <strong className="text-[#003366]">Decretos 466, 404 y 405</strong> del Ministerio de Salud. 
-          Contenido técnico y jurídico validado para el proceso de certificación 2026.
+        {/* Subtítulo - Inyección SEO de Decretos y MINSAL */}
+        <p className="text-lg md:text-2xl text-slate-500 mb-12 max-w-3xl mx-auto font-medium leading-relaxed">
+          Entrena con el único simulador técnico en Chile basado en los <strong className="text-[#003366]">Decretos 466, 404 y 405</strong>. 
+          Contenido oficial del <span className="text-[#003366] font-bold">Ministerio de Salud</span> para la certificación de Auxiliares de Farmacia.
         </p>
         
-        {/* Botones de Acción - Ecosistema Completo */}
+        {/* Botones de Acción - Jerarquía Visual Fortalecida */}
         <div className="flex flex-col items-center gap-6">
-          {/* Botón Principal: Simulador - Ahora en Azul Médico (#003366) */}
+          {/* Botón Principal: El imán de Clics */}
           <Link 
             href="/quiz" 
-            className="inline-flex items-center justify-center w-full sm:w-auto gap-3 bg-[#003366] text-white px-12 py-5 rounded-full font-black text-base md:text-lg hover:bg-[#002244] transition-all shadow-xl hover:-translate-y-1 group"
+            className="inline-flex items-center justify-center w-full sm:w-auto gap-3 bg-[#003366] text-white px-12 py-6 rounded-full font-black text-lg md:text-xl hover:bg-[#002244] transition-all shadow-[0_20px_40px_rgba(0,51,102,0.2)] hover:-translate-y-1 group"
           >
-            <Gamepad2 size={24} className="text-[#28a745] group-hover:scale-110 transition-transform" />
-            EMPEZAR SIMULADOR <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+            <Gamepad2 size={24} className="text-[#28a745] group-hover:rotate-12 transition-transform" />
+            INICIAR SIMULADOR GRATIS <ArrowRight size={22} className="group-hover:translate-x-1 transition-transform" />
           </Link>
 
-          {/* Accesos Secundarios: Herramientas de Mesón */}
-          <div className="flex flex-wrap justify-center gap-3 w-full">
+          {/* Accesos Secundarios: Utilidad de Mesón */}
+          <div className="flex flex-wrap justify-center gap-4 w-full">
             <Link 
               href="/vademecum" 
-              className="inline-flex items-center gap-2 bg-white text-[#003366] px-6 py-3 rounded-2xl font-bold text-sm border border-slate-200 hover:border-[#28a745] hover:text-[#28a745] transition-all shadow-sm"
+              className="inline-flex items-center gap-2 bg-white text-[#003366] px-8 py-4 rounded-2xl font-bold text-sm border border-slate-200 hover:border-[#28a745] hover:text-[#28a745] transition-all shadow-sm group"
             >
-              <Pill size={18} className="text-[#28a745]" />
-              Vademécum Profesional
+              <Pill size={18} className="text-[#28a745] group-hover:scale-110 transition-transform" />
+              Vademécum Técnico
             </Link>
 
             <Link 
               href="/dermocheck" 
-              className="inline-flex items-center gap-2 bg-white text-[#003366] px-6 py-3 rounded-2xl font-bold text-sm border border-slate-200 hover:border-[#28a745] hover:text-[#28a745] transition-all shadow-sm"
+              className="inline-flex items-center gap-2 bg-white text-[#003366] px-8 py-4 rounded-2xl font-bold text-sm border border-slate-200 hover:border-[#28a745] hover:text-[#28a745] transition-all shadow-sm group"
             >
-              <Calculator size={18} className="text-[#28a745]" />
-              DermoCheck (Vencimientos)
+              <Calculator size={18} className="text-[#28a745] group-hover:scale-110 transition-transform" />
+              DermoCheck Vencimientos
             </Link>
           </div>
         </div>

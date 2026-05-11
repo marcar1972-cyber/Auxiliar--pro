@@ -6,6 +6,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../firebase/config"; 
 import { useRouter } from "next/navigation"; 
 import BannerVenta from "../components/BannerVenta";
+import { ShieldCheck, Info, BookOpen, AlertTriangle, Search } from "lucide-react";
 
 // IMPORTAMOS LA DATA DESDE EL OTRO ARCHIVO
 import { BLOQUE_I, OPCIONES_DESPLEGABLES } from "./vademecumData";
@@ -132,7 +133,7 @@ export default function BuscadorVademecum() {
   };
 
   const handleCargaMasivaYPurga = async () => {
-    if (!window.confirm("⚠️ ¿Ejecutar SINCRONIZACIÓN PRO? Se cargará el Bloque I (Digestivo y Respiratorio).")) return;
+    if (!window.confirm("⚠️ ¿Ejecutar SINCRONIZACIÓN PRO? Se cargará el Bloque I.")) return;
     setCargandoAuditoria(true);
 
     try {
@@ -152,11 +153,11 @@ export default function BuscadorVademecum() {
         const docId = normalizarTexto(item.nombre).replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
         await setDoc(doc(db, "vademecum", docId), item);
       }
-      alert("✅ Bloque I Sincronizado correctamente.");
+      alert("✅ Bloque I Sincronizado.");
       window.location.reload();
     } catch (error) { 
       console.error(error); 
-      alert("❌ Error en carga masiva."); 
+      alert("❌ Error."); 
       setCargandoAuditoria(false);
     }
   };
@@ -198,11 +199,6 @@ export default function BuscadorVademecum() {
                   <p className="text-emerald-900 font-medium text-sm whitespace-pre-line">{item.cross_selling}</p>
                 </div>
             </div>
-          </div>
-          <div className="bg-slate-100 px-8 py-4 border-t border-slate-200">
-            <p className="text-slate-500 text-xs text-center font-medium italic">
-              ⚠️ Aviso: La información contenida en este vademécum es referencial para profesionales de la salud. La posología final la determina el médico.
-            </p>
           </div>
         </>
       ) : (
@@ -304,7 +300,7 @@ export default function BuscadorVademecum() {
       <div className="max-w-5xl mx-auto">
         <div className="bg-slate-50 p-10 rounded-[3rem] border border-slate-100 mb-12 shadow-sm">
           <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-            <h1 className="text-4xl font-black text-slate-900">Vademécum <span className="text-emerald-500">PRO</span></h1>
+            <h1 className="text-4xl font-black text-slate-900 tracking-tighter">Vademécum <span className="text-emerald-500">PRO</span></h1>
             {isAdmin && (
               <div className="flex gap-3">
                 <button onClick={handleCargaMasivaYPurga} className="bg-slate-900 hover:bg-slate-800 transition-colors text-white px-6 py-3 rounded-full font-black text-sm shadow-md">🚀 Sync Bloque I</button>
@@ -319,9 +315,67 @@ export default function BuscadorVademecum() {
             </form>
           )}
         </div>
-        <div className="space-y-8">{modoAuditoria ? todosMedicamentos.map(renderTarjetaMedicamento) : resultados.map(renderTarjetaMedicamento)}</div>
+
+        <div className="space-y-8">
+            {modoAuditoria ? todosMedicamentos.map(renderTarjetaMedicamento) : resultados.map(renderTarjetaMedicamento)}
+        </div>
+
+        {/* 🚀 BLOQUE DE AUTORIDAD TÉCNICA (ANTI-THIN CONTENT) */}
+        <section className="mt-20 border-t border-slate-200 pt-16">
+            <div className="grid md:grid-cols-2 gap-12">
+                <div className="space-y-6">
+                    <div className="flex items-center gap-3 text-[#003366]">
+                        <ShieldCheck size={32} />
+                        <h3 className="text-2xl font-black uppercase tracking-tight">Vademécum Oficial AuxiliarPro</h3>
+                    </div>
+                    <p className="text-slate-600 leading-relaxed font-medium">
+                        En <strong>AuxiliarPro</strong>, nos basamos estrictamente en la normativa técnica del <strong>MINSAL</strong> y las resoluciones del <strong>ISP de Chile</strong>. Nuestro buscador integra datos críticos para el auxiliar de farmacia moderno: desde el manejo de <strong>Recetas Cheque y Retenidas</strong> según el <strong>DS 404 y 405</strong>, hasta protocolos de almacenamiento bajo el <strong>DS 466</strong>.
+                    </p>
+                    <div className="bg-emerald-50 border border-emerald-100 p-6 rounded-3xl">
+                        <h4 className="font-black text-emerald-800 mb-2 flex items-center gap-2">
+                            <Info size={18}/> ¿Por qué usar este buscador?
+                        </h4>
+                        <p className="text-sm text-emerald-700 font-medium">
+                            Optimizamos la búsqueda de fármacos de alta rotación y bioequivalentes. Cada ficha incluye <strong>Tips de Mesón</strong> diseñados para mejorar la atención farmacéutica y asegurar el cumplimiento legal en Chile.
+                        </p>
+                    </div>
+                </div>
+
+                <div className="space-y-6">
+                    <div className="flex items-center gap-3 text-slate-400">
+                        <BookOpen size={32} />
+                        <h3 className="text-2xl font-black uppercase tracking-tight">Marco Normativo Chileno</h3>
+                    </div>
+                    <p className="text-slate-500 text-sm leading-relaxed italic">
+                        La dispensación de medicamentos en Chile está regulada por la <strong>Ley de Fármacos 20.724</strong>. El auxiliar de farmacia debe dominar la clasificación de productos, la <strong>Cadena de Frío</strong>, y los reportes de <strong>Farmacovigilancia</strong>. Nuestro Vademécum PRO es una herramienta de consulta rápida para profesionales que buscan excelencia técnica.
+                    </p>
+                    <div className="bg-rose-50 border border-rose-100 p-6 rounded-3xl flex items-start gap-4">
+                        <AlertTriangle className="text-rose-500 shrink-0" size={24} />
+                        <div>
+                            <h4 className="font-black text-rose-800 text-sm mb-1 uppercase">Aviso de Seguridad</h4>
+                            <p className="text-xs text-rose-700 font-medium leading-relaxed">
+                                Información de carácter informativo para personal certificado. El uso y dosificación debe ser supervisado por un profesional clínico facultado.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="mt-12 flex flex-wrap gap-2 justify-center border-b border-slate-100 pb-12">
+                {['Código Sanitario', 'Bioequivalentes', 'D.S. 466', 'D.S. 404', 'D.S. 405', 'Ley 20.724', 'ISP', 'Minsal', 'Farmacología Chilena'].map(tag => (
+                    <span key={tag} className="px-4 py-2 bg-slate-50 text-slate-400 text-[10px] font-black uppercase tracking-widest rounded-xl border border-slate-200">
+                        {tag}
+                    </span>
+                ))}
+            </div>
+        </section>
+
         <div className="mt-8"><BannerVenta /></div>
       </div>
+
+      <footer className="mt-12 text-center text-slate-300 text-[10px] font-mono uppercase tracking-[0.3em] pb-12">
+        AuxiliarPro Vademécum v5.0 | macz.dev
+      </footer>
     </div>
   );
 }

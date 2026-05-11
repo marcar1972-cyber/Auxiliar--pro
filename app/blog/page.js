@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react"; // <-- Añadido para los estados y el guardián
-import { auth } from "../firebase/config"; // <-- Añadido para verificar sesión
+import { useState, useEffect } from "react";
+import { auth } from "../firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
-import { useRouter } from "next/navigation"; // <-- Añadido para redirigir
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { 
-  Calendar, BookOpen, FileText, DollarSign, Scale, Users, ArrowRight, GraduationCap, Lightbulb, Share2, Loader2 
-} from "lucide-react"; // <-- Añadimos Loader2 para el spinner
+  Calendar, BookOpen, FileText, DollarSign, Scale, Users, ArrowRight, GraduationCap, Lightbulb, Share2, Loader2, ShieldCheck, Newspaper
+} from "lucide-react";
 
 // LISTADO DE ARTÍCULOS
 const articles = [
@@ -89,11 +89,10 @@ export default function BlogIndex() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  // 🛡️ GUARDIÁN DE RUTA: Solo permite ver si está logueado
+  // 🛡️ GUARDIÁN DE RUTA
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (!user) {
-        // Si no hay usuario, lo mandamos al login
         router.push("/login?redirect=/blog");
       } else {
         setLoading(false);
@@ -106,7 +105,7 @@ export default function BlogIndex() {
   const handleShare = async () => {
     const shareData = {
       title: 'Blog AuxiliarPro - Noticias y Guías para Farmacia',
-      text: '¡Mira estos artículos! Tienen toda la info sobre sueldos, requisitos y exámenes SEREMI para auxiliares de farmacia.',
+      text: '¡Mira estos artículos! Tienen toda la info sobre sueldos, requisitos y exámenes SEREMI.',
       url: window.location.href,
     };
 
@@ -122,7 +121,6 @@ export default function BlogIndex() {
     }
   };
 
-  // Spinner de carga mientras verifica la sesión
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
@@ -137,7 +135,7 @@ export default function BlogIndex() {
       {/* HEADER DEL BLOG */}
       <header className="mb-14 text-center">
         <div className="flex items-center justify-center gap-3 mb-6">
-           <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Contenido Educativo</span>
+           <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Centro de Noticias AuxiliarPro</span>
            <button 
               onClick={handleShare}
               className="bg-white border border-slate-200 text-slate-500 hover:text-emerald-600 p-2 rounded-full shadow-sm hover:shadow-md transition-all active:scale-95"
@@ -148,25 +146,22 @@ export default function BlogIndex() {
         </div>
 
         <h1 className="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight text-balance">
-          Blog para <span className="text-emerald-600">Auxiliar de Farmacia</span>
+          Actualidad para el <span className="text-emerald-600">Auxiliar de Farmacia</span>
         </h1>
         <p className="text-slate-500 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed text-balance">
-          Mantente al día con las normativas, fechas de examen y consejos de estudio para asegurar tu registro en la SEREMI.
+          Información estratégica sobre normativas del MINSAL, sueldos, trámites SEREMI y técnicas de gestión en farmacias chilenas.
         </p>
       </header>
 
       {/* GRILLA DE ARTÍCULOS */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
-        
         {articles.map((post, index) => (
           <article key={index} className="bg-white border border-slate-200 rounded-3xl overflow-hidden hover:shadow-xl transition-all flex flex-col h-full hover:-translate-y-1 group">
-            
             <div className={`h-48 ${post.bgIcon} flex items-center justify-center group-hover:bg-opacity-80 transition-all duration-300`}>
-               <div className="transform group-hover:scale-110 transition-transform duration-300">
-                 {post.icon}
-               </div>
+                <div className="transform group-hover:scale-110 transition-transform duration-300">
+                  {post.icon}
+                </div>
             </div>
-            
             <div className="p-8 flex-grow flex flex-col">
               <div className={`flex items-center gap-2 text-[10px] font-black ${post.color} mb-3 uppercase tracking-widest bg-slate-50 px-3 py-1 rounded-full w-fit`}>
                 {post.category}
@@ -177,7 +172,6 @@ export default function BlogIndex() {
               <p className="text-slate-500 text-sm mb-8 leading-relaxed line-clamp-3">
                 {post.desc}
               </p>
-              
               <div className="mt-auto">
                 <Link 
                   href={`/blog/${post.slug}`} 
@@ -189,9 +183,48 @@ export default function BlogIndex() {
             </div>
           </article>
         ))}
-
       </div>
 
+      {/* 🚀 SECCIÓN DE AUTORIDAD EDITORIAL (ANTI-THIN CONTENT) */}
+      <section className="bg-slate-50 rounded-[2.5rem] p-8 md:p-12 border border-slate-200 mt-12">
+        <div className="max-w-4xl">
+          <div className="flex items-center gap-3 mb-6 text-emerald-600">
+            <Newspaper size={28} />
+            <h3 className="text-2xl font-black uppercase tracking-tight">Editorial Técnica AuxiliarPro</h3>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-10 text-sm leading-relaxed text-slate-600">
+            <div className="space-y-4">
+              <p>
+                El <strong>Blog de AuxiliarPro</strong> nace con la misión de profesionalizar el rol del auxiliar de farmacia en Chile. Nuestra línea editorial se basa estrictamente en la normativa del <strong>MINSAL y el ISP</strong>, desglosando leyes complejas como el <strong>Decreto 466</strong> para que sean aplicables en el día a día del mesón.
+              </p>
+              <p>
+                Analizamos no solo la teoría del <strong>Examen SEREMI</strong>, sino también la realidad laboral: desde la actualización de sueldos hasta la gestión eficiente del stock para evitar vencimientos, un pilar que abordamos con herramientas como <strong>DermoCheck</strong>.
+              </p>
+            </div>
+            <div className="space-y-4">
+              <p>
+                En cada artículo, buscamos que el colega farmacéutico encuentre respuestas claras sobre <strong>Receta Cheque, Receta Retenida</strong> y los protocolos de los <strong>Decretos 404 y 405</strong>. La formación continua es la única forma de asegurar la seguridad del paciente y la estabilidad profesional.
+              </p>
+              <div className="flex flex-wrap gap-2 pt-4">
+                {['Sueldos 2026', 'Trámites SEREMI', 'Ley de Fármacos', 'Gestión de Farmacia', 'DS 466'].map(tag => (
+                  <span key={tag} className="bg-white border border-slate-200 text-slate-400 text-[10px] font-bold px-3 py-1 rounded-lg uppercase tracking-widest">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FOOTER DE CONFIANZA */}
+      <footer className="mt-20 text-center border-t border-slate-100 pt-10">
+        <ShieldCheck className="mx-auto mb-4 text-slate-300" size={40} />
+        <p className="text-xs text-slate-400 max-w-xl mx-auto uppercase tracking-widest leading-loose">
+          Información generada por auxiliares certificados para la comunidad farmacéutica de Chile. v5.0 | <span className="font-mono">&lt; macz.dev /&gt;</span>
+        </p>
+      </footer>
     </div>
   );
 }

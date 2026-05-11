@@ -1,14 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react"; // Añadimos useEffect y useState
-import { auth } from "../firebase/config"; // Importamos auth
+import { useState, useEffect } from "react";
+import { auth } from "../firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
-import { useRouter } from "next/navigation"; // Para redireccionar
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { 
   BookOpen, Pill, Lock, ArrowRight, Library, GraduationCap, 
   BrainCircuit, Store, Calculator, Microscope, Flame, Heart, Brain, Share2,
-  Loader2 
+  Loader2, ShieldCheck, FileText
 } from "lucide-react";
 import BannerVenta from '../components/BannerVenta';
 
@@ -16,11 +16,10 @@ export default function GuiasIndex() {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  // 🛡️ GUARDIÁN DE RUTA: Solo permite ver si está logueado
+  // 🛡️ GUARDIÁN DE RUTA
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (!user) {
-        // Si no hay usuario, lo mandamos al login con un parámetro para que vuelva aquí después
         router.push("/login?redirect=/guias");
       } else {
         setLoading(false);
@@ -42,7 +41,7 @@ export default function GuiasIndex() {
         await navigator.share(shareData);
       } else {
         await navigator.clipboard.writeText(shareData.url);
-        alert("Enlace copiado al portapapeles. ¡Ya puedes pegarlo donde quieras!");
+        alert("Enlace copiado al portapapeles.");
       }
     } catch (err) {
       console.log("Error al compartir", err);
@@ -122,7 +121,6 @@ export default function GuiasIndex() {
     }
   ];
 
-  // Si está cargando la sesión, mostramos un spinner profesional
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
@@ -143,39 +141,20 @@ export default function GuiasIndex() {
              </span>
              <button 
                 onClick={handleShare}
-                className="bg-white border border-slate-200 text-slate-500 hover:text-emerald-600 p-2 rounded-full shadow-sm hover:shadow-md transition-all active:scale-95"
-                title="Compartir Biblioteca"
+                className="bg-white border border-slate-200 text-slate-500 hover:text-emerald-600 p-2 rounded-full shadow-sm"
              >
                 <Share2 size={16} />
              </button>
           </div>
           
-          <h1 className="text-3xl md:text-5xl font-black text-slate-900 mb-6 leading-tight text-balance">
+          <h1 className="text-3xl md:text-5xl font-black text-slate-900 mb-6 leading-tight">
             Guías de Estudio AuxiliarPro: <br className="hidden md:block"/>
             <span className="text-blue-600">Apoyo para tu Certificación en Chile</span>
           </h1>
           
-          <p className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed text-balance">
-            Descarga material de estudio ordenado y actualizado para preparar tu examen ante la SEREMI. Repasa la Normativa (Decreto 466) y Farmacología con resúmenes claros y directos al grano.
+          <p className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+            Descarga material de estudio ordenado y actualizado para preparar tu examen ante la SEREMI. Repasa la Normativa (Decreto 466) y Farmacología con resúmenes claros.
           </p>
-
-          <a 
-            href="https://wa.me/?text=¡Hola!%20Encontré%20estos%20resúmenes%20para%20estudiar%20farmacia,%20se%20ven%20buenos:%20https://www.auxiliaresdefarmacia.cl/guias" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="group block bg-[#25D366] p-6 rounded-3xl shadow-sm hover:shadow-md transition-all hover:bg-[#20bd5a] mt-8 max-w-md mx-auto text-left"
-          >
-            <div className="flex items-center gap-4">
-                <div className="shrink-0">
-                    <img src="/whatsapp.webp" alt="WhatsApp" className="w-10 h-10 object-contain" />
-                </div>
-                <div>
-                    <h4 className="font-bold text-white text-sm">Compartir dato con Colegas</h4>
-                    <p className="text-xs text-white/90">Enviar al grupo de estudio</p>
-                </div>
-                <ArrowRight size={20} className="text-white ml-auto opacity-70 group-hover:translate-x-1 transition-transform"/>
-            </div>
-          </a>
         </div>
 
         {/* GRILLA DE GUÍAS */}
@@ -196,17 +175,7 @@ export default function GuiasIndex() {
                 {guia.desc}
               </p>
               <div className="mt-auto w-full">
-                <span className={`block w-full text-center py-4 rounded-xl font-black text-xs uppercase tracking-wider transition-colors ${
-                    guia.color === 'blue' ? 'bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white' : 
-                    guia.color === 'red' ? 'bg-red-50 text-red-600 group-hover:bg-red-600 group-hover:text-white' :
-                    guia.color === 'emerald' ? 'bg-emerald-50 text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white' :
-                    guia.color === 'teal' ? 'bg-teal-50 text-teal-600 group-hover:bg-teal-600 group-hover:text-white' :
-                    guia.color === 'indigo' ? 'bg-indigo-50 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white' :
-                    guia.color === 'cyan' ? 'bg-cyan-50 text-cyan-600 group-hover:bg-cyan-600 group-hover:text-white' :
-                    guia.color === 'orange' ? 'bg-orange-50 text-orange-600 group-hover:bg-orange-600 group-hover:text-white' :
-                    guia.color === 'rose' ? 'bg-rose-50 text-rose-600 group-hover:bg-rose-600 group-hover:text-white' :
-                    'bg-purple-50 text-purple-600 group-hover:bg-purple-600 group-hover:text-white'
-                }`}>
+                <span className={`block w-full text-center py-4 rounded-xl font-black text-xs uppercase tracking-wider transition-colors bg-slate-50 text-slate-600 group-hover:bg-[#003366] group-hover:text-white`}>
                   Leer Resumen y Quiz
                 </span>
               </div>
@@ -215,53 +184,60 @@ export default function GuiasIndex() {
         </div>
 
         {/* 🏛️ SECCIÓN TRÁMITE SEREMI */}
-        <div className="mb-20 w-full max-w-4xl mx-auto bg-slate-50 border border-slate-200 rounded-3xl p-8 shadow-sm">
+        <div className="mb-20 w-full max-w-4xl mx-auto bg-white border border-slate-200 rounded-3xl p-8 shadow-sm">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="text-center md:text-left space-y-2 flex-1">
-              <h3 className="text-xl font-bold text-slate-900 leading-tight">
-                ¿Ya cumpliste el año en farmacia? 🕒
-              </h3>
-              <p className="text-slate-600 text-sm">
-                Reúne tu documentación y haz el trámite en línea. Antes de subir los papeles, revisa nuestra guía para evitar rechazos.
-              </p>
+              <h3 className="text-xl font-bold text-slate-900 leading-tight">¿Ya cumpliste el año en farmacia? 🕒</h3>
+              <p className="text-slate-600 text-sm">Reúne tu documentación y haz el trámite en línea. Revisa nuestra guía para evitar rechazos.</p>
             </div>
-
             <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-                <Link href="/blog/fecha-examen-auxiliar-farmacia-seremi" className="group flex items-center justify-center gap-2 px-5 py-3 rounded-xl border border-slate-300 bg-white text-slate-700 font-semibold hover:bg-slate-50 hover:border-slate-400 transition-all text-sm">
+                <Link href="/blog/fecha-examen-auxiliar-farmacia-seremi" className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl border border-slate-300 bg-white text-slate-700 font-semibold text-sm">
                     <span>📄 Ver Guía Paso a Paso</span>
                 </Link>
-
-                <a 
-                    href="https://seremienlinea.minsal.cl" 
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group flex items-center justify-center gap-2 bg-blue-700 hover:bg-blue-800 text-white px-5 py-3 rounded-xl font-semibold transition-all shadow-sm text-sm"
-                >
+                <a href="https://seremienlinea.minsal.cl" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 bg-blue-700 hover:bg-blue-800 text-white px-5 py-3 rounded-xl font-semibold text-sm">
                     <span>Ir a Trámite SEREMI</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-80">
-                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                        <polyline points="15 3 21 3 21 9"></polyline>
-                        <line x1="10" y1="14" x2="21" y2="3"></line>
-                    </svg>
                 </a>
             </div>
           </div>
-          <p className="text-[10px] text-slate-400 mt-6 text-center md:text-left">
-            *AuxiliarPro te orienta, pero el trámite final se realiza en el portal oficial del Minsal.
-          </p>
         </div>
 
+        {/* BANNER DE VENTA */}
         <div className="mb-20 max-w-4xl mx-auto">
             <BannerVenta colorTheme="blue" />
         </div>
 
-        <div className="border-t border-slate-200 pt-16 text-center">
-            <h3 className="text-xl font-bold text-slate-800 mb-4 flex items-center justify-center gap-2">
-                <GraduationCap className="text-slate-400"/>
-                ¿Qué debo estudiar para el examen?
-            </h3>
-            <p className="text-slate-500 max-w-2xl mx-auto text-sm leading-relaxed">
-                El examen de competencia para Auxiliar de Farmacia en Chile evalúa principalmente el conocimiento sobre el <strong>Código Sanitario</strong>, la <strong>Ley 20.724</strong> (Fármacos I), el <strong>Decreto 466</strong> (Reglamento de Farmacias), los <strong>Decretos 404 y 405</strong> (Estupefacientes y Psicotrópicos) y el <strong>Decreto 3</strong> (Productos Farmacéuticos), además de nociones básicas de <strong>Cálculo de Dosis (Posología)</strong> y <strong>Farmacología General</strong>.
+        {/* 🚀 BLOQUE DE AUTORIDAD TÉCNICA (ANTI-THIN CONTENT) */}
+        <section className="border-t border-slate-200 pt-16 mb-12">
+            <div className="max-w-4xl mx-auto">
+                <div className="flex items-center gap-3 mb-6 text-[#003366]">
+                    <ShieldCheck size={28} />
+                    <h3 className="text-2xl font-black uppercase tracking-tight">Autoridad Técnica AuxiliarPro</h3>
+                </div>
+                
+                <div className="grid md:grid-cols-2 gap-8 text-sm leading-relaxed text-slate-600">
+                    <p>
+                        En <strong>AuxiliarPro</strong>, nos basamos estrictamente en la normativa vigente dictada por el <strong>MINSAL</strong> y fiscalizada por el <strong>ISP de Chile</strong>. El correcto manejo de la <strong>Receta Cheque y Receta Retenida</strong>, la vigilancia activa de la <strong>Farmacovigilancia</strong> y el almacenamiento técnico según el <strong>Decreto Supremo 466</strong> son los pilares fundamentales de nuestro entrenamiento para auxiliares.
+                    </p>
+                    <p>
+                        Nuestro material cubre desde la <strong>Ley de Fármacos 20.724</strong> hasta los protocolos críticos de los <strong>Decretos 404 y 405</strong> (Estupefacientes y Psicotrópicos). Entendemos que la certificación ante la <strong>SEREMI de Salud</strong> requiere no solo memoria, sino una comprensión profunda de la ética farmacéutica y la seguridad del paciente en el mesón de atención.
+                    </p>
+                </div>
+
+                <div className="mt-8 flex flex-wrap gap-2">
+                    {['DS 466', 'DS 404', 'DS 405', 'Ley 20.724', 'Código Sanitario', 'Bioequivalencia', 'ISP Chile'].map((tag) => (
+                        <span key={tag} className="bg-slate-100 text-slate-500 px-3 py-1 rounded-lg text-[10px] font-bold uppercase tracking-widest border border-slate-200">
+                            {tag}
+                        </span>
+                    ))}
+                </div>
+            </div>
+        </section>
+
+        {/* FOOTER ACADÉMICO */}
+        <div className="text-center text-slate-400">
+            <GraduationCap className="mx-auto mb-4 opacity-20" size={40}/>
+            <p className="text-xs max-w-2xl mx-auto leading-relaxed">
+                El examen de competencia para Auxiliar de Farmacia en Chile evalúa el conocimiento sobre el Código Sanitario y reglamentos vigentes. Esta biblioteca es una herramienta de apoyo complementaria.
             </p>
         </div>
 
