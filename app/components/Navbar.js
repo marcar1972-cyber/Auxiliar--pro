@@ -63,14 +63,14 @@ export default function Navbar() {
     <nav className="bg-white border-b border-slate-100 sticky top-0 z-[100] shadow-sm">
       <div className="max-w-[1400px] mx-auto px-4 h-16 flex items-center justify-between">
         
-        {/* LOGO ACTUALIZADO */}
-        <Link href="/" className="relative w-32 md:w-40 h-10 hover:opacity-80 transition-opacity shrink-0 flex items-center">
+        {/* LOGO ACTUALIZADO (Formato webp y restringido a no desbordar) */}
+        <Link href="/" className="relative w-40 md:w-48 h-12 hover:opacity-80 transition-opacity shrink-0 flex items-center">
             <Image 
-              src="/logo_auxiliarpro.png" 
-              alt="Logo AuxiliarPro" 
-              width={160}
-              height={40}
-              className="object-contain object-left"
+              src="/logo.webp" 
+              alt="Logo AuxiliarPro App" 
+              width={200}
+              height={48}
+              className="object-contain object-left w-auto h-full max-h-12"
               priority
             />
         </Link>
