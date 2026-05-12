@@ -30,13 +30,14 @@ export async function GET(request) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        // Usamos el token de forma segura
+        // Token maestro de tu cuenta
         Authorization: `Bearer APP_USR-6296117002447975-040718-d1a2cd392dac4324a4875784375a14d9-3319774413`,
       },
       body: JSON.stringify({
         items: [
           {
             title: nombrePlan,
+            description: nombrePlan, // 🚀 CTO FIX: Obligamos a MP a mandar el nombre exacto al Webhook
             quantity: 1,
             unit_price: precio,
             currency_id: "CLP",
@@ -47,6 +48,7 @@ export async function GET(request) {
         },
         // 🔥 REFERENCIA EXTERNA PARA TU WEBHOOK
         external_reference: uid, 
+        statement_descriptor: "AUXILIARPRO", // 🚀 CTO FIX: Evita que el banco rechace el pago por desconocimiento
         
         back_urls: {
           success: "https://www.auxiliaresdefarmacia.cl/success",
@@ -54,8 +56,8 @@ export async function GET(request) {
           pending: "https://www.auxiliaresdefarmacia.cl/planes",
         },
         auto_return: "approved",
-        // Asegúrate que esta URL sea accesible públicamente y sea HTTPS
-        notification_url: "https://www.auxiliaresdefarmacia.cl/api/webhook-mp",
+        // ⚠️ ALERTA CTO: Asegúrate que esta URL sea exactamente donde está tu carpeta del webhook
+        notification_url: "https://www.auxiliaresdefarmacia.cl/api/webhook-mp", 
       }),
     });
 

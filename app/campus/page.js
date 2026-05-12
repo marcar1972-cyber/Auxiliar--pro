@@ -25,24 +25,38 @@ export default function CampusPage() {
           if (userSnap.exists()) {
             const data = userSnap.data();
             
-            // CTO FIX: Ampliamos la lectura de progreso para cubrir todas las estructuras históricas y actuales
             setUserProgress(data.approvedModules || data.completedModules || data.unlockedLevelsPro || data.unlockedLevels || []);
 
-            // CTO FIX: Validación Pro Robusta
+            // 🚀 CTO FIX: Firewall de Expiración Nivel Dios (Bulletproof Parser)
             let isSubValid = data.isPro === true; 
 
             const rawFields = [data.untilPro, data.untilpro, data.proUntil, data.prountil];
             
             const parseDate = (val) => {
               if (!val) return null;
-              if (typeof val.toDate === 'function') return val.toDate();
+              if (typeof val.toDate === 'function') return val.toDate(); // Firestore Timestamp nativo
+              if (typeof val.seconds === 'number') return new Date(val.seconds * 1000); // Objeto Firestore crudo
               
               if (typeof val === 'string') {
-                const dateStr = val.toLowerCase();
+                const s = val.trim().toLowerCase();
+                
+                // Formato YYYY-MM-DD o ISO "2026-05-05T04:00:00.000Z"
+                if (s.match(/^\d{4}-\d{2}-\d{2}/)) {
+                  const d = new Date(val);
+                  if (!isNaN(d.getTime())) return d;
+                }
+
+                // Formato DD-MM-YYYY o DD/MM/YYYY (Chileno)
+                const clMatch = s.match(/^(\d{2})[-/](\d{2})[-/](\d{4})/);
+                if (clMatch) {
+                  return new Date(parseInt(clMatch[3]), parseInt(clMatch[2]) - 1, parseInt(clMatch[1]), 23, 59, 59);
+                }
+
+                // Formato texto "09 de mayo de 2026"
                 const months = { enero:0, febrero:1, marzo:2, abril:3, mayo:4, junio:5, julio:6, agosto:7, septiembre:8, octubre:9, noviembre:10, diciembre:11 };
-                const parts = dateStr.replace(/de /g, "").split(" ");
-                if (parts.length >= 3 && months[parts[1]] !== undefined) {
-                  return new Date(parseInt(parts[2]), months[parts[1]], parseInt(parts[0]), 23, 59, 59);
+                const textParts = s.replace(/de /g, "").split(" ");
+                if (textParts.length >= 3 && months[textParts[1]] !== undefined) {
+                  return new Date(parseInt(textParts[2]), months[textParts[1]], parseInt(textParts[0]), 23, 59, 59);
                 }
               }
               const d = new Date(val);
@@ -53,9 +67,18 @@ export default function CampusPage() {
 
             if (validDates.length > 0) {
               const expiryDate = new Date(Math.max(...validDates));
-              if (expiryDate > new Date()) {
-                isSubValid = true;
+              // Forzamos la expiración al final del día por si hay desfase de zona horaria
+              expiryDate.setHours(23, 59, 59, 999);
+              const currentDate = new Date();
+              
+              // Si la fecha límite YA PASÓ, el muro se cierra implacablemente
+              if (expiryDate < currentDate) {
+                isSubValid = false;
               }
+            } else if (data.isPro === true) {
+               // Si esPro es true pero no logramos leer ninguna fecha, por seguridad asumimos que expiró 
+               // (evita cuentas "inmortales" por bugs de base de datos), a menos que seamos nosotros reparándolo.
+               // isSubValid = false; -> Se puede activar si quieres ser radical, pero dejémoslo pasar si la data se corrompió.
             }
 
             if (isAdmin) isSubValid = true;
@@ -109,12 +132,12 @@ export default function CampusPage() {
 
   const isModuleLocked = (modName) => {
     if (isAdminUser) return false;
-    if (!hasActiveSub) return true; 
     
     const num = parseInt(modName.replace("MOD ", ""));
     if (num === 1) return false;
+    
+    if (!hasActiveSub) return true; 
 
-    // CTO FIX: Verifica tanto formato numérico como string de acuerdo al progreso unificado
     const hasNumericProgress = userProgress.includes(num - 1);
     const hasStringProgress = userProgress.includes(`mod-${num - 1}`);
 
@@ -156,7 +179,7 @@ export default function CampusPage() {
             const defaultDescription = "Material oficial completo para tu certificación SEREMI.";
 
             return (
-              <div key={group} className={`bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden transition-all ${locked ? "opacity-60 cursor-not-allowed grayscale" : "hover:border-[#28a745] hover:shadow-lg"}`}>
+              <div key={group} className={`bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden transition-all ${locked ? "opacity-60 grayscale" : "hover:border-[#28a745] hover:shadow-lg"}`}>
                 <div className="bg-slate-100 px-6 py-4 border-b border-slate-200 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className={`p-2 rounded-lg shrink-0 text-white ${locked ? "bg-slate-400" : "bg-[#003366]"}`}>
@@ -164,14 +187,14 @@ export default function CampusPage() {
                     </div>
                     <h2 className="text-xl font-black text-[#003366] leading-tight">Módulo {group.replace("MOD ", "")}: Fundamentos</h2>
                   </div>
-                  {!hasActiveSub && !isAdminUser && (
+                  {!hasActiveSub && !isAdminUser && group !== "MOD 1" && (
                     <div className="bg-slate-300 text-slate-600 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-1.5 shadow-md">
                       <Lock size={14} /> Requiere PRO
                     </div>
                   )}
-                  {(hasActiveSub || isAdminUser) && !locked && (
+                  {(hasActiveSub || isAdminUser || group === "MOD 1") && !locked && (
                     <div className="bg-gradient-to-br from-[#28a745] to-[#218838] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider flex items-center gap-1.5 shadow-md">
-                      <ShieldCheck size={14} /> Verificado Pro
+                      <ShieldCheck size={14} /> Accesible
                     </div>
                   )}
                 </div>
@@ -184,22 +207,32 @@ export default function CampusPage() {
                     </p>
                   </div>
                   
-                  <Link href={locked ? "#" : `/campus/${group.toLowerCase().replace(" ", "-")}`} className="w-full md:w-auto">
-                    <button 
-                      disabled={locked}
-                      className="flex items-center justify-center gap-2 bg-white border-2 border-[#003366] text-[#003366] px-6 py-3 rounded-xl font-bold transition-all w-full md:w-auto shadow-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#003366] hover:text-white"
-                    >
-                        {locked ? <Lock size={18} /> : <BookOpen size={18} />} 
-                        {!hasActiveSub && !isAdminUser ? "Adquirir PRO para Desbloquear" : locked ? "Completa el módulo anterior" : "Estudiar Módulo"}
-                    </button>
-                  </Link>
+                  {/* 🚀 CTO FIX: Destrucción del Link fantasma. Si está bloqueado, solo hay botón estático. */}
+                  <div className="w-full md:w-auto">
+                    {locked ? (
+                      <button 
+                        disabled
+                        className="flex items-center justify-center gap-2 bg-slate-100 border-2 border-slate-200 text-slate-400 px-6 py-3 rounded-xl font-bold transition-all w-full md:w-auto cursor-not-allowed"
+                      >
+                          <Lock size={18} /> 
+                          {!hasActiveSub && !isAdminUser && group !== "MOD 1" ? "Suscripción Expirada" : "Completa el módulo anterior"}
+                      </button>
+                    ) : (
+                      <Link href={`/campus/${group.toLowerCase().replace(" ", "-")}`}>
+                        <button className="flex items-center justify-center gap-2 bg-white border-2 border-[#003366] text-[#003366] px-6 py-3 rounded-xl font-bold transition-all w-full md:w-auto shadow-sm hover:bg-[#003366] hover:text-white">
+                            <BookOpen size={18} /> Estudiar Módulo
+                        </button>
+                      </Link>
+                    )}
+                  </div>
+
                 </div>
               </div>
             );
           })}
 
           {/* EVALUACIÓN FINAL SEREMI BLINDADA */}
-          <div className={`rounded-3xl shadow-lg border border-slate-200 overflow-hidden p-8 flex flex-col md:flex-row items-center justify-between gap-6 mt-4 transition-all ${isFinalExamLocked ? 'bg-slate-800 text-white opacity-90' : 'bg-gradient-to-r from-[#003366] to-[#004a99] text-white'}`}>
+          <div className={`rounded-3xl shadow-lg border border-slate-200 overflow-hidden p-8 flex flex-col md:flex-row items-center justify-between gap-6 mt-4 transition-all ${isFinalExamLocked ? 'bg-slate-800 text-white opacity-95' : 'bg-gradient-to-r from-[#003366] to-[#004a99] text-white'}`}>
               <div className="flex-1">
                   <h2 className="text-2xl font-black mb-2 flex items-center gap-3">
                     {isFinalExamLocked ? <Lock size={28} className="text-slate-400" /> : <Trophy size={28} className="text-amber-400" />}
@@ -207,16 +240,26 @@ export default function CampusPage() {
                   </h2>
                   <p className={isFinalExamLocked ? "text-slate-400" : "text-blue-100"}>
                     {isFinalExamLocked 
-                      ? "Evaluación global restringida. Requiere una suscripción PRO activa para desbloquear el simulador de certificación." 
+                      ? "Evaluación global restringida. Tu suscripción expiró o requiere actualización PRO para desbloquear el simulador de certificación." 
                       : "Evaluación global de todos los módulos. ¡Demuestra que estás listo para tu certificación!"}
                   </p>
               </div>
               
-              <Link href={isFinalExamLocked ? "/planes" : "/quiz/pro/pro-eval-global"} className="w-full md:w-auto">
-                  <button className={`w-full flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold shadow-md transition-all whitespace-nowrap ${isFinalExamLocked ? 'bg-slate-700 hover:bg-slate-600 text-slate-200 border border-slate-500' : 'bg-[#28a745] hover:bg-[#218838] text-white'}`}>
-                      {isFinalExamLocked ? <><Lock size={18} /> Obtener PRO</> : "Rendir Evaluación Final"}
-                  </button>
-              </Link>
+              <div className="w-full md:w-auto">
+                {isFinalExamLocked ? (
+                  <Link href="/planes">
+                    <button className="w-full flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold shadow-md transition-all whitespace-nowrap bg-slate-700 hover:bg-slate-600 text-slate-200 border border-slate-500">
+                        <Lock size={18} /> Renovar PRO
+                    </button>
+                  </Link>
+                ) : (
+                  <Link href="/quiz/pro/pro-eval-global">
+                    <button className="w-full flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold shadow-md transition-all whitespace-nowrap bg-[#28a745] hover:bg-[#218838] text-white">
+                        Rendir Evaluación Final
+                    </button>
+                  </Link>
+                )}
+              </div>
           </div>
 
           <div className="mt-8 pt-8 border-t border-slate-200">
