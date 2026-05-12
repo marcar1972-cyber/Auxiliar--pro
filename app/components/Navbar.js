@@ -8,8 +8,8 @@ import {
   Star, Pill, HelpCircle, Share2 
 } from "lucide-react";
 import UserIcon from "../UserIcon"; 
-import StreakCounter from "./StreakCounter"; // 🔥 Importamos el nuevo componente
-import { auth, db } from "../firebase/config"; // Necesitamos acceso a la racha
+import StreakCounter from "./StreakCounter"; 
+import { auth, db } from "../firebase/config"; 
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, onSnapshot } from "firebase/firestore";
 
@@ -63,10 +63,10 @@ export default function Navbar() {
     <nav className="bg-white border-b border-slate-100 sticky top-0 z-[100] shadow-sm">
       <div className="max-w-[1400px] mx-auto px-4 h-16 flex items-center justify-between">
         
-        {/* LOGO */}
+        {/* LOGO ACTUALIZADO */}
         <Link href="/" className="relative w-32 md:w-40 h-10 hover:opacity-80 transition-opacity shrink-0 flex items-center">
             <Image 
-              src="/logo-mama.png" 
+              src="/logo_auxiliarpro.png" 
               alt="Logo AuxiliarPro" 
               width={160}
               height={40}
@@ -160,7 +160,6 @@ export default function Navbar() {
               <Gamepad2 size={24} className="text-emerald-400"/> Simulador Examen
             </Link>
 
-            {/* SECCIÓN PLANES (MÓVIL) */}
             <Link href="/planes" onClick={() => setIsOpen(false)} className="flex items-center gap-4 text-amber-700 font-bold text-base p-4 rounded-2xl bg-amber-50 border border-amber-100 shadow-sm">
               <div className="bg-amber-100 p-2 rounded-lg text-amber-600"><Star size={20} fill="currentColor" /></div>
               Planes y Suscripción PRO
