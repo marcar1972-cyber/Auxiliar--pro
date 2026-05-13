@@ -6,7 +6,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../firebase/config"; 
 import { useRouter } from "next/navigation"; 
 import BannerVenta from "../components/BannerVenta";
-import { ShieldCheck, Info, BookOpen, AlertTriangle, Search } from "lucide-react";
+import { ShieldCheck, Info, BookOpen, AlertTriangle, Search, List, Eye, EyeOff, Download, CheckSquare, Square } from "lucide-react";
 
 // IMPORTAMOS LA DATA DESDE EL OTRO ARCHIVO
 import { BLOQUE_I, OPCIONES_DESPLEGABLES } from "./vademecumData";
@@ -26,8 +26,12 @@ export default function BuscadorVademecum() {
   const [editForm, setEditForm] = useState({});
 
   const [modoAuditoria, setModoAuditoria] = useState(false);
+  const [modoInventario, setModoInventario] = useState(false); 
   const [todosMedicamentos, setTodosMedicamentos] = useState([]);
   const [cargandoAuditoria, setCargandoAuditoria] = useState(false);
+
+  // 🚀 ESTADOS NUEVOS PARA EXPORTACIÓN EXCEL/CSV
+  const [seleccionados, setSeleccionados] = useState(new Set()); // Guardamos los IDs seleccionados
 
   const ADMIN_EMAIL = "marcar1972@gmail.com";
   const PLANES_LINK = "/planes";
@@ -46,16 +50,18 @@ export default function BuscadorVademecum() {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
-        setIsAdmin(currentUser.email === ADMIN_EMAIL);
+        const isAdminCheck = currentUser.email === ADMIN_EMAIL;
+        setIsAdmin(isAdminCheck);
+        
         const userDoc = await getDoc(doc(db, "users", currentUser.uid));
         
         let currentIsPro = false;
         if (userDoc.exists()) {
-          currentIsPro = userDoc.data().isPro || currentUser.email === ADMIN_EMAIL;
+          currentIsPro = userDoc.data().isPro || isAdminCheck;
           setIsPro(currentIsPro);
         }
         
-        if (!currentIsPro) {
+        if (!currentIsPro && !isAdminCheck) {
           router.push(PLANES_LINK);
         } else {
           setCheckingAuth(false);
@@ -68,11 +74,68 @@ export default function BuscadorVademecum() {
     return () => unsubscribe();
   }, [router]);
 
+  // 🚀 FUNCIONES DE SELECCIÓN Y EXPORTACIÓN
+  const toggleSeleccion = (id) => {
+    const nuevosSeleccionados = new Set(seleccionados);
+    if (nuevosSeleccionados.has(id)) {
+      nuevosSeleccionados.delete(id);
+    } else {
+      nuevosSeleccionados.add(id);
+    }
+    setSeleccionados(nuevosSeleccionados);
+  };
+
+  const seleccionarTodos = () => {
+    const dataAMostrar = modoAuditoria ? todosMedicamentos : resultados;
+    if (seleccionados.size === dataAMostrar.length) {
+      setSeleccionados(new Set()); // Deseleccionar todos
+    } else {
+      setSeleccionados(new Set(dataAMostrar.map(item => item.id))); // Seleccionar todos los visibles
+    }
+  };
+
+  const descargarExcel = () => {
+    if (seleccionados.size === 0) return;
+
+    // Buscamos los datos completos de los items seleccionados
+    const itemsExportar = (modoAuditoria ? todosMedicamentos : resultados).filter(item => seleccionados.has(item.id));
+    
+    // Armamos el CSV (Separado por punto y coma para que Excel en español lo lea bien)
+    const cabeceras = ["Nombre", "Principio Activo", "Categoría", "Condición Venta", "Lista Control"];
+    const lineasCSV = [cabeceras.join(";")];
+
+    itemsExportar.forEach(item => {
+      // Limpiamos los textos por si tienen punto y coma o saltos de línea para no romper el CSV
+      const limpiar = (txt) => (txt || "").replace(/;/g, ",").replace(/\n/g, " ");
+      const fila = [
+        limpiar(item.nombre),
+        limpiar(item.principio_activo),
+        limpiar(item.categoria),
+        limpiar(item.condicion_venta),
+        limpiar(item.lista_control)
+      ];
+      lineasCSV.push(fila.join(";"));
+    });
+
+    // Creamos el archivo y forzamos la descarga
+    const csvContenido = "data:text/csv;charset=utf-8,\uFEFF" + lineasCSV.join("\n"); // \uFEFF fuerza UTF-8 en Excel
+    const encodeUri = encodeURI(csvContenido);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodeUri);
+    link.setAttribute("download", `Reporte_Vademecum_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    alert(`✅ Excel generado con ${seleccionados.size} medicamentos.`);
+  };
+
   const handleBuscar = async (e) => {
     if (e) e.preventDefault();
     if (!busqueda.trim()) return;
     setCargando(true);
     setBuscado(true);
+    setSeleccionados(new Set()); // Limpiamos selección al buscar de nuevo
     
     try {
       const querySnapshot = await getDocs(collection(db, "vademecum"));
@@ -82,8 +145,9 @@ export default function BuscadorVademecum() {
       querySnapshot.forEach((doc) => {
         const item = { id: doc.id, ...doc.data() };
         const nombreNormalizado = normalizarTexto(item.nombre);
+        const principioNormalizado = normalizarTexto(item.principio_activo);
         
-        if (nombreNormalizado.includes(terminoBusqueda)) {
+        if (nombreNormalizado.includes(terminoBusqueda) || principioNormalizado.includes(terminoBusqueda)) {
           datosFiltrados.push(item);
         }
       });
@@ -119,8 +183,10 @@ export default function BuscadorVademecum() {
   };
 
   const toggleAuditoria = async () => {
-    setModoAuditoria(!modoAuditoria);
-    if (!modoAuditoria && todosMedicamentos.length === 0) {
+    const nuevoModo = !modoAuditoria;
+    setModoAuditoria(nuevoModo);
+    setSeleccionados(new Set()); // Limpiamos selección al cambiar de vista
+    if (nuevoModo && todosMedicamentos.length === 0) {
       setCargandoAuditoria(true);
       const querySnapshot = await getDocs(collection(db, "vademecum"));
       const datos = [];
@@ -162,8 +228,38 @@ export default function BuscadorVademecum() {
     }
   };
 
+  // 🚀 RENDER COMPACTO CON CHECKBOX PARA REPORTES (Solo Admin)
+  const renderFilaInventario = (item) => {
+    const estaSeleccionado = seleccionados.has(item.id);
+    
+    return (
+      <div key={item.id} className={`border-b border-slate-100 p-4 flex items-center justify-between transition-colors ${estaSeleccionado ? 'bg-emerald-50' : 'bg-white hover:bg-slate-50'}`}>
+        <div className="flex items-center gap-4">
+          <button 
+            onClick={() => toggleSeleccion(item.id)}
+            className={`p-1 rounded-md transition-colors ${estaSeleccionado ? 'text-emerald-600' : 'text-slate-300 hover:text-emerald-400'}`}
+          >
+            {estaSeleccionado ? <CheckSquare size={20} /> : <Square size={20} />}
+          </button>
+          <div className="flex flex-col">
+            <span className="font-black text-slate-900 text-base">{item.nombre}</span>
+            <span className="text-[10px] text-slate-400 uppercase font-bold tracking-widest">{item.principio_activo}</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-4">
+          <span className="bg-slate-100 text-slate-500 text-[10px] font-black px-3 py-1 rounded-lg uppercase">{item.categoria}</span>
+          {isAdmin && (
+            <button onClick={() => iniciarEdicion(item)} className="p-2 text-slate-300 hover:text-emerald-500 transition-colors" title="Editar Ficha">
+              <Info size={18} />
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  };
+
   const renderTarjetaMedicamento = (item) => (
-    <div key={item.id} className="bg-white rounded-[2.5rem] shadow-lg border border-slate-100 overflow-hidden relative transition-all hover:border-emerald-200">
+    <div key={item.id} className="bg-white rounded-[2.5rem] shadow-lg border border-slate-100 overflow-hidden relative transition-all hover:border-emerald-200 mb-8">
       {editandoId !== item.id ? (
         <>
           <div className="bg-slate-900 text-white p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -288,8 +384,12 @@ export default function BuscadorVademecum() {
 
   if (checkingAuth) return <div className="min-h-screen flex items-center justify-center bg-white"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div></div>;
 
+  const dataAMostrar = modoAuditoria ? todosMedicamentos : resultados;
+  const totalMostrados = dataAMostrar.length;
+  const todosSeleccionados = totalMostrados > 0 && seleccionados.size === totalMostrados;
+
   return (
-    <div className="min-h-screen bg-white p-6 relative">
+    <div className="min-h-screen bg-white p-4 md:p-6 relative">
       {cargandoAuditoria && (
         <div className="fixed inset-0 bg-white/80 backdrop-blur-sm z-[100] flex flex-col items-center justify-center">
           <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-emerald-500 mb-4"></div>
@@ -298,77 +398,111 @@ export default function BuscadorVademecum() {
       )}
 
       <div className="max-w-5xl mx-auto">
-        <div className="bg-slate-50 p-10 rounded-[3rem] border border-slate-100 mb-12 shadow-sm">
+        <div className="bg-slate-50 p-6 md:p-10 rounded-[2rem] md:rounded-[3rem] border border-slate-100 mb-12 shadow-sm">
           <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
-            <h1 className="text-4xl font-black text-slate-900 tracking-tighter">Vademécum <span className="text-emerald-500">PRO</span></h1>
+            <h1 className="text-4xl font-black text-slate-900 tracking-tighter text-center md:text-left w-full md:w-auto">Vademécum <span className="text-emerald-500">PRO</span></h1>
+            
             {isAdmin && (
-              <div className="flex gap-3">
-                <button onClick={handleCargaMasivaYPurga} className="bg-slate-900 hover:bg-slate-800 transition-colors text-white px-6 py-3 rounded-full font-black text-sm shadow-md">🚀 Sync Bloque I</button>
-                <button onClick={toggleAuditoria} className="bg-emerald-500 hover:bg-emerald-400 transition-colors text-white px-6 py-3 rounded-full font-black text-sm shadow-md">{modoAuditoria ? "❌ Cerrar" : "⚡ Ver Todo"}</button>
+              <div className="flex flex-wrap gap-3 justify-center">
+                <button onClick={handleCargaMasivaYPurga} className="bg-slate-900 hover:bg-slate-800 transition-colors text-white px-5 py-3 rounded-full font-black text-xs shadow-md">🚀 Sync Bloque I</button>
+                <button onClick={toggleAuditoria} className="bg-emerald-500 hover:bg-emerald-400 transition-colors text-white px-5 py-3 rounded-full font-black text-xs shadow-md">{modoAuditoria ? "✖ Cerrar Auditoría" : "⚡ Ver Todos"}</button>
+                
+                {/* 🚀 BOTÓN FILTRO INVENTARIO */}
+                <button 
+                    onClick={() => {
+                      setModoInventario(!modoInventario);
+                      setSeleccionados(new Set()); // Limpiamos selección al cambiar de vista
+                    }} 
+                    className={`${modoInventario ? 'bg-amber-500' : 'bg-slate-400'} hover:opacity-80 transition-all text-white px-5 py-3 rounded-full font-black text-xs shadow-md flex items-center gap-2`}
+                >
+                    {modoInventario ? <EyeOff size={14}/> : <Eye size={14}/>}
+                    {modoInventario ? "Vista Fichas" : "Vista Inventario"}
+                </button>
               </div>
             )}
           </div>
+
           {!modoAuditoria && (
-            <form onSubmit={handleBuscar} className="flex gap-3">
-              <input type="text" value={busqueda} onChange={(e) => {setBusqueda(e.target.value); setBuscado(false);}} placeholder="Buscar por fármaco, categoría o acción..." className="flex-1 border-2 rounded-2xl p-4 text-lg outline-none focus:border-emerald-500 transition-colors shadow-sm" />
-              <button type="submit" className="bg-slate-900 text-white font-black px-10 rounded-2xl hover:bg-emerald-600 transition-all shadow-md">Buscar 🔍</button>
+            <form onSubmit={handleBuscar} className="flex flex-col md:flex-row gap-3">
+              <div className="relative flex-1">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+                <input 
+                    type="text" 
+                    value={busqueda} 
+                    onChange={(e) => {setBusqueda(e.target.value); setBuscado(false);}} 
+                    placeholder="Buscar fármaco o principio activo..." 
+                    className="w-full border-2 rounded-2xl p-4 pl-12 text-base md:text-lg outline-none focus:border-emerald-500 transition-colors shadow-sm" 
+                />
+              </div>
+              <button type="submit" className="w-full md:w-auto bg-slate-900 text-white font-black py-4 px-10 rounded-2xl hover:bg-emerald-600 transition-all shadow-md">Buscar</button>
             </form>
           )}
         </div>
 
-        <div className="space-y-8">
-            {modoAuditoria ? todosMedicamentos.map(renderTarjetaMedicamento) : resultados.map(renderTarjetaMedicamento)}
+        {/* 🚀 CONTROLES DE EXPORTACIÓN (Solo visibles en modo inventario si hay datos) */}
+        {modoInventario && totalMostrados > 0 && (
+          <div className="mb-4 flex flex-col sm:flex-row justify-between items-center bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <div className="flex items-center gap-3 mb-3 sm:mb-0">
+              <button 
+                onClick={seleccionarTodos}
+                className="flex items-center gap-2 text-slate-600 hover:text-emerald-600 font-bold text-sm transition-colors"
+              >
+                {todosSeleccionados ? <CheckSquare size={20} className="text-emerald-500" /> : <Square size={20} />}
+                {todosSeleccionados ? "Deseleccionar Todos" : "Seleccionar Todos"}
+              </button>
+              <span className="text-xs text-slate-400 font-black px-3 py-1 bg-white rounded-full border border-slate-200">
+                {seleccionados.size} / {totalMostrados}
+              </span>
+            </div>
+            
+            {seleccionados.size > 0 && (
+              <button 
+                onClick={descargarExcel}
+                className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-black px-6 py-2 rounded-xl shadow-md transition-all animate-in fade-in zoom-in"
+              >
+                <Download size={18} /> Descargar Selección (Excel)
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* CONTENEDOR DE RESULTADOS DINÁMICO */}
+        <div className={modoInventario ? "bg-white border border-slate-200 rounded-[2rem] overflow-hidden shadow-sm divide-y divide-slate-100" : ""}>
+            {totalMostrados > 0 ? (
+                dataAMostrar.map(item => modoInventario ? renderFilaInventario(item) : renderTarjetaMedicamento(item))
+            ) : buscado && !cargando && (
+                <div className="text-center py-20 bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-200">
+                    <p className="text-slate-400 font-bold text-xl uppercase tracking-widest">Sin resultados encontrados</p>
+                </div>
+            )}
         </div>
 
-        {/* 🚀 BLOQUE DE AUTORIDAD TÉCNICA (ANTI-THIN CONTENT) */}
-        <section className="mt-20 border-t border-slate-200 pt-16">
-            <div className="grid md:grid-cols-2 gap-12">
-                <div className="space-y-6">
-                    <div className="flex items-center gap-3 text-[#003366]">
-                        <ShieldCheck size={32} />
-                        <h3 className="text-2xl font-black uppercase tracking-tight">Vademécum Oficial AuxiliarPro</h3>
+        {/* BLOQUE DE AUTORIDAD TÉCNICA (Se oculta en modo inventario para limpieza) */}
+        {!modoInventario && (
+            <section className="mt-20 border-t border-slate-200 pt-16">
+                <div className="grid md:grid-cols-2 gap-12">
+                    <div className="space-y-6">
+                        <div className="flex items-center gap-3 text-[#003366]">
+                            <ShieldCheck size={32} />
+                            <h3 className="text-2xl font-black uppercase tracking-tight">Vademécum Oficial AuxiliarPro</h3>
+                        </div>
+                        <p className="text-slate-600 leading-relaxed font-medium">
+                            En <strong>AuxiliarPro</strong>, nos basamos estrictamente en la normativa técnica del <strong>MINSAL</strong> y las resoluciones del <strong>ISP de Chile</strong>. Nuestro buscador integra datos críticos para el auxiliar de farmacia moderno: desde el manejo de <strong>Recetas Cheque y Retenidas</strong> según el <strong>DS 404 y 405</strong>, hasta protocolos de almacenamiento bajo el <strong>DS 466</strong>.
+                        </p>
                     </div>
-                    <p className="text-slate-600 leading-relaxed font-medium">
-                        En <strong>AuxiliarPro</strong>, nos basamos estrictamente en la normativa técnica del <strong>MINSAL</strong> y las resoluciones del <strong>ISP de Chile</strong>. Nuestro buscador integra datos críticos para el auxiliar de farmacia moderno: desde el manejo de <strong>Recetas Cheque y Retenidas</strong> según el <strong>DS 404 y 405</strong>, hasta protocolos de almacenamiento bajo el <strong>DS 466</strong>.
-                    </p>
-                    <div className="bg-emerald-50 border border-emerald-100 p-6 rounded-3xl">
-                        <h4 className="font-black text-emerald-800 mb-2 flex items-center gap-2">
-                            <Info size={18}/> ¿Por qué usar este buscador?
-                        </h4>
-                        <p className="text-sm text-emerald-700 font-medium">
-                            Optimizamos la búsqueda de fármacos de alta rotación y bioequivalentes. Cada ficha incluye <strong>Tips de Mesón</strong> diseñados para mejorar la atención farmacéutica y asegurar el cumplimiento legal en Chile.
+
+                    <div className="space-y-6">
+                        <div className="flex items-center gap-3 text-slate-400">
+                            <BookOpen size={32} />
+                            <h3 className="text-2xl font-black uppercase tracking-tight">Marco Normativo Chileno</h3>
+                        </div>
+                        <p className="text-slate-500 text-sm leading-relaxed italic">
+                            La dispensación de medicamentos en Chile está regulada por la <strong>Ley de Fármacos 20.724</strong>. El auxiliar de farmacia debe dominar la clasificación de productos, la <strong>Cadena de Frío</strong>, y los reportes de <strong>Farmacovigilancia</strong>.
                         </p>
                     </div>
                 </div>
-
-                <div className="space-y-6">
-                    <div className="flex items-center gap-3 text-slate-400">
-                        <BookOpen size={32} />
-                        <h3 className="text-2xl font-black uppercase tracking-tight">Marco Normativo Chileno</h3>
-                    </div>
-                    <p className="text-slate-500 text-sm leading-relaxed italic">
-                        La dispensación de medicamentos en Chile está regulada por la <strong>Ley de Fármacos 20.724</strong>. El auxiliar de farmacia debe dominar la clasificación de productos, la <strong>Cadena de Frío</strong>, y los reportes de <strong>Farmacovigilancia</strong>. Nuestro Vademécum PRO es una herramienta de consulta rápida para profesionales que buscan excelencia técnica.
-                    </p>
-                    <div className="bg-rose-50 border border-rose-100 p-6 rounded-3xl flex items-start gap-4">
-                        <AlertTriangle className="text-rose-500 shrink-0" size={24} />
-                        <div>
-                            <h4 className="font-black text-rose-800 text-sm mb-1 uppercase">Aviso de Seguridad</h4>
-                            <p className="text-xs text-rose-700 font-medium leading-relaxed">
-                                Información de carácter informativo para personal certificado. El uso y dosificación debe ser supervisado por un profesional clínico facultado.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div className="mt-12 flex flex-wrap gap-2 justify-center border-b border-slate-100 pb-12">
-                {['Código Sanitario', 'Bioequivalentes', 'D.S. 466', 'D.S. 404', 'D.S. 405', 'Ley 20.724', 'ISP', 'Minsal', 'Farmacología Chilena'].map(tag => (
-                    <span key={tag} className="px-4 py-2 bg-slate-50 text-slate-400 text-[10px] font-black uppercase tracking-widest rounded-xl border border-slate-200">
-                        {tag}
-                    </span>
-                ))}
-            </div>
-        </section>
+            </section>
+        )}
 
         <div className="mt-8"><BannerVenta /></div>
       </div>
