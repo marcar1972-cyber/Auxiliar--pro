@@ -84,12 +84,9 @@ export default function QuizLobbyPage() {
             if (isAdmin) userHasActivePro = true;
             setIsProUser(userHasActivePro);
 
-            let passedMod4 = false;
-            if (data.unlockedLevels && data.unlockedLevels.length >= 4) passedMod4 = true;
-            if (data.unlockedLevelsPro && data.unlockedLevelsPro.length > 1) passedMod4 = true;
-            if (isAdmin) passedMod4 = true;
-
-            setCanAccessSimulator(passedMod4);
+            // CTO FIX: Se elimina la restricción de haber aprobado los 4 módulos previos.
+            // Ahora, si el usuario es PRO (y su cuenta no ha expirado), tiene acceso total e inmediato.
+            setCanAccessSimulator(userHasActivePro);
           }
         } catch (error) {
           console.error("Error obteniendo estado de usuario:", error);
@@ -217,9 +214,16 @@ export default function QuizLobbyPage() {
                       <h3 className="font-black text-2xl text-white leading-tight">Campus Virtual PRO</h3>
                       <button onClick={handleShare} className="text-blue-300 hover:text-amber-400 transition-colors bg-white/10 p-2 rounded-full"><Share2 size={16} /></button>
                     </div>
-                    <p className="text-sm text-blue-100 mb-5">
-                      {isCheckingAuth ? "Verificando tu nivel de acceso..." : !isProUser ? "Descubre el temario oficial en el Campus y entusiásmate a dar el paso PRO." : canAccessSimulator ? "Acceso total a los módulos y al Simulador Fiscalizador. Estás listo para el desafío final." : "Acceso PRO activo. El Simulador SEREMI se desbloqueará automáticamente al aprobar el Módulo 4."}
-                    </p>
+                    <div className="text-sm text-blue-100 mb-5 min-h-[40px]">
+                      {isCheckingAuth 
+                        ? "Verificando tu nivel de acceso..." 
+                        : !isProUser 
+                          ? "Descubre el temario oficial en el Campus y entusiásmate a dar el paso PRO." 
+                          : canAccessSimulator 
+                            ? "Acceso total a los módulos y al Simulador Fiscalizador. Estás listo para el desafío final." 
+                            : "Acceso PRO activo. El Simulador SEREMI está bloqueado (Error)."
+                      }
+                    </div>
                     <div className="flex flex-col sm:flex-row gap-3">
                       <button onClick={handleCampusAccess} className="flex items-center justify-center gap-2 bg-white text-[#002244] font-bold px-6 py-3 rounded-xl hover:bg-slate-100 transition-all flex-1"><BookOpen size={18} /> Ingresar al Campus</button>
                       {!isProUser ? (

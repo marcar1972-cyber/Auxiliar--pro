@@ -41,12 +41,10 @@ export default function QuizEnginePage() {
   const [isAnswered, setIsAnswered] = useState(false);
   const [user, setUser] = useState(null);
   const [lockout, setLockout] = useState(false);
-  const [isGlobalLocked, setIsGlobalLocked] = useState(false); // CTO FIX: Estado de bloqueo para examen global
+  const [isGlobalLocked, setIsGlobalLocked] = useState(false); 
   
-  // --- AQUI ESTA LA LOGICA DEL TIEMPO SIN MUTILAR EL RESTO ---
   const initialTime = level?.timeLimit ? level.timeLimit * 60 : 15 * 60;
   const [timeLeft, setTimeLeft] = useState(initialTime);
-  // ------------------------------------------------------------
   
   const [failedAttempts, setFailedAttempts] = useState(0); 
 
@@ -54,7 +52,6 @@ export default function QuizEnginePage() {
     const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
-        // Exención total para marcar1972@gmail.com
         if (currentUser.email === 'marcar1972@gmail.com') return;
 
         const userRef = doc(db, "users", currentUser.uid);
@@ -67,10 +64,8 @@ export default function QuizEnginePage() {
             setLockout(true);
           }
 
-          // CTO FIX: Validación estricta para Evaluación Global
           if (rawId === 'pro-eval-global') {
             const approved = data.approvedModules || data.completedModules || data.unlockedLevelsPro || data.unlockedLevels || [];
-            // Verificamos si tiene los 4 módulos aprobados
             const count = [1, 2, 3, 4].filter(num => approved.includes(num) || approved.includes(`mod-${num}`)).length;
             if (count < 4) {
               setIsGlobalLocked(true);
@@ -114,19 +109,27 @@ export default function QuizEnginePage() {
 
   const handleFinish = async (isApproved) => {
     setShowResults(true);
-    // Exención total para marcar1972@gmail.com
     if (!user || user.email === 'marcar1972@gmail.com') return;
     
     const userRef = doc(db, "users", user.uid);
     
-    // LÓGICA DE PROGRESO BÁSICO
-    if (isApproved && mode !== 'pro') {
-      await updateDoc(userRef, {
-        completedBasicLevels: arrayUnion(parseInt(numericId))
-      });
-    }
-
-    if (!isApproved) {
+    if (isApproved) {
+      // FIX: Guardar progreso según el modo (Básico o Pro)
+      if (mode === 'pro') {
+        // Para el Campus: Guardamos en approvedModules para desbloquear el siguiente
+        await updateDoc(userRef, {
+          approvedModules: arrayUnion(rawId), // Guarda 'mod-1', 'mod-2', etc.
+          failedAttempts: 0
+        });
+      } else {
+        // Para modo Básico
+        await updateDoc(userRef, {
+          completedBasicLevels: arrayUnion(parseInt(numericId)),
+          failedAttempts: 0
+        });
+      }
+    } else {
+      // Lógica de fallos
       const userSnap = await getDoc(userRef);
       const currentFailures = (userSnap.data().failedAttempts || 0) + 1;
       const updates = { failedAttempts: currentFailures };
@@ -135,8 +138,6 @@ export default function QuizEnginePage() {
         updates.failedAttempts = 0; 
       }
       await updateDoc(userRef, updates);
-    } else {
-      await updateDoc(userRef, { failedAttempts: 0 });
     }
   };
 
@@ -234,7 +235,6 @@ export default function QuizEnginePage() {
 
   return (
     <main className="min-h-screen bg-slate-50 p-6 flex flex-col">
-      {/* NAVEGACIÓN INVERSA HACIA EL LOBBY */}
       <div className="max-w-2xl mx-auto w-full mb-4">
           <Link href={level?.backRoute || (mode === 'pro' ? '/campus' : '/quiz')} className="flex items-center gap-2 text-slate-400 hover:text-[#003366] font-bold text-sm transition-colors">
             <ChevronLeft size={16} /> Volver al Lobby
@@ -284,35 +284,35 @@ export default function QuizEnginePage() {
                      <p className="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Progreso</p>
                      <p className="font-bold text-slate-800">{currentQuestion + 1} / {level.questions.length}</p>
                  </div>
-              </div>
+             </div>
 
-              <div className="font-mono text-xl font-bold text-emerald-600 mb-4 flex items-center gap-2">
+             <div className="font-mono text-xl font-bold text-emerald-600 mb-4 flex items-center gap-2">
                  <Clock size={20} />
                  {Math.floor(timeLeft/60)}:{String(timeLeft%60).padStart(2,'0')}
-              </div>
+             </div>
                
-              <h2 className="text-2xl font-bold mb-8">{level.questions[currentQuestion].question}</h2>
-              <div className="space-y-4">
+             <h2 className="text-2xl font-bold mb-8">{level.questions[currentQuestion].question}</h2>
+             <div className="space-y-4">
                 {level.questions[currentQuestion].options.map((opt, i) => (
                   <button key={i} onClick={() => handleAnswer(i)} className={`w-full p-6 border-2 rounded-2xl text-left font-bold transition-all ${!isAnswered ? "hover:border-emerald-500" : i === level.questions[currentQuestion].correctAnswer ? "bg-emerald-50 border-emerald-500" : i === selectedOption ? "bg-red-50 border-red-500" : "opacity-40"}`}>
                      <span className="mr-3 text-slate-400 font-mono">{String.fromCharCode(65 + i)}.</span>
                      {cleanOptionText(opt)}
                   </button>
                 ))}
-              </div>
+             </div>
                
-              {isAnswered && (
+             {isAnswered && (
                 <button onClick={nextQuestion} className="mt-8 w-full bg-emerald-600 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2">
                     {currentQuestion + 1 === level.questions.length ? "FINALIZAR EVALUACIÓN" : "SIGUIENTE PREGUNTA"}
                     <ChevronRight size={20} />
                 </button>
-              )}
+             )}
 
-              <div className="mt-12 pt-8 border-t border-slate-200">
+             <div className="mt-12 pt-8 border-t border-slate-200">
                 <button onClick={handleAbandon} className="mx-auto flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-sm border-2 border-[#003366] text-[#003366] hover:bg-[#003366] hover:text-white transition-all">
                     <X size={18}/> Abandonar Examen
                 </button>
-              </div>
+             </div>
           </div>
         )}
       </div>

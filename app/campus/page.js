@@ -131,17 +131,15 @@ export default function CampusPage() {
   };
 
   const isModuleLocked = (modName) => {
-    if (isAdminUser) return false;
+    // Si es administrador o tiene suscripción activa, acceso total sin restricciones secuenciales.
+    if (isAdminUser || hasActiveSub) return false;
     
+    // El Módulo 1 es gratis/accesible por defecto (aunque la UI podría bloquear su contenido si no es PRO, aquí se muestra disponible)
     const num = parseInt(modName.replace("MOD ", ""));
     if (num === 1) return false;
     
-    if (!hasActiveSub) return true; 
-
-    const hasNumericProgress = userProgress.includes(num - 1);
-    const hasStringProgress = userProgress.includes(`mod-${num - 1}`);
-
-    return !(hasNumericProgress || hasStringProgress);
+    // Si no es PRO ni Admin, todos los demás módulos están bloqueados.
+    return true; 
   };
 
   if (loading) return <div className="flex justify-center items-center p-20 min-h-screen bg-slate-50"><Loader2 className="animate-spin text-[#003366]" size={32} /></div>;
@@ -215,7 +213,7 @@ export default function CampusPage() {
                         className="flex items-center justify-center gap-2 bg-slate-100 border-2 border-slate-200 text-slate-400 px-6 py-3 rounded-xl font-bold transition-all w-full md:w-auto cursor-not-allowed"
                       >
                           <Lock size={18} /> 
-                          {!hasActiveSub && !isAdminUser && group !== "MOD 1" ? "Suscripción Expirada" : "Completa el módulo anterior"}
+                          {!hasActiveSub && !isAdminUser && group !== "MOD 1" ? "Suscripción Expirada" : "Bloqueado"}
                       </button>
                     ) : (
                       <Link href={`/campus/${group.toLowerCase().replace(" ", "-")}`}>

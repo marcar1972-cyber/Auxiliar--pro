@@ -39,10 +39,6 @@ export default function BannerVenta() {
                 <CheckCircle size={18} className="shrink-0 mt-0.5 text-[#28a745]" />
                 <span className="text-left"><strong className="text-[#003366]">Vademécum Profesional (Beta)</strong>.</span>
               </li>
-              <li className="flex items-start gap-3 text-slate-400">
-                <CheckCircle size={18} className="shrink-0 mt-0.5 text-slate-300" />
-                <span className="text-left">Próximamente: Asistente IA y Módulo Psicología.</span>
-              </li>
             </ul>
             
             {/* Contenedor principal en Azul Médico (#003366) para transmitir rigor técnico */}
