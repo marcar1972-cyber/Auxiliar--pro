@@ -1,3 +1,5 @@
+// Ruta: app/quiz/page.js
+
 "use client";
 
 import { useRouter } from "next/navigation";
@@ -24,7 +26,6 @@ const ADMIN_EMAIL = "marcar1972@gmail.com";
 
 export default function QuizLobbyPage() {
   const router = useRouter();
-  const [isVerifying, setIsVerifying] = useState(false);
   const [daysRemaining, setDaysRemaining] = useState(null); 
   const [showWarning, setShowWarning] = useState(false);
   
@@ -115,19 +116,6 @@ export default function QuizLobbyPage() {
   const handleBasicAccess = (route) => {
     if (!auth.currentUser) { router.push('/login'); return; }
     router.push(route);
-  };
-
-  const handleProAccess = async () => {
-    const currentUser = auth.currentUser;
-    if (!currentUser) { router.push('/login'); return; }
-    setIsVerifying(true);
-    try {
-      if (isPastLaunch() && !isProUser && currentUser.email !== ADMIN_EMAIL) {
-         window.location.href = '/planes'; 
-      } else {
-         router.push('/quiz/pro/pro-eval-1');
-      }
-    } catch (error) { window.location.href = '/planes'; } finally { setIsVerifying(false); }
   };
 
   const handleCampusAccess = () => {
@@ -225,12 +213,10 @@ export default function QuizLobbyPage() {
                       }
                     </div>
                     <div className="flex flex-col sm:flex-row gap-3">
-                      <button onClick={handleCampusAccess} className="flex items-center justify-center gap-2 bg-white text-[#002244] font-bold px-6 py-3 rounded-xl hover:bg-slate-100 transition-all flex-1"><BookOpen size={18} /> Ingresar al Campus</button>
-                      {!isProUser ? (
-                        <button onClick={() => router.push('/planes')} className="flex items-center justify-center gap-2 bg-slate-800/80 border border-slate-600 text-amber-400 font-bold px-6 py-3 rounded-xl hover:bg-slate-700 transition-colors flex-1"><Lock size={18} /> Obtener PRO</button>
-                      ) : canAccessSimulator && (
-                        <button onClick={handleProAccess} disabled={isVerifying} className="flex items-center justify-center gap-2 bg-[#28a745] text-white font-bold px-6 py-3 rounded-xl hover:bg-[#218838] shadow-[0_0_15px_rgba(40,167,69,0.4)] transition-all flex-1 disabled:opacity-70">{isVerifying ? <Loader2 className="animate-spin" size={18} /> : <><BrainCircuit size={18} /> Iniciar Simulador</>}</button>
-                      )}
+                      {/* 🔥 UN SOLO BOTÓN CLARO Y DIRECTO AL CAMPUS */}
+                      <button onClick={handleCampusAccess} className="flex items-center justify-center gap-2 bg-white text-[#002244] font-bold px-6 py-3 rounded-xl hover:bg-slate-100 transition-all w-full">
+                        <BookOpen size={18} /> Ingresar al Campus
+                      </button>
                     </div>
                 </div>
               </div>
