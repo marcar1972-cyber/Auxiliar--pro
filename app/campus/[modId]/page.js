@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { db, auth } from "../../firebase/config"; 
@@ -100,28 +101,20 @@ export default function ModuloDetalle() {
               const expiryDate = new Date(Math.max(...validDates));
               if (expiryDate.getTime() > Date.now()) {
                 isSubValid = true;
+              } else {
+                isSubValid = false; // Expirado
               }
             }
 
             if (isAdmin) isSubValid = true; 
 
             const approved = data.approvedModules || data.completedModules || data.unlockedLevelsPro || data.unlockedLevels || [];
-            
             const count = [1, 2, 3, 4].filter(num => approved.includes(num) || approved.includes(`mod-${num}`)).length;
             setGlobalProgress(isAdmin ? 100 : (count / 4) * 100);
 
+            // 🚀 CTO FIX: LIBERACIÓN TOTAL. Si la suscripción es válida, entra sin pedirle requisitos previos.
             if (isSubValid) {
-              const currentModNum = parseInt(modId.replace(/\D/g, ""));
-              
-              if (currentModNum === 1 || modId === "mod-1") {
-                moduleUnlocked = true; 
-              } else {
-                const prevModIdStr = `mod-${currentModNum - 1}`;
-                const prevModIdNum = currentModNum - 1;
-                if (approved.includes(prevModIdStr) || approved.includes(prevModIdNum)) {
-                  moduleUnlocked = true;
-                }
-              }
+              moduleUnlocked = true;
             }
             
             if (isAdmin) moduleUnlocked = true; 
@@ -139,7 +132,7 @@ export default function ModuloDetalle() {
         
         const fetchedFiles = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         
-        // CTO FIX: Ordenamiento seguro. Si no tiene número (ej: Tecnologia farmaceutica), le da 0 para ponerlo primero.
+        // CTO FIX: Ordenamiento seguro. Si no tiene número, le da 0 para ponerlo primero.
         fetchedFiles.sort((a, b) => {
           const numA = parseInt(a.title.match(/\d+/)?.[0] || 0);
           const numB = parseInt(b.title.match(/\d+/)?.[0] || 0);
@@ -219,7 +212,6 @@ export default function ModuloDetalle() {
                     {!isModuleUnlocked ? <Lock size={28} /> : <FileText size={32} />}
                   </div>
                   <div>
-                    {/* Aquí se aplica la limpieza y numeración estricta */}
                     <h3 className="font-black text-slate-800 text-lg leading-tight capitalize mb-1">{cleanName(file.title, index)}</h3>
                     <div className="flex items-center gap-2 text-sm text-slate-500">
                       <ShieldCheck size={14} className={!isModuleUnlocked ? "text-slate-400" : "text-[#28a745]"} /> 
