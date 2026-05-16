@@ -1,4 +1,6 @@
 "use client";
+export const dynamic = 'force-dynamic'; // 🔥 CTO FIX: Fuerza renderizado en tiempo real, aniquila la caché de Vercel.
+
 import { useEffect, useState } from "react";
 import { db, auth } from "../firebase/config"; 
 import { collection, getDocs, query, orderBy, doc, getDoc } from "firebase/firestore"; 
