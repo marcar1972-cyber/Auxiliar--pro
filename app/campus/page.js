@@ -1,5 +1,4 @@
 "use client";
-export const dynamic = 'force-dynamic'; // 🔥 CTO FIX: Fuerza renderizado en tiempo real, aniquila la caché de Vercel.
 
 import { useEffect, useState } from "react";
 import { db, auth } from "../firebase/config"; 
@@ -55,7 +54,7 @@ export default function CampusPage() {
                 }
 
                 // Formato texto "09 de mayo de 2026"
-                const months = { enero:0, febrero:1, marzo:2, abril:3, mayo:4, junio:5, julio:6, agosto:7, septiembre:8, octubre:9, noviembre:10, diciembre:11 };
+                const months = { enero:0, febrero:1, marzo:2, abril:3, mayo:4, junio:5, julio:6, agosto:7, septiembre:8, october:9, noviembre:10, diciembre:11 };
                 const textParts = s.replace(/de /g, "").split(" ");
                 if (textParts.length >= 3 && months[textParts[1]] !== undefined) {
                   return new Date(parseInt(textParts[2]), months[textParts[1]], parseInt(textParts[0]), 23, 59, 59);
@@ -69,18 +68,12 @@ export default function CampusPage() {
 
             if (validDates.length > 0) {
               const expiryDate = new Date(Math.max(...validDates));
-              // Forzamos la expiración al final del día por si hay desfase de zona horaria
               expiryDate.setHours(23, 59, 59, 999);
               const currentDate = new Date();
               
-              // Si la fecha límite YA PASÓ, el muro se cierra implacablemente
               if (expiryDate < currentDate) {
                 isSubValid = false;
               }
-            } else if (data.isPro === true) {
-               // Si esPro es true pero no logramos leer ninguna fecha, por seguridad asumimos que expiró 
-               // (evita cuentas "inmortales" por bugs de base de datos), a menos que seamos nosotros reparándolo.
-               // isSubValid = false; -> Se puede activar si quieres ser radical, pero dejémoslo pasar si la data se corrompió.
             }
 
             if (isAdmin) isSubValid = true;
@@ -133,14 +126,13 @@ export default function CampusPage() {
   };
 
   const isModuleLocked = (modName) => {
-    // Si es administrador o tiene suscripción activa, acceso total sin restricciones secuenciales.
+    // Si es administrador o tiene suscripción activa vigente, acceso total sin bloqueos secuenciales.
     if (isAdminUser || hasActiveSub) return false;
     
-    // El Módulo 1 es gratis/accesible por defecto (aunque la UI podría bloquear su contenido si no es PRO, aquí se muestra disponible)
+    // El Módulo 1 es accesible por defecto
     const num = parseInt(modName.replace("MOD ", ""));
     if (num === 1) return false;
     
-    // Si no es PRO ni Admin, todos los demás módulos están bloqueados.
     return true; 
   };
 
@@ -172,7 +164,7 @@ export default function CampusPage() {
             const locked = isModuleLocked(group); 
             const descriptions = {
               "MOD 1": "Higiene, reglamentación y ética profesional.",
-              "MOD 2": "Farmacología clínica y mecanismos de acción.",
+              "MOD 2": "Farmacología clínica y mechanisms de acción.",
               "MOD 3": "Gestión de farmacia, inventarios y atención al cliente.",
               "MOD 4": "Casos prácticos de fiscalización y rendición SEREMI."
             };
@@ -207,7 +199,6 @@ export default function CampusPage() {
                     </p>
                   </div>
                   
-                  {/* 🚀 CTO FIX: Destrucción del Link fantasma. Si está bloqueado, solo hay botón estático. */}
                   <div className="w-full md:w-auto">
                     {locked ? (
                       <button 
@@ -231,7 +222,6 @@ export default function CampusPage() {
             );
           })}
 
-          {/* EVALUACIÓN FINAL SEREMI BLINDADA */}
           <div className={`rounded-3xl shadow-lg border border-slate-200 overflow-hidden p-8 flex flex-col md:flex-row items-center justify-between gap-6 mt-4 transition-all ${isFinalExamLocked ? 'bg-slate-800 text-white opacity-95' : 'bg-gradient-to-r from-[#003366] to-[#004a99] text-white'}`}>
               <div className="flex-1">
                   <h2 className="text-2xl font-black mb-2 flex items-center gap-3">
