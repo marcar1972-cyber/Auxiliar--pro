@@ -1,123 +1,118 @@
-import Link from 'next/link';
+// Ruta: app/preguntas-examen-seremi-farmacologia/page.js
 
-export const metadata = {
-  title: '[GUÍA 2026] Preguntas Examen SEREMI Farmacología y Legislación',
-  description: 'Guía oficial para el examen de Auxiliar de Farmacia. Requisitos, aranceles actualizados y temario legal (Decretos 466, 404, 405 y Ley de Fármacos).',
-};
+"use client";
+
+import { useState } from "react";
+import Link from 'next/link';
+import { BookOpen, ShieldAlert, Target, Clock, AlertTriangle, ArrowRight, CheckCircle2, BrainCircuit, FileText } from "lucide-react";
 
 export default function FarmacologiaHub() {
+  const [answered, setAnswered] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(false);
+
+  const handleAnswer = (correct) => {
+    setAnswered(true);
+    setIsCorrect(correct);
+  };
+
   return (
-    <main className="min-h-screen bg-slate-50 font-sans text-slate-800 pb-20">
+    <main className="min-h-screen bg-white font-sans text-slate-800 pb-20">
       
       {/* Hero Section */}
-      <section className="bg-[#003366] text-white py-20 px-6 text-center">
-        <h1 className="text-4xl md:text-5xl font-black mb-6">Guía Examen SEREMI: Farmacología y Legislación</h1>
-        <p className="text-xl text-blue-100 max-w-2xl mx-auto">
-          Preparación oficial basada en los Decretos del MINSAL, Ley de Fármacos y requisitos de la Autoridad Sanitaria para la certificación de Auxiliar de Farmacia.
-        </p>
+      <section className="bg-[#003366] text-white py-20 px-6 text-center relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] pointer-events-none"></div>
+        <div className="max-w-4xl mx-auto relative z-10">
+          <span className="bg-[#28a745] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
+            Guía Maestra de Preparación
+          </span>
+          <h1 className="text-4xl md:text-5xl font-black mb-6 leading-tight tracking-tight">
+            Preguntas Examen SEREMI: <br/><span className="text-emerald-400">¿Qué te van a preguntar?</span>
+          </h1>
+          <p className="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto leading-relaxed">
+            Descubre el formato exacto de la prueba y domina la legislación farmacéutica chilena para asegurar tu certificación oficial.
+          </p>
+        </div>
       </section>
 
-      <div className="max-w-4xl mx-auto px-6 py-16 space-y-16">
+      <div className="max-w-4xl mx-auto px-6 py-12 space-y-16">
         
-        {/* Roadmap Visual: Requisitos Oficiales (Decreto 38 y Manual SEREMI) */}
+        {/* Formato del Examen (Decreto 38) */}
         <section>
-          <h2 className="text-2xl font-black text-[#003366] mb-8 uppercase tracking-widest">Requisitos y Trámites Oficiales</h2>
-          <div className="relative border-l-4 border-[#28a745] ml-4 space-y-12">
-            {[
-              { 
-                step: '01', 
-                title: 'Documentación y Experiencia (Decreto 38)', 
-                desc: 'Debes presentar: Certificado de enseñanza media (4º medio), foto tamaño carnet, y un certificado emitido por el Químico Farmacéutico que acredite al menos 1 año de desempeño efectivo (junto con copia de contrato).' 
-              },
-              { 
-                step: '02', 
-                title: 'Ingreso en Línea y Derecho a Examen', 
-                desc: 'El trámite se realiza en la plataforma Seremi en línea con Clave Única. El arancel inicial por el Derecho a Examen es de $19.100.' 
-              },
-              { 
-                step: '03', 
-                title: 'Evaluación de Competencias', 
-                desc: 'Rendición del examen teórico para verificar tus conocimientos. Las materias principales incluyen dispensación, almacenamiento y normativa legal vigente.' 
-              },
-              { 
-                step: '04', 
-                title: 'Resolución y Credencial', 
-                desc: 'Tras aprobar, se debe cancelar la Inscripción en el Registro ($47.600) y la emisión de la Credencial o Carnet ($29.700) para ejercer legalmente.' 
-              }
-            ].map((item) => (
-              <div key={item.step} className="relative pl-8">
-                <div className="absolute -left-[14px] top-0 w-6 h-6 bg-[#28a745] rounded-full flex items-center justify-center text-white font-bold text-xs">
-                  {item.step}
-                </div>
-                <h3 className="text-lg font-bold text-[#003366]">{item.title}</h3>
-                <p className="text-slate-600 mt-1 leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Golden Snippets: Temario Legal (Ficha Ley Fármacos y Decretos) */}
-        <section className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm">
-          <h2 className="text-2xl font-black text-[#003366] mb-6 uppercase tracking-widest">Preguntas Frecuentes del Temario Legal</h2>
-          
-          <div className="space-y-6">
-            <div className="border-b border-slate-100 pb-6">
-              <h3 className="text-lg font-bold text-slate-800 mb-2">¿Cuáles son las condiciones de venta de medicamentos?</h3>
-              <p className="text-slate-600">
-                La legislación chilena distingue estrictamente tres categorías principales que el auxiliar debe dominar al dispensar: venta directa, venta con receta médica, y venta con receta médica retenida.
-              </p>
-            </div>
-
-            <div className="border-b border-slate-100 pb-6">
-              <h3 className="text-lg font-bold text-slate-800 mb-2">¿Qué exige la ley respecto a la Bioequivalencia?</h3>
-              <p className="text-slate-600">
-                Un medicamento bioequivalente contiene el mismo principio activo y es similar en calidad, eficacia y seguridad. Por ley, las farmacias deben informar al paciente sobre su existencia y mantener a disposición del público el listado de estos productos, además de cumplir con el petitorio mínimo obligatorio.
-              </p>
-            </div>
-
-            <div className="pb-2">
-              <h3 className="text-lg font-bold text-slate-800 mb-2">¿Quién es el responsable de la dispensación?</h3>
-              <p className="text-slate-600">
-                Según la normativa, el Químico Farmacéutico debe estar presente durante todo el horario de funcionamiento. El Auxiliar de Farmacia actúa asistiendo en la dispensación y venta, bajo la supervisión directa y responsabilidad del Director Técnico.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Hub de Enlaces (Navegación a los Clusters) */}
-        <section className="grid md:grid-cols-3 gap-6">
-          <div className="col-span-1 md:col-span-3 mb-2">
-            <h2 className="text-2xl font-black text-[#003366] uppercase tracking-widest">Centro de Conocimiento</h2>
-            <p className="text-slate-600 mt-2">Profundiza en cada área de tu preparación con nuestras guías especializadas:</p>
-          </div>
-          
-          {[
-            { title: 'Recetas Retenidas', desc: 'Diferencias entre DTO 404 y DTO 405.', link: '/blog/receta-cheque-retenida' },
-            { title: 'Trámites SEREMI', desc: 'Guía paso a paso en la plataforma.', link: '/blog/tramites-seremi' },
-            { title: 'Ley de Fármacos', desc: 'Bioequivalencia y petitorio mínimo.', link: '/blog/ley-farmacos' }
-          ].map((card) => (
-            <Link 
-              href={card.link} 
-              key={card.title} 
-              className="bg-white p-6 rounded-xl border border-slate-200 hover:border-[#28a745] transition-all shadow-sm flex flex-col"
-            >
-              <h3 className="text-xl font-bold text-[#003366] mb-2">{card.title} →</h3>
-              <p className="text-slate-500 text-sm flex-grow">{card.desc}</p>
-            </Link>
-          ))}
-        </section>
-
-        {/* CTA FINAL -> Apuntando al Lobby (/quiz) */}
-        <section className="bg-gradient-to-br from-[#002244] to-[#003366] p-10 rounded-3xl border border-slate-700 text-center shadow-xl">
-          <h2 className="text-3xl font-black text-white mb-4">¿Listo para asegurar tu examen?</h2>
-          <p className="text-lg text-blue-100 mb-8 max-w-lg mx-auto">
-            No estudies a ciegas ni arriesgues el pago de tu derecho a examen. Únete a AuxiliarPro App y practica con preguntas estructuradas en el marco legal vigente.
+          <h2 className="text-3xl font-black text-[#003366] mb-6 flex items-center gap-3">
+            <Target className="text-[#28a745]" size={32} />
+            El Formato del Examen (Decreto 38)
+          </h2>
+          <p className="text-slate-600 text-lg mb-8 leading-relaxed">
+            La autoridad sanitaria evalúa rigurosamente tus conocimientos para verificar que cuentas con las competencias necesarias para desempeñarte bajo la supervisión de un Químico Farmacéutico. El examen oficial presenta la siguiente estructura:
           </p>
-          <Link href="/quiz" className="inline-block px-8 py-4 bg-[#28a745] text-white font-black rounded-xl hover:bg-[#218838] transition-colors shadow-lg">
-            Ir al Simulador de Entrenamiento
+          
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+              <Clock className="text-amber-500 mb-3" size={28} />
+              <h3 className="text-xl font-bold text-[#003366] mb-2">Modalidad y Tiempo</h3>
+              <p className="text-slate-600">
+                Se rinde en formato de <strong>selección múltiple</strong> a través de la plataforma de la SEREMI de Salud. Dispones de un tiempo cronometrado exacto (generalmente 60 minutos) y se rinde de forma supervisada.
+              </p>
+            </div>
+            <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+              <BookOpen className="text-[#003366] mb-3" size={28} />
+              <h3 className="text-xl font-bold text-[#003366] mb-2">Balance Farmacología vs Legislación</h3>
+              <p className="text-slate-600">
+                Aproximadamente un <strong>60% de las preguntas corresponde a farmacología y dispensación</strong>, mientras que el <strong>40% evalúa legislación estricta</strong> (Decretos 466, 404 y 405).
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Snippets Legales */}
+        <section className="bg-blue-50/40 p-8 md:p-10 rounded-3xl border border-blue-100">
+          <h2 className="text-2xl font-black text-[#003366] mb-8 text-center uppercase tracking-widest">
+            Preguntas Frecuentes Reales (Snippet Legal)
+          </h2>
+          <div className="space-y-8">
+            <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200">
+              <span className="inline-block bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded-lg mb-3 text-xs uppercase tracking-wider">Pregunta de Examen</span>
+              <h3 className="font-black text-slate-800 text-xl leading-snug mb-4">¿Cuál es la vigencia de una receta de productos psicotrópicos (Lista B) desde su emisión?</h3>
+              <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
+                <span className="inline-block text-[#003366] font-black mb-2 text-sm uppercase tracking-wider">Respuesta Oficial:</span>
+                <p className="text-slate-600 leading-relaxed text-lg">Según el Decreto 405, la receta tiene una vigencia estricta de <strong>30 días</strong> contados desde la fecha de su extensión.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Hub de Enlaces */}
+        <section className="grid md:grid-cols-3 gap-6 pt-8 border-t border-slate-100">
+          <div className="col-span-1 md:col-span-3 mb-2">
+            <h2 className="text-2xl font-black text-[#003366] uppercase tracking-widest">Navega por el Temario</h2>
+          </div>
+          
+          <Link href="/blog/receta-cheque-retenida" className="bg-white p-6 rounded-xl border border-slate-200 hover:border-[#003366] transition-all shadow-sm flex flex-col group">
+            <h3 className="text-lg font-bold text-[#003366] mb-2 group-hover:text-[#28a745] transition-colors">El Terror de las Recetas →</h3>
+            <p className="text-slate-500 text-sm flex-grow">Diferencias críticas entre Decretos 404 y 405 (Estupefacientes y Psicotrópicos).</p>
+          </Link>
+
+          <Link href="/blog/preguntas-medicamentos-venta-directa" className="bg-white p-6 rounded-xl border border-slate-200 hover:border-[#003366] transition-all shadow-sm flex flex-col group">
+            <h3 className="text-lg font-bold text-[#003366] mb-2 group-hover:text-[#28a745] transition-colors">Venta Directa →</h3>
+            <p className="text-slate-500 text-sm flex-grow">Acción terapéutica y contraindicaciones de productos de venta libre.</p>
+          </Link>
+
+          <Link href="/blog/conceptos-clave-farmacia" className="bg-white p-6 rounded-xl border border-slate-200 hover:border-[#003366] transition-all shadow-sm flex flex-col group">
+            <h3 className="text-lg font-bold text-[#003366] mb-2 group-hover:text-[#28a745] transition-colors">Conceptos Clave →</h3>
+            <p className="text-slate-500 text-sm flex-grow">Bioequivalencia, Formas Farmacéuticas y manejo de Cadena de Frío.</p>
           </Link>
         </section>
 
+        {/* CTA FINAL */}
+        <section className="bg-gradient-to-br from-[#002244] to-[#003366] p-10 md:p-12 rounded-3xl border border-slate-800 text-center shadow-2xl">
+          <h2 className="text-3xl md:text-4xl font-black text-white mb-6">¿Vas a rendir tu examen a ciegas?</h2>
+          <p className="text-lg text-blue-100 mb-10 max-w-xl mx-auto">
+            Accede al simulador completo en AuxiliarPro App.
+          </p>
+          <Link href="/planes" className="inline-block px-10 py-5 bg-[#28a745] text-white font-black text-lg rounded-xl hover:bg-[#218838] transition-colors shadow-lg shadow-green-900/50">
+            Desbloquear Banco de Preguntas PRO
+          </Link>
+        </section>
       </div>
     </main>
   );

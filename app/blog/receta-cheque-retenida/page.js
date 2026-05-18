@@ -1,117 +1,157 @@
-import React from 'react';
+// Ruta: app/examen/preguntas-receta-retenida-cheque/page.js
+
+"use client";
+
+import { useState } from "react";
 import Link from 'next/link';
+import { AlertTriangle, ArrowRight, CheckCircle2, BrainCircuit, Scale, ChevronLeft } from "lucide-react";
 
-export const metadata = {
-  title: "Receta Cheque vs Retenida: Diferencias para el Examen SEREMI 2026",
-  description: "Guía técnica definitiva sobre los Decretos 404 y 405. Aprende vigencias, registros obligatorios y normativas de control en Chile.",
-};
+export default function RecetasRetenidas() {
+  const [answered, setAnswered] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(false);
 
-export default function RecetaChequeRetenidaPage() {
+  const handleAnswer = (correct) => {
+    setAnswered(true);
+    setIsCorrect(correct);
+  };
+
   return (
-    <article className="max-w-4xl mx-auto px-6 py-12 bg-white text-slate-800 font-sans">
-      {/* Navegación de regreso al Pilar */}
-      <Link href="/preguntas-examen-seremi-farmacologia" className="text-blue-600 hover:underline text-sm font-bold flex items-center mb-8">
-        ← Volver a Guía Examen SEREMI
-      </Link>
-
-      <header className="mb-12 border-b border-slate-100 pb-8">
-        <h1 className="text-4xl font-black text-slate-900 tracking-tight leading-none mb-4">
-          Control de Recetas: Decretos 404 y 405
-        </h1>
-        <p className="text-xl text-slate-500 italic">
-          "La ley no se interpreta en el mesón, se cumple". Guía de cumplimiento técnico para Auxiliares.
-        </p>
-      </header>
-
-      <section className="space-y-12">
-        {/* Bloque Decreto 404: Estupefacientes */}
-        <div className="bg-slate-50 p-8 rounded-3xl border-l-8 border-emerald-500 shadow-sm">
-          <h2 className="text-2xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-            Decreto 404: Reglamento de Estupefacientes
-          </h2>
-          <p className="mb-4 text-slate-600">Regula sustancias de las Listas I y II (producen dependencia grave). Ejemplo: Morfina, Codeína, Fentanilo.</p>
-          <ul className="list-disc pl-6 space-y-3 text-slate-700">
-            <li><strong>Receta Cheque:</strong> Obligatoria para Lista I. Formulario oficial, foliado y en triplicado.</li>
-            <li><strong>Vigencia de Despacho:</strong> Hasta 30 días corridos desde la fecha de su extensión.</li>
-            <li><strong>Cantidad Máxima:</strong> No puede exceder la dosis necesaria para 30 días de tratamiento.</li>
-            <li><strong>Registro:</strong> Ingreso inmediato en el Libro de Control de Estupefacientes.</li>
-          </ul>
+    <main className="min-h-screen bg-[#FFFFFF] font-sans text-slate-800 pb-20">
+      
+      {/* Navegación */}
+      <nav className="bg-[#FFFFFF] border-b border-slate-200 py-4 px-6 sticky top-0 z-40">
+        <div className="max-w-4xl mx-auto flex items-center gap-2 text-sm font-bold text-[#003366] hover:text-[#28a745] transition-colors w-max">
+          <ChevronLeft size={16} />
+          <Link href="/preguntas-examen-seremi-farmacologia">Volver al Hub de Farmacología</Link>
         </div>
+      </nav>
 
-        {/* Bloque Decreto 405: Psicotrópicos */}
-        <div className="bg-slate-50 p-8 rounded-3xl border-l-8 border-blue-500 shadow-sm">
-          <h2 className="text-2xl font-bold text-slate-900 mb-4 flex items-center gap-2">
-            Decreto 405: Reglamento de Psicotrópicos
-          </h2>
-          <p className="mb-4 text-slate-600">Regula sustancias que actúan sobre el SNC (Listas II, III y IV). Ejemplo: Alprazolam, Diazepam, Fenobarbital.</p>
-          <ul className="list-disc pl-6 space-y-3 text-slate-700">
-            <li><strong>Condición de Venta:</strong> Lista II y III requieren Receta Cheque. Lista IV requiere Receta Retenida con control de stock.</li>
-            <li><strong>Vigencia:</strong> 30 días corridos desde su extensión.</li>
-            <li><strong>Almacenamiento:</strong> Deben guardarse en un área especial (mueble o caja fuerte) bajo llave, bajo responsabilidad del Q.F.</li>
-            <li><strong>Registro:</strong> Control obligatorio en el Libro de Productos Psicotrópicos.</li>
-          </ul>
-        </div>
-
-        {/* Importante: Nota sobre Antibióticos (Corregida) */}
-        <div className="bg-amber-50 p-6 rounded-2xl border border-amber-200 shadow-sm">
-          <h3 className="text-amber-800 font-bold flex items-center gap-2 mb-2">
-            ⚠️ Manejo de Antibióticos en el Mesón
-          </h3>
-          <p className="text-sm text-amber-900 leading-relaxed">
-            Es un error común creer que todos los antibióticos se retienen. En la práctica, la mayoría son de <strong>Receta Simple</strong> (se despachan y se devuelven). Sin embargo, ciertos grupos (como los de la Res. 1333/87) exigen <strong>Receta Retenida</strong>. Como auxiliar, tu regla de oro es <strong>verificar siempre la leyenda en la caja del medicamento</strong> para informar correctamente al paciente.
+      {/* Hero Section */}
+      <section className="bg-[#003366] text-white py-20 px-6 text-center relative overflow-hidden">
+        <div className="max-w-4xl mx-auto relative z-10">
+          <span className="bg-[#28a745] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
+            Legislación Crítica
+          </span>
+          <h1 className="text-4xl md:text-5xl font-black mb-6 leading-tight tracking-tight">
+            El Terror de las Recetas: <br/><span className="text-[#28a745]">Diferencias entre DTO 404 y 405</span>
+          </h1>
+          <p className="text-lg md:text-xl text-blue-100 max-w-2xl mx-auto leading-relaxed">
+            Domina la distinción legal entre Estupefacientes y Psicotrópicos. Aprende qué receta exige la ley chilena para cada lista y asegura tu respuesta en el examen SEREMI.
           </p>
         </div>
+      </section>
 
-        {/* Tabla Comparativa de Auditoría Examen */}
-        <div className="mt-8">
-          <h3 className="text-xl font-bold mb-6 text-center text-slate-900 uppercase tracking-widest">Matriz de Cumplimiento Técnico</h3>
-          <div className="overflow-hidden rounded-2xl border border-slate-200">
+      <div className="max-w-4xl mx-auto px-6 py-12 space-y-16">
+        
+        {/* Tabla Legal Comparativa */}
+        <section>
+          <div className="flex items-center gap-3 mb-6">
+            <Scale className="text-[#28a745]" size={32} />
+            <h2 className="text-3xl font-black text-[#003366]">Tabla Legal Comparativa</h2>
+          </div>
+          <p className="text-slate-600 text-lg mb-8 leading-relaxed">
+            El error más común es pensar que todos los psicotrópicos requieren Receta Cheque. La ley es clara: la exigencia de la receta depende de la <strong>Lista</strong> a la que pertenezca el principio activo.
+          </p>
+          
+          <div className="overflow-x-auto rounded-2xl border border-slate-200 shadow-sm">
             <table className="w-full text-left border-collapse">
-              <thead className="bg-slate-900 text-white text-xs uppercase tracking-widest font-mono">
-                <tr>
-                  <th className="p-4 border-r border-slate-700">Variable</th>
-                  <th className="p-4 border-r border-slate-700">Receta Cheque</th>
-                  <th className="p-4 font-bold">Receta Retenida</th>
+              <thead>
+                <tr className="bg-slate-50 text-[#003366]">
+                  <th className="p-5 border-b border-slate-200 font-black">Característica Legal</th>
+                  <th className="p-5 border-b border-slate-200 font-black">Receta Médica Retenida</th>
+                  <th className="p-5 border-b border-slate-200 font-black">Receta Cheque</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 bg-white text-sm">
-                <tr>
-                  <td className="p-4 font-bold text-slate-500 bg-slate-50">Control Legal</td>
-                  <td className="p-4">Estupefacientes (L-I) y Psicotrópicos (L-II y III)</td>
-                  <td className="p-4">Psicotrópicos (L-IV) y Antibióticos seleccionados</td>
+              <tbody className="divide-y divide-slate-100">
+                <tr className="hover:bg-slate-50 transition-colors">
+                  <td className="p-5 font-bold text-[#003366] text-sm">Uso Principal</td>
+                  <td className="p-5 text-slate-600 text-sm">Psicotrópicos de la Lista IV (ej: Clonazepam, Diazepam). Estupefacientes de las Listas I y II en dosis mínimas o según lo determine su registro sanitario (ej: Codeína en dosis bajas).</td>
+                  <td className="p-5 text-slate-600 text-sm">Psicotrópicos de las Listas II y III (ej: Metilfenidato, Fenobarbital, Buprenorfina). Estupefacientes de las Listas I y II (ej: Morfina, Fentanilo).</td>
                 </tr>
-                <tr>
-                  <td className="p-4 font-bold text-slate-500 bg-slate-50">Resguardo en Farmacia</td>
-                  <td className="p-4">Se retiene original y copia</td>
-                  <td className="p-4">Se retiene original (archivo x 1 año mínimo)</td>
+                <tr className="hover:bg-slate-50 transition-colors">
+                  <td className="p-5 font-bold text-[#003366] text-sm">Formato del Documento</td>
+                  <td className="p-5 text-slate-600 text-sm">Debe ser extendida íntegramente por el médico y ser de carácter impreso cuando se trata de productos sujetos a control legal.</td>
+                  <td className="p-5 text-slate-600 text-sm">Formato valorado oficial, confeccionado por la Central de Abastecimiento (CENABAST) y entregado por la SEREMI al médico.</td>
                 </tr>
-                <tr>
-                  <td className="p-4 font-bold text-slate-500 bg-slate-50">Identificación Paciente</td>
-                  <td className="p-4">Nombre, RUT, Domicilio y Edad (Obligatorio)</td>
-                  <td className="p-4">Nombre, RUT y Domicilio (Obligatorio)</td>
+                <tr className="hover:bg-slate-50 transition-colors">
+                  <td className="p-5 font-bold text-[#003366] text-sm">Vigencia</td>
+                  <td className="p-5 text-slate-600 font-bold text-[#28a745] text-sm">30 días corridos desde su emisión.</td>
+                  <td className="p-5 text-slate-600 font-bold text-[#28a745] text-sm">30 días corridos desde su emisión.</td>
+                </tr>
+                <tr className="hover:bg-slate-50 transition-colors">
+                  <td className="p-5 font-bold text-[#003366] text-sm">Registro en Farmacia</td>
+                  <td className="p-5 text-slate-600 text-sm">Se anota en el Libro de Control correspondiente. Para benzodiazepinas de la Lista IV, registro de saldo simplificado. Original se archiva.</td>
+                  <td className="p-5 text-slate-600 text-sm">Se anota en el Libro de Control. El original se archiva y se envían copias/relaciones al Servicio de Salud o ISP.</td>
                 </tr>
               </tbody>
             </table>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CTA Estratégico AuxiliarPro - LINK CORREGIDO A /quiz */}
-      <footer className="mt-20 p-10 bg-blue-600 rounded-[2.5rem] text-center text-white shadow-2xl shadow-blue-200">
-        <h3 className="text-3xl font-black mb-4 italic">¿Dudas con la Ley de Fármacos?</h3>
-        <p className="mb-8 text-blue-100 text-lg">
-          No dejes tu examen al azar. Entrena con el banco de preguntas auditado según los Decretos 466, 404 y 405.
-        </p>
-        <Link 
-          href="/quiz" 
-          className="bg-white text-blue-600 px-10 py-4 rounded-2xl font-black uppercase tracking-widest text-sm hover:scale-105 transition-all inline-block shadow-lg"
-        >
-          Acceder al Simulador SEREMI
-        </Link>
-        <p className="mt-8 text-[10px] opacity-50 font-mono tracking-widest">
-          ESTRATEGIA MACZDEV // <span className="font-bold">&lt; macz.dev /&gt;</span>
-        </p>
-      </footer>
-    </article>
+        {/* Preguntas Frecuentes Reales */}
+        <section className="bg-slate-50 p-8 md:p-10 rounded-3xl border border-slate-200">
+          <h2 className="text-2xl font-black text-[#003366] mb-8 text-center uppercase tracking-widest">
+            Preguntas Frecuentes Reales
+          </h2>
+          <div className="space-y-8">
+            <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200">
+              <span className="inline-block bg-[#28a745] text-white font-bold px-3 py-1 rounded-lg mb-3 text-xs uppercase tracking-wider">Pregunta de Examen</span>
+              <h3 className="font-black text-[#003366] text-xl leading-snug mb-4">¿Puede un Auxiliar de Farmacia despachar una Receta Cheque si el Director Técnico no está presente?</h3>
+              <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
+                <span className="inline-block text-[#28a745] font-black mb-2 text-sm uppercase tracking-wider">Respuesta Oficial:</span>
+                <p className="text-slate-600 leading-relaxed text-lg">No. Según los Decretos 404 y 405, las recetas cheque y retenidas que prescriban estupefacientes o psicotrópicos deben ser despachadas personalmente por el Director Técnico de la farmacia. El auxiliar solo puede asistir bajo la supervisión directa de este.</p>
+              </div>
+            </div>
+
+            <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200">
+              <span className="inline-block bg-[#28a745] text-white font-bold px-3 py-1 rounded-lg mb-3 text-xs uppercase tracking-wider">Pregunta de Examen</span>
+              <h3 className="font-black text-[#003366] text-xl leading-snug mb-4">¿Qué sucede si un paciente se presenta con una Receta Retenida emitida hace 32 días?</h3>
+              <div className="bg-slate-50 p-5 rounded-xl border border-slate-100">
+                <span className="inline-block text-[#28a745] font-black mb-2 text-sm uppercase tracking-wider">Respuesta Oficial:</span>
+                <p className="text-slate-600 leading-relaxed text-lg">La receta debe ser rechazada. La normativa chilena establece que tanto las Recetas Retenidas como las Recetas Cheque tienen una validez legal estricta de 30 días corridos contados desde la fecha en que ellas sean extendidas.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Simulador */}
+        <section className="bg-white p-8 rounded-3xl border-2 border-[#003366] shadow-xl relative">
+          <div className="absolute top-0 right-0 bg-[#003366] text-white text-xs font-bold px-4 py-1.5 rounded-bl-xl tracking-wider">
+            Simulador AuxiliarPro
+          </div>
+          <div className="flex items-center gap-3 mb-6">
+            <BrainCircuit className="text-[#28a745]" size={32} />
+            <h2 className="text-2xl font-black text-[#003366]">La Pregunta del Día</h2>
+          </div>
+          
+          <div className="mb-6">
+            <p className="text-lg md:text-xl font-bold text-slate-800 mb-6">
+              De acuerdo al Decreto 405, la dispensación de Diazepam (Psicotrópico Lista IV) requiere:
+            </p>
+            
+            {!answered ? (
+              <div className="space-y-3">
+                <button onClick={() => handleAnswer(false)} className="w-full text-left p-4 rounded-xl border border-slate-200 hover:border-[#003366] hover:bg-slate-50 transition-all font-medium text-slate-700">A) Receta Simple.</button>
+                <button onClick={() => handleAnswer(false)} className="w-full text-left p-4 rounded-xl border border-slate-200 hover:border-[#003366] hover:bg-slate-50 transition-all font-medium text-slate-700">B) Receta Cheque valorada por la SEREMI.</button>
+                <button onClick={() => handleAnswer(true)} className="w-full text-left p-4 rounded-xl border border-slate-200 hover:border-[#003366] hover:bg-slate-50 transition-all font-medium text-slate-700">C) Receta Médica Retenida.</button>
+              </div>
+            ) : (
+              <div className={`p-6 rounded-2xl border-2 ${isCorrect ? 'bg-emerald-50 border-emerald-200' : 'bg-red-50 border-red-200'}`}>
+                <h3 className={`font-black text-xl mb-3 ${isCorrect ? 'text-[#28a745]' : 'text-red-600'}`}>{isCorrect ? '¡Respuesta Correcta!' : 'Respuesta Incorrecta'}</h3>
+                <p className="text-slate-700 font-medium mb-6 text-lg">
+                  {isCorrect ? "Vas por buen camino. Confundir estos tipos de receta es causal de sumario sanitario." : "Error fatal de mesón. Confundir el tipo de receta es falta grave."}
+                </p>
+                <Link href="/planes">
+                  <button className="bg-[#003366] text-white px-8 py-4 rounded-xl font-bold hover:bg-[#28a745] transition-all shadow-md w-full sm:w-auto flex items-center justify-center gap-2">
+                    Desbloquear Banco de Preguntas PRO <ArrowRight size={18} />
+                  </button>
+                </Link>
+              </div>
+            )}
+          </div>
+        </section>
+
+      </div>
+    </main>
   );
 }
