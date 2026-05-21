@@ -19,6 +19,12 @@ const nextConfig = {
         destination: '/quiz',
         permanent: true, // Esto envía un código 301 (SEO Friendly)
       },
+      {
+        // Nueva regla sumada para el error específico de la evaluación 4
+        source: '/quiz/basic/basic-eval-4',
+        destination: '/quiz',
+        permanent: true,
+      },
     ];
   },
 
