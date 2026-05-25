@@ -1,374 +1,371 @@
+// Ruta: app/quiz/page.js
+
 "use client";
 
-import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import SocialContact from "../components/SocialContact";
+import BannerVenta from "../components/BannerVenta";
 import { 
-  Flame, Clock, CheckCircle2, XCircle, ArrowLeft, Loader2, RefreshCcw, Trophy, CheckCircle, Lock, Star
-} from "lucide-react";
-
-// 🔥 RUTAS CORREGIDAS Y VERIFICADAS
-import { auth, db } from "../../firebase/config"; 
-import { updateStreak } from "../../../lib/streakService"; 
-import { onAuthStateChanged } from "firebase/auth";
+  ChevronLeft, ShieldCheck, Trophy, BrainCircuit, Share2, Loader2, AlertTriangle, BookOpen, Lock, ChevronRight, Sparkles, Flame, X
+} from "lucide-react"; 
+import { auth, db } from "../firebase/config";
 import { doc, getDoc } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 
-// 📦 IMPORTAMOS TU BANCO DE DATOS MAESTRO
-import { quizData } from "../../../lib/data"; 
+// 🔥 RUTA RELATIVA: Salimos de quiz (1), salimos de app (2) y entramos a lib
+import { updateStreak } from "../../lib/streakService";
+
+const isPastLaunch = () => {
+  const launchDate = new Date("2026-03-31T23:59:59");
+  return new Date() > launchDate;
+};
 
 const ADMIN_EMAIL = "marcar1972@gmail.com";
 
-// Función para mezclar arreglos (Fisher-Yates)
-const shuffleArray = (array) => {
-  const shuffled = [...array];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
-};
-
-// 🌪️ ASPIRADORA DE PREGUNTAS: Extrae todas las preguntas de tus módulos en data.js
-const extraerPreguntas = (data) => {
-  let todas = [];
-  if (!data) return todas;
-
-  if (Array.isArray(data)) {
-    data.forEach(modulo => {
-      if (modulo.preguntas && Array.isArray(modulo.preguntas)) {
-        todas = [...todas, ...modulo.preguntas];
-      }
-    });
-  }
-  
-  return todas;
-};
-
-export default function RachaQuizPage() {
+export default function QuizLobbyPage() {
   const router = useRouter();
+  const [daysRemaining, setDaysRemaining] = useState(null); 
+  const [showWarning, setShowWarning] = useState(false);
   
-  const [userUid, setUserUid] = useState(null);
-  const [isCheckingStatus, setIsCheckingStatus] = useState(true);
-  const [isProUser, setIsProUser] = useState(false); // 🔥 Nuevo estado para validación
-  const [alreadyPlayedToday, setAlreadyPlayedToday] = useState(false);
-  const [streakCountDisplay, setStreakCountDisplay] = useState(0);
+  // ESTADOS DE ACCESO Y CARGA
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true); 
+  const [isProUser, setIsProUser] = useState(false); 
+  const [canAccessSimulator, setCanAccessSimulator] = useState(false);
 
-  const [questions, setQuestions] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [score, setScore] = useState(0);
-  
-  const [timeLeft, setTimeLeft] = useState(15);
-  const [isGameOver, setIsGameOver] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [isCorrect, setIsCorrect] = useState(null);
+  // ESTADOS DE RACHA
+  const [streakData, setStreakData] = useState({ current: 0, longest: 0 });
 
-  // 1. INICIALIZAR SESIÓN Y VERIFICAR ACCESO PRO / RACHA
+  // 🚀 LÓGICA DE PROGRESO DE NIVELES (SIMULADOR INICIAL - 3 NIVELES)
+  const [progressPercent, setProgressPercent] = useState(0);
+  const [levelsCompletedCount, setLevelsCompletedCount] = useState(0);
+
+  // 🚀 LÓGICA DE CONVERSIÓN IN-APP: Modal proactivo para usuarios Free
+  const [showPromoModal, setShowPromoModal] = useState(false);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        setUserUid(user.uid);
-        await verificarAccesoYRacha(user);
+        try {
+          const userRef = doc(db, "users", user.uid);
+          const docSnap = await getDoc(userRef);
+
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            const isAdmin = user.email === ADMIN_EMAIL;
+            let userHasActivePro = data.isPro === true;
+            
+            // Seteamos datos de racha para la UI (el motor de racha ahora se actualizará AL TERMINAR el desafío diario)
+            setStreakData({
+              current: data.streakCount || 0,
+              longest: data.longestStreak || 0
+            });
+
+            // 🚀 CÁLCULO DINÁMICO DEL PROGRESO REAL EN LOS 3 NIVELES GRATIS
+            let completedCount = 0;
+            if (data.completedLevels && Array.isArray(data.completedLevels)) {
+              completedCount = data.completedLevels.length;
+              setLevelsCompletedCount(completedCount);
+              // Lógica basada en el tope de 3 niveles de la v5.0
+              const percent = Math.min(Math.round((completedCount / 3) * 100), 100);
+              setProgressPercent(percent);
+            } else {
+              setProgressPercent(0);
+              setLevelsCompletedCount(0);
+            }
+
+            const rawFields = [data.untilPro, data.untilpro, data.proUntil, data.prountil];
+            const parseDate = (val) => {
+              if (!val) return null;
+              if (typeof val.toDate === 'function') return val.toDate();
+              const d = new Date(val);
+              return isNaN(d.getTime()) ? null : d;
+            };
+
+            const validDates = rawFields.map(parseDate).filter(d => d !== null);
+
+            if (validDates.length > 0) {
+              const expiryDate = new Date(Math.max(...validDates));
+              const now = new Date();
+              if (expiryDate > now) userHasActivePro = true;
+              
+              // Control de expiración y alertas
+              const diffTime = expiryDate.getTime() - now.getTime();
+              const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+              if (diffDays >= 0) {
+                setDaysRemaining(diffDays);
+                setShowWarning(true); 
+              } else {
+                setDaysRemaining(0); 
+                userHasActivePro = false;
+              }
+            }
+
+            if (isAdmin) userHasActivePro = true;
+            setIsProUser(userHasActivePro);
+
+            // CTO FIX: Se elimina la restricción de haber aprobado los 4 módulos previos.
+            // Ahora, si el usuario es PRO (y su cuenta no ha expirado), tiene acceso total e inmediato.
+            setCanAccessSimulator(userHasActivePro);
+
+            // ⚡ CORRECCIÓN UX: El modal SOLO salta si completó los 3 niveles gratis y no es PRO.
+            if (!userHasActivePro && completedCount >= 3) {
+              const timer = setTimeout(() => {
+                setShowPromoModal(true);
+              }, 1500); // 1.5 segundos de retraso orgánico para dar una mejor transición
+              return () => clearTimeout(timer);
+            }
+          }
+        } catch (error) {
+          console.error("Error obteniendo estado de usuario:", error);
+        } finally {
+          setIsCheckingAuth(false);
+        }
       } else {
-        router.push('/login');
+        setIsCheckingAuth(false);
       }
     });
-
     return () => unsubscribe();
-  }, [router]);
+  }, []);
 
-  // 2. FUNCIÓN DE SEGURIDAD: VERIFICA PRO, EXPIRACIÓN Y ESTADO DIARIO
-  const verificarAccesoYRacha = async (user) => {
-    try {
-      const userRef = doc(db, "users", user.uid);
-      const userSnap = await getDoc(userRef);
-
-      if (userSnap.exists()) {
-        const data = userSnap.data();
-        
-        // --- VALIDACIÓN DE ACCESO PRO ---
-        const isAdmin = user.email === ADMIN_EMAIL;
-        let hasActivePro = data.isPro === true;
-
-        const rawFields = [data.untilPro, data.untilpro, data.proUntil, data.prountil];
-        const parseDate = (val) => {
-          if (!val) return null;
-          if (typeof val.toDate === 'function') return val.toDate();
-          const d = new Date(val);
-          return isNaN(d.getTime()) ? null : d;
-        };
-
-        const validDates = rawFields.map(parseDate).filter(d => d !== null);
-
-        if (validDates.length > 0) {
-          const expiryDate = new Date(Math.max(...validDates));
-          const now = new Date();
-          if (expiryDate <= now) hasActivePro = false;
-          else hasActivePro = true;
-        }
-
-        if (isAdmin) hasActivePro = true;
-
-        setIsProUser(hasActivePro);
-
-        // Si no es PRO, detenemos la carga de preguntas
-        if (!hasActivePro) {
-          setIsCheckingStatus(false);
-          return;
-        }
-
-        // --- VALIDACIÓN DE ACTIVIDAD DIARIA ---
-        setStreakCountDisplay(data.streakCount || 0);
-
-        if (data.lastStreakUpdate) {
-          const fechaUltimaActividad = data.lastStreakUpdate.toDate();
-          const ahora = new Date();
-          
-          const esMismoDia = 
-            fechaUltimaActividad.getFullYear() === ahora.getFullYear() &&
-            fechaUltimaActividad.getMonth() === ahora.getMonth() &&
-            fechaUltimaActividad.getDate() === ahora.getDate();
-
-          if (esMismoDia) {
-            setAlreadyPlayedToday(true);
-            setIsCheckingStatus(false);
-            return;
-          }
-        }
-      }
-      
-      iniciarJuego();
-    } catch (error) {
-      console.error("Error en verificación:", error);
-      router.push('/quiz');
-    } finally {
-      setIsCheckingStatus(false);
-    }
-  };
-
-  const iniciarJuego = () => {
-    const bancoCompleto = extraerPreguntas(quizData);
-    
-    if (bancoCompleto.length === 0) {
-      console.error("No se pudieron cargar las preguntas.");
-      return;
-    }
-
-    const mezcladas = shuffleArray(bancoCompleto).slice(0, 5);
-    setQuestions(mezcladas);
-    setCurrentIndex(0);
-    setScore(0);
-    setTimeLeft(15);
-    setIsGameOver(false);
-    setSelectedAnswer(null);
-    setIsCorrect(null);
-  };
-
-  useEffect(() => {
-    if (isGameOver || selectedAnswer !== null || questions.length === 0 || alreadyPlayedToday || !isProUser) return;
-
-    if (timeLeft === 0) {
-      handleAnswer(-1); 
-      return;
-    }
-
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => prev - 1);
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [timeLeft, isGameOver, selectedAnswer, questions, alreadyPlayedToday, isProUser]);
-
-  const handleAnswer = (indexSeleccionado) => {
-    if (selectedAnswer !== null) return;
-
-    const preguntaActual = questions[currentIndex];
-    const fueCorrecta = indexSeleccionado === preguntaActual.correcta;
-    
-    setSelectedAnswer(indexSeleccionado);
-    setIsCorrect(fueCorrecta);
-
-    if (fueCorrecta) setScore(prev => prev + 1);
-
-    setTimeout(() => {
-      if (currentIndex + 1 < questions.length) {
-        setCurrentIndex(prev => prev + 1);
-        setSelectedAnswer(null);
-        setIsCorrect(null);
-        setTimeLeft(15);
-      } else {
-        finalizarJuego(fueCorrecta ? score + 1 : score);
-      }
-    }, 1500);
-  };
-
-  const finalizarJuego = async (puntajeFinal) => {
-    setIsGameOver(true);
-    
-    if (puntajeFinal >= 3 && userUid) {
-      setIsSaving(true);
+  const handleShare = async () => {
+    if (navigator.share) {
       try {
-        const nuevaRacha = await updateStreak(userUid);
-        setStreakCountDisplay(nuevaRacha);
-      } catch (error) {
-        console.error("Error al guardar racha:", error);
-      } finally {
-        setIsSaving(false);
-      }
-    }
+        await navigator.share({
+          title: 'AuxiliarPro App - Simulador Examen MINSAL',
+          text: 'Prepárate para tu examen de Auxiliar de Farmacia con este simulador. ¡Está buenísimo!',
+          url: window.location.origin,
+        });
+      } catch (error) { console.log('Error compartiendo', error); }
+    } else { alert("La función de compartir no está soportada."); }
   };
 
-  // PANTALLA DE CARGA INICIAL
-  if (isCheckingStatus) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50">
-        <Loader2 className="animate-spin text-[#003366]" size={48} />
-      </div>
-    );
-  }
+  const handleBasicAccess = (route) => {
+    if (!auth.currentUser) { router.push('/login'); return; }
+    router.push(route);
+  };
 
-  // 🔥 PANTALLA DE BLOQUEO: DEBES SER PRO
-  if (!isProUser) {
-    return (
-      <main className="min-h-screen bg-slate-50 flex items-center justify-center p-6 font-sans">
-        <div className="w-full max-w-md bg-white rounded-[2rem] p-8 shadow-xl text-center border border-slate-100 animate-in zoom-in duration-500">
-          <div className="mx-auto w-24 h-24 rounded-full flex items-center justify-center mb-6 bg-amber-50 shadow-inner">
-             <Lock size={48} className="text-amber-600" />
-          </div>
-          <h2 className="text-3xl font-black tracking-tight mb-2 text-[#003366]">Acceso Restringido</h2>
-          <p className="text-slate-500 mb-8 leading-relaxed">
-            El <strong>Desafío de Racha Diaria</strong> es una función exclusiva para miembros de <strong>AuxiliarPro Campus</strong>. Actualiza tu cuenta para encender tu fuego.
-          </p>
-          <div className="flex flex-col gap-3">
-            <button 
-              onClick={() => router.push('/planes')} 
-              className="w-full bg-amber-500 text-white font-black py-4 rounded-xl hover:bg-amber-600 transition-all shadow-md flex justify-center items-center gap-2"
-            >
-              <Star size={20} fill="currentColor" /> SER PRO AHORA
-            </button>
-            <button 
-              onClick={() => router.push('/quiz')} 
-              className="w-full bg-slate-100 text-slate-500 font-bold py-4 rounded-xl hover:bg-slate-200"
-            >
-              Volver al Lobby
-            </button>
-          </div>
-        </div>
-      </main>
-    );
-  }
-
-  // PANTALLA DE "YA JUGASTE HOY"
-  if (alreadyPlayedToday) {
-    return (
-      <main className="min-h-screen bg-slate-50 flex items-center justify-center p-6 font-sans">
-        <div className="w-full max-w-md bg-white rounded-[2rem] p-8 shadow-xl text-center relative border border-slate-100 animate-in zoom-in duration-500">
-          <div className="mx-auto w-24 h-24 rounded-full flex items-center justify-center mb-6 shadow-inner bg-orange-100">
-             <Flame size={56} className="text-orange-500 fill-orange-500 animate-pulse" />
-          </div>
-          <h2 className="text-3xl font-black tracking-tight mb-2 text-[#003366]">¡Fuego Encendido!</h2>
-          <p className="text-slate-500 mb-8 leading-relaxed">
-            Ya completaste tu Desafío Diario. Tu racha es de <strong>{streakCountDisplay} días</strong>. ¡Vuelve mañana!
-          </p>
-          <button onClick={() => router.push('/quiz')} className="w-full bg-[#003366] text-white font-black py-4 rounded-xl hover:bg-[#002244] shadow-md flex justify-center items-center gap-2">
-            <ArrowLeft size={20} /> VOLVER AL LOBBY
-          </button>
-        </div>
-      </main>
-    );
-  }
-
-  // PANTALLA FINAL DEL JUEGO
-  if (isGameOver) {
-    const isSuccess = score >= 3;
-    return (
-      <main className="min-h-screen bg-slate-50 flex items-center justify-center p-6 font-sans">
-        <div className="w-full max-w-md bg-white rounded-[2rem] p-8 shadow-xl text-center border border-slate-100 animate-in zoom-in duration-500">
-          <div className={`mx-auto w-24 h-24 rounded-full flex items-center justify-center mb-6 shadow-inner ${isSuccess ? 'bg-orange-100' : 'bg-slate-100'}`}>
-            {isSuccess ? <Flame size={56} className="text-orange-500 fill-orange-500 animate-pulse" /> : <XCircle size={56} className="text-slate-400" />}
-          </div>
-          <h2 className={`text-3xl font-black tracking-tight mb-2 ${isSuccess ? 'text-[#003366]' : 'text-slate-600'}`}>
-            {isSuccess ? "¡Misión Cumplida!" : "Casi lo logras"}
-          </h2>
-          <p className="text-slate-500 mb-8 leading-relaxed">
-            {isSuccess ? `Has encendido el fuego. Tu racha aumentó a ${streakCountDisplay} días.` : "No alcanzaste el mínimo de 3 aciertos para encender tu fuego."}
-          </p>
-          <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 mb-8 w-full text-center">
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Tu Puntaje</p>
-            <p className="text-4xl font-black text-[#003366]">{score} <span className="text-xl text-slate-300">/ 5</span></p>
-          </div>
-          {isSaving ? (
-             <div className="flex justify-center items-center gap-2 text-orange-500 font-bold py-4">
-               <Loader2 className="animate-spin" /> Registrando racha...
-             </div>
-          ) : (
-            <div className="flex flex-col gap-3">
-              {isSuccess ? (
-                <button onClick={() => router.push('/quiz')} className="w-full bg-[#003366] text-white font-black py-4 rounded-xl hover:bg-[#002244] shadow-md flex justify-center items-center gap-2">
-                  <Trophy size={20} /> VOLVER AL LOBBY
-                </button>
-              ) : (
-                <>
-                  <button onClick={iniciarJuego} className="w-full bg-orange-500 text-white font-black py-4 rounded-xl hover:bg-orange-600 shadow-md flex justify-center items-center gap-2">
-                    <RefreshCcw size={20} /> REINTENTAR AHORA
-                  </button>
-                  <button onClick={() => router.push('/quiz')} className="w-full bg-slate-100 text-slate-500 font-bold py-4 rounded-xl hover:bg-slate-200">Volver al Lobby</button>
-                </>
-              )}
-            </div>
-          )}
-        </div>
-      </main>
-    );
-  }
-
-  const preguntaActual = questions[currentIndex];
-  const isTimeCritical = timeLeft <= 5;
+  const handleCampusAccess = () => {
+    if (!auth.currentUser) { router.push('/login'); return; }
+    router.push('/campus');
+  };
 
   return (
-    <main className="min-h-screen bg-slate-50 font-sans flex flex-col">
-      <nav className="bg-white shadow-sm sticky top-0 z-50">
-        <div className="max-w-3xl mx-auto p-4 flex items-center justify-between w-full">
-          <button onClick={() => router.push('/quiz')} className="text-slate-400 hover:text-red-500 transition-colors flex items-center gap-1 text-sm font-bold">
-            <ArrowLeft size={20} /> Salir
-          </button>
-          <div className="flex items-center gap-2 bg-orange-50 px-3 py-1.5 rounded-full border border-orange-100">
-            <Flame size={16} className="text-orange-500 fill-orange-500" />
-            <span className="text-sm font-black text-orange-700">DESAFÍO DIARIO</span>
-          </div>
-          <div className="text-sm font-black text-slate-300">{currentIndex + 1}/5</div>
+    <main className="min-h-screen bg-slate-50 pb-24 font-sans relative">
+      <nav className="bg-white p-6 shadow-sm sticky top-0 z-50 border-b border-slate-100">
+        <div className="max-w-3xl mx-auto flex items-center gap-4">
+          <Link href="/" className="text-slate-400 hover:text-[#003366] cursor-pointer transition-colors">
+            <ChevronLeft size={28} />
+          </Link>
+          <span className="text-xl font-black text-[#003366] tracking-tighter">Lobby de Entrenamiento</span>
         </div>
       </nav>
-      <div className="w-full h-1.5 bg-slate-200">
-        <div className="h-full bg-[#28a745] transition-all duration-300" style={{ width: `${((currentIndex) / 5) * 100}%` }}></div>
-      </div>
-      <div className="flex-1 flex flex-col items-center justify-center p-6 max-w-2xl mx-auto w-full min-h-[70vh]">
-        <div className="flex justify-center mb-6">
-           <div className={`flex items-center gap-2 text-4xl font-black tabular-nums ${isTimeCritical ? 'text-red-500 animate-pulse' : 'text-[#003366]'}`}>
-             <Clock size={32} />00:{timeLeft.toString().padStart(2, '0')}
-           </div>
-        </div>
-        <h2 className="text-2xl md:text-3xl font-black text-slate-800 leading-tight mb-10 text-center px-4">{preguntaActual?.pregunta}</h2>
-        <div className="space-y-4 w-full mb-8">
-          {preguntaActual?.opciones.map((opcion, index) => {
-            let btnCls = "w-full text-left p-5 rounded-2xl border-2 transition-all font-bold text-lg ";
-            if (selectedAnswer === null) btnCls += "bg-white border-slate-200 text-slate-600 hover:border-[#003366] hover:bg-slate-50";
-            else {
-              if (index === preguntaActual.correcta) btnCls += "bg-emerald-50 border-emerald-500 text-emerald-700";
-              else if (index === selectedAnswer && !isCorrect) btnCls += "bg-red-50 border-red-500 text-red-700";
-              else btnCls += "bg-slate-50 border-slate-100 text-slate-400 opacity-50";
-            }
-            return (
-              <button key={index} onClick={() => handleAnswer(index)} disabled={selectedAnswer !== null} className={btnCls}>
-                <div className="flex justify-between items-center">
-                  <span>{opcion}</span>
-                  {selectedAnswer !== null && index === preguntaActual.correcta && <CheckCircle2 className="text-emerald-500" size={24} />}
-                  {selectedAnswer === index && !isCorrect && <XCircle className="text-red-500" size={24} />}
+
+      <section className="p-6 max-w-3xl mx-auto mt-6">
+        <header className="mb-8 text-center">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-4">
+            <h1 className="text-3xl md:text-4xl font-black text-[#003366] tracking-tight leading-tight">
+              Simulador de Examen <span className="text-[#28a745]">Auxiliar de Farmacia</span> SEREMI
+            </h1>
+            <button onClick={handleShare} className="shrink-0 flex items-center justify-center p-3 bg-white text-slate-600 rounded-2xl hover:bg-[#28a745] hover:text-white transition-all border border-slate-200 shadow-sm">
+              <Share2 size={24} strokeWidth={2.5} />
+            </button>
+          </div>
+
+          <p className="text-slate-500 text-sm md:text-base max-w-2xl mx-auto leading-relaxed mb-6">
+            Prepárate para la certificación del MINSAL in Chile. Practica con casos reales y preguntas de prueba para asegurar tu título como Auxiliar de Farmacia.
+          </p>
+
+          {/* ✅ AVISO V5.0 RESTAURADO COMPLETAMENTE */}
+          <div className="text-left bg-blue-50 border border-blue-200 p-5 md:p-6 rounded-2xl shadow-sm mb-8 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-1.5 h-full bg-[#003366]"></div>
+            <div className="flex flex-col sm:flex-row gap-4 items-start">
+              <div className="bg-blue-100 p-3 rounded-xl shrink-0 text-[#003366] shadow-sm">
+                <Sparkles size={24} />
+              </div>
+              <div className="w-full">
+                <h3 className="font-black text-[#003366] text-base md:text-lg uppercase tracking-wide mb-2">¡Evolucionamos a la v5.0! 🚀</h3>
+                <p className="text-sm text-slate-600 leading-relaxed mb-3">
+                  Acabamos de implementar la mayor actualización de nuestra plataforma para optimizar tu tiempo de estudio:
+                </p>
+                <ul className="text-sm text-slate-600 space-y-2 list-disc pl-5 font-medium mb-4">
+                  <li>El <strong>Simulador Inicial</strong> se ha optimizado: pasamos de 7 niveles dispersos a <strong>3 niveles fundamentales <span className="text-[#28a745] font-black">100% gratis</span></strong>, yendo directo a lo que importa.</li>
+                  <li>El acceso PRO se transformó en el nuevo <strong className="text-[#003366]">Campus Virtual PRO</strong>: un ecosistema de estudio formativo, <strong>con estructura de CFT</strong>, diseñado para llevarte paso a paso a la aprobación.</li>
+                </ul>
+                <div className="bg-white/60 p-4 rounded-xl border border-blue-100/50 mt-2">
+                  <p className="text-xs text-[#003366] font-medium leading-relaxed">
+                    <strong className="text-[#003366] font-black">Nuestro Compromiso:</strong> AuxiliarPro App seguirá en continua evolución. Ya seas un aspirante buscando su credencial o un colega activo de mesón, nuestra meta es entregarte siempre la herramienta tecnológica más precisa y actualizada del rubro en Chile.
+                  </p>
                 </div>
-              </button>
-            );
-          })}
+              </div>
+            </div>
+          </div>
+
+          {showWarning && daysRemaining !== null && (
+            <div className="inline-flex items-center gap-2 bg-[#f0fdf4] text-[#166534] px-5 py-2.5 rounded-full text-sm font-black tracking-wide border border-[#bbf7d0] shadow-sm">
+              <AlertTriangle size={16} />
+              {daysRemaining === 0 ? "¡Suscripción expirada hoy!" : `¡Quedan ${daysRemaining} días de acceso PRO!`}
+            </div>
+          )}
+        </header>
+
+        <div className="w-full space-y-6">
+          <button onClick={() => handleBasicAccess('/quiz/basic')} className="w-full text-left rounded-[2rem] border-2 transition-all p-8 bg-white border-slate-200 shadow-sm hover:border-[#28a745] hover:shadow-lg group flex flex-col md:flex-row items-center gap-6">
+            <div className="w-20 h-20 rounded-full flex items-center justify-center text-4xl shrink-0 bg-[#28a745] text-white shadow-md group-hover:scale-105 transition-transform"><BrainCircuit size={40} /></div>
+            <div className="flex-1 w-full text-center md:text-left">
+                <h3 className="font-black text-2xl text-[#003366] leading-tight mb-2 group-hover:text-[#28a745] transition-colors">Simulador Inicial</h3>
+                <p className="text-sm text-slate-500 mb-4">La ruta de entrenamiento definitiva. <strong className="text-[#28a745]">100% gratis</strong> para dominar los conceptos básicos.</p>
+                
+                {/* 🚀 COMPONENTE DE BARRA DE PROGRESO INTEGRADO DINÁMICAMENTE */}
+                <div className="w-full mt-2">
+                  <div className="flex justify-between items-center text-xs font-bold text-slate-400 mb-1">
+                    <span>Progreso de Entrenamiento</span>
+                    <span className="text-[#28a745]">{levelsCompletedCount} / 3 Niveles ({progressPercent}%)</span>
+                  </div>
+                  <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden border border-slate-200/50">
+                    <div 
+                      className="bg-[#28a745] h-full rounded-full transition-all duration-500 ease-out shadow-sm"
+                      style={{ width: `${progressPercent}%` }}
+                    ></div>
+                  </div>
+                </div>
+            </div>
+            <div className="hidden md:flex shrink-0 text-[#28a745] items-center gap-2 font-bold opacity-50 group-hover:opacity-100 transition-opacity bg-emerald-50 px-4 py-2 rounded-full">Entrar <ChevronRight size={20} /></div>
+          </button>
+
+          <article>
+            <div className="w-full rounded-[2rem] border-2 border-[#001122] transition-all p-8 bg-[#002244] shadow-xl relative overflow-hidden mt-2">
+              <div className="absolute -top-24 -right-24 w-64 h-64 bg-[#003366] rounded-full blur-3xl opacity-50 pointer-events-none"></div>
+              <div className="relative z-10 flex flex-col md:flex-row items-center gap-6">
+                <div className="w-20 h-20 rounded-full flex items-center justify-center text-4xl shrink-0 bg-gradient-to-br from-amber-400 to-orange-500 text-white shadow-[0_0_20px_rgba(255,153,0,0.3)]"><ShieldCheck size={40} /></div>
+                <div className="flex-1 text-center md:text-left">
+                    <div className="flex items-center justify-center md:justify-start gap-3 mb-2">
+                      <h3 className="font-black text-2xl text-white leading-tight">Campus Virtual PRO</h3>
+                      <button onClick={handleShare} className="text-blue-300 hover:text-amber-400 transition-colors bg-white/10 p-2 rounded-full"><Share2 size={16} /></button>
+                    </div>
+                    <div className="text-sm text-blue-100 mb-5 min-h-[40px]">
+                      {isCheckingAuth 
+                        ? "Verificando tu level de acceso..." 
+                        : !isProUser 
+                          ? "Descubre el temario oficial en el Campus y entusiásmate a dar el paso PRO." 
+                          : canAccessSimulator 
+                            ? "Acceso total a los módulos y al Simulador Fiscalizador. Estás listo para el desafío final." 
+                            : "Acceso PRO activo. El Simulador SEREMI está bloqueado (Error)."
+                      }
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <button onClick={handleCampusAccess} className="flex items-center justify-center gap-2 bg-white text-[#002244] font-bold px-6 py-3 rounded-xl hover:bg-slate-100 transition-all w-full">
+                        <BookOpen size={18} /> Ingresar al Campus
+                      </button>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          {/* CENTRO DE MANDO REUBICADO: DESAFÍO DIARIO Y RACHA */}
+          <div className="bg-white border border-slate-200 p-5 rounded-[2rem] shadow-sm mt-8 max-w-full mx-auto animate-in fade-in zoom-in duration-500 relative overflow-hidden">
+             <div className="absolute top-0 right-0 w-32 h-32 bg-orange-50 rounded-bl-full -z-10 opacity-50"></div>
+             
+             <div className="flex items-center justify-center gap-6 mb-5">
+               <div className="flex flex-col items-center">
+                  <div className="relative">
+                    <Flame size={56} className={streakData.current > 0 ? "text-orange-500 fill-orange-500 animate-pulse drop-shadow-md" : "text-slate-300 fill-slate-100"} />
+                  </div>
+               </div>
+               <div className="text-left">
+                  <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Tu Racha</p>
+                  <h4 className={`text-3xl font-black tracking-tighter ${streakData.current > 0 ? 'text-[#003366]' : 'text-slate-400'}`}>
+                    {streakData.current} <span className="text-lg">Días</span>
+                  </h4>
+                  <p className="text-[10px] font-bold text-slate-500 mt-1">
+                    Récord: <span className="text-orange-600">{streakData.longest} days</span>
+                  </p>
+               </div>
+             </div>
+
+             <button 
+               onClick={() => handleBasicAccess('/quiz/racha')}
+               className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-black py-3.5 px-6 rounded-xl transition-all shadow-[0_0_15px_rgba(249,115,22,0.3)] hover:shadow-[0_0_20px_rgba(249,115,22,0.5)] hover:-translate-y-0.5"
+             >
+               <Flame size={20} className="fill-white" /> JUGAR DESAFÍO RÁPIDO
+             </button>
+             <p className="text-center text-[10px] text-slate-400 mt-3 font-bold px-2 leading-relaxed">
+               Responde 5 preguntas al azar con <span className="text-red-500">15 segundos de límite</span> para encender tu fuego de hoy.
+             </p>
+          </div>
+
+          <div className="pt-4"><SocialContact /></div>
         </div>
-      </div>
+        <div className="mt-8"><BannerVenta /></div>
+      </section>
+
+      {/* 🚀 MODAL IN-APP DE CONVERSIÓN TÁCTICA PARA CONVERTIR USUARIOS REGISTRADOS */}
+      {showPromoModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="relative w-full max-w-md p-6 bg-white rounded-[2rem] shadow-2xl border border-slate-100 flex flex-col items-center text-center">
+            
+            {/* Botón de cierre discreto */}
+            <button 
+              onClick={() => setShowPromoModal(false)} 
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1 rounded-full hover:bg-slate-50 transition-colors"
+            >
+              <X size={20} />
+            </button>
+
+            {/* Icono de Valor Médico / Aprobación */}
+            <div className="flex items-center justify-center w-12 h-12 mb-4 rounded-full bg-blue-50 text-[#003366]">
+              <ShieldCheck size={28} className="text-[#003366]" />
+            </div>
+
+            {/* Subtítulo de Conversión Preciso */}
+            <h3 className="text-xl font-black text-[#003366] tracking-tight">
+              ¡Asegura tu Aprobación SEREMI! 🇨🇱
+            </h3>
+            
+            <p className="mt-2 text-sm text-slate-500 leading-relaxed font-medium">
+              Ya conoces los 3 niveles iniciales de prueba. Te invitamos a descubrir la preparación más potente y cercana al examen profesional de la SEREMI que existe en Chile.
+            </p>
+
+            {/* Micro Balas de Valor Táctico */}
+            <div className="w-full my-4 p-4 bg-slate-50 rounded-2xl text-left text-xs text-slate-600 space-y-2.5 border border-slate-100 font-medium">
+              <div className="flex items-center gap-2">
+                <span className="text-[#28a745] font-black">✔</span>
+                <span><strong>Simulador Profesional:</strong> Módulos completos con la exigencia real del MINSAL.</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-[#28a745] font-black">✔</span>
+                <span><strong>Preguntas de Racha Avanzadas:</strong> Consistencia diaria bajo presión.</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-[#28a745] font-black">✔</span>
+                <span><strong>Explicaciones del Marco Legal:</strong> Decretos 466, 404 y 405 en cada fallo.</span>
+              </div>
+            </div>
+
+            {/* Botón de Conversión a Mercado Pago / Registro PRO */}
+            <div className="w-full space-y-2">
+              <button
+                onClick={handleCampusAccess}
+                className="w-full py-3.5 px-4 bg-[#003366] hover:bg-[#002244] text-white text-sm font-bold rounded-xl shadow-lg shadow-blue-100 transition-all transform active:scale-[0.98]"
+              >
+                Desbloquear el Campus Virtual PRO
+              </button>
+              <button
+                onClick={() => setShowPromoModal(false)}
+                className="w-full py-2 text-xs text-slate-400 hover:text-slate-500 font-semibold transition-colors"
+              >
+                Seguir repasando en el Lobby básico
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      <footer className="p-8 text-center text-[10px] font-mono text-slate-400 uppercase tracking-widest">AuxiliarPro App | &lt; macz.dev /&gt;</footer>
     </main>
   );
 }

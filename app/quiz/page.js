@@ -8,7 +8,7 @@ import Link from "next/link";
 import SocialContact from "../components/SocialContact";
 import BannerVenta from "../components/BannerVenta";
 import { 
-  ChevronLeft, ShieldCheck, Trophy, BrainCircuit, Share2, Loader2, AlertTriangle, BookOpen, Lock, ChevronRight, Sparkles, Flame
+  ChevronLeft, ShieldCheck, Trophy, BrainCircuit, Share2, Loader2, AlertTriangle, BookOpen, Lock, ChevronRight, Sparkles, Flame, X
 } from "lucide-react"; 
 import { auth, db } from "../firebase/config";
 import { doc, getDoc } from "firebase/firestore";
@@ -37,6 +37,13 @@ export default function QuizLobbyPage() {
   // ESTADOS DE RACHA
   const [streakData, setStreakData] = useState({ current: 0, longest: 0 });
 
+  // 🚀 LÓGICA DE PROGRESO DE NIVELES (SIMULADOR INICIAL - 3 NIVELES)
+  const [progressPercent, setProgressPercent] = useState(0);
+  const [levelsCompletedCount, setLevelsCompletedCount] = useState(0);
+
+  // 🚀 LÓGICA DE CONVERSIÓN IN-APP: Modal proactivo para usuarios Free
+  const [showPromoModal, setShowPromoModal] = useState(false);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -55,6 +62,22 @@ export default function QuizLobbyPage() {
               longest: data.longestStreak || 0
             });
 
+            // 🚀 CTO FIX: Vinculación exacta con 'completedBasicLevels' de Firestore y remoción de duplicados
+            let completedCount = 0;
+            if (data.completedBasicLevels && Array.isArray(data.completedBasicLevels)) {
+              // Usamos un Set para asegurar que si repite el nivel 1, no se cuente doble en el avance global
+              const uniqueLevels = [...new Set(data.completedBasicLevels)];
+              completedCount = uniqueLevels.length;
+              setLevelsCompletedCount(completedCount);
+              
+              // Lógica basada en el tope de 3 niveles de la v5.0
+              const percent = Math.min(Math.round((completedCount / 3) * 100), 100);
+              setProgressPercent(percent);
+            } else {
+              setProgressPercent(0);
+              setLevelsCompletedCount(0);
+            }
+
             const rawFields = [data.untilPro, data.untilpro, data.proUntil, data.prountil];
             const parseDate = (val) => {
               if (!val) return null;
@@ -70,6 +93,7 @@ export default function QuizLobbyPage() {
               const now = new Date();
               if (expiryDate > now) userHasActivePro = true;
               
+              // Control de expiración y alertas
               const diffTime = expiryDate.getTime() - now.getTime();
               const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
@@ -88,6 +112,14 @@ export default function QuizLobbyPage() {
             // CTO FIX: Se elimina la restricción de haber aprobado los 4 módulos previos.
             // Ahora, si el usuario es PRO (y su cuenta no ha expirado), tiene acceso total e inmediato.
             setCanAccessSimulator(userHasActivePro);
+
+            // ⚡ CORRECCIÓN UX: El modal SOLO salta si completó los 3 niveles gratis y no es PRO.
+            if (!userHasActivePro && completedCount >= 3) {
+              const timer = setTimeout(() => {
+                setShowPromoModal(true);
+              }, 1500); // 1.5 segundos de retraso orgánico para dar una mejor transición
+              return () => clearTimeout(timer);
+            }
           }
         } catch (error) {
           console.error("Error obteniendo estado de usuario:", error);
@@ -146,7 +178,7 @@ export default function QuizLobbyPage() {
           </div>
 
           <p className="text-slate-500 text-sm md:text-base max-w-2xl mx-auto leading-relaxed mb-6">
-            Prepárate para la certificación del MINSAL en Chile. Practica con casos reales y preguntas de prueba para asegurar tu título como Auxiliar de Farmacia.
+            Prepárate para la certificación del MINSAL in Chile. Practica con casos reales y preguntas de prueba para asegurar tu título como Auxiliar de Farmacia.
           </p>
 
           {/* ✅ AVISO V5.0 RESTAURADO COMPLETAMENTE */}
@@ -185,9 +217,23 @@ export default function QuizLobbyPage() {
         <div className="w-full space-y-6">
           <button onClick={() => handleBasicAccess('/quiz/basic')} className="w-full text-left rounded-[2rem] border-2 transition-all p-8 bg-white border-slate-200 shadow-sm hover:border-[#28a745] hover:shadow-lg group flex flex-col md:flex-row items-center gap-6">
             <div className="w-20 h-20 rounded-full flex items-center justify-center text-4xl shrink-0 bg-[#28a745] text-white shadow-md group-hover:scale-105 transition-transform"><BrainCircuit size={40} /></div>
-            <div className="flex-1 text-center md:text-left">
+            <div className="flex-1 w-full text-center md:text-left">
                 <h3 className="font-black text-2xl text-[#003366] leading-tight mb-2 group-hover:text-[#28a745] transition-colors">Simulador Inicial</h3>
-                <p className="text-sm text-slate-500">La ruta de entrenamiento definitiva. <strong className="text-[#28a745]">100% gratis</strong> para dominar los conceptos básicos.</p>
+                <p className="text-sm text-slate-500 mb-4">La ruta de entrenamiento definitiva. <strong className="text-[#28a745]">100% gratis</strong> para dominar los conceptos básicos.</p>
+                
+                {/* 🚀 COMPONENTE DE BARRA DE PROGRESO INTEGRADO DINÁMICAMENTE */}
+                <div className="w-full mt-2">
+                  <div className="flex justify-between items-center text-xs font-bold text-slate-400 mb-1">
+                    <span>Progreso de Entrenamiento</span>
+                    <span className="text-[#28a745]">{levelsCompletedCount} / 3 Niveles ({progressPercent}%)</span>
+                  </div>
+                  <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden border border-slate-200/50">
+                    <div 
+                      className="bg-[#28a745] h-full rounded-full transition-all duration-500 ease-out shadow-sm"
+                      style={{ width: `${progressPercent}%` }}
+                    ></div>
+                  </div>
+                </div>
             </div>
             <div className="hidden md:flex shrink-0 text-[#28a745] items-center gap-2 font-bold opacity-50 group-hover:opacity-100 transition-opacity bg-emerald-50 px-4 py-2 rounded-full">Entrar <ChevronRight size={20} /></div>
           </button>
@@ -204,7 +250,7 @@ export default function QuizLobbyPage() {
                     </div>
                     <div className="text-sm text-blue-100 mb-5 min-h-[40px]">
                       {isCheckingAuth 
-                        ? "Verificando tu nivel de acceso..." 
+                        ? "Verificando tu level de acceso..." 
                         : !isProUser 
                           ? "Descubre el temario oficial en el Campus y entusiásmate a dar el paso PRO." 
                           : canAccessSimulator 
@@ -213,7 +259,6 @@ export default function QuizLobbyPage() {
                       }
                     </div>
                     <div className="flex flex-col sm:flex-row gap-3">
-                      {/* 🔥 UN SOLO BOTÓN CLARO Y DIRECTO AL CAMPUS */}
                       <button onClick={handleCampusAccess} className="flex items-center justify-center gap-2 bg-white text-[#002244] font-bold px-6 py-3 rounded-xl hover:bg-slate-100 transition-all w-full">
                         <BookOpen size={18} /> Ingresar al Campus
                       </button>
@@ -223,9 +268,8 @@ export default function QuizLobbyPage() {
             </div>
           </article>
 
-          {/* 🔥 CENTRO DE MANDO REUBICADO: DESAFÍO DIARIO Y RACHA */}
+          {/* CENTRO DE MANDO REUBICADO: DESAFÍO DIARIO Y RACHA */}
           <div className="bg-white border border-slate-200 p-5 rounded-[2rem] shadow-sm mt-8 max-w-full mx-auto animate-in fade-in zoom-in duration-500 relative overflow-hidden">
-             {/* Decoración de fondo */}
              <div className="absolute top-0 right-0 w-32 h-32 bg-orange-50 rounded-bl-full -z-10 opacity-50"></div>
              
              <div className="flex items-center justify-center gap-6 mb-5">
@@ -240,7 +284,7 @@ export default function QuizLobbyPage() {
                     {streakData.current} <span className="text-lg">Días</span>
                   </h4>
                   <p className="text-[10px] font-bold text-slate-500 mt-1">
-                    Récord: <span className="text-orange-600">{streakData.longest} días</span>
+                    Récord: <span className="text-orange-600">{streakData.longest} days</span>
                   </p>
                </div>
              </div>
@@ -260,6 +304,70 @@ export default function QuizLobbyPage() {
         </div>
         <div className="mt-8"><BannerVenta /></div>
       </section>
+
+      {/* 🚀 MODAL IN-APP DE CONVERSIÓN TÁCTICA PARA CONVERTIR USUARIOS REGISTRADOS */}
+      {showPromoModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="relative w-full max-w-md p-6 bg-white rounded-[2rem] shadow-2xl border border-slate-100 flex flex-col items-center text-center">
+            
+            {/* Botón de cierre discreto */}
+            <button 
+              onClick={() => setShowPromoModal(false)} 
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1 rounded-full hover:bg-slate-50 transition-colors"
+            >
+              <X size={20} />
+            </button>
+
+            {/* Icono de Valor Médico / Aprobación */}
+            <div className="flex items-center justify-center w-12 h-12 mb-4 rounded-full bg-blue-50 text-[#003366]">
+              <ShieldCheck size={28} className="text-[#003366]" />
+            </div>
+
+            {/* Subtítulo de Conversión Preciso */}
+            <h3 className="text-xl font-black text-[#003366] tracking-tight">
+              ¡Asegura tu Aprobación SEREMI! 🇨🇱
+            </h3>
+            
+            <p className="mt-2 text-sm text-slate-500 leading-relaxed font-medium">
+              Ya conoces los 3 niveles iniciales de prueba. Te invitamos a descubrir la preparación más potente y cercana al examen profesional de la SEREMI que existe en Chile.
+            </p>
+
+            {/* Micro Balas de Valor Táctico */}
+            <div className="w-full my-4 p-4 bg-slate-50 rounded-2xl text-left text-xs text-slate-600 space-y-2.5 border border-slate-100 font-medium">
+              <div className="flex items-center gap-2">
+                <span className="text-[#28a745] font-black">✔</span>
+                <span><strong>Simulador Profesional:</strong> Módulos completos con la exigencia real del MINSAL.</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-[#28a745] font-black">✔</span>
+                <span><strong>Preguntas de Racha Avanzadas:</strong> Consistencia diaria bajo presión.</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-[#28a745] font-black">✔</span>
+                <span><strong>Explicaciones del Marco Legal:</strong> Decretos 466, 404 y 405 en cada fallo.</span>
+              </div>
+            </div>
+
+            {/* Botón de Conversión a Mercado Pago / Registro PRO */}
+            <div className="w-full space-y-2">
+              <button
+                onClick={handleCampusAccess}
+                className="w-full py-3.5 px-4 bg-[#003366] hover:bg-[#002244] text-white text-sm font-bold rounded-xl shadow-lg shadow-blue-100 transition-all transform active:scale-[0.98]"
+              >
+                Desbloquear el Campus Virtual PRO
+              </button>
+              <button
+                onClick={() => setShowPromoModal(false)}
+                className="w-full py-2 text-xs text-slate-400 hover:text-slate-500 font-semibold transition-colors"
+              >
+                Seguir repasando en el Lobby básico
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
       <footer className="p-8 text-center text-[10px] font-mono text-slate-400 uppercase tracking-widest">AuxiliarPro App | &lt; macz.dev /&gt;</footer>
     </main>
   );

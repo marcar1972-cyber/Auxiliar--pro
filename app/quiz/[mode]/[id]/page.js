@@ -182,7 +182,9 @@ export default function QuizEnginePage() {
     const passingLogic = level?.passingScore ? Math.ceil(level.questions.length * (level.passingScore / 100)) : Math.ceil(level.questions.length * 0.8);
     const isApproved = score >= passingLogic;
     const nextLevel = parseInt(numericId) + 1;
-    const canGoToNext = isApproved && mode !== 'pro' && nextLevel <= 6;
+    
+    // 🚀 CTO FIX: El tope máximo de niveles gratis en la v5.0 es estrictamente el nivel 3.
+    const canGoToNext = isApproved && mode !== 'pro' && nextLevel <= 3;
 
     return (
       <main className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-4">
@@ -197,7 +199,7 @@ export default function QuizEnginePage() {
              </Link>
           ) : (
              <Link href={mode === 'pro' ? '/campus' : '/quiz'} className="block w-full bg-slate-900 text-white font-black py-4 rounded-2xl text-center uppercase text-sm mb-4">
-               {mode === 'pro' ? "VOLVER AL CAMPUS" : "VOLVER AL LOBBY"}
+               {mode === 'pro' ? "VOLVER AL CAMPUS" : isApproved ? "FINALIZAR ENTRENAMIENTO" : "VOLVER AL LOBBY"}
              </Link>
           )}
 
@@ -235,7 +237,7 @@ export default function QuizEnginePage() {
              </div>
 
              <p className="mb-6 text-slate-600 text-sm leading-relaxed">
-               {level?.seo?.description || `Tienes ${level?.timeLimit || 15} minutos para completar esta evaluación.`}
+               {level?.seo?.description || `Tienes ${level?.timeLimit || 15} minutes para completar esta evaluación.`}
                <br/><br/>
                <strong>Importante:</strong> Si repruebas 3 veces, el sistema te bloqueará por 30 minutos para que repases los contenidos antes de volver a intentar.
              </p>
@@ -255,9 +257,9 @@ export default function QuizEnginePage() {
                      <p className="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Evaluación</p>
                      <p className="font-black text-[#003366] text-sm">{level?.title}</p>
                  </div>
-                 <div className="text-center">
+                 <div>
                      <p className="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Intento</p>
-                     <p className="font-bold text-slate-800">{failedAttempts + 1} / 3</p>
+                     <p className="font-bold text-slate-800 text-center">{failedAttempts + 1} / 3</p>
                  </div>
                  <div className="text-right">
                      <p className="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Progreso</p>
