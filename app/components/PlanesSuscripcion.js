@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { auth, db } from "../firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-import { Loader2, CheckCircle, Flame, Star,Zap } from "lucide-react";
+import { Loader2, CheckCircle, Flame, Zap } from "lucide-react";
 import Link from "next/link";
 
 export default function PlanesSuscripcion() {
@@ -13,10 +13,10 @@ export default function PlanesSuscripcion() {
   const [proUntil, setProUntil] = useState(null);
   const [loadingAuth, setLoadingAuth] = useState(true);
 
-  // 🔥 Enlaces de pago (Conectados a tu API)
-  const BASE_LINK_MENSUAL = "/api/checkout-mp?plan=mensual"; 
-  const BASE_LINK_ANUAL = "/api/checkout-mp?plan=anual";
-  const BASE_LINK_SPRINT = "/api/checkout-mp?plan=sprint";
+  // 🔥 Enlaces de pago directos de Mercado Pago
+  const BASE_LINK_MENSUAL = "https://www.mercadopago.cl/subscriptions/checkout?preapproval_plan_id=a62216d952f8490c8377e9fb7c1ee4da"; 
+  const BASE_LINK_ANUAL = "https://www.mercadopago.cl/subscriptions/checkout?preapproval_plan_id=2c643011caec42a0a74d4b139d381f9e";
+  const BASE_LINK_SPRINT = "https://mpago.la/2DTtJWf";
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -78,8 +78,9 @@ export default function PlanesSuscripcion() {
               Eres miembro PRO hasta el {proUntil ? formatearFecha(proUntil) : "Indefinido"}
             </div>
           ) : (
-            <div className="inline-flex items-center justify-center bg-slate-100 text-slate-600 px-8 py-3 rounded-full text-sm font-black uppercase tracking-[0.2em] mb-6 border border-slate-200">
-              PLANES DE ENTRENAMIENTO PROFESIONAL
+            <div className="inline-flex items-center justify-center bg-gradient-to-r from-orange-500 to-red-600 text-white px-8 py-3 rounded-full text-sm font-black uppercase tracking-[0.2em] mb-6 shadow-lg shadow-orange-500/30">
+              <Flame size={18} className="mr-2 fill-white" />
+              CYBERDAY: PRECIOS EXCLUSIVOS HASTA EL 07 JUNIO
             </div>
           )}
           
@@ -121,7 +122,7 @@ export default function PlanesSuscripcion() {
               </li>
               <li className="flex items-start gap-3 text-xs font-bold text-slate-600 opacity-50">
                 <span className="text-slate-300 text-lg leading-none">✗</span> 
-                <span><span className="text-slate-400 line-through">Campus Virtual + Simulador PRO</span></span>
+                <span><span className="text-slate-400 line-through">Campus Virtual PRO completo</span></span>
               </li>
             </ul>
 
@@ -143,19 +144,22 @@ export default function PlanesSuscripcion() {
           </div>
 
           {/* PLAN SPRINT 15 DÍAS */}
-          <div className="bg-white rounded-[2rem] p-6 md:p-8 border-2 border-orange-400 flex flex-col relative transition-all hover:border-orange-500 shadow-lg overflow-hidden">
-            <div className="absolute top-0 left-0 w-full bg-orange-400 text-white text-center py-1 text-[9px] font-black uppercase tracking-widest">
-              Examen Próximo
+          <div className="bg-white rounded-[2rem] p-6 md:p-8 border-2 border-orange-500 flex flex-col relative transition-all hover:border-orange-600 shadow-lg overflow-hidden">
+            <div className="absolute top-0 left-0 w-full bg-gradient-to-r from-orange-500 to-red-500 text-white text-center py-1.5 text-[9px] font-black uppercase tracking-widest">
+              OFERTA CYBERDAY
             </div>
             <div className="mb-6 mt-3">
-              <span className="bg-orange-50 text-orange-600 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">Urgencia</span>
+              <span className="bg-orange-50 text-orange-600 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest inline-flex items-center gap-1">
+                <Zap size={12} className="fill-orange-500" /> Urgencia
+              </span>
               <h3 className="text-xl font-black text-slate-900 mt-4 mb-2">Pase 15 Días</h3>
               <p className="text-slate-500 text-xs leading-relaxed font-medium">Estudio intensivo final.</p>
             </div>
             
             <div className="mb-8">
+              <div className="text-slate-400 text-sm line-through font-black mb-1">$3.990</div>
               <div className="flex items-baseline gap-1">
-                <span className="text-4xl font-black text-slate-900">$3.990</span>
+                <span className="text-4xl font-black text-slate-900">$2.990</span>
               </div>
               <p className="text-orange-500 text-[10px] font-black mt-2 uppercase tracking-widest">Pago Único</p>
             </div>
@@ -172,6 +176,10 @@ export default function PlanesSuscripcion() {
               <li className="flex items-start gap-3 text-xs font-bold text-slate-700">
                 <CheckCircle size={16} className="text-[#28a745]" /> 
                 <span>Simulador Fiscalizador</span>
+              </li>
+              <li className="flex items-start gap-3 text-xs font-bold text-slate-700">
+                <CheckCircle size={16} className="text-[#28a745]" /> 
+                <span>Vademécum Profesional</span>
               </li>
             </ul>
 
@@ -198,17 +206,20 @@ export default function PlanesSuscripcion() {
           {/* PLAN MENSUAL */}
           <div className="bg-white rounded-[2rem] p-6 md:p-8 border border-slate-200 flex flex-col relative transition-all hover:border-slate-300 shadow-xl">
             <div className="mb-6">
-              <span className="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">Recomendado</span>
+              <span className="bg-red-50 text-red-600 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border border-red-100">
+                PRECIO CYBER
+              </span>
               <h3 className="text-xl font-black text-slate-900 mt-4 mb-2">Mensual PRO</h3>
               <p className="text-slate-500 text-xs leading-relaxed font-medium">Entrenamiento técnico.</p>
             </div>
             
             <div className="mb-8">
+              <div className="text-slate-400 text-sm line-through font-black mb-1">$5.990</div>
               <div className="flex items-baseline gap-1">
-                <span className="text-4xl font-black text-slate-900">$5.990</span>
+                <span className="text-4xl font-black text-slate-900">$3.990</span>
                 <span className="text-slate-500 font-bold text-xs">/mes</span>
               </div>
-              <p className="text-slate-400 text-[10px] font-black mt-2 uppercase tracking-widest">Cancela cuando quieras</p>
+              <p className="text-slate-400 text-[10px] font-black mt-2 uppercase tracking-widest">Renovación automática</p>
             </div>
 
             <ul className="space-y-4 mb-10 flex-1 border-t border-slate-100 pt-6">
@@ -217,12 +228,16 @@ export default function PlanesSuscripcion() {
                 <span>Desafío de Racha Diaria</span>
               </li>
               <li className="flex items-start gap-3 text-xs font-bold text-slate-700">
-                <CheckCircle size={16} className="text-[#28a745]" /> 
-                <span>Vademécum Profesional</span>
+                <Zap size={16} className="text-[#28a745]" /> 
+                <span>Campus Virtual PRO completo</span>
               </li>
               <li className="flex items-start gap-3 text-xs font-bold text-slate-700">
                 <CheckCircle size={16} className="text-[#28a745]" /> 
-                <span>Campus Virtual + Simulador PRO</span>
+                <span>Simulador Fiscalizador</span>
+              </li>
+              <li className="flex items-start gap-3 text-xs font-bold text-slate-700">
+                <CheckCircle size={16} className="text-[#28a745]" /> 
+                <span>Vademécum Profesional</span>
               </li>
             </ul>
 
@@ -247,9 +262,9 @@ export default function PlanesSuscripcion() {
           </div>
 
           {/* PLAN ANUAL */}
-          <div className="bg-[#003366] rounded-[2rem] p-6 md:p-8 border-4 border-[#28a745] flex flex-col relative shadow-[0_20px_50px_rgba(40,167,69,0.3)] mt-6 xl:mt-0">
-            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-[#28a745] text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-2xl whitespace-nowrap border-2 border-[#003366]">
-              MEJOR VALOR
+          <div className="bg-[#003366] rounded-[2rem] p-6 md:p-8 border-4 border-[#28a745] flex flex-col relative shadow-[0_20px_50px_rgba(40,167,69,0.3)] mt-6 xl:mt-0 overflow-hidden">
+            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-red-600 to-orange-500 text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-2xl whitespace-nowrap border-2 border-[#003366] flex items-center gap-1">
+              <Flame size={12} className="fill-white" /> SUPER PRECIO CYBER
             </div>
 
             <div className="mb-6 mt-2">
@@ -258,24 +273,29 @@ export default function PlanesSuscripcion() {
             </div>
             
             <div className="mb-8">
+              <div className="text-slate-400 text-sm line-through font-black mb-1 opacity-70">$49.990</div>
               <div className="flex items-baseline gap-1">
-                <span className="text-5xl font-black text-white">$49.990</span>
+                <span className="text-5xl font-black text-white">$19.990</span>
               </div>
-              <p className="text-[#28a745] text-[10px] font-black mt-2 uppercase tracking-widest">Ahorra 2 meses</p>
+              <p className="text-[#28a745] text-[10px] font-black mt-2 uppercase tracking-widest">Acceso Anual Total</p>
             </div>
 
             <ul className="space-y-4 mb-10 flex-1 border-t border-slate-800 pt-6">
               <li className="flex items-start gap-3 text-xs font-bold text-slate-300">
                 <Flame size={16} className="text-orange-500 fill-orange-500" />
-                <span className="text-white">Desafío de Racha Diaria (Full)</span>
+                <span className="text-white">Desafío de Racha Diaria</span>
               </li>
               <li className="flex items-start gap-3 text-xs font-bold text-slate-300">
-                <Star size={16} className="text-amber-400 fill-amber-400" /> 
-                <span className="text-white">Soporte Prioritario</span>
+                <Zap size={16} className="text-[#28a745]" /> 
+                <span className="text-white">Campus Virtual PRO completo</span>
               </li>
               <li className="flex items-start gap-3 text-xs font-bold text-slate-300">
                 <CheckCircle size={16} className="text-[#28a745]" /> 
-                <span className="text-white">Acceso total v5.0</span>
+                <span className="text-white">Simulador Fiscalizador</span>
+              </li>
+              <li className="flex items-start gap-3 text-xs font-bold text-slate-300">
+                <CheckCircle size={16} className="text-[#28a745]" /> 
+                <span className="text-white">Vademécum Profesional</span>
               </li>
             </ul>
 

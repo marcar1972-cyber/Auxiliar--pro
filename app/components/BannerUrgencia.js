@@ -11,7 +11,6 @@ export default function BannerUrgencia() {
   const [isMounted, setIsMounted] = useState(false);
   
   const [timeLeft, setTimeLeft] = useState({ dias: 0, horas: '00', min: '00', seg: '00' });
-  const [isEventActive, setIsEventActive] = useState(false);
   
   const [usuario, setUsuario] = useState(null);
   const [cargando, setCargando] = useState(false);
@@ -19,19 +18,10 @@ export default function BannerUrgencia() {
 
   function calculateTimeLeft() {
     const ahora = new Date();
-    const startDate = new Date("2026-06-01T00:00:00");
+    // Apuntamos directamente al final del Cyber
     const endDate = new Date("2026-06-07T23:59:59");
     
-    let targetDate = startDate;
-    let active = false;
-
-    // Si ya pasamos el 1 de Junio pero aún no termina el 7 de Junio
-    if (ahora >= startDate && ahora <= endDate) {
-      targetDate = endDate;
-      active = true;
-    }
-
-    const difference = targetDate - ahora;
+    const difference = endDate - ahora;
     let newTimeLeft = { dias: 0, horas: '00', min: '00', seg: '00' };
     
     if (difference > 0) {
@@ -41,11 +31,6 @@ export default function BannerUrgencia() {
         min: String(Math.floor((difference / 1000 / 60) % 60)).padStart(2, '0'),
         seg: String(Math.floor((difference / 1000) % 60)).padStart(2, '0')
       };
-    }
-
-    // Actualizamos el estado de la UI solo si cambia el periodo
-    if (isEventActive !== active) {
-      setIsEventActive(active);
     }
 
     return newTimeLeft;
@@ -73,16 +58,10 @@ export default function BannerUrgencia() {
     });
 
     return () => { clearInterval(timer); unsubscribeAuth(); };
-  }, [isEventActive]);
+  }, []);
 
   const handleAccionBoton = async () => {
-    // SI EL EVENTO NO HA EMPEZADO: Mandar directo a tu post oficial de Facebook para acumular interacciones
-    if (!isEventActive) {
-        window.open('https://www.facebook.com/share/p/18ULBXPQmx/', '_blank');
-        return;
-    }
-
-    // SI EL EVENTO YA EMPEZÓ: Ejecutar flujo de conversión e ir a la sección de planes
+    // Redirigir siempre al flujo de planes de pago (El evento ya está activo)
     if (!usuario) { 
         router.push('/login'); 
         return; 
@@ -151,7 +130,7 @@ export default function BannerUrgencia() {
       {/* Contador Regresivo Inteligente */}
       <div className="flex items-center gap-1.5 font-mono text-xs md:text-sm relative z-10 bg-black/40 px-3 py-1.5 rounded-xl border border-white/10 shadow-inner">
         <span className="text-white/60 font-sans text-[10px] uppercase font-bold tracking-wider mr-1">
-          {isEventActive ? "Cierra en:" : "Faltan:"}
+          Cierra en:
         </span>
         <div className="flex flex-col items-center">
           <span className="text-white font-black text-sm md:text-base">{timeLeft.dias}</span>
@@ -174,7 +153,7 @@ export default function BannerUrgencia() {
         </div>
       </div>
       
-      {/* Botón de Acción con Enlace a Redes Sociales */}
+      {/* Botón de Acción Directo a Pagos */}
       <div className="flex flex-row items-center gap-2 shrink-0 relative z-10 mt-1 lg:mt-0">
         <button 
           onClick={handleAccionBoton}
@@ -185,13 +164,11 @@ export default function BannerUrgencia() {
                 : 'bg-[#28a745] text-white hover:bg-[#218838] hover:scale-105 cursor-pointer active:scale-95 shadow-[#28a745]/30'
           }`}
         >
-          {inscrito && isEventActive
+          {inscrito 
             ? 'VER PRECIOS CYBER ✓' 
             : cargando 
               ? 'PROCESANDO...' 
-              : isEventActive 
-                ? 'VER PRECIOS CYBER →' 
-                : 'VER PUBLICACIÓN CYBER →'}
+              : 'VER PRECIOS CYBER →'}
         </button>
       </div>
     </div>

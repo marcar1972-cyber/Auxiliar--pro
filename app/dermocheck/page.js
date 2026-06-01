@@ -5,7 +5,7 @@ import { calculateBatch } from "./batchCalculator";
 import { 
   ChevronLeft, Search, AlertCircle, Beaker, CheckCircle2, 
   BookOpen, Type, Hash, ShieldCheck, Sparkles, Zap, Share2,
-  Facebook, Instagram, ChevronDown
+  Facebook, Instagram, ChevronDown, Info
 } from "lucide-react";
 import Link from "next/link";
 import BannerVenta from "../components/BannerVenta";
@@ -17,7 +17,21 @@ export default function DermoCheckPage() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
 
-  const brands = ['Eucerin', 'La Roche-Posay', 'Vichy', 'CeraVe', 'ISDIN', 'Nivea', 'Aquaphor', 'Garnier'];
+  // LISTA MAESTRA DE MARCAS COMPLETA Y SINCRONIZADA CON EL PDF v2026
+  const brands = [
+    'Eucerin', 
+    'La Roche-Posay', 
+    'Vichy', 
+    'CeraVe', 
+    'ISDIN', 
+    'Nivea', 
+    'Aquaphor', 
+    'Garnier',
+    "L'Oréal",
+    'Avène',
+    'Uriage',
+    'Ducray'
+  ];
 
   // FUNCIÓN UNIVERSAL PARA COMPARTIR
   const handleShare = async () => {
@@ -92,9 +106,11 @@ export default function DermoCheckPage() {
             </div>
 
             <div className="p-8 md:p-12 space-y-8">
-              {/* FIX UX/UI: Contenedor Relativo y Flecha para el Select */}
+              {/* ETIQUETA NOTORIA Y GRANDE */}
               <div>
-                <label className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 block">1. Selecciona Marca</label>
+                <label className="text-sm font-black text-slate-700 bg-slate-100 py-1.5 px-4 rounded-lg inline-block shadow-sm border border-slate-200 uppercase tracking-wider mb-4">
+                  1. Selecciona Marca
+                </label>
                 <div className="relative group">
                   <select 
                     value={brand}
@@ -121,14 +137,17 @@ export default function DermoCheckPage() {
                 </label>
               </div>
 
+              {/* ETIQUETA NOTORIA Y GRANDE */}
               <div>
-                <label className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4 block">2. Ingresa Batch Code</label>
+                <label className="text-sm font-black text-slate-700 bg-slate-100 py-1.5 px-4 rounded-lg inline-block shadow-sm border border-slate-200 uppercase tracking-wider mb-4">
+                  2. Ingresa Batch Code
+                </label>
                 <input 
                   type="text"
                   value={code}
                   onChange={(e) => setCode(e.target.value.toUpperCase())}
                   placeholder="EJ: 40229376"
-                  className="w-full bg-slate-50 border-2 border-slate-100 p-6 rounded-2xl text-2xl text-slate-900 font-black focus:border-emerald-500 outline-none transition-all shadow-sm"
+                  className="w-full bg-slate-50 border-2 border-slate-200 p-6 rounded-2xl text-2xl text-slate-900 font-black focus:border-emerald-500 outline-none transition-all shadow-sm"
                 />
               </div>
 
@@ -142,6 +161,9 @@ export default function DermoCheckPage() {
             <div className="mt-8 bg-emerald-500 rounded-[2.5rem] p-10 shadow-2xl text-white animate-in slide-in-from-top-4 duration-500">
               <p className="text-emerald-100 text-sm font-bold uppercase mb-1">Vencimiento Estimado:</p>
               <p className="text-6xl font-black tracking-tighter">{result.month} <span className="text-slate-900">{result.year}</span></p>
+              <p className="text-xs text-emerald-100/70 font-medium mt-2 uppercase tracking-widest">
+                Fabricado en: {result.fabMonth} de {result.fabYear} ({result.shelfLife} meses de duración)
+              </p>
             </div>
           )}
 
@@ -153,40 +175,150 @@ export default function DermoCheckPage() {
           )}
         </section>
 
-        {/* --- GUÍA MAESTRA --- */}
-        <section className="space-y-8 pt-10">
-          <div className="text-center">
+        {/* --- NUEVA GUÍA MAESTRA EN FORMATO TABLA (FIEL A TU REQUERIMIENTO) --- */}
+        <section className="space-y-6 pt-6">
+          <div className="text-center mb-4">
             <h2 className="font-black text-slate-800 uppercase text-xl tracking-tighter flex items-center justify-center gap-2">
-              <BookOpen className="text-blue-500" /> Guía Maestra de Lotes
+              <BookOpen className="text-blue-500" size={22} /> Guía Maestra de Lotes v2026
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 gap-8">
-            <div className="bg-white rounded-[2.5rem] shadow-xl border border-blue-50 overflow-hidden">
-              <div className="bg-blue-600 p-5 text-white flex justify-between items-center">
-                <h3 className="font-black text-xs uppercase tracking-[0.2em] flex items-center gap-2"><Type size={18} /> Sistema de Letras</h3>
-                <span className="text-[9px] font-bold opacity-70">L'ORÉAL • VICHY • CERAVE</span>
-              </div>
-              <div className="p-8 text-center space-y-6">
-                <div className="bg-blue-50 py-4 px-8 rounded-2xl inline-block font-mono text-3xl font-black text-blue-900 tracking-[0.3em]">28<span className="text-blue-600 underline underline-offset-8">Y</span>109</div>
-                <p className="text-sm font-bold text-slate-600">La 3ª posición indica el año: W=2025, X=2026, Y=2027, Z=2028</p>
-              </div>
-            </div>
+          <div className="bg-white rounded-[2.5rem] shadow-xl border border-slate-100 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-[#1e293b] text-white text-xs uppercase tracking-wider font-black">
+                    <th className="py-4 px-6">Marca / Laboratorio</th>
+                    <th className="py-4 px-6">Lógica de Lectura</th>
+                    <th className="py-4 px-6">Ejemplo de Cálculo</th>
+                  </tr>
+                </thead>
+                <tbody className="text-sm divide-y divide-slate-100 font-medium text-slate-600">
+                  {/* Fila 1: Eucerin / Nivea */}
+                  <tr className="hover:bg-slate-50/80 transition-colors">
+                    <td className="py-5 px-6 font-black text-slate-900">EUCERIN / NIVEA / AQUAPHOR</td>
+                    <td className="py-5 px-6 leading-relaxed">
+                      Formato de 8 dígitos numéricos.<br />
+                      <strong>1er dígito:</strong> Último número del año de fabricación.<br />
+                      <strong>2º y 3º dígito:</strong> Semana del año de fabricación.
+                    </td>
+                    <td className="py-5 px-6">
+                      <span className="font-mono bg-slate-100 px-2 py-1 rounded text-slate-800 font-bold">44252776</span><br />
+                      <span className="text-xs text-slate-500 block mt-1">
+                        4 = Año 2024.<br />
+                        42 = Semana de Octubre.<br />
+                        Vence: Octubre 2027 (+3 años).
+                      </span>
+                    </td>
+                  </tr>
 
-            <div className="bg-white rounded-[2.5rem] shadow-xl border border-rose-50 overflow-hidden">
-              <div className="bg-rose-500 p-5 text-white flex justify-between items-center">
-                <h3 className="font-black text-xs uppercase tracking-[0.2em] flex items-center gap-2"><Hash size={18} /> Sistema Numérico</h3>
-                <span className="text-[9px] font-bold opacity-70">EUCERIN • NIVEA</span>
-              </div>
-              <div className="p-8 text-center space-y-6">
-                <div className="bg-rose-50 py-4 px-8 rounded-2xl inline-block font-mono text-3xl font-black text-slate-800 tracking-[0.2em]"><span className="text-rose-600">5</span>1236376</div>
-                <p className="text-sm font-bold text-slate-600">1er dígito = Año de fabricación. 2do/3ro = Semana del año.</p>
-              </div>
+                  {/* Fila 2: L'oréal, Vichy, La Roche, CeraVe */}
+                  <tr className="hover:bg-slate-50/80 transition-colors">
+                    <td className="py-5 px-6 font-black text-slate-900">VICHY / LA ROCHE-POSAY / CERAVE / L'ORÉAL</td>
+                    <td className="py-5 px-6 leading-relaxed">
+                      Código alfanumérico.<br />
+                      <strong>3ª posición (Letra):</strong> Año de fabricación (W=22, X=23, Y=24, Z=25, A=2026, B=2027).<br />
+                      <strong>4ª posición:</strong> Mes (1-9=Ene-Sep, O=Oct, N=Nov, D=Dic).
+                    </td>
+                    <td className="py-5 px-6">
+                      <span className="font-mono bg-slate-100 px-2 py-1 rounded text-slate-800 font-bold">28Z109</span><br />
+                      <span className="text-xs text-slate-500 block mt-1">
+                        Z = Año 2025.<br />
+                        1 = Mes de Enero.<br />
+                        Vence: Enero 2028 (+36 meses).
+                      </span>
+                    </td>
+                  </tr>
+
+                  {/* Fila 3: ISDIN */}
+                  <tr className="hover:bg-slate-50/80 transition-colors">
+                    <td className="py-5 px-6 font-black text-slate-900">ISDIN</td>
+                    <td className="py-5 px-6 leading-relaxed">
+                      Sistema de Calendario Juliano.<br />
+                      <strong>1er dígito:</strong> Año de fabricación (5=2025, 6=2026).<br />
+                      <strong>Siguientes 3 dígitos:</strong> Día correlativo del año (001 al 365).
+                    </td>
+                    <td className="py-5 px-6">
+                      <span className="font-mono bg-slate-100 px-2 py-1 rounded text-slate-800 font-bold">5046XXXX</span><br />
+                      <span className="text-xs text-slate-500 block mt-1">
+                        5 = Año 2025.<br />
+                        046 = Día 46 del año (15 de Feb).<br />
+                        Vence: Febrero 2028 (+3 años).
+                      </span>
+                    </td>
+                  </tr>
+
+                  {/* Fila 4: Avène / Ducray */}
+                  <tr className="hover:bg-slate-50/80 transition-colors">
+                    <td className="py-5 px-6 font-black text-slate-900">AVÈNE / DUCRAY</td>
+                    <td className="py-5 px-6 leading-relaxed">
+                      Laboratorios Pierre Fabre.<br />
+                      <strong>1er dígito:</strong> Año de fabricación (6=2026).<br />
+                      <strong>2ª posición (Letra):</strong> Mes de fabricación en orden alfabético (A=Ene, B=Feb... L=Dic).
+                    </td>
+                    <td className="py-5 px-6">
+                      <span className="font-mono bg-slate-100 px-2 py-1 rounded text-slate-800 font-bold">5AXX</span><br />
+                      <span className="text-xs text-slate-500 block mt-1">
+                        5 = Año 2025.<br />
+                        A = Mes de Enero.<br />
+                        Vence: Enero 2028 (+36 meses).
+                      </span>
+                    </td>
+                  </tr>
+
+                  {/* Fila 5: Uriage */}
+                  <tr className="hover:bg-slate-50/80 transition-colors">
+                    <td className="py-5 px-6 font-black text-slate-900">URIAGE</td>
+                    <td className="py-5 px-6 leading-relaxed">
+                      Estructura mixta numérica Juliano.<br />
+                      <strong>1er dígito:</strong> Año de fabricación (6=2026).<br />
+                      <strong>Siguientes 3 dígitos:</strong> Día juliano exacto en que se envasó el producto.
+                    </td>
+                    <td className="py-5 px-6">
+                      <span className="font-mono bg-slate-100 px-2 py-1 rounded text-slate-800 font-bold">4285X</span><br />
+                      <span className="text-xs text-slate-500 block mt-1">
+                        4 = Año 2024.<br />
+                        285 = Día 285 del año (12 de Oct).<br />
+                        Vence: Octubre 2027 (+3 años).
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* --- MANUAL DE LECTURA RÁPIDA DE FONDO --- */}
+          <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-xl border border-slate-100 space-y-6">
+            <h3 className="text-lg font-black text-slate-800 uppercase tracking-tight flex items-center gap-2">
+              <ShieldCheck className="text-emerald-500" /> Manual de Lectura Rápida
+            </h3>
+            <p className="text-sm font-medium text-slate-500 leading-relaxed">
+              De acuerdo con las normativas sanitarias vigentes aplicadas por los laboratorios de marcas dermo en Chile, si el empaque no cuenta con la fecha estampada explícitamente en el formato tradicional de DD/MM/AA, se debe calcular utilizando el código alfa-numérico (Batch Code) grabado directamente en el sello plástico del tubo o en la base de la caja de cartón.
+            </p>
+            <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100">
+              <p className="text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">💡 Regla de Oro del Auxiliar de Farmacia:</p>
+              <p className="text-xs text-slate-500 font-medium leading-relaxed">
+                Salvo excepciones de productos específicos (como líneas pediátricas o fórmulas inestables con Vitamina C pura que reducen su vida útil a 30 meses), la constante oficial de almacenamiento cerrado para este software de cálculo automatizado es de <strong>36 meses (3 años)</strong> a partir del mes de producción certificado por el laboratorio de origen.
+              </p>
+            </div>
+          </div>
+
+          {/* --- CRITICAL UI FIX: DISCLAIMER / AVISO DE RESPONSABILIDAD LEGAL --- */}
+          <div className="bg-amber-50/60 border border-amber-200/70 rounded-2xl p-6 flex gap-4">
+            <div className="w-8 h-8 bg-amber-500/10 rounded-lg flex items-center justify-center shrink-0">
+              <Info className="text-amber-600" size={20} />
+            </div>
+            <div>
+              <p className="text-xs font-black text-amber-800 uppercase tracking-wider mb-1">Aviso de Responsabilidad (Disclaimer):</p>
+              <p className="text-xs text-amber-700/90 font-medium leading-relaxed">
+                Los cálculos entregados por DermoCheck PRO son estimaciones algorítmicas basadas estrictamente en las guías técnicas oficiales de los laboratorios para el año de vigencia 2026. Esta herramienta fue diseñada exclusivamente con fines pedagógicos y de apoyo académico para el estudio del examen de Auxiliar de Farmacia ante la SEREMI de Salud. AuxiliarPro no se responsabiliza por discordancias físicas de stock o decisiones comerciales derivadas del uso de este software. El rotulado del importador siempre prevalecerá como el dato legal final.
+              </p>
             </div>
           </div>
         </section>
 
-        {/* FOOTER ACTUALIZADO CON LOGO OFICIAL WHATSAPP */}
+        {/* FOOTER CON LOGO OFICIAL WHATSAPP */}
         <footer className="pt-16 space-y-12 text-center">
           <BannerVenta />
 
@@ -203,7 +335,7 @@ export default function DermoCheckPage() {
           </div>
 
           <p className="text-[10px] font-mono text-slate-300 uppercase tracking-widest">
-            DermoCheck Engine v2.8 — AuxiliarPro Ecosystem
+            DermoCheck Engine v5.2 — AuxiliarPro Ecosystem
           </p>
         </footer>
       </div>

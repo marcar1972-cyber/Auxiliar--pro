@@ -25,6 +25,30 @@ const nextConfig = {
         destination: '/quiz',
         permanent: true,
       },
+      {
+        // Redirección 301 para rescatar el tráfico del artículo sobre sueldos
+        source: '/blog/cuanto-gana-auxiliar-farmacia-chile',
+        destination: '/quiz',
+        permanent: true,
+      },
+      {
+        // Redirección 301 para rescatar el tráfico del artículo sobre diferencias técnicas
+        source: '/blog/diferencia-auxiliar-tecnico-farmacia',
+        destination: '/quiz',
+        permanent: true,
+      },
+      {
+        // Redirección 301 para rescatar el tráfico del artículo sobre fechas de examen
+        source: '/blog/fecha-examen-auxiliar-farmacia-seremi',
+        destination: '/quiz',
+        permanent: true,
+      },
+      {
+        // 🔥 Rescata la URL truncada/cortada que está pendiente en Search Console
+        source: '/blog/fecha-',
+        destination: '/quiz',
+        permanent: true,
+      },
     ];
   },
 
