@@ -20,7 +20,7 @@ export default function PaginaPlanes() {
           <p className="text-slate-700 text-sm font-bold leading-relaxed">
             Tus pagos están protegidos por <span className="text-blue-500">Mercado Pago</span>. 
             <br />
-            <span className="text-emerald-600">Cero cobros automáticos:</span> No realizamos renovaciones forzosas. Al terminar tu pase de 15 días o suscripción, tú decides si deseas comprar un nuevo periodo para continuar estudiando.
+            Los planes Mensual y Anual PRO operan bajo <span className="text-[#003366]">renovación automática (mensual o anual)</span> y puedes cancelarlos libremente cuando quieras. El pase de 15 días expira de forma normal sin cargos posteriores.
           </p>
         </div>
       </main>
