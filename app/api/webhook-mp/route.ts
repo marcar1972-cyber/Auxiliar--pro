@@ -13,36 +13,51 @@ if (!admin.apps.length) {
 
 const db = admin.firestore();
 
-export async function POST(request: Request) {
+export async function POST(request) {
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("data.id") || searchParams.get("id");
     const type = searchParams.get("type");
 
-    if (type === "payment" && id) {
-      // Consultamos el pago a Mercado Pago
-      const response = await fetch(`https://api.mercadopago.com/v1/payments/${id}`, {
-        headers: { Authorization: `Bearer APP_USR-6296117002447975-040718-d1a2cd392dac4324a4875784375a14d9-3319774413` },
-      });
+    if (id) {
+      let uid = null;
+      let diasASumar = 30; // Por defecto mensual
+      let status = "";
 
-      const payment = await response.json();
-      const uid = payment.external_reference;
-
-      if (uid && payment.status === "approved") {
+      // Si es un pago único (Pase 15 días o primera cuota procesada)
+      if (type === "payment") {
+        const response = await fetch(`https://api.mercadopago.com/v1/payments/${id}`, {
+          headers: { Authorization: `Bearer APP_USR-6296117002447975-040718-d1a2cd392dac4324a4875784375a14d9-3319774413` },
+        });
+        const payment = await response.json();
+        uid = payment.external_reference;
+        status = payment.status;
         
-        // --- INICIO CTO FIX: LÓGICA DE DÍAS SEGÚN EL PLAN ---
         const descripcion = payment.description ? payment.description.toLowerCase() : "";
-        let diasASumar = 30; // Por defecto es mensual (30 días)
-
-        if (descripcion.includes("anual")) {
+        if (descripcion.includes("anual") || (payment.transaction_amount && payment.transaction_amount > 10000)) {
           diasASumar = 365;
-        } else if (descripcion.includes("15 días") || descripcion.includes("pase sprint")) {
+        } else if (descripcion.includes("15 días") || descripcion.includes("sprint")) {
           diasASumar = 15;
         }
+      } 
+      // Si es la confirmación directa de la suscripción (Preapproval)
+      else if (type === "subscription_preapproval") {
+        const response = await fetch(`https://api.mercadopago.com/preapproval/${id}`, {
+          headers: { Authorization: `Bearer APP_USR-6296117002447975-040718-d1a2cd392dac4324a4875784375a14d9-3319774413` },
+        });
+        const sub = await response.json();
+        uid = sub.external_reference;
+        status = sub.status; // "authorized"
         
+        if (sub.auto_recurring && sub.auto_recurring.frequency === 12) {
+            diasASumar = 365;
+        }
+      }
+
+      // Si tenemos UID y el pago/suscripción está aprobado
+      if (uid && (status === "approved" || status === "authorized")) {
         const proUntil = new Date();
         proUntil.setDate(proUntil.getDate() + diasASumar);
-        // --- FIN CTO FIX ---
 
         await db.collection("users").doc(uid).update({
           isPro: true,
@@ -55,7 +70,7 @@ export async function POST(request: Request) {
       }
     }
     return NextResponse.json({ received: true }, { status: 200 });
-  } catch (error: any) {
+  } catch (error) {
     console.error("❌ Error en Webhook:", error.message);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

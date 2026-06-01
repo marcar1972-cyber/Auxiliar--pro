@@ -13,10 +13,10 @@ export default function PlanesSuscripcion() {
   const [proUntil, setProUntil] = useState(null);
   const [loadingAuth, setLoadingAuth] = useState(true);
 
-  // 🔥 Enlaces de pago directos de Mercado Pago
-  const BASE_LINK_MENSUAL = "https://www.mercadopago.cl/subscriptions/checkout?preapproval_plan_id=a62216d952f8490c8377e9fb7c1ee4da"; 
-  const BASE_LINK_ANUAL = "https://www.mercadopago.cl/subscriptions/checkout?preapproval_plan_id=2c643011caec42a0a74d4b139d381f9e";
-  const BASE_LINK_SPRINT = "https://mpago.la/2DTtJWf";
+  // 🔥 Enlaces apuntando a tu puente dinámico para amarrar el UID
+  const BASE_LINK_MENSUAL = "/api/checkout-mp?plan=mensual"; 
+  const BASE_LINK_ANUAL = "/api/checkout-mp?plan=anual";
+  const BASE_LINK_SPRINT = "/api/checkout-mp?plan=sprint";
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
