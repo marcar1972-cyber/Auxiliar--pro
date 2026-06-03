@@ -109,7 +109,8 @@ export default function FarmacologiaHub() {
           <p className="text-lg text-blue-100 mb-10 max-w-xl mx-auto">
             Accede al simulador completo en AuxiliarPro App.
           </p>
-          <Link href="/planes" className="inline-block px-10 py-5 bg-[#28a745] text-white font-black text-lg rounded-xl hover:bg-[#218838] transition-colors shadow-lg shadow-green-900/50">
+          {/* --- AQUÍ ESTÁ EL CAMBIO QUE PEDISTE --- */}
+          <Link href="/campus" className="inline-block px-10 py-5 bg-[#28a745] text-white font-black text-lg rounded-xl hover:bg-[#218838] transition-colors shadow-lg shadow-green-900/50">
             Desbloquear Banco de Preguntas PRO
           </Link>
         </section>
