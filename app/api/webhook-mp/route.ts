@@ -15,63 +15,105 @@ const db = admin.firestore();
 
 export async function POST(request) {
   try {
+    console.log("🔔 === WEBHOOK RECIBIDO ===");
+    console.log("⏰ Timestamp:", new Date().toISOString());
+
+    // Mercado Pago envía el ID en los query params
     const { searchParams } = new URL(request.url);
     const id = searchParams.get("data.id") || searchParams.get("id");
     const type = searchParams.get("type");
 
-    if (id) {
-      let uid = null;
-      let diasASumar = 30; // Por defecto mensual
-      let status = "";
+    console.log("📍 Query Params:", { id, type });
 
-      // Si es un pago único (Pase 15 días o primera cuota procesada)
-      if (type === "payment") {
-        const response = await fetch(`https://api.mercadopago.com/v1/payments/${id}`, {
-          headers: { Authorization: `Bearer APP_USR-6296117002447975-040718-d1a2cd392dac4324a4875784375a14d9-3319774413` },
-        });
-        const payment = await response.json();
-        uid = payment.external_reference;
-        status = payment.status;
-        
-        const descripcion = payment.description ? payment.description.toLowerCase() : "";
-        if (descripcion.includes("anual") || (payment.transaction_amount && payment.transaction_amount > 10000)) {
-          diasASumar = 365;
-        } else if (descripcion.includes("15 días") || descripcion.includes("sprint")) {
-          diasASumar = 15;
-        }
-      } 
-      // Si es la confirmación directa de la suscripción (Preapproval)
-      else if (type === "subscription_preapproval") {
-        const response = await fetch(`https://api.mercadopago.com/preapproval/${id}`, {
-          headers: { Authorization: `Bearer APP_USR-6296117002447975-040718-d1a2cd392dac4324a4875784375a14d9-3319774413` },
-        });
-        const sub = await response.json();
-        uid = sub.external_reference;
-        status = sub.status; // "authorized"
-        
-        if (sub.auto_recurring && sub.auto_recurring.frequency === 12) {
-            diasASumar = 365;
-        }
-      }
-
-      // Si tenemos UID y el pago/suscripción está aprobado
-      if (uid && (status === "approved" || status === "authorized")) {
-        const proUntil = new Date();
-        proUntil.setDate(proUntil.getDate() + diasASumar);
-
-        await db.collection("users").doc(uid).update({
-          isPro: true,
-          proUntil: admin.firestore.Timestamp.fromDate(proUntil),
-          lastPayment: admin.firestore.FieldValue.serverTimestamp(),
-          activatedBy: "MercadoPago-Automático"
-        });
-
-        console.log(`✅ Usuario ${uid} activado por ${diasASumar} días.`);
-      }
+    if (!id || type !== "payment") {
+      console.log("⚠️ No es un pago o falta ID");
+      return NextResponse.json({ received: true }, { status: 200 });
     }
-    return NextResponse.json({ received: true }, { status: 200 });
+
+    // Obtener información del pago desde la API de Mercado Pago
+    const response = await fetch(`https://api.mercadopago.com/v1/payments/${id}`, {
+      headers: {
+        Authorization: `Bearer APP_USR-6296117002447975-040718-d1a2cd392dac4324a4875784375a14d9-3319774413`,
+      },
+    });
+
+    if (!response.ok) {
+      console.error(`❌ Error al obtener payment: ${response.status}`);
+      return NextResponse.json({ error: "Payment not found" }, { status: 404 });
+    }
+
+    const payment = await response.json();
+    console.log("💰 Payment data:", {
+      status: payment.status,
+      external_reference: payment.external_reference,
+      amount: payment.transaction_amount,
+      description: payment.description
+    });
+
+    const uid = payment.external_reference;
+    const status = payment.status;
+
+    // Solo procesar si está aprobado
+    if (status !== "approved") {
+      console.log(`⏳ Pago no aprobado aún. Status: ${status}`);
+      return NextResponse.json({ received: true }, { status: 200 });
+    }
+
+    // Determinar días según el monto pagado
+    const monto = payment.transaction_amount || 0;
+    let diasASumar = 30; // Por defecto mensual
+
+    if (monto >= 19000) {
+      diasASumar = 365; // Anual
+    } else if (monto < 3500) {
+      diasASumar = 15; // Sprint
+    }
+    // Si está entre 3500 y 19000, es mensual (30 días)
+
+    console.log(`✅ Activando usuario ${uid} por ${diasASumar} días...`);
+
+    // Calcular fecha de expiración
+    const proUntil = new Date();
+    proUntil.setDate(proUntil.getDate() + diasASumar);
+
+    // Verificar si el usuario existe en Firestore
+    const userDoc = await db.collection("users").doc(uid).get();
+
+    if (!userDoc.exists) {
+      console.error(`❌ El usuario ${uid} no existe en Firestore`);
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    // Actualizar usuario en Firestore
+    await db.collection("users").doc(uid).update({
+      isPro: true,
+      proUntil: admin.firestore.Timestamp.fromDate(proUntil),
+      lastPayment: admin.firestore.FieldValue.serverTimestamp(),
+      activatedBy: "MercadoPago-Automático",
+      paymentDetails: {
+        id: id,
+        amount: monto,
+        dias: diasASumar,
+        timestamp: admin.firestore.FieldValue.serverTimestamp()
+      }
+    });
+
+    console.log(`🎉 Usuario ${uid} activado exitosamente hasta ${proUntil.toISOString()}`);
+
+    return NextResponse.json({
+      success: true,
+      message: `Usuario ${uid} activado por ${diasASumar} días`
+    }, { status: 200 });
+
   } catch (error) {
-    console.error("❌ Error en Webhook:", error.message);
+    console.error("❌ ERROR CRÍTICO EN WEBHOOK:", error);
+    console.error("Stack trace:", error.stack);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
+}
+
+// Manejar GET por si Mercado Pago hace verificaciones
+export async function GET(request) {
+  console.log("🔍 GET request al webhook (posible verificación)");
+  return NextResponse.json({ status: "ok", message: "Webhook activo" }, { status: 200 });
 }

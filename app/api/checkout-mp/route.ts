@@ -10,57 +10,79 @@ export async function GET(request) {
     return NextResponse.json({ error: "Faltan datos de usuario" }, { status: 400 });
   }
 
-  // 🚀 CTO FIX: Redirigimos a los enlaces directos pero anexando la referencia externa a la URL de Mercado Pago
-  // Esto permite que cuando el usuario pague, MP retorne el parámetro external_reference a tu Webhook.
-  
-  let redirectUrl = "";
+  const TOKEN = "APP_USR-6296117002447975-040718-d1a2cd392dac4324a4875784375a14d9-3319774413";
 
-  if (plan === "anual") {
-    redirectUrl = `https://www.mercadopago.cl/subscriptions/checkout?preapproval_plan_id=2c643011caec42a0a74d4b139d381f9e&external_reference=${uid}`;
-  } else if (plan === "mensual") {
-    redirectUrl = `https://www.mercadopago.cl/subscriptions/checkout?preapproval_plan_id=a62216d952f8490c8377e9fb7c1ee4da&external_reference=${uid}`;
-  } else if (plan === "sprint") {
-    // Para el pase fijo (Payment Normal), creamos la preferencia on the fly con precio Cyber
-    try {
-      const response = await fetch("https://api.mercadopago.com/checkout/preferences", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer APP_USR-6296117002447975-040718-d1a2cd392dac4324a4875784375a14d9-3319774413`,
-        },
-        body: JSON.stringify({
-          items: [
-            {
-              title: "Pase Sprint Final - AuxiliarPro (15 Días)",
-              description: "Pase Sprint Final", 
-              quantity: 1,
-              unit_price: 2990, // Precio Cyber Oferta
-              currency_id: "CLP",
-            },
-          ],
-          payer: { email: email },
-          external_reference: uid, 
-          statement_descriptor: "AUXILIARPRO", 
-          back_urls: {
-            success: "https://www.auxiliaresdefarmacia.cl/success",
-            failure: "https://www.auxiliaresdefarmacia.cl/planes",
-            pending: "https://www.auxiliaresdefarmacia.cl/planes",
-          },
-          auto_return: "approved",
-          notification_url: "https://www.auxiliaresdefarmacia.cl/api/webhook-mp", 
-        }),
-      });
-      const data = await response.json();
-      if (data && data.init_point) {
-        return NextResponse.redirect(data.init_point);
-      } else {
-         return NextResponse.json({ error: "Error de MP" }, { status: 500 });
-      }
-    } catch (e) {
-      return NextResponse.json({ error: e.message }, { status: 500 });
+  // Configuración de planes (precios según tus links de Mercado Pago)
+  const planesConfig = {
+    sprint: {
+      titulo: "Pase Sprint Final - AuxiliarPro (15 Días)",
+      descripcion: "Pase Sprint Final 15 días",
+      precio: 2990,
+      dias: 15
+    },
+    mensual: {
+      titulo: "Suscripción Mensual PRO - AuxiliarPro",
+      descripcion: "Acceso completo por 30 días",
+      precio: 3990,
+      dias: 30
+    },
+    anual: {
+      titulo: "Suscripción Anual PRO - AuxiliarPro",
+      descripcion: "Acceso completo por 365 días",
+      precio: 19990,
+      dias: 365
     }
+  };
+
+  const planConfig = planesConfig[plan];
+
+  if (!planConfig) {
+    return NextResponse.json({ error: "Plan no válido" }, { status: 400 });
   }
 
-  // Redirección para suscripciones recurrentes
-  return NextResponse.redirect(redirectUrl);
+  try {
+    // Crear preferencia de pago dinámica para TODOS los planes
+    const response = await fetch("https://api.mercadopago.com/checkout/preferences", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${TOKEN}`,
+      },
+      body: JSON.stringify({
+        items: [
+          {
+            title: planConfig.titulo,
+            description: planConfig.descripcion,
+            quantity: 1,
+            unit_price: planConfig.precio,
+            currency_id: "CLP",
+          },
+        ],
+        payer: { 
+          email: email 
+        },
+        external_reference: uid, // 🔥 CLAVE: Esto permite que el webhook identifique al usuario
+        statement_descriptor: "AUXILIARPRO",
+        back_urls: {
+          success: "https://www.auxiliaresdefarmacia.cl/success",
+          failure: "https://www.auxiliaresdefarmacia.cl/planes",
+          pending: "https://www.auxiliaresdefarmacia.cl/planes",
+        },
+        auto_return: "approved",
+        notification_url: "https://www.auxiliaresdefarmacia.cl/api/webhook-mp", // 🔥 Webhook para notificaciones
+      }),
+    });
+
+    const data = await response.json();
+
+    if (data && data.init_point) {
+      return NextResponse.redirect(data.init_point);
+    } else {
+      console.error("Error de MP:", data);
+      return NextResponse.json({ error: "Error al crear preferencia", details: data }, { status: 500 });
+    }
+  } catch (e) {
+    console.error("Error en checkout:", e);
+    return NextResponse.json({ error: e.message }, { status: 500 });
+  }
 }

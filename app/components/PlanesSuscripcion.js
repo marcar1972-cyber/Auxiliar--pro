@@ -219,7 +219,7 @@ export default function PlanesSuscripcion() {
                 <span className="text-4xl font-black text-slate-900">$3.990</span>
                 <span className="text-slate-500 font-bold text-xs">/mes</span>
               </div>
-              <p className="text-slate-400 text-[10px] font-black mt-2 uppercase tracking-widest">Renovación automática</p>
+              <p className="text-slate-400 text-[10px] font-black mt-2 uppercase tracking-widest">Pago Único</p>
             </div>
 
             <ul className="space-y-4 mb-10 flex-1 border-t border-slate-100 pt-6">
@@ -262,7 +262,7 @@ export default function PlanesSuscripcion() {
           </div>
 
           {/* PLAN ANUAL */}
-          <div className="bg-[#003366] rounded-[2rem] p-6 md:p-8 border-4 border-[#28a745] flex flex-col relative shadow-[0_20px_50px_rgba(40,167,69,0.3)] mt-6 xl:mt-0 overflow-hidden">
+          <div className="bg-[#003366] rounded-[2rem] p-6 md:p-8 border-4 border-[#28a745] flex flex-col relative shadow-[0_20px_50px_rgba(40,167,69,0.3)] mt-6 xl:mt-0 pt-12">
             <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-red-600 to-orange-500 text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-2xl whitespace-nowrap border-2 border-[#003366] flex items-center gap-1">
               <Flame size={12} className="fill-white" /> SUPER PRECIO CYBER
             </div>

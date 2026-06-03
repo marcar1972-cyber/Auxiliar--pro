@@ -22,30 +22,37 @@ export default function TerminosPage() {
           </ul>
 
           <div className="bg-slate-50 border border-slate-200 p-4 rounded-lg mt-4">
-            <p className="font-bold text-slate-900 mb-2">Estructura de Suscripciones (Valores vigentes sujetos a promociones):</p>
+            <p className="font-bold text-slate-900 mb-2">Estructura de Planes (Valores regulares vigentes):</p>
             <ul className="list-disc pl-5 text-slate-700 space-y-2">
-              <li><strong>Pase 15 Días:</strong> Pago único. Otorga acceso total por un período de 15 días exactos. No se renueva automáticamente.</li>
-              <li><strong>Plan Mensual PRO:</strong> $3.990 CLP mensuales. <strong>Suscripción con renovación automática</strong>. Se debita mes a mes hasta que el usuario decida cancelar.</li>
-              <li><strong>Plan Anual PRO:</strong> $19.990 CLP pago único anual. Otorga acceso ininterrumpido por 365 días.</li>
+              <li><strong>Pase 15 Días:</strong> Pago único de $3.990 CLP. Otorga acceso total por un período de 15 días exactos. No se renueva automáticamente.</li>
+              <li><strong>Plan Mensual PRO:</strong> Pago único de $5.990 CLP. Otorga acceso total por 30 días exactos. No se renueva automáticamente.</li>
+              <li><strong>Plan Anual PRO:</strong> Pago único de $49.990 CLP. Otorga acceso ininterrumpido por 365 días. No se renueva automáticamente.</li>
             </ul>
-            <p className="text-xs text-slate-500 mt-3 italic">Los pagos son procesados y tokenizados de forma segura a través de nuestra pasarela oficial (Mercado Pago).</p>
+            <p className="text-xs text-slate-500 mt-3 italic">Los pagos son procesados y tokenizados de forma segura a través de nuestra pasarela oficial (Mercado Pago). Los valores pueden variar según promociones temporales vigentes.</p>
+          </div>
+
+          <div className="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-md mt-4">
+            <p className="font-bold text-emerald-800 mb-1">Modelo de Pago Único - Sin Cargos Sorpresa:</p>
+            <p className="text-emerald-700 text-sm">
+              AuxiliarPro opera exclusivamente con <strong>pagos únicos sin renovación automática</strong>. Este modelo ha demostrado ser el más efectivo para garantizar la transparencia y el control total del usuario sobre sus gastos. No realizamos cargos recurrentes ni cobros inesperados. Cuando tu acceso expire, simplemente deberás realizar un nuevo pago si deseas continuar utilizando los servicios PRO. Esta política elimina cualquier riesgo de cargos no deseados y te da libertad total para decidir cuándo renovar.
+            </p>
           </div>
 
           <div className="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-md mt-4">
-            <p className="font-bold text-amber-800 mb-1">Cláusulas Especiales de Ofertas (CyberDay / Descuentos):</p>
+            <p className="font-bold text-amber-800 mb-1">Cláusulas Especiales de Ofertas (CyberDay, Black Friday y Promociones Temporales):</p>
             <p className="text-amber-700 text-sm">
-              Las promociones, descuentos o cupones especiales son válidos <strong>únicamente bajo las condiciones estipuladas en la oferta específica</strong>. En el caso de planes de renovación automática adquiridos bajo una tarifa promocional, dicho valor se mantendrá mientras la suscripción permanezca activa ininterrumpidamente, salvo que la oferta indique lo contrario. AuxiliarPro se reserva el derecho de otorgar extensiones de beneficios a usuarios específicos a su entera discreción.
+              AuxiliarPro realiza promociones y descuentos especiales de forma periódica (CyberDay, Black Friday, ofertas flash, entre otras). Estas promociones son válidas <strong>únicamente bajo las condiciones estipuladas en la oferta específica vigente al momento de la compra</strong>. Los precios promocionales aplican exclusivamente al pago único que se está realizando y no generan compromisos futuros ni precios preferenciales para renovaciones posteriores. AuxiliarPro se reserva el derecho de otorgar extensiones de beneficios a usuarios específicos a su entera discreción.
             </p>
           </div>
 
           <h2 className="text-lg font-bold text-slate-900 mt-4">2. Modificación de Precios y Condiciones</h2>
-          <p><strong>AuxiliarPro se reserva el derecho de modificar, actualizar o ajustar los precios</strong> de las suscripciones, así como los beneficios incluidos en cada plan, en cualquier momento. </p>
-          <p>En caso de un aumento en el valor de los planes de renovación automática, los usuarios serán notificados oportunamente antes del siguiente ciclo de facturación. El uso continuo de la plataforma y la mantención de la suscripción activa implica la aceptación de las nuevas tarifas.</p>
+          <p><strong>AuxiliarPro se reserva el derecho de modificar, actualizar o ajustar los precios</strong> de los planes, así como los beneficios incluidos en cada uno, en cualquier momento.</p>
+          <p>Cualquier cambio en los precios aplicará únicamente a nuevos pagos realizados después de la modificación. Los accesos ya adquiridos mantendrán su vigencia completa hasta la fecha de expiración originalmente pactada, sin verse afectados por aumentos posteriores.</p>
 
-          <h2 className="text-lg font-bold text-slate-900 mt-4">3. Facturación Recurrente, Cancelación y Política de Reembolso</h2>
-          <p><strong>Renovación Automática:</strong> Al contratar un plan mensual, el usuario acepta y autoriza explícitamente a AuxiliarPro y a su pasarela de pagos (Mercado Pago) a realizar un <strong>cargo automático y recurrente</strong> a su método de pago registrado al inicio de cada nuevo ciclo de facturación (mensual).</p>
-          <p><strong>Cancelación de la Suscripción:</strong> El usuario tiene el derecho de cancelar la renovación automática de su plan en cualquier momento. La cancelación detendrá los cobros futuros, pero el usuario mantendrá el acceso PRO hasta el final del período ya pagado. La cancelación debe ser gestionada directamente desde la pasarela de pagos o solicitada al soporte técnico antes de la fecha de corte.</p>
-          <p><strong>Reembolsos:</strong> Al tratarse de un producto digital de contenido educativo SaaS con acceso inmediato e ilimitado tras el pago, <strong>no se realizarán devoluciones ni reembolsos</strong> (ni totales ni parciales) por períodos ya facturados o por olvido de cancelación por parte del usuario.</p>
+          <h2 className="text-lg font-bold text-slate-900 mt-4">3. Política de Pagos y Reembolsos</h2>
+          <p><strong>Pagos Únicos:</strong> Todos los planes de AuxiliarPro son pagos únicos que otorgan acceso por un período determinado (15 días, 30 días o 365 días). Al finalizar el período contratado, el acceso PRO expira automáticamente sin generar cargos adicionales. No existe renovación automática ni cobros recurrentes de ningún tipo.</p>
+          <p><strong>Renovación Manual:</strong> Si deseas continuar utilizando los servicios PRO después de que tu acceso expire, deberás realizar un nuevo pago manualmente. Los precios aplicables serán los vigentes al momento de la nueva contratación.</p>
+          <p><strong>Reembolsos:</strong> Al tratarse de un producto digital de contenido educativo SaaS con acceso inmediato e ilimitado tras el pago, <strong>no se realizarán devoluciones ni reembolsos</strong> (ni totales ni parciales) por períodos ya facturados. El usuario tiene acceso completo a todos los materiales y herramientas desde el momento exacto del pago.</p>
           <p><strong>Uso de Cuenta:</strong> Toda cuenta es de uso personal, individual e intransferible. El sistema detectará intentos de acceso simultáneo o de compartir credenciales, lo cual es causal de suspensión definitiva de la cuenta sin derecho a reembolso.</p>
 
           <h2 className="text-lg font-bold text-slate-900 mt-4">4. Responsabilidad Educativa y Uso en el Mesón</h2>
@@ -57,7 +64,7 @@ export default function TerminosPage() {
           <p>El código fuente, diseño, estructura de los simuladores, "Vademécum Profesional", bases de datos y herramientas de inteligencia artificial son propiedad exclusiva de AuxiliarPro. Los textos legales (Decretos como el D.S. 466 y Ley 20.724) referenciados son de dominio público. Queda estrictamente prohibida la copia, reproducción, reventa o extracción masiva de datos de la plataforma.</p>
 
           <p className="mt-8 pt-6 border-t border-slate-200 text-xs text-slate-500 font-medium">
-            Última actualización: 01 de Junio de 2026.
+            Última actualización: 03 de Junio de 2026.
           </p>
         </div>
       </div>
