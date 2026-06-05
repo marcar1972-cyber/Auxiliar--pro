@@ -8,8 +8,8 @@ import { useRouter } from "next/navigation";
 import BannerVenta from "../components/BannerVenta";
 import { ShieldCheck, Info, BookOpen, AlertTriangle, Search, List, Eye, EyeOff, Download, CheckSquare, Square } from "lucide-react";
 
-// IMPORTAMOS LA DATA DESDE EL OTRO ARCHIVO
-import { BLOQUE_I, OPCIONES_DESPLEGABLES } from "./vademecumData";
+// 🚀 IMPORTAMOS AMBOS BLOQUES DESDE EL OTRO ARCHIVO
+import { BLOQUE_I, BLOQUE_II, OPCIONES_DESPLEGABLES } from "./vademecumData";
 
 export default function BuscadorVademecum() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -30,8 +30,7 @@ export default function BuscadorVademecum() {
   const [todosMedicamentos, setTodosMedicamentos] = useState([]);
   const [cargandoAuditoria, setCargandoAuditoria] = useState(false);
 
-  // 🚀 ESTADOS NUEVOS PARA EXPORTACIÓN EXCEL/CSV
-  const [seleccionados, setSeleccionados] = useState(new Set()); // Guardamos los IDs seleccionados
+  const [seleccionados, setSeleccionados] = useState(new Set()); 
 
   const ADMIN_EMAIL = "marcar1972@gmail.com";
   const PLANES_LINK = "/planes";
@@ -74,51 +73,32 @@ export default function BuscadorVademecum() {
     return () => unsubscribe();
   }, [router]);
 
-  // 🚀 FUNCIONES DE SELECCIÓN Y EXPORTACIÓN
   const toggleSeleccion = (id) => {
     const nuevosSeleccionados = new Set(seleccionados);
-    if (nuevosSeleccionados.has(id)) {
-      nuevosSeleccionados.delete(id);
-    } else {
-      nuevosSeleccionados.add(id);
-    }
+    if (nuevosSeleccionados.has(id)) nuevosSeleccionados.delete(id);
+    else nuevosSeleccionados.add(id);
     setSeleccionados(nuevosSeleccionados);
   };
 
   const seleccionarTodos = () => {
     const dataAMostrar = modoAuditoria ? todosMedicamentos : resultados;
-    if (seleccionados.size === dataAMostrar.length) {
-      setSeleccionados(new Set()); // Deseleccionar todos
-    } else {
-      setSeleccionados(new Set(dataAMostrar.map(item => item.id))); // Seleccionar todos los visibles
-    }
+    if (seleccionados.size === dataAMostrar.length) setSeleccionados(new Set()); 
+    else setSeleccionados(new Set(dataAMostrar.map(item => item.id))); 
   };
 
   const descargarExcel = () => {
     if (seleccionados.size === 0) return;
-
-    // Buscamos los datos completos de los items seleccionados
     const itemsExportar = (modoAuditoria ? todosMedicamentos : resultados).filter(item => seleccionados.has(item.id));
-    
-    // Armamos el CSV (Separado por punto y coma para que Excel en español lo lea bien)
     const cabeceras = ["Nombre", "Principio Activo", "Categoría", "Condición Venta", "Lista Control"];
     const lineasCSV = [cabeceras.join(";")];
 
     itemsExportar.forEach(item => {
-      // Limpiamos los textos por si tienen punto y coma o saltos de línea para no romper el CSV
       const limpiar = (txt) => (txt || "").replace(/;/g, ",").replace(/\n/g, " ");
-      const fila = [
-        limpiar(item.nombre),
-        limpiar(item.principio_activo),
-        limpiar(item.categoria),
-        limpiar(item.condicion_venta),
-        limpiar(item.lista_control)
-      ];
+      const fila = [limpiar(item.nombre), limpiar(item.principio_activo), limpiar(item.categoria), limpiar(item.condicion_venta), limpiar(item.lista_control)];
       lineasCSV.push(fila.join(";"));
     });
 
-    // Creamos el archivo y forzamos la descarga
-    const csvContenido = "data:text/csv;charset=utf-8,\uFEFF" + lineasCSV.join("\n"); // \uFEFF fuerza UTF-8 en Excel
+    const csvContenido = "data:text/csv;charset=utf-8,\uFEFF" + lineasCSV.join("\n");
     const encodeUri = encodeURI(csvContenido);
     const link = document.createElement("a");
     link.setAttribute("href", encodeUri);
@@ -126,7 +106,6 @@ export default function BuscadorVademecum() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    
     alert(`✅ Excel generado con ${seleccionados.size} medicamentos.`);
   };
 
@@ -135,7 +114,7 @@ export default function BuscadorVademecum() {
     if (!busqueda.trim()) return;
     setCargando(true);
     setBuscado(true);
-    setSeleccionados(new Set()); // Limpiamos selección al buscar de nuevo
+    setSeleccionados(new Set()); 
     
     try {
       const querySnapshot = await getDocs(collection(db, "vademecum"));
@@ -156,19 +135,9 @@ export default function BuscadorVademecum() {
     setCargando(false);
   };
 
-  const iniciarEdicion = (item) => {
-    setEditandoId(item.id);
-    setEditForm(item);
-  };
-
-  const cancelarEdicion = () => {
-    setEditandoId(null);
-    setEditForm({});
-  };
-
-  const handleEditChange = (e) => {
-    setEditForm({ ...editForm, [e.target.name]: e.target.value });
-  };
+  const iniciarEdicion = (item) => { setEditandoId(item.id); setEditForm(item); };
+  const cancelarEdicion = () => { setEditandoId(null); setEditForm({}); };
+  const handleEditChange = (e) => { setEditForm({ ...editForm, [e.target.name]: e.target.value }); };
 
   const guardarEdicion = async (e) => {
     e.preventDefault();
@@ -185,60 +154,56 @@ export default function BuscadorVademecum() {
   const toggleAuditoria = async () => {
     const nuevoModo = !modoAuditoria;
     setModoAuditoria(nuevoModo);
-    setSeleccionados(new Set()); // Limpiamos selección al cambiar de vista
+    setSeleccionados(new Set()); 
     if (nuevoModo && todosMedicamentos.length === 0) {
       setCargandoAuditoria(true);
       const querySnapshot = await getDocs(collection(db, "vademecum"));
       const datos = [];
-      querySnapshot.forEach((doc) => {
-          if(doc.data().nombre) datos.push({ id: doc.id, ...doc.data() })
-      });
+      querySnapshot.forEach((doc) => { if(doc.data().nombre) datos.push({ id: doc.id, ...doc.data() }) });
       setTodosMedicamentos(datos.sort((a, b) => a.nombre.localeCompare(b.nombre)));
       setCargandoAuditoria(false);
     }
   };
 
-  const handleCargaMasivaYPurga = async () => {
-    if (!window.confirm("⚠️ ¿Ejecutar SINCRONIZACIÓN PRO? Se cargará el Bloque I.")) return;
+  // 🚀 FUNCIÓN GENÉRICA DE SINCRONIZACIÓN (Reemplaza a handleCargaMasivaYPurga)
+  const sincronizarBloque = async (bloqueData, nombreBloque) => {
+    if (!window.confirm(`⚠️ ¿Ejecutar SINCRONIZACIÓN PRO? Se cargará el ${nombreBloque}.`)) return;
     setCargandoAuditoria(true);
 
     try {
       const vademecumRef = collection(db, "vademecum");
       const todosLosDocsSnapshot = await getDocs(vademecumRef);
 
-      for (const item of BLOQUE_I) {
+      for (const item of bloqueData) {
         const nombreLimpioNuevo = normalizarTexto(item.nombre).replace(/\s+/g, '');
         
-        todosLosDocsSnapshot.forEach(async (docSnap) => {
+        // Purga de duplicados existentes
+        for (const docSnap of todosLosDocsSnapshot.docs) {
           const data = docSnap.data();
           if (data.nombre && normalizarTexto(data.nombre).replace(/\s+/g, '') === nombreLimpioNuevo) {
             await deleteDoc(doc(db, "vademecum", docSnap.id));
           }
-        });
+        }
         
+        // Carga del nuevo documento
         const docId = normalizarTexto(item.nombre).replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
         await setDoc(doc(db, "vademecum", docId), item);
       }
-      alert("✅ Bloque I Sincronizado.");
+      alert(`✅ ${nombreBloque} Sincronizado con éxito.`);
       window.location.reload();
     } catch (error) { 
       console.error(error); 
-      alert("❌ Error."); 
+      alert("❌ Error al sincronizar."); 
       setCargandoAuditoria(false);
     }
   };
 
-  // 🚀 RENDER COMPACTO CON CHECKBOX PARA REPORTES (Solo Admin)
   const renderFilaInventario = (item) => {
     const estaSeleccionado = seleccionados.has(item.id);
-    
     return (
       <div key={item.id} className={`border-b border-slate-100 p-4 flex items-center justify-between transition-colors ${estaSeleccionado ? 'bg-emerald-50' : 'bg-white hover:bg-slate-50'}`}>
         <div className="flex items-center gap-4">
-          <button 
-            onClick={() => toggleSeleccion(item.id)}
-            className={`p-1 rounded-md transition-colors ${estaSeleccionado ? 'text-emerald-600' : 'text-slate-300 hover:text-emerald-400'}`}
-          >
+          <button onClick={() => toggleSeleccion(item.id)} className={`p-1 rounded-md transition-colors ${estaSeleccionado ? 'text-emerald-600' : 'text-slate-300 hover:text-emerald-400'}`}>
             {estaSeleccionado ? <CheckSquare size={20} /> : <Square size={20} />}
           </button>
           <div className="flex flex-col">
@@ -307,7 +272,6 @@ export default function BuscadorVademecum() {
                 <button type="submit" className="bg-emerald-500 hover:bg-emerald-600 text-white font-black px-6 py-2 rounded-xl shadow-lg transition-colors">💾 Guardar Cambios</button>
               </div>
             </div>
-
             <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
               <h3 className="text-sm font-black text-slate-400 uppercase border-b pb-2">1. Identificación y Formato</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -325,7 +289,6 @@ export default function BuscadorVademecum() {
                 </div>
               </div>
             </div>
-
             <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
               <h3 className="text-sm font-black text-slate-400 uppercase border-b pb-2">2. Información Clínica</h3>
               <div>
@@ -337,11 +300,10 @@ export default function BuscadorVademecum() {
                 <textarea name="posologia" value={editForm.posologia || ""} onChange={handleEditChange} className="w-full p-3 rounded-xl border-2 border-slate-200 focus:border-emerald-500 outline-none transition-colors" rows="2"></textarea>
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Contraindicaciones (Riesgos)</label>
+                <label className="block text-xs font-bold text-rose-500 mb-1 uppercase">Contraindicaciones (Riesgos)</label>
                 <textarea name="contraindicaciones" value={editForm.contraindicaciones || ""} onChange={handleEditChange} className="w-full p-3 rounded-xl border-2 border-rose-200 focus:border-rose-500 outline-none transition-colors" rows="2"></textarea>
               </div>
             </div>
-
             <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
               <h3 className="text-sm font-black text-slate-400 uppercase border-b pb-2">3. Normativa Legal y Estrategia Comercial</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -349,19 +311,14 @@ export default function BuscadorVademecum() {
                   <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Condición de Venta</label>
                   <select name="condicion_venta" value={editForm.condicion_venta || ""} onChange={handleEditChange} className="w-full p-3 rounded-xl border-2 border-slate-200 focus:border-emerald-500 outline-none transition-colors">
                     <option value="">Seleccione una opción...</option>
-                    {OPCIONES_DESPLEGABLES.condicionVenta.map((opcion) => (
-                      <option key={opcion} value={opcion}>{opcion}</option>
-                    ))}
+                    {OPCIONES_DESPLEGABLES.condicionVenta.map((opcion) => (<option key={opcion} value={opcion}>{opcion}</option>))}
                   </select>
                 </div>
-                
                 <div>
                   <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Lista de Control (D.S. 404/405)</label>
                   <select name="lista_control" value={editForm.lista_control || ""} onChange={handleEditChange} className="w-full p-3 rounded-xl border-2 border-slate-200 focus:border-emerald-500 outline-none transition-colors">
                     <option value="">Seleccione una opción...</option>
-                    {OPCIONES_DESPLEGABLES.listaControl.map((opcion) => (
-                      <option key={opcion} value={opcion}>{opcion}</option>
-                    ))}
+                    {OPCIONES_DESPLEGABLES.listaControl.map((opcion) => (<option key={opcion} value={opcion}>{opcion}</option>))}
                   </select>
                 </div>
               </div>
@@ -374,7 +331,6 @@ export default function BuscadorVademecum() {
                 <textarea name="cross_selling" value={editForm.cross_selling || ""} onChange={handleEditChange} className="w-full p-3 rounded-xl border-2 border-emerald-200 focus:border-emerald-500 outline-none transition-colors bg-emerald-50" rows="2"></textarea>
               </div>
             </div>
-            
             <button type="submit" className="w-full bg-slate-900 hover:bg-slate-800 text-white font-black py-4 rounded-xl shadow-xl text-lg transition-colors">💾 Confirmar y Actualizar Base de Datos</button>
           </form>
         </div>
@@ -404,15 +360,14 @@ export default function BuscadorVademecum() {
             
             {isAdmin && (
               <div className="flex flex-wrap gap-3 justify-center">
-                <button onClick={handleCargaMasivaYPurga} className="bg-slate-900 hover:bg-slate-800 transition-colors text-white px-5 py-3 rounded-full font-black text-xs shadow-md">🚀 Sync Bloque I</button>
-                <button onClick={toggleAuditoria} className="bg-emerald-500 hover:bg-emerald-400 transition-colors text-white px-5 py-3 rounded-full font-black text-xs shadow-md">{modoAuditoria ? "✖ Cerrar Auditoría" : "⚡ Ver Todos"}</button>
+                {/* 🚀 BOTONES DE SINCRONIZACIÓN REFACTORIZADOS */}
+                <button onClick={() => sincronizarBloque(BLOQUE_I, "Bloque I")} className="bg-slate-900 hover:bg-slate-800 transition-colors text-white px-5 py-3 rounded-full font-black text-xs shadow-md">🚀 Sync Bloque I</button>
+                <button onClick={() => sincronizarBloque(BLOQUE_II, "Bloque II")} className="bg-emerald-700 hover:bg-emerald-600 transition-colors text-white px-5 py-3 rounded-full font-black text-xs shadow-md">🚀 Sync Bloque II</button>
                 
-                {/* 🚀 BOTÓN FILTRO INVENTARIO */}
+                <button onClick={toggleAuditoria} className="bg-blue-500 hover:bg-blue-400 transition-colors text-white px-5 py-3 rounded-full font-black text-xs shadow-md">{modoAuditoria ? "✖ Cerrar Auditoría" : "⚡ Ver Todos"}</button>
+                
                 <button 
-                    onClick={() => {
-                      setModoInventario(!modoInventario);
-                      setSeleccionados(new Set()); // Limpiamos selección al cambiar de vista
-                    }} 
+                    onClick={() => { setModoInventario(!modoInventario); setSeleccionados(new Set()); }} 
                     className={`${modoInventario ? 'bg-amber-500' : 'bg-slate-400'} hover:opacity-80 transition-all text-white px-5 py-3 rounded-full font-black text-xs shadow-md flex items-center gap-2`}
                 >
                     {modoInventario ? <EyeOff size={14}/> : <Eye size={14}/>}
@@ -426,47 +381,30 @@ export default function BuscadorVademecum() {
             <form onSubmit={handleBuscar} className="flex flex-col md:flex-row gap-3">
               <div className="relative flex-1">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
-                <input 
-                    type="text" 
-                    value={busqueda} 
-                    onChange={(e) => {setBusqueda(e.target.value); setBuscado(false);}} 
-                    placeholder="Buscar fármaco o principio activo..." 
-                    className="w-full border-2 rounded-2xl p-4 pl-12 text-base md:text-lg outline-none focus:border-emerald-500 transition-colors shadow-sm" 
-                />
+                <input type="text" value={busqueda} onChange={(e) => {setBusqueda(e.target.value); setBuscado(false);}} placeholder="Buscar fármaco o principio activo..." className="w-full border-2 rounded-2xl p-4 pl-12 text-base md:text-lg outline-none focus:border-emerald-500 transition-colors shadow-sm" />
               </div>
               <button type="submit" className="w-full md:w-auto bg-slate-900 text-white font-black py-4 px-10 rounded-2xl hover:bg-emerald-600 transition-all shadow-md">Buscar</button>
             </form>
           )}
         </div>
 
-        {/* 🚀 CONTROLES DE EXPORTACIÓN (Solo visibles en modo inventario si hay datos) */}
         {modoInventario && totalMostrados > 0 && (
           <div className="mb-4 flex flex-col sm:flex-row justify-between items-center bg-slate-50 p-4 rounded-2xl border border-slate-200">
             <div className="flex items-center gap-3 mb-3 sm:mb-0">
-              <button 
-                onClick={seleccionarTodos}
-                className="flex items-center gap-2 text-slate-600 hover:text-emerald-600 font-bold text-sm transition-colors"
-              >
+              <button onClick={seleccionarTodos} className="flex items-center gap-2 text-slate-600 hover:text-emerald-600 font-bold text-sm transition-colors">
                 {todosSeleccionados ? <CheckSquare size={20} className="text-emerald-500" /> : <Square size={20} />}
                 {todosSeleccionados ? "Deseleccionar Todos" : "Seleccionar Todos"}
               </button>
-              <span className="text-xs text-slate-400 font-black px-3 py-1 bg-white rounded-full border border-slate-200">
-                {seleccionados.size} / {totalMostrados}
-              </span>
+              <span className="text-xs text-slate-400 font-black px-3 py-1 bg-white rounded-full border border-slate-200">{seleccionados.size} / {totalMostrados}</span>
             </div>
-            
             {seleccionados.size > 0 && (
-              <button 
-                onClick={descargarExcel}
-                className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-black px-6 py-2 rounded-xl shadow-md transition-all animate-in fade-in zoom-in"
-              >
+              <button onClick={descargarExcel} className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-black px-6 py-2 rounded-xl shadow-md transition-all">
                 <Download size={18} /> Descargar Selección (Excel)
               </button>
             )}
           </div>
         )}
 
-        {/* CONTENEDOR DE RESULTADOS DINÁMICO */}
         <div className={modoInventario ? "bg-white border border-slate-200 rounded-[2rem] overflow-hidden shadow-sm divide-y divide-slate-100" : ""}>
             {totalMostrados > 0 ? (
                 dataAMostrar.map(item => modoInventario ? renderFilaInventario(item) : renderTarjetaMedicamento(item))
@@ -477,7 +415,6 @@ export default function BuscadorVademecum() {
             )}
         </div>
 
-        {/* BLOQUE DE AUTORIDAD TÉCNICA (Se oculta en modo inventario para limpieza) */}
         {!modoInventario && (
             <section className="mt-20 border-t border-slate-200 pt-16">
                 <div className="grid md:grid-cols-2 gap-12">
@@ -490,7 +427,6 @@ export default function BuscadorVademecum() {
                             En <strong>AuxiliarPro</strong>, nos basamos estrictamente en la normativa técnica del <strong>MINSAL</strong> y las resoluciones del <strong>ISP de Chile</strong>. Nuestro buscador integra datos críticos para el auxiliar de farmacia moderno: desde el manejo de <strong>Recetas Cheque y Retenidas</strong> según el <strong>DS 404 y 405</strong>, hasta protocolos de almacenamiento bajo el <strong>DS 466</strong>.
                         </p>
                     </div>
-
                     <div className="space-y-6">
                         <div className="flex items-center gap-3 text-slate-400">
                             <BookOpen size={32} />
@@ -503,10 +439,8 @@ export default function BuscadorVademecum() {
                 </div>
             </section>
         )}
-
         <div className="mt-8"><BannerVenta /></div>
       </div>
-
       <footer className="mt-12 text-center text-slate-300 text-[10px] font-mono uppercase tracking-[0.3em] pb-12">
         AuxiliarPro Vademécum v5.0 | macz.dev
       </footer>

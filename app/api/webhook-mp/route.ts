@@ -1,6 +1,8 @@
+// app/api/webhook-mp/route.js
 import { NextResponse } from "next/server";
 import admin from "firebase-admin";
 
+// Inicialización de Firebase Admin (idempotente)
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert({
@@ -12,6 +14,67 @@ if (!admin.apps.length) {
 }
 
 const db = admin.firestore();
+
+// 🔥 CONFIGURACIÓN DE PLANES (para validación de montos)
+const PLANES_PRECIOS = {
+  sprint: { min: 2500, max: 3499, dias: 15, nombre: "Sprint Final" },
+  mensual: { min: 3500, max: 18999, dias: 30, nombre: "Mensual PRO" },
+  anual: { min: 19000, max: Infinity, dias: 365, nombre: "Anual PRO" }
+};
+
+/**
+ * Determina los días de suscripción según el monto pagado
+ */
+function determinarDiasPorMonto(monto) {
+  if (monto >= PLANES_PRECIOS.anual.min) {
+    return { dias: PLANES_PRECIOS.anual.dias, plan: "anual" };
+  } else if (monto >= PLANES_PRECIOS.mensual.min) {
+    return { dias: PLANES_PRECIOS.mensual.dias, plan: "mensual" };
+  } else if (monto >= PLANES_PRECIOS.sprint.min) {
+    return { dias: PLANES_PRECIOS.sprint.dias, plan: "sprint" };
+  }
+  return { dias: 30, plan: "mensual (por defecto)" }; // Fallback
+}
+
+/**
+ * Guarda pago huérfano en colección especial para revisión manual
+ */
+async function guardarPagoHuerfano(payment, motivo) {
+  try {
+    await db.collection("pagos_huerfanos").add({
+      paymentId: payment.id,
+      status: payment.status,
+      amount: payment.transaction_amount,
+      payerEmail: payment.payer?.email || "N/A",
+      externalReference: payment.external_reference || "N/A",
+      metadata: payment.metadata || {},
+      motivo: motivo,
+      timestamp: admin.firestore.FieldValue.serverTimestamp(),
+      procesado: false,
+      notas: "Requiere revisión manual"
+    });
+    console.log("💾 Pago huérfano guardado en colección 'pagos_huerfanos'");
+  } catch (error) {
+    console.error("❌ Error al guardar pago huérfano:", error);
+  }
+}
+
+/**
+ * Verifica si el pago ya fue procesado (evita duplicados)
+ */
+async function verificarPagoDuplicado(paymentId) {
+  try {
+    const snapshot = await db.collection("users")
+      .where("paymentDetails.id", "==", paymentId)
+      .limit(1)
+      .get();
+    
+    return !snapshot.empty;
+  } catch (error) {
+    console.error("⚠️ Error al verificar duplicado:", error);
+    return false; // En caso de error, continuar con el procesamiento
+  }
+}
 
 export async function POST(request) {
   try {
@@ -25,6 +88,7 @@ export async function POST(request) {
 
     console.log("📍 Query Params:", { id, type });
 
+    // Validación inicial
     if (!id || type !== "payment") {
       console.log("⚠️ No es un pago o falta ID");
       return NextResponse.json({ received: true }, { status: 200 });
@@ -44,14 +108,17 @@ export async function POST(request) {
 
     const payment = await response.json();
     console.log("💰 Payment data:", {
+      id: payment.id,
       status: payment.status,
       external_reference: payment.external_reference,
       amount: payment.transaction_amount,
+      payer_email: payment.payer?.email,
       description: payment.description
     });
 
     const uid = payment.external_reference;
     const status = payment.status;
+    const monto = payment.transaction_amount || 0;
 
     // Solo procesar si está aprobado
     if (status !== "approved") {
@@ -59,29 +126,77 @@ export async function POST(request) {
       return NextResponse.json({ received: true }, { status: 200 });
     }
 
-    // Determinar días según el monto pagado
-    const monto = payment.transaction_amount || 0;
-    let diasASumar = 30; // Por defecto mensual
-
-    if (monto >= 19000) {
-      diasASumar = 365; // Anual
-    } else if (monto < 3500) {
-      diasASumar = 15; // Sprint
+    // 🔥 VALIDACIÓN 1: Verificar si el pago ya fue procesado
+    const esDuplicado = await verificarPagoDuplicado(payment.id);
+    if (esDuplicado) {
+      console.log(`⚠️ Pago ${payment.id} ya fue procesado anteriormente. Ignorando duplicado.`);
+      return NextResponse.json({ 
+        received: true, 
+        message: "Payment already processed" 
+      }, { status: 200 });
     }
-    // Si está entre 3500 y 19000, es mensual (30 días)
 
-    console.log(`✅ Activando usuario ${uid} por ${diasASumar} días...`);
+    // 🔥 VALIDACIÓN 2: Verificar que exista external_reference (UID)
+    if (!uid || uid.trim() === "") {
+      console.error("❌ CRÍTICO: Pago sin external_reference (UID)");
+      await guardarPagoHuerfano(payment, "Falta external_reference (UID)");
+      return NextResponse.json(
+        { error: "Missing external_reference" }, 
+        { status: 400 }
+      );
+    }
+
+    // 🔥 VALIDACIÓN 3: Validar formato del UID
+    if (uid.length < 10 || uid.length > 128) {
+      console.error(`❌ UID con formato inválido: ${uid}`);
+      await guardarPagoHuerfano(payment, `UID con formato inválido: ${uid}`);
+      return NextResponse.json(
+        { error: "Invalid UID format" }, 
+        { status: 400 }
+      );
+    }
+
+    // Determinar días según el monto pagado
+    const { dias: diasASumar, plan: planDetectado } = determinarDiasPorMonto(monto);
+    console.log(`📊 Plan detectado: ${planDetectado} (${diasASumar} días) por monto $${monto}`);
 
     // Calcular fecha de expiración
     const proUntil = new Date();
     proUntil.setDate(proUntil.getDate() + diasASumar);
 
-    // Verificar si el usuario existe en Firestore
+    // 🔥 VALIDACIÓN 4: Verificar si el usuario existe en Firestore
     const userDoc = await db.collection("users").doc(uid).get();
 
     if (!userDoc.exists) {
-      console.error(`❌ El usuario ${uid} no existe en Firestore`);
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      console.error(`❌ CRÍTICO: El usuario ${uid} no existe en Firestore`);
+      await guardarPagoHuerfano(payment, `Usuario no existe en Firestore: ${uid}`);
+      return NextResponse.json(
+        { error: "User not found in Firestore" }, 
+        { status: 404 }
+      );
+    }
+
+    const userData = userDoc.data();
+    console.log(`👤 Usuario encontrado:`, {
+      uid: uid,
+      email: userData.email,
+      isPro: userData.isPro,
+      proUntil: userData.proUntil?.toDate()?.toISOString() || "N/A"
+    });
+
+    // 🔥 VALIDACIÓN 5: Verificar si el usuario ya tiene suscripción activa
+    if (userData.isPro && userData.proUntil) {
+      const fechaActual = new Date();
+      const fechaProUntil = userData.proUntil.toDate();
+      
+      if (fechaProUntil > fechaActual) {
+        console.log(`ℹ️ Usuario ya tiene suscripción activa hasta ${fechaProUntil.toISOString()}`);
+        console.log(`🔄 Sumando ${diasASumar} días adicionales a la suscripción existente`);
+        
+        // Sumar días a la fecha actual de expiración (no desde hoy)
+        proUntil.setTime(fechaProUntil.getTime());
+        proUntil.setDate(proUntil.getDate() + diasASumar);
+      }
     }
 
     // Actualizar usuario en Firestore
@@ -90,24 +205,53 @@ export async function POST(request) {
       proUntil: admin.firestore.Timestamp.fromDate(proUntil),
       lastPayment: admin.firestore.FieldValue.serverTimestamp(),
       activatedBy: "MercadoPago-Automático",
+      planActual: planDetectado,
       paymentDetails: {
-        id: id,
+        id: payment.id,
         amount: monto,
         dias: diasASumar,
+        plan: planDetectado,
+        payerEmail: payment.payer?.email || "N/A",
+        status: payment.status,
         timestamp: admin.firestore.FieldValue.serverTimestamp()
-      }
+      },
+      // Historial de pagos (array)
+      historialPagos: admin.firestore.FieldValue.arrayUnion({
+        id: payment.id,
+        amount: monto,
+        dias: diasASumar,
+        plan: planDetectado,
+        timestamp: admin.firestore.FieldValue.serverTimestamp()
+      })
     });
 
     console.log(`🎉 Usuario ${uid} activado exitosamente hasta ${proUntil.toISOString()}`);
+    console.log(`📧 Email de pago: ${payment.payer?.email || "N/A"}`);
+    console.log(`💳 Monto: $${monto} CLP`);
 
     return NextResponse.json({
       success: true,
-      message: `Usuario ${uid} activado por ${diasASumar} días`
+      message: `Usuario ${uid} activado por ${diasASumar} días`,
+      plan: planDetectado,
+      proUntil: proUntil.toISOString()
     }, { status: 200 });
 
   } catch (error) {
     console.error("❌ ERROR CRÍTICO EN WEBHOOK:", error);
     console.error("Stack trace:", error.stack);
+    
+    // Intentar guardar el error en colección de errores para debugging
+    try {
+      await db.collection("webhook_errors").add({
+        error: error.message,
+        stack: error.stack,
+        timestamp: admin.firestore.FieldValue.serverTimestamp(),
+        url: request.url
+      });
+    } catch (logError) {
+      console.error("No se pudo guardar el error en Firestore:", logError);
+    }
+    
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
@@ -115,5 +259,9 @@ export async function POST(request) {
 // Manejar GET por si Mercado Pago hace verificaciones
 export async function GET(request) {
   console.log("🔍 GET request al webhook (posible verificación)");
-  return NextResponse.json({ status: "ok", message: "Webhook activo" }, { status: 200 });
+  return NextResponse.json({ 
+    status: "ok", 
+    message: "Webhook activo",
+    timestamp: new Date().toISOString()
+  }, { status: 200 });
 }
