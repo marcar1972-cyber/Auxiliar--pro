@@ -30,24 +30,24 @@ export async function GET(request) {
 
   const TOKEN = "APP_USR-6296117002447975-040718-d1a2cd392dac4324a4875784375a14d9-3319774413";
 
-  // Configuración de planes (precios según tus links de Mercado Pago)
+  // 🔥 CONFIGURACIÓN DE PLANES ACTUALIZADA (Precios Oficiales 2026)
   const planesConfig = {
     sprint: {
-      titulo: "Pase Sprint Final - AuxiliarPro (15 Días)",
-      descripcion: "Pase Sprint Final 15 días",
-      precio: 2990,
+      titulo: "Pase 15 Días - AuxiliarPro",
+      descripcion: "Acceso completo al Campus Virtual y Simulador SEREMI por 15 días",
+      precio: 3990,
       dias: 15
     },
     mensual: {
       titulo: "Suscripción Mensual PRO - AuxiliarPro",
-      descripcion: "Acceso completo por 30 días",
-      precio: 3990,
+      descripcion: "Acceso completo por 30 días al Campus Virtual, Simulador y Vademécum",
+      precio: 5990,
       dias: 30
     },
     anual: {
       titulo: "Suscripción Anual PRO - AuxiliarPro",
-      descripcion: "Acceso completo por 365 días",
-      precio: 19990,
+      descripcion: "Acceso completo por 365 días a todo el ecosistema AuxiliarPro",
+      precio: 49990,
       dias: 365
     }
   };

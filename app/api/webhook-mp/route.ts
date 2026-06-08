@@ -15,11 +15,11 @@ if (!admin.apps.length) {
 
 const db = admin.firestore();
 
-// 🔥 CONFIGURACIÓN DE PLANES (para validación de montos)
+// 🔥 CONFIGURACIÓN DE PLANES ACTUALIZADA (Precios Oficiales 2026)
 const PLANES_PRECIOS = {
-  sprint: { min: 2500, max: 3499, dias: 15, nombre: "Sprint Final" },
-  mensual: { min: 3500, max: 18999, dias: 30, nombre: "Mensual PRO" },
-  anual: { min: 19000, max: Infinity, dias: 365, nombre: "Anual PRO" }
+  sprint: { min: 3500, max: 4999, dias: 15, nombre: "Sprint 15 Días" },
+  mensual: { min: 5000, max: 19999, dias: 30, nombre: "Mensual PRO" },
+  anual: { min: 20000, max: Infinity, dias: 365, nombre: "Anual PRO" }
 };
 
 /**
@@ -34,6 +34,29 @@ function determinarDiasPorMonto(monto) {
     return { dias: PLANES_PRECIOS.sprint.dias, plan: "sprint" };
   }
   return { dias: 30, plan: "mensual (por defecto)" }; // Fallback
+}
+
+/**
+ * 🔥 NUEVA FUNCIÓN: Busca usuario por email en Firestore (fallback cuando no hay UID)
+ */
+async function buscarUsuarioPorEmail(email) {
+  try {
+    if (!email) return null;
+    
+    const snapshot = await db.collection("users")
+      .where("email", "==", email.toLowerCase().trim())
+      .limit(1)
+      .get();
+    
+    if (!snapshot.empty) {
+      const doc = snapshot.docs[0];
+      return { uid: doc.id, data: doc.data() };
+    }
+    return null;
+  } catch (error) {
+    console.error("⚠️ Error al buscar usuario por email:", error);
+    return null;
+  }
 }
 
 /**
@@ -72,7 +95,7 @@ async function verificarPagoDuplicado(paymentId) {
     return !snapshot.empty;
   } catch (error) {
     console.error("⚠️ Error al verificar duplicado:", error);
-    return false; // En caso de error, continuar con el procesamiento
+    return false;
   }
 }
 
@@ -116,9 +139,10 @@ export async function POST(request) {
       description: payment.description
     });
 
-    const uid = payment.external_reference;
+    let uid = payment.external_reference;
     const status = payment.status;
     const monto = payment.transaction_amount || 0;
+    const payerEmail = payment.payer?.email;
 
     // Solo procesar si está aprobado
     if (status !== "approved") {
@@ -136,18 +160,39 @@ export async function POST(request) {
       }, { status: 200 });
     }
 
-    // 🔥 VALIDACIÓN 2: Verificar que exista external_reference (UID)
+    // 🔥 VALIDACIÓN 2: Si no hay external_reference (UID), buscar por email del payer
+    let metodoBusqueda = "external_reference";
+    
     if (!uid || uid.trim() === "") {
-      console.error("❌ CRÍTICO: Pago sin external_reference (UID)");
-      await guardarPagoHuerfano(payment, "Falta external_reference (UID)");
-      return NextResponse.json(
-        { error: "Missing external_reference" }, 
-        { status: 400 }
-      );
+      console.log("⚠️ Pago sin external_reference. Buscando usuario por email del payer...");
+      metodoBusqueda = "email";
+      
+      if (payerEmail) {
+        const usuarioPorEmail = await buscarUsuarioPorEmail(payerEmail);
+        
+        if (usuarioPorEmail) {
+          uid = usuarioPorEmail.uid;
+          console.log(`✅ Usuario encontrado por email: ${uid} (${payerEmail})`);
+        } else {
+          console.error(`❌ No se encontró usuario con email: ${payerEmail}`);
+          await guardarPagoHuerfano(payment, `No se encontró usuario con email: ${payerEmail}`);
+          return NextResponse.json(
+            { error: "User not found by email" }, 
+            { status: 404 }
+          );
+        }
+      } else {
+        console.error("❌ CRÍTICO: Pago sin external_reference Y sin email del payer");
+        await guardarPagoHuerfano(payment, "Falta external_reference (UID) y email del payer");
+        return NextResponse.json(
+          { error: "Missing external_reference and payer email" }, 
+          { status: 400 }
+        );
+      }
     }
 
-    // 🔥 VALIDACIÓN 3: Validar formato del UID
-    if (uid.length < 10 || uid.length > 128) {
+    // 🔥 VALIDACIÓN 3: Validar formato del UID (solo si vino por external_reference)
+    if (metodoBusqueda === "external_reference" && (uid.length < 10 || uid.length > 128)) {
       console.error(`❌ UID con formato inválido: ${uid}`);
       await guardarPagoHuerfano(payment, `UID con formato inválido: ${uid}`);
       return NextResponse.json(
@@ -204,15 +249,16 @@ export async function POST(request) {
       isPro: true,
       proUntil: admin.firestore.Timestamp.fromDate(proUntil),
       lastPayment: admin.firestore.FieldValue.serverTimestamp(),
-      activatedBy: "MercadoPago-Automático",
+      activatedBy: `MercadoPago-Automático-via-${metodoBusqueda}`,
       planActual: planDetectado,
       paymentDetails: {
         id: payment.id,
         amount: monto,
         dias: diasASumar,
         plan: planDetectado,
-        payerEmail: payment.payer?.email || "N/A",
+        payerEmail: payerEmail || "N/A",
         status: payment.status,
+        metodoBusqueda: metodoBusqueda,
         timestamp: admin.firestore.FieldValue.serverTimestamp()
       },
       // Historial de pagos (array)
@@ -221,19 +267,22 @@ export async function POST(request) {
         amount: monto,
         dias: diasASumar,
         plan: planDetectado,
+        metodoBusqueda: metodoBusqueda,
         timestamp: admin.firestore.FieldValue.serverTimestamp()
       })
     });
 
     console.log(`🎉 Usuario ${uid} activado exitosamente hasta ${proUntil.toISOString()}`);
-    console.log(`📧 Email de pago: ${payment.payer?.email || "N/A"}`);
+    console.log(`📧 Email de pago: ${payerEmail || "N/A"}`);
     console.log(`💳 Monto: $${monto} CLP`);
+    console.log(`🔍 Método de búsqueda: ${metodoBusqueda}`);
 
     return NextResponse.json({
       success: true,
       message: `Usuario ${uid} activado por ${diasASumar} días`,
       plan: planDetectado,
-      proUntil: proUntil.toISOString()
+      proUntil: proUntil.toISOString(),
+      metodoBusqueda: metodoBusqueda
     }, { status: 200 });
 
   } catch (error) {

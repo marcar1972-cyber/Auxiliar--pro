@@ -13,10 +13,10 @@ export default function PlanesSuscripcion() {
   const [proUntil, setProUntil] = useState(null);
   const [loadingAuth, setLoadingAuth] = useState(true);
 
-  // 🔥 Enlaces apuntando a tu puente dinámico para amarrar el UID
-  const BASE_LINK_MENSUAL = "/api/checkout-mp?plan=mensual"; 
-  const BASE_LINK_ANUAL = "/api/checkout-mp?plan=anual";
-  const BASE_LINK_SPRINT = "/api/checkout-mp?plan=sprint";
+  // 🔗 Enlaces directos de MercadoPago
+  const LINK_15_DIAS = "https://mpago.la/2en6De7";
+  const LINK_MENSUAL = "https://mpago.la/2vRdcGW";
+  const LINK_ANUAL = "https://mpago.la/1Afrgc3";
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
@@ -58,12 +58,6 @@ export default function PlanesSuscripcion() {
     return fecha.toLocaleDateString("es-CL", { day: 'numeric', month: 'long', year: 'numeric' });
   };
 
-  const getCheckoutLink = (baseLink) => {
-    if (!user) return "/login";
-    const conector = baseLink.includes('?') ? '&' : '?';
-    return `${baseLink}${conector}email=${encodeURIComponent(user.email)}&uid=${user.uid}`;
-  };
-
   const isActive = hasActiveSubscription();
 
   return (
@@ -78,9 +72,9 @@ export default function PlanesSuscripcion() {
               Eres miembro PRO hasta el {proUntil ? formatearFecha(proUntil) : "Indefinido"}
             </div>
           ) : (
-            <div className="inline-flex items-center justify-center bg-gradient-to-r from-orange-500 to-red-600 text-white px-8 py-3 rounded-full text-sm font-black uppercase tracking-[0.2em] mb-6 shadow-lg shadow-orange-500/30">
-              <Flame size={18} className="mr-2 fill-white" />
-              CYBERDAY: PRECIOS EXCLUSIVOS HASTA EL 07 JUNIO
+            <div className="inline-flex items-center justify-center bg-[#003366]/10 text-[#003366] px-8 py-3 rounded-full text-sm font-black uppercase tracking-[0.2em] mb-6 shadow-sm border border-[#003366]/20">
+              <Zap size={18} className="mr-2 text-[#28a745]" />
+              PLANES DE SUSCRIPCIÓN
             </div>
           )}
           
@@ -104,7 +98,6 @@ export default function PlanesSuscripcion() {
             </div>
             
             <div className="mb-8">
-              <div className="text-transparent text-sm line-through font-black select-none">&nbsp;</div>
               <div className="flex items-baseline gap-1">
                 <span className="text-4xl font-black text-slate-700">Gratis</span>
               </div>
@@ -144,29 +137,25 @@ export default function PlanesSuscripcion() {
           </div>
 
           {/* PLAN SPRINT 15 DÍAS */}
-          <div className="bg-white rounded-[2rem] p-6 md:p-8 border-2 border-orange-500 flex flex-col relative transition-all hover:border-orange-600 shadow-lg overflow-hidden">
-            <div className="absolute top-0 left-0 w-full bg-gradient-to-r from-orange-500 to-red-500 text-white text-center py-1.5 text-[9px] font-black uppercase tracking-widest">
-              OFERTA CYBERDAY
-            </div>
-            <div className="mb-6 mt-3">
-              <span className="bg-orange-50 text-orange-600 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest inline-flex items-center gap-1">
-                <Zap size={12} className="fill-orange-500" /> Urgencia
+          <div className="bg-white rounded-[2rem] p-6 md:p-8 border-2 border-[#003366] flex flex-col relative transition-all hover:border-[#002244] shadow-lg overflow-hidden">
+            <div className="mb-6">
+              <span className="bg-[#003366]/10 text-[#003366] px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest inline-flex items-center gap-1">
+                <Zap size={12} className="text-[#28a745]" /> Intensivo
               </span>
               <h3 className="text-xl font-black text-slate-900 mt-4 mb-2">Pase 15 Días</h3>
               <p className="text-slate-500 text-xs leading-relaxed font-medium">Estudio intensivo final.</p>
             </div>
             
             <div className="mb-8">
-              <div className="text-slate-400 text-sm line-through font-black mb-1">$3.990</div>
               <div className="flex items-baseline gap-1">
-                <span className="text-4xl font-black text-slate-900">$2.990</span>
+                <span className="text-4xl font-black text-slate-900">$3.990</span>
               </div>
-              <p className="text-orange-500 text-[10px] font-black mt-2 uppercase tracking-widest">Pago Único</p>
+              <p className="text-slate-400 text-[10px] font-black mt-2 uppercase tracking-widest">Pago Único</p>
             </div>
 
             <ul className="space-y-4 mb-10 flex-1 border-t border-slate-100 pt-6">
               <li className="flex items-start gap-3 text-xs font-bold text-slate-700">
-                <Flame size={16} className="text-orange-500 fill-orange-500" />
+                <Flame size={16} className="text-[#28a745]" />
                 <span>Desafío de Racha Diaria</span>
               </li>
               <li className="flex items-start gap-3 text-xs font-bold text-slate-700">
@@ -194,8 +183,10 @@ export default function PlanesSuscripcion() {
                 </button>
               ) : (
                 <a 
-                  href={getCheckoutLink(BASE_LINK_SPRINT)}
-                  className="w-full block bg-orange-500 text-white hover:bg-orange-600 font-black py-4 rounded-xl transition-all text-center text-sm shadow-lg"
+                  href={LINK_15_DIAS}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full block bg-[#003366] text-white hover:bg-[#002244] font-black py-4 rounded-xl transition-all text-center text-sm shadow-lg"
                 >
                   Obtener Pase
                 </a>
@@ -204,19 +195,21 @@ export default function PlanesSuscripcion() {
           </div>
 
           {/* PLAN MENSUAL */}
-          <div className="bg-white rounded-[2rem] p-6 md:p-8 border border-slate-200 flex flex-col relative transition-all hover:border-slate-300 shadow-xl">
-            <div className="mb-6">
-              <span className="bg-red-50 text-red-600 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border border-red-100">
-                PRECIO CYBER
+          <div className="bg-white rounded-[2rem] p-6 md:p-8 border-2 border-[#28a745] flex flex-col relative transition-all hover:border-[#218838] shadow-xl">
+            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-[#28a745] text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-lg whitespace-nowrap border-2 border-white">
+              MÁS POPULAR
+            </div>
+            <div className="mb-6 mt-2">
+              <span className="bg-[#28a745]/10 text-[#28a745] px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest inline-flex items-center gap-1">
+                <CheckCircle size={12} /> Recomendado
               </span>
               <h3 className="text-xl font-black text-slate-900 mt-4 mb-2">Mensual PRO</h3>
-              <p className="text-slate-500 text-xs leading-relaxed font-medium">Entrenamiento técnico.</p>
+              <p className="text-slate-500 text-xs leading-relaxed font-medium">Entrenamiento técnico completo.</p>
             </div>
             
             <div className="mb-8">
-              <div className="text-slate-400 text-sm line-through font-black mb-1">$5.990</div>
               <div className="flex items-baseline gap-1">
-                <span className="text-4xl font-black text-slate-900">$3.990</span>
+                <span className="text-4xl font-black text-slate-900">$5.990</span>
                 <span className="text-slate-500 font-bold text-xs">/mes</span>
               </div>
               <p className="text-slate-400 text-[10px] font-black mt-2 uppercase tracking-widest">Pago Único</p>
@@ -224,7 +217,7 @@ export default function PlanesSuscripcion() {
 
             <ul className="space-y-4 mb-10 flex-1 border-t border-slate-100 pt-6">
               <li className="flex items-start gap-3 text-xs font-bold text-slate-700">
-                <Flame size={16} className="text-orange-500 fill-orange-500" />
+                <Flame size={16} className="text-[#28a745]" />
                 <span>Desafío de Racha Diaria</span>
               </li>
               <li className="flex items-start gap-3 text-xs font-bold text-slate-700">
@@ -252,8 +245,10 @@ export default function PlanesSuscripcion() {
                 </button>
               ) : (
                 <a 
-                  href={getCheckoutLink(BASE_LINK_MENSUAL)}
-                  className="w-full block bg-[#003366] text-white hover:bg-[#002244] font-black py-4 rounded-xl transition-all text-center text-sm shadow-lg"
+                  href={LINK_MENSUAL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full block bg-[#28a745] text-white hover:bg-[#218838] font-black py-4 rounded-xl transition-all text-center text-sm shadow-lg shadow-[#28a745]/30"
                 >
                   Plan Mensual
                 </a>
@@ -262,27 +257,26 @@ export default function PlanesSuscripcion() {
           </div>
 
           {/* PLAN ANUAL */}
-          <div className="bg-[#003366] rounded-[2rem] p-6 md:p-8 border-4 border-[#28a745] flex flex-col relative shadow-[0_20px_50px_rgba(40,167,69,0.3)] mt-6 xl:mt-0 pt-12">
-            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-red-600 to-orange-500 text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-2xl whitespace-nowrap border-2 border-[#003366] flex items-center gap-1">
-              <Flame size={12} className="fill-white" /> SUPER PRECIO CYBER
+          <div className="bg-[#003366] rounded-[2rem] p-6 md:p-8 border-4 border-[#28a745] flex flex-col relative shadow-[0_20px_50px_rgba(40,167,69,0.3)] mt-6 xl:mt-0">
+            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-[#28a745] to-emerald-600 text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-2xl whitespace-nowrap border-2 border-[#003366] flex items-center gap-1">
+              <Flame size={12} className="fill-white" /> MEJOR VALOR
             </div>
 
             <div className="mb-6 mt-2">
               <h3 className="text-2xl font-black text-white mb-2 tracking-tight">Anual PRO</h3>
-              <p className="text-slate-400 text-xs font-medium leading-relaxed">Arsenal completo.</p>
+              <p className="text-slate-400 text-xs font-medium leading-relaxed">Arsenal completo para todo el año.</p>
             </div>
             
             <div className="mb-8">
-              <div className="text-slate-400 text-sm line-through font-black mb-1 opacity-70">$49.990</div>
               <div className="flex items-baseline gap-1">
-                <span className="text-5xl font-black text-white">$19.990</span>
+                <span className="text-5xl font-black text-white">$49.990</span>
               </div>
               <p className="text-[#28a745] text-[10px] font-black mt-2 uppercase tracking-widest">Acceso Anual Total</p>
             </div>
 
             <ul className="space-y-4 mb-10 flex-1 border-t border-slate-800 pt-6">
               <li className="flex items-start gap-3 text-xs font-bold text-slate-300">
-                <Flame size={16} className="text-orange-500 fill-orange-500" />
+                <Flame size={16} className="text-[#28a745]" />
                 <span className="text-white">Desafío de Racha Diaria</span>
               </li>
               <li className="flex items-start gap-3 text-xs font-bold text-slate-300">
@@ -310,7 +304,9 @@ export default function PlanesSuscripcion() {
                 </button>
               ) : (
                 <a 
-                  href={getCheckoutLink(BASE_LINK_ANUAL)}
+                  href={LINK_ANUAL}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-full block bg-[#28a745] text-white hover:bg-[#218838] font-black py-5 rounded-xl transition-all text-center text-sm shadow-[0_0_30px_rgba(40,167,69,0.4)] transform hover:scale-105"
                 >
                   Obtener Anual
