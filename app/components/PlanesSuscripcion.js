@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { auth, db } from "../firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, onSnapshot, updateDoc } from "firebase/firestore"; // 🚀 CTO FIX: Cambiado getDoc por onSnapshot
 import { Loader2, CheckCircle, Flame, Zap } from "lucide-react";
 import Link from "next/link";
 
@@ -19,32 +19,62 @@ export default function PlanesSuscripcion() {
   const LINK_ANUAL = "https://mpago.la/1Afrgc3";
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      try {
-        if (currentUser) {
-          setUser(currentUser);
-          const docRef = doc(db, "users", currentUser.uid);
-          const docSnap = await getDoc(docRef);
-          
-          if (docSnap.exists()) {
-            const data = docSnap.data();
-            setIsPro(data.isPro || false);
-            if (data.proUntil) {
-              setProUntil(data.proUntil.toDate());
+    // 1. Escuchamos de forma reactiva el estado de autenticación del usuario
+    const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        const docRef = doc(db, "users", currentUser.uid);
+
+        // 2. 🚀 CTO BLINDAJE: Conexión asíncrona en tiempo real (onSnapshot)
+        // Reacciona de forma inmediata a actualizaciones del Webhook o cambios manuales en la consola de Firebase
+        const unsubscribeSnapshot = onSnapshot(docRef, async (docSnap) => {
+          try {
+            if (docSnap.exists()) {
+              const data = docSnap.data();
+              let currentIsPro = data.isPro || false;
+              let currentProUntil = null;
+
+              // 3. 🛡️ CONTROL DE TIPOS PARA FORMATEO DE FECHAS (Evita congelamiento de UI)
+              if (data.proUntil) {
+                if (typeof data.proUntil.toDate === "function") {
+                  // Caso óptimo: Viene como objeto Timestamp nativo de Firestore
+                  currentProUntil = data.proUntil.toDate();
+                } else if (typeof data.proUntil === "string" || typeof data.proUntil === "number") {
+                  // Caso de rescate: Forzado manual como String/Texto desde la consola externa
+                  currentProUntil = new Date(data.proUntil);
+                }
+              }
+
+              // 🚀 CTO BLINDAJE: Expiración Pasiva Automática integrada en el flujo reactivo
+              if (currentIsPro && currentProUntil && new Date() > currentProUntil) {
+                await updateDoc(docRef, { isPro: false });
+                currentIsPro = false; // Corregimos el estado local de forma inmediata para mutar la interfaz
+              }
+
+              setIsPro(currentIsPro);
+              setProUntil(currentProUntil);
             }
+          } catch (error) {
+            console.error("Error procesando cambios del documento de usuario:", error);
+          } finally {
+            setLoadingAuth(false);
           }
-        } else {
-          setUser(null);
-          setIsPro(false);
-          setProUntil(null);
-        }
-      } catch (error) {
-        console.error("Error verificando estado PRO:", error);
-      } finally {
+        }, (error) => {
+          console.error("Error en canal onSnapshot de Firestore:", error);
+          setLoadingAuth(false);
+        });
+
+        // Retornamos la limpieza del snapshot si el usuario cambia de estado
+        return () => unsubscribeSnapshot();
+      } else {
+        setUser(null);
+        setIsPro(false);
+        setProUntil(null);
         setLoadingAuth(false);
       }
     });
-    return () => unsubscribe();
+
+    return () => unsubscribeAuth();
   }, []);
 
   const hasActiveSubscription = () => {

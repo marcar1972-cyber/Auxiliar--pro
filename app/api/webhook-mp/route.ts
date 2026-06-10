@@ -272,10 +272,25 @@ export async function POST(request) {
       })
     });
 
+    // 🔥 BLINDAJE CTO: Registro de Auditoría (El "Recibo" de cruce de datos)
+    await db.collection("payments_log").doc(payment.id.toString()).set({
+      transactionId: payment.id,
+      uid: uid,
+      auxiliarProEmail: userData.email || "No registrado",
+      mercadoPagoEmail: payerEmail || "No registrado en MP",
+      plan: planDetectado,
+      daysAdded: diasASumar,
+      amount: monto,
+      status: payment.status,
+      metodoBusqueda: metodoBusqueda,
+      createdAt: admin.firestore.FieldValue.serverTimestamp()
+    });
+
     console.log(`🎉 Usuario ${uid} activado exitosamente hasta ${proUntil.toISOString()}`);
     console.log(`📧 Email de pago: ${payerEmail || "N/A"}`);
     console.log(`💳 Monto: $${monto} CLP`);
     console.log(`🔍 Método de búsqueda: ${metodoBusqueda}`);
+    console.log(`🧾 Recibo de auditoría creado en payments_log`);
 
     return NextResponse.json({
       success: true,
