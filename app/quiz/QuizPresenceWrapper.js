@@ -1,44 +1,58 @@
 "use client";
 
 import { useEffect } from "react";
-import { auth, db } from "../firebase/config";
+import { auth, db } from "@/firebase/config"; 
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, setDoc, deleteDoc, serverTimestamp } from "firebase/firestore";
 
 /**
  * < macz.dev />
- * ARCHIVO: QuizPresenceWrapper - Lado del Cliente (Rastreador en Vivo)
+ * ARCHIVO: QuizPresenceWrapper - Lado del Cliente (Rastreador Directo v3.0)
  */
 export default function QuizPresenceWrapper({ children }) {
   useEffect(() => {
     let activeDocRef = null;
 
-    const unsubscribeAuth = onAuthStateChanged(auth, async (currentUser) => {
+    const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
       try {
-        if (currentUser && currentUser.email) {
-          activeDocRef = doc(db, "active_sessions", currentUser.uid);
+        if (currentUser) {
+          // Capturamos el UID de forma segura
+          const uid = currentUser.uid;
+          // Si el email no viene listo, usamos un fallback basado en su proveedor o UID para que no falle
+          const emailUser = currentUser.email ? currentUser.email.toLowerCase().trim() : `usuario_${uid.substring(0, 5)}@auxiliarpro.cl`;
+
+          activeDocRef = doc(db, "active_sessions", uid);
           
-          await setDoc(activeDocRef, {
-            uid: currentUser.uid,
-            email: currentUser.email.toLowerCase().trim(),
+          // Forzamos la escritura directa en Firestore
+          setDoc(activeDocRef, {
+            uid: uid,
+            email: emailUser,
             lastHeartbeat: serverTimestamp(),
-            status: "estudiando"
+            status: "estudiando",
+            online: true
+          }, { merge: true })
+          .then(() => {
+            console.log("📡 [RADAR] Conexión grabada con éxito en Firestore para:", emailUser);
+          })
+          .catch((err) => {
+            console.error("❌ [RADAR] Error al escribir en Firestore:", err);
           });
-          
-          console.log(`📡 Presencia activada: ${currentUser.email} está en línea.`);
+
         } else {
+          // Si no está logueado o sale, limpiamos la sesión activa
           if (activeDocRef) {
-            await deleteDoc(activeDocRef);
+            deleteDoc(activeDocRef).catch(() => {});
             activeDocRef = null;
           }
         }
       } catch (error) {
-        console.error("Error en el sistema de presencia activa:", error);
+        console.error("❌ [RADAR] Error crítico en el sub-sistema de presencia:", error);
       }
     });
 
+    // Captura de cierre de pestaña/navegador
     const handleBeforeUnload = () => {
-      if (auth.currentUser && db) {
+      if (auth.currentUser) {
         const docRef = doc(db, "active_sessions", auth.currentUser.uid);
         deleteDoc(docRef).catch(() => {});
       }
