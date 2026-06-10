@@ -37,7 +37,7 @@ function determinarDiasPorMonto(monto) {
 }
 
 /**
- * 🔥 NUEVA FUNCIÓN: Busca usuario por email en Firestore (fallback cuando no hay UID)
+ * 🔥 Busca usuario por email en Firestore (fallback cuando no hay UID)
  */
 async function buscarUsuarioPorEmail(email) {
   try {
@@ -104,20 +104,35 @@ export async function POST(request) {
     console.log("🔔 === WEBHOOK RECIBIDO ===");
     console.log("⏰ Timestamp:", new Date().toISOString());
 
-    // Mercado Pago envía el ID en los query params
+    // 1. Clonamos la request para leer tanto los query params como el cuerpo JSON si es necesario
     const { searchParams } = new URL(request.url);
-    const id = searchParams.get("data.id") || searchParams.get("id");
-    const type = searchParams.get("type");
+    let id = searchParams.get("data.id") || searchParams.get("id");
+    let type = searchParams.get("type");
 
-    console.log("📍 Query Params:", { id, type });
+    // 🚀 CTO FIX: Captura de ráfagas avanzadas de Mercado Pago v2026
+    // Si los parámetros no vienen en la URL, los extraemos del body JSON de la notificación
+    if (!id || !type) {
+      try {
+        const body = await request.json();
+        console.log("📦 Body JSON detectado:", body);
+        id = body.data?.id || body.id || id;
+        type = body.type || body.action || type;
+      } catch (e) {
+        console.log("ℹ️ Request no contiene body JSON o no se pudo parsear");
+      }
+    }
 
-    // Validación inicial
-    if (!id || type !== "payment") {
-      console.log("⚠️ No es un pago o falta ID");
+    console.log("📍 Datos extraídos para evaluación:", { id, type });
+
+    // Normalizamos el tipo para atrapar formatos tipo "payment.created" o similares
+    const esTipoPayment = type && (type.includes("payment") || type === "payment");
+
+    if (!id || !esTipoPayment) {
+      console.log("⚠️ Notificación ignorada de forma segura: No es un evento de pago operativo o falta ID.");
       return NextResponse.json({ received: true }, { status: 200 });
     }
 
-    // Obtener información del pago desde la API de Mercado Pago
+    // Obtener información oficial y final del pago directo desde la API de Mercado Pago
     const response = await fetch(`https://api.mercadopago.com/v1/payments/${id}`, {
       headers: {
         Authorization: `Bearer APP_USR-6296117002447975-040718-d1a2cd392dac4324a4875784375a14d9-3319774413`,
@@ -125,12 +140,12 @@ export async function POST(request) {
     });
 
     if (!response.ok) {
-      console.error(`❌ Error al obtener payment: ${response.status}`);
-      return NextResponse.json({ error: "Payment not found" }, { status: 404 });
+      console.error(`❌ Error al consultar la API de MP para el ID ${id}: ${response.status}`);
+      return NextResponse.json({ error: "Payment not found in MercadoPago API" }, { status: 404 });
     }
 
     const payment = await response.json();
-    console.log("💰 Payment data:", {
+    console.log("💰 Respuesta oficial de MercadoPago:", {
       id: payment.id,
       status: payment.status,
       external_reference: payment.external_reference,
@@ -144,27 +159,27 @@ export async function POST(request) {
     const monto = payment.transaction_amount || 0;
     const payerEmail = payment.payer?.email;
 
-    // Solo procesar si está aprobado
+    // Solo procesar si el estado final consolidado por la API es "approved"
     if (status !== "approved") {
-      console.log(`⏳ Pago no aprobado aún. Status: ${status}`);
+      console.log(`⏳ Estado de pago retenido o pendiente. Status actual: ${status}. Operación en espera.`);
       return NextResponse.json({ received: true }, { status: 200 });
     }
 
-    // 🔥 VALIDACIÓN 1: Verificar si el pago ya fue procesado
+    // 🔥 VALIDACIÓN 1: Evitar reprocesamientos o duplicaciones de planes
     const esDuplicado = await verificarPagoDuplicado(payment.id);
     if (esDuplicado) {
-      console.log(`⚠️ Pago ${payment.id} ya fue procesado anteriormente. Ignorando duplicado.`);
+      console.log(`⚠️ El pago ID: ${payment.id} ya impactó las cuentas previamente. Cancelando duplicado.`);
       return NextResponse.json({ 
         received: true, 
         message: "Payment already processed" 
       }, { status: 200 });
     }
 
-    // 🔥 VALIDACIÓN 2: Si no hay external_reference (UID), buscar por email del payer
+    // 🔥 VALIDACIÓN 2: Motor de contingencia ante links directos sin UID (Búsqueda cruzada)
     let metodoBusqueda = "external_reference";
     
     if (!uid || uid.trim() === "") {
-      console.log("⚠️ Pago sin external_reference. Buscando usuario por email del payer...");
+      console.log("⚠️ Pago sin external_reference (UID). Activando motor de contingencia por Email...");
       metodoBusqueda = "email";
       
       if (payerEmail) {
@@ -172,9 +187,9 @@ export async function POST(request) {
         
         if (usuarioPorEmail) {
           uid = usuarioPorEmail.uid;
-          console.log(`✅ Usuario encontrado por email: ${uid} (${payerEmail})`);
+          console.log(`✅ Usuario interceptado con éxito mediante email: ${uid} (${payerEmail})`);
         } else {
-          console.error(`❌ No se encontró usuario con email: ${payerEmail}`);
+          console.error(`❌ Falla crítica: No existe cuenta registrada en la app para el email: ${payerEmail}`);
           await guardarPagoHuerfano(payment, `No se encontró usuario con email: ${payerEmail}`);
           return NextResponse.json(
             { error: "User not found by email" }, 
@@ -182,7 +197,7 @@ export async function POST(request) {
           );
         }
       } else {
-        console.error("❌ CRÍTICO: Pago sin external_reference Y sin email del payer");
+        console.error("❌ Falla crítica: Pago entrante ciego. Sin UID ni correo del comprador.");
         await guardarPagoHuerfano(payment, "Falta external_reference (UID) y email del payer");
         return NextResponse.json(
           { error: "Missing external_reference and payer email" }, 
@@ -191,9 +206,9 @@ export async function POST(request) {
       }
     }
 
-    // 🔥 VALIDACIÓN 3: Validar formato del UID (solo si vino por external_reference)
+    // 🔥 VALIDACIÓN 3: Formateo de consistencia de UIDs de Firebase
     if (metodoBusqueda === "external_reference" && (uid.length < 10 || uid.length > 128)) {
-      console.error(`❌ UID con formato inválido: ${uid}`);
+      console.error(`❌ Formato de UID corrupto detectado en pasarela: ${uid}`);
       await guardarPagoHuerfano(payment, `UID con formato inválido: ${uid}`);
       return NextResponse.json(
         { error: "Invalid UID format" }, 
@@ -201,19 +216,19 @@ export async function POST(request) {
       );
     }
 
-    // Determinar días según el monto pagado
+    // Determinar la duración exacta según la matriz de precios oficiales de la escuela
     const { dias: diasASumar, plan: planDetectado } = determinarDiasPorMonto(monto);
-    console.log(`📊 Plan detectado: ${planDetectado} (${diasASumar} días) por monto $${monto}`);
+    console.log(`📊 Matriz evaluada: Asignando plan '${planDetectado}' (+${diasASumar} días) por recaudación de $${monto}`);
 
-    // Calcular fecha de expiración
+    // Configurar la fecha de término base
     const proUntil = new Date();
     proUntil.setDate(proUntil.getDate() + diasASumar);
 
-    // 🔥 VALIDACIÓN 4: Verificar si el usuario existe en Firestore
+    // 🔥 VALIDACIÓN 4: Comprobar la existencia del documento en Firestore antes de actualizar
     const userDoc = await db.collection("users").doc(uid).get();
 
     if (!userDoc.exists) {
-      console.error(`❌ CRÍTICO: El usuario ${uid} no existe en Firestore`);
+      console.error(`❌ Falla de integridad: El UID '${uid}' no tiene un documento correspondiente en Firestore`);
       await guardarPagoHuerfano(payment, `Usuario no existe en Firestore: ${uid}`);
       return NextResponse.json(
         { error: "User not found in Firestore" }, 
@@ -222,29 +237,31 @@ export async function POST(request) {
     }
 
     const userData = userDoc.data();
-    console.log(`👤 Usuario encontrado:`, {
+    console.log(`👤 Datos actuales del alumno antes del impacto:`, {
       uid: uid,
       email: userData.email,
       isPro: userData.isPro,
       proUntil: userData.proUntil?.toDate()?.toISOString() || "N/A"
     });
 
-    // 🔥 VALIDACIÓN 5: Verificar si el usuario ya tiene suscripción activa
+    // 🔥 VALIDACIÓN 5: Acumulación reactiva de períodos activos
     if (userData.isPro && userData.proUntil) {
       const fechaActual = new Date();
-      const fechaProUntil = userData.proUntil.toDate();
+      // Verificamos si la fecha viene en formato Timestamp nativo para parsearla con seguridad
+      const fechaProUntil = typeof userData.proUntil.toDate === "function" 
+        ? userData.proUntil.toDate() 
+        : new Date(userData.proUntil);
       
       if (fechaProUntil > fechaActual) {
-        console.log(`ℹ️ Usuario ya tiene suscripción activa hasta ${fechaProUntil.toISOString()}`);
-        console.log(`🔄 Sumando ${diasASumar} días adicionales a la suscripción existente`);
+        console.log(`ℹ️ Alumno mantiene días Pro remanentes vigentes hasta ${fechaProUntil.toISOString()}`);
+        console.log(`🔄 Acción: Extendiendo la vigencia sumando los nuevos ${diasASumar} días al remanente.`);
         
-        // Sumar días a la fecha actual de expiración (no desde hoy)
         proUntil.setTime(fechaProUntil.getTime());
         proUntil.setDate(proUntil.getDate() + diasASumar);
       }
     }
 
-    // Actualizar usuario en Firestore
+    // 🚀 IMPACTO DE DATOS EN FIREBASE (Habilitación del Alumno)
     await db.collection("users").doc(uid).update({
       isPro: true,
       proUntil: admin.firestore.Timestamp.fromDate(proUntil),
@@ -261,7 +278,6 @@ export async function POST(request) {
         metodoBusqueda: metodoBusqueda,
         timestamp: admin.firestore.FieldValue.serverTimestamp()
       },
-      // Historial de pagos (array)
       historialPagos: admin.firestore.FieldValue.arrayUnion({
         id: payment.id,
         amount: monto,
@@ -272,7 +288,7 @@ export async function POST(request) {
       })
     });
 
-    // 🔥 BLINDAJE CTO: Registro de Auditoría (El "Recibo" de cruce de datos)
+    // 🔥 BITÁCORA DE AUDITORÍA CRUZADA (Caja negra anti-amnesia de correos)
     await db.collection("payments_log").doc(payment.id.toString()).set({
       transactionId: payment.id,
       uid: uid,
@@ -286,11 +302,7 @@ export async function POST(request) {
       createdAt: admin.firestore.FieldValue.serverTimestamp()
     });
 
-    console.log(`🎉 Usuario ${uid} activado exitosamente hasta ${proUntil.toISOString()}`);
-    console.log(`📧 Email de pago: ${payerEmail || "N/A"}`);
-    console.log(`💳 Monto: $${monto} CLP`);
-    console.log(`🔍 Método de búsqueda: ${metodoBusqueda}`);
-    console.log(`🧾 Recibo de auditoría creado en payments_log`);
+    console.log(`🎉 OPERACIÓN EXITOSA: Alumno ${uid} activado hasta el ${proUntil.toISOString()}`);
 
     return NextResponse.json({
       success: true,
@@ -301,10 +313,8 @@ export async function POST(request) {
     }, { status: 200 });
 
   } catch (error) {
-    console.error("❌ ERROR CRÍTICO EN WEBHOOK:", error);
-    console.error("Stack trace:", error.stack);
+    console.error("❌ ERROR EXCEPCIONAL CRÍTICO EN WEBHOOK:", error);
     
-    // Intentar guardar el error en colección de errores para debugging
     try {
       await db.collection("webhook_errors").add({
         error: error.message,
@@ -313,7 +323,7 @@ export async function POST(request) {
         url: request.url
       });
     } catch (logError) {
-      console.error("No se pudo guardar el error en Firestore:", logError);
+      console.error("Falla al guardar reporte de error en base de datos:", logError);
     }
     
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -322,7 +332,7 @@ export async function POST(request) {
 
 // Manejar GET por si Mercado Pago hace verificaciones
 export async function GET(request) {
-  console.log("🔍 GET request al webhook (posible verificación)");
+  console.log("🔍 GET request al webhook (Verificación de enlace de pasarela)");
   return NextResponse.json({ 
     status: "ok", 
     message: "Webhook activo",
