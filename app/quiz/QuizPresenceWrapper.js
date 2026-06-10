@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect } from "react";
-import { auth, db } from "@/firebase/config"; 
+// 🚀 CTO FIX: Cambiada la ruta de importación a relativa exacta hacia la raíz para que Vercel no falle por falta de alias
+import { auth, db } from "../../firebase/config"; 
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, setDoc, deleteDoc, serverTimestamp } from "firebase/firestore";
 
 /**
  * < macz.dev />
- * ARCHIVO: QuizPresenceWrapper - Lado del Cliente (Rastreador Directo v3.0)
+ * ARCHIVO: QuizPresenceWrapper - Lado del Cliente (Rastreador Directo v3.1)
  */
 export default function QuizPresenceWrapper({ children }) {
   useEffect(() => {
