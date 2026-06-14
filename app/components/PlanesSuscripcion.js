@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { auth, db } from "../firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
-import { doc, onSnapshot, updateDoc } from "firebase/firestore"; // 🚀 CTO FIX: Cambiado getDoc por onSnapshot
+import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { Loader2, CheckCircle, Flame, Zap } from "lucide-react";
 import Link from "next/link";
 
@@ -13,10 +13,10 @@ export default function PlanesSuscripcion() {
   const [proUntil, setProUntil] = useState(null);
   const [loadingAuth, setLoadingAuth] = useState(true);
 
-  // 🔗 Enlaces directos de MercadoPago
-  const LINK_15_DIAS = "https://mpago.la/2en6De7";
-  const LINK_MENSUAL = "https://mpago.la/2vRdcGW";
-  const LINK_ANUAL = "https://mpago.la/1Afrgc3";
+  // 🔗 Enlaces base de MercadoPago compartidos
+  const BASE_LINK_15_DIAS = "https://mpago.la/2en6De7";
+  const BASE_LINK_MENSUAL = "https://mpago.la/2vRdcGW";
+  const BASE_LINK_ANUAL = "https://mpago.la/1Afrgc3";
 
   useEffect(() => {
     // 1. Escuchamos de forma reactiva el estado de autenticación del usuario
@@ -25,8 +25,7 @@ export default function PlanesSuscripcion() {
         setUser(currentUser);
         const docRef = doc(db, "users", currentUser.uid);
 
-        // 2. 🚀 CTO BLINDAJE: Conexión asíncrona en tiempo real (onSnapshot)
-        // Reacciona de forma inmediata a actualizaciones del Webhook o cambios manuales en la consola de Firebase
+        // 2. Conexión asíncrona en tiempo real (onSnapshot)
         const unsubscribeSnapshot = onSnapshot(docRef, async (docSnap) => {
           try {
             if (docSnap.exists()) {
@@ -34,21 +33,19 @@ export default function PlanesSuscripcion() {
               let currentIsPro = data.isPro || false;
               let currentProUntil = null;
 
-              // 3. 🛡️ CONTROL DE TIPOS PARA FORMATEO DE FECHAS (Evita congelamiento de UI)
+              // 3. Control de tipos para formateo de fechas
               if (data.proUntil) {
                 if (typeof data.proUntil.toDate === "function") {
-                  // Caso óptimo: Viene como objeto Timestamp nativo de Firestore
                   currentProUntil = data.proUntil.toDate();
                 } else if (typeof data.proUntil === "string" || typeof data.proUntil === "number") {
-                  // Caso de rescate: Forzado manual como String/Texto desde la consola externa
                   currentProUntil = new Date(data.proUntil);
                 }
               }
 
-              // 🚀 CTO BLINDAJE: Expiración Pasiva Automática integrada en el flujo reactivo
+              // Expiración Pasiva Automática integrada en el flujo reactivo
               if (currentIsPro && currentProUntil && new Date() > currentProUntil) {
                 await updateDoc(docRef, { isPro: false });
-                currentIsPro = false; // Corregimos el estado local de forma inmediata para mutar la interfaz
+                currentIsPro = false;
               }
 
               setIsPro(currentIsPro);
@@ -64,7 +61,6 @@ export default function PlanesSuscripcion() {
           setLoadingAuth(false);
         });
 
-        // Retornamos la limpieza del snapshot si el usuario cambia de estado
         return () => unsubscribeSnapshot();
       } else {
         setUser(null);
@@ -76,6 +72,14 @@ export default function PlanesSuscripcion() {
 
     return () => unsubscribeAuth();
   }, []);
+
+  // 🚀 CTO INYECTOR DINÁMICO: Vincula el email del usuario logueado al link estático de Mercado Pago
+  const construirLinkInteligente = (linkBase) => {
+    if (!user || !user.email) return linkBase;
+    const conector = linkBase.includes("?") ? "&" : "?";
+    // Pasamos el email y el uid en caliente para que queden registrados en el flujo del checkout de MP
+    return `${linkBase}${conector}payer_email=${encodeURIComponent(user.email.toLowerCase().trim())}&external_reference=${encodeURIComponent(user.uid)}`;
+  };
 
   const hasActiveSubscription = () => {
     if (!isPro) return false;
@@ -213,7 +217,7 @@ export default function PlanesSuscripcion() {
                 </button>
               ) : (
                 <a 
-                  href={LINK_15_DIAS}
+                  href={construirLinkInteligente(BASE_LINK_15_DIAS)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full block bg-[#003366] text-white hover:bg-[#002244] font-black py-4 rounded-xl transition-all text-center text-sm shadow-lg"
@@ -275,7 +279,7 @@ export default function PlanesSuscripcion() {
                 </button>
               ) : (
                 <a 
-                  href={LINK_MENSUAL}
+                  href={construirLinkInteligente(BASE_LINK_MENSUAL)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full block bg-[#28a745] text-white hover:bg-[#218838] font-black py-4 rounded-xl transition-all text-center text-sm shadow-lg shadow-[#28a745]/30"
@@ -334,7 +338,7 @@ export default function PlanesSuscripcion() {
                 </button>
               ) : (
                 <a 
-                  href={LINK_ANUAL}
+                  href={construirLinkInteligente(BASE_LINK_ANUAL)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-full block bg-[#28a745] text-white hover:bg-[#218838] font-black py-5 rounded-xl transition-all text-center text-sm shadow-[0_0_30px_rgba(40,167,69,0.4)] transform hover:scale-105"
