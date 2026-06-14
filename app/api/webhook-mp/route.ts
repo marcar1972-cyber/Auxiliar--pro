@@ -16,6 +16,7 @@ if (!admin.apps.length) {
 const db = admin.firestore();
 const MP_TOKEN = "APP_USR-6296117002447975-040718-d1a2cd392dac4324a4875784375a14d9-3319774413";
 
+// Matriz de precios oficiales (Ecosistema AuxiliarPro App 2026)
 const PLANES_PRECIOS = {
   sprint: { min: 3500, max: 4999, dias: 15, nombre: "Sprint 15 Días" },
   mensual: { min: 5000, max: 19999, dias: 30, nombre: "Mensual PRO" },
@@ -48,23 +49,23 @@ async function buscarUsuarioPorEmail(email: string) {
   return null;
 }
 
-async function guardarPagoHuerfano(payment: any, motivo: string) {
+async function registrarPagoHuerfanoEstatico(payment: any, motivo: string, plan: string, dias: number) {
   try {
-    await db.collection("pagos_huerfanos").doc(payment.id.toString()).set({
+    // Generamos una bitácora limpia en una colección de atención inmediata
+    await db.collection("pagos_pendientes_asignacion").doc(payment.id.toString()).set({
       paymentId: payment.id,
-      status: payment.status,
       amount: payment.transaction_amount,
       payerEmail: payment.payer?.email || "N/A",
-      externalReference: payment.external_reference || "N/A",
-      metadata: payment.metadata || {},
-      motivo: motivo,
+      planDetectado: plan,
+      diasCalculados: dias,
+      motivoError: motivo,
       timestamp: admin.firestore.FieldValue.serverTimestamp(),
       procesado: false,
-      notas: "Requiere vinculación forzada"
+      instrucciones: "Para activar manualmente: Busca el UID del alumno e incrementa sus días sumando este bloque de forma directa."
     });
-    console.log(`💾 Pago huérfano guardado con ID: ${payment.id}`);
+    console.log(`⚠️ ALERTA: Link estático detectado sin cuenta vinculada. Almacenado ID de control: ${payment.id}`);
   } catch (error) {
-    console.error("❌ Error al guardar log de pago huérfano:", error);
+    console.error("❌ Error escribiendo en cola de asignación manual:", error);
   }
 }
 
@@ -83,7 +84,7 @@ export async function POST(request: Request) {
         id = body.data?.id || body.id || id;
         type = body.type || body.action || type;
       } catch {
-        // Payload no parseable
+        // Payload sin body estructural
       }
     }
 
@@ -98,7 +99,7 @@ export async function POST(request: Request) {
     });
 
     if (!response.ok) {
-      console.error(`❌ Falló la verificación para el ID ${id}.`);
+      console.error(`❌ Falló la verificación de pasarela para el ID ${id}.`);
       return NextResponse.json({ error: "Payment verification failed" }, { status: 404 });
     }
 
@@ -107,30 +108,30 @@ export async function POST(request: Request) {
     const monto = payment.transaction_amount || 0;
     const payerEmail = payment.payer?.email ? payment.payer.email.toLowerCase().trim() : "";
     
-    // Extracción ultra-tolerante de Identificadores (Capa de Inteligencia del Backend)
+    // Extracción tolerante en capas de metadatos
     let uid = payment.external_reference || payment.metadata?.uid || payment.metadata?.user_id;
 
     if (status !== "approved") {
-      console.log(`⏳ Pago ID ${id} ignorado de forma segura debido a estado: '${status}'.`);
+      console.log(`⏳ Pago ID ${id} ignorado de forma segura debido a estado no operativo: '${status}'.`);
       return NextResponse.json({ received: true }, { status: 200 });
     }
 
-    // CONTROL DE IDEMPOTENCIA
+    // CONTROL DE IDEMPOTENCIA ANTI-RÁFAGAS
     const logRef = db.collection("payments_log").doc(id.toString());
     const logDoc = await logRef.get();
 
     if (logDoc.exists) {
-      console.log(`⚠️ Clon asíncrono interceptado para el ID de pago ${id}.`);
+      console.log(`⚠️ Registro duplicado omitido con éxito para el ID de pago ${id}.`);
       return NextResponse.json({ received: true, message: "Payment already processed" }, { status: 200 });
     }
 
     let metodoBusqueda = "external_reference";
+    const { dias: diasASumar, plan: planDetectado } = determinarDiasPorMonto(monto);
 
-    // 🚀 MEJORA DE CONTINGENCIA AVANZADA (Evita fallos como el de Nataly)
+    // 🚀 CAPA DE RESOLUCIÓN PARA LINKS ESTÁTICOS (MANUALES DESDE PANEL MP)
     if (!uid || uid.trim() === "") {
-      console.log("⚠️ Transacción sin UID en pasarela. Extrayendo vía correos cruzados...");
+      console.log("⚠️ Transacción de Link Estático (Sin external_reference). Evaluando correos...");
       
-      // Intentamos primero con el correo que viene de los metadatos de la aplicación
       const emailEnMetadatos = payment.metadata?.email || payment.metadata?.user_email;
       let usuarioEncontrado = await buscarUsuarioPorEmail(emailEnMetadatos);
 
@@ -138,7 +139,6 @@ export async function POST(request: Request) {
         uid = usuarioEncontrado.uid;
         metodoBusqueda = "metadata_email";
       } else {
-        // Si falla, probamos con el correo del pagador de Mercado Pago
         usuarioEncontrado = await buscarUsuarioPorEmail(payerEmail);
         if (usuarioEncontrado) {
           uid = usuarioEncontrado.uid;
@@ -146,29 +146,29 @@ export async function POST(request: Request) {
         }
       }
 
+      // 🛡️ EL SALVAVIDAS DEL MESÓN: Si el correo no existe, no rompemos con 404. 
+      // Registramos en una colección de control rápido para que sepa Marcelo y respondemos 200 a MP.
       if (!uid) {
-        console.error(`❌ Alerta Crítica: El comprador '${payerEmail}' no pudo ser asociado a ninguna cuenta.`);
-        await guardarPagoHuerfano(payment, `No se encontró usuario para correo MP: ${payerEmail} ni metadatos.`);
-        return NextResponse.json({ error: "User profile missing" }, { status: 404 });
+        console.warn(`⚠️ Enlace de pago ciego detectado. Correo pagador: ${payerEmail}. Enviando a cola manual.`);
+        await registrarPagoHuerfanoEstatico(payment, "Link estático manual sin coincidencias de correo en la App.", planDetectado, diasASumar);
+        return NextResponse.json({ received: true, status: "pending_manual_assignment" }, { status: 200 });
       }
     }
 
     if (metodoBusqueda === "external_reference" && (uid.length < 10 || uid.length > 128)) {
-      console.error(`❌ Formato de UID de Firebase corrupto: ${uid}`);
-      await guardarPagoHuerfano(payment, `UID corrupto: ${uid}`);
+      console.error(`❌ Estructura de UID inválida detectada en pasarela: ${uid}`);
       return NextResponse.json({ error: "Invalid signature pattern" }, { status: 400 });
     }
 
-    const { dias: diasASumar, plan: planDetectado } = determinarDiasPorMonto(monto);
     const userRef = db.collection("users").doc(uid);
     const discrepanciaRef = db.collection("pagos_discrepantes").doc(id.toString());
 
-    // EJECUCIÓN ATÓMICA CON TRANSACCIÓN DE FIREBASE
+    // EJECUCIÓN TRANSACCIONAL ATÓMICA DE FIREBASE
     await db.runTransaction(async (transaction) => {
       const userSnapshot = await transaction.get(userRef);
 
       if (!userSnapshot.exists) {
-        throw new Error(`UserNotFound: El documento de usuario ${uid} no existe.`);
+        throw new Error(`UserNotFound: El documento del alumno ${uid} no existe.`);
       }
 
       const userData = userSnapshot.data() || {};
@@ -188,7 +188,7 @@ export async function POST(request: Request) {
 
       proUntilBase.setDate(proUntilBase.getDate() + diasASumar);
 
-      // Guardar discrepancia de correo de forma limpia sin tumbar la pasarela
+      // Almacenamos diferencias de email para control interno de caja
       if (payerEmail && userEmailApp && payerEmail !== userEmailApp) {
         transaction.set(discrepanciaRef, {
           paymentId: payment.id,
@@ -200,11 +200,11 @@ export async function POST(request: Request) {
           diasAsignados: diasASumar,
           timestamp: admin.firestore.FieldValue.serverTimestamp(),
           revisado: false,
-          notas: "Cruce automático exitoso por ID/Metadatos, pero los correos difieren."
+          notas: "Asignación exitosa automática, pero las cuentas difieren."
         });
       }
 
-      // Mutación garantizada del estado Pro del Alumno
+      // Forzar mutación definitiva del estado Pro
       transaction.update(userRef, {
         isPro: true,
         proUntil: admin.firestore.Timestamp.fromDate(proUntilBase),
@@ -230,7 +230,7 @@ export async function POST(request: Request) {
         })
       });
 
-      // Insertar el recibo definitivo (Garantía contra re-intentos)
+      // Registro de cierre contra re-procesamientos
       transaction.set(logRef, {
         transactionId: payment.id,
         uid: uid,
@@ -245,7 +245,7 @@ export async function POST(request: Request) {
       });
     });
 
-    console.log(`🎉 COMPRA PROCESADA: El alumno ${uid} ha sido mutado a PRO automáticamente.`);
+    console.log(`🎉 ENTRADA EXITOSA: El usuario ${uid} mutó a PRO de forma correcta.`);
 
     return NextResponse.json({
       success: true,
@@ -253,7 +253,7 @@ export async function POST(request: Request) {
     }, { status: 200 });
 
   } catch (error: any) {
-    console.error("❌ ERROR EXCEPCIONAL DENTRO DEL WEBHOOK:", error.message);
+    console.error("❌ EXCEPCIÓN DETECTADA EN EL PIPELINE DEL WEBHOOK:", error.message);
 
     try {
       if (error.message && !error.message.includes("UserNotFound")) {
@@ -265,7 +265,7 @@ export async function POST(request: Request) {
         });
       }
     } catch (logError) {
-      console.error("Falla al escribir log de error en base de datos:", logError);
+      console.error("Falla al escribir reporte en base de datos:", logError);
     }
 
     if (error.message && error.message.includes("UserNotFound")) {
