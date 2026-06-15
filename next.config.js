@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // 🚀 CTO FIX DEFINITIVO: Fuerza a Next.js a aceptar las barras diagonales sin lanzar redirecciones 308 en los webhooks
+  trailingSlash: true,
+
   typescript: {
     // 🟢 Ignora los errores de TypeScript para que Vercel compile
     ignoreBuildErrors: true,
