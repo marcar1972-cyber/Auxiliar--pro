@@ -16,7 +16,6 @@ if (!admin.apps.length) {
 const db = admin.firestore();
 const TOKEN = "APP_USR-6296117002447975-040718-d1a2cd392dac4324a4875784375a14d9-3319774413";
 
-// Matriz de precios oficiales e inmutables del ecosistema 2026
 const PLANES_PRECIOS = {
   sprint: { min: 3500, max: 4999, dias: 15, nombre: "Sprint 15 Días" },
   mensual: { min: 5000, max: 19999, dias: 30, nombre: "Mensual PRO" },
@@ -50,43 +49,50 @@ async function buscarUsuarioPorEmail(email: string) {
 }
 
 export async function POST(request: Request) {
-  const timestampEntrada = new Date();
   console.log("🔔 === WEBHOOK INBOUND MERCADO PAGO ===");
+  
+  let id: string | null = null;
+  let type: string | null = null;
+  let queryPayerEmail: string | null = null;
+  let queryUid: string | null = null;
 
   try {
+    // 1. Intentar capturar desde los parámetros de la URL (Query Params)
     const { searchParams } = new URL(request.url);
-    let id = searchParams.get("data.id") || searchParams.get("id");
-    let type = searchParams.get("type");
+    id = searchParams.get("data.id") || searchParams.get("id");
+    type = searchParams.get("type");
+    queryPayerEmail = searchParams.get("payer_email");
+    queryUid = searchParams.get("external_reference");
 
-    // Lector tolerante de ráfagas asíncronas en el Body JSON
+    // 2. 🚀 CAPA DE RESCATE: Si viene vacío en la URL, leemos de forma obligatoria el JSON del Body
     if (!id || !type) {
       try {
         const body = await request.json();
+        console.log("📦 Body JSON detectado en Webhook:", body);
         id = body.data?.id || body.id || id;
         type = body.type || body.action || type;
       } catch {
-        // Petición sin body ejecutable
+        // Payload no contiene JSON válido
       }
     }
 
-    // El parámetro del inyector del frontend también puede viajar en la URL de la notificación
-    const queryPayerEmail = searchParams.get("payer_email");
-    const queryUid = searchParams.get("external_reference");
+    // Normalización de tipos para capturar formatos como "payment.created" o "payment"
+    const esTipoPayment = type && (type.includes("payment") || type === "payment" || type.includes("action.id"));
 
-    const esTipoPayment = type && (type.includes("payment") || type === "payment");
-
-    if (!id || !esTipoPayment) {
-      return NextResponse.json({ received: true }, { status: 200 });
+    // Si después de revisar URL y Body sigue sin haber un ID, guardamos registro de aviso
+    if (!id) {
+      console.error("❌ Notificación rechazada: Imposible extraer el ID del pago.");
+      return NextResponse.json({ received: false, error: "Missing transaction ID" }, { status: 400 });
     }
 
-    // 1. Consulta directa de validación a la API oficial de Mercado Pago
+    // 3. Consulta directa a la API de Mercado Pago (Canal de Verdad del Dinero)
     const response = await fetch(`https://api.mercadopago.com/v1/payments/${id}`, {
       headers: { Authorization: `Bearer ${TOKEN}` },
     });
 
     if (!response.ok) {
-      console.error(`❌ Falló la validación HTTP para el ID ${id} en la API de MP.`);
-      return NextResponse.json({ error: "Payment not found in pasarela" }, { status: 404 });
+      console.error(`❌ Error en API MP para el ID ${id}. Pasarela respondió HTTP: ${response.status}`);
+      return NextResponse.json({ error: "Payment not found in Mercado Pago API" }, { status: 404 });
     }
 
     const payment = await response.json();
@@ -94,38 +100,39 @@ export async function POST(request: Request) {
     const monto = payment.transaction_amount || 0;
     const mpPayerEmail = payment.payer?.email ? payment.payer.email.toLowerCase().trim() : "";
     
-    // Extractor de ID en cascada descendente de seguridad
+    // Extractor de identidad en cascada descendente
     let uid = payment.external_reference || queryUid || payment.metadata?.uid || payment.metadata?.user_id;
 
+    // Si el pago no está aprobado, respondemos 200 para liberar la cola pero no alteramos Firestore
     if (status !== "approved") {
-      console.log(`⏳ Pago ID ${id} retenido. Estatus actual: '${status}'.`);
+      console.log(`⏳ Pago ID ${id} recibido pero ignorado por estado: '${status}'.`);
       return NextResponse.json({ received: true }, { status: 200 });
     }
 
-    // 🛡️ CONTROL DE IDEMPOTENCIA: Bloqueo de duplicados por ID único de documento
+    // 🛡️ CONTROL DE DUPLICADOS (Idempotencia por ID de Documento)
     const logRef = db.collection("payments_log").doc(id.toString());
     const logDoc = await logRef.get();
 
     if (logDoc.exists) {
-      console.log(`⚠️ Operación clonada interceptada con éxito para el ID de pago ${id}.`);
-      return NextResponse.json({ received: true, message: "Payment already consolidated" }, { status: 200 });
+      console.log(`⚠️ Transacción ID ${id} ya impactó las cuentas anteriormente. Omitiendo duplicado.`);
+      return NextResponse.json({ received: true, message: "Already processed" }, { status: 200 });
     }
 
     let metodoBusqueda = "external_reference";
     const { dias: diasASumar, plan: planDetectado } = determinarDiasPorMonto(monto);
 
-    // 🚀 MOTOR DE CONTINGENCIA PARA LINKS ESTÁTICOS MANUALES
+    // 🚀 CAPA INTELIGENTE DE RESOLUCIÓN DE IDENTIDAD PARA LINKS MANUALES
     if (!uid || uid.trim() === "") {
-      console.log("⚠️ Transacción sin UID nativo. Activando rastreo cruzado por emails...");
+      console.log("⚠️ Pago sin UID nativo en pasarela. Activando escáner secuencial por correos...");
       
-      // Intentamos cruzar con el correo inyectado por el frontend en la URL
+      // Intento A: Email inyectado por el frontend en la URL
       let usuarioEncontrado = await buscarUsuarioPorEmail(queryPayerEmail);
       
       if (usuarioEncontrado) {
         uid = usuarioEncontrado.uid;
         metodoBusqueda = "query_param_email";
       } else {
-        // Intentamos con los metadatos internos
+        // Intento B: Email guardado en los metadatos internos del cobro
         const emailEnMetadatos = payment.metadata?.email || payment.metadata?.user_email;
         usuarioEncontrado = await buscarUsuarioPorEmail(emailEnMetadatos);
 
@@ -133,7 +140,7 @@ export async function POST(request: Request) {
           uid = usuarioEncontrado.uid;
           metodoBusqueda = "metadata_email";
         } else {
-          // Último recurso: El correo pagador de la cuenta de Mercado Pago
+          // Intento C: El correo con el que el alumno pagó en la pantalla de Mercado Pago
           usuarioEncontrado = await buscarUsuarioPorEmail(mpPayerEmail);
           if (usuarioEncontrado) {
             uid = usuarioEncontrado.uid;
@@ -142,9 +149,9 @@ export async function POST(request: Request) {
         }
       }
 
-      // Salvavidas absoluto: Si nadie coincide, enviamos a cola manual sin reventar la pasarela
+      // Si ningún correo coincide con tu base de datos de usuarios, enviamos a cola de revisión manual
       if (!uid) {
-        console.error(`❌ Imposible asociar pago ${id}. Correo MP: ${mpPayerEmail}. Almacenando en cola manual.`);
+        console.error(`❌ Pago huérfano total detectado. ID: ${id}. Correo pagador MP: ${mpPayerEmail}`);
         await db.collection("pagos_pendientes_asignacion").doc(id.toString()).set({
           paymentId: id,
           amount: monto,
@@ -154,28 +161,28 @@ export async function POST(request: Request) {
           diasCalculados: diasASumar,
           timestamp: admin.firestore.FieldValue.serverTimestamp(),
           procesado: false,
-          notas: "El correo pagador no coincide con ningún alumno de la plataforma. Asignar manualmente."
+          notas: "El dinero se recaudó con éxito, pero el correo no existe en la App. Asignar manualmente."
         });
-        return NextResponse.json({ received: true, status: "queued_for_manual_check" }, { status: 200 });
+        return NextResponse.json({ received: true, status: "queued_for_manual_assignment" }, { status: 200 });
       }
     }
 
     const userRef = db.collection("users").doc(uid);
     const discrepanciaRef = db.collection("pagos_discrepantes").doc(id.toString());
 
-    // 🔥 EJECUCIÓN ATÓMICA TRANSACCIONAL DE FIREBASE (Garantiza el cambio de false a true)
+    // 🔥 IMPACTO TRANSACCIONAL ATÓMICO (Garantiza mutación forzada de false a true)
     await db.runTransaction(async (transaction) => {
       const userSnapshot = await transaction.get(userRef);
 
       if (!userSnapshot.exists) {
-        throw new Error(`UserNotFound: El perfil del alumno ${uid} no existe en Firestore.`);
+        throw new Error(`UserNotFound: El documento de usuario '${uid}' no existe en la base de datos.`);
       }
 
       const userData = userSnapshot.data() || {};
       const userEmailApp = userData.email ? userData.email.toLowerCase().trim() : "";
       let proUntilBase = new Date();
 
-      // Validación reactiva de acumulación de suscripciones vigentes
+      // Acumulación de tiempo PRO remanente si la suscripción aún no expira
       if (userData.isPro && userData.proUntil) {
         const fechaActual = new Date();
         const fechaProUntilExistente = typeof userData.proUntil.toDate === "function"
@@ -189,9 +196,9 @@ export async function POST(request: Request) {
 
       proUntilBase.setDate(proUntilBase.getDate() + diasASumar);
 
-      // Si el correo que pagó es diferente al de la app, registramos la discrepancia para auditoría rápida
+      // Si el correo de MP es diferente al de la app, guardamos bitácora de discrepancia sin trabar el flujo
       if (mpPayerEmail && userEmailApp && mpPayerEmail !== userEmailApp) {
-        transaction.set(discrepancyRef, {
+        transaction.set(discrepanciaRef, {
           paymentId: id,
           uid: uid,
           emailEnApp: userEmailApp,
@@ -201,11 +208,11 @@ export async function POST(request: Request) {
           diasAsignados: diasASumar,
           timestamp: admin.firestore.FieldValue.serverTimestamp(),
           revisado: false,
-          notas: "Usuario activado con éxito. Los correos difieren."
+          notas: "Usuario activado de forma exitosa. Los correos difieren."
         });
       }
 
-      // MUTACIÓN TOTAL DEL ESTADO DEL USUARIO
+      // Mutación total garantizada de la cuenta
       transaction.update(userRef, {
         isPro: true,
         proUntil: admin.firestore.Timestamp.fromDate(proUntilBase),
@@ -231,7 +238,7 @@ export async function POST(request: Request) {
         })
       });
 
-      // Escribir el recibo final (Candado definitivo de control)
+      // Guardar el log definitivo de control de caja
       transaction.set(logRef, {
         transactionId: id,
         uid: uid,
@@ -246,15 +253,15 @@ export async function POST(request: Request) {
       });
     });
 
-    console.log(`🎉 EXITO: El alumno ${uid} ha pasado a estado PRO de forma automática.`);
+    console.log(`🎉 OPERACIÓN EXITOSA AUTOMÁTICA: Alumno ${uid} mutó a PRO con éxito.`);
 
     return NextResponse.json({
       success: true,
-      message: `Usuario ${uid} mutado a PRO de forma consistente por ${diasASumar} días.`
+      message: `Usuario ${uid} configurado en modo PRO de forma consistente por ${diasASumar} días.`
     }, { status: 200 });
 
   } catch (error: any) {
-    console.error("❌ ERROR EXCEPCIONAL EN EL PIPELINE DEL WEBHOOK:", error.message);
+    console.error("❌ ERROR CRÍTICO EN EL PIPELINE DEL WEBHOOK:", error.message);
 
     try {
       if (error.message && !error.message.includes("UserNotFound")) {
@@ -266,7 +273,7 @@ export async function POST(request: Request) {
         });
       }
     } catch (logError) {
-      console.error("Falla en cascada al escribir log en Firebase:", logError);
+      console.error("Falla en cascada escribiendo log de error:", logError);
     }
 
     if (error.message && error.message.includes("UserNotFound")) {
@@ -280,7 +287,7 @@ export async function POST(request: Request) {
 export async function GET(request: Request) {
   return NextResponse.json({
     status: "online",
-    message: "AuxiliarPro Webhook Gate v4.0 operativo",
+    message: "AuxiliarPro Webhook Gate v4.0 activo y blindado",
     timestamp: new Date().toISOString()
   }, { status: 200 });
 }
