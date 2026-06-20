@@ -1,0 +1,77 @@
+[
+  {
+    "id": "fc-001",
+    "question": "¿Qué es el DFL 725 (Código Sanitario)?",
+    "answer": "Es la norma madre que rige todas las actividades de salud en Chile y define a las farmacias como centros de salud."
+  },
+  {
+    "id": "fc-002",
+    "question": "¿Quién debe dirigir técnicamente una farmacia y durante qué horario?",
+    "answer": "Debe ser dirigida por un Químico Farmacéutico durante todo su horario de funcionamiento."
+  },
+  {
+    "id": "fc-003",
+    "question": "¿Qué cambio introdujo la Ley de Fármacos (Ley 20.724) en las recetas?",
+    "answer": "Estableció la obligatoriedad de incluir la Denominación Común Internacional (DCI) y el deber de informar sobre bioequivalentes."
+  },
+  {
+    "id": "fc-004",
+    "question": "¿Cuál es el propósito del Decreto Supremo 466?",
+    "answer": "Es el reglamento operativo que dicta las normas sobre instalación, funcionamiento y cierre de farmacias y otros establecimientos."
+  },
+  {
+    "id": "fc-005",
+    "question": "¿Cómo se define el Uso Racional de Medicamentos (URM)?",
+    "answer": "Es el proceso donde los pacientes reciben la medicación adecuada a sus necesidades, en dosis correctas, por el tiempo debido y al menor costo posible."
+  },
+  {
+    "id": "fc-006",
+    "question": "¿Qué garantiza el atributo de Bioequivalencia?",
+    "answer": "Garantiza que un medicamento tiene la misma eficacia y seguridad que el producto innovador (original)."
+  },
+  {
+    "id": "fc-007",
+    "question": "¿Qué organismo es responsable del registro y la fiscalización de fármacos en Chile?",
+    "answer": "El Instituto de Salud Pública (ISP)."
+  },
+  {
+    "id": "fc-008",
+    "question": "Cuál es la función de la SEREMI de Salud respecto a las farmacias?",
+    "answer": "Es la autoridad encargada de otorgar las autorizaciones de funcionamiento y realizar los exámenes de competencia para auxiliares."
+  },
+  {
+    "id": "fc-009",
+    "question": "¿Qué es el 'Petitorio Mínimo'?",
+    "answer": "Es el listado de medicamentos obligatorios que toda farmacia debe tener en stock permanentemente."
+  },
+  {
+    "id": "fc-010",
+    "question": "¿En qué consiste el acto de Dispensación?",
+    "answer": "Es el acto farmacéutico de entrega e información sobre el fármaco (uso, interacciones y almacenamiento)."
+  },
+  {
+    "id": "fc-011",
+    "question": "¿Qué importancia biológica tiene el cumplimiento del URM?",
+    "answer": "Busca minimizar efectos adversos y evitar problemas de salud pública como la resistencia bacteriana."
+  },
+  {
+    "id": "fc-012",
+    "question": "¿Qué define el Registro Sanitario?",
+    "answer": "Es la inscripción oficial que autoriza la venta de un fármaco en el país tras validar su calidad."
+  },
+  {
+    "id": "fc-013",
+    "question": "¿Cuál es la jerarquía del auxiliar según el Reglamento 466?",
+    "answer": "El auxiliar actúa siempre bajo la supervisión, control y dependencia del Director Técnico."
+  },
+  {
+    "id": "fc-014",
+    "question": "¿Qué es una Receta Retenida?",
+    "answer": "Es una prescripción médica que debe quedar archivada físicamente en la farmacia tras el despacho."
+  },
+  {
+    "id": "fc-015",
+    "question": "Qué debe hacer el auxiliar si un cliente pide un antibiótico de marca costoso?",
+    "answer": "Debe informar que existe la DCI y que la farmacia tiene la obligación de ofrecer la alternativa bioequivalente certificada."
+  }
+]

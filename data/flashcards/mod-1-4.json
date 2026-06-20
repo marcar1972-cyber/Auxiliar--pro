@@ -1,0 +1,77 @@
+[
+  {
+    "id": "fc-001",
+    "question": "¿Cuál es el objetivo principal de la Ley de Fármacos (Ley 20.724)?",
+    "answer": "Garantizar que la población acceda a medicamentos de calidad, seguridad y eficacia, promoviendo la transparencia y la educación sanitaria."
+  },
+  {
+    "id": "fc-002",
+    "question": "¿Qué es la Denominación Común Internacional (DCI)?",
+    "answer": "Es el nombre genérico del principio activo recomendado por la OMS, el cual debe indicarse obligatoriamente en la receta médica."
+  },
+  {
+    "id": "fc-003",
+    "question": "¿Qué obligación tiene el médico si prescribe un medicamento por su nombre de fantasía (marca)?",
+    "answer": "Está obligado por ley a agregar la DCI (nombre genérico) para autorizar su posible intercambio en la farmacia."
+  },
+  {
+    "id": "fc-004",
+    "question": "¿Bajo qué condición se puede realizar el intercambio por un bioequivalente?",
+    "answer": "Cuando el medicamento tiene demostrada su equivalencia terapéutica y el paciente solicita la alternativa certificada."
+  },
+  {
+    "id": "fc-005",
+    "question": "¿Cómo se identifica visualmente un medicamento bioequivalente en su envase?",
+    "answer": "Debe llevar obligatoriamente el Logotipo 'B' dentro de una banda amarilla o roja."
+  },
+  {
+    "id": "fc-006",
+    "question": "¿Qué garantiza biológicamente la certificación de bioequivalencia?",
+    "answer": "Asegura que el fármaco tiene la misma biodisponibilidad que el producto innovador, llegando a la sangre en la misma concentración y velocidad."
+  },
+  {
+    "id": "fc-007",
+    "question": "¿Qué establece la Norma Técnica 147 (NT 147)?",
+    "answer": "Dicta las pautas obligatorias de Buenas Prácticas de Almacenamiento y Distribución (BPA) para evitar la degradación de los fármacos."
+  },
+  {
+    "id": "fc-008",
+    "question": "¿Qué controles ambientales debe registrar el auxiliar según la NT 147?",
+    "answer": "Debe registrar la temperatura (15°C a 25°C) y la humedad relativa (máx. 60%) al menos dos veces al día."
+  },
+  {
+    "id": "fc-009",
+    "question": "¿Qué es el 'Petitorio Mínimo'?",
+    "answer": "Es el listado de medicamentos que toda farmacia debe tener obligatoriamente en stock para asegurar la disponibilidad inmediata a la población."
+  },
+  {
+    "id": "fc-010",
+    "question": "¿Cuál es la función del Formulario Nacional de Medicamentos (FNM)?",
+    "answer": "Regir los arsenales farmacoterapéuticos del país con productos indispensables basados en evidencia científica y la realidad epidemiológica."
+  },
+  {
+    "id": "fc-011",
+    "question": "¿Qué información sobre bioequivalentes debe estar disponible para el público?",
+    "answer": "Las farmacias deben tener a disposición el listado actualizado de productos bioequivalentes para consulta libre de los usuarios."
+  },
+  {
+    "id": "fc-012",
+    "question": "¿Qué es la trazabilidad de un medicamento?",
+    "answer": "Es la capacidad de identificar el lote y origen de cada unidad en todas sus etapas, desde la fabricación hasta la venta."
+  },
+  {
+    "id": "fc-013",
+    "question": "¿Cuál es la diferencia entre una receta médica y una Receta Cheque?",
+    "answer": "La receta médica es un instrumento privado de prescripción, mientras que la Receta Cheque es un formulario oficial para estupefacientes y psicotrópicos controlados."
+  },
+  {
+    "id": "fc-014",
+    "question": "¿Qué requisitos debe cumplir el envase de un producto de Venta Directa (VD)?",
+    "answer": "Debe contener en su exterior la indicación terapéutica necesaria y contar con sellos de inviolabilidad."
+  },
+  {
+    "id": "fc-015",
+    "question": "¿Por qué es crítica la transparencia de precios según esta ley?",
+    "answer": "Para que los precios sean visibles y comparables, permitiendo que el usuario ejerce su derecho a la libre elección de medicamentos."
+  }
+]

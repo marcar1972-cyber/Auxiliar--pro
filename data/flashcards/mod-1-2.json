@@ -1,0 +1,77 @@
+[
+  {
+    "id": "fc-001",
+    "question": "¿Por qué la infraestructura de una farmacia es considerada crítica?",
+    "answer": "Porque garantiza que los medicamentos no pierdan su estabilidad química y física, evitando que se vuelvan riesgosos o ineficaces."
+  },
+  {
+    "id": "fc-002",
+    "question": "¿A qué altura mínima deben estar los productos de Venta Directa (VD) en la sala de ventas?",
+    "answer": "Deben estar a una altura mínima de 1 metro para seguridad infantil."
+  },
+  {
+    "id": "fc-003",
+    "question": "¿Qué condiciones ambientales exige la Norma Técnica 147 para la bodega?",
+    "answer": "Exige una temperatura de 15°C a 25°C y una humedad relativa máxima del 60%."
+  },
+  {
+    "id": "fc-004",
+    "question": "¿Qué es el Área de Cuarentena?",
+    "answer": "Es una zona aislada y rotulada para productos vencidos, dañados o devueltos que esperan su disposición final."
+  },
+  {
+    "id": "fc-005",
+    "question": "¿Qué define la 'Estabilidad' de un medicamento?",
+    "answer": "Es la capacidad de un fármaco para mantener sus propiedades originales dentro de los límites especificados durante su período de eficacia."
+  },
+  {
+    "id": "fc-006",
+    "question": "¿Cuál es el rango de temperatura para la Cadena de Frío (productos termolábiles)?",
+    "answer": "El rango obligatorio es entre 2°C y 8°C."
+  },
+  {
+    "id": "fc-007",
+    "question": "¿Cada cuánto se deben registrar las temperaturas en la farmacia?",
+    "answer": "Se deben registrar al menos dos veces al día (mañana y tarde)."
+  },
+  {
+    "id": "fc-008",
+    "question": "¿Qué instrumento se utiliza para medir temperatura y humedad simultáneamente?",
+    "answer": "El termohigrómetro."
+  },
+  {
+    "id": "fc-009",
+    "question": "¿Qué es el área de Fraccionamiento?",
+    "answer": "Sector destinado a extraer unidades individuales (pastillas) de un envase clínico para entregárselas al paciente."
+  },
+  {
+    "id": "fc-010",
+    "question": "¿Quién tiene prohibido entrar al área de fraccionamiento?",
+    "answer": "El público general tiene prohibido el acceso para evitar riesgos de contaminación cruzada."
+  },
+  {
+    "id": "fc-011",
+    "question": "¿Qué tipos de medicamentos NO pueden fraccionarse?",
+    "answer": "No se pueden fraccionar productos controlados (psicotrópicos), oncológicos, radiofármacos ni medicamentos que requieran refrigeración."
+  },
+  {
+    "id": "fc-012",
+    "question": "¿Qué significa que un medicamento sea Fotosensible?",
+    "answer": "Significa que su principio activo sufre degradación química si se expone a la luz directa."
+  },
+  {
+    "id": "fc-013",
+    "question": "¿Cuál es la función de la Oficina del Director Técnico?",
+    "answer": "Es el espacio donde el Químico Farmacéutico custodia los libros de control oficial (Psicotrópicos, Estupefacientes e Inspección)."
+  },
+  {
+    "id": "fc-014",
+    "question": "¿Qué sucede biológicamente si un fármaco pierde estabilidad por calor?",
+    "answer": "Su principio activo puede degradarse, perdiendo el efecto terapéutico o generando compuestos tóxicos."
+  },
+  {
+    "id": "fc-015",
+    "question": "¿Qué debe hacer el auxiliar si recibe un producto termolábil a temperatura ambiente?",
+    "answer": "Debe trasladarlo de inmediato al Área de Cuarentena e informar al Director Técnico, ya que se rompió la cadena de frío."
+  }
+]

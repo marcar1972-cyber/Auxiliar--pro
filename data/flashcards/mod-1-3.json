@@ -1,0 +1,77 @@
+[
+  {
+    "id": "fc-001",
+    "question": "¿Cómo define el Estado chileno el rol del Auxiliar de Farmacia?",
+    "answer": "Se define como un colaborador directo en las acciones de protección, fomento y recuperación de la salud."
+  },
+  {
+    "id": "fc-002",
+    "question": "¿Cuáles son los requisitos de educación y experiencia para obtener la resolución de Auxiliar de Farmacia?",
+    "answer": "Haber aprobado el 4º año de enseñanza media y acreditar un desempeño efectivo de al menos un año en labores de bodegaje y reposición, certificado por un Director Técnico."
+  },
+  {
+    "id": "fc-003",
+    "question": "¿Qué evaluación final es obligatoria para ejercer legalmente como auxiliar?",
+    "answer": "Se debe rendir y aprobar un examen de competencias ante la SEREMI de Salud sobre regulación sanitaria y farmacología básica."
+  },
+  {
+    "id": "fc-004",
+    "question": "¿Cuál es la relación jerárquica legal del auxiliar respecto al Químico Farmacéutico?",
+    "answer": "El auxiliar actúa siempre bajo la supervisión, control y dependencia del Director Técnico; no posee autonomía para funciones profesionales."
+  },
+  {
+    "id": "fc-005",
+    "question": "¿Qué funciones operativas puede realizar el auxiliar según el Artículo 28 del Decreto 466?",
+    "answer": "Incluyen el bodegaje, reposición de inventarios, entrega física de medicamentos (expendio) y educación sobre productos de venta directa."
+  },
+  {
+    "id": "fc-006",
+    "question": "¿Qué tiene prohibido hacer el auxiliar si el Químico Farmacéutico se retira del local?",
+    "answer": "No puede despachar ninguna receta que sea retenida, cheque o psicotrópicos, ya que el profesional debe supervisar y firmar personalmente dicho despacho."
+  },
+  {
+    "id": "fc-007",
+    "question": "¿Por qué es una responsabilidad ética respetar las condiciones de almacenamiento?",
+    "answer": "Porque alteraciones en la temperatura o humedad pueden cambiar la biodisponibilidad del fármaco, causando que el tratamiento falle o genere toxicidad."
+  },
+  {
+    "id": "fc-008",
+    "question": "¿Qué debe hacer un auxiliar si detecta una posible Reacción Adversa a Medicamento (RAM)?",
+    "answer": "Debe preguntar al paciente por sus síntomas y derivarlo oportunamente al Director Técnico para el proceso de farmacovigilancia."
+  },
+  {
+    "id": "fc-009",
+    "question": "Asistencialmente, ¿cuál es la principal prohibición del auxiliar en el mesón?",
+    "answer": "El auxiliar tiene prohibición de diagnosticar o recetar; su función se limita a asistir en la dispensación de lo ya prescrito por un médico."
+  },
+  {
+    "id": "fc-010",
+    "question": "¿Qué sucede legalmente si un auxiliar despacha un medicamento diferente al indicado en la receta?",
+    "answer": "Constituye una infracción grave que conlleva sanciones tanto para el auxiliar como para el Director Técnico y el dueño del local."
+  },
+  {
+    "id": "fc-011",
+    "question": "¿Qué información debe entregar el auxiliar en una 'dispensación informada'?",
+    "answer": "Debe informar sobre el uso correcto, interacciones con alimentos (ej: no tomar ciprofloxacino con lácteos), almacenamiento y posibles efectos adversos."
+  },
+  {
+    "id": "fc-012",
+    "question": "¿Cuál es la consecuencia ética y legal de vender un psicotrópico sin receta 'por cortesía'?",
+    "answer": "Es una falta grave que puede llevar a la cancelación definitiva del carnet de auxiliar por parte de la SEREMI de Salud."
+  },
+  {
+    "id": "fc-013",
+    "question": "¿Cuál es el objetivo del Uso Racional de Medicamentos (URM) que el auxiliar debe promover?",
+    "answer": "Garantizar que el paciente reciba la medicación adecuada a sus necesidades, en la dosis correcta, por el tiempo debido y al menor costo posible."
+  },
+  {
+    "id": "fc-014",
+    "question": "¿Qué verificación debe hacer el auxiliar al recibir una receta médica?",
+    "answer": "Debe confirmar que esté extendida según la normativa: nombre del paciente, DCI (nombre genérico), dosis, firma y fecha vigente."
+  },
+  {
+    "id": "fc-015",
+    "question": "¿Qué estándar técnico rige la gestión logística del auxiliar en la farmacia?",
+    "answer": "La Norma Técnica 147, que dicta las pautas obligatorias de Buenas Prácticas de Almacenamiento y Distribución."
+  }
+]
