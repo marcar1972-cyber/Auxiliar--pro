@@ -58,16 +58,6 @@ export default function BannerUrgencia() {
         cuponAsignado: 'AUXILIARPRO_2026'
       });
 
-      fetch('https://hook.us2.make.com/r8r94dlmw5a6l4kvwfshfqu7byu3q3h7', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          nombre: usuario.displayName || 'Usuario AuxiliarPro',
-          email: usuario.email,
-          cupon: 'AUXILIARPRO_2026'
-        })
-      }).catch(err => console.error("Webhook skip:", err));
-
       setInscrito(true);
       router.push('/planes');
 
@@ -82,7 +72,7 @@ export default function BannerUrgencia() {
   if (!isMounted) return null;
 
   return (
-    <div className="bg-[#003366] text-white py-3 px-4 text-center text-xs md:text-sm font-medium flex flex-col lg:flex-row items-center justify-center gap-4 lg:gap-8 shadow-[0_4px_30px_rgba(40,167,69,0.2)] z-50 relative w-full overflow-hidden border-b-2 border-[#28a745]">
+    <div className="bg-[#0b2545] text-white py-3 px-4 text-center text-xs md:text-sm font-medium flex flex-col lg:flex-row items-center justify-center gap-4 lg:gap-8 shadow-[0_4px_30px_rgba(40,167,69,0.2)] z-50 relative w-full overflow-hidden border-b-2 border-[#28a745]">
       
       {/* Efecto de Brillo de Fondo */}
       <div className="absolute top-0 right-0 w-72 h-72 bg-[#28a745] rounded-full blur-[100px] opacity-25 -mr-20 -mt-20 pointer-events-none"></div>
@@ -91,10 +81,10 @@ export default function BannerUrgencia() {
       {/* Textos Principales */}
       <div className="flex flex-col sm:flex-row items-center justify-center gap-2 md:gap-4 text-center max-w-full relative z-10">
         <div className="bg-[#28a745] text-white font-black text-xs px-2 py-0.5 rounded-md tracking-wider uppercase shadow-[0_0_10px_rgba(40,167,69,0.5)]">
-          🎯 AUXILIARPRO
+          🎯 DÍA DEL PADRE: INVIERTE EN TI
         </div>
         <span className="leading-tight text-white font-bold tracking-tight">
-          Tu mejor opción para preparar el examen SEREMI de Auxiliar de Farmacia
+          Para el papá que estudia después del turno: domina el examen SEREMI con la plataforma más rápida y efectiva
         </span>
         <span className="hidden lg:inline opacity-30 text-white">|</span>
         <span className="leading-tight text-emerald-400 font-extrabold italic">

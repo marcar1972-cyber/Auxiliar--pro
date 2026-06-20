@@ -63,17 +63,19 @@ export default function Navbar() {
     <nav className="bg-white border-b border-slate-100 sticky top-0 z-[100] shadow-sm">
       <div className="max-w-[1400px] mx-auto px-4 h-16 flex items-center justify-between">
         
-        {/* LOGO ACTUALIZADO (Formato webp y restringido a no desbordar) */}
-        <Link href="/" className="relative w-40 md:w-48 h-12 hover:opacity-80 transition-opacity shrink-0 flex items-center">
-            <Image 
-              src="/logo.webp" 
-              alt="Logo AuxiliarPro App" 
-              width={200}
-              height={48}
-              className="object-contain object-left w-auto h-full max-h-12"
-              priority
-            />
-        </Link>
+        {/* CONTENEDOR DE LOGO MAXIMIZADO: Desborda la h-16 para verse gigante, similar al tamaño de los títulos principales */}
+        <div className="relative w-64 md:w-72 h-16 shrink-0 flex items-center">
+          <Link href="/" className="absolute left-0 w-72 md:w-80 h-24 md:h-28 flex items-center hover:opacity-80 transition-opacity z-50">
+              <Image 
+                src="/logo-dia-papa-2-sin fondo.png" 
+                alt="Logo AuxiliarPro App" 
+                width={320}
+                height={112}
+                className="object-contain object-left w-full h-full transform scale-150 md:scale-[1.65] origin-left select-none pointer-events-none"
+                priority
+              />
+          </Link>
+        </div>
 
         {/* 🖥️ MENÚ DE ESCRITORIO */}
         <div className="hidden lg:flex items-center gap-1 xl:gap-2">

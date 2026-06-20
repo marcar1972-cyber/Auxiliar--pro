@@ -13,6 +13,11 @@ export default function PlanesSuscripcion() {
   const [proUntil, setProUntil] = useState(null);
   const [loadingAuth, setLoadingAuth] = useState(true);
 
+  // 🚀 ESTADOS DEL POPUP (5 Segundos de lectura)
+  const [mostrarAviso, setMostrarAviso] = useState(false);
+  const [contador, setContador] = useState(5);
+  const [urlDestino, setUrlDestino] = useState("");
+
   // 🔗 Enlaces base de MercadoPago compartidos
   const BASE_LINK_15_DIAS = "https://mpago.la/2en6De7";
   const BASE_LINK_MENSUAL = "https://mpago.la/2vRdcGW";
@@ -73,6 +78,17 @@ export default function PlanesSuscripcion() {
     return () => unsubscribeAuth();
   }, []);
 
+  // 🚀 REQUISITO 5 SEGUNDOS: Manejador activo de la cuenta regresiva y desvío final
+  useEffect(() => {
+    let timer;
+    if (mostrarAviso && contador > 0) {
+      timer = setTimeout(() => setContador(contador - 1), 1000);
+    } else if (mostrarAviso && contador === 0 && urlDestino) {
+      window.location.href = urlDestino;
+    }
+    return () => clearTimeout(timer);
+  }, [mostrarAviso, contador, urlDestino]);
+
   // 🚀 CTO INYECTOR DINÁMICO: Vincula el email del usuario logueado al link estático de Mercado Pago
   const construirLinkInteligente = (linkBase) => {
     if (!user || !user.email) return linkBase;
@@ -95,7 +111,34 @@ export default function PlanesSuscripcion() {
   const isActive = hasActiveSubscription();
 
   return (
-    <div className="w-full bg-white py-12">
+    <div className="w-full bg-white py-12 relative">
+      
+      {/* 🚨 POPUP FLOTANTE DE ADVERTENCIA DE SOPORTE */}
+      {mostrarAviso && (
+        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-[9999] p-4">
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl p-6 md:p-8 max-w-md w-full text-center relative overflow-hidden">
+            
+            <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-xl font-black mx-auto mb-4 border border-blue-200 shadow-sm">
+              {contador}s
+            </div>
+            
+            <h3 className="text-slate-900 text-lg font-black tracking-tight mb-2">
+              Redirigiendo a Mercado Pago...
+            </h3>
+            
+            <blockquote className="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl my-4 text-left">
+              <p className="text-amber-900 text-xs md:text-sm font-medium leading-relaxed">
+                <strong>Nota Importante:</strong> Si después de realizar el pago de tu suscripción no se activa tu cuenta PRO de forma inmediata, envíanos un correo a <span className="font-bold underline text-blue-700">hola@auxiliarpro.cl</span> para revisar tu caso a la brevedad y solucionarlo.
+              </p>
+            </blockquote>
+            
+            <p className="text-slate-400 text-[11px] font-semibold uppercase mt-4">
+              Preparando conexión segura con la pasarela
+            </p>
+          </div>
+        </div>
+      )}
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         
         {/* ENCABEZADO */}
@@ -220,6 +263,12 @@ export default function PlanesSuscripcion() {
                   href={construirLinkInteligente(BASE_LINK_15_DIAS)}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setUrlDestino(construirLinkInteligente(BASE_LINK_15_DIAS));
+                    setContador(5);
+                    setMostrarAviso(true);
+                  }}
                   className="w-full block bg-[#003366] text-white hover:bg-[#002244] font-black py-4 rounded-xl transition-all text-center text-sm shadow-lg"
                 >
                   Obtener Pase
@@ -282,6 +331,12 @@ export default function PlanesSuscripcion() {
                   href={construirLinkInteligente(BASE_LINK_MENSUAL)}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setUrlDestino(construirLinkInteligente(BASE_LINK_MENSUAL));
+                    setContador(5);
+                    setMostrarAviso(true);
+                  }}
                   className="w-full block bg-[#28a745] text-white hover:bg-[#218838] font-black py-4 rounded-xl transition-all text-center text-sm shadow-lg shadow-[#28a745]/30"
                 >
                   Plan Mensual
@@ -341,6 +396,12 @@ export default function PlanesSuscripcion() {
                   href={construirLinkInteligente(BASE_LINK_ANUAL)}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setUrlDestino(construirLinkInteligente(BASE_LINK_ANUAL));
+                    setContador(5);
+                    setMostrarAviso(true);
+                  }}
                   className="w-full block bg-[#28a745] text-white hover:bg-[#218838] font-black py-5 rounded-xl transition-all text-center text-sm shadow-[0_0_30px_rgba(40,167,69,0.4)] transform hover:scale-105"
                 >
                   Obtener Anual
