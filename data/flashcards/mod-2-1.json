@@ -1,0 +1,77 @@
+[
+  {
+    "id": "fc-001",
+    "question": "¿Qué es la Farmacotecnia?",
+    "answer": "Es la disciplina científica que estudia las manipulaciones a las que se someten las materias primas para darles una forma farmacéutica adecuada que permita una administración precisa y eficaz."
+  },
+  {
+    "id": "fc-002",
+    "question": "¿Qué es el Principio Activo (PA)?",
+    "answer": "Es la sustancia o mezcla de sustancias responsables del efecto farmacológico específico, ya sea para prevenir, aliviar, controlar o curar una enfermedad."
+  },
+  {
+    "id": "fc-003",
+    "question": "¿Cuál es la función de un excipiente en un medicamento?",
+    "answer": "Es una materia prima sin actividad terapéutica que actúa como vehículo, conservante o modificador de la liberación, permitiendo que el principio activo sea estable y manejable."
+  },
+  {
+    "id": "fc-004",
+    "question": "¿Qué facultad exclusiva otorga el Artículo 8 del Decreto Supremo 466 a las farmacias?",
+    "answer": "Les otorga la facultad exclusiva de elaborar preparados magistrales y oficinales."
+  },
+  {
+    "id": "fc-005",
+    "question": "¿Cuál es la definición biológica de Forma Farmacéutica?",
+    "answer": "Es la 'arquitectura' o disposición física que protege al principio activo de factores ambientales y de la degradación gástrica, determinando el lugar y la velocidad de su absorción."
+  },
+  {
+    "id": "fc-006",
+    "question": "¿Cómo influye la forma farmacéutica en la biodisponibilidad?",
+    "answer": "Determina la cantidad y velocidad con que el principio activo llega a la circulación sistémica."
+  },
+  {
+    "id": "fc-007",
+    "question": "¿Qué procesos físicos debe sufrir una forma sólida antes de que el fármaco actúe?",
+    "answer": "Debe pasar por los procesos de desintegración (fragmentación en medio líquido) y disolución en los fluidos corporales."
+  },
+  {
+    "id": "fc-008",
+    "question": "¿Qué operaciones comunes incluye el proceso de fabricación farmacéutica?",
+    "answer": "Incluye el pesaje, mezcla, granulación (en el caso de sólidos) o solubilización (en líquidos), bajo estrictos controles de calidad."
+  },
+  {
+    "id": "fc-009",
+    "question": "¿Por qué está prohibido triturar comprimidos de liberación prolongada?",
+    "answer": "Porque altera su estructura física, destruyendo el mecanismo de liberación controlada, lo que puede causar una absorción masiva y peligrosa (toxicidad) o que el ácido del estómago destruya el fármaco."
+  },
+  {
+    "id": "fc-010",
+    "question": "¿Cuál es la diferencia entre un preparado magistral y uno oficinal?",
+    "answer": "El magistral es personalizado para un paciente específico, mientras que el oficinal sigue una fórmula predefinida en farmacopeas oficiales."
+  },
+  {
+    "id": "fc-011",
+    "question": "¿Qué define la 'Estabilidad' de un producto farmacéutico?",
+    "answer": "Es la capacidad del medicamento para mantener sus propiedades originales (físicas, químicas, biológicas y microbiológicas) a lo largo del tiempo."
+  },
+  {
+    "id": "fc-012",
+    "question": "¿Qué es un 'Lote' o 'Serie' en producción?",
+    "answer": "Es una cantidad definida de producto fabricado en un solo ciclo de fabricación, lo que garantiza que todas las unidades sean uniformes."
+  },
+  {
+    "id": "fc-013",
+    "question": "¿A qué se refiere el término 'Cuarentena' en el ámbito farmacéutico?",
+    "answer": "Es el aislamiento transitorio de productos mientras se evalúa su aprobación o rechazo técnico."
+  },
+  {
+    "id": "fc-014",
+    "question": "¿Qué importancia tiene la 'Trazabilidad' en farmacotecnia?",
+    "answer": "Es la capacidad de identificar el origen y desplazamiento de un producto en todas sus etapas, desde la materia prima hasta la entrega al paciente."
+  },
+  {
+    "id": "fc-015",
+    "question": "¿Qué es el proceso de desintegración?",
+    "answer": "Es el proceso físico de fragmentación de una forma farmacéutica sólida cuando entra en contacto con un medio líquido."
+  }
+]

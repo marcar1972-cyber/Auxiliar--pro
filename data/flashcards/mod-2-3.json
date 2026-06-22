@@ -1,0 +1,77 @@
+[
+  {
+    "id": "fc-001",
+    "question": "¿Cómo se definen las formas farmacéuticas líquidas?",
+    "answer": "Son preparaciones que contienen uno o más principios activos disueltos o dispersos en un vehículo apropiado."
+  },
+  {
+    "id": "fc-002",
+    "question": "¿Cuál es la principal ventaja biofarmacéutica de los líquidos (soluciones) frente a los sólidos?",
+    "answer": "Al estar el principio activo ya disuelto, se elimina la etapa de desintegración, lo que suele resultar en una absorción más rápida y un inicio de acción acelerado."
+  },
+  {
+    "id": "fc-003",
+    "question": "¿Para qué grupos de pacientes son indispensables estas formas y por qué?",
+    "answer": "Para la población pediátrica y geriátrica, debido a la facilidad de deglución y la versatilidad para el ajuste preciso de la dosis."
+  },
+  {
+    "id": "fc-004",
+    "question": "¿Qué es una solución y qué ejemplos incluye?",
+    "answer": "Es una mezcla homogénea de una sola fase donde el fármaco está totalmente disuelto. Incluye gotas, jarabes, elíxires y soluciones óticas o nasales."
+  },
+  {
+    "id": "fc-005",
+    "question": "¿Qué característica técnica define a los jarabes?",
+    "answer": "Son soluciones acuosas con una alta concentración de sacarosa (cercana al 64% p/p), lo que les da alta viscosidad, permite enmascarar sabores y ayuda a su conservación natural."
+  },
+  {
+    "id": "fc-006",
+    "question": "¿Qué es una suspensión y qué requiere antes de su administración?",
+    "answer": "Es un sistema heterogéneo donde un sólido finamente dividido se dispersa en un líquido. Requiere siempre agentes suspendentes y ser agitada enérgicamente antes de usar para evitar la sedimentación."
+  },
+  {
+    "id": "fc-007",
+    "question": "¿Qué establece la ley sobre la exhibición de precios de los líquidos?",
+    "answer": "El Art. 45 C exige que se indique el precio por unidad de medida calculado cada 100 mililitros, permitiendo la comparación directa entre productos."
+  },
+  {
+    "id": "fc-008",
+    "question": "¿Bajo qué condiciones se permite el fraccionamiento de líquidos?",
+    "answer": "Se autoriza solo para formas líquidas dispuestas en envases primarios monodosis; está prohibido para controlados o productos de cadena de frío."
+  },
+  {
+    "id": "fc-009",
+    "question": "¿Por qué se utilizan las 'suspensiones extemporáneas' (polvos para reconstituir)?",
+    "answer": "Se usan para principios activos que son químicamente inestables en medio acuoso por periodos largos; al estar secos se garantiza el 100% de la potencia hasta su uso."
+  },
+  {
+    "id": "fc-010",
+    "question": "¿Qué es la 'marca de aforo' en un frasco de suspensión?",
+    "answer": "Es la marca en el envase que indica el volumen exacto al cual debe agregarse agua purificada para reconstituir correctamente el producto."
+  },
+  {
+    "id": "fc-011",
+    "question": "¿Qué tres parámetros de seguridad son innegociables para los colirios (oftálmicos)?",
+    "answer": "Deben cumplir con esterilidad (sin microorganismos), isotonía (presión similar a las lágrimas) y pH neutro."
+  },
+  {
+    "id": "fc-012",
+    "question": "¿Qué advertencia deben llevar los envases de soluciones inyectables de 100 mL o más?",
+    "answer": "Deben indicar explícitamente que se debe desechar en caso de turbidez o precipitado, ya que esto indica contaminación o pérdida de estabilidad."
+  },
+  {
+    "id": "fc-013",
+    "question": "¿Cuál es el riesgo de no agitar una suspensión antes de cada dosis?",
+    "answer": "El paciente puede recibir solo vehículo (agua/azúcar) en las primeras tomas (subdosis) y una sobredosis peligrosa en las últimas dosis acumuladas al fondo."
+  },
+  {
+    "id": "fc-014",
+    "question": "¿Qué es una emulsión?",
+    "answer": "Es una mezcla de dos líquidos no miscibles entre sí (como agua y aceite), estabilizados por un agente emulsionante."
+  },
+  {
+    "id": "fc-015",
+    "question": "¿Qué es el 'vehículo' en una fórmula líquida?",
+    "answer": "Es el componente líquido que sirve de soporte y contiene al principio activo."
+  }
+]

@@ -1,0 +1,77 @@
+[
+  {
+    "id": "fc-001",
+    "question": "¿Cómo se define la calidad de un medicamento en términos legales y sanitarios?",
+    "answer": "Es una condición indispensable definida por la conjunción de su eficacia, seguridad y estabilidad, factores que deben mantenerse según lo autorizado en su registro sanitario."
+  },
+  {
+    "id": "fc-002",
+    "question": "¿Qué son las Buenas Prácticas de Manufactura (BPM)?",
+    "answer": "Son las normas técnicas mínimas que rigen los procedimientos para asegurar que los productos farmacéuticos mantengan una calidad satisfactoria y consistente en cada lote."
+  },
+  {
+    "id": "fc-003",
+    "question": "¿Cuál es la función de las Buenas Prácticas de Laboratorio (BPL)?",
+    "answer": "Garantizar que los datos generados en el control de calidad sean reproducibles, representativos y confiables."
+  },
+  {
+    "id": "fc-004",
+    "question": "¿Por qué el control de calidad y el aseguramiento de la calidad deben ser independientes?",
+    "answer": "Para evitar conflictos de interés y asegurar el cumplimiento de la norma, deben ser dirigidos por profesionales distintos."
+  },
+  {
+    "id": "fc-005",
+    "question": "¿Qué es la 'estabilidad' de un fármaco?",
+    "answer": "Es la capacidad del medicamento para mantener sus propiedades originales (físicas, químicas, biológicas y microbiológicas) durante su periodo de eficacia."
+  },
+  {
+    "id": "fc-006",
+    "question": "¿Qué riesgo biológico existe si un fármaco pierde su estabilidad?",
+    "answer": "Puede generar productos de degradación tóxicos o perder su potencia, lo que resulta en un fracaso terapéutico."
+  },
+  {
+    "id": "fc-007",
+    "question": "¿Cómo influye la estabilidad en la farmacocinética (liberación)?",
+    "answer": "La degradación de los excipientes en una forma inestable puede alterar drásticamente la biodisponibilidad, afectando la cantidad y velocidad con que el principio activo llega a la sangre."
+  },
+  {
+    "id": "fc-008",
+    "question": "¿Qué debe hacer el auxiliar si un paciente intenta devolver un producto dañado por humedad?",
+    "answer": "Debe informar que el producto no es apto para el consumo y trasladarlo de inmediato al Área de Cuarentena para evitar su reintegración al stock de venta."
+  },
+  {
+    "id": "fc-009",
+    "question": "¿Qué es el 'Recetario' en una farmacia?",
+    "answer": "Es el sector diferenciado destinado exclusivamente a la elaboración de preparados farmacéuticos y cosméticos personalizados."
+  },
+  {
+    "id": "fc-010",
+    "question": "¿Cuál es la definición de una Fórmula Magistral?",
+    "answer": "Es un medicamento personalizado para un paciente determinado, prescrito por un profesional habilitado y elaborado de forma extemporánea."
+  },
+  {
+    "id": "fc-011",
+    "question": "¿Qué caracteriza a un Preparado Oficinal o Galénico?",
+    "answer": "Es aquel cuya fórmula y método de preparación están predefinidos en farmacopeas oficiales o documentos reconocidos."
+  },
+  {
+    "id": "fc-012",
+    "question": "¿Qué registro oficial es obligatorio mantener en el recetario?",
+    "answer": "El Registro Oficial de Elaboración, el cual debe estar foliado y autorizado por la SEREMI de Salud."
+  },
+  {
+    "id": "fc-013",
+    "question": "¿Puede el auxiliar elaborar una fórmula magistral sin supervisión?",
+    "answer": "No; todas las labores en el recetario deben realizarse bajo la estricta supervigilancia del Químico Farmacéutico y aplicando técnicas de asepsia."
+  },
+  {
+    "id": "fc-014",
+    "question": "¿Es legal elaborar una crema magistral sin receta médica?",
+    "answer": "No; por definición legal, toda fórmula magistral requiere obligatoriamente una orden suscrita por un profesional habilitado."
+  },
+  {
+    "id": "fc-015",
+    "question": "¿Qué es la trazabilidad en el contexto del recetario?",
+    "answer": "Es la capacidad de identificar el origen y desplazamiento de cada preparado mediante el registro meticuloso de sus etapas de elaboración y distribución."
+  }
+]

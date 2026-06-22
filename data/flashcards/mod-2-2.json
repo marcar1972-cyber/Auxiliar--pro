@@ -1,0 +1,77 @@
+[
+  {
+    "id": "fc-001",
+    "question": "¿Cómo se definen técnicamente las formas farmacéuticas sólidas?",
+    "answer": "Son preparaciones que contienen uno o más principios activos asociados a excipientes, diseñadas mayoritariamente para administración oral y que destacan por su alta estabilidad físico-química y precisión en la dosificación."
+  },
+  {
+    "id": "fc-002",
+    "question": "¿Cuál es la principal diferencia entre comprimidos y cápsulas?",
+    "answer": "Los comprimidos se obtienen por compresión mecánica de polvos o granulados, mientras que las cápsulas consisten en un receptáculo de gelatina (dura o blanda) que contiene el principio activo en su interior."
+  },
+  {
+    "id": "fc-003",
+    "question": "¿Qué funciones cumple el recubrimiento en las grageas o comprimidos recubiertos?",
+    "answer": "Sirve para enmascarar sabores desagradables, proteger el principio activo de la luz y la humedad, o facilitar la deglución del medicamento."
+  },
+  {
+    "id": "fc-004",
+    "question": "¿Cuál es la función crítica del recubrimiento entérico?",
+    "answer": "Impide que el comprimido se disuelva en el pH ácido del estómago, liberando el fármaco solo en el intestino delgado para proteger la mucosa gástrica o evitar la destrucción del principio activo por el ácido."
+  },
+  {
+    "id": "fc-005",
+    "question": "¿Qué proceso físico debe ocurrir antes de que un fármaco sólido pueda absorberse?",
+    "answer": "Debe pasar por procesos de desintegración (fragmentarse en partículas pequeñas) y disolución antes de atravesar las membranas biológicas."
+  },
+  {
+    "id": "fc-006",
+    "question": "¿Qué sucede con la biodisponibilidad si un comprimido no se disuelve correctamente?",
+    "answer": "La biodisponibilidad (la fracción del fármaco que llega a la sangre) será nula o insuficiente para lograr el éxito terapéutico."
+  },
+  {
+    "id": "fc-007",
+    "question": "¿Qué es un excipiente en una forma sólida?",
+    "answer": "Es una materia prima sin actividad terapéutica que se usa para dar forma, estabilidad o sabor al medicamento, como diluyentes, aglutinantes o desintegrantes."
+  },
+  {
+    "id": "fc-008",
+    "question": "¿Bajo qué normativa legal se permite el fraccionamiento en Chile?",
+    "answer": "Bajo el Artículo 40 del Decreto Supremo 466, que faculta a las farmacias para entregar la cantidad exacta de unidades posológicas prescritas en la receta."
+  },
+  {
+    "id": "fc-009",
+    "question": "¿Cuáles son los requisitos de infraestructura para el área de fraccionamiento?",
+    "answer": "Debe ser un área circunscrita, con mesones lisos e impermeables, y el proceso debe realizarse bajo la supervisión directa del Químico Farmacéutico."
+  },
+  {
+    "id": "fc-010",
+    "question": "¿Qué tipos de productos sólidos está estrictamente PROHIBIDO fraccionar?",
+    "answer": "Productos sujetos a control legal (estupefacientes y psicotrópicos), oncológicos, radiofármacos, los que requieran cadena de frío y productos fotosensibles."
+  },
+  {
+    "id": "fc-011",
+    "question": "¿Qué información debe llevar obligatoriamente el rotulado de un producto fraccionado?",
+    "answer": "Debe incluir la DCI (nombre genérico), el número de lote, la fecha de vencimiento, las instrucciones de la receta y se debe entregar el folleto de información al paciente."
+  },
+  {
+    "id": "fc-012",
+    "question": "¿Por qué está prohibido fraccionar un psicotrópico como el Alprazolam?",
+    "answer": "Por razones de seguridad sanitaria y control estricto de stock exigido por la ley para evitar el desvío de dosis."
+  },
+  {
+    "id": "fc-013",
+    "question": "¿Qué son los polvos y granulados para suspensión extemporánea?",
+    "answer": "Son formas sólidas que requieren ser reconstituidas en un vehículo líquido (generalmente agua purificada) antes de su administración, comunes en antibióticos pediátricos."
+  },
+  {
+    "id": "fc-014",
+    "question": "¿Por qué es fundamental el control de humedad en el almacenamiento de sólidos?",
+    "answer": "Porque la humedad puede causar la hidrólisis (ruptura química) de comprimidos y polvos, alterando su estabilidad y periodo de eficacia."
+  },
+  {
+    "id": "fc-015",
+    "question": "¿Qué riesgo existe al triturar un comprimido de liberación prolongada?",
+    "answer": "Se destruye el mecanismo de liberación controlada, lo que puede provocar una absorción masiva y peligrosa (toxicidad) o que el ácido del estómago destruya el medicamento."
+  }
+]

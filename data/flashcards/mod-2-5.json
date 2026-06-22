@@ -1,0 +1,77 @@
+[
+  {
+    "id": "fc-001",
+    "question": "¿Cuál es el objetivo principal de las formas farmacéuticas inhalatorias?",
+    "answer": "Administrar principios activos directamente al árbol bronquial para lograr un efecto local inmediato o una absorción sistémica rápida a través de la superficie alveolar."
+  },
+  {
+    "id": "fc-002",
+    "question": "¿Qué ventaja biológica ofrece la vía inhalatoria frente a la oral?",
+    "answer": "Evita el paso por el tracto digestivo y el metabolismo de 'primer paso' en el hígado, permitiendo que el fármaco llegue casi instantáneamente a los receptores pulmonares."
+  },
+  {
+    "id": "fc-003",
+    "question": "¿Qué tamaño deben tener las partículas de un aerosol para ser efectivas?",
+    "answer": "Deben tener un tamaño de entre 1 y 5 micras para alcanzar los bronquiolos; si son más grandes quedan en la garganta y si son más pequeñas se exhalan."
+  },
+  {
+    "id": "fc-004",
+    "question": "¿Cuál es la función técnica de las aerocámaras?",
+    "answer": "Disminuyen la velocidad de las partículas, permitiendo que queden suspendidas para ser inhaladas sin requerir una coordinación perfecta entre el disparo y la inspiración."
+  },
+  {
+    "id": "fc-005",
+    "question": "¿Por qué se debe esperar entre 1 y 2 minutos entre cada 'puf' o disparo?",
+    "answer": "Para permitir que el primer disparo dilate los bronquios, facilitando que el segundo llegue a zonas más profundas del pulmón."
+  },
+  {
+    "id": "fc-006",
+    "question": "¿Cómo se definen los productos estériles?",
+    "answer": "Son aquellos que están totalmente exentos de microorganismos vivos y de pirógenos (sustancias que causan fiebre)."
+  },
+  {
+    "id": "fc-007",
+    "question": "¿Qué tres requisitos de seguridad deben cumplir los colirios (vía oftálmica)?",
+    "answer": "Deben ser estériles, isotónicos (presión igual a las lágrimas) y tener un pH neutro para no irritar el ojo."
+  },
+  {
+    "id": "fc-008",
+    "question": "¿Cuánto tiempo de validez tiene un colirio una vez abierto el frasco?",
+    "answer": "Se recomienda desecharlo tras 28 a 30 días de abierto, ya que el conservante pierde efectividad y aumenta el riesgo de infección ocular por contaminación."
+  },
+  {
+    "id": "fc-009",
+    "question": "¿Qué advertencia legal deben llevar las soluciones inyectables de 100 mL o más?",
+    "answer": "Deben indicar obligatoriamente: 'desechar en caso de turbidez o precipitado', según el Artículo 84 del DTO 466."
+  },
+  {
+    "id": "fc-010",
+    "question": "¿Cuál es la biodisponibilidad de un fármaco administrado por vía intravenosa (IV)?",
+    "answer": "Es del 100%, ya que el fármaco se deposita directamente en el torrente sanguíneo, siendo la vía de elección en emergencias."
+  },
+  {
+    "id": "fc-011",
+    "question": "¿Qué precaución crítica se debe tener con los parches transdérmicos?",
+    "answer": "No deben cortarse, ya que se destruiría la matriz de liberación diseñada para entregar el fármaco de forma sostenida."
+  },
+  {
+    "id": "fc-012",
+    "question": "¿Qué es un pirógeno?",
+    "answer": "Es una sustancia de origen bacteriano capaz de provocar un aumento de la temperatura corporal (fiebre) si ingresa al organismo."
+  },
+  {
+    "id": "fc-013",
+    "question": "¿Cómo deben conservarse los supositorios y óvulos?",
+    "answer": "Al ser formas moldeadas sensibles al calor, deben conservarse siempre en un lugar fresco para evitar que pierdan su forma y consistencia."
+  },
+  {
+    "id": "fc-014",
+    "question": "¿Qué es el propelente en un inhalador MDI?",
+    "answer": "Es el gas a presión que se encarga de expulsar el principio activo del envase en forma de partículas finas."
+  },
+  {
+    "id": "fc-015",
+    "question": "¿Qué riesgo existe al usar un inhalador sin aerocámara?",
+    "answer": "Aumenta el depósito del fármaco en la boca y garganta, lo que puede causar ronquera o infecciones por hongos (candidiasis orofaríngea)."
+  }
+]

@@ -9,11 +9,20 @@ import { onAuthStateChanged } from "firebase/auth";
 import { FileText, Download, Loader2, ChevronLeft, BrainCircuit, ShieldCheck, Lock, CheckCircle2, X, RotateCw, ArrowRight, ArrowLeft } from "lucide-react"; 
 import Link from "next/link";
 
+// CTO FIX: Corrección de ruteo relativo (subir solo dos niveles desde [modId] -> campus -> app)
+import SocialContact from "../../components/SocialContact";
+
 // Importación de los Mazos Locales Pilotados (Costo $0)
 import mod1_1Cards from "../../../data/flashcards/mod-1-1.json";
 import mod1_2Cards from "../../../data/flashcards/mod-1-2.json";
 import mod1_3Cards from "../../../data/flashcards/mod-1-3.json";
 import mod1_4Cards from "../../../data/flashcards/mod-1-4.json";
+import mod2_1Cards from "../../../data/flashcards/mod-2-1.json";
+import mod2_2Cards from "../../../data/flashcards/mod-2-2.json";
+import mod2_3Cards from "../../../data/flashcards/mod-2-3.json";
+import mod2_4Cards from "../../../data/flashcards/mod-2-4.json";
+import mod2_5Cards from "../../../data/flashcards/mod-2-5.json";
+import mod2_6Cards from "../../../data/flashcards/mod-2-6.json";
 
 const ProfessionalProgress = ({ percentage }) => (
   <div className="w-full bg-white p-4 rounded-2xl border border-slate-200 mb-8 shadow-sm">
@@ -49,7 +58,7 @@ export default function ModuloDetalle() {
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
 
-  // CTO FIX: Numeración estricta y limpieza de strings para garantizar el orden 1 al N
+  // CNC FIX: Numeración estricta y limpieza de strings para garantizar el orden 1 al N
   const cleanName = (fileName, index) => {
     let name = fileName.replace(/\.pdf$/i, "").trim(); 
     name = name.replace(/^(\d+[\.\-\_]*\s*|MOD\s*\d+\s*CLASE\s*\d+\s*)/i, "").trim();
@@ -97,8 +106,42 @@ export default function ModuloDetalle() {
       } else {
         alert("Mazo en preparación. Los pilotos actuales están activos en las clases 1 a la 4 del Módulo 1.");
       }
+    } else if (modId === "mod-2") {
+      if (index === 0) { // 2.1 Fundamentos de Farmacotecnia
+        setCurrentMazo(mod2_1Cards);
+        setCurrentCardIndex(0);
+        setIsFlipped(false);
+        setIsModalOpen(true);
+      } else if (index === 1) { // 2.2 Sólidos
+        setCurrentMazo(mod2_2Cards);
+        setCurrentCardIndex(0);
+        setIsFlipped(false);
+        setIsModalOpen(true);
+      } else if (index === 2) { // 2.3 Líquidos
+        setCurrentMazo(mod2_3Cards);
+        setCurrentCardIndex(0);
+        setIsFlipped(false);
+        setIsModalOpen(true);
+      } else if (index === 3) { // 2.4 Semisólidos
+        setCurrentMazo(mod2_4Cards);
+        setCurrentCardIndex(0);
+        setIsFlipped(false);
+        setIsModalOpen(true);
+      } else if (index === 4) { // 2.5 Inhalatorias y Estériles
+        setCurrentMazo(mod2_5Cards);
+        setCurrentCardIndex(0);
+        setIsFlipped(false);
+        setIsModalOpen(true);
+      } else if (index === 5) { // 2.6 Control de Calidad
+        setCurrentMazo(mod2_6Cards);
+        setCurrentCardIndex(0);
+        setIsFlipped(false);
+        setIsModalOpen(true);
+      } else {
+        alert("Mazo en preparación. Por ahora los pilotos activos corresponden a las clases 1 a la 6 del Módulo 2.");
+      }
     } else {
-      alert("Mazo en preparación. Por ahora los pilotos activos corresponden al Módulo 1.");
+      alert("Mazo en preparación. Por ahora los pilotos activos corresponden al Módulo 1 y Módulo 2.");
     }
   };
 
@@ -307,6 +350,11 @@ export default function ModuloDetalle() {
             </Link>
           </div>
         )}
+
+        {/* CTO INJECTION: Bloque de contacto externo al final para opiniones y feedback */}
+        <div className="mt-12 pt-4 border-t border-slate-200">
+          <SocialContact />
+        </div>
       </div>
 
       {/* COMPONENTE INTERFÁCICO: MODAL DE TARJETAS DIDÁCTICAS CORREGIDO PARA CHROME */}

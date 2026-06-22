@@ -1,0 +1,77 @@
+[
+  {
+    "id": "fc-001",
+    "question": "¿Cómo se definen las formas farmacéuticas semisólidas?",
+    "answer": "Son preparaciones de consistencia intermedia entre sólido y líquido, destinadas a ser aplicadas sobre la piel o mucosas para ejercer una acción local o permitir la penetración percutánea de principios activos."
+  },
+  {
+    "id": "fc-002",
+    "question": "¿Qué caracteriza a las pomadas según la naturaleza de su vehículo?",
+    "answer": "Constan de un vehículo de una sola fase, son de carácter graso y poseen propiedades oclusivas que favorecen la hidratación de la piel."
+  },
+  {
+    "id": "fc-003",
+    "question": "¿Cuál es la diferencia técnica fundamental entre una crema y una pomada?",
+    "answer": "Las cremas son preparaciones multifásicas (aceite y agua), son menos grasas y de más fácil absorción; las pomadas son monofásicas y predominantemente grasas."
+  },
+  {
+    "id": "fc-004",
+    "question": "¿Qué son los ungüentos y para qué se diseñan?",
+    "answer": "Son bases muy grasas y generalmente anhidras (sin agua), diseñadas para permanecer mucho tiempo sobre la piel lesionada o seca."
+  },
+  {
+    "id": "fc-005",
+    "question": "¿Qué ventaja ofrecen los geles al paciente?",
+    "answer": "Están formados por líquidos gelificados que ofrecen una sensación de frescura en la aplicación y no dejan residuos grasos."
+  },
+  {
+    "id": "fc-006",
+    "question": "¿Qué componente especial caracteriza a las pastas?",
+    "answer": "Contienen un elevado porcentaje de polvos finamente divididos (como óxido de zinc) dispersos en el vehículo, usándose principalmente para protección cutánea."
+  },
+  {
+    "id": "fc-007",
+    "question": "¿Qué exigencia legal impone el Artículo 86 del DS 466 sobre el rotulado de semisólidos?",
+    "answer": "Establece que la composición de la fórmula debe expresarse obligatoriamente en porcentajes y en su dosis unitaria respectiva."
+  },
+  {
+    "id": "fc-008",
+    "question": "¿Qué formas semisólidas está permitido fraccionar según el Artículo 40?",
+    "answer": "Se autoriza explícitamente el fraccionamiento de formas moldeadas, tales como óvulos y supositorios, bajo supervisión del Director Técnico."
+  },
+  {
+    "id": "fc-009",
+    "question": "¿De qué depende la velocidad de liberación del fármaco en un semisólido?",
+    "answer": "Depende de la afinidad del fármaco por el vehículo: si es muy afín a la grasa y se usa una pomada grasa, se liberará lentamente; si se requiere efecto rápido, se usan bases acuosas."
+  },
+  {
+    "id": "fc-010",
+    "question": "¿Qué es la absorción percutánea?",
+    "answer": "Es el proceso mediante el cual el principio activo se libera de la base y atraviesa el estrato córneo de la piel para llegar a capas profundas o a la circulación."
+  },
+  {
+    "id": "fc-011",
+    "question": "¿Qué fenómeno ocurre cuando una crema se expone al calor excesivo (ej. dentro de un auto)?",
+    "answer": "Ocurre la coalescencia, que es la separación de las fases (agua y aceite), lo que altera la distribución del principio activo y anula la garantía de estabilidad."
+  },
+  {
+    "id": "fc-012",
+    "question": "¿Cuál es la temperatura máxima de almacenamiento recomendada para semisólidos?",
+    "answer": "Deben conservarse a temperatura ambiente controlada, que no debe exceder los $25^{\\circ}C$."
+  },
+  {
+    "id": "fc-013",
+    "question": "¿Cuál es la advertencia crítica al aplicar semisólidos no estériles?",
+    "answer": "No deben aplicarse sobre heridas abiertas a menos que el producto sea específicamente estéril, para evitar infecciones."
+  },
+  {
+    "id": "fc-014",
+    "question": "¿Por qué es fundamental cerrar herméticamente el envase tras su uso?",
+    "answer": "Para evitar la oxidación de los componentes grasos y la contaminación microbiana de las fases acuosas."
+  },
+  {
+    "id": "fc-015",
+    "question": "¿Qué significa que una base tenga 'oclusividad'?",
+    "answer": "Es la capacidad de formar una película que impide la pérdida de agua a través de la piel, favoreciendo su hidratación."
+  }
+]
