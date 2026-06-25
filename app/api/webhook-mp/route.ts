@@ -71,13 +71,16 @@ export async function POST(request: Request) {
         console.log("📦 Body JSON detectado en Webhook:", body);
         id = body.data?.id || body.id || id;
         type = body.type || body.action || type;
+        
+        // Extraer parámetros adicionales si vienen metidos en el JSON de MP
+        if (body.data) {
+          queryPayerEmail = queryPayerEmail || body.data.payer_email || null;
+          queryUid = queryUid || body.data.external_reference || null;
+        }
       } catch {
         // Payload no contiene JSON válido
       }
     }
-
-    // Normalización de tipos para capturar formatos como "payment.created" o "payment"
-    const esTipoPayment = type && (type.includes("payment") || type === "payment" || type.includes("action.id"));
 
     // Si después de revisar URL y Body sigue sin haber un ID, guardamos registro de aviso
     if (!id) {
@@ -100,8 +103,8 @@ export async function POST(request: Request) {
     const monto = payment.transaction_amount || 0;
     const mpPayerEmail = payment.payer?.email ? payment.payer.email.toLowerCase().trim() : "";
     
-    // Extractor de identidad en cascada descendente
-    let uid = payment.external_reference || queryUid || payment.metadata?.uid || payment.metadata?.user_id;
+    // Extractor de identidad ampliado (Buscamos también dentro de los metadatos de la respuesta completa)
+    let uid = payment.external_reference || queryUid || payment.metadata?.uid || payment.metadata?.user_id || payment.metadata?.external_reference;
 
     // Si el pago no está aprobado, respondemos 200 para liberar la cola pero no alteramos Firestore
     if (status !== "approved") {
@@ -133,7 +136,7 @@ export async function POST(request: Request) {
         metodoBusqueda = "query_param_email";
       } else {
         // Intento B: Email guardado en los metadatos internos del cobro
-        const emailEnMetadatos = payment.metadata?.email || payment.metadata?.user_email;
+        const emailEnMetadatos = payment.metadata?.email || payment.metadata?.user_email || payment.metadata?.payer_email;
         usuarioEncontrado = await buscarUsuarioPorEmail(emailEnMetadatos);
 
         if (usuarioEncontrado) {
@@ -146,6 +149,17 @@ export async function POST(request: Request) {
             uid = usuarioEncontrado.uid;
             metodoBusqueda = "mp_payer_email";
           }
+        }
+      }
+
+      // 🚨 ÚLTIMA CAPA DE RESCATE CRÍTICA: Si el correo de MP no coincide porque usó otra cuenta para pagar,
+      // buscamos en metadatos adicionales que la API de MP a veces guarda como adicionales en 'additional_info'
+      if (!uid && payment.additional_info?.payer?.email) {
+        const emailAdicional = payment.additional_info.payer.email;
+        usuarioEncontrado = await buscarUsuarioPorEmail(emailAdicional);
+        if (usuarioEncontrado) {
+          uid = usuarioEncontrado.uid;
+          metodoBusqueda = "additional_info_payer_email";
         }
       }
 
