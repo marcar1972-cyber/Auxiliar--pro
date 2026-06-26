@@ -58,16 +58,16 @@ export default function Navbar() {
 
   return (
     <nav className="bg-white border-b border-slate-100 sticky top-0 z-[100] shadow-sm">
-      <div className="max-w-[1400px] mx-auto px-4 flex flex-col lg:flex-row lg:items-center lg:justify-between lg:h-24">
+      <div className="max-w-[1400px] mx-auto px-4 flex flex-col lg:flex-row lg:items-center lg:justify-between lg:h-20">
         
         {/* LOGO */}
-        <Link href="/" className="relative flex items-center justify-center shrink-0 hover:opacity-90 transition-opacity z-50 mx-auto lg:mx-0 py-2 lg:py-0 lg:h-full">
+        <Link href="/" className="relative flex items-center justify-center shrink-0 hover:opacity-90 transition-opacity z-50 mx-auto lg:mx-0 py-3 lg:py-0 lg:h-full">
             <Image 
-              src="/logo-dia-papa-2-sin fondo-.png" 
+              src="/logo.webp" 
               alt="Logo AuxiliarPro App" 
-              width={450} 
-              height={180} 
-              className="h-24 lg:h-32 w-auto object-contain -translate-y-2 lg:-translate-y-3"
+              width={320} 
+              height={120} 
+              className="h-16 lg:h-20 w-auto object-contain"
               priority
             />
         </Link>

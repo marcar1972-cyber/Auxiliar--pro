@@ -81,10 +81,10 @@ export default function BannerUrgencia() {
       {/* Textos Principales */}
       <div className="flex flex-col sm:flex-row items-center justify-center gap-2 md:gap-4 text-center max-w-full relative z-10">
         <div className="bg-[#28a745] text-white font-black text-xs px-2 py-0.5 rounded-md tracking-wider uppercase shadow-[0_0_10px_rgba(40,167,69,0.5)]">
-          🎯 DÍA DEL PADRE: INVIERTE EN TI
+          🎯 EXAMEN SEREMI
         </div>
         <span className="leading-tight text-white font-bold tracking-tight">
-          Para el papá que estudia después del turno: domina el examen SEREMI con la plataforma más rápida y efectiva
+          Estudia con la mejor herramienta para preparar tu examen SEREMI y asegura tu certificación
         </span>
         <span className="hidden lg:inline opacity-30 text-white">|</span>
         <span className="leading-tight text-emerald-400 font-extrabold italic">

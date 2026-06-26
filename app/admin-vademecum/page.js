@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import BannerVenta from "../components/BannerVenta";
 import { ShieldCheck, Info, BookOpen, AlertTriangle, Search, List, Eye, EyeOff, Download, CheckSquare, Square } from "lucide-react";
 
-// 🚀 IMPORTAMOS AMBOS BLOQUES DESDE EL OTRO ARCHIVO
+// 🚀 IMPORTAMOS LOS BLOQUES DESDE EL OTRO ARCHIVO
 import { BLOQUE_I, BLOQUE_II, OPCIONES_DESPLEGABLES } from "./vademecumData";
 
 export default function BuscadorVademecum() {
@@ -31,6 +31,9 @@ export default function BuscadorVademecum() {
   const [cargandoAuditoria, setCargandoAuditoria] = useState(false);
 
   const [seleccionados, setSeleccionados] = useState(new Set()); 
+  
+  // 🚀 NUEVO ESTADO PARA LA SUGERENCIA DE BÚSQUEDA
+  const [sugerencia, setSugerencia] = useState(null); 
 
   const ADMIN_EMAIL = "marcar1972@gmail.com";
   const PLANES_LINK = "/planes";
@@ -43,6 +46,41 @@ export default function BuscadorVademecum() {
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
       .trim();
+  };
+
+  // 🚀 NUEVA FUNCIÓN: Calcula la similitud entre dos palabras (Distancia de Levenshtein)
+  const calcularSimilitud = (palabra1, palabra2) => {
+    if (!palabra1 || !palabra2) return 0;
+    if (palabra1 === palabra2) return 100;
+    const len1 = palabra1.length;
+    const len2 = palabra2.length;
+    
+    // Si la diferencia de largo es muy grande, no es probable que sea un error de tipeo
+    if (Math.abs(len1 - len2) > 3) return 0;
+
+    let matriz = [];
+    for (let i = 0; i <= len1; i++) {
+      matriz[i] = [i];
+    }
+    for (let j = 0; j <= len2; j++) {
+      matriz[0][j] = j;
+    }
+
+    for (let i = 1; i <= len1; i++) {
+      for (let j = 1; j <= len2; j++) {
+        const costo = palabra1[i - 1] === palabra2[j - 1] ? 0 : 1;
+        matriz[i][j] = Math.min(
+          matriz[i - 1][j] + 1,
+          matriz[i][j - 1] + 1,
+          matriz[i - 1][j - 1] + costo
+        );
+      }
+    }
+    
+    const distancia = matriz[len1][len2];
+    const maxLen = Math.max(len1, len2);
+    // Retornamos un porcentaje de similitud (100% es idéntico)
+    return ((maxLen - distancia) / maxLen) * 100;
   };
 
   useEffect(() => {
@@ -109,30 +147,64 @@ export default function BuscadorVademecum() {
     alert(`✅ Excel generado con ${seleccionados.size} medicamentos.`);
   };
 
-  const handleBuscar = async (e) => {
+  // 🚀 FUNCIÓN DE BÚSQUEDA MODIFICADA (Acepta un texto forzado para cuando se hace clic en la sugerencia)
+  const handleBuscar = async (e, textoForzado = null) => {
     if (e) e.preventDefault();
-    if (!busqueda.trim()) return;
+    const textoABuscar = textoForzado || busqueda;
+    if (!textoABuscar.trim()) return;
+    
     setCargando(true);
     setBuscado(true);
     setSeleccionados(new Set()); 
+    setSugerencia(null); 
     
     try {
       const querySnapshot = await getDocs(collection(db, "vademecum"));
       const datosFiltrados = [];
-      const terminoBusqueda = normalizarTexto(busqueda);
+      const terminoBusqueda = normalizarTexto(textoABuscar);
+      let mejorSugerencia = { nombre: "", similitud: 0 };
 
       querySnapshot.forEach((doc) => {
         const item = { id: doc.id, ...doc.data() };
         const nombreNormalizado = normalizarTexto(item.nombre);
         const principioNormalizado = normalizarTexto(item.principio_activo);
         
+        // 1. Búsqueda exacta (la que ya tenías)
         if (nombreNormalizado.includes(terminoBusqueda) || principioNormalizado.includes(terminoBusqueda)) {
           datosFiltrados.push(item);
+        } 
+        // 2. Búsqueda difusa (solo si la palabra tiene al menos 3 letras)
+        else if (terminoBusqueda.length >= 3) {
+          const primerNombre = nombreNormalizado.split(' ')[0];
+          const primerPrincipio = principioNormalizado.split(' ')[0];
+          
+          const simNombre = calcularSimilitud(terminoBusqueda, primerNombre);
+          const simPrincipio = calcularSimilitud(terminoBusqueda, primerPrincipio);
+          
+          const maxSim = Math.max(simNombre, simPrincipio);
+          
+          // Si la similitud es alta (> 70%) y es mejor que la anterior, la guardamos
+          if (maxSim > 70 && maxSim > mejorSugerencia.similitud) {
+            mejorSugerencia = { nombre: item.nombre, similitud: maxSim };
+          }
         }
       });
+      
       setResultados(datosFiltrados);
+      
+      // Si no hubo resultados exactos pero encontramos una sugerencia, la mostramos
+      if (datosFiltrados.length === 0 && mejorSugerencia.nombre) {
+        setSugerencia(mejorSugerencia.nombre);
+      }
+      
     } catch (error) { console.error(error); }
     setCargando(false);
+  };
+
+  // 🚀 NUEVA FUNCIÓN: Buscar sugerencia al hacer clic
+  const buscarSugerencia = (textoSugerido) => {
+    setBusqueda(textoSugerido); // Actualiza el input visualmente
+    handleBuscar(null, textoSugerido); // Dispara la búsqueda inmediatamente
   };
 
   const iniciarEdicion = (item) => { setEditandoId(item.id); setEditForm(item); };
@@ -165,7 +237,7 @@ export default function BuscadorVademecum() {
     }
   };
 
-  // 🚀 FUNCIÓN GENÉRICA DE SINCRONIZACIÓN (Reemplaza a handleCargaMasivaYPurga)
+  // 🚀 FUNCIÓN GENÉRICA DE SINCRONIZACIÓN
   const sincronizarBloque = async (bloqueData, nombreBloque) => {
     if (!window.confirm(`⚠️ ¿Ejecutar SINCRONIZACIÓN PRO? Se cargará el ${nombreBloque}.`)) return;
     setCargandoAuditoria(true);
@@ -177,7 +249,6 @@ export default function BuscadorVademecum() {
       for (const item of bloqueData) {
         const nombreLimpioNuevo = normalizarTexto(item.nombre).replace(/\s+/g, '');
         
-        // Purga de duplicados existentes
         for (const docSnap of todosLosDocsSnapshot.docs) {
           const data = docSnap.data();
           if (data.nombre && normalizarTexto(data.nombre).replace(/\s+/g, '') === nombreLimpioNuevo) {
@@ -185,7 +256,6 @@ export default function BuscadorVademecum() {
           }
         }
         
-        // Carga del nuevo documento
         const docId = normalizarTexto(item.nombre).replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
         await setDoc(doc(db, "vademecum", docId), item);
       }
@@ -360,7 +430,6 @@ export default function BuscadorVademecum() {
             
             {isAdmin && (
               <div className="flex flex-wrap gap-3 justify-center">
-                {/* 🚀 BOTONES DE SINCRONIZACIÓN REFACTORIZADOS */}
                 <button onClick={() => sincronizarBloque(BLOQUE_I, "Bloque I")} className="bg-slate-900 hover:bg-slate-800 transition-colors text-white px-5 py-3 rounded-full font-black text-xs shadow-md">🚀 Sync Bloque I</button>
                 <button onClick={() => sincronizarBloque(BLOQUE_II, "Bloque II")} className="bg-emerald-700 hover:bg-emerald-600 transition-colors text-white px-5 py-3 rounded-full font-black text-xs shadow-md">🚀 Sync Bloque II</button>
                 
@@ -405,12 +474,28 @@ export default function BuscadorVademecum() {
           </div>
         )}
 
+        {/* 🚀 CONTENEDOR DE RESULTADOS CON BLOQUE DE SUGERENCIA INTEGRADO */}
         <div className={modoInventario ? "bg-white border border-slate-200 rounded-[2rem] overflow-hidden shadow-sm divide-y divide-slate-100" : ""}>
             {totalMostrados > 0 ? (
                 dataAMostrar.map(item => modoInventario ? renderFilaInventario(item) : renderTarjetaMedicamento(item))
             ) : buscado && !cargando && (
-                <div className="text-center py-20 bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-200">
+                <div className="text-center py-20 bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-200 flex flex-col items-center gap-6">
                     <p className="text-slate-400 font-bold text-xl uppercase tracking-widest">Sin resultados encontrados</p>
+                    
+                    {/* 🚀 NUEVO BLOQUE DE SUGERENCIA (Did you mean...?) */}
+                    {sugerencia && (
+                        <div className="mt-4 bg-amber-50 border-2 border-amber-200 p-6 rounded-2xl max-w-md animate-in fade-in zoom-in shadow-sm">
+                            <p className="text-amber-800 font-bold text-sm mb-3 flex items-center justify-center gap-2">
+                                <AlertTriangle size={18} /> ¿Tal vez quisiste decir...?
+                            </p>
+                            <button 
+                                onClick={() => buscarSugerencia(sugerencia)}
+                                className="text-emerald-600 font-black text-xl hover:text-emerald-700 transition-colors underline decoration-emerald-300 decoration-4 hover:decoration-emerald-500"
+                            >
+                                {sugerencia}
+                            </button>
+                        </div>
+                    )}
                 </div>
             )}
         </div>
@@ -442,7 +527,7 @@ export default function BuscadorVademecum() {
         <div className="mt-8"><BannerVenta /></div>
       </div>
       <footer className="mt-12 text-center text-slate-300 text-[10px] font-mono uppercase tracking-[0.3em] pb-12">
-        AuxiliarPro Vademécum v5.0 | macz.dev
+        AuxiliarPro Vademécum v5.1 | macz.dev
       </footer>
     </div>
   );
