@@ -455,6 +455,14 @@ export default function BuscadorVademecum() {
               <button type="submit" className="w-full md:w-auto bg-slate-900 text-white font-black py-4 px-10 rounded-2xl hover:bg-emerald-600 transition-all shadow-md">Buscar</button>
             </form>
           )}
+
+          {/* 🚨 DISCLAIMER LEGAL / EXENCIÓN DE RESPONSABILIDAD */}
+          <div className="mt-6 bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-start gap-3">
+            <AlertTriangle className="text-amber-600 shrink-0 mt-0.5" size={20} />
+            <p className="text-amber-900 text-xs md:text-sm font-medium leading-relaxed">
+              <span className="font-black uppercase">Aviso Legal:</span> Toda la información es orientativa. Los resultados, dosis y contraindicaciones deben ser <span className="font-black underline">validados por un Químico Farmacéutico (Q.F.) o fuentes oficiales (ISP/MINSAL)</span>. AuxiliarPro se exime de responsabilidad por dispensaciones no supervisadas.
+            </p>
+          </div>
         </div>
 
         {modoInventario && totalMostrados > 0 && (
