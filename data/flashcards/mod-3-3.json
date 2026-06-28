@@ -1,0 +1,77 @@
+[
+  {
+    "id": "fc-001",
+    "question": "¿Qué caracteriza a las sustancias sujetas a control legal (estupefacientes y psicotrópicos)?",
+    "answer": "Poseen propiedades farmacológicas capaces de actuar sobre el Sistema Nervioso Central (SNC) y tienen un alto potencial de generar dependencia física o psíquica, además de riesgo de abuso."
+  },
+  {
+    "id": "fc-002",
+    "question": "¿Cuáles son los dos decretos fundamentales que rigen estas sustancias en Chile?",
+    "answer": "El Decreto Supremo 404 para Estupefacientes y el Decreto Supremo 405 para Psicotrópicos."
+  },
+  {
+    "id": "fc-003",
+    "question": "¿Qué define a la 'Lista I' de psicotrópicos y estupefacientes?",
+    "answer": "Son sustancias cuya utilidad médica es nula y presentan un alto riesgo, por lo que están estrictamente prohibidas en el territorio nacional (ej: LSD, Heroína)."
+  },
+  {
+    "id": "fc-004",
+    "question": "¿Cuál es la diferencia de prescripción entre las Listas II/III y la Lista IV de psicotrópicos?",
+    "answer": "Las Listas II y III requieren obligatoriamente una Receta Cheque, mientras que la Lista IV requiere Receta Médica Retenida con Control de Existencia."
+  },
+  {
+    "id": "fc-005",
+    "question": "¿Cómo debe ser el almacenamiento físico de estos productos según el Art. 14 del DS 466?",
+    "answer": "Deben resguardarse en una estantería o mueble metálico exclusivo y permanecer siempre bajo llave."
+  },
+  {
+    "id": "fc-006",
+    "question": "¿Quién es el responsable legal directo de la custodia y expendio de estas sustancias?",
+    "answer": "El Director Técnico (Químico Farmacéutico) es el responsable directo; el auxiliar solo asiste bajo su supervisión y nunca debe tener las llaves a su alcance."
+  },
+  {
+    "id": "fc-007",
+    "question": "¿Está permitido el fraccionamiento de estupefacientes o psicotrópicos?",
+    "answer": "No. El Artículo 40 del Decreto 466 lo prohíbe taxativamente; deben entregarse siempre en su envase original sellado para garantizar la trazabilidad."
+  },
+  {
+    "id": "fc-008",
+    "question": "¿Cómo actúan biológicamente las benzodiazepinas (Psicotrópicos Lista IV)?",
+    "answer": "Potencian el efecto del neurotransmisor GABA al unirse al receptor GABA-A en el cerebro, produciendo efectos ansiolíticos, sedantes y anticonvulsivantes."
+  },
+  {
+    "id": "fc-009",
+    "question": "¿Cuál es el riesgo crítico de una administración incorrecta o sobredosis de psicotrópicos?",
+    "answer": "Puede provocar una depresión respiratoria severa."
+  },
+  {
+    "id": "fc-010",
+    "question": "¿Qué información debe registrarse obligatoriamente en el Libro de Control ante un 'egreso' (venta)?",
+    "answer": "Fecha, cantidad, número de receta, nombre del médico, RUT del paciente y RUT del adquirente."
+  },
+  {
+    "id": "fc-011",
+    "question": "¿Qué sucede si hay un descuadre entre el saldo físico del armario y el saldo anotado en el libro?",
+    "answer": "Cualquier diferencia es causal de un sumario sanitario inmediato por parte de la autoridad."
+  },
+  {
+    "id": "fc-012",
+    "question": "¿Cuál es la vigencia legal de una receta para productos controlados?",
+    "answer": "La receta tiene una vigencia de exactamente 30 días desde la fecha de su emisión."
+  },
+  {
+    "id": "fc-013",
+    "question": "¿Qué debe hacer el auxiliar si una receta presenta tachaduras o correcciones (enmiendas)?",
+    "answer": "Debe rechazar el despacho, ya que cualquier enmienda invalida el documento legal."
+  },
+  {
+    "id": "fc-014",
+    "question": "¿Qué es una 'Receta Cheque'?",
+    "answer": "Es un formulario oficial numerado que se utiliza para la prescripción de sustancias de control máximo, correspondientes a las Listas II y III."
+  },
+  {
+    "id": "fc-015",
+    "question": "¿Qué requisito debe cumplir el 'Adquirente' para retirar un medicamento controlado?",
+    "answer": "Debe ser una persona mayor de 18 años y sus datos personales (como el RUT) deben quedar registrados obligatoriamente en el Libro de Control."
+  }
+]

@@ -1,0 +1,77 @@
+[
+  {
+    "id": "fc-001",
+    "question": "¿Qué es la Cadena de Frío?",
+    "answer": "Es un proceso sanitario crítico e ininterrumpido que busca garantizar la estabilidad, seguridad y eficacia de los productos termolábiles desde su fabricación hasta su administración final."
+  },
+  {
+    "id": "fc-002",
+    "question": "¿Cuándo se considera que un producto es 'termolábil'?",
+    "answer": "Cuando sus propiedades físicas, químicas o biológicas se degradan si no se conservan dentro de rangos de temperatura estrictos."
+  },
+  {
+    "id": "fc-003",
+    "question": "¿Cuál es el rango normativo de temperatura para la refrigeración?",
+    "answer": "La normativa establece que los productos refrigerados deben mantenerse permanentemente entre 2°C y 8°C."
+  },
+  {
+    "id": "fc-004",
+    "question": "¿Cuál es el rango para la temperatura de congelación (vacunas específicas)?",
+    "answer": "El rango es de -20°C ± 5°C."
+  },
+  {
+    "id": "fc-005",
+    "question": "¿Cuál es la obligación legal respecto al registro de temperaturas?",
+    "answer": "Se deben registrar las temperaturas máximas y mínimas manualmente al menos dos veces al día (mañana y tarde), los siete días de la semana, incluyendo festivos."
+  },
+  {
+    "id": "fc-006",
+    "question": "¿Qué características técnicas debe tener el equipo de refrigeración?",
+    "answer": "Debe ser de uso exclusivo para medicamentos, contar con sistemas de alarma para fallas o cambios de temperatura y estar conectado a un respaldo de energía (UPS) o generador."
+  },
+  {
+    "id": "fc-007",
+    "question": "¿Qué ocurre biológicamente si un fármaco biológico (como la insulina) sufre exceso de calor o frío?",
+    "answer": "Ocurre la desnaturalización, donde la proteína pierde su estructura y, por lo tanto, el fármaco pierde su actividad biológica y potencia."
+  },
+  {
+    "id": "fc-008",
+    "question": "¿Qué es una 'Excursión de Temperatura'?",
+    "answer": "Es cualquier evento donde el medicamento es expuesto a temperaturas fuera de su rango preestablecido de almacenamiento."
+  },
+  {
+    "id": "fc-009",
+    "question": "¿Qué debe hacer el auxiliar ante una excursión de temperatura?",
+    "answer": "Debe informar inmediatamente al Director Técnico y segregar los productos afectados en el Área de Cuarentena hasta determinar si aún son aptos para el uso."
+  },
+  {
+    "id": "fc-010",
+    "question": "¿Cuál es la primera regla del plan de contingencia ante un corte de energía?",
+    "answer": "No se debe abrir el refrigerador, para mantener la inercia térmica interna el mayor tiempo posible."
+  },
+  {
+    "id": "fc-011",
+    "question": "¿Qué tres ejemplos de productos biológicos menciona el material como dependientes de la cadena de frío?",
+    "answer": "Menciona la Insulina NPH, las vacunas y la eritropoyetina."
+  },
+  {
+    "id": "fc-012",
+    "question": "¿Cómo debe educar el auxiliar al paciente que retira un producto termolábil?",
+    "answer": "Debe informar que el producto pierde su efecto a temperatura ambiente y sugerir el uso de una bolsa térmica con unidades de gel refrigerante para el transporte al hogar."
+  },
+  {
+    "id": "fc-013",
+    "question": "¿Qué precaución técnica se debe tener al usar gel refrigerante en el transporte?",
+    "answer": "Se debe advertir que el gel no debe tocar directamente el envase del medicamento para evitar su congelación accidental."
+  },
+  {
+    "id": "fc-014",
+    "question": "¿Qué es el 'Mapeo Térmico'?",
+    "answer": "Es un estudio técnico que determina cuáles son los puntos más calientes y fríos dentro de un equipo de refrigeración."
+  },
+  {
+    "id": "fc-015",
+    "question": "¿Cuál es la responsabilidad del Director Técnico según el Artículo 121 del Decreto 466?",
+    "answer": "Tiene la obligación de asegurar la conservación de la temperatura de los productos biológicos y mantener registros de ella hasta su entrega."
+  }
+]

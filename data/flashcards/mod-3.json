@@ -1,0 +1,77 @@
+[
+  {
+    "id": "fc-001",
+    "question": "¿Cuál es el objetivo principal del almacenamiento de productos farmacéuticos?",
+    "answer": "Asegurar que el medicamento mantenga su calidad, seguridad y eficacia desde su fabricación hasta su administración final, previniendo el deterioro físico o la degradación química."
+  },
+  {
+    "id": "fc-002",
+    "question": "¿Cómo se define técnicamente la 'estabilidad' de un fármaco?",
+    "answer": "Es la capacidad de un principio activo o producto terminado para mantener sus propiedades originales (físicas, químicas, biológicas y microbiológicas) dentro de los límites autorizados."
+  },
+  {
+    "id": "fc-003",
+    "question": "¿Qué se entiende por 'período de eficacia'?",
+    "answer": "Es el lapso de tiempo durante el cual se garantiza la estabilidad del producto bajo las condiciones de almacenamiento definidas en su registro sanitario."
+  },
+  {
+    "id": "fc-004",
+    "question": "¿Qué norma técnica dicta las pautas obligatorias de almacenamiento en Chile?",
+    "answer": "La Norma Técnica 147, que establece las Buenas Prácticas de Almacenamiento y Distribución (BPA)."
+  },
+  {
+    "id": "fc-005",
+    "question": "¿Cuál es la responsabilidad legal del Director Técnico según el DS 466 respecto al stock?",
+    "answer": "Debe velar porque el sistema de almacenamiento asegure la conservación y calidad de todos los productos farmacéuticos."
+  },
+  {
+    "id": "fc-006",
+    "question": "¿Qué riesgo biológico implica el consumo de un fármaco inestable?",
+    "answer": "Puede generar productos de degradación tóxicos para el organismo o carecer totalmente de efecto terapéutico."
+  },
+  {
+    "id": "fc-007",
+    "question": "¿Cuál es el rango de temperatura definido como 'Temperatura Ambiente'?",
+    "answer": "Generalmente se sitúa entre 15°C y 25°C, aunque puede llegar a los 30°C dependiendo de los estudios de estabilidad específicos."
+  },
+  {
+    "id": "fc-008",
+    "question": "¿Qué rango de temperatura debe mantenerse estrictamente para la Cadena de Frío?",
+    "answer": "Debe mantenerse de forma constante entre 2°C y 8°C."
+  },
+  {
+    "id": "fc-009",
+    "question": "¿Cuál es el límite máximo permitido para la Humedad Relativa (H.R.) en bodega?",
+    "answer": "No debe superar el 60% (+/- 5%), ya que el exceso favorece la hidrólisis y el crecimiento de microorganismos."
+  },
+  {
+    "id": "fc-010",
+    "question": "¿Cómo deben protegerse los medicamentos 'fotosensibles'?",
+    "answer": "Deben mantenerse en sus envases originales, que suelen ser opacos o de color ámbar para filtrar la luz y evitar la degradación fotoquímica."
+  },
+  {
+    "id": "fc-011",
+    "question": "¿Qué es una 'Excursión de Temperatura'?",
+    "answer": "Es un evento donde un producto es expuesto a temperaturas fuera de su rango rotulado de almacenamiento (ej. una falla en el aire acondicionado)."
+  },
+  {
+    "id": "fc-012",
+    "question": "¿Qué acción debe tomar el auxiliar ante una excursión de temperatura detectada?",
+    "answer": "Debe informar de inmediato al Director Técnico y registrar el evento por escrito para evaluar si los productos deben pasar a Área de Cuarentena."
+  },
+  {
+    "id": "fc-013",
+    "question": "¿Con qué frecuencia deben registrarse las condiciones ambientales en la farmacia?",
+    "answer": "Se deben realizar monitoreos constantes y registros por escrito al menos dos veces al día (mañana y tarde)."
+  },
+  {
+    "id": "fc-014",
+    "question": "¿Cuál es la función del Área de Cuarentena en logística?",
+    "answer": "Es el aislamiento físico transitorio de productos que están en evaluación, han sido rechazados o han sufrido alteraciones, para evitar su venta."
+  },
+  {
+    "id": "fc-015",
+    "question": "¿Qué instrumento es obligatorio para el control ambiental y qué mide?",
+    "answer": "El termohigrómetro, que mide simultáneamente la temperatura y el porcentaje de humedad relativa en el ambiente."
+  }
+]

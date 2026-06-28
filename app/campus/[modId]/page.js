@@ -24,6 +24,11 @@ import mod2_4Cards from "../../../data/flashcards/mod-2-4.json";
 import mod2_5Cards from "../../../data/flashcards/mod-2-5.json";
 import mod2_6Cards from "../../../data/flashcards/mod-2-6.json";
 
+// Inyección Módulo 3 (Logística, Cadena de Frío y Control Legal)
+import mod3_1Cards from "../../../data/flashcards/mod-3.json";
+import mod3_2Cards from "../../../data/flashcards/mod-3-2.json";
+import mod3_3Cards from "../../../data/flashcards/mod-3-3.json";
+
 const ProfessionalProgress = ({ percentage }) => (
   <div className="w-full bg-white p-4 rounded-2xl border border-slate-200 mb-8 shadow-sm">
     <div className="flex justify-between items-center mb-2">
@@ -140,8 +145,27 @@ export default function ModuloDetalle() {
       } else {
         alert("Mazo en preparación. Por ahora los pilotos activos corresponden a las clases 1 a la 6 del Módulo 2.");
       }
+    } else if (modId === "mod-3") {
+      if (index === 0) { // 3.1 Almacenamiento y Logística
+        setCurrentMazo(mod3_1Cards);
+        setCurrentCardIndex(0);
+        setIsFlipped(false);
+        setIsModalOpen(true);
+      } else if (index === 1) { // 3.2 Cadena de Frío
+        setCurrentMazo(mod3_2Cards);
+        setCurrentCardIndex(0);
+        setIsFlipped(false);
+        setIsModalOpen(true);
+      } else if (index === 2) { // 3.3 Control Legal
+        setCurrentMazo(mod3_3Cards);
+        setCurrentCardIndex(0);
+        setIsFlipped(false);
+        setIsModalOpen(true);
+      } else {
+        alert("Mazo en preparación. Por ahora los pilotos activos corresponden a las clases 1 a la 3 del Módulo 3.");
+      }
     } else {
-      alert("Mazo en preparación. Por ahora los pilotos activos corresponden al Módulo 1 y Módulo 2.");
+      alert("Mazo en preparación. Por ahora los pilotos activos corresponden a los Módulos 1, 2 y 3.");
     }
   };
 
