@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { auth, db } from "../firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
-import { doc, onSnapshot, updateDoc } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import { Loader2, CheckCircle, Flame, Zap } from "lucide-react";
 import Link from "next/link";
 
@@ -30,8 +30,8 @@ export default function PlanesSuscripcion() {
         setUser(currentUser);
         const docRef = doc(db, "users", currentUser.uid);
 
-        // 2. Conexión asíncrona en tiempo real (onSnapshot)
-        const unsubscribeSnapshot = onSnapshot(docRef, async (docSnap) => {
+        // 2. Conexión asíncrona en tiempo real (onSnapshot - Solo Lectura)
+        const unsubscribeSnapshot = onSnapshot(docRef, (docSnap) => {
           try {
             if (docSnap.exists()) {
               const data = docSnap.data();
@@ -47,9 +47,10 @@ export default function PlanesSuscripcion() {
                 }
               }
 
-              // Expiración Pasiva Automática integrada en el flujo reactivo
-              if (currentIsPro && currentProUntil && new Date() > currentProUntil) {
-                await updateDoc(docRef, { isPro: false });
+              // 🚀 BLINDAJE CTO: ESTADO CALCULADO (Solo Lectura, sin escrituras destructivas)
+              // Si la fecha existe y ya expiró, calculamos localmente que isPro es false
+              // para la interfaz, PERO NO actualizamos la base de datos (Eso lo hace el Backend).
+              if (currentProUntil && new Date() > currentProUntil) {
                 currentIsPro = false;
               }
 
