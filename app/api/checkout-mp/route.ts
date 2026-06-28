@@ -168,20 +168,19 @@ export async function POST(request: Request) {
     // 🔥 ACTUALIZACIÓN EN TRANSACCIÓN ATÓMICA BLINDADA
     await db.runTransaction(async (transaction) => {
       const userSnapshot = await transaction.get(userRef);
-      if (!userSnapshot.exists) {
-        throw new Error("UserNotFound");
-      }
-
-      const userData = userSnapshot.data() || {};
+      
+      const userData = userSnapshot.exists ? (userSnapshot.data() || {}) : {};
       const userEmailApp = userData.email ? userData.email.toLowerCase().trim() : "";
       let proUntilBase = new Date();
 
-      if (userData.isPro && userData.proUntil) {
+      // 🚀 BLINDAJE DE EXSPIRACIÓN: Evaluamos la fecha directamente si existe, ignorando si isPro es false
+      if (userData.proUntil) {
         const fechaActual = new Date();
         const fechaProUntilExistente = typeof userData.proUntil.toDate === "function"
           ? userData.proUntil.toDate()
           : new Date(userData.proUntil);
 
+        // Si la fecha remanente guardada aún es válida en el futuro, acumulamos sobre ella
         if (fechaProUntilExistente > fechaActual) {
           proUntilBase.setTime(fechaProUntilExistente.getTime());
         }
@@ -203,7 +202,8 @@ export async function POST(request: Request) {
         });
       }
 
-      transaction.update(userRef, {
+      // 🚀 SOLUCIÓN AL PRIMER PAGO: Mutación vía set + merge para asegurar la creación atómica completa
+      transaction.set(userRef, {
         isPro: true,
         proUntil: admin.firestore.Timestamp.fromDate(proUntilBase),
         lastPayment: admin.firestore.FieldValue.serverTimestamp(),
@@ -226,12 +226,12 @@ export async function POST(request: Request) {
           metodoBusqueda: metodoBusqueda,
           timestamp: admin.firestore.FieldValue.serverTimestamp()
         })
-      });
+      }, { merge: true });
 
       transaction.set(logRef, {
         transactionId: id,
         uid: uid,
-        auxiliarProEmail: userEmailApp,
+        auxiliarProEmail: userEmailApp || "Nuevo Usuario sin email previo",
         mercadoPagoEmail: mpPayerEmail,
         plan: planDetectado,
         daysAdded: diasASumar,
