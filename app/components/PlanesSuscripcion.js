@@ -48,8 +48,6 @@ export default function PlanesSuscripcion() {
               }
 
               // 🚀 BLINDAJE CTO: ESTADO CALCULADO (Solo Lectura, sin escrituras destructivas)
-              // Si la fecha existe y ya expiró, calculamos localmente que isPro es false
-              // para la interfaz, PERO NO actualizamos la base de datos (Eso lo hace el Backend).
               if (currentProUntil && new Date() > currentProUntil) {
                 currentIsPro = false;
               }
@@ -90,12 +88,19 @@ export default function PlanesSuscripcion() {
     return () => clearTimeout(timer);
   }, [mostrarAviso, contador, urlDestino]);
 
-  // 🚀 CTO INYECTOR DINÁMICO: Vincula el email del usuario logueado al link estático de Mercado Pago
+  // 🚀 CTO INYECTOR DINÁMICO MEJORADO PARA CHECKOUT PRO MANUAL
   const construirLinkInteligente = (linkBase) => {
     if (!user || !user.email) return linkBase;
+    
+    const emailCodificado = encodeURIComponent(user.email.toLowerCase().trim());
+    const uidCodificado = encodeURIComponent(user.uid);
+    
+    // Forzamos el retorno seguro al gateway secundario de la app para procesar el pago al instante al volver
+    const urlRetorno = encodeURIComponent(`https://www.auxiliaresdefarmacia.cl/api/checkout-mp?payer_email=${emailCodificado}&external_reference=${uidCodificado}`);
+    
     const conector = linkBase.includes("?") ? "&" : "?";
-    // Pasamos el email y el uid en caliente para que queden registrados en el flujo del checkout de MP
-    return `${linkBase}${conector}payer_email=${encodeURIComponent(user.email.toLowerCase().trim())}&external_reference=${encodeURIComponent(user.uid)}`;
+    
+    return `${linkBase}${conector}payer_email=${emailCodificado}&external_reference=${uidCodificado}&wallet_return=${urlRetorno}&back_url=${urlRetorno}`;
   };
 
   const hasActiveSubscription = () => {
@@ -340,7 +345,7 @@ export default function PlanesSuscripcion() {
                   }}
                   className="w-full block bg-[#28a745] text-white hover:bg-[#218838] font-black py-4 rounded-xl transition-all text-center text-sm shadow-lg shadow-[#28a745]/30"
                 >
-                  Plan Mensual
+                  Plan Mezual
                 </a>
               )}
             </div>
