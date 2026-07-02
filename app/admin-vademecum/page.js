@@ -6,10 +6,10 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../firebase/config"; 
 import { useRouter } from "next/navigation"; 
 import BannerVenta from "../components/BannerVenta";
-import { ShieldCheck, Info, BookOpen, AlertTriangle, Search, List, Eye, EyeOff, Download, CheckSquare, Square } from "lucide-react";
+import { ShieldCheck, Info, BookOpen, AlertTriangle, Search, List, Eye, EyeOff, Download, CheckSquare, Square, Package } from "lucide-react";
 
-// 🚀 IMPORTAMOS LOS BLOQUES DESDE EL OTRO ARCHIVO
-import { BLOQUE_I, BLOQUE_II, OPCIONES_DESPLEGABLES } from "./vademecumData";
+// 🚀 IMPORTAMOS LOS TRES BLOQUES DESDE EL OTRO ARCHIVO
+import { BLOQUE_I, BLOQUE_II, BLOQUE_III, OPCIONES_DESPLEGABLES } from "./vademecumData";
 
 export default function BuscadorVademecum() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -32,7 +32,7 @@ export default function BuscadorVademecum() {
 
   const [seleccionados, setSeleccionados] = useState(new Set()); 
   
-  // 🚀 NUEVO ESTADO PARA LA SUGERENCIA DE BÚSQUEDA
+  // 🚀 ESTADO PARA LA SUGERENCIA DE BÚSQUEDA
   const [sugerencia, setSugerencia] = useState(null); 
 
   const ADMIN_EMAIL = "marcar1972@gmail.com";
@@ -48,14 +48,13 @@ export default function BuscadorVademecum() {
       .trim();
   };
 
-  // 🚀 NUEVA FUNCIÓN: Calcula la similitud entre dos palabras (Distancia de Levenshtein)
+  // 🚀 FUNCIÓN: Calcula la similitud entre dos palabras (Distancia de Levenshtein)
   const calcularSimilitud = (palabra1, palabra2) => {
     if (!palabra1 || !palabra2) return 0;
     if (palabra1 === palabra2) return 100;
     const len1 = palabra1.length;
     const len2 = palabra2.length;
     
-    // Si la diferencia de largo es muy grande, no es probable que sea un error de tipeo
     if (Math.abs(len1 - len2) > 3) return 0;
 
     let matriz = [];
@@ -79,10 +78,10 @@ export default function BuscadorVademecum() {
     
     const distancia = matriz[len1][len2];
     const maxLen = Math.max(len1, len2);
-    // Retornamos un porcentaje de similitud (100% es idéntico)
     return ((maxLen - distancia) / maxLen) * 100;
   };
 
+  // 🚀 CAMBIO: Acceso libre solo requiere autenticación, sin verificar isPro
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
@@ -98,11 +97,8 @@ export default function BuscadorVademecum() {
           setIsPro(currentIsPro);
         }
         
-        if (!currentIsPro && !isAdminCheck) {
-          router.push(PLANES_LINK);
-        } else {
-          setCheckingAuth(false);
-        }
+        // 🚀 ACCESO LIBRE: Cualquier usuario autenticado puede entrar
+        setCheckingAuth(false);
       } else {
         setUser(null);
         router.push("/login");
@@ -147,7 +143,7 @@ export default function BuscadorVademecum() {
     alert(`✅ Excel generado con ${seleccionados.size} medicamentos.`);
   };
 
-  // 🚀 FUNCIÓN DE BÚSQUEDA MODIFICADA (Acepta un texto forzado para cuando se hace clic en la sugerencia)
+  // 🚀 FUNCIÓN DE BÚSQUEDA CON SUGERENCIA
   const handleBuscar = async (e, textoForzado = null) => {
     if (e) e.preventDefault();
     const textoABuscar = textoForzado || busqueda;
@@ -169,11 +165,9 @@ export default function BuscadorVademecum() {
         const nombreNormalizado = normalizarTexto(item.nombre);
         const principioNormalizado = normalizarTexto(item.principio_activo);
         
-        // 1. Búsqueda exacta (la que ya tenías)
         if (nombreNormalizado.includes(terminoBusqueda) || principioNormalizado.includes(terminoBusqueda)) {
           datosFiltrados.push(item);
         } 
-        // 2. Búsqueda difusa (solo si la palabra tiene al menos 3 letras)
         else if (terminoBusqueda.length >= 3) {
           const primerNombre = nombreNormalizado.split(' ')[0];
           const primerPrincipio = principioNormalizado.split(' ')[0];
@@ -183,7 +177,6 @@ export default function BuscadorVademecum() {
           
           const maxSim = Math.max(simNombre, simPrincipio);
           
-          // Si la similitud es alta (> 70%) y es mejor que la anterior, la guardamos
           if (maxSim > 70 && maxSim > mejorSugerencia.similitud) {
             mejorSugerencia = { nombre: item.nombre, similitud: maxSim };
           }
@@ -192,7 +185,6 @@ export default function BuscadorVademecum() {
       
       setResultados(datosFiltrados);
       
-      // Si no hubo resultados exactos pero encontramos una sugerencia, la mostramos
       if (datosFiltrados.length === 0 && mejorSugerencia.nombre) {
         setSugerencia(mejorSugerencia.nombre);
       }
@@ -201,10 +193,9 @@ export default function BuscadorVademecum() {
     setCargando(false);
   };
 
-  // 🚀 NUEVA FUNCIÓN: Buscar sugerencia al hacer clic
   const buscarSugerencia = (textoSugerido) => {
-    setBusqueda(textoSugerido); // Actualiza el input visualmente
-    handleBuscar(null, textoSugerido); // Dispara la búsqueda inmediatamente
+    setBusqueda(textoSugerido);
+    handleBuscar(null, textoSugerido);
   };
 
   const iniciarEdicion = (item) => { setEditandoId(item.id); setEditForm(item); };
@@ -310,6 +301,17 @@ export default function BuscadorVademecum() {
           <div className="p-8 grid grid-cols-1 lg:grid-cols-2 gap-10">
             <div className="space-y-6">
                 <div><h3 className="font-black text-emerald-600 text-xs mb-2 uppercase">¿Para qué sirve?</h3><p className="text-slate-700 font-medium">{item.para_que_sirve}</p></div>
+                
+                {/* 🚀 NUEVO: BLOQUE DE PRESENTACIONES DISPONIBLES */}
+                {item.presentaciones && (
+                  <div>
+                    <h3 className="font-black text-blue-600 text-xs mb-2 uppercase flex items-center gap-2">
+                      <Package size={14} /> Presentaciones Disponibles
+                    </h3>
+                    <p className="text-slate-700 font-medium text-sm">{item.presentaciones}</p>
+                  </div>
+                )}
+                
                 <div><h3 className="font-black text-emerald-600 text-xs mb-2 uppercase">Dosificación / Posología</h3><p className="text-slate-700 font-medium whitespace-pre-line">{item.posologia}</p></div>
                 <div><h3 className="font-black text-rose-500 text-xs mb-2 uppercase">Contraindicaciones</h3><p className="text-slate-700 font-medium text-sm">{item.contraindicaciones}</p></div>
             </div>
@@ -365,6 +367,13 @@ export default function BuscadorVademecum() {
                 <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">¿Para qué sirve? (Acción Terapéutica)</label>
                 <textarea name="para_que_sirve" value={editForm.para_que_sirve || ""} onChange={handleEditChange} className="w-full p-3 rounded-xl border-2 border-slate-200 focus:border-emerald-500 outline-none transition-colors" rows="2"></textarea>
               </div>
+              
+              {/* 🚀 NUEVO: CAMPO DE PRESENTACIONES EN EL FORMULARIO DE EDICIÓN */}
+              <div>
+                <label className="block text-xs font-bold text-blue-600 mb-1 uppercase">📦 Presentaciones Disponibles</label>
+                <textarea name="presentaciones" value={editForm.presentaciones || ""} onChange={handleEditChange} className="w-full p-3 rounded-xl border-2 border-blue-200 focus:border-blue-500 outline-none transition-colors bg-blue-50" rows="2" placeholder="Ej: Comprimidos: 500 mg (Cajas de 20 y 30 unidades)"></textarea>
+              </div>
+              
               <div>
                 <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Dosificación / Posología</label>
                 <textarea name="posologia" value={editForm.posologia || ""} onChange={handleEditChange} className="w-full p-3 rounded-xl border-2 border-slate-200 focus:border-emerald-500 outline-none transition-colors" rows="2"></textarea>
@@ -430,10 +439,12 @@ export default function BuscadorVademecum() {
             
             {isAdmin && (
               <div className="flex flex-wrap gap-3 justify-center">
+                {/* 🚀 BOTONES DE SINCRONIZACIÓN - AHORA CON BLOQUE III */}
                 <button onClick={() => sincronizarBloque(BLOQUE_I, "Bloque I")} className="bg-slate-900 hover:bg-slate-800 transition-colors text-white px-5 py-3 rounded-full font-black text-xs shadow-md">🚀 Sync Bloque I</button>
                 <button onClick={() => sincronizarBloque(BLOQUE_II, "Bloque II")} className="bg-emerald-700 hover:bg-emerald-600 transition-colors text-white px-5 py-3 rounded-full font-black text-xs shadow-md">🚀 Sync Bloque II</button>
+                <button onClick={() => sincronizarBloque(BLOQUE_III, "Bloque III")} className="bg-blue-700 hover:bg-blue-600 transition-colors text-white px-5 py-3 rounded-full font-black text-xs shadow-md">🚀 Sync Bloque III</button>
                 
-                <button onClick={toggleAuditoria} className="bg-blue-500 hover:bg-blue-400 transition-colors text-white px-5 py-3 rounded-full font-black text-xs shadow-md">{modoAuditoria ? "✖ Cerrar Auditoría" : "⚡ Ver Todos"}</button>
+                <button onClick={toggleAuditoria} className="bg-purple-500 hover:bg-purple-400 transition-colors text-white px-5 py-3 rounded-full font-black text-xs shadow-md">{modoAuditoria ? "✖ Cerrar Auditoría" : "⚡ Ver Todos"}</button>
                 
                 <button 
                     onClick={() => { setModoInventario(!modoInventario); setSeleccionados(new Set()); }} 
@@ -456,7 +467,7 @@ export default function BuscadorVademecum() {
             </form>
           )}
 
-          {/* 🚨 DISCLAIMER LEGAL / EXENCIÓN DE RESPONSABILIDAD */}
+          {/* 🚨 DISCLAIMER LEGAL */}
           <div className="mt-6 bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-start gap-3">
             <AlertTriangle className="text-amber-600 shrink-0 mt-0.5" size={20} />
             <p className="text-amber-900 text-xs md:text-sm font-medium leading-relaxed">
@@ -482,7 +493,7 @@ export default function BuscadorVademecum() {
           </div>
         )}
 
-        {/* 🚀 CONTENEDOR DE RESULTADOS CON BLOQUE DE SUGERENCIA INTEGRADO */}
+        {/* 🚀 CONTENEDOR DE RESULTADOS CON BLOQUE DE SUGERENCIA */}
         <div className={modoInventario ? "bg-white border border-slate-200 rounded-[2rem] overflow-hidden shadow-sm divide-y divide-slate-100" : ""}>
             {totalMostrados > 0 ? (
                 dataAMostrar.map(item => modoInventario ? renderFilaInventario(item) : renderTarjetaMedicamento(item))
@@ -490,7 +501,7 @@ export default function BuscadorVademecum() {
                 <div className="text-center py-20 bg-slate-50 rounded-[3rem] border-2 border-dashed border-slate-200 flex flex-col items-center gap-6">
                     <p className="text-slate-400 font-bold text-xl uppercase tracking-widest">Sin resultados encontrados</p>
                     
-                    {/* 🚀 NUEVO BLOQUE DE SUGERENCIA (Did you mean...?) */}
+                    {/* 🚀 BLOQUE DE SUGERENCIA */}
                     {sugerencia && (
                         <div className="mt-4 bg-amber-50 border-2 border-amber-200 p-6 rounded-2xl max-w-md animate-in fade-in zoom-in shadow-sm">
                             <p className="text-amber-800 font-bold text-sm mb-3 flex items-center justify-center gap-2">
@@ -535,7 +546,7 @@ export default function BuscadorVademecum() {
         <div className="mt-8"><BannerVenta /></div>
       </div>
       <footer className="mt-12 text-center text-slate-300 text-[10px] font-mono uppercase tracking-[0.3em] pb-12">
-        AuxiliarPro Vademécum v5.1 | macz.dev
+        AuxiliarPro Vademécum v5.2 | macz.dev
       </footer>
     </div>
   );
