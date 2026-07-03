@@ -67,8 +67,10 @@ async function procesarPago(request: Request) {
   const urlObj = new URL(request.url);
   id = urlObj.searchParams.get("data.id") || urlObj.searchParams.get("id") || urlObj.searchParams.get("payment_id");
   type = urlObj.searchParams.get("type") || (id ? "payment" : null);
-  queryPayerEmail = urlObj.searchParams.get("payer_email");
-  queryUid = urlObj.searchParams.get("external_reference");
+  
+  // Rescate explícito del email desde los parámetros de retorno dinámicos
+  queryPayerEmail = urlObj.searchParams.get("payer_email") || urlObj.searchParams.get("email");
+  queryUid = urlObj.searchParams.get("external_reference") || urlObj.searchParams.get("uid");
 
   if (request.method === "POST" && (!id || !type)) {
     try {
@@ -80,7 +82,7 @@ async function procesarPago(request: Request) {
         queryUid = queryUid || body.data.external_reference || null;
       }
     } catch {
-      // Fallback
+      // Fallback si falla el parseo de JSON
     }
   }
 
@@ -124,6 +126,7 @@ async function procesarPago(request: Request) {
     let metodoBusqueda = "external_reference";
     const { dias: diasASumar, plan: planDetectado } = determinarDiasPorMonto(monto);
 
+    // SISTEMA DE BUSQUEDA MULTINIVEL DE RESPALDO (Por si la URL se corta)
     if (!uid || uid.trim() === "") {
       let usuarioEncontrado = await buscarUsuarioPorEmail(queryPayerEmail);
       if (usuarioEncontrado) {
@@ -159,10 +162,9 @@ async function procesarPago(request: Request) {
           payerEmail: mpPayerEmail || "N/A",
           queryEmail: queryPayerEmail || "N/A",
           plan: planDetectado,
-          diasCalculados: diasASumar,
           timestamp: admin.firestore.FieldValue.serverTimestamp(),
           procesado: false,
-          notes: "Retenido por Gateway Secundario. Correo no encontrado en la App."
+          notes: "Retenido. El correo no coincide con ninguna cuenta en Firestore."
         });
         return NextResponse.redirect(REDIRECT_DASHBOARD);
       }
@@ -200,7 +202,7 @@ async function procesarPago(request: Request) {
           plan: planDetectado,
           timestamp: admin.firestore.FieldValue.serverTimestamp(),
           revisado: false,
-          notes: "Activado por Gateway Secundario. Correos difieren."
+          notes: "Activado. El email de Mercado Pago difiere del de la App."
         });
       }
 
@@ -232,7 +234,7 @@ async function procesarPago(request: Request) {
       transaction.set(logRef, {
         transactionId: id,
         uid: uid,
-        auxiliarProEmail: userEmailApp || "Nuevo Usuario sin email previo",
+        auxiliarProEmail: userEmailApp || "Nuevo Usuario sin email",
         mercadoPagoEmail: mpPayerEmail,
         plan: planDetectado,
         daysAdded: diasASumar,
