@@ -105,7 +105,14 @@ export default function Navbar() {
           {user && <StreakCounter count={streak} />}
           <button onClick={handleShare} className="p-2 text-slate-400"><Share2 size={20} /></button>
           <Link href="/quiz" className="bg-slate-900 text-white p-2 rounded-lg"><Gamepad2 size={18} /></Link>
-          <button onClick={() => setIsOpen(!isOpen)} className="p-2 text-slate-600">
+          
+          {/* EL BOTÓN DE SESIÓN QUEDA SIEMPRE EXPUESTO PERO A LA IZQUIERDA DE LA HAMBURGUESA */}
+          <div className="flex items-center shrink-0 border-r border-slate-100 pr-1">
+            <UserIcon />
+          </div>
+
+          {/* MENÚ HAMBURGUESA COMO CIERRE ABSOLUTO EN LA DERECHA TOTAL */}
+          <button onClick={() => setIsOpen(!isOpen)} className="p-2 text-slate-600 ml-1">
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
@@ -138,7 +145,6 @@ export default function Navbar() {
                 <button onClick={() => { handleShare(); setIsOpen(false); }} className="flex items-center gap-2 text-slate-500 font-bold text-sm">
                   <Share2 size={16} /> Compartir
                 </button>
-                {user && <UserIcon />}
               </div>
             </div>
           </div>
