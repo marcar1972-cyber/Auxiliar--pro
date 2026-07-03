@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // 🚀 CTO FIX DEFINITIVO: Fuerza a Next.js a aceptar las barras diagonales sin lanzar redirecciones 308 en los webhooks
-  trailingSlash: true,
+  // 🚀 CTO FIX DEFINITUM: Desactiva el forzado de barras para que Mercado Pago entre directo sin redirecciones 308
+  trailingSlash: false,
 
   typescript: {
     // 🟢 Ignora los errores de TypeScript para que Vercel compile
