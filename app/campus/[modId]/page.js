@@ -29,6 +29,10 @@ import mod3_1Cards from "../../../data/flashcards/mod-3.json";
 import mod3_2Cards from "../../../data/flashcards/mod-3-2.json";
 import mod3_3Cards from "../../../data/flashcards/mod-3-3.json";
 
+// Inyección Módulo 4 (Vías, Dosificación y Fraccionamiento)
+import mod4_1Cards from "../../../data/flashcards/mod-4-1.json";
+import mod4_2Cards from "../../../data/flashcards/mod-4-2.json";
+
 const ProfessionalProgress = ({ percentage }) => (
   <div className="w-full bg-white p-4 rounded-2xl border border-slate-200 mb-8 shadow-sm">
     <div className="flex justify-between items-center mb-2">
@@ -164,8 +168,22 @@ export default function ModuloDetalle() {
       } else {
         alert("Mazo en preparación. Por ahora los pilotos activos corresponden a las clases 1 a la 3 del Módulo 3.");
       }
+    } else if (modId === "mod-4") {
+      if (index === 0) { // 4.1 Vías de Administración Detalladas
+        setCurrentMazo(mod4_1Cards);
+        setCurrentCardIndex(0);
+        setIsFlipped(false);
+        setIsModalOpen(true);
+      } else if (index === 1) { // 4.2 Posología, Cálculo de Dosis y Fraccionamiento
+        setCurrentMazo(mod4_2Cards);
+        setCurrentCardIndex(0);
+        setIsFlipped(false);
+        setIsModalOpen(true);
+      } else {
+        alert("Mazo en preparación. Por ahora los pilotos activos corresponden a las clases 1 y 2 del Módulo 4.");
+      }
     } else {
-      alert("Mazo en preparación. Por ahora los pilotos activos corresponden a los Módulos 1, 2 y 3.");
+      alert("Mazo en preparación. Por ahora los pilotos activos corresponden a los Módulos 1, 2, 3 y 4.");
     }
   };
 

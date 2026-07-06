@@ -1,0 +1,77 @@
+[
+  {
+    "id": "fc-001",
+    "question": "¿Cómo se define técnicamente la administración de un medicamento?",
+    "answer": "Es el acto mediante el cual se coloca un medicamento en contacto con el ser humano para que ejerza una acción local o sea absorbido para una acción sistémica."
+  },
+  {
+    "id": "fc-002",
+    "question": "¿Qué factores determina la elección de la vía de administración?",
+    "answer": "Determina la velocidad de absorción, la magnitud del efecto, la seguridad del paciente y la optimización de la biodisponibilidad del principio activo."
+  },
+  {
+    "id": "fc-003",
+    "question": "¿Cuál es la característica principal de la vía enteral?",
+    "answer": "El fármaco se deposita en el tubo digestivo (oral, sublingual o rectal) para ser absorbido a través de la mucosa gastrointestinal hacia la circulación."
+  },
+  {
+    "id": "fc-004",
+    "question": "¿Qué ventaja ofrece la vía sublingual respecto al metabolismo del fármaco?",
+    "answer": "Permite una absorción rápida a través de las venas sublinguales, evitando el metabolismo de primer paso en el hígado."
+  },
+  {
+    "id": "fc-005",
+    "question": "¿Qué es el 'metabolismo de primer paso'?",
+    "answer": "Es la degradación inicial de un fármaco en el hígado antes de que este logre llegar a la circulación sistémica."
+  },
+  {
+    "id": "fc-006",
+    "question": "¿Cómo se define la vía parenteral?",
+    "answer": "Es la administración del fármaco mediante una inyección que atraviesa la barrera biológica de la piel."
+  },
+  {
+    "id": "fc-007",
+    "question": "¿Qué vía de administración ofrece un 100% de biodisponibilidad y respuesta inmediata?",
+    "answer": "La vía intravenosa (IV), debido a que el fármaco se deposita directamente en el torrente sanguíneo."
+  },
+  {
+    "id": "fc-008",
+    "question": "¿Cuál es la diferencia entre la vía intramuscular (IM) y la subcutánea (SC)?",
+    "answer": "En la IM el fármaco se inyecta en el tejido muscular para una absorción gradual, mientras que en la SC se realiza en el tejido adiposo bajo la piel (común para la insulina)."
+  },
+  {
+    "id": "fc-009",
+    "question": "¿Qué condiciones de fabricación son obligatorias para los inyectables?",
+    "answer": "Deben fabricarse bajo condiciones de esterilidad absoluta y ser isotónicos."
+  },
+  {
+    "id": "fc-010",
+    "question": "¿Qué es la isotonía y en qué vías es esencial?",
+    "answer": "Es la propiedad de tener la misma presión osmótica que los fluidos corporales; es esencial en inyectables y colirios para evitar daños o irritación."
+  },
+  {
+    "id": "fc-011",
+    "question": "¿Qué diferencia existe entre acción local y acción sistémica?",
+    "answer": "La acción local ocurre solo en el lugar de aplicación; la acción sistémica ocurre tras la absorción y distribución del fármaco por todo el cuerpo."
+  },
+  {
+    "id": "fc-012",
+    "question": "¿Por qué se prefiere la vía inhalatoria sobre la oral en una crisis asmática?",
+    "answer": "Porque la vía inhalatoria deposita el fármaco directamente en los bronquios actuando casi instantáneamente, mientras que la vía oral tarda más al tener que pasar por el sistema digestivo."
+  },
+  {
+    "id": "fc-013",
+    "question": "¿Qué barreras biológicas debe superar un fármaco administrado por vía oral?",
+    "answer": "Debe superar barreras físicas y químicas, como el pH del estómago y las enzimas hepáticas, que pueden inactivar el principio activo."
+  },
+  {
+    "id": "fc-014",
+    "question": "¿Qué técnica es fundamental aplicar en la preparación y administración de vías parenterales?",
+    "answer": "La asepsia, que son las técnicas utilizadas para evitar la contaminación por microorganismos al atravesar la piel."
+  },
+  {
+    "id": "fc-015",
+    "question": "¿Cuál es la función de los recubrimientos en some formas farmacéuticas orales?",
+    "answer": "Están diseñados específicamente para resistir el ácido gástrico y proteger el principio activo hasta su lugar de absorción."
+  }
+]

@@ -1,0 +1,77 @@
+[
+  {
+    "id": "fc-001",
+    "question": "¿Qué es la posología?",
+    "answer": "Es la rama de la farmacología que determina la dosis y la frecuencia con la que debe administrarse un medicamento para lograr el efecto terapéutico sin alcanzar niveles de toxicidad."
+  },
+  {
+    "id": "fc-002",
+    "question": "¿Cuál es el riesgo de un error en el cálculo o interpretación de la dosis?",
+    "answer": "Puede derivar en un fracaso del tratamiento por subdosis o en efectos adversos graves por sobredosis."
+  },
+  {
+    "id": "fc-003",
+    "question": "¿Qué información debe consignar obligatoriamente la receta médica según el Art. 38 del DS 466?",
+    "answer": "Debe ser clara y legible, indicando la dosificación (posología), el intervalo de administración y el período total del tratamiento."
+  },
+  {
+    "id": "fc-004",
+    "question": "¿Cómo se realiza el cálculo de dosis basado en el peso corporal (mg/kg)?",
+    "answer": "Se obtiene multiplicando la dosis recomendada por el peso del paciente (Dosis x Peso = Cantidad diaria), método muy usado en pediatría."
+  },
+  {
+    "id": "fc-005",
+    "question": "¿Cómo se calcula la cantidad total de unidades de dispensación necesarias para un tratamiento?",
+    "answer": "Se multiplica la dosis unitaria por la frecuencia diaria y luego por el total de días (Dosis x Frecuencia x Tiempo)."
+  },
+  {
+    "id": "fc-006",
+    "question": "Si una receta indica '5 ml cada 8 horas por 10 días', ¿cuántos frascos de 100 ml se necesitan?",
+    "answer": "Se necesitan 2 frascos, ya que el cálculo total es de 150 ml (5 ml x 3 veces al día x 10 días)."
+  },
+  {
+    "id": "fc-007",
+    "question": "¿Cómo se define técnicamente la 'Dosis'?",
+    "answer": "Es la cantidad total de fármaco contenida en la forma farmacéutica que se administra en cada oportunidad."
+  },
+  {
+    "id": "fc-008",
+    "question": "¿Qué es el fraccionamiento de medicamentos?",
+    "answer": "Es el proceso técnico de extraer unidades posológicas de un envase clínico para entregar al paciente el número exacto de dosis requerido en su receta."
+  },
+  {
+    "id": "fc-009",
+    "question": "¿Cuál es el principal beneficio del fraccionamiento para el sistema de salud?",
+    "answer": "Optimiza el costo para el usuario, evita el almacenamiento de restos de fármacos en el hogar y promueve el Uso Racional de Medicamentos (URM)."
+  },
+  {
+    "id": "fc-010",
+    "question": "¿Qué formas farmacéuticas se pueden fraccionar legalmente?",
+    "answer": "Solo medicamentos sólidos (comprimidos, cápsulas) y líquidos o polvos dispuestos en envases primarios monodosis."
+  },
+  {
+    "id": "fc-011",
+    "question": "¿Qué productos tienen prohibición absoluta de ser fraccionados?",
+    "answer": "Sustancias bajo control legal (estupefacientes/psicotrópicos), oncológicos, radiofármacos, hormonas y medicamentos que requieran cadena de frío."
+  },
+  {
+    "id": "fc-012",
+    "question": "¿Se puede fraccionar una receta de Clonazepam si el paciente no tiene dinero para la caja completa?",
+    "answer": "No. Los productos sujetos a control legal tienen prohibición absoluta de fraccionamiento por razones de seguridad y control de stock."
+  },
+  {
+    "id": "fc-013",
+    "question": "¿Qué datos debe registrar el auxiliar en cada operación de fraccionamiento según el Art. 19 A?",
+    "answer": "Número correlativo, datos del paciente, DCI del fármaco, número de lote, fecha de vencimiento y nombre del responsable."
+  },
+  {
+    "id": "fc-014",
+    "question": "¿Qué requisito técnico debe cumplirse respecto al alveolo (blíster) durante el fraccionamiento?",
+    "answer": "El alveolo o reservorio no debe dañarse ni exponer la forma farmacéutica al ambiente para mantener su integridad."
+  },
+  {
+    "id": "fc-015",
+    "question": "¿Cuál es la vigencia legal general de una receta para fármacos de uso agudo?",
+    "answer": "Generalmente tiene un plazo de validez de 30 días desde su emisión."
+  }
+]
