@@ -12,25 +12,14 @@ export default function PlanesSuscripcion() {
   const [isPro, setIsPro] = useState(false);
   const [proUntil, setProUntil] = useState(null);
   const [loadingAuth, setLoadingAuth] = useState(true);
-
-  // 🚀 ESTADOS DEL POPUP (5 Segundos de lectura)
-  const [mostrarAviso, setMostrarAviso] = useState(false);
-  const [contador, setContador] = useState(5);
-  const [urlDestino, setUrlDestino] = useState("");
-
-  // 🔗 Enlaces base de MercadoPago compartidos
-  const BASE_LINK_15_DIAS = "https://mpago.la/2en6De7";
-  const BASE_LINK_MENSUAL = "https://mpago.la/2vRdcGW";
-  const BASE_LINK_ANUAL = "https://mpago.la/1Afrgc3";
+  const [loadingCheckout, setLoadingCheckout] = useState(null);
 
   useEffect(() => {
-    // 1. Escuchamos de forma reactiva el estado de autenticación del usuario
     const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
         const docRef = doc(db, "users", currentUser.uid);
 
-        // 2. Conexión asíncrona en tiempo real (onSnapshot - Solo Lectura)
         const unsubscribeSnapshot = onSnapshot(docRef, (docSnap) => {
           try {
             if (docSnap.exists()) {
@@ -38,7 +27,6 @@ export default function PlanesSuscripcion() {
               let currentIsPro = data.isPro || false;
               let currentProUntil = null;
 
-              // 3. Control de tipos para formateo de fechas
               if (data.proUntil) {
                 if (typeof data.proUntil.toDate === "function") {
                   currentProUntil = data.proUntil.toDate();
@@ -47,7 +35,6 @@ export default function PlanesSuscripcion() {
                 }
               }
 
-              // 🚀 BLINDAJE CTO: ESTADO CALCULADO (Solo Lectura, sin escrituras destructivas)
               if (currentProUntil && new Date() > currentProUntil) {
                 currentIsPro = false;
               }
@@ -56,12 +43,12 @@ export default function PlanesSuscripcion() {
               setProUntil(currentProUntil);
             }
           } catch (error) {
-            console.error("Error procesando cambios del documento de usuario:", error);
+            console.error("Error procesando cambios del documento:", error);
           } finally {
             setLoadingAuth(false);
           }
         }, (error) => {
-          console.error("Error en canal onSnapshot de Firestore:", error);
+          console.error("Error en canal onSnapshot:", error);
           setLoadingAuth(false);
         });
 
@@ -77,35 +64,54 @@ export default function PlanesSuscripcion() {
     return () => unsubscribeAuth();
   }, []);
 
-  // 🚀 REQUISITO 5 SEGUNDOS: Manejador activo de la cuenta regresiva y desvío final
-  useEffect(() => {
-    let timer;
-    if (mostrarAviso && contador > 0) {
-      timer = setTimeout(() => setContador(contador - 1), 1000);
-    } else if (mostrarAviso && contador === 0 && urlDestino) {
-      window.location.href = urlDestino;
+  // 🚀 DISPARADOR DINÁMICO BLINDADO: Manejo estricto del estado de carga y excepciones
+  const iniciarPagoDinamico = async (planKey) => {
+    if (!user) {
+      window.location.href = "/login";
+      return;
     }
-    return () => clearTimeout(timer);
-  }, [mostrarAviso, contador, urlDestino]);
 
-  // 🚀 CTO INYECTOR DINÁMICO MEJORADO PARA CHECKOUT PRO MANUAL
-  const construirLinkInteligente = (linkBase) => {
-    if (!user || !user.email) return linkBase;
-    
-    const emailCodificado = encodeURIComponent(user.email.toLowerCase().trim());
-    const uidCodificado = encodeURIComponent(user.uid);
-    
-    // Forzamos el retorno seguro al gateway secundario de la app para procesar el pago al instante al volver
-    const urlRetorno = encodeURIComponent(`https://www.auxiliaresdefarmacia.cl/api/checkout-mp?payer_email=${emailCodificado}&external_reference=${uidCodificado}`);
-    
-    const conector = linkBase.includes("?") ? "&" : "?";
-    
-    return `${linkBase}${conector}payer_email=${emailCodificado}&external_reference=${uidCodificado}&wallet_return=${urlRetorno}&back_url=${urlRetorno}`;
+    // Evitar llamadas duplicadas si ya está procesando
+    if (loadingCheckout) return;
+
+    try {
+      setLoadingCheckout(planKey);
+
+      const response = await fetch("/api/checkout-mp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          planKey,
+          uid: user.uid,
+          email: user.email || user.providerData[0]?.email || "",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.initPoint) {
+        // Redirección directa e inmediata a Mercado Pago
+        window.location.href = data.initPoint;
+      } else {
+        throw new Error(data.error || "initPoint no recibido desde el backend.");
+      }
+    } catch (error) {
+      console.error("❌ Error iniciando pasarela Checkout Pro:", error);
+      alert("Hubo un problema al conectar con Mercado Pago. Por favor, reintenta en unos momentos.");
+      // Forzar la liberación del botón si falla la pasarela de red
+      setLoadingCheckout(null);
+    }
   };
 
   const hasActiveSubscription = () => {
     if (!isPro) return false;
-    if (!proUntil) return true; 
+    if (!proUntil) return true;
     return new Date() <= proUntil;
   };
 
@@ -118,33 +124,6 @@ export default function PlanesSuscripcion() {
 
   return (
     <div className="w-full bg-white py-12 relative">
-      
-      {/* 🚨 POPUP FLOTANTE DE ADVERTENCIA DE SOPORTE */}
-      {mostrarAviso && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-[9999] p-4">
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-2xl p-6 md:p-8 max-w-md w-full text-center relative overflow-hidden">
-            
-            <div className="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-xl font-black mx-auto mb-4 border border-blue-200 shadow-sm">
-              {contador}s
-            </div>
-            
-            <h3 className="text-slate-900 text-lg font-black tracking-tight mb-2">
-              Redirigiendo a Mercado Pago...
-            </h3>
-            
-            <blockquote className="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl my-4 text-left">
-              <p className="text-amber-900 text-xs md:text-sm font-medium leading-relaxed">
-                <strong>Nota Importante:</strong> Si después de realizar el pago de tu suscripción no se activa tu cuenta PRO de forma inmediata, envíanos un correo a <span className="font-bold underline text-blue-700">hola@auxiliarpro.cl</span> para revisar tu caso a la brevedad y solucionarlo.
-              </p>
-            </blockquote>
-            
-            <p className="text-slate-400 text-[11px] font-semibold uppercase mt-4">
-              Preparando conexión segura con la pasarela
-            </p>
-          </div>
-        </div>
-      )}
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         
         {/* ENCABEZADO */}
@@ -157,7 +136,7 @@ export default function PlanesSuscripcion() {
           ) : (
             <div className="inline-flex items-center justify-center bg-[#003366]/10 text-[#003366] px-8 py-3 rounded-full text-sm font-black uppercase tracking-[0.2em] mb-6 shadow-sm border border-[#003366]/20">
               <Zap size={18} className="mr-2 text-[#28a745]" />
-              PLANES DE SUSCRIPCIÓN
+              PLANES DE ACCESO PREMIUM
             </div>
           )}
           
@@ -262,23 +241,16 @@ export default function PlanesSuscripcion() {
                 </div>
               ) : isActive ? (
                 <button disabled className="w-full bg-slate-100 text-slate-400 font-black py-4 rounded-xl border border-slate-200 cursor-not-allowed text-[11px] uppercase tracking-wider">
-                  Suscripción Activa
+                  Cuenta PRO Activa
                 </button>
               ) : (
-                <a 
-                  href={construirLinkInteligente(BASE_LINK_15_DIAS)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setUrlDestino(construirLinkInteligente(BASE_LINK_15_DIAS));
-                    setContador(5);
-                    setMostrarAviso(true);
-                  }}
-                  className="w-full block bg-[#003366] text-white hover:bg-[#002244] font-black py-4 rounded-xl transition-all text-center text-sm shadow-lg"
+                <button 
+                  onClick={() => iniciarPagoDinamico("sprint")}
+                  disabled={loadingCheckout !== null}
+                  className="w-full bg-[#003366] text-white hover:bg-[#002244] font-black py-4 rounded-xl transition-all text-center text-sm shadow-lg flex items-center justify-center gap-2"
                 >
-                  Obtener Pase
-                </a>
+                  {loadingCheckout === "sprint" ? <Loader2 className="animate-spin" size={18} /> : "Obtener Pase"}
+                </button>
               )}
             </div>
           </div>
@@ -330,23 +302,16 @@ export default function PlanesSuscripcion() {
                 </div>
               ) : isActive ? (
                 <button disabled className="w-full bg-slate-100 text-slate-400 font-black py-4 rounded-xl border border-slate-200 cursor-not-allowed text-[11px] uppercase tracking-wider">
-                  Suscripción Activa
+                  Cuenta PRO Activa
                 </button>
               ) : (
-                <a 
-                  href={construirLinkInteligente(BASE_LINK_MENSUAL)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setUrlDestino(construirLinkInteligente(BASE_LINK_MENSUAL));
-                    setContador(5);
-                    setMostrarAviso(true);
-                  }}
-                  className="w-full block bg-[#28a745] text-white hover:bg-[#218838] font-black py-4 rounded-xl transition-all text-center text-sm shadow-lg shadow-[#28a745]/30"
+                <button 
+                  onClick={() => iniciarPagoDinamico("mensual")}
+                  disabled={loadingCheckout !== null}
+                  className="w-full bg-[#28a745] text-white hover:bg-[#218838] font-black py-4 rounded-xl transition-all text-center text-sm shadow-lg shadow-[#28a745]/30 flex items-center justify-center gap-2"
                 >
-                  Plan Mezual
-                </a>
+                  {loadingCheckout === "mensual" ? <Loader2 className="animate-spin" size={18} /> : "Plan Mensual"}
+                </button>
               )}
             </div>
           </div>
@@ -395,23 +360,16 @@ export default function PlanesSuscripcion() {
                 </div>
               ) : isActive ? (
                 <button disabled className="w-full bg-[#002244] text-[#28a745] font-black py-4 rounded-xl border border-[#28a745]/30 cursor-not-allowed text-[11px] uppercase tracking-wider">
-                  Suscripción Activa
+                  Cuenta PRO Activa
                 </button>
               ) : (
-                <a 
-                  href={construirLinkInteligente(BASE_LINK_ANUAL)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setUrlDestino(construirLinkInteligente(BASE_LINK_ANUAL));
-                    setContador(5);
-                    setMostrarAviso(true);
-                  }}
-                  className="w-full block bg-[#28a745] text-white hover:bg-[#218838] font-black py-5 rounded-xl transition-all text-center text-sm shadow-[0_0_30px_rgba(40,167,69,0.4)] transform hover:scale-105"
+                <button 
+                  onClick={() => iniciarPagoDinamico("anual")}
+                  disabled={loadingCheckout !== null}
+                  className="w-full block bg-[#28a745] text-white hover:bg-[#218838] font-black py-5 rounded-xl transition-all text-center text-sm shadow-[0_0_30px_rgba(40,167,69,0.4)] transform hover:scale-105 flex items-center justify-center gap-2"
                 >
-                  Obtener Anual
-                </a>
+                  {loadingCheckout === "anual" ? <Loader2 className="animate-spin" size={18} /> : "Obtener Anual"}
+                </button>
               )}
             </div>
           </div>
