@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { 
   BookOpen, GraduationCap, Calculator, Menu, X, Gamepad2, 
-  Star, Pill, HelpCircle, Share2 
+  Star, Pill, HelpCircle, Share2, ShieldCheck
 } from "lucide-react";
 import UserIcon from "../UserIcon"; 
 import StreakCounter from "./StreakCounter"; 
@@ -17,24 +17,38 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [streak, setStreak] = useState(0);
   const [user, setUser] = useState(null);
+  const [isPro, setIsPro] = useState(false);
 
   useEffect(() => {
+    let unsubscribeDoc = () => {};
+
     const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
         const userRef = doc(db, "users", currentUser.uid);
-        const unsubscribeDoc = onSnapshot(userRef, (docSnap) => {
+        
+        // Escucha activa de Firestore para mantener racha y estado PRO actualizados en tiempo real
+        unsubscribeDoc = onSnapshot(userRef, (docSnap) => {
           if (docSnap.exists()) {
-            setStreak(docSnap.data().streakCount || 0);
+            const data = docSnap.data();
+            setStreak(data.streakCount || 0);
+            setIsPro(data.isPro === true);
           }
+        }, (error) => {
+          console.error("Error en Navbar onSnapshot:", error);
         });
-        return () => unsubscribeDoc();
+
       } else {
         setUser(null);
         setStreak(0);
+        setIsPro(false);
       }
     });
-    return () => unsubscribeAuth();
+
+    return () => {
+      unsubscribeAuth();
+      unsubscribeDoc();
+    };
   }, []);
 
   const handleShare = async () => {
@@ -93,10 +107,28 @@ export default function Navbar() {
            <Link href="/faq" className="flex items-center gap-1 text-slate-600 font-bold text-[11px] tracking-wider px-3 py-2 rounded-lg hover:bg-slate-50">
              <HelpCircle size={14} /> FAQ
            </Link>
-           <button onClick={handleShare} className="p-2 text-slate-400 hover:text-emerald-500">
+           <button onClick={handleShare} className="p-2 text-slate-400 hover:text-emerald-500 mr-1">
              <Share2 size={20} />
            </button>
+           
            {user && <StreakCounter count={streak} />}
+
+           {/* INFO CUENTA DE ESCRITORIO */}
+           {user && (
+             <div className="flex flex-col items-end text-right px-2 border-l border-slate-100 select-none">
+               <span className="text-[10px] font-mono font-bold text-slate-500 truncate max-w-[140px]">{user.email}</span>
+               {isPro ? (
+                 <span className="text-[9px] font-black tracking-wider text-emerald-600 uppercase flex items-center gap-0.5">
+                   💎 PLAN PRO
+                 </span>
+               ) : (
+                 <span className="text-[9px] font-bold tracking-wider text-slate-400 uppercase">
+                   📖 GRATUITO
+                 </span>
+               )}
+             </div>
+           )}
+
            <UserIcon />
         </div>
 
@@ -106,8 +138,24 @@ export default function Navbar() {
           <button onClick={handleShare} className="p-2 text-slate-400"><Share2 size={20} /></button>
           <Link href="/quiz" className="bg-slate-900 text-white p-2 rounded-lg"><Gamepad2 size={18} /></Link>
           
-          {/* EL BOTÓN DE SESIÓN QUEDA SIEMPRE EXPUESTO PERO A LA IZQUIERDA DE LA HAMBURGUESA */}
-          <div className="flex items-center shrink-0 border-r border-slate-100 pr-1">
+          {/* EL BOTÓN DE SESIÓN CON INFORMACIÓN DE CUENTA EN TIEMPO REAL */}
+          <div className="flex items-center gap-2 shrink-0 border-r border-slate-100 pr-2 select-none">
+            {user && (
+              <div className="flex flex-col items-end text-right">
+                <span className="text-[9px] font-mono font-bold text-slate-500 truncate max-w-[100px]">
+                  {user.email}
+                </span>
+                {isPro ? (
+                  <span className="text-[8px] font-black tracking-tight text-emerald-600 uppercase">
+                    💎 PRO
+                  </span>
+                ) : (
+                  <span className="text-[8px] font-bold tracking-tight text-slate-400 uppercase">
+                    📖 FREE
+                  </span>
+                )}
+              </div>
+            )}
             <UserIcon />
           </div>
 
