@@ -8,10 +8,10 @@ import Link from "next/link";
 import SocialContact from "../components/SocialContact";
 import BannerVenta from "../components/BannerVenta";
 import { 
-  ChevronLeft, ShieldCheck, Trophy, BrainCircuit, Share2, Loader2, AlertTriangle, BookOpen, Lock, ChevronRight, Sparkles, Flame, X
+  ChevronLeft, ShieldCheck, Trophy, BrainCircuit, Share2, Loader2, AlertTriangle, BookOpen, Lock, ChevronRight, Sparkles, Flame, X, User
 } from "lucide-react"; 
 import { auth, db } from "../firebase/config";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 
 // 🔥 RUTA RELATIVA: Salimos de quiz (1), salimos de app (2) y entramos a lib
@@ -28,6 +28,7 @@ export default function QuizLobbyPage() {
   const router = useRouter();
   const [daysRemaining, setDaysRemaining] = useState(null); 
   const [showWarning, setShowWarning] = useState(false);
+  const [currentUserEmail, setCurrentUserEmail] = useState("");
   
   // ESTADOS DE ACCESO Y CARGA
   const [isCheckingAuth, setIsCheckingAuth] = useState(true); 
@@ -45,32 +46,33 @@ export default function QuizLobbyPage() {
   const [showPromoModal, setShowPromoModal] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        try {
-          const userRef = doc(db, "users", user.uid);
-          const docSnap = await getDoc(userRef);
+    let unsubscribeDoc = () => {};
 
+    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setCurrentUserEmail(user.email || "");
+        const userRef = doc(db, "users", user.uid);
+        
+        // 🔄 ESCUCHA ACTIVA EN TIEMPO REAL (onSnapshot)
+        unsubscribeDoc = onSnapshot(userRef, (docSnap) => {
           if (docSnap.exists()) {
             const data = docSnap.data();
             const isAdmin = user.email === ADMIN_EMAIL;
             let userHasActivePro = data.isPro === true;
             
-            // Seteamos datos de racha para la UI (el motor de racha ahora se actualizará AL TERMINAR el desafío diario)
+            // Seteamos datos de racha para la UI
             setStreakData({
               current: data.streakCount || 0,
               longest: data.longestStreak || 0
             });
 
-            // 🚀 CTO FIX: Vinculación exacta con 'completedBasicLevels' de Firestore y remoción de duplicados
+            // Avance global del simulador
             let completedCount = 0;
             if (data.completedBasicLevels && Array.isArray(data.completedBasicLevels)) {
-              // Usamos un Set para asegurar que si repite el nivel 1, no se cuente doble en el avance global
               const uniqueLevels = [...new Set(data.completedBasicLevels)];
               completedCount = uniqueLevels.length;
               setLevelsCompletedCount(completedCount);
               
-              // Lógica basada en el tope de 3 niveles de la v5.0
               const percent = Math.min(Math.round((completedCount / 3) * 100), 100);
               setProgressPercent(percent);
             } else {
@@ -93,7 +95,6 @@ export default function QuizLobbyPage() {
               const now = new Date();
               if (expiryDate > now) userHasActivePro = true;
               
-              // Control de expiración y alertas
               const diffTime = expiryDate.getTime() - now.getTime();
               const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
@@ -108,30 +109,32 @@ export default function QuizLobbyPage() {
 
             if (isAdmin) userHasActivePro = true;
             setIsProUser(userHasActivePro);
-
-            // CTO FIX: Se elimina la restricción de haber aprobado los 4 módulos previos.
-            // Ahora, si el usuario es PRO (y su cuenta no ha expirado), tiene acceso total e inmediato.
             setCanAccessSimulator(userHasActivePro);
 
-            // ⚡ CORRECCIÓN UX: El modal SOLO salta si completó los 3 niveles gratis y no es PRO.
+            // Control modal de promoción
             if (!userHasActivePro && completedCount >= 3) {
-              const timer = setTimeout(() => {
-                setShowPromoModal(true);
-              }, 1500); // 1.5 segundos de retraso orgánico para dar una mejor transición
-              return () => clearTimeout(timer);
+              setShowPromoModal(true);
+            } else {
+              setShowPromoModal(false);
             }
           }
-        } catch (error) {
-          console.error("Error obteniendo estado de usuario:", error);
-        } finally {
           setIsCheckingAuth(false);
-        }
+        }, (error) => {
+          console.error("Error escuchando cambios de Firestore en tiempo real:", error);
+          setIsCheckingAuth(false);
+        });
+
       } else {
         setIsCheckingAuth(false);
+        setCurrentUserEmail("");
       }
     });
-    return () => unsubscribe();
-  }, []);
+
+    return () => {
+      unsubscribeAuth();
+      unsubscribeDoc();
+    };
+  }, [router]);
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -158,15 +161,44 @@ export default function QuizLobbyPage() {
   return (
     <main className="min-h-screen bg-slate-50 pb-24 font-sans relative">
       <nav className="bg-white p-6 shadow-sm sticky top-0 z-50 border-b border-slate-100">
-        <div className="max-w-3xl mx-auto flex items-center gap-4">
-          <Link href="/" className="text-slate-400 hover:text-[#003366] cursor-pointer transition-colors">
-            <ChevronLeft size={28} />
-          </Link>
-          <span className="text-xl font-black text-[#003366] tracking-tighter">Lobby de Entrenamiento</span>
+        <div className="max-w-3xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Link href="/" className="text-slate-400 hover:text-[#003366] cursor-pointer transition-colors">
+              <ChevronLeft size={28} />
+            </Link>
+            <span className="text-xl font-black text-[#003366] tracking-tighter">Lobby de Entrenamiento</span>
+          </div>
         </div>
       </nav>
 
       <section className="p-6 max-w-3xl mx-auto mt-6">
+        
+        {/* 💎 BADGE DE VALIDACIÓN VISUAL DE SOPORTE PARA PANTALLAZOS */}
+        {!isCheckingAuth && auth.currentUser && (
+          <div className="mb-6 p-4 rounded-2xl border flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm bg-white border-slate-200">
+            <div className="flex items-center gap-3">
+              <div className="bg-slate-100 p-2.5 rounded-xl text-slate-500">
+                <User size={20} />
+              </div>
+              <div className="text-left">
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Sesión Iniciada como</p>
+                <p className="text-xs font-mono font-bold text-slate-700 truncate max-w-[220px] sm:max-w-xs">{currentUserEmail}</p>
+              </div>
+            </div>
+            <div>
+              {isProUser ? (
+                <span className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-black tracking-widest rounded-full uppercase shadow-inner animate-pulse">
+                  <ShieldCheck size={14} className="fill-emerald-50" /> 💎 Cuenta PRO Activa
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-100 text-slate-500 border border-slate-200 text-xs font-bold tracking-widest rounded-full uppercase">
+                  📖 Modo Gratuito (Básico)
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+
         <header className="mb-8 text-center">
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-4">
             <h1 className="text-3xl md:text-4xl font-black text-[#003366] tracking-tight leading-tight">
@@ -178,10 +210,9 @@ export default function QuizLobbyPage() {
           </div>
 
           <p className="text-slate-500 text-sm md:text-base max-w-2xl mx-auto leading-relaxed mb-6">
-            Prepárate para la certificación del MINSAL in Chile. Practica con casos reales y preguntas de prueba para asegurar tu título como Auxiliar de Farmacia.
+            Prepárate para la certificación del MINSAL en Chile. Practica con casos reales y preguntas de prueba para asegurar tu título como Auxiliar de Farmacia.
           </p>
 
-          {/* ✅ AVISO V5.0 RESTAURADO COMPLETAMENTE */}
           <div className="text-left bg-blue-50 border border-blue-200 p-5 md:p-6 rounded-2xl shadow-sm mb-8 relative overflow-hidden">
             <div className="absolute top-0 left-0 w-1.5 h-full bg-[#003366]"></div>
             <div className="flex flex-col sm:flex-row gap-4 items-start">
@@ -221,7 +252,6 @@ export default function QuizLobbyPage() {
                 <h3 className="font-black text-2xl text-[#003366] leading-tight mb-2 group-hover:text-[#28a745] transition-colors">Simulador Inicial</h3>
                 <p className="text-sm text-slate-500 mb-4">La ruta de entrenamiento definitiva. <strong className="text-[#28a745]">100% gratis</strong> para dominar los conceptos básicos.</p>
                 
-                {/* 🚀 COMPONENTE DE BARRA DE PROGRESO INTEGRADO DINÁMICAMENTE */}
                 <div className="w-full mt-2">
                   <div className="flex justify-between items-center text-xs font-bold text-slate-400 mb-1">
                     <span>Progreso de Entrenamiento</span>
@@ -250,7 +280,7 @@ export default function QuizLobbyPage() {
                     </div>
                     <div className="text-sm text-blue-100 mb-5 min-h-[40px]">
                       {isCheckingAuth 
-                        ? "Verificando tu level de acceso..." 
+                        ? "Verificando tu nivel de acceso..." 
                         : !isProUser 
                           ? "Descubre el temario oficial en el Campus y entusiásmate a dar el paso PRO." 
                           : canAccessSimulator 
@@ -268,7 +298,6 @@ export default function QuizLobbyPage() {
             </div>
           </article>
 
-          {/* CENTRO DE MANDO REUBICADO: DESAFÍO DIARIO Y RACHA */}
           <div className="bg-white border border-slate-200 p-5 rounded-[2rem] shadow-sm mt-8 max-w-full mx-auto animate-in fade-in zoom-in duration-500 relative overflow-hidden">
              <div className="absolute top-0 right-0 w-32 h-32 bg-orange-50 rounded-bl-full -z-10 opacity-50"></div>
              
@@ -305,12 +334,10 @@ export default function QuizLobbyPage() {
         <div className="mt-8"><BannerVenta /></div>
       </section>
 
-      {/* 🚀 MODAL IN-APP DE CONVERSIÓN TÁCTICA PARA CONVERTIR USUARIOS REGISTRADOS */}
       {showPromoModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="relative w-full max-w-md p-6 bg-white rounded-[2rem] shadow-2xl border border-slate-100 flex flex-col items-center text-center">
             
-            {/* Botón de cierre discreto */}
             <button 
               onClick={() => setShowPromoModal(false)} 
               className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-1 rounded-full hover:bg-slate-50 transition-colors"
@@ -318,12 +345,10 @@ export default function QuizLobbyPage() {
               <X size={20} />
             </button>
 
-            {/* Icono de Valor Médico / Aprobación */}
             <div className="flex items-center justify-center w-12 h-12 mb-4 rounded-full bg-blue-50 text-[#003366]">
               <ShieldCheck size={28} className="text-[#003366]" />
             </div>
 
-            {/* Subtítulo de Conversión Preciso */}
             <h3 className="text-xl font-black text-[#003366] tracking-tight">
               ¡Asegura tu Aprobación SEREMI! 🇨🇱
             </h3>
@@ -332,7 +357,6 @@ export default function QuizLobbyPage() {
               Ya conoces los 3 niveles iniciales de prueba. Te invitamos a descubrir la preparación más potente y cercana al examen profesional de la SEREMI que existe en Chile.
             </p>
 
-            {/* Micro Balas de Valor Táctico */}
             <div className="w-full my-4 p-4 bg-slate-50 rounded-2xl text-left text-xs text-slate-600 space-y-2.5 border border-slate-100 font-medium">
               <div className="flex items-center gap-2">
                 <span className="text-[#28a745] font-black">✔</span>
@@ -348,7 +372,6 @@ export default function QuizLobbyPage() {
               </div>
             </div>
 
-            {/* Botón de Conversión a Mercado Pago / Registro PRO */}
             <div className="w-full space-y-2">
               <button
                 onClick={handleCampusAccess}
