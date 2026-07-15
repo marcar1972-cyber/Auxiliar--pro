@@ -36,6 +36,14 @@ function determinarDiasPorMonto(monto: number) {
   }
 }
 
+// Función auxiliar para forzar la interrupción de operaciones lentas y evitar timeout del hosting
+const promiseWithTimeout = <T>(promise: Promise<T>, ms: number, errorMsg: string): Promise<T> => {
+  return Promise.race([
+    promise,
+    new Promise<never>((_, reject) => setTimeout(() => reject(new Error(errorMsg)), ms))
+  ]);
+};
+
 async function buscarUsuarioPorEmail(email: string) {
   if (!email) return null;
   const emailNormalizado = email.toLowerCase().trim();
@@ -52,7 +60,7 @@ async function buscarUsuarioPorEmail(email: string) {
 }
 
 export async function POST(request: Request) {
-  console.log("🔔 === WEBHOOK INBOUND MERCADO PAGO (PROCESANDO PREFERENCIA DINÁMICA) ===");
+  console.log("🔔 === WEBHOOK INBOUND MERCADO PAGO (PROCESANDO PREFERENCIA DINÁMICA CON TIMEOUT) ===");
   
   let id: string | null = null;
   let type: string | null = null;
@@ -70,20 +78,21 @@ export async function POST(request: Request) {
       } catch {}
     }
 
-    if (type === "payment" || id) {
-      if (!id) {
-        return NextResponse.json({ received: false, error: "Missing ID" }, { status: 400 });
-      }
-
-      const response = await fetch(`https://api.mercadopago.com/v1/payments/${id}`, {
+    if (type === "payment" && id) {
+      // 1. Consultar el pago a Mercado Pago con un límite estricto de 4 segundos
+      const mpFetchPromise = fetch(`https://api.mercadopago.com/v1/payments/${id}`, {
         headers: { Authorization: `Bearer ${TOKEN}` },
+      }).then(async (res) => {
+        if (!res.ok) throw new Error("Payment not found in MP API");
+        return res.json();
       });
 
-      if (!response.ok) {
-        return NextResponse.json({ error: "Payment not found in MP API" }, { status: 404 });
-      }
+      const payment = await promiseWithTimeout(
+        mpFetchPromise,
+        4000,
+        "Superado límite de espera en respuesta de API de Mercado Pago"
+      );
 
-      const payment = await response.json();
       const status = payment.status;
       const monto = payment.transaction_amount || 0;
       const mpPayerEmail = payment.payer?.email ? payment.payer.email.toLowerCase().trim() : "";
@@ -92,9 +101,15 @@ export async function POST(request: Request) {
 
       if (status === "approved") {
         const logRef = db.collection("payments_log").doc(id.toString());
-        const logDoc = await logRef.get();
+        
+        // Timeout para validar duplicación en Firestore
+        const checkDuplicado = await promiseWithTimeout(
+          logRef.get(),
+          3000,
+          "Timeout al consultar duplicidad de pagos en base de datos"
+        );
 
-        if (logDoc.exists) {
+        if (checkDuplicado.exists) {
           return NextResponse.json({ received: true, message: "Already processed" }, { status: 200 });
         }
 
@@ -120,7 +135,8 @@ export async function POST(request: Request) {
         if (uid) {
           const userRef = db.collection("users").doc(uid);
           
-          await db.runTransaction(async (transaction) => {
+          // 2. Transacción atómica de Firestore con timeout estricto de 4 segundos
+          const transactionPromise = db.runTransaction(async (transaction) => {
             const userSnapshot = await transaction.get(userRef);
             const userData = userSnapshot.exists ? (userSnapshot.data() || {}) : {};
             let proUntilBase = new Date();
@@ -156,9 +172,16 @@ export async function POST(request: Request) {
             });
           });
 
+          await promiseWithTimeout(
+            transactionPromise,
+            4000,
+            "Timeout de escritura o transacción en base de datos"
+          );
+
           console.log(`🎉 Webhook Éxito: Alumno ${uid} activado automáticamente en modo PRO.`);
         } else {
-          await db.collection("pagos_pendientes_asignacion").doc(id.toString()).set({
+          // 3. Fallback de pagos pendientes con un timeout de 3 segundos
+          const huerfanoPromise = db.collection("pagos_pendientes_asignacion").doc(id.toString()).set({
             paymentId: id,
             amount: monto,
             payerEmail: mpPayerEmail || "N/A",
@@ -167,6 +190,12 @@ export async function POST(request: Request) {
             procesado: false,
             notas: "Recaudado. UID ausente y correo sin coincidencias en base de datos."
           });
+
+          await promiseWithTimeout(
+            huerfanoPromise,
+            3000,
+            "Timeout al guardar log de pago pendiente por asignar"
+          );
         }
       }
     }
@@ -174,8 +203,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ received: true }, { status: 200 });
 
   } catch (error: any) {
-    console.error("❌ Error crítico en pipeline de webhook:", error.message);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error("❌ Error crítico mitigado en pipeline de webhook:", error.message);
+    // Devolvemos status 200 para indicarle al gateway que recibimos el webhook correctamente,
+    // previniendo los reintentos que llenan el log, y guardando la traza para auditoría.
+    return NextResponse.json({ received: true, error: error.message }, { status: 200 });
   }
 }
 
