@@ -129,7 +129,7 @@ export default function PlanesSuscripcion() {
 
   const formatearFecha = (fecha) => {
     if (!fecha) return "";
-    return text = fecha.toLocaleDateString("es-CL", { day: 'numeric', month: 'long', year: 'numeric' });
+    return fecha.toLocaleDateString("es-CL", { day: 'numeric', month: 'long', year: 'numeric' });
   };
 
   const isActive = hasActiveSubscription();
