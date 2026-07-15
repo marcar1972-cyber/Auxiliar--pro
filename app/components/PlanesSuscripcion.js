@@ -1,10 +1,11 @@
+// app/components/PlanesSuscripcion.js
 "use client";
 
 import { useState, useEffect } from "react";
 import { auth, db } from "../firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, onSnapshot } from "firebase/firestore";
-import { Loader2, CheckCircle, Flame, Zap } from "lucide-react";
+import { Loader2, CheckCircle, Flame, Zap, AlertTriangle, ArrowRight, X } from "lucide-react";
 import Link from "next/link";
 
 export default function PlanesSuscripcion() {
@@ -13,6 +14,10 @@ export default function PlanesSuscripcion() {
   const [proUntil, setProUntil] = useState(null);
   const [loadingAuth, setLoadingAuth] = useState(true);
   const [loadingCheckout, setLoadingCheckout] = useState(null);
+
+  // Estados para controlar el Popup Interceptor
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [planSeleccionado, setPlanSeleccionado] = useState(null);
 
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
@@ -64,18 +69,26 @@ export default function PlanesSuscripcion() {
     return () => unsubscribeAuth();
   }, []);
 
-  // 🚀 DISPARADOR DINÁMICO BLINDADO: Manejo estricto del estado de carga y excepciones
-  const iniciarPagoDinamico = async (planKey) => {
+  // Abre el modal de confirmación antes de procesar el pago
+  const abrirConfirmacionPago = (planKey) => {
     if (!user) {
       window.location.href = "/login";
       return;
     }
+    setPlanSeleccionado(planKey);
+    setIsModalOpen(true);
+  };
+
+  // 🚀 DISPARADOR DINÁMICO: Se ejecuta solo si el usuario confirma en el Popup
+  const confirmarYProcesarPago = async () => {
+    if (!planSeleccionado || !user) return;
+    setIsModalOpen(false); // Cierra el modal
 
     // Evitar llamadas duplicadas si ya está procesando
     if (loadingCheckout) return;
 
     try {
-      setLoadingCheckout(planKey);
+      setLoadingCheckout(planSeleccionado);
 
       const response = await fetch("/api/checkout-mp", {
         method: "POST",
@@ -83,7 +96,7 @@ export default function PlanesSuscripcion() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          planKey,
+          planKey: planSeleccionado,
           uid: user.uid,
           email: user.email || user.providerData[0]?.email || "",
         }),
@@ -96,15 +109,14 @@ export default function PlanesSuscripcion() {
       const data = await response.json();
 
       if (data.initPoint) {
-        // Redirección directa e inmediata a Mercado Pago
+        // Redirección directa a Mercado Pago
         window.location.href = data.initPoint;
       } else {
-        throw new Error(data.error || "initPoint no recibido desde el backend.");
+        throw new Error(data.error || "initPoint no recibido.");
       }
     } catch (error) {
       console.error("❌ Error iniciando pasarela Checkout Pro:", error);
       alert("Hubo un problema al conectar con Mercado Pago. Por favor, reintenta en unos momentos.");
-      // Forzar la liberación del botón si falla la pasarela de red
       setLoadingCheckout(null);
     }
   };
@@ -117,15 +129,46 @@ export default function PlanesSuscripcion() {
 
   const formatearFecha = (fecha) => {
     if (!fecha) return "";
-    return fecha.toLocaleDateString("es-CL", { day: 'numeric', month: 'long', year: 'numeric' });
+    return text = fecha.toLocaleDateString("es-CL", { day: 'numeric', month: 'long', year: 'numeric' });
   };
 
   const isActive = hasActiveSubscription();
+
+  const getNombrePlan = (key) => {
+    if (key === "sprint") return "Pase 15 Días";
+    if (key === "mensual") return "Mensual PRO";
+    if (key === "anual") return "Anual PRO";
+    return "";
+  };
 
   return (
     <div className="w-full bg-white py-12 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         
+        {/* ⚠️ SECCIÓN AVISO DE ACTUALIZACIÓN TRIBUTARIA/TECNOLÓGICA */}
+        <div className="max-w-4xl mx-auto mb-12 bg-amber-50 border-2 border-amber-500/30 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row gap-6 items-center shadow-sm">
+          <div className="bg-amber-500/10 p-4 rounded-xl text-amber-600">
+            <AlertTriangle size={36} className="stroke-[2.5]" />
+          </div>
+          <div className="flex-1 text-center md:text-left">
+            <h4 className="text-amber-900 font-black text-lg mb-2">Aviso de Actualización de Pasarela</h4>
+            <p className="text-amber-800 text-sm font-medium leading-relaxed">
+              Estamos migrando nuestros sistemas de pago. Las activaciones automáticas se realizarán de forma manual tras efectuar tu compra.
+            </p>
+            <p className="text-amber-800 text-sm font-bold mt-2">
+              ⚠️ Al finalizar tu pago en la pasarela, es obligatorio que registres tu comprobante de pago en nuestro formulario para activar tu acceso.
+            </p>
+          </div>
+          <div className="w-full md:w-auto">
+            <Link 
+              href="/activar" 
+              className="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-700 text-white font-black py-3 px-6 rounded-xl transition-all text-sm shadow-md whitespace-nowrap"
+            >
+              Registrar Comprobante <ArrowRight size={16} />
+            </Link>
+          </div>
+        </div>
+
         {/* ENCABEZADO */}
         <div className="text-center mb-16">
           {isActive ? (
@@ -245,7 +288,7 @@ export default function PlanesSuscripcion() {
                 </button>
               ) : (
                 <button 
-                  onClick={() => iniciarPagoDinamico("sprint")}
+                  onClick={() => abrirConfirmacionPago("sprint")}
                   disabled={loadingCheckout !== null}
                   className="w-full bg-[#003366] text-white hover:bg-[#002244] font-black py-4 rounded-xl transition-all text-center text-sm shadow-lg flex items-center justify-center gap-2"
                 >
@@ -306,7 +349,7 @@ export default function PlanesSuscripcion() {
                 </button>
               ) : (
                 <button 
-                  onClick={() => iniciarPagoDinamico("mensual")}
+                  onClick={() => abrirConfirmacionPago("mensual")}
                   disabled={loadingCheckout !== null}
                   className="w-full bg-[#28a745] text-white hover:bg-[#218838] font-black py-4 rounded-xl transition-all text-center text-sm shadow-lg shadow-[#28a745]/30 flex items-center justify-center gap-2"
                 >
@@ -364,7 +407,7 @@ export default function PlanesSuscripcion() {
                 </button>
               ) : (
                 <button 
-                  onClick={() => iniciarPagoDinamico("anual")}
+                  onClick={() => abrirConfirmacionPago("anual")}
                   disabled={loadingCheckout !== null}
                   className="w-full block bg-[#28a745] text-white hover:bg-[#218838] font-black py-5 rounded-xl transition-all text-center text-sm shadow-[0_0_30px_rgba(40,167,69,0.4)] transform hover:scale-105 flex items-center justify-center gap-2"
                 >
@@ -376,6 +419,63 @@ export default function PlanesSuscripcion() {
 
         </div>
       </div>
+
+      {/* POPUP (MODAL) INTERCEPTOR DE PAGO */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm transition-opacity">
+          <div className="bg-white w-full max-w-md rounded-3xl border-2 border-amber-500/20 shadow-2xl p-6 md:p-8 relative transform scale-100 transition-all">
+            
+            {/* Botón cerrar X */}
+            <button 
+              onClick={() => setIsModalOpen(false)}
+              className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 transition-colors p-1"
+            >
+              <X size={20} />
+            </button>
+
+            {/* Icono Advertencia */}
+            <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-amber-50 text-amber-600 mb-6 border border-amber-200">
+              <AlertTriangle size={24} className="stroke-[2.5]" />
+            </div>
+
+            {/* Contenido */}
+            <div className="text-center">
+              <h3 className="text-xl font-black text-slate-900 mb-2">
+                ¡Atención! Activación Manual
+              </h3>
+              <p className="text-slate-600 text-sm font-bold leading-relaxed mb-4">
+                Estás a punto de adquirir el plan <span className="text-[#003366] underline">{getNombrePlan(planSeleccionado)}</span>.
+              </p>
+              
+              <div className="bg-amber-50/70 border border-amber-200/50 rounded-2xl p-4 text-left space-y-3 mb-6">
+                <p className="text-amber-900 text-xs font-semibold leading-relaxed">
+                  🔄 <strong>¿Cómo funciona?:</strong> Estamos migrando nuestros servidores de pago. El acceso se activará de forma manual tras validar tu transacción.
+                </p>
+                <p className="text-amber-900 text-xs font-bold leading-relaxed">
+                  ⚠️ <strong>Paso Obligatorio:</strong> Una vez realizado el pago, deberás presionar el botón de arriba en la web para registrar tu comprobante de pago en nuestro formulario.
+                </p>
+              </div>
+
+              {/* Botones de acción */}
+              <div className="flex flex-col gap-3">
+                <button
+                  onClick={confirmarYProcesarPago}
+                  className="w-full inline-flex items-center justify-center gap-2 bg-[#28a745] hover:bg-[#218838] text-white font-black py-4 rounded-xl transition-all text-sm shadow-md"
+                >
+                  Entendido, ir a pagar <ArrowRight size={16} />
+                </button>
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="w-full bg-slate-100 hover:bg-slate-200 text-slate-500 font-bold py-3 rounded-xl transition-all text-xs"
+                >
+                  Volver a los planes
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      )}
     </div>
   );
 }
