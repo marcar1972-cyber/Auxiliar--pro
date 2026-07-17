@@ -49,7 +49,8 @@ export default function PillarPage() {
           {[
             { title: 'Marco Regulatorio', desc: 'Entiende la Ley y el Decreto 466.', link: '/blog/marco-regulatorio' },
             { title: 'Trámites SEREMI', desc: 'Guía de postulación y Certificados.', link: '/blog/tramites-seremi' },
-            { title: 'Preparación Técnica', desc: 'Conceptos clave para tu examen.', link: '/blog/preparacion-tecnica' }
+            { title: 'Preparación Técnica', desc: 'Conceptos clave para tu examen.', link: '/blog/preparacion-tecnica' },
+            { title: 'Materias del Examen', desc: 'Las 5 áreas clave que evalúa la SEREMI.', link: '/blog/materias-examen-seremi' }
           ].map((card) => (
             <Link 
               href={card.link} 

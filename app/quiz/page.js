@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import SocialContact from "../components/SocialContact";
 import BannerVenta from "../components/BannerVenta";
+import GuiaAuxiliarFarmaciaCard from "../components/GuiaAuxiliarFarmaciaCard"; // 🆕 Import del nuevo componente
 import { 
   ChevronLeft, ShieldCheck, Trophy, BrainCircuit, Share2, Loader2, AlertTriangle, BookOpen, Lock, ChevronRight, Sparkles, Flame, X, User
 } from "lucide-react"; 
@@ -297,6 +298,9 @@ export default function QuizLobbyPage() {
               </div>
             </div>
           </article>
+
+          {/* 🎓 NUEVA TARJETA: GUÍA COMPLETA - CÓMO SER AUXILIAR DE FARMACIA */}
+          <GuiaAuxiliarFarmaciaCard />
 
           <div className="bg-white border border-slate-200 p-5 rounded-[2rem] shadow-sm mt-8 max-w-full mx-auto animate-in fade-in zoom-in duration-500 relative overflow-hidden">
              <div className="absolute top-0 right-0 w-32 h-32 bg-orange-50 rounded-bl-full -z-10 opacity-50"></div>
