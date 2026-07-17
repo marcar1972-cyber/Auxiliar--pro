@@ -1,15 +1,18 @@
-// app/api/webhook-mp/route.ts
 import { NextResponse } from "next/server";
 import admin from "firebase-admin";
 
 export const runtime = "nodejs";
 
-// 1. Inicialización idempotente y segura usando variables de entorno de Vercel
+// 1. Inicialización segura. La fallbackKey se eliminó por seguridad. 
+// Si las variables están en Vercel (como confirmaste), esto funcionará perfectamente.
 if (!admin.apps.length) {
-  const projectId = process.env.FIREBASE_PROJECT_ID || "auxiliar-pro";
-  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL || "firebase-adminsdk-fbsvc@auxiliar-pro.iam.gserviceaccount.com";
-  const fallbackKey = "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCdlXNjBN7KQ3UT\n5AuSGzSR8a7FtncW/fHq91flqbKSynkuifUrikUn/7rzaxahtgF+P9eWovywEtUg\noI1PwSBkA55fXUwUUWqz156AIJfz8c0VtBLV8GEFLBlY2Mbr1wSj7N3n20+AzXOl\nGiZ4ZUONIFuGttoYjahuei1P6Ku3bWk8I4AOuMTxzRvLTCIgY5UBvBQLyw0aJBrW\nDt/KQbSV5bLymUCmIdNPEjbPQaI8gCsqPXdb8OARtrvFoMXPQkXbsq5BnbAzyqv7\nJAJhF18FZ7gkmLTgX53TUXu/WLkiEc6OJSeSu3bDbGXh+DYLUvH4x8pXkHwoSy2a\nQ5hQdTFlAgMBAAECggEADnPG7dVkA2PVaHoZL5CsLRhfwYU+/c5Tcgu2NXtvQ7Qr\nEgAYCqK3PfhfsnRnUnRpRaVgRdHz38gSYNgoraBWMqX8T920HQbshMrpH/IdTYOn\nHe7ybUmK9Fj7iCD1eWqyY8BVB68e5v6wtPslfRQ4ckh97Gh3rxnK0TsGTdZWbU+I\nJxe9kq2nIq+4CJaTHcNRjIyID8O64WwJw8M69vBCQwQEPxa42V0ypOI/jovZutRh\nrs4KPcAZrdjZ5fa7jQ6J77PbP8p9A1F3060hu5cySTQf7wFfqOHs2q4LyyoLfDaa\nMjl0PVF0G381h4LxbnGPjFaPo0lw6cQGh08UYAAusQKBgQDMH0e64+xDWta7r+2S\ne2j7/vZnMci1iF0eMij3T2kam7s5OE++l8Lpp1lMreQEKYDEOWIZ1HyHH05tpmrr\na+b/9YxLkOgQHL1I/9PFgF+eLX9rhG/nf7STqPLRgHS2/SfvA4zDTxDpY7a6J4r6\nI/UyB5gGhlWes4QwjCuqxQudfQKBgQDFokL2v3UCNBdKLiBpFY18EzsIedhRmZ4i\nEN7JGoO08pgNy3P/D3RxVDQoTWN7wjIWEl4OrcBmEUkTHk9zSBKMGhQdlAjsMGqt\ntBRxPEBUiS3+2Ms4ZpW2VvfOYEouN09Eg27zeAD0G7KlSZR8LhywzhCRM/n3qa3p\nFh4TG3/ICQKBgBzg8A0I4gxFdcvn//yRaTD9yW6gJH1KZaI4BoO2wG/7SGm4BdA5\nOGJGQuQOVgwgsw8P70koPtX/H+Fzgfz8rxnXa5nlTm+5IS6KwzNWDjEazsQvYIWo\nE6wwYuow+lJJTrUKE4guT341lUyQ+6CYJcCGQoPpzYM+cp1Lt4HZjuMhAoGAEJeE\nw65jJmI1KlchBXF3xVjf9eA01vTsn7OG4J9HO2O6fD3+aQVlIzaMgm2s0nEFP3Ef\nUGAp7Oe6mM5MoUMFu5lc4vbQoPOXoSmjJbaHOBGkOOb+eKe0HfDDMSJIWATwtLHM\nGMiUW+oPX20D+EDuy7EhFu+kJrSqEw12TOhcG/ECgYA6rsak+ngB2LjwwrcMe7Uk\nH54Xiiq6g7SxaCt9KdDqISTaR+CIRO5zbCDpUbvqlEog8ugTrfws0L2x/c2+acAK\n9pUz8bx3lMq7PsPtbczAGfAXubp/azLd8UR0eLDXUzzwUrbRTBAaG0FZq3xDXsgC\nQg3KG/E+3cgEmPDIKfPcSg==\n-----END PRIVATE KEY-----\n";
-  const privateKey = (process.env.FIREBASE_PRIVATE_KEY || fallbackKey).replace(/\\n/g, "\n");
+  const projectId = process.env.FIREBASE_PROJECT_ID;
+  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
+  const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n");
+
+  if (!projectId || !clientEmail || !privateKey) {
+    throw new Error("Faltan variables de entorno críticas de Firebase Admin en Vercel.");
+  }
 
   admin.initializeApp({
     credential: admin.credential.cert({ projectId, clientEmail, privateKey }),
@@ -17,9 +20,13 @@ if (!admin.apps.length) {
 }
 
 const db = admin.firestore();
-const TOKEN = process.env.MERCADO_PAGO_ACCESS_TOKEN || "APP_USR-6296117002447975-040718-d1a2cd392dac4324a4875784375a14d9-3319774413";
+const TOKEN = process.env.MERCADO_PAGO_ACCESS_TOKEN;
 
-// 2. MATRIZ DE PRECIOS OFICIALES DE AUXILIARPRO APP CALIBRADA
+if (!TOKEN) {
+  console.warn("⚠️ MERCADO_PAGO_ACCESS_TOKEN no está definido en las variables de entorno.");
+}
+
+// 2. MATRIZ DE PRECIOS OFICIALES DE AUXILIARPRO APP CALIBRADA (Intacta)
 const PLANES_PRECIOS = {
   sprint: { montoExacto: 3990, dias: 15, plan: "sprint" },
   mensual: { montoExacto: 5990, dias: 30, plan: "mensual" },
@@ -35,14 +42,6 @@ function determinarDiasPorMonto(monto: number) {
     return { dias: PLANES_PRECIOS.sprint.dias, plan: PLANES_PRECIOS.sprint.plan };
   }
 }
-
-// Función auxiliar para forzar la interrupción de operaciones lentas y evitar timeout del hosting
-const promiseWithTimeout = <T>(promise: Promise<T>, ms: number, errorMsg: string): Promise<T> => {
-  return Promise.race([
-    promise,
-    new Promise<never>((_, reject) => setTimeout(() => reject(new Error(errorMsg)), ms))
-  ]);
-};
 
 async function buscarUsuarioPorEmail(email: string) {
   if (!email) return null;
@@ -60,7 +59,7 @@ async function buscarUsuarioPorEmail(email: string) {
 }
 
 export async function POST(request: Request) {
-  console.log("🔔 === WEBHOOK INBOUND MERCADO PAGO (PROCESANDO PREFERENCIA DINÁMICA CON TIMEOUT) ===");
+  console.log("🔔 === WEBHOOK INBOUND MERCADO PAGO (PROCESANDO PREFERENCIA DINÁMICA) ===");
   
   let id: string | null = null;
   let type: string | null = null;
@@ -79,19 +78,24 @@ export async function POST(request: Request) {
     }
 
     if (type === "payment" && id) {
-      // 1. Consultar el pago a Mercado Pago con un límite estricto de 4 segundos
-      const mpFetchPromise = fetch(`https://api.mercadopago.com/v1/payments/${id}`, {
-        headers: { Authorization: `Bearer ${TOKEN}` },
-      }).then(async (res) => {
-        if (!res.ok) throw new Error("Payment not found in MP API");
-        return res.json();
-      });
+      // FIX 3: AbortController para evitar fugas de memoria (corta la conexión de red real)
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 4000);
 
-      const payment = await promiseWithTimeout(
-        mpFetchPromise,
-        4000,
-        "Superado límite de espera en respuesta de API de Mercado Pago"
-      );
+      let payment;
+      try {
+        const res = await fetch(`https://api.mercadopago.com/v1/payments/${id}`, {
+          headers: { Authorization: `Bearer ${TOKEN}` },
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+        
+        if (!res.ok) throw new Error("Payment not found in MP API");
+        payment = await res.json();
+      } catch (fetchError: any) {
+        clearTimeout(timeoutId);
+        throw new Error(`Fallo al consultar MP: ${fetchError.message}`);
+      }
 
       const status = payment.status;
       const monto = payment.transaction_amount || 0;
@@ -101,21 +105,10 @@ export async function POST(request: Request) {
 
       if (status === "approved") {
         const logRef = db.collection("payments_log").doc(id.toString());
-        
-        // Timeout para validar duplicación en Firestore
-        const checkDuplicado = await promiseWithTimeout(
-          logRef.get(),
-          3000,
-          "Timeout al consultar duplicidad de pagos en base de datos"
-        );
-
-        if (checkDuplicado.exists) {
-          return NextResponse.json({ received: true, message: "Already processed" }, { status: 200 });
-        }
-
-        let metodoBusqueda = "external_reference";
         const { dias: diasASumar, plan: planDetectado } = determinarDiasPorMonto(monto);
 
+        // Lógica de fallback de búsqueda por email (Intacta)
+        let metodoBusqueda = "external_reference";
         if (!uid || uid.trim() === "") {
           let usuarioEncontrado = await buscarUsuarioPorEmail(mpPayerEmail);
           if (usuarioEncontrado) {
@@ -135,8 +128,17 @@ export async function POST(request: Request) {
         if (uid) {
           const userRef = db.collection("users").doc(uid);
           
-          // 2. Transacción atómica de Firestore con timeout estricto de 4 segundos
-          const transactionPromise = db.runTransaction(async (transaction) => {
+          // FIX 2: Transacción atómica que INCLUYE la verificación de duplicados
+          // Esto garantiza 100% de idempotencia, evitando race conditions.
+          await db.runTransaction(async (transaction) => {
+            // 1. Verificar duplicado DENTRO de la transacción
+            const logDoc = await transaction.get(logRef);
+            if (logDoc.exists) {
+              console.log(`✅ Idempotencia: Pago ${id} ya fue procesado anteriormente.`);
+              return; // Salir sin hacer nada, ya está procesado
+            }
+
+            // 2. Actualizar usuario
             const userSnapshot = await transaction.get(userRef);
             const userData = userSnapshot.exists ? (userSnapshot.data() || {}) : {};
             let proUntilBase = new Date();
@@ -162,6 +164,7 @@ export async function POST(request: Request) {
               planActual: planDetectado
             }, { merge: true });
 
+            // 3. Registrar el log (esto bloquea futuros duplicados en esta misma transacción)
             transaction.set(logRef, {
               transactionId: id,
               uid: uid,
@@ -172,30 +175,19 @@ export async function POST(request: Request) {
             });
           });
 
-          await promiseWithTimeout(
-            transactionPromise,
-            4000,
-            "Timeout de escritura o transacción en base de datos"
-          );
-
           console.log(`🎉 Webhook Éxito: Alumno ${uid} activado automáticamente en modo PRO.`);
         } else {
-          // 3. Fallback de pagos pendientes con un timeout de 3 segundos
-          const huerfanoPromise = db.collection("pagos_pendientes_asignacion").doc(id.toString()).set({
+          // Fallback de pagos pendientes
+          await db.collection("pagos_pendientes_asignacion").doc(id.toString()).set({
             paymentId: id,
             amount: monto,
             payerEmail: mpPayerEmail || "N/A",
             plan: planDetectado,
-            timestamp: new Date(),
+            timestamp: admin.firestore.FieldValue.serverTimestamp(),
             procesado: false,
             notas: "Recaudado. UID ausente y correo sin coincidencias en base de datos."
           });
-
-          await promiseWithTimeout(
-            huerfanoPromise,
-            3000,
-            "Timeout al guardar log de pago pendiente por asignar"
-          );
+          console.warn(`⚠️ Pago huérfano registrado: ${id}`);
         }
       }
     }
@@ -204,9 +196,21 @@ export async function POST(request: Request) {
 
   } catch (error: any) {
     console.error("❌ Error crítico mitigado en pipeline de webhook:", error.message);
-    // Devolvemos status 200 para indicarle al gateway que recibimos el webhook correctamente,
-    // previniendo los reintentos que llenan el log, y guardando la traza para auditoría.
-    return NextResponse.json({ received: true, error: error.message }, { status: 200 });
+    
+    // Registro de auditoría en caso de fallo
+    try {
+      await db.collection("webhook_audit_errors").add({
+        paymentId: id || "unknown",
+        error: error.message,
+        type,
+        timestamp: admin.firestore.FieldValue.serverTimestamp(),
+      });
+    } catch (logError) {
+      console.error("Fallo al registrar error de auditoría:", logError);
+    }
+
+    // Devolvemos 200 OK para que MP no siga reintentando infinitamente
+    return NextResponse.json({ received: true, error: "Internal processing error logged" }, { status: 200 });
   }
 }
 
