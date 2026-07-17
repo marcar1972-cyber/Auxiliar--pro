@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { auth, db } from "../firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, onSnapshot } from "firebase/firestore";
-import { Loader2, CheckCircle, Flame, Zap, AlertTriangle, ArrowRight, X } from "lucide-react";
+import { Loader2, CheckCircle, Flame, Zap, ArrowRight, X } from "lucide-react";
 import Link from "next/link";
 
 export default function PlanesSuscripcion() {
@@ -145,30 +145,6 @@ export default function PlanesSuscripcion() {
     <div className="w-full bg-white py-12 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         
-        {/* ⚠️ SECCIÓN AVISO DE ACTUALIZACIÓN TRIBUTARIA/TECNOLÓGICA */}
-        <div className="max-w-4xl mx-auto mb-12 bg-amber-50 border-2 border-amber-500/30 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row gap-6 items-center shadow-sm">
-          <div className="bg-amber-500/10 p-4 rounded-xl text-amber-600">
-            <AlertTriangle size={36} className="stroke-[2.5]" />
-          </div>
-          <div className="flex-1 text-center md:text-left">
-            <h4 className="text-amber-900 font-black text-lg mb-2">Aviso de Actualización de Pasarela</h4>
-            <p className="text-amber-800 text-sm font-medium leading-relaxed">
-              Estamos migrando nuestros sistemas de pago. Las activaciones automáticas se realizarán de forma manual tras efectuar tu compra.
-            </p>
-            <p className="text-amber-800 text-sm font-bold mt-2">
-              ⚠️ Al finalizar tu pago en la pasarela, es obligatorio que registres tu comprobante de pago en nuestro formulario para activar tu acceso.
-            </p>
-          </div>
-          <div className="w-full md:w-auto">
-            <Link 
-              href="/activar" 
-              className="w-full md:w-auto inline-flex items-center justify-center gap-2 bg-amber-600 hover:bg-amber-700 text-white font-black py-3 px-6 rounded-xl transition-all text-sm shadow-md whitespace-nowrap"
-            >
-              Registrar Comprobante <ArrowRight size={16} />
-            </Link>
-          </div>
-        </div>
-
         {/* ENCABEZADO */}
         <div className="text-center mb-16">
           {isActive ? (
@@ -423,7 +399,7 @@ export default function PlanesSuscripcion() {
       {/* POPUP (MODAL) INTERCEPTOR DE PAGO */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm transition-opacity">
-          <div className="bg-white w-full max-w-md rounded-3xl border-2 border-amber-500/20 shadow-2xl p-6 md:p-8 relative transform scale-100 transition-all">
+          <div className="bg-white w-full max-w-md rounded-3xl border-2 border-[#28a745]/20 shadow-2xl p-6 md:p-8 relative transform scale-100 transition-all">
             
             {/* Botón cerrar X */}
             <button 
@@ -433,28 +409,19 @@ export default function PlanesSuscripcion() {
               <X size={20} />
             </button>
 
-            {/* Icono Advertencia */}
-            <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-amber-50 text-amber-600 mb-6 border border-amber-200">
-              <AlertTriangle size={24} className="stroke-[2.5]" />
+            {/* Icono Confirmación */}
+            <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-[#28a745]/10 text-[#28a745] mb-6 border border-[#28a745]/20">
+              <CheckCircle size={24} className="stroke-[2.5]" />
             </div>
 
             {/* Contenido */}
             <div className="text-center">
               <h3 className="text-xl font-black text-slate-900 mb-2">
-                ¡Atención! Activación Manual
+                Confirmar Compra
               </h3>
-              <p className="text-slate-600 text-sm font-bold leading-relaxed mb-4">
-                Estás a punto de adquirir el plan <span className="text-[#003366] underline">{getNombrePlan(planSeleccionado)}</span>.
+              <p className="text-slate-600 text-sm font-bold leading-relaxed mb-6">
+                Estás a punto de adquirir el plan <span className="text-[#003366] underline">{getNombrePlan(planSeleccionado)}</span>. Serás redirigido a Mercado Pago para completar tu transacción de forma segura y tu acceso se activará automáticamente.
               </p>
-              
-              <div className="bg-amber-50/70 border border-amber-200/50 rounded-2xl p-4 text-left space-y-3 mb-6">
-                <p className="text-amber-900 text-xs font-semibold leading-relaxed">
-                  🔄 <strong>¿Cómo funciona?:</strong> Estamos migrando nuestros servidores de pago. El acceso se activará de forma manual tras validar tu transacción.
-                </p>
-                <p className="text-amber-900 text-xs font-bold leading-relaxed">
-                  ⚠️ <strong>Paso Obligatorio:</strong> Una vez realizado el pago, deberás presionar el botón de arriba en la web para registrar tu comprobante de pago en nuestro formulario.
-                </p>
-              </div>
 
               {/* Botones de acción */}
               <div className="flex flex-col gap-3">
@@ -462,7 +429,7 @@ export default function PlanesSuscripcion() {
                   onClick={confirmarYProcesarPago}
                   className="w-full inline-flex items-center justify-center gap-2 bg-[#28a745] hover:bg-[#218838] text-white font-black py-4 rounded-xl transition-all text-sm shadow-md"
                 >
-                  Entendido, ir a pagar <ArrowRight size={16} />
+                  Continuar al Pago <ArrowRight size={16} />
                 </button>
                 <button
                   onClick={() => setIsModalOpen(false)}
