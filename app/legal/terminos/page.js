@@ -17,8 +17,8 @@ export default function TerminosPage() {
           <h2 className="text-lg font-bold text-slate-900 mt-4">1. Planes de Acceso y Suscripciones</h2>
           <p>AuxiliarPro ofrece distintos niveles de acceso a su contenido, divididos en una modalidad gratuita y planes de pago:</p>
           <ul className="list-disc pl-5 space-y-2">
-            <li><strong>Plan Base (Gratuito):</strong> Acceso sin costo a los niveles 1, 2 y 3 del Simulador Inicial.</li>
-            <li><strong>Suscripción Nivel PRO:</strong> Otorga acceso total a la plataforma, incluyendo el Desafío de Racha Diaria, Campus Virtual PRO completo, Simulador Fiscalizador SEREMI y Vademécum Profesional.</li>
+            <li><strong>Plan Base (Gratuito):</strong> Acceso sin costo a los niveles 1, 2 y 3 del Simulador Inicial, y acceso temporal a herramientas de trámite durante el "Mes de Oro" o promociones vigentes.</li>
+            <li><strong>Suscripción Nivel PRO:</strong> Otorga acceso total a la plataforma, incluyendo el Desafío de Racha Diaria, Campus Virtual PRO completo, Simulador Fiscalizador SEREMI, Vademécum Profesional y la Suite de Herramientas de Trámite y Empleabilidad (Generador de Certificados, Recortador de Fotos y Optimizador de CV).</li>
           </ul>
 
           <div className="bg-slate-50 border border-slate-200 p-4 rounded-lg mt-4">
@@ -59,12 +59,21 @@ export default function TerminosPage() {
           <p>AuxiliarPro es exclusivamente una plataforma de entrenamiento académico y apoyo al estudio. El contenido entregado <strong>no constituye consejo médico, diagnóstico, ni reemplaza el criterio oficial de los fiscalizadores de la SEREMI de Salud o normativas vigentes del ISP</strong>.</p>
           <p><strong>El solo hecho de estudiar con el material y los simuladores de AuxiliarPro no otorga certificación oficial ante la SEREMI.</strong> Para poder optar por la credencial, el alumno debe cumplir con los requisitos legales correspondientes, como trabajar un año en farmacia (como bodeguero o en sala) y rendir y aprobar la prueba oficial ante la SEREMI.</p>
           <p>No garantizamos la aprobación del examen oficial de la SEREMI, ya que esto depende del esfuerzo personal, experiencia y estudio del estudiante. Asimismo, el uso de la información brindada (incluyendo el Vademécum o la IA) en el mesón de farmacia real es de exclusiva responsabilidad del usuario y debe ser siempre validada por un Químico Farmacéutico.</p>
+
+          <h2 className="text-lg font-bold text-slate-900 mt-4">5. Herramientas de Trámite, Optimización y Privacidad de Datos</h2>
+          <p>Al utilizar las herramientas de la plataforma (Generador de Certificado de Idoneidad, Recortador de Fotos y Optimizador de CV), el usuario acepta las siguientes condiciones específicas:</p>
+          <ul className="list-disc pl-5 space-y-2 mt-2">
+            <li><strong>5.1. Naturaleza de los Documentos Generados:</strong> El "Certificado de Idoneidad y Desempeño Laboral" generado por la plataforma es un borrador o plantilla digital basada en el Artículo 28, letra b) del D.S. 466/1984. Este documento NO tiene validez legal hasta que sea impreso, firmado y timbrado físicamente (o con firma electrónica avanzada) por el Químico Farmacéutico Director Técnico del establecimiento. AuxiliarPro no se hace responsable de la veracidad de los datos ingresados por el usuario ni de la obtención de dicha firma.</li>
+            <li><strong>5.2. Trámite ante la SEREMI:</strong> AuxiliarPro facilita la creación de archivos y la guía de pasos, pero NO realiza el envío, postulación o seguimiento del trámite ante la SEREMI en Línea. Esta responsabilidad recae 100% en el usuario.</li>
+            <li><strong>5.3. Optimizador de CV y Fotos:</strong> Estas herramientas son ayudas técnicas para formatear documentos según estándares del mercado y requisitos generales de la SEREMI. AuxiliarPro no garantiza la contratación laboral ni la aceptación final del documento por parte de la autoridad sanitaria, la cual tiene la facultad discrecional de rechazo.</li>
+            <li><strong>5.4. Protección de Datos Personales (Ley 19.628):</strong> Al subir documentos (contratos, fotos, CVs, RUTs), el usuario autoriza a AuxiliarPro a procesar estos datos exclusivamente para la generación de las herramientas solicitadas. Implementamos medidas de seguridad (cifrado y acceso restringido) para proteger esta información. Los datos no serán vendidos ni compartidos con terceros con fines comerciales. El usuario puede solicitar la eliminación de sus archivos subidos contactando a soporte.</li>
+          </ul>
           
-          <h2 className="text-lg font-bold text-slate-900 mt-4">5. Propiedad Intelectual</h2>
-          <p>El código fuente, diseño, estructura de los simuladores, "Vademécum Profesional", bases de datos y herramientas de inteligencia artificial son propiedad exclusiva de AuxiliarPro. Los textos legales (Decretos como el D.S. 466 y Ley 20.724) referenciados son de dominio público. Queda estrictamente prohibida la copia, reproducción, reventa o extracción masiva de datos de la plataforma.</p>
+          <h2 className="text-lg font-bold text-slate-900 mt-4">6. Propiedad Intelectual</h2>
+          <p>El código fuente, diseño, estructura de los simuladores, "Vademécum Profesional", bases de datos y herramientas de inteligencia artificial son propiedad exclusiva de AuxiliarPro (MaczDev). Los textos legales (Decretos como el D.S. 466 y Ley 20.724) referenciados son de dominio público. Queda estrictamente prohibida la copia, reproducción, reventa o extracción masiva de datos (scraping) de la plataforma.</p>
 
           <p className="mt-8 pt-6 border-t border-slate-200 text-xs text-slate-500 font-medium">
-            Última actualización: 03 de Junio de 2026.
+            Última actualización: 24 de Julio de 2026.
           </p>
         </div>
       </div>
