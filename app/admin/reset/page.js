@@ -4,7 +4,7 @@
 // IMPORTACIONES
 // ==========================================
 import { useState, useEffect } from "react";
-// Funciones de Firestore para interactwith la base de datos
+// Funciones de Firestore para interactuar con la base de datos
 import { collection, getDocs, doc, updateDoc, getDoc, setDoc, deleteDoc } from "firebase/firestore";
 // Función para escuchar cambios en el estado de autenticación
 import { onAuthStateChanged } from "firebase/auth";
@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 // Componente personalizado para mostrar banners
 import BannerVenta from "../../components/BannerVenta";
 // Datos estáticos para la carga masiva (Bloque G y opciones de select)
-import { BLOQUE_G, OPCIONES_DESPLEGABLES } from "../../admin-vademecum/vademecumData";
+// import { BLOQUE_G, OPCIONES_DESPLEGABLES } from "../../admin-vademecum/vademecumData";
 
 // ==========================================
 // COMPONENTE PRINCIPAL
@@ -204,25 +204,12 @@ export default function BuscadorVademecum() {
       // Obtenemos snapshot de todo para poder purgar duplicados
       const todosLosDocsSnapshot = await getDocs(vademecumRef);
 
-      for (const item of BLOQUE_G) {
-        // Normalizamos el nombre para comparar sin espacios ni mayúsculas
-        const nombreLimpioNuevo = item.nombre.replace(/\s+/g, '').toLowerCase();
-        
-        // 1. PURGA: Busca si ya existe algo con ese nombre y lo borra
-        todosLosDocsSnapshot.forEach(async (docSnap) => {
-          const data = docSnap.data();
-          if (data.nombre && data.nombre.replace(/\s+/g, '').toLowerCase() === nombreLimpioNuevo) {
-            await deleteDoc(doc(db, "vademecum", docSnap.id));
-          }
-        });
-        
-        // 2. INSERCIÓN: Genera un ID limpio y guarda el nuevo registro
-        const docId = item.nombre.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-        await setDoc(doc(db, "vademecum", docId), item);
-      }
+      // NOTA: Como comentamos el import de BLOQUE_G, esta función no se ejecutará correctamente hasta que lo arreglemos en el próximo sprint.
+      // Por ahora, el objetivo es que Vercel logre compilar el proyecto.
       
-      alert("✅ Bloque G Sincronizado correctamente desde archivo de datos.");
-      window.location.reload(); // Recarga forzada para limpiar estados
+      alert("⚠️ Función de sincronización temporalmente desactivada para permitir el despliegue.");
+      setCargandoAuditoria(false);
+      
     } catch (error) { 
       console.error("Error en carga masiva:", error); 
       alert("❌ Error en carga masiva."); 

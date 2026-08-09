@@ -1,5 +1,3 @@
-"use client";
-
 import Hero from "./components/Hero";
 import ModulosLegales from "./components/ModulosLegales";
 import Metodologia from "./components/Metodologia";
@@ -9,7 +7,6 @@ import PlanesSuscripcion from "./components/PlanesSuscripcion";
 import { CheckCircle, Star } from "lucide-react";
 
 export default function LandingPage() {
-  // Arreglo de testimonios integrado directamente en la página
   const testimoniosData = [
     {
       id: 1,
@@ -29,23 +26,12 @@ export default function LandingPage() {
 
   return (
     <div className="min-h-screen bg-white font-sans text-slate-800">
-      
-      {/* 1. Alerta de Cierre - ELIMINADO (Ahora se maneja desde RootLayout) */}
-      
-      {/* 2. Hero Section (El Gancho) */}
       <Hero />
-      
-      {/* 3. Carrusel de Leyes (Mobile First) */}
       <main className="w-full flex flex-col items-center">
         <ModulosLegales />
-        
-        {/* 4. Metodología de Estudio */}
         <Metodologia />
-        
-        {/* 5. PLANES DE SUSCRIPCIÓN (Reemplaza a AvisoFreemium) */}
         <PlanesSuscripcion /> 
         
-        {/* 6. Testimonios (Código incrustado con SEO optimizado) */}
         <section id="testimonios" className="bg-white py-24 px-6 w-full border-t border-slate-100">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
@@ -87,13 +73,9 @@ export default function LandingPage() {
           </div>
         </section>
         
-        {/* 7. FAQs */}
         <FaqSeccion />
-        
-        {/* 8. Historia del Creador */}
         <Creador />
       </main>
-
     </div>
   );
 }

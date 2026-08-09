@@ -1,26 +1,29 @@
 import { NextResponse } from "next/server";
 import admin from "firebase-admin";
 
+export const dynamic = 'force-dynamic';
 export const runtime = "nodejs";
 
-// 1. Inicialización segura. La fallbackKey se eliminó por seguridad. 
-// Si las variables están en Vercel (como confirmaste), esto funcionará perfectamente.
+// 1. Inicialización segura que NO rompe el build si faltan variables locales
+let db: any = null;
+const TOKEN = process.env.MERCADO_PAGO_ACCESS_TOKEN;
+
 if (!admin.apps.length) {
   const projectId = process.env.FIREBASE_PROJECT_ID;
   const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
   const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n");
 
-  if (!projectId || !clientEmail || !privateKey) {
-    throw new Error("Faltan variables de entorno críticas de Firebase Admin en Vercel.");
+  if (projectId && clientEmail && privateKey) {
+    admin.initializeApp({
+      credential: admin.credential.cert({ projectId, clientEmail, privateKey }),
+    });
+    db = admin.firestore();
+  } else {
+    console.warn("⚠️ Variables de Firebase Admin no detectadas localmente. El build continuará de forma segura.");
   }
-
-  admin.initializeApp({
-    credential: admin.credential.cert({ projectId, clientEmail, privateKey }),
-  });
+} else {
+  db = admin.firestore();
 }
-
-const db = admin.firestore();
-const TOKEN = process.env.MERCADO_PAGO_ACCESS_TOKEN;
 
 if (!TOKEN) {
   console.warn("⚠️ MERCADO_PAGO_ACCESS_TOKEN no está definido en las variables de entorno.");
@@ -44,7 +47,7 @@ function determinarDiasPorMonto(monto: number) {
 }
 
 async function buscarUsuarioPorEmail(email: string) {
-  if (!email) return null;
+  if (!email || !db) return null;
   const emailNormalizado = email.toLowerCase().trim();
   const snapshot = await db.collection("users")
     .where("email", "==", emailNormalizado)
@@ -77,8 +80,7 @@ export async function POST(request: Request) {
       } catch {}
     }
 
-    if (type === "payment" && id) {
-      // FIX 3: AbortController para evitar fugas de memoria (corta la conexión de red real)
+    if (type === "payment" && id && db) {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 4000);
 
@@ -107,7 +109,6 @@ export async function POST(request: Request) {
         const logRef = db.collection("payments_log").doc(id.toString());
         const { dias: diasASumar, plan: planDetectado } = determinarDiasPorMonto(monto);
 
-        // Lógica de fallback de búsqueda por email (Intacta)
         let metodoBusqueda = "external_reference";
         if (!uid || uid.trim() === "") {
           let usuarioEncontrado = await buscarUsuarioPorEmail(mpPayerEmail);
@@ -128,17 +129,13 @@ export async function POST(request: Request) {
         if (uid) {
           const userRef = db.collection("users").doc(uid);
           
-          // FIX 2: Transacción atómica que INCLUYE la verificación de duplicados
-          // Esto garantiza 100% de idempotencia, evitando race conditions.
           await db.runTransaction(async (transaction) => {
-            // 1. Verificar duplicado DENTRO de la transacción
             const logDoc = await transaction.get(logRef);
             if (logDoc.exists) {
               console.log(`✅ Idempotencia: Pago ${id} ya fue procesado anteriormente.`);
-              return; // Salir sin hacer nada, ya está procesado
+              return;
             }
 
-            // 2. Actualizar usuario
             const userSnapshot = await transaction.get(userRef);
             const userData = userSnapshot.exists ? (userSnapshot.data() || {}) : {};
             let proUntilBase = new Date();
@@ -164,7 +161,6 @@ export async function POST(request: Request) {
               planActual: planDetectado
             }, { merge: true });
 
-            // 3. Registrar el log (esto bloquea futuros duplicados en esta misma transacción)
             transaction.set(logRef, {
               transactionId: id,
               uid: uid,
@@ -177,7 +173,6 @@ export async function POST(request: Request) {
 
           console.log(`🎉 Webhook Éxito: Alumno ${uid} activado automáticamente en modo PRO.`);
         } else {
-          // Fallback de pagos pendientes
           await db.collection("pagos_pendientes_asignacion").doc(id.toString()).set({
             paymentId: id,
             amount: monto,
@@ -197,19 +192,19 @@ export async function POST(request: Request) {
   } catch (error: any) {
     console.error("❌ Error crítico mitigado en pipeline de webhook:", error.message);
     
-    // Registro de auditoría en caso de fallo
-    try {
-      await db.collection("webhook_audit_errors").add({
-        paymentId: id || "unknown",
-        error: error.message,
-        type,
-        timestamp: admin.firestore.FieldValue.serverTimestamp(),
-      });
-    } catch (logError) {
-      console.error("Fallo al registrar error de auditoría:", logError);
+    if (db) {
+      try {
+        await db.collection("webhook_audit_errors").add({
+          paymentId: id || "unknown",
+          error: error.message,
+          type,
+          timestamp: admin.firestore.FieldValue.serverTimestamp(),
+        });
+      } catch (logError) {
+        console.error("Fallo al registrar error de auditoría:", logError);
+      }
     }
 
-    // Devolvemos 200 OK para que MP no siga reintentando infinitamente
     return NextResponse.json({ received: true, error: "Internal processing error logged" }, { status: 200 });
   }
 }
