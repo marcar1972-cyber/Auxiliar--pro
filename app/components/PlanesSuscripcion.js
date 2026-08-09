@@ -19,13 +19,6 @@ export default function PlanesSuscripcion() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [planSeleccionado, setPlanSeleccionado] = useState(null);
 
-  // Mapeo oficial de Links de Pago directos (Cuenta AuxiliarPro)
-  const MP_LINKS = {
-    sprint: "https://mpago.la/1W4Lngw",
-    mensual: "https://mpago.la/1a1jUu3",
-    anual: "https://mpago.la/1eBpJsB",
-  };
-
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
       if (currentUser) {
@@ -86,17 +79,45 @@ export default function PlanesSuscripcion() {
     setIsModalOpen(true);
   };
 
-  // 🚀 DISPARADOR: Redirige directamente al Link Oficial de Mercado Pago
-  const confirmarYProcesarPago = () => {
+  // 🚀 DISPARADOR DINÁMICO: Llama a la API de Checkout inyectando UID y Email
+  const confirmarYProcesarPago = async () => {
     if (!planSeleccionado || !user) return;
-    setIsModalOpen(false);
+    setIsModalOpen(false); // Cierra el modal
 
-    const linkOficial = MP_LINKS[planSeleccionado];
-    if (linkOficial) {
+    // Evitar llamadas duplicadas si ya está procesando
+    if (loadingCheckout) return;
+
+    try {
       setLoadingCheckout(planSeleccionado);
-      window.location.href = linkOficial;
-    } else {
-      alert("Error al seleccionar el plan. Por favor reintenta.");
+
+      const response = await fetch("/api/checkout-mp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          planKey: planSeleccionado,
+          uid: user.uid,
+          email: user.email || user.providerData[0]?.email || "",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.initPoint) {
+        // Redirección directa al Checkout Dinámico de Mercado Pago
+        window.location.href = data.initPoint;
+      } else {
+        throw new Error(data.error || "initPoint no recibido.");
+      }
+    } catch (error) {
+      console.error("❌ Error iniciando pasarela Checkout Pro:", error);
+      alert("Hubo un problema al conectar con Mercado Pago. Por favor, reintenta en unos momentos.");
+      setLoadingCheckout(null);
     }
   };
 
