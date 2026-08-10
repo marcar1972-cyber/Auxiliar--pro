@@ -27,7 +27,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-, "app/admin/carga-modulos/page.js"  ],
+, "app/admin/carga-modulos/page.js", "lib/utils.js"  ],
   "exclude": [
     "node_modules"
   ]

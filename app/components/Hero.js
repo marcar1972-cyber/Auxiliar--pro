@@ -52,10 +52,17 @@ export default function Hero() {
 
             <Link 
               href="/dermocheck" 
-              className="inline-flex items-center gap-2 bg-white text-[#003366] px-8 py-4 rounded-2xl font-bold text-sm border border-slate-200 hover:border-[#28a745] hover:text-[#28a745] transition-all shadow-sm group"
+              className="inline-flex items-center gap-3 bg-white text-[#003366] px-8 py-3 rounded-2xl border border-slate-200 hover:border-[#28a745] transition-all shadow-sm group"
             >
-              <Calculator size={18} className="text-[#28a745] group-hover:scale-110 transition-transform" />
-              DermoCheck Vencimientos
+              <Calculator size={18} className="text-[#28a745] group-hover:scale-110 transition-transform shrink-0" />
+              <span className="flex flex-col items-start leading-tight text-left">
+                <span className="font-black text-sm tracking-tight group-hover:text-[#28a745] transition-colors">
+                  DermoCheck
+                </span>
+                <span className="text-[10px] font-semibold text-slate-500 group-hover:text-[#28a745]/80 transition-colors">
+                  Revisa los vencimientos en dermocosmética
+                </span>
+              </span>
             </Link>
           </div>
         </div>

@@ -22,7 +22,7 @@ export default function Footer() {
           <div className="w-full md:w-1/4 flex justify-center md:justify-start">
             {/* Contenedor del logo ampliado al doble: de w-36 h-10 a w-72 h-20 */}
             <div className="relative w-72 h-20">
-              <Image src="/logo_auxiliarpro.png" alt="AuxiliarPro" fill className="object-contain object-center md:object-left rounded-sm" />
+              <Image src="/logo_auxiliarpro.png" alt="AuxiliarPro SpA" fill className="object-contain object-center md:object-left rounded-sm" />
             </div>
           </div>
 
@@ -68,13 +68,13 @@ export default function Footer() {
 
           <div className="flex flex-col items-center gap-3 text-center">
             <div className="text-[9px] font-black uppercase tracking-[0.4em] text-white/60">
-              AuxiliarPro Chile © 2026 | Excelencia Farmacéutica
+              AuxiliarPro SpA © 2026 | Excelencia Farmacéutica
             </div>
             
             {/* FIRMA MACZDEV */}
             <div className="flex flex-col items-center gap-1">
               <p className="text-[10px] font-bold text-[#28a745] tracking-widest">
-                Desarrollado por MaczDev • Core v5.0
+                Built by &lt;macz.dev/&gt;
               </p>
               <p className="text-[9px] text-white/40 italic font-medium">
                 Hecho con 80% de curiosidad humana y 20% de IA.

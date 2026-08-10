@@ -11,7 +11,7 @@ export default function DescargosPage() {
           <Link 
             href="/" 
             className="inline-flex items-center gap-2 text-slate-400 hover:text-[#003366] mb-8 transition-colors font-bold text-sm"
-            title="Volver a la página principal de AuxiliarPro"
+            title="Volver a la página principal de AuxiliarPro SpA"
           >
             <ChevronLeft size={20} aria-hidden="true" /> Volver al Inicio
           </Link>
@@ -38,7 +38,7 @@ export default function DescargosPage() {
           
           <section className="space-y-6 text-base leading-relaxed bg-slate-50 p-6 md:p-8 rounded-3xl border border-slate-100 shadow-inner">
             <p>
-              <strong>AuxiliarPro Chile</strong> es una plataforma EdTech (tecnología educativa) privada e independiente, creada por profesionales para facilitar el estudio y la preparación de futuros colegas en el rubro farmacéutico.
+              <strong>AuxiliarPro SpA</strong> es una plataforma EdTech (tecnología educativa) privada e independiente, creada por profesionales para facilitar el estudio y la preparación de futuros colegas en el rubro farmacéutico.
             </p>
             
             <p className="font-bold text-[#003366]">
@@ -59,7 +59,7 @@ export default function DescargosPage() {
 
             <footer className="mt-10 border-t border-slate-200 pt-6">
               <p className="text-slate-500 italic text-sm">
-                El uso de la plataforma AuxiliarPro no garantiza la aprobación automática del examen oficial, pero proporciona un entorno de estudio riguroso diseñado bajo las exigencias teóricas y normativas de la autoridad sanitaria chilena.
+                El uso de la plataforma AuxiliarPro SpA no garantiza la aprobación automática del examen oficial, pero proporciona un entorno de estudio riguroso diseñado bajo las exigencias teóricas y normativas de la autoridad sanitaria chilena.
               </p>
             </footer>
           </section>
