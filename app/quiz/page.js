@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import SocialContact from "../components/SocialContact";
 import BannerVenta from "../components/BannerVenta";
-import GuiaAuxiliarFarmaciaCard from "../components/GuiaAuxiliarFarmaciaCard"; // 🆕 Import del nuevo componente
+import TarjetaTramiteSeremi from "../components/TarjetaTramiteSeremi"; // 🆕 Reemplaza a la guía: invita al trámite SEREMI
 import { 
   ChevronLeft, ShieldCheck, Trophy, BrainCircuit, Share2, Loader2, AlertTriangle, BookOpen, Lock, ChevronRight, Sparkles, Flame, X, User
 } from "lucide-react"; 
@@ -299,8 +299,8 @@ export default function QuizLobbyPage() {
             </div>
           </article>
 
-          {/* 🎓 NUEVA TARJETA: GUÍA COMPLETA - CÓMO SER AUXILIAR DE FARMACIA */}
-          <GuiaAuxiliarFarmaciaCard />
+          {/* 📥 NUEVA TARJETA: TRÁMITE SEREMI (reemplaza a la guía "Cómo ser Auxiliar") */}
+          <TarjetaTramiteSeremi />
 
           <div className="bg-white border border-slate-200 p-5 rounded-[2rem] shadow-sm mt-8 max-w-full mx-auto animate-in fade-in zoom-in duration-500 relative overflow-hidden">
              <div className="absolute top-0 right-0 w-32 h-32 bg-orange-50 rounded-bl-full -z-10 opacity-50"></div>
@@ -354,7 +354,7 @@ export default function QuizLobbyPage() {
             </div>
 
             <h3 className="text-xl font-black text-[#003366] tracking-tight">
-              ¡Asegura tu Aprobación SEREMI! 🇨🇱
+              ¡Asegura tu Aprobación SEREMI! 🇨
             </h3>
             
             <p className="mt-2 text-sm text-slate-500 leading-relaxed font-medium">
