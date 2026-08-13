@@ -162,7 +162,7 @@ export default function FormularioPage() {
                   className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
                   value={datos.nombreEstablecimiento}
                   onChange={(e) => cambiar("nombreEstablecimiento", e.target.value)}
-                  placeholder="Ej: Farmacia Cruz Verde"
+                  placeholder="Nombre de tu farmacia"
                 />
               </div>
               <div>
