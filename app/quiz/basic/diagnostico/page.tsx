@@ -9,9 +9,9 @@ import {
   XCircle, 
   AlertTriangle,
   Target,
-  TrendingUp,
-  BookOpen,
-  Lock,
+  TrendingUp, 
+  BookOpen, 
+  Lock, 
   ArrowRight,
   ShieldCheck
 } from "lucide-react";
@@ -158,6 +158,12 @@ export default function DiagnosticoPage() {
   const [timeStarted] = useState(Date.now());
 
   const handleAnswer = (answerIndex: number) => {
+    // 🩺 CTO FIX: liberar el foco del botón clickeado para que la siguiente
+    // pregunta no herede el anillo verde de :focus (falso "seleccionado").
+    if (typeof document !== "undefined" && document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+
     const newAnswers = [...selectedAnswers, answerIndex];
     setSelectedAnswers(newAnswers);
 
@@ -378,7 +384,9 @@ export default function DiagnosticoPage() {
 
       {/* Contenido de la pregunta */}
       <div className="max-w-3xl mx-auto px-6 py-8">
-        <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 md:p-8 mb-6">
+        {/* 🩺 CTO FIX: key={question.id} fuerza remount de la tarjeta en cada
+            pregunta → ningún botón hereda foco/hover de la pregunta anterior. */}
+        <div key={question.id} className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 md:p-8 mb-6">
           <h2 className="text-xl md:text-2xl font-black text-[#003366] leading-tight mb-6">
             {question.question}
           </h2>
