@@ -206,7 +206,7 @@ export default function CampusPage() {
                         className="flex items-center justify-center gap-2 bg-slate-100 border-2 border-slate-200 text-slate-400 px-6 py-3 rounded-xl font-bold transition-all w-full md:w-auto cursor-not-allowed"
                       >
                           <Lock size={18} /> 
-                          {!hasActiveSub && !isAdminUser && group !== "MOD 1" ? "Suscripción Expirada" : "Bloqueado"}
+                          {!hasActiveSub && !isAdminUser && group !== "MOD 1" ? "Renovar PRO" : "Bloqueado"}
                       </button>
                     ) : (
                       <Link href={`/campus/${group.toLowerCase().replace(" ", "-")}`}>

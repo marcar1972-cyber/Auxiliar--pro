@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { auth, db } from "../firebase/config";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, onSnapshot } from "firebase/firestore";
-import { Loader2, CheckCircle, Flame, Zap, ArrowRight, X } from "lucide-react";
+import { Loader2, CheckCircle, Flame, Zap, ArrowRight, X, Trophy, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 
 export default function PlanesSuscripcion() {
@@ -57,7 +57,7 @@ export default function PlanesSuscripcion() {
           setLoadingAuth(false);
         });
 
-        return () => unsubscribeSnapshot();
+        return () => unsubscribeSnapshot;
       } else {
         setUser(null);
         setIsPro(false);
@@ -66,7 +66,7 @@ export default function PlanesSuscripcion() {
       }
     });
 
-    return () => unsubscribeAuth();
+    return () => unsubscribeAuth;
   }, []);
 
   // Abre el modal de confirmación antes de procesar el pago
@@ -136,8 +136,8 @@ export default function PlanesSuscripcion() {
 
   const getNombrePlan = (key) => {
     if (key === "sprint") return "Pase 15 Días";
-    if (key === "mensual") return "Mensual PRO";
-    if (key === "anual") return "Anual PRO";
+    if (key === "mensual") return "Mensual PRO (30 días)";
+    if (key === "anual") return "Hasta Que Apruebes · 365 días";
     return "";
   };
 
@@ -175,7 +175,7 @@ export default function PlanesSuscripcion() {
             <div className="mb-6">
               <span className="bg-slate-100 text-slate-500 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">Plan Base</span>
               <h3 className="text-xl font-black text-slate-700 mt-4 mb-2">Inicial</h3>
-              <p className="text-slate-500 text-xs leading-relaxed font-medium">Herramientas fundamentales.</p>
+              <p className="text-slate-500 text-xs leading-relaxed font-medium">Descubre tu nivel real antes de estudiar.</p>
             </div>
             
             <div className="mb-8">
@@ -188,7 +188,7 @@ export default function PlanesSuscripcion() {
             <ul className="space-y-4 mb-10 flex-1 border-t border-slate-100 pt-6">
               <li className="flex items-start gap-3 text-xs font-bold text-slate-600">
                 <span className="text-emerald-500 text-lg leading-none">✓</span> 
-                <span>Simulador Inicial (3 Niveles)</span>
+                <span>Diagnóstico SEREMI 2026 (3 áreas)</span>
               </li>
               <li className="flex items-start gap-3 text-xs font-bold text-slate-600 opacity-50">
                 <span className="text-slate-300 text-lg leading-none">✗</span> 
@@ -207,7 +207,7 @@ export default function PlanesSuscripcion() {
                 </div>
               ) : user ? (
                 <Link href="/quiz" className="w-full block bg-slate-100 text-slate-600 hover:bg-slate-200 font-black py-4 rounded-xl transition-all text-center text-[11px] uppercase tracking-wider">
-                  Ir al Simulador
+                  Ir al Diagnóstico
                 </Link>
               ) : (
                 <Link href="/login" className="w-full block bg-slate-100 text-slate-600 hover:bg-slate-200 font-black py-4 rounded-xl transition-all text-center text-[11px] uppercase tracking-wider">
@@ -217,9 +217,12 @@ export default function PlanesSuscripcion() {
             </div>
           </div>
 
-          {/* PLAN SPRINT 15 DÍAS */}
-          <div className="bg-white rounded-[2rem] p-6 md:p-8 border-2 border-[#003366] flex flex-col relative transition-all hover:border-[#002244] shadow-lg overflow-hidden">
-            <div className="mb-6">
+          {/* PLAN SPRINT 15 DÍAS — EL BEST SELLER REAL */}
+          <div className="bg-white rounded-[2rem] p-6 md:p-8 border-2 border-[#003366] flex flex-col relative transition-all hover:border-[#002244] shadow-lg">
+            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-[#003366] text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-lg whitespace-nowrap border-2 border-white flex items-center gap-1">
+              <Trophy size={12} className="text-[#28a745]" /> MÁS VENDIDO
+            </div>
+            <div className="mb-6 mt-2">
               <span className="bg-[#003366]/10 text-[#003366] px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest inline-flex items-center gap-1">
                 <Zap size={12} className="text-[#28a745]" /> Intensivo
               </span>
@@ -231,7 +234,7 @@ export default function PlanesSuscripcion() {
               <div className="flex items-baseline gap-1">
                 <span className="text-4xl font-black text-slate-900">$3.990</span>
               </div>
-              <p className="text-slate-400 text-[10px] font-black mt-2 uppercase tracking-widest">Pago Único</p>
+              <p className="text-slate-400 text-[10px] font-black mt-2 uppercase tracking-widest">Pago único por 15 días</p>
             </div>
 
             <ul className="space-y-4 mb-10 flex-1 border-t border-slate-100 pt-6">
@@ -274,25 +277,21 @@ export default function PlanesSuscripcion() {
             </div>
           </div>
 
-          {/* PLAN MENSUAL */}
+          {/* PLAN MENSUAL — RECOMENDADO SI HAY TIEMPO */}
           <div className="bg-white rounded-[2rem] p-6 md:p-8 border-2 border-[#28a745] flex flex-col relative transition-all hover:border-[#218838] shadow-xl">
-            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-[#28a745] text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-lg whitespace-nowrap border-2 border-white">
-              MÁS POPULAR
-            </div>
-            <div className="mb-6 mt-2">
+            <div className="mb-6">
               <span className="bg-[#28a745]/10 text-[#28a745] px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest inline-flex items-center gap-1">
                 <CheckCircle size={12} /> Recomendado
               </span>
               <h3 className="text-xl font-black text-slate-900 mt-4 mb-2">Mensual PRO</h3>
-              <p className="text-slate-500 text-xs leading-relaxed font-medium">Entrenamiento técnico completo.</p>
+              <p className="text-slate-500 text-xs leading-relaxed font-medium">Ideal si tu examen es en +3 semanas.</p>
             </div>
             
             <div className="mb-8">
               <div className="flex items-baseline gap-1">
                 <span className="text-4xl font-black text-slate-900">$5.990</span>
-                <span className="text-slate-500 font-bold text-xs">/mes</span>
               </div>
-              <p className="text-slate-400 text-[10px] font-black mt-2 uppercase tracking-widest">Pago Único</p>
+              <p className="text-slate-400 text-[10px] font-black mt-2 uppercase tracking-widest">Pago único por 30 días</p>
             </div>
 
             <ul className="space-y-4 mb-10 flex-1 border-t border-slate-100 pt-6">
@@ -335,25 +334,32 @@ export default function PlanesSuscripcion() {
             </div>
           </div>
 
-          {/* PLAN ANUAL */}
+          {/* PLAN ANUAL — SEGURO ANTI-REPRO (ACOTADO A 365 DÍAS) */}
           <div className="bg-[#003366] rounded-[2rem] p-6 md:p-8 border-4 border-[#28a745] flex flex-col relative shadow-[0_20px_50px_rgba(40,167,69,0.3)] mt-6 xl:mt-0">
             <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-[#28a745] to-emerald-600 text-white px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-2xl whitespace-nowrap border-2 border-[#003366] flex items-center gap-1">
               <Flame size={12} className="fill-white" /> MEJOR VALOR
             </div>
 
             <div className="mb-6 mt-2">
-              <h3 className="text-2xl font-black text-white mb-2 tracking-tight">Anual PRO</h3>
-              <p className="text-slate-400 text-xs font-medium leading-relaxed">Arsenal completo para todo el año.</p>
+              <h3 className="text-2xl font-black text-white mb-2 tracking-tight">Hasta Que Apruebes</h3>
+              <p className="text-slate-400 text-xs font-medium leading-relaxed">365 días de entrenamiento continuo, incluso si debes rendir de nuevo.</p>
             </div>
             
             <div className="mb-8">
-              <div className="flex items-baseline gap-1">
-                <span className="text-5xl font-black text-white">$49.990</span>
+              <div className="flex items-baseline gap-2">
+                <span className="text-xl font-black text-slate-400 line-through">$49.990</span>
               </div>
-              <p className="text-[#28a745] text-[10px] font-black mt-2 uppercase tracking-widest">Acceso Anual Total</p>
+              <div className="flex items-baseline gap-1">
+                <span className="text-5xl font-black text-white">$29.990</span>
+              </div>
+              <p className="text-[#28a745] text-[10px] font-black mt-2 uppercase tracking-widest">Pago único por 365 días · Sin renovación automática</p>
             </div>
 
             <ul className="space-y-4 mb-10 flex-1 border-t border-slate-800 pt-6">
+              <li className="flex items-start gap-3 text-xs font-bold text-slate-300">
+                <ShieldCheck size={16} className="text-[#28a745]" />
+                <span className="text-white">Seguro anti-repro: si repruebas dentro de tu año, sigues entrenando sin costo adicional</span>
+              </li>
               <li className="flex items-start gap-3 text-xs font-bold text-slate-300">
                 <Flame size={16} className="text-[#28a745]" />
                 <span className="text-white">Desafío de Racha Diaria</span>
@@ -387,7 +393,7 @@ export default function PlanesSuscripcion() {
                   disabled={loadingCheckout !== null}
                   className="w-full block bg-[#28a745] text-white hover:bg-[#218838] font-black py-5 rounded-xl transition-all text-center text-sm shadow-[0_0_30px_rgba(40,167,69,0.4)] transform hover:scale-105 flex items-center justify-center gap-2"
                 >
-                  {loadingCheckout === "anual" ? <Loader2 className="animate-spin" size={18} /> : "Obtener Anual"}
+                  {loadingCheckout === "anual" ? <Loader2 className="animate-spin" size={18} /> : "Asegurar mi Año"}
                 </button>
               )}
             </div>

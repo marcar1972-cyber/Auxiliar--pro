@@ -4,6 +4,7 @@ import Metodologia from "./components/Metodologia";
 import FaqSeccion from "./components/FaqSeccion";
 import Creador from "./components/Creador";
 import PlanesSuscripcion from "./components/PlanesSuscripcion";
+import TarjetaTramiteSeremi from "./components/TarjetaTramiteSeremi";
 import { CheckCircle, Star } from "lucide-react";
 
 export default function LandingPage() {
@@ -28,6 +29,8 @@ export default function LandingPage() {
     <div className="min-h-screen bg-white font-sans text-slate-800">
       <Hero />
       <main className="w-full flex flex-col items-center">
+        {/* 🆕 TARJETA DE TRÁMITE: captura al lead caliente justo después del CTA de diagnóstico */}
+        <TarjetaTramiteSeremi />
         <ModulosLegales />
         <Metodologia />
         <PlanesSuscripcion /> 

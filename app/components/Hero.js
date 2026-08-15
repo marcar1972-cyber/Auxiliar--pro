@@ -15,7 +15,7 @@ export default function Hero() {
         {/* Etiqueta de Autoridad - CTR Mejorado con Icono */}
         <div className="inline-flex items-center gap-2 bg-emerald-50 text-[#28a745] px-5 py-2.5 rounded-full text-[10px] md:text-xs font-black uppercase tracking-widest mb-10 border border-emerald-100 italic shadow-sm">
           <ShieldCheck size={14} className="animate-pulse" />
-          Comunidad de +900 alumnos aprobando bajo normativa SEREMI 2026
+          Comunidad de +1.720 alumnos aprobando bajo normativa SEREMI 2026
         </div>
         
         {/* Título Principal - Optimizado para capturar búsquedas de "Examen Auxiliar" */}
@@ -37,7 +37,7 @@ export default function Hero() {
             className="inline-flex items-center justify-center w-full sm:w-auto gap-3 bg-[#003366] text-white px-12 py-6 rounded-full font-black text-lg md:text-xl hover:bg-[#002244] transition-all shadow-[0_20px_40px_rgba(0,51,102,0.2)] hover:-translate-y-1 group"
           >
             <Gamepad2 size={24} className="text-[#28a745] group-hover:rotate-12 transition-transform" />
-            INICIAR SIMULADOR GRATIS <ArrowRight size={22} className="group-hover:translate-x-1 transition-transform" />
+            INICIAR DIAGNÓSTICO GRATIS <ArrowRight size={22} className="group-hover:translate-x-1 transition-transform" />
           </Link>
 
           {/* Accesos Secundarios: Utilidad de Mesón */}

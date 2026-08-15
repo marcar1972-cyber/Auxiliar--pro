@@ -46,89 +46,96 @@ export default function QuizLobbyPage() {
   // 🚀 LÓGICA DE CONVERSIÓN IN-APP: Modal proactivo para usuarios Free
   const [showPromoModal, setShowPromoModal] = useState(false);
 
+  // 🔒 GUARD DE AUTENTICACIÓN: Si no hay sesión activa, redirige al login
+  // y vuelve a este lobby automáticamente tras iniciar sesión.
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        router.replace('/login?redirect=/quiz');
+      }
+    });
+    return () => unsubscribe();
+  }, [router]);
+
   useEffect(() => {
     let unsubscribeDoc = () => {};
 
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setCurrentUserEmail(user.email || "");
-        const userRef = doc(db, "users", user.uid);
-        
-        // 🔄 ESCUCHA ACTIVA EN TIEMPO REAL (onSnapshot)
-        unsubscribeDoc = onSnapshot(userRef, (docSnap) => {
-          if (docSnap.exists()) {
-            const data = docSnap.data();
-            const isAdmin = user.email === ADMIN_EMAIL;
-            let userHasActivePro = data.isPro === true;
+      if (!user) return; // El guard ya redirige
+      
+      setCurrentUserEmail(user.email || "");
+      const userRef = doc(db, "users", user.uid);
+      
+      // 🔄 ESCUCHA ACTIVA EN TIEMPO REAL (onSnapshot)
+      unsubscribeDoc = onSnapshot(userRef, (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          const isAdmin = user.email === ADMIN_EMAIL;
+          let userHasActivePro = data.isPro === true;
+          
+          // Seteamos datos de racha para la UI
+          setStreakData({
+            current: data.streakCount || 0,
+            longest: data.longestStreak || 0
+          });
+
+          // Avance global del diagnóstico
+          let completedCount = 0;
+          if (data.completedBasicLevels && Array.isArray(data.completedBasicLevels)) {
+            const uniqueLevels = [...new Set(data.completedBasicLevels)];
+            completedCount = uniqueLevels.length;
+            setLevelsCompletedCount(completedCount);
             
-            // Seteamos datos de racha para la UI
-            setStreakData({
-              current: data.streakCount || 0,
-              longest: data.longestStreak || 0
-            });
+            const percent = Math.min(Math.round((completedCount / 3) * 100), 100);
+            setProgressPercent(percent);
+          } else {
+            setProgressPercent(0);
+            setLevelsCompletedCount(0);
+          }
 
-            // Avance global del diagnóstico
-            let completedCount = 0;
-            if (data.completedBasicLevels && Array.isArray(data.completedBasicLevels)) {
-              const uniqueLevels = [...new Set(data.completedBasicLevels)];
-              completedCount = uniqueLevels.length;
-              setLevelsCompletedCount(completedCount);
-              
-              const percent = Math.min(Math.round((completedCount / 3) * 100), 100);
-              setProgressPercent(percent);
+          const rawFields = [data.untilPro, data.untilpro, data.proUntil, data.prountil];
+          const parseDate = (val) => {
+            if (!val) return null;
+            if (typeof val.toDate === 'function') return val.toDate();
+            const d = new Date(val);
+            return isNaN(d.getTime()) ? null : d;
+          };
+
+          const validDates = rawFields.map(parseDate).filter(d => d !== null);
+
+          if (validDates.length > 0) {
+            const expiryDate = new Date(Math.max(...validDates));
+            const now = new Date();
+            if (expiryDate > now) userHasActivePro = true;
+            
+            const diffTime = expiryDate.getTime() - now.getTime();
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            if (diffDays >= 0) {
+              setDaysRemaining(diffDays);
+              setShowWarning(true); 
             } else {
-              setProgressPercent(0);
-              setLevelsCompletedCount(0);
-            }
-
-            const rawFields = [data.untilPro, data.untilpro, data.proUntil, data.prountil];
-            const parseDate = (val) => {
-              if (!val) return null;
-              if (typeof val.toDate === 'function') return val.toDate();
-              const d = new Date(val);
-              return isNaN(d.getTime()) ? null : d;
-            };
-
-            const validDates = rawFields.map(parseDate).filter(d => d !== null);
-
-            if (validDates.length > 0) {
-              const expiryDate = new Date(Math.max(...validDates));
-              const now = new Date();
-              if (expiryDate > now) userHasActivePro = true;
-              
-              const diffTime = expiryDate.getTime() - now.getTime();
-              const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-              if (diffDays >= 0) {
-                setDaysRemaining(diffDays);
-                setShowWarning(true); 
-              } else {
-                setDaysRemaining(0); 
-                userHasActivePro = false;
-              }
-            }
-
-            if (isAdmin) userHasActivePro = true;
-            setIsProUser(userHasActivePro);
-            setCanAccessSimulator(userHasActivePro);
-
-            // Control modal de promoción (después de completar los 3 diagnósticos)
-            if (!userHasActivePro && completedCount >= 3) {
-              setShowPromoModal(true);
-            } else {
-              setShowPromoModal(false);
+              setDaysRemaining(0); 
+              userHasActivePro = false;
             }
           }
-          setIsCheckingAuth(false);
-        }, (error) => {
-          console.error("Error escuchando cambios de Firestore en tiempo real:", error);
-          setIsCheckingAuth(false);
-        });
 
-      } else {
+          if (isAdmin) userHasActivePro = true;
+          setIsProUser(userHasActivePro);
+          setCanAccessSimulator(userHasActivePro);
+
+          // Control modal de promoción (después de completar los 3 diagnósticos)
+          if (!userHasActivePro && completedCount >= 3) {
+            setShowPromoModal(true);
+          } else {
+            setShowPromoModal(false);
+          }
+        }
         setIsCheckingAuth(false);
-        setCurrentUserEmail("");
-      }
+      }, (error) => {
+        console.error("Error escuchando cambios de Firestore en tiempo real:", error);
+        setIsCheckingAuth(false);
+      });
     });
 
     return () => {
@@ -150,14 +157,34 @@ export default function QuizLobbyPage() {
   };
 
   const handleBasicAccess = (route) => {
-    if (!auth.currentUser) { router.push('/login'); return; }
+    if (!auth.currentUser) { router.push('/login?redirect=' + encodeURIComponent(route)); return; }
     router.push(route);
   };
 
   const handleCampusAccess = () => {
-    if (!auth.currentUser) { router.push('/login'); return; }
+    if (!auth.currentUser) { router.push('/login?redirect=/campus'); return; }
     router.push('/campus');
   };
+
+  // 🔒 PANTALLA DE CARGA: Mientras verifica la sesión
+  if (isCheckingAuth || !auth.currentUser) {
+    return (
+      <main className="min-h-screen bg-slate-50 flex flex-col items-center justify-center px-6">
+        <div className="flex flex-col items-center gap-4">
+          <div className="relative">
+            <div className="absolute inset-0 rounded-full bg-[#28a745]/20 animate-ping"></div>
+            <div className="relative bg-white p-4 rounded-full border-2 border-slate-200 shadow-lg">
+              <Loader2 className="animate-spin text-[#003366]" size={40} />
+            </div>
+          </div>
+          <div className="text-center">
+            <h2 className="text-lg font-black text-[#003366] mb-1">Verificando tu sesión</h2>
+            <p className="text-sm text-slate-500">Preparando tu Lobby de Entrenamiento...</p>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-slate-50 pb-24 font-sans relative">
@@ -175,30 +202,28 @@ export default function QuizLobbyPage() {
       <section className="p-6 max-w-3xl mx-auto mt-6">
         
         {/* 💎 BADGE DE VALIDACIÓN VISUAL DE SOPORTE PARA PANTALLAZOS */}
-        {!isCheckingAuth && auth.currentUser && (
-          <div className="mb-6 p-4 rounded-2xl border flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm bg-white border-slate-200">
-            <div className="flex items-center gap-3">
-              <div className="bg-slate-100 p-2.5 rounded-xl text-slate-500">
-                <User size={20} />
-              </div>
-              <div className="text-left">
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Sesión Iniciada como</p>
-                <p className="text-xs font-mono font-bold text-slate-700 truncate max-w-[220px] sm:max-w-xs">{currentUserEmail}</p>
-              </div>
+        <div className="mb-6 p-4 rounded-2xl border flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm bg-white border-slate-200">
+          <div className="flex items-center gap-3">
+            <div className="bg-slate-100 p-2.5 rounded-xl text-slate-500">
+              <User size={20} />
             </div>
-            <div>
-              {isProUser ? (
-                <span className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-black tracking-widest rounded-full uppercase shadow-inner animate-pulse">
-                  <ShieldCheck size={14} className="fill-emerald-50" /> 💎 Cuenta PRO Activa
-                </span>
-              ) : (
-                <span className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-100 text-slate-500 border border-slate-200 text-xs font-bold tracking-widest rounded-full uppercase">
-                  <Stethoscope size={14} /> 🔍 Modo Diagnóstico Gratuito
-                </span>
-              )}
+            <div className="text-left">
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider">Sesión Iniciada como</p>
+              <p className="text-xs font-mono font-bold text-slate-700 truncate max-w-[220px] sm:max-w-xs">{currentUserEmail}</p>
             </div>
           </div>
-        )}
+          <div>
+            {isProUser ? (
+              <span className="inline-flex items-center gap-1.5 px-4 py-2 bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-black tracking-widest rounded-full uppercase shadow-inner animate-pulse">
+                <ShieldCheck size={14} className="fill-emerald-50" /> 💎 Cuenta PRO Activa
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1.5 px-4 py-2 bg-slate-100 text-slate-500 border border-slate-200 text-xs font-bold tracking-widest rounded-full uppercase">
+                <Stethoscope size={14} /> 🔍 Modo Diagnóstico Gratuito
+              </span>
+            )}
+          </div>
+        </div>
 
         <header className="mb-8 text-center">
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-4">

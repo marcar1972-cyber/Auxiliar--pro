@@ -26,10 +26,11 @@ if (!admin.apps.length) {
 // Token de respaldo local si no detecta la variable de entorno de Vercel
 const MERCADO_PAGO_ACCESS_TOKEN = process.env.MERCADO_PAGO_ACCESS_TOKEN || "APP_USR-6296117002447975-040718-d1a2cd392dac4324a4875784375a14d9-3319774413";
 
+// 🔧 CAMBIO QUIRÚRGICO: solo monto y nombre del plan anual
 const PLANES = {
   sprint: { monto: 3990, dias: 15, nombre: "Sprint 15 Días" },
   mensual: { monto: 5990, dias: 30, nombre: "Mensual PRO" },
-  anual: { monto: 49990, dias: 365, nombre: "Anual PRO" },
+  anual: { monto: 29990, dias: 365, nombre: "Hasta Que Apruebes" },
 };
 
 export async function POST(request: Request) {

@@ -74,10 +74,6 @@ export default function FooterFormulario() {
             </li>
           </ul>
         </section>
-
-        <p className="text-center text-sm text-slate-400">
-          Built by <span className="font-mono text-green-500">&lt;macz.dev/&gt;</span>
-        </p>
       </div>
     </footer>
   );
