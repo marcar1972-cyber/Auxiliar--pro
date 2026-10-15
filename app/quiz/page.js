@@ -1,6 +1,4 @@
-// Ruta: app/quiz/page.js
-
-"use client";
+'use client';
 
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
@@ -9,19 +7,14 @@ import SocialContact from "../components/SocialContact";
 import BannerVenta from "../components/BannerVenta";
 import TarjetaTramiteSeremi from "../components/TarjetaTramiteSeremi";
 import { 
-  ChevronLeft, ShieldCheck, Trophy, BrainCircuit, Share2, Loader2, AlertTriangle, BookOpen, Lock, ChevronRight, Sparkles, Flame, X, User, Stethoscope
+  ChevronLeft, ShieldCheck, Trophy, BrainCircuit, Share2, Loader2, AlertTriangle, BookOpen, Lock, ChevronRight, Sparkles, Flame, X, User, Stethoscope, ExternalLink, Clock
 } from "lucide-react"; 
 import { auth, db } from "../firebase/config";
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot, getDoc, updateDoc } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 
-// 🔥 RUTA RELATIVA: Salimos de quiz (1), salimos de app (2) y entramos a lib
+// 🚀 Servicio de racha
 import { updateStreak } from "../../lib/streakService";
-
-const isPastLaunch = () => {
-  const launchDate = new Date("2026-03-31T23:59:59");
-  return new Date() > launchDate;
-};
 
 const ADMIN_EMAIL = "marcar1972@gmail.com";
 
@@ -39,15 +32,18 @@ export default function QuizLobbyPage() {
   // ESTADOS DE RACHA
   const [streakData, setStreakData] = useState({ current: 0, longest: 0 });
 
-  // 🚀 LÓGICA DE PROGRESO (DIAGNÓSTICO SEREMI - 3 ÁREAS)
+  // LÓGICA DE PROGRESO (DIAGNÓSTICO SEREMI - 3 ÁREAS)
   const [progressPercent, setProgressPercent] = useState(0);
   const [levelsCompletedCount, setLevelsCompletedCount] = useState(0);
 
-  // 🚀 LÓGICA DE CONVERSIÓN IN-APP: Modal proactivo para usuarios Free
+  // LÓGICA DE CONVERSIÓN IN-APP
   const [showPromoModal, setShowPromoModal] = useState(false);
 
-  // 🔒 GUARD DE AUTENTICACIÓN: Si no hay sesión activa, redirige al login
-  // y vuelve a este lobby automáticamente tras iniciar sesión.
+  // SOLICITUD DE NOMBRE OFICIAL (Solo para PRO)
+  const [showNameModal, setShowNameModal] = useState(false);
+  const [tempName, setTempName] = useState("");
+
+  // 🔒 GUARD DE AUTENTICACIÓN
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (!user) {
@@ -61,19 +57,19 @@ export default function QuizLobbyPage() {
     let unsubscribeDoc = () => {};
 
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
-      if (!user) return; // El guard ya redirige
+      if (!user) return;
       
       setCurrentUserEmail(user.email || "");
       const userRef = doc(db, "users", user.uid);
       
-      // 🔄 ESCUCHA ACTIVA EN TIEMPO REAL (onSnapshot)
+      // 🔄 ESCUCHA ACTIVA EN TIEMPO REAL
       unsubscribeDoc = onSnapshot(userRef, (docSnap) => {
         if (docSnap.exists()) {
           const data = docSnap.data();
           const isAdmin = user.email === ADMIN_EMAIL;
           let userHasActivePro = data.isPro === true;
           
-          // Seteamos datos de racha para la UI
+          // Seteamos datos de racha
           setStreakData({
             current: data.streakCount || 0,
             longest: data.longestStreak || 0
@@ -93,6 +89,7 @@ export default function QuizLobbyPage() {
             setLevelsCompletedCount(0);
           }
 
+          // Validación de vigencia PRO
           const rawFields = [data.untilPro, data.untilpro, data.proUntil, data.prountil];
           const parseDate = (val) => {
             if (!val) return null;
@@ -124,7 +121,7 @@ export default function QuizLobbyPage() {
           setIsProUser(userHasActivePro);
           setCanAccessSimulator(userHasActivePro);
 
-          // Control modal de promoción (después de completar los 3 diagnósticos)
+          // Control modal de promoción
           if (!userHasActivePro && completedCount >= 3) {
             setShowPromoModal(true);
           } else {
@@ -133,7 +130,7 @@ export default function QuizLobbyPage() {
         }
         setIsCheckingAuth(false);
       }, (error) => {
-        console.error("Error escuchando cambios de Firestore en tiempo real:", error);
+        console.error("Error escuchando cambios de Firestore:", error);
         setIsCheckingAuth(false);
       });
     });
@@ -153,7 +150,7 @@ export default function QuizLobbyPage() {
           url: window.location.origin,
         });
       } catch (error) { console.log('Error compartiendo', error); }
-    } else { alert("La función de compartir no está soportada."); }
+    } else { alert("La función de compartir no está soportada en este navegador."); }
   };
 
   const handleBasicAccess = (route) => {
@@ -161,12 +158,48 @@ export default function QuizLobbyPage() {
     router.push(route);
   };
 
-  const handleCampusAccess = () => {
+  const handleCampusAccess = async () => {
     if (!auth.currentUser) { router.push('/login?redirect=/campus'); return; }
+    
+    if (isProUser) {
+      const userRef = doc(db, "users", auth.currentUser.uid);
+      const userSnap = await getDoc(userRef);
+      
+      if (userSnap.exists()) {
+        const data = userSnap.data();
+        if (!data.nombreCertificado || data.nombreCertificado.trim() === "") {
+          setShowNameModal(true);
+          return;
+        }
+      }
+    }
+    
     router.push('/campus');
   };
 
-  // 🔒 PANTALLA DE CARGA: Mientras verifica la sesión
+  const handleSaveCertificationName = async () => {
+    const cleanName = tempName.trim();
+    if (cleanName.length < 5) {
+      alert("Por favor, ingresa tu nombre y apellidos completos (mínimo 5 caracteres).");
+      return;
+    }
+
+    if (auth.currentUser) {
+      const userRef = doc(db, "users", auth.currentUser.uid);
+      try {
+        await updateDoc(userRef, {
+          nombreCertificado: cleanName
+        });
+        setShowNameModal(false);
+        router.push('/campus');
+      } catch (error) {
+        console.error("Error guardando nombre:", error);
+        alert("Hubo un error al guardar tu nombre. Intenta de nuevo.");
+      }
+    }
+  };
+
+  // PANTALLA DE CARGA
   if (isCheckingAuth || !auth.currentUser) {
     return (
       <main className="min-h-screen bg-slate-50 flex flex-col items-center justify-center px-6">
@@ -201,7 +234,7 @@ export default function QuizLobbyPage() {
 
       <section className="p-6 max-w-3xl mx-auto mt-6">
         
-        {/* 💎 BADGE DE VALIDACIÓN VISUAL DE SOPORTE PARA PANTALLAZOS */}
+        {/* BADGE DE SESIÓN */}
         <div className="mb-6 p-4 rounded-2xl border flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm bg-white border-slate-200">
           <div className="flex items-center gap-3">
             <div className="bg-slate-100 p-2.5 rounded-xl text-slate-500">
@@ -246,19 +279,14 @@ export default function QuizLobbyPage() {
                 <Sparkles size={24} />
               </div>
               <div className="w-full">
-                <h3 className="font-black text-[#003366] text-base md:text-lg uppercase tracking-wide mb-2">¡Evolucionamos a la v5.1! 🚀</h3>
+                <h3 className="font-black text-[#003366] text-base md:text-lg uppercase tracking-wide mb-2">Plataforma Actualizada 2026 🚀</h3>
                 <p className="text-sm text-slate-600 leading-relaxed mb-3">
-                  Acabamos de implementar una nueva actualización de nuestra plataforma para optimizar tu tiempo de estudio:
+                  Optimizamos las herramientas de preparación continua:
                 </p>
                 <ul className="text-sm text-slate-600 space-y-2 list-disc pl-5 font-medium mb-4">
-                  <li>El nuevo <strong>Diagnóstico SEREMI 2026</strong>: <strong>3 áreas de evaluación <span className="text-[#28a745] font-black">100% gratis</span></strong> para que descubras tu nivel real antes de estudiar.</li>
-                  <li>El <strong className="text-[#003366]">Campus Virtual PRO</strong>: un ecosistema de estudio formativo, <strong>con estructura de CFT</strong>, diseñado para llevarte paso a paso a la aprobación.</li>
+                  <li>El nuevo <strong>Diagnóstico SEREMI 2026</strong>: <strong>3 áreas de evaluación <span className="text-[#28a745] font-black">100% gratis</span></strong> para identificar tu nivel actual.</li>
+                  <li>El <strong className="text-[#003366]">Campus Virtual PRO</strong>: ecosistema de preparación estructurado para la aprobación del examen SEREMI.</li>
                 </ul>
-                <div className="bg-white/60 p-4 rounded-xl border border-blue-100/50 mt-2">
-                  <p className="text-xs text-[#003366] font-medium leading-relaxed">
-                    <strong className="text-[#003366] font-black">Nuestro Compromiso:</strong> AuxiliarPro seguirá en continua evolución. Ya seas un aspirante buscando su credencial o un colega activo de mesón, nuestra meta es entregarte siempre la herramienta tecnológica más precisa y actualizada del rubro en Chile.
-                  </p>
-                </div>
               </div>
             </div>
           </div>
@@ -272,7 +300,7 @@ export default function QuizLobbyPage() {
         </header>
 
         <div className="w-full space-y-6">
-          {/* 🩺 NUEVO DIAGNÓSTICO SEREMI 2026 */}
+          {/* DIAGNÓSTICO SEREMI */}
           <button onClick={() => handleBasicAccess('/quiz/basic')} className="w-full text-left rounded-[2rem] border-2 transition-all p-8 bg-white border-slate-200 shadow-sm hover:border-[#28a745] hover:shadow-lg group flex flex-col md:flex-row items-center gap-6">
             <div className="w-20 h-20 rounded-full flex items-center justify-center text-4xl shrink-0 bg-gradient-to-br from-orange-500 to-red-500 text-white shadow-md group-hover:scale-105 transition-transform">
               <Stethoscope size={40} />
@@ -297,6 +325,7 @@ export default function QuizLobbyPage() {
             <div className="hidden md:flex shrink-0 text-[#28a745] items-center gap-2 font-bold opacity-50 group-hover:opacity-100 transition-opacity bg-emerald-50 px-4 py-2 rounded-full">Iniciar <ChevronRight size={20} /></div>
           </button>
 
+          {/* CAMPUS VIRTUAL PRO */}
           <article>
             <div className="w-full rounded-[2rem] border-2 border-[#001122] transition-all p-8 bg-[#002244] shadow-xl relative overflow-hidden mt-2">
               <div className="absolute -top-24 -right-24 w-64 h-64 bg-[#003366] rounded-full blur-3xl opacity-50 pointer-events-none"></div>
@@ -314,7 +343,7 @@ export default function QuizLobbyPage() {
                           ? "¿Ya viste tus áreas débiles en el diagnóstico? El Campus PRO te entrena exactamente en lo que fallas." 
                           : canAccessSimulator 
                             ? "Acceso total a los módulos y al Simulador Fiscalizador. Estás listo para el desafío final." 
-                            : "Acceso PRO activo. El Simulador SEREMI está bloqueado (Error)."
+                            : "Acceso PRO activo."
                       }
                     </div>
                     <div className="flex flex-col sm:flex-row gap-3">
@@ -327,10 +356,11 @@ export default function QuizLobbyPage() {
             </div>
           </article>
 
-          {/* 📥 TARJETA: TRÁMITE SEREMI */}
+          {/* TARJETA TRÁMITE SEREMI */}
           <TarjetaTramiteSeremi />
 
-          <div className="bg-white border border-slate-200 p-5 rounded-[2rem] shadow-sm mt-8 max-w-full mx-auto animate-in fade-in zoom-in duration-500 relative overflow-hidden">
+          {/* TARJETA RACHA */}
+          <div className="bg-white border border-slate-200 p-5 rounded-[2rem] shadow-sm mt-8 max-w-full mx-auto relative overflow-hidden">
              <div className="absolute top-0 right-0 w-32 h-32 bg-orange-50 rounded-bl-full -z-10 opacity-50"></div>
              
              <div className="flex items-center justify-center gap-6 mb-5">
@@ -345,7 +375,7 @@ export default function QuizLobbyPage() {
                     {streakData.current} <span className="text-lg">Días</span>
                   </h4>
                   <p className="text-[10px] font-bold text-slate-500 mt-1">
-                    Récord: <span className="text-orange-600">{streakData.longest} days</span>
+                    Récord: <span className="text-orange-600">{streakData.longest} días</span>
                   </p>
                </div>
              </div>
@@ -361,11 +391,33 @@ export default function QuizLobbyPage() {
              </p>
           </div>
 
+          {/* TARJETA DERMOCHECK */}
+          <a 
+            href="http://auxiliarpro.cl/dermocheck" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="block bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-sm group hover:ring-2 hover:ring-emerald-500 transition-all text-slate-300"
+          >
+            <div className="flex items-center gap-4 mb-4">
+              <div className="bg-emerald-500/20 text-emerald-400 p-3 rounded-full group-hover:bg-emerald-500 group-hover:text-white transition-colors"><Clock size={24} /></div>
+              <div>
+                <h4 className="font-bold text-white text-sm">DermoCheck</h4>
+                <p className="text-xs text-slate-400">Verifica vencimientos</p>
+              </div>
+              <ExternalLink size={16} className="ml-auto text-slate-500"/>
+            </div>
+            <p className="text-sm text-slate-300 leading-relaxed mb-0">
+              ¿Vendes Dermo? Verifica vencimientos por lote aquí.
+            </p>
+          </a>
+
           <div className="pt-4"><SocialContact /></div>
         </div>
+
         <div className="mt-8"><BannerVenta /></div>
       </section>
 
+      {/* MODAL PROMO CONVERSIÓN */}
       {showPromoModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
           <div className="relative w-full max-w-md p-6 bg-white rounded-[2rem] shadow-2xl border border-slate-100 flex flex-col items-center text-center">
@@ -386,7 +438,7 @@ export default function QuizLobbyPage() {
             </h3>
             
             <p className="mt-2 text-sm text-slate-500 leading-relaxed font-medium">
-              Ya conoces tus áreas débiles. Ahora es momento de <strong className="text-[#003366]">corregirlas</strong> con el entrenamiento más cercano al examen oficial SEREMI de Chile.
+              Ya conoces tus áreas débiles. Ahora es momento de <strong className="text-[#003366]">corregirlas</strong> con el entrenamiento oficial de AuxiliarPro.
             </p>
 
             <div className="w-full my-4 p-4 bg-slate-50 rounded-2xl text-left text-xs text-slate-600 space-y-2.5 border border-slate-100 font-medium">
@@ -423,7 +475,48 @@ export default function QuizLobbyPage() {
         </div>
       )}
 
-      {/* ❌ FOOTER REDUNDANTE ELIMINADO — El footer nativo del layout queda activo */}
+      {/* MODAL NOMBRE OFICIAL */}
+      {showNameModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="relative w-full max-w-md p-6 bg-white rounded-[2rem] shadow-2xl border border-slate-100 flex flex-col items-center text-center">
+            
+            <div className="flex items-center justify-center w-12 h-12 mb-4 rounded-full bg-[#003366]/10 text-[#003366]">
+              <User size={28} />
+            </div>
+            
+            <h3 className="text-xl font-black text-[#003366] tracking-tight">
+              Registro de Nombre Oficial
+            </h3>
+            
+            <p className="mt-2 text-sm text-slate-500 leading-relaxed font-medium">
+              Para poder emitir tu <strong className="text-[#003366]">Certificado de Participación</strong> al finalizar el curso, necesitamos registrar tu nombre legal completo.
+            </p>
+            
+            <p className="mt-2 text-xs text-red-600 font-bold bg-red-50 px-3 py-2 rounded-lg w-full">
+              IMPORTANTE: Una vez guardado, este nombre no podrá ser modificado por ti para garantizar la validez del certificado.
+            </p>
+            
+            <input 
+              type="text" 
+              value={tempName}
+              onChange={(e) => setTempName(e.target.value)}
+              placeholder="Ej: Juan Pérez González"
+              className="w-full mt-4 border-2 border-slate-300 rounded-xl px-4 py-3 focus:border-[#28a745] focus:outline-none uppercase text-sm font-bold text-slate-700"
+              autoFocus
+            />
+            
+            <div className="w-full space-y-2 mt-4">
+              <button
+                onClick={handleSaveCertificationName}
+                className="w-full py-3.5 px-4 bg-[#28a745] hover:bg-[#218838] text-white text-sm font-bold rounded-xl shadow-lg transition-all transform active:scale-[0.98]"
+              >
+                Confirmar y Guardar Nombre
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
     </main>
   );
 }

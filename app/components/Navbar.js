@@ -89,7 +89,7 @@ export default function Navbar() {
 
         {/* 🖥️ MENÚ DE ESCRITORIO */}
         <div className="hidden lg:flex items-center gap-1 xl:gap-2">
-           <Link href="/quiz" className="flex items-center gap-1 text-white bg-slate-900 hover:bg-emerald-600 font-black text-[10px] uppercase tracking-widest px-3 py-2 rounded-full transition-all shadow-md mr-1">
+           <Link href="/quiz/basic/diagnostico" className="flex items-center gap-1 text-white bg-slate-900 hover:bg-emerald-600 font-black text-[10px] uppercase tracking-widest px-3 py-2 rounded-full transition-all shadow-md mr-1">
              <Stethoscope size={14} /> DIAGNÓSTICO
            </Link>
            <Link href="/planes" className="flex items-center gap-1 text-amber-600 font-bold text-[11px] tracking-wider px-3 py-2 rounded-lg hover:bg-amber-50">
@@ -137,7 +137,7 @@ export default function Navbar() {
         <div className="lg:hidden flex items-center justify-center gap-3 w-full pb-2 pt-1">
           {user && <StreakCounter count={streak} />}
           <button onClick={handleShare} className="p-2 text-slate-400"><Share2 size={20} /></button>
-          <Link href="/quiz" className="bg-slate-900 text-white p-2 rounded-lg"><Stethoscope size={18} /></Link>
+          <Link href="/quiz/basic/diagnostico" className="bg-slate-900 text-white p-2 rounded-lg"><Stethoscope size={18} /></Link>
           
           {/* EL BOTÓN DE SESIÓN CON INFORMACIÓN DE CUENTA EN TIEMPO REAL */}
           <div className="flex items-center gap-2 shrink-0 border-r border-slate-100 pr-2 select-none">
@@ -170,7 +170,7 @@ export default function Navbar() {
         {isOpen && (
           <div className="lg:hidden w-full bg-white border-t border-slate-100 py-4 animate-in slide-in-from-top duration-200">
             <div className="flex flex-col gap-1 px-2">
-              <Link href="/quiz" onClick={() => setIsOpen(false)} className="flex items-center gap-3 text-white bg-slate-900 hover:bg-emerald-600 font-black text-xs uppercase tracking-widest px-4 py-3 rounded-lg transition-all shadow-md">
+              <Link href="/quiz/basic/diagnostico" onClick={() => setIsOpen(false)} className="flex items-center gap-3 text-white bg-slate-900 hover:bg-emerald-600 font-black text-xs uppercase tracking-widest px-4 py-3 rounded-lg transition-all shadow-md">
                 <Stethoscope size={18} /> DIAGNÓSTICO
               </Link>
               <Link href="/planes" onClick={() => setIsOpen(false)} className="flex items-center gap-3 text-amber-600 font-bold text-sm tracking-wider px-4 py-3 rounded-lg hover:bg-amber-50">

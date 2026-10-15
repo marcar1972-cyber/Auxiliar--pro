@@ -11,7 +11,7 @@ export const proEval13 = {
       question: "1. (Situacional) Un cliente llega apurado solicitando un fraccionamiento de 15 comprimidos de un sedante Lista IV porque no tiene dinero para la caja de 30. Usted sabe que el producto es original y está vigente. ¿Qué debe hacer?",
       options: [
         "A) Realizar el corte con cuidado para no tocar los comprimidos.",
-        "B) Informar que el fraccionamiento de psicotrópicos y estupefacientes está estrictamente prohibido por el Art. 40 del Decreto 466.",
+        "B) Informar que el fraccionamiento de psicotrópicos y estupefacientes está strictly prohibido por el Art. 40 del Decreto 466.",
         "C) Consultar al guardia de seguridad si puede autorizar el corte.",
         "D) Venderle las 15 unidades y anotar 'ajuste manual' en el libro."
       ],
@@ -30,15 +30,15 @@ export const proEval13 = {
       explanation: "Establecido expresamente en el Art. 26 del DTO 404 (Estupefacientes) y el Art. 25 del DTO 405 (Psicotrópicos). La Receta Cheque y la Receta Retenida tienen una validez máxima de 30 días corridos a contar de la fecha de su emisión."
     },
     {
-      question: "3. (Situacional) Un fiscalizador de la SEREMI le solicita abrir el armario de psicotrópicos. El Químico Farmacéutico (DT) está en su hora de colación fuera de la farmacia. ¿Cómo procede usted?",
+      question: "3. (Caso Real) Durante una inspección de la SEREMI de Salud, el fiscalizador solicita la revisión y conteo del mueble de productos controlados (Psicotrópicos). El Químico Farmacéutico (DT) se encuentra momentáneamente en el servicio higiénico (baño) del local. ¿Cómo debe proceder el Auxiliar de Farmacia?",
       options: [
-        "A) Abre el armario con las llaves que el DT dejó en el cajón.",
-        "B) Explica que el auxiliar no puede manejar controlados ni atender fiscalizaciones en ausencia del DT, según el Art. 26 del DTO 466.",
-        "C) Le dice al fiscalizador que no hay llaves.",
-        "D) Llama a su casa para preguntar qué hacer."
+        "A) Buscar las llaves en el escritorio del DT y abrir el mueble para no hacer esperar al fiscalizador.",
+        "B) Informar respetuosamente al fiscalizador que la custodia y apertura del mueble de controlados es responsabilidad exclusiva del Químico Farmacéutico, solicitándole esperar unos minutos a que el DT regrese al área técnica.",
+        "C) Forzar el mueble para demostrar transparencia ante la autoridad sanitaria.",
+        "D) Indicar al fiscalizador que los productos controlados no se pueden fiscalizar si no hay una orden judicial previa."
       ],
       correctAnswer: 1, // B
-      explanation: "El personal auxiliar actúa bajo estricta supervisión. El Art. 26 del DTO 466 prohíbe explícitamente a los auxiliares desempeñar funciones propias del Químico Farmacéutico (como el manejo y custodia de controlados) durante su ausencia."
+      explanation: "Según los D.S. 404 y D.S. 405, la tenencia, custodia de llaves y manejo de estupefacientes y psicotrópicos es responsabilidad exclusiva del Químico Farmacéutico. El auxiliar no debe manipular las llaves del mueble de controlados; su rol es solicitar amablemente la espera de la autoridad sanitaria hasta el retorno inmediato del DT."
     },
     {
       question: "4. (Situacional) Al revisar una Receta Retenida de Alprazolam, usted nota que el médico escribió la dosis en números ('30') pero no en letras. ¿Es válida para el despacho?",
@@ -85,15 +85,15 @@ export const proEval13 = {
       explanation: "Esta es la clasificación estándar de la mayoría de las benzodiazepinas de uso masivo (ansiolíticos y sedantes) en Chile. Al pertenecer a la Lista IV, su condición de expendio exige receta médica retenida."
     },
     {
-      question: "8. (Situacional) Al registrar una venta en el Libro de Psicotrópicos, usted olvida anotar el RUT del adquirente. ¿Qué consecuencia tiene este olvido?",
+      question: "8. (Situacional) Al recepcionar una Receta Retenida de un producto psicotrópico para que el Químico Farmacéutico realice el despacho y registro oficial, ¿qué dato fundamental del adquirente debe verificar el Auxiliar de Farmacia antes de presentarla al DT?",
       options: [
-        "A) Ninguna, el RUT del paciente es suficiente.",
-        "B) Es una falta administrativa grave al Art. 18 de los DTO 404/405 que invalida el registro de egreso.",
-        "C) Se puede anotar al día siguiente de memoria.",
-        "D) Se cobra una multa solo si el inspector lo nota."
+        "A) Ninguno, el RUT del paciente es el único dato legal exigible.",
+        "B) El nombre, domicilio y cédula de identidad (RUT) de la persona que retira físicamente el producto, requeridos obligatoriamente por el Art. 18 de los DTO 404/405.",
+        "C) La firma de autorización del gerente comercial de la farmacia.",
+        "D) La huella dactilar de la persona en el reverso del documento."
       ],
       correctAnswer: 1, // B
-      explanation: "La trazabilidad completa y oficial exige identificar tanto al paciente como a la persona que retira físicamente la sustancia del local (adquirente). Omitir la firma y el RUT del adquirente constituye una falta grave en el control de existencias."
+      explanation: "Aunque el registro en el Libro Oficial es responsabilidad del Químico Farmacéutico, el auxiliar debe comprobar que la receta cuente con la identificación completa del adquirente (nombre, RUT y domicilio) al momento de recepcionarla en el mesón para garantizar la trazabilidad legal requerida por la autoridad sanitaria."
     },
     {
       question: "9. (Situacional) Llega una receta de un 'preparado magistral' que contiene una sustancia de la Lista III de psicotrópicos. ¿Qué formato de receta debe exigir?",

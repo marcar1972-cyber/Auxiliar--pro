@@ -1,15 +1,31 @@
+// ============================================================================
+// ARCHIVO: C:\Dev\Auxiliar--pro\app\campus\[modId]\page.js
+// DESCRIPCIÓN: Vista de detalle del módulo con gamificación mediante ráfaga de confetti,
+//              frases motivacionales y aviso festivo al completar el grupo de lecciones.
+// INTERDEPENDENCIAS DIRECTAS (RUTAS EXACTAS):
+//   - Componente Social: 'C:\Dev\Auxiliar--pro\app\components\SocialContact.jsx'
+//       -> Importado vía: '../../components/SocialContact'
+//   - Conexión Firebase: 'C:\Dev\Auxiliar--pro\firebase\config.js'
+//       -> Importado vía: '../../firebase/config'
+//   - Mazos de Flashcards JSON: 'C:\Dev\Auxiliar--pro\data\flashcards\*.json'
+//       -> Importados vía: '../../../data/flashcards/*.json'
+//   - Paquetes externos: 'canvas-confetti' (requiere `npm install canvas-confetti`)
+//   - Firma: < macz.dev />
+// ============================================================================
+
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { db, auth } from "../../firebase/config"; 
 import { collection, query, where, getDocs, doc, getDoc } from "firebase/firestore"; 
 import { ref, getDownloadURL, getStorage } from "firebase/storage"; 
 import { onAuthStateChanged } from "firebase/auth"; 
-import { FileText, Download, Loader2, ChevronLeft, BrainCircuit, ShieldCheck, Lock, CheckCircle2, X, RotateCw, ArrowRight, ArrowLeft } from "lucide-react"; 
+import { FileText, Download, Loader2, ChevronLeft, BrainCircuit, ShieldCheck, Lock, CheckCircle2, X, RotateCw, ArrowRight, ArrowLeft, Award } from "lucide-react"; 
 import Link from "next/link";
+import confetti from "canvas-confetti";
 
-// CTO FIX: Corrección de ruteo relativo (subir solo dos niveles desde [modId] -> campus -> app)
+// CTO FIX: Corrección de ruteo relativo
 import SocialContact from "../../components/SocialContact";
 
 // Importación de los Mazos Locales Pilotados (Costo $0)
@@ -33,6 +49,13 @@ import mod3_3Cards from "../../../data/flashcards/mod-3-3.json";
 import mod4_1Cards from "../../../data/flashcards/mod-4-1.json";
 import mod4_2Cards from "../../../data/flashcards/mod-4-2.json";
 
+const MOTIVATIONAL_PHRASES = [
+  "¡El esfuerzo de hoy es tu tranquilidad y éxito en el examen SEREMI de mañana!",
+  "¡Sigue así! Cada módulo completado te acerca un paso más a tu certificación oficial.",
+  "¡Excelente trabajo! Tu dedicación en el estudio marca la diferencia en el mesón.",
+  "¡Demostraste un dominio impecable! Estás construyendo un perfil profesional de alto nivel."
+];
+
 const ProfessionalProgress = ({ percentage }) => (
   <div className="w-full bg-white p-4 rounded-2xl border border-slate-200 mb-8 shadow-sm">
     <div className="flex justify-between items-center mb-2">
@@ -54,12 +77,23 @@ const ProfessionalProgress = ({ percentage }) => (
 
 export default function ModuloDetalle() {
   const { modId } = useParams();
+  const searchParams = useSearchParams();
+  const isCompletedParam = searchParams.get("completed");
+
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [hasActiveSub, setHasActiveSub] = useState(false);
   const [isModuleUnlocked, setIsModuleUnlocked] = useState(false); 
   const [globalProgress, setGlobalProgress] = useState(0);
   const [isAdminUser, setIsAdminUser] = useState(false);
+  const [approvedEvals, setApprovedEvals] = useState([]);
+  
+  // 🚀 CTO FIX: Estado para gamificación con banner y frases
+  const [showCelebrationBanner, setShowCelebrationBanner] = useState(false);
+  const [randomPhrase, setRandomPhrase] = useState("");
+
+  // 🚀 CTO FIX: Nuevo estado para guardar el puntaje y estado de cada evaluación
+  const [evalStats, setEvalStats] = useState({});
 
   // Estados locales para el modal interactivo de Tarjetas Didácticas a costo $0
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -67,14 +101,30 @@ export default function ModuloDetalle() {
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
 
-  // CNC FIX: Numeración estricta y limpieza de strings para garantizar el orden 1 al N
+  // Gamificación: Disparo de Confetti al llegar con ?completed=true
+  useEffect(() => {
+    if (isCompletedParam === "true") {
+      setShowCelebrationBanner(true);
+      const phrase = MOTIVATIONAL_PHRASES[Math.floor(Math.random() * MOTIVATIONAL_PHRASES.length)];
+      setRandomPhrase(phrase);
+
+      confetti({
+        particleCount: 120,
+        spread: 80,
+        origin: { y: 0.6 }
+      });
+    }
+  }, [isCompletedParam]);
+
+  // CTO FIX 1: Eliminada la numeración - Solo retorna el nombre limpio
   const cleanName = (fileName, index) => {
     let name = fileName.replace(/\.pdf$/i, "").trim(); 
-    name = name.replace(/^(\d+[\.\-\_]*\s*|MOD\s*\d+\s*CLASE\s*\d+\s*)/i, "").trim();
-    return `${index + 1}. ${name.charAt(0).toUpperCase() + name.slice(1)}`;
+    name = name.replace(/^[\d\.\-\_\s]*(mod|módulo|mod\.)?[\d\.\-\_\s]*(clase)?[\d\.\-\_\s]*/i, "").trim();
+    if (!name) name = "Tema";
+    return name.charAt(0).toUpperCase() + name.slice(1);
   };
 
-  const getQuizPath = (modId, fileTitle, index) => {
+  const getEvalId = (modId, index) => {
     const modNumber = parseInt(modId.replace(/\D/g, ""));
     const lessonNumber = index + 1;
 
@@ -84,12 +134,30 @@ export default function ModuloDetalle() {
     if (modNumber === 3) evalId = lessonNumber + 10; 
     if (modNumber === 4) evalId = lessonNumber + 13; 
     
-    return `/quiz/pro/pro-eval-${evalId}`; 
+    return `pro-eval-${evalId}`;
+  };
+
+  const getQuizPath = (modId, fileTitle, index) => {
+    return `/quiz/pro/${getEvalId(modId, index)}`; 
+  };
+
+  // Función para determinar si una lección interna específica está desbloqueada de forma secuencial
+  const isLessonUnlocked = (index) => {
+    if (isAdminUser) return true;
+    if (!isModuleUnlocked) return false;
+    
+    const currentEvalId = getEvalId(modId, index);
+    const evalNumber = parseInt(currentEvalId.replace("pro-eval-", ""));
+    
+    if (evalNumber === 1) return true;
+    
+    const previousEvalId = `pro-eval-${evalNumber - 1}`;
+    return approvedEvals.includes(previousEvalId);
   };
 
   // Manejador del mazo estático local mapeado dinámicamente
   const handleOpenFlashcards = (index) => {
-    if (!isModuleUnlocked) return;
+    if (!isLessonUnlocked(index)) return;
     
     if (modId === "mod-1") {
       if (index === 0) {
@@ -116,32 +184,32 @@ export default function ModuloDetalle() {
         alert("Mazo en preparación. Los pilotos actuales están activos en las clases 1 a la 4 del Módulo 1.");
       }
     } else if (modId === "mod-2") {
-      if (index === 0) { // 2.1 Fundamentos de Farmacotecnia
+      if (index === 0) { 
         setCurrentMazo(mod2_1Cards);
         setCurrentCardIndex(0);
         setIsFlipped(false);
         setIsModalOpen(true);
-      } else if (index === 1) { // 2.2 Sólidos
+      } else if (index === 1) { 
         setCurrentMazo(mod2_2Cards);
         setCurrentCardIndex(0);
         setIsFlipped(false);
         setIsModalOpen(true);
-      } else if (index === 2) { // 2.3 Líquidos
+      } else if (index === 2) { 
         setCurrentMazo(mod2_3Cards);
         setCurrentCardIndex(0);
         setIsFlipped(false);
         setIsModalOpen(true);
-      } else if (index === 3) { // 2.4 Semisólidos
+      } else if (index === 3) { 
         setCurrentMazo(mod2_4Cards);
         setCurrentCardIndex(0);
         setIsFlipped(false);
         setIsModalOpen(true);
-      } else if (index === 4) { // 2.5 Inhalatorias y Estériles
+      } else if (index === 4) { 
         setCurrentMazo(mod2_5Cards);
         setCurrentCardIndex(0);
         setIsFlipped(false);
         setIsModalOpen(true);
-      } else if (index === 5) { // 2.6 Control de Calidad
+      } else if (index === 5) { 
         setCurrentMazo(mod2_6Cards);
         setCurrentCardIndex(0);
         setIsFlipped(false);
@@ -150,17 +218,17 @@ export default function ModuloDetalle() {
         alert("Mazo en preparación. Por ahora los pilotos activos corresponden a las clases 1 a la 6 del Módulo 2.");
       }
     } else if (modId === "mod-3") {
-      if (index === 0) { // 3.1 Almacenamiento y Logística
+      if (index === 0) { 
         setCurrentMazo(mod3_1Cards);
         setCurrentCardIndex(0);
         setIsFlipped(false);
         setIsModalOpen(true);
-      } else if (index === 1) { // 3.2 Cadena de Frío
+      } else if (index === 1) { 
         setCurrentMazo(mod3_2Cards);
         setCurrentCardIndex(0);
         setIsFlipped(false);
         setIsModalOpen(true);
-      } else if (index === 2) { // 3.3 Control Legal
+      } else if (index === 2) { 
         setCurrentMazo(mod3_3Cards);
         setCurrentCardIndex(0);
         setIsFlipped(false);
@@ -169,12 +237,12 @@ export default function ModuloDetalle() {
         alert("Mazo en preparación. Por ahora los pilotos activos corresponden a las clases 1 a la 3 del Módulo 3.");
       }
     } else if (modId === "mod-4") {
-      if (index === 0) { // 4.1 Vías de Administración Detalladas
+      if (index === 0) { 
         setCurrentMazo(mod4_1Cards);
         setCurrentCardIndex(0);
         setIsFlipped(false);
         setIsModalOpen(true);
-      } else if (index === 1) { // 4.2 Posología, Cálculo de Dosis y Fraccionamiento
+      } else if (index === 1) { 
         setCurrentMazo(mod4_2Cards);
         setCurrentCardIndex(0);
         setIsFlipped(false);
@@ -192,6 +260,8 @@ export default function ModuloDetalle() {
       try {
         let isSubValid = false;
         let moduleUnlocked = false;
+        let approvedList = [];
+        let stats = {};
         
         if (user) {
           const isAdmin = user.email === "marcar1972@gmail.com"; 
@@ -232,17 +302,61 @@ export default function ModuloDetalle() {
 
             if (isAdmin) isSubValid = true; 
 
-            const approved = data.approvedModules || data.completedModules || data.unlockedLevelsPro || data.unlockedLevels || [];
-            const count = [1, 2, 3, 4].filter(num => approved.includes(num) || approved.includes(`mod-${num}`)).length;
-            setGlobalProgress(isAdmin ? 100 : (count / 4) * 100);
-
-            if (isSubValid) moduleUnlocked = true;
-            if (isAdmin) moduleUnlocked = true; 
-            
+            approvedList = data.approvedModules || data.completedModules || data.unlockedLevelsPro || data.unlockedLevels || [];
           } else if (isAdmin) {
             isSubValid = true;
             moduleUnlocked = true;
           }
+
+          try {
+            const logsQuery = query(
+              collection(db, "exam_logs"),
+              where("userId", "==", user.uid)
+            );
+            
+            const logsSnap = await getDocs(logsQuery);
+            
+            logsSnap.forEach(docSnap => {
+              const logData = docSnap.data();
+              if (logData.examId && typeof logData.examId === 'string' && logData.examId.startsWith('pro-eval-')) {
+                const existing = stats[logData.examId];
+                const logTime = logData.timestamp ? logData.timestamp.toDate().getTime() : (logData.date ? new Date(logData.date).getTime() : 0);
+                const existingTime = existing ? (existing.timestamp ? existing.timestamp.toDate().getTime() : (existing.date ? new Date(existing.date).getTime() : 0)) : -1;
+                
+                if (!existing || logTime > existingTime) {
+                  stats[logData.examId] = {
+                    score: logData.score,
+                    passed: logData.passed,
+                    timestamp: logData.timestamp,
+                    date: logData.date
+                  };
+                }
+              }
+            });
+            
+            setEvalStats(stats);
+            
+            const newlyApproved = Object.keys(stats).filter(id => stats[id].passed === true);
+            const combinedApproved = [...new Set([...approvedList, ...newlyApproved])];
+            approvedList = combinedApproved;
+            
+            console.log("📊 Estadísticas de evaluaciones detectadas:", stats);
+          } catch (logError) {
+            console.warn("No se pudieron leer exam_logs:", logError);
+          }
+
+          setApprovedEvals(approvedList);
+
+          const totalEvaluations = 15;
+          const approvedCount = approvedList.filter(evalId => 
+            typeof evalId === 'string' && evalId.startsWith("pro-eval-") && !evalId.includes("global")
+          ).length;
+          
+          const calculatedProgress = Math.round((approvedCount / totalEvaluations) * 100);
+          setGlobalProgress(isAdmin ? 100 : calculatedProgress);
+
+          if (isSubValid) moduleUnlocked = true;
+          if (isAdmin) moduleUnlocked = true; 
         }
         setHasActiveSub(isSubValid);
         setIsModuleUnlocked(moduleUnlocked);
@@ -269,8 +383,8 @@ export default function ModuloDetalle() {
     return () => unsubscribe();
   }, [modId]);
 
-  const handleDownload = async (file) => {
-    if (!isModuleUnlocked) return; 
+  const handleDownload = async (file, index) => {
+    if (!isLessonUnlocked(index)) return; 
     try {
       if (file.url) return window.open(file.url, "_blank");
       if (file.downloadURL) return window.open(file.downloadURL, "_blank");
@@ -292,6 +406,24 @@ export default function ModuloDetalle() {
 
   if (loading) return <div className="flex justify-center p-20 min-h-screen bg-slate-50"><Loader2 className="animate-spin text-[#003366]" size={32} /></div>;
 
+  const currentModNumber = modId.replace(/\D/g, "");
+
+  const getModuleEvalRange = (modNumber) => {
+    if (modNumber === 1) return [1, 4];
+    if (modNumber === 2) return [5, 10];
+    if (modNumber === 3) return [11, 13];
+    if (modNumber === 4) return [14, 15];
+    return [1, 1];
+  };
+
+  const modNumber = parseInt(currentModNumber);
+  const [evalStart, evalEnd] = getModuleEvalRange(modNumber);
+  
+  const moduleCompleted = files.length > 0 && files.every((_, index) => {
+    const evalId = getEvalId(modId, index);
+    return approvedEvals.includes(evalId);
+  });
+
   return (
     <main className="min-h-screen bg-slate-50 p-6 md:p-12">
       <div className="max-w-4xl mx-auto">
@@ -299,12 +431,43 @@ export default function ModuloDetalle() {
           <ChevronLeft size={20} /> Volver al Campus
         </Link>
         
+        {/* Banner de Celebración Gamificado */}
+        {showCelebrationBanner && (
+          <div className="mb-8 bg-gradient-to-r from-emerald-600 to-teal-700 text-white rounded-3xl p-6 shadow-xl border border-emerald-400 relative overflow-hidden transition-all">
+            <div className="flex items-start gap-4">
+              <div className="p-3 bg-white/20 rounded-2xl backdrop-blur-sm">
+                <Award className="w-8 h-8 text-amber-300" />
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="bg-amber-400/30 text-amber-200 text-xs font-black uppercase tracking-wider px-3 py-1 rounded-full border border-amber-300/40">
+                    ¡Módulo Completado!
+                  </span>
+                </div>
+                <h2 className="text-2xl font-black text-white">
+                  ¡FELICITACIONES! HAS COMPLETADO EL MÓDULO {currentModNumber}
+                </h2>
+                <p className="mt-2 text-emerald-100 font-medium text-sm leading-relaxed">
+                  {randomPhrase}
+                </p>
+              </div>
+              <button 
+                onClick={() => setShowCelebrationBanner(false)}
+                className="text-emerald-200 hover:text-white font-bold text-sm bg-black/10 px-3 py-1 rounded-lg"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+        )}
+
         {(hasActiveSub || isAdminUser) && <ProfessionalProgress percentage={globalProgress} />}
 
         <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-200 mb-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex-1 text-center md:text-left z-10">
             <span className="bg-[#003366] text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2.5 inline-block"> Verificado Pro </span>
-            <h1 className="text-3xl font-black text-[#003366] tracking-tight mb-2 capitalize">Módulo {modId.replace("-", " ")}: Formación Técnica</h1>
+            
+            <h1 className="text-3xl font-black text-[#003366] tracking-tight mb-2 capitalize">Módulo {currentModNumber}: Formación Técnica</h1>
             <p className="text-slate-500 text-base max-w-xl">Accede al material de estudio oficial. Estudia los módulos y luego rinde la evaluación para avanzar hacia el Simulador.</p>
           </div>
           
@@ -312,56 +475,96 @@ export default function ModuloDetalle() {
             <div className="bg-slate-300 text-slate-600 text-sm font-bold px-6 py-3 rounded-full uppercase tracking-wider flex items-center gap-1.5 shadow-md">
               <Lock size={18} /> {!hasActiveSub ? "Requiere PRO" : "Módulo Bloqueado"}
             </div>
+          ) : moduleCompleted ? (
+            <div className="bg-gradient-to-br from-[#1e7e34] to-[#155724] text-white text-sm font-bold px-6 py-3 rounded-full uppercase tracking-wider flex items-center gap-1.5 shadow-[0_0_15px_rgba(30,126,52,0.5)]">
+              <CheckCircle2 size={18} /> Módulo {currentModNumber} Completado
+            </div>
           ) : (
             <div className="bg-gradient-to-br from-[#28a745] to-[#218838] text-white text-sm font-bold px-6 py-3 rounded-full uppercase tracking-wider flex items-center gap-1.5 shadow-[0_0_15px_rgba(40,167,69,0.4)]">
-              <ShieldCheck size={18} /> Módulo {modId.replace(/\D/g, "")} Desbloqueado
+              <ShieldCheck size={18} /> Módulo {currentModNumber} Desbloqueado
             </div>
           )}
         </div>
 
-        <div className="bg-white rounded-3xl shadow-sm border border-slate-200 divide-y divide-slate-100 overflow-hidden">
+        <div className="flex flex-col gap-6 bg-slate-50/50 p-4 md:p-6 rounded-3xl">
           {files.map((file, index) => {
+            const unlocked = isLessonUnlocked(index);
+            const currentEvalId = getEvalId(modId, index);
+            
+            const stat = evalStats[currentEvalId];
+            const hasAttempted = stat !== undefined;
+            const isEvalApproved = stat?.passed === true;
+            const score = stat?.score || 0;
+
             return (
-              <div key={file.id || index} className={`p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 transition-colors ${!isModuleUnlocked ? "opacity-70 grayscale pointer-events-none" : "hover:bg-slate-50"}`}>
-                <div className="flex items-start gap-4 flex-1">
-                  <div className={`w-16 h-16 rounded-full flex items-center justify-center text-3xl shrink-0 text-white shadow-md ${!isModuleUnlocked ? "bg-slate-400" : "bg-[#28a745]"}`}>
-                    {!isModuleUnlocked ? <Lock size={28} /> : <FileText size={32} />}
+              <div key={file.id || index} className={`bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8 flex flex-col gap-6 transition-all hover:shadow-md ${!unlocked ? "opacity-70 grayscale pointer-events-none" : ""}`}>
+                
+                <div className="flex items-start gap-4 w-full">
+                  <div className={`w-16 h-16 rounded-full flex items-center justify-center text-3xl shrink-0 text-white shadow-md ${!unlocked ? "bg-slate-400" : "bg-[#28a745]"}`}>
+                    {!unlocked ? <Lock size={28} /> : <FileText size={32} />}
                   </div>
-                  <div>
-                    <h3 className="font-black text-slate-800 text-lg leading-tight capitalize mb-1">{cleanName(file.title, index)}</h3>
-                    <div className="flex items-center gap-2 text-sm text-slate-500">
-                      <ShieldCheck size={14} className={!isModuleUnlocked ? "text-slate-400" : "text-[#28a745]"} /> 
-                      <span>Material Oficial | Manual de Estudio</span>
+                  <div className="flex-1 min-w-0 pt-2">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="font-black text-slate-800 text-lg leading-tight capitalize">
+                        {cleanName(file.title, index)}
+                      </h3>
+                      
+                      {hasAttempted && (
+                        <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
+                          isEvalApproved 
+                            ? "bg-emerald-50 text-emerald-700 border-emerald-200" 
+                            : "bg-red-50 text-red-700 border-red-200"
+                        }`}>
+                          {isEvalApproved ? <CheckCircle2 size={10} /> : <X size={10} />}
+                          {isEvalApproved ? `Aprobado - ${score}%` : `Reprobado - ${score}%`}
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>
                 
-                <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
+                <div className="flex flex-col sm:flex-row gap-3 w-full pl-0 md:pl-20">
                   <button 
-                    disabled={!isModuleUnlocked}
-                    onClick={() => handleDownload(file)} 
-                    className={`px-5 py-2.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors shadow-sm w-full sm:w-auto text-sm ${!isModuleUnlocked ? "bg-slate-200 text-slate-500 cursor-not-allowed" : "bg-[#003366] text-white hover:bg-[#001122]"}`}
+                    disabled={!unlocked}
+                    onClick={() => handleDownload(file, index)} 
+                    className={`px-6 py-2.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors shadow-sm flex-1 sm:flex-none min-w-[160px] whitespace-nowrap text-sm ${!unlocked ? "bg-slate-200 text-slate-500 cursor-not-allowed" : "bg-[#003366] text-white hover:bg-[#001122]"}`}
                   >
-                    {!isModuleUnlocked ? <Lock size={16} /> : <Download size={16} />} 
-                    {!hasActiveSub ? "Requiere PRO" : !isModuleUnlocked ? "Bloqueado" : "Descargar PDF"}
+                    {!unlocked ? <Lock size={16} /> : <Download size={16} />} 
+                    {!hasActiveSub ? "Requiere PRO" : !unlocked ? "Bloqueado" : "Descargar PDF"}
                   </button>
 
                   <button 
-                    disabled={!isModuleUnlocked}
+                    disabled={!unlocked}
                     onClick={() => handleOpenFlashcards(index)} 
-                    className={`border-2 px-5 py-2.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors shadow-sm w-full sm:w-auto text-sm ${!isModuleUnlocked ? "bg-white border-slate-200 text-slate-400 cursor-not-allowed" : "bg-white border-[#003366] text-[#003366] hover:bg-slate-100"}`}
+                    className={`border-2 px-6 py-2.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors shadow-sm flex-1 sm:flex-none min-w-[160px] whitespace-nowrap text-sm ${!unlocked ? "bg-white border-slate-200 text-slate-400 cursor-not-allowed" : "bg-white border-[#003366] text-[#003366] hover:bg-slate-100"}`}
                   >
-                    {!isModuleUnlocked ? <Lock size={16} /> : <BrainCircuit size={16} />} 
-                    {!hasActiveSub ? "Requiere PRO" : !isModuleUnlocked ? "Bloqueado" : "Tarjetas Didácticas"}
+                    {!unlocked ? <Lock size={16} /> : <BrainCircuit size={16} />} 
+                    {!hasActiveSub ? "Requiere PRO" : !unlocked ? "Bloqueado" : "Tarjetas Didácticas"}
                   </button>
 
-                  <Link href={!isModuleUnlocked ? "#" : getQuizPath(modId, file.title, index)} className="w-full sm:w-auto">
+                  <Link href={!unlocked ? "#" : getQuizPath(modId, file.title, index)} className="flex-1 sm:flex-none">
                     <button 
-                      disabled={!isModuleUnlocked}
-                      className={`border-2 px-5 py-2.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors shadow-sm w-full text-sm ${!isModuleUnlocked ? "bg-white border-slate-300 text-slate-400 cursor-not-allowed" : "bg-white border-[#28a745] text-[#28a745] hover:bg-[#28a745] hover:text-white"}`}
+                      disabled={!unlocked}
+                      className={`border-2 px-6 py-2.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors shadow-sm w-full min-w-[160px] whitespace-nowrap text-sm ${
+                        !unlocked 
+                          ? "bg-white border-slate-300 text-slate-400 cursor-not-allowed" 
+                          : !hasAttempted
+                            ? "bg-white border-[#28a745] text-[#28a745] hover:bg-[#28a745] hover:text-white"
+                            : isEvalApproved
+                              ? "bg-[#28a745] border-[#28a745] text-white hover:bg-emerald-700"
+                              : "bg-white border-red-500 text-red-600 hover:bg-red-50"
+                      }`}
                     >
-                      {!isModuleUnlocked ? <Lock size={16} /> : <BrainCircuit size={16} />} 
-                      {!hasActiveSub ? "Requiere PRO" : !isModuleUnlocked ? "Bloqueado" : "Evaluación"}
+                      {!unlocked ? (
+                        <Lock size={16} />
+                      ) : !hasAttempted ? (
+                        <BrainCircuit size={16} />
+                      ) : isEvalApproved ? (
+                        <CheckCircle2 size={16} />
+                      ) : (
+                        <RotateCw size={16} />
+                      )} 
+                      {!hasActiveSub ? "Requiere PRO" : !unlocked ? "Bloqueado" : !hasAttempted ? "Iniciar Evaluación" : isEvalApproved ? "Revisar Evaluación" : "Reintentar Evaluación"}
                     </button>
                   </Link>
                 </div>
@@ -377,7 +580,7 @@ export default function ModuloDetalle() {
               <span className={`text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2.5 inline-block ${!isModuleUnlocked ? "bg-slate-400" : "bg-[#28a745]"}`}> 
                 {!isModuleUnlocked ? "Bloqueado" : "Desbloqueado"} 
               </span>
-              <h3 className="font-black text-2xl text-[#003366] leading-tight mb-2">Evaluación Final del Módulo {modId.replace("-", " ")}</h3>
+              <h3 className="font-black text-2xl text-[#003366] leading-tight mb-2">Evaluación Final del Módulo {currentModNumber}</h3>
               <p className="text-slate-500 text-sm md:text-base max-w-xl">Pon a prueba tus conocimientos antes de enfrentar el Examen SEREMI Oficial.</p>
             </div>
             
@@ -393,18 +596,14 @@ export default function ModuloDetalle() {
           </div>
         )}
 
-        {/* CTO INJECTION: Bloque de contacto externo al final para opiniones y feedback */}
         <div className="mt-12 pt-4 border-t border-slate-200">
           <SocialContact />
         </div>
       </div>
 
-      {/* COMPONENTE INTERFÁCICO: MODAL DE TARJETAS DIDÁCTICAS CORREGIDO PARA CHROME */}
       {isModalOpen && currentMazo.length > 0 && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white w-full max-w-lg rounded-3xl shadow-2xl flex flex-col overflow-hidden max-h-[90vh]">
-            
-            {/* Header */}
             <div className="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
               <div>
                 <h4 className="font-black text-[#003366] text-sm tracking-tight uppercase">Tarjetas Didácticas</h4>
@@ -418,7 +617,6 @@ export default function ModuloDetalle() {
               </button>
             </div>
 
-            {/* Renderizado de la Tarjeta Interactiva con Corrección Total de Espejo para Webkit/Chrome */}
             <div className="p-6 md:p-8 flex flex-col items-center justify-center flex-1 min-h-[300px]" style={{ perspective: "1000px" }}>
               <div 
                 onClick={() => setIsFlipped(!isFlipped)}
@@ -428,14 +626,9 @@ export default function ModuloDetalle() {
                   transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)"
                 }}
               >
-                
-                {/* CARA FRONTAL (Pregunta) */}
                 <div 
                   className="absolute inset-0 w-full h-full bg-white border-2 border-slate-200 hover:border-[#003366] rounded-2xl p-6 flex flex-col justify-center items-center text-center shadow-sm"
-                  style={{ 
-                    backfaceVisibility: "hidden", 
-                    WebkitBackfaceVisibility: "hidden" 
-                  }}
+                  style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden" }}
                 >
                   <span className="absolute top-3 left-3 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md bg-slate-100 text-slate-400">
                     Pregunta Técnica
@@ -448,14 +641,9 @@ export default function ModuloDetalle() {
                   </div>
                 </div>
 
-                {/* CARA POSTERIOR (Respuesta) */}
                 <div 
                   className="absolute inset-0 w-full h-full bg-emerald-50/10 border-2 border-[#28a745] rounded-2xl p-6 flex flex-col justify-center items-center text-center shadow-sm"
-                  style={{ 
-                    backfaceVisibility: "hidden", 
-                    WebkitBackfaceVisibility: "hidden",
-                    transform: "rotateY(180deg)"
-                  }}
+                  style={{ backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
                 >
                   <span className="absolute top-3 left-3 text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md bg-emerald-100 text-[#28a745]">
                     Respuesta / Base Legal
@@ -467,11 +655,9 @@ export default function ModuloDetalle() {
                     <RotateCw size={12} /> Hacer clic para volver
                   </div>
                 </div>
-
               </div>
             </div>
 
-            {/* Controles de Navegación del Mazo */}
             <div className="p-5 border-t border-slate-100 bg-slate-50 flex items-center justify-between gap-4">
               <button 
                 disabled={currentCardIndex === 0}
@@ -496,7 +682,6 @@ export default function ModuloDetalle() {
                 Siguiente <ArrowRight size={14} />
               </button>
             </div>
-
           </div>
         </div>
       )}

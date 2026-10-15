@@ -3,6 +3,9 @@
 import { useState, useEffect } from 'react';
 import Link from "next/link";
 import Script from "next/script"; 
+import { auth, db } from "../../firebase/config";
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, onSnapshot } from "firebase/firestore";
 import BannerVenta from '../../components/BannerVenta'; 
 import { 
   BookOpen, CheckCircle, AlertTriangle, ShieldCheck, FileText, 
@@ -69,6 +72,52 @@ export default function GuiaDecreto405() {
   const [isPdfReady, setIsPdfReady] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
     
+  // 🔐 VERIFICACIÓN DE SUSCRIPCIÓN PRO
+  const [user, setUser] = useState(null);
+  const [isPro, setIsPro] = useState(false);
+
+  useEffect(() => {
+    const unsubscribeAuth = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        const docRef = doc(db, "users", currentUser.uid);
+
+        const unsubscribeSnapshot = onSnapshot(docRef, (docSnap) => {
+          try {
+            if (docSnap.exists()) {
+              const data = docSnap.data();
+              let currentIsPro = data.isPro || false;
+              let currentProUntil = null;
+
+              if (data.proUntil) {
+                if (typeof data.proUntil.toDate === "function") {
+                  currentProUntil = data.proUntil.toDate();
+                } else if (typeof data.proUntil === "string" || typeof data.proUntil === "number") {
+                  currentProUntil = new Date(data.proUntil);
+                }
+              }
+
+              if (currentProUntil && new Date() > currentProUntil) {
+                currentIsPro = false;
+              }
+
+              setIsPro(currentIsPro);
+            }
+          } catch (error) {
+            console.error("Error verificando suscripción:", error);
+          }
+        });
+
+        return () => unsubscribeSnapshot;
+      } else {
+        setUser(null);
+        setIsPro(false);
+      }
+    });
+
+    return () => unsubscribeAuth();
+  }, []);
+
   // ESTADOS DEL QUIZ
   const [quizActivo, setQuizActivo] = useState(false);
   const [preguntaActual, setPreguntaActual] = useState(0);
@@ -105,6 +154,11 @@ export default function GuiaDecreto405() {
 
   // 🖨️ FUNCIÓN PARA GENERAR EL PDF
   const generarPDF = async () => {
+    if (!isPro) {
+      alert("La descarga de guías en PDF es un beneficio exclusivo para alumnos con Plan PRO (Pase 15 Días o Mensual).");
+      return;
+    }
+
     if (typeof window !== 'undefined' && window.html2pdf) {
       setIsGenerating(true); 
       const elemento = document.getElementById('contenido-pdf');
@@ -237,7 +291,7 @@ export default function GuiaDecreto405() {
                     <h3 className="text-xl font-bold text-slate-900 mb-4 pb-2 border-b border-slate-200 flex items-center gap-2">
                       <FileSignature className="text-blue-600" /> Módulo B: La Venta (Expendio) y Tipos de Receta
                     </h3>
-                    <p className="mb-4 text-slate-600">La forma de vender estos productos depende estrictamente de la Lista a la que pertenezcan:</p>
+                    <p className="mb-4 text-slate-600">La forma de vender estos productos depende strictly de la Lista a la que pertenezcan:</p>
                     
                     <div className="grid md:grid-cols-2 gap-4 mb-6">
                         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
@@ -347,7 +401,7 @@ export default function GuiaDecreto405() {
                 </section>
             </div>
 
-            {/* AVISO LEGAL MOVIL: SE MUESTRA AQUI PERO LOS CTA DE VENTA SE VAN AL FINAL */}
+            {/* AVISO LEGAL MOVIL */}
             <div className="bg-slate-800/5 p-5 rounded-2xl border border-slate-200 mt-8 hidden lg:block">
                 <p className="text-sm text-slate-500 leading-relaxed flex gap-3">
                     <AlertTriangle className="shrink-0 text-amber-500 mt-0.5" size={20} />
@@ -359,7 +413,7 @@ export default function GuiaDecreto405() {
 
           </div>
 
-          {/* 🔴 COLUMNA DERECHA: SIDEBAR STICKY (O BLOQUE FINAL EN MÓVIL) */}
+          {/* 🔴 COLUMNA DERECHA: SIDEBAR STICKY */}
           <div className="lg:col-span-4">
             <div className="block lg:sticky lg:top-24 space-y-6">
               
@@ -369,86 +423,113 @@ export default function GuiaDecreto405() {
                 
                 <div className="relative z-10">
                   
-                  {/* ESTADO 1: INICIO */}
-                  {!quizActivo && !mostrarResultado && (
+                  {!isPro ? (
+                    /* 🔒 VISTA BLOQUEADA PARA USUARIOS SIN PLAN PRO */
+                    <div className="text-center py-2">
+                      <div className="w-12 h-12 bg-amber-500/20 text-amber-400 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-amber-500/30">
+                        <Lock size={24} />
+                      </div>
+                      <span className="bg-amber-500/20 text-amber-300 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block border border-amber-500/30">
+                        Exclusivo Plan PRO
+                      </span>
+                      <h3 className="text-xl font-black mb-2 text-white leading-tight">
+                        Quiz de Autoevaluación
+                      </h3>
+                      <p className="text-slate-400 text-xs leading-relaxed mb-6">
+                        Ponte a prueba con las 10 preguntas tipo examen SEREMI sobre esta guía desbloqueando tu acceso PRO.
+                      </p>
+                      <Link 
+                        href="/planes"
+                        className="w-full inline-flex items-center justify-center gap-2 bg-[#28a745] hover:bg-[#218838] text-white font-black py-3.5 rounded-xl text-xs uppercase tracking-wider transition-all shadow-lg hover:scale-105"
+                      >
+                        Activar Plan PRO <ArrowRight size={16} />
+                      </Link>
+                    </div>
+                  ) : (
+                    /* 🟢 VISTA DESBLOQUEADA PARA USUARIOS PRO */
                     <>
-                        <span className="bg-emerald-500 text-emerald-50 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
-                            Quiz Express
-                        </span>
-                        <h3 className="text-3xl font-black mb-4 leading-tight">
-                            ¿Sabes del Decreto 405?
-                        </h3>
-                        <p className="text-slate-400 mb-8 text-sm leading-relaxed">
-                            Pon a prueba lo que leíste sobre psicotrópicos, estrellas verdes y recetas.
-                        </p>
-                        <button 
-                            onClick={() => setQuizActivo(true)}
-                            className="w-full block bg-white text-slate-900 font-black text-center py-4 rounded-xl hover:bg-emerald-400 transition-colors shadow-lg flex items-center justify-center gap-2"
-                        >
-                            COMENZAR TEST <ArrowRight size={18} />
-                        </button>
+                      {/* ESTADO 1: INICIO */}
+                      {!quizActivo && !mostrarResultado && (
+                        <>
+                            <span className="bg-emerald-500 text-emerald-50 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mb-4 inline-block">
+                                Quiz Express
+                            </span>
+                            <h3 className="text-3xl font-black mb-4 leading-tight">
+                                ¿Sabes del Decreto 405?
+                            </h3>
+                            <p className="text-slate-400 mb-8 text-sm leading-relaxed">
+                                Pon a prueba lo que leíste sobre psicotrópicos, estrellas verdes y recetas.
+                            </p>
+                            <button 
+                                onClick={() => setQuizActivo(true)}
+                                className="w-full block bg-white text-slate-900 font-black text-center py-4 rounded-xl hover:bg-emerald-400 transition-colors shadow-lg flex items-center justify-center gap-2"
+                            >
+                                COMENZAR TEST <ArrowRight size={18} />
+                            </button>
+                        </>
+                      )}
+
+                      {/* ESTADO 2: PREGUNTAS */}
+                      {quizActivo && (
+                        <div className="animate-in fade-in slide-in-from-right-4 duration-300">
+                            <div className="flex justify-between items-center mb-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
+                                <span>Pregunta {preguntaActual + 1} de {preguntasQuiz.length}</span>
+                                <button onClick={reiniciarQuiz}><XCircle size={20} className="hover:text-red-400"/></button>
+                            </div>
+                            
+                            <h4 className="font-bold text-lg mb-6 leading-tight">
+                                {preguntasQuiz[preguntaActual].pregunta}
+                            </h4>
+
+                            <div className="space-y-3">
+                                {preguntasQuiz[preguntaActual].opciones.map((opcion, index) => (
+                                    <button
+                                        key={`${preguntaActual}-${index}`} 
+                                        onClick={() => manejarRespuesta(index)}
+                                        disabled={respuestaSeleccionada !== null}
+                                        className={`w-full text-left p-3 rounded-xl text-sm font-medium transition-all ${
+                                            respuestaSeleccionada === index 
+                                                ? index === preguntasQuiz[preguntaActual].correcta 
+                                                    ? 'bg-emerald-500 text-white font-bold' 
+                                                    : 'bg-red-500 text-white'
+                                                : 'bg-slate-800 hover:bg-slate-700 text-slate-200'
+                                        }`}
+                                    >
+                                        {opcion}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                      )}
+
+                      {/* ESTADO 3: RESULTADOS */}
+                      {mostrarResultado && (
+                        <div className="text-center animate-in zoom-in duration-300">
+                            <div className="bg-emerald-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-400">
+                                <Trophy size={32} />
+                            </div>
+                            <h3 className="text-2xl font-black mb-2">¡Completado!</h3>
+                            <p className="text-slate-400 mb-6">
+                                Obtuviste <strong className="text-white">{puntaje}</strong> de <strong className="text-white">{preguntasQuiz.length}</strong> correctas.
+                            </p>
+                            
+                            <div className="space-y-3">
+                                {puntaje === preguntasQuiz.length ? (
+                                    <div className="bg-emerald-900/50 p-3 rounded-lg text-sm text-emerald-200 border border-emerald-800">
+                                        ¡Excelente! Manejas el reglamento de psicotrópicos.
+                                    </div>
+                                ) : (
+                                    <button 
+                                        onClick={reiniciarQuiz}
+                                        className="w-full bg-slate-800 text-white font-bold py-3 rounded-xl hover:bg-slate-700 text-sm"
+                                    >
+                                        Intentar de nuevo
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                      )}
                     </>
-                  )}
-
-                  {/* ESTADO 2: PREGUNTAS */}
-                  {quizActivo && (
-                    <div className="animate-in fade-in slide-in-from-right-4 duration-300">
-                        <div className="flex justify-between items-center mb-4 text-xs font-bold text-slate-400 uppercase tracking-widest">
-                            <span>Pregunta {preguntaActual + 1} de {preguntasQuiz.length}</span>
-                            <button onClick={reiniciarQuiz}><XCircle size={20} className="hover:text-red-400"/></button>
-                        </div>
-                        
-                        <h4 className="font-bold text-lg mb-6 leading-tight">
-                            {preguntasQuiz[preguntaActual].pregunta}
-                        </h4>
-
-                        <div className="space-y-3">
-                            {preguntasQuiz[preguntaActual].opciones.map((opcion, index) => (
-                                <button
-                                    key={`${preguntaActual}-${index}`} 
-                                    onClick={() => manejarRespuesta(index)}
-                                    disabled={respuestaSeleccionada !== null}
-                                    className={`w-full text-left p-3 rounded-xl text-sm font-medium transition-all ${
-                                        respuestaSeleccionada === index 
-                                            ? index === preguntasQuiz[preguntaActual].correcta 
-                                                ? 'bg-emerald-500 text-white font-bold' 
-                                                : 'bg-red-500 text-white'
-                                            : 'bg-slate-800 hover:bg-slate-700 text-slate-200'
-                                    }`}
-                                >
-                                    {opcion}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-                  )}
-
-                  {/* ESTADO 3: RESULTADOS */}
-                  {mostrarResultado && (
-                    <div className="text-center animate-in zoom-in duration-300">
-                        <div className="bg-emerald-500/20 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 text-emerald-400">
-                            <Trophy size={32} />
-                        </div>
-                        <h3 className="text-2xl font-black mb-2">¡Completado!</h3>
-                        <p className="text-slate-400 mb-6">
-                            Obtuviste <strong className="text-white">{puntaje}</strong> de <strong className="text-white">{preguntasQuiz.length}</strong> correctas.
-                        </p>
-                        
-                        <div className="space-y-3">
-                            {puntaje === preguntasQuiz.length ? (
-                                <div className="bg-emerald-900/50 p-3 rounded-lg text-sm text-emerald-200 border border-emerald-800">
-                                    ¡Excelente! Manejas el reglamento de psicotrópicos.
-                                </div>
-                            ) : (
-                                <button 
-                                    onClick={reiniciarQuiz}
-                                    className="w-full bg-slate-800 text-white font-bold py-3 rounded-xl hover:bg-slate-700 text-sm"
-                                >
-                                    Intentar de nuevo
-                                </button>
-                            )}
-                        </div>
-                    </div>
                   )}
 
                 </div>
@@ -469,28 +550,37 @@ export default function GuiaDecreto405() {
                     Convierte esta página en un archivo PDF automáticamente para estudiar offline.
                 </p>
                 
-                <button 
-                    onClick={generarPDF}
-                    disabled={!isPdfReady || isGenerating}
-                    className={`w-full border-2 border-slate-200 text-slate-600 font-bold text-center py-3 rounded-xl transition-colors flex items-center justify-center gap-2 text-sm 
-                      ${isPdfReady && !isGenerating ? 'hover:border-red-500 hover:text-red-600 hover:bg-red-50 cursor-pointer' : 'opacity-50 cursor-not-allowed'}`}
-                >
-                    {isGenerating ? (
-                        <>
-                          <RefreshCw className="animate-spin" size={16} /> Generando...
-                        </>
-                    ) : (
-                        <>
-                          <Download size={16} /> 
-                          {isPdfReady ? 'DESCARGAR PDF' : 'Cargando...'}
-                        </>
-                    )}
-                </button>
+                {isPro ? (
+                  <button 
+                      onClick={generarPDF}
+                      disabled={!isPdfReady || isGenerating}
+                      className={`w-full border-2 border-slate-200 text-slate-600 font-bold text-center py-3 rounded-xl transition-colors flex items-center justify-center gap-2 text-sm 
+                        ${isPdfReady && !isGenerating ? 'hover:border-red-500 hover:text-red-600 hover:bg-red-50 cursor-pointer' : 'opacity-50 cursor-not-allowed'}`}
+                  >
+                      {isGenerating ? (
+                          <>
+                            <RefreshCw className="animate-spin" size={16} /> Generando...
+                          </>
+                      ) : (
+                          <>
+                            <Download size={16} /> 
+                            {isPdfReady ? 'DESCARGAR PDF' : 'Cargando...'}
+                          </>
+                      )}
+                  </button>
+                ) : (
+                  <Link 
+                    href="/planes"
+                    className="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-center py-3 rounded-xl transition-colors flex items-center justify-center gap-2 text-xs uppercase tracking-wider border border-slate-200"
+                  >
+                    <Lock size={14} className="text-amber-500" /> Desbloquear PDF con Plan PRO
+                  </Link>
+                )}
               </div>
 
-              {/* 🟢 TARJETA DERMOCHECK (VALOR GRATUITO ANTES DE LA VENTA) */}
+              {/* 🟢 TARJETA DERMOCHECK */}
               <a 
-                href="https://www.dermocheck.cl/#calculator-section" 
+                href="http://auxiliarpro.cl/dermocheck" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="block bg-slate-900 p-6 rounded-3xl border border-slate-800 shadow-sm group hover:ring-2 hover:ring-emerald-500 transition-all text-slate-300"
@@ -531,7 +621,7 @@ export default function GuiaDecreto405() {
                 </div>
               </a>
 
-              {/* 🚀 AQUÍ ESTÁ LA MAGIA DEL DRY: LLAMAMOS AL COMPONENTE */}
+              {/* 🚀 COMPONENTE DE VENTA DRY */}
               <BannerVenta colorTheme="emerald" />
 
             </div>

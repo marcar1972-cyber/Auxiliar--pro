@@ -1,6 +1,5 @@
 import DermoCheckClient from "./DermoCheckClient";
 
-// 🚀 CTO FIX: INYECCIÓN DE SEO TÉCNICO A LA VENA
 export const metadata = {
   title: "DermoCheck PRO: Calculadora de Vencimiento y Batch Code Dermocosmético",
   description: "Calcula online la fecha de caducidad de productos Eucerin, La Roche-Posay, Vichy, CeraVe, ISDIN y más utilizando el código de lote (Batch Code). Herramienta gratis para farmacias en Chile.",
@@ -24,6 +23,5 @@ export const metadata = {
 };
 
 export default function DermoCheckPage() {
-  // Simplemente renderizamos el componente interactivo
   return <DermoCheckClient />;
 }

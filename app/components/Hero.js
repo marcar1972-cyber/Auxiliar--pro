@@ -1,6 +1,6 @@
 'use client';
 import Link from "next/link";
-import { ArrowRight, Pill, Calculator, Gamepad2, ShieldCheck } from "lucide-react";
+import { ArrowRight, Pill, Calculator, Gamepad2, ShieldCheck, GraduationCap, Zap, Award } from "lucide-react";
 
 export default function Hero() {
   return (
@@ -23,25 +23,54 @@ export default function Hero() {
           Aprueba tu examen <span className="text-[#28a745]">SEREMI</span> <br className="hidden md:block" /> a la primera.
         </h1>
         
-        {/* Subtítulo - Inyección SEO de Decretos y MINSAL */}
-        <p className="text-lg md:text-2xl text-slate-500 mb-12 max-w-3xl mx-auto font-medium leading-relaxed">
-          Entrena con el único simulador técnico en Chile basado en los <strong className="text-[#003366]">Decretos 466, 404 y 405</strong>. 
-          Contenido oficial del <span className="text-[#003366] font-bold">Ministerio de Salud</span> para la certificación de Auxiliares de Farmacia.
-        </p>
-        
-        {/* Botones de Acción - Jerarquía Visual Fortalecida */}
-        <div className="flex flex-col items-center gap-6">
-          {/* Botón Principal: El imán de Clics */}
-          <Link 
-            href="/quiz" 
-            className="inline-flex items-center justify-center w-full sm:w-auto gap-3 bg-[#003366] text-white px-12 py-6 rounded-full font-black text-lg md:text-xl hover:bg-[#002244] transition-all shadow-[0_20px_40px_rgba(0,51,102,0.2)] hover:-translate-y-1 group"
-          >
-            <Gamepad2 size={24} className="text-[#28a745] group-hover:rotate-12 transition-transform" />
-            INICIAR DIAGNÓSTICO GRATIS <ArrowRight size={22} className="group-hover:translate-x-1 transition-transform" />
-          </Link>
+        {/* Subtítulo - Opción 2 con Inyección SEO de Decretos, MINSAL y Nuevas Modalidades */}
+        <div className="mb-12 max-w-3xl mx-auto">
+          <p className="text-lg md:text-2xl text-slate-500 font-medium leading-relaxed mb-6">
+            Entrena con el único simulador técnico en Chile basado en la normativa oficial del <span className="text-[#003366] font-bold">Ministerio de Salud</span> (<strong className="text-[#003366]">DS 466, 404 y 405</strong>).
+          </p>
 
-          {/* Accesos Secundarios: Utilidad de Mesón */}
-          <div className="flex flex-wrap justify-center gap-4 w-full">
+          <div className="bg-emerald-50/60 border border-emerald-100 rounded-3xl p-5 md:p-6 text-left max-w-2xl mx-auto shadow-sm">
+            <p className="text-xs font-black text-[#28a745] uppercase tracking-widest mb-3 text-center">
+              ✨ Nuevas Suscripciones Mensual y Anual
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs md:text-sm text-slate-700 font-medium">
+              <div className="flex items-start gap-2.5 bg-white p-3 rounded-2xl border border-slate-100 shadow-xs">
+                <Zap size={18} className="text-amber-500 shrink-0 mt-0.5" />
+                <span><strong className="text-[#003366]">Simulador Extra de Refuerzo:</strong> Para duplicar tu ritmo de ensayo con preguntas trampa SEREMI.</span>
+              </div>
+              <div className="flex items-start gap-2.5 bg-white p-3 rounded-2xl border border-slate-100 shadow-xs">
+                <Award size={18} className="text-[#28a745] shrink-0 mt-0.5" />
+                <span><strong className="text-[#003366]">Certificado de Participación:</strong> Valida tu entrenamiento teórico y progreso en la plataforma.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Botones de Acción Principales (Jerarquía Proporcional) */}
+        <div className="flex flex-col items-center gap-8">
+          
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
+            {/* Botón Principal 1: Acceso al Lobby del Campus PRO */}
+            <Link 
+              href="/quiz" 
+              className="inline-flex items-center justify-center w-full sm:w-auto gap-3 bg-[#28a745] text-white px-10 py-5 rounded-full font-black text-base md:text-lg hover:bg-[#218838] transition-all shadow-[0_15px_30px_rgba(40,167,69,0.3)] hover:-translate-y-1 group"
+            >
+              <GraduationCap size={22} className="group-hover:scale-110 transition-transform" />
+              INGRESAR A MI CAMPUS <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+
+            {/* Botón Principal 2: Diagnóstico Gratuito */}
+            <Link 
+              href="/quiz/basic/diagnostico" 
+              className="inline-flex items-center justify-center w-full sm:w-auto gap-3 bg-[#003366] text-white px-10 py-5 rounded-full font-black text-base md:text-lg hover:bg-[#002244] transition-all shadow-[0_15px_30px_rgba(0,51,102,0.2)] hover:-translate-y-1 group"
+            >
+              <Gamepad2 size={22} className="text-[#28a745] group-hover:rotate-12 transition-transform" />
+              INICIAR DIAGNÓSTICO GRATIS <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
+
+          {/* Accesos Secundarios: Únicamente Herramientas de Mesón */}
+          <div className="flex flex-wrap justify-center gap-4 w-full pt-2">
             <Link 
               href="/vademecum" 
               className="inline-flex items-center gap-2 bg-white text-[#003366] px-8 py-4 rounded-2xl font-bold text-sm border border-slate-200 hover:border-[#28a745] hover:text-[#28a745] transition-all shadow-sm group"
@@ -65,6 +94,7 @@ export default function Hero() {
               </span>
             </Link>
           </div>
+
         </div>
 
       </div>

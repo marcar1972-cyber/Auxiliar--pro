@@ -1,8 +1,11 @@
-// app/quizData/pro-eval-global.js
+// ============================================================================
+// ARCHIVO: app/quizData/pro-eval-global.js
+// DESCRIPCIÓN: Examen Global SEREMI I (40 preguntas, 60 min, 70% aprobación)
+// ============================================================================
 
 export const proEvalGlobal = {
   id: "pro-eval-global",
-  title: "EXAMEN GLOBAL SEREMI: Certificación AuxiliarPro",
+  title: "EXAMEN GLOBAL SEREMI I: Certificación AuxiliarPro",
   description: "Simulador Oficial de 40 preguntas. Abarca Legislación, Farmacotecnia, Almacenamiento y Cálculos. Lee atentamente, abundan las preguntas 'cazabobos'.",
   timeLimit: 60, // 60 minutos
   passingScore: 70, // 70% de aprobación (28 correctas)
@@ -93,7 +96,7 @@ export const proEvalGlobal = {
         "D) Microgramos (mcg)."
       ],
       correctAnswer: 2, // C
-      explanation: "Punto crítico de seguridad: La insulina jamás se dosifica en miligramos directos. Su formulación base (ej: 0,5 UI/kg/día) se calcula y administra estrictamente en Unidades Internacionales (UI)."
+      explanation: "Punto crítico de seguridad: La insulina jamás se dosifica en miligramos directos. Su formulación base (ej: 0,5 UI/kg/día) se calcula y administra strictly en Unidades Internacionales (UI)."
     },
     {
       question: "9. (CÁLCULO) Un médico prescribe: 'Administrar 10 gotas cada 8 horas por 7 días'. Si sabemos que referencialmente 1 ml equivale a 20 gotas, y cada frasco trae 20 ml. Indique la alternativa CORRECTA sobre cuántos frascos necesita comprar el paciente para terminar su tratamiento:",
@@ -133,7 +136,7 @@ export const proEvalGlobal = {
       options: [
         "A) Se pueden vender online si el paciente escanea y adjunta la receta cheque a color.",
         "B) Se pueden vender si el despacho a domicilio se hace a través de transporte blindado.",
-        "C) Está estrictamente prohibido el expendio de medicamentos sujetos a control de Receta Cheque a través de medios electrónicos.",
+        "C) Está strictly prohibido el expendio de medicamentos sujetos a control de Receta Cheque a través de medios electrónicos.",
         "D) Solo se autoriza si el pago se realiza con tarjeta de crédito a nombre del paciente titular."
       ],
       correctAnswer: 2, // C

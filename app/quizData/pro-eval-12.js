@@ -8,15 +8,15 @@ export const proEval12 = {
   passingScore: 80,
   questions: [
     {
-      question: "1. Un paciente devuelve una caja de insulina que estuvo 2 horas sobre el mostrador de su cocina por olvido. ¿Qué acción técnica corresponde realizar?",
+      question: "1. Un paciente acude a la farmacia a consultar por su insulina, la cual estuvo olvidada durante 2 horas sobre el mostrador de su cocina a temperatura ambiente (22 °C). ¿Qué orientación técnica corresponde realizar por parte del personal de farmacia?",
       options: [
         "A) Decirle que la guarde en el refrigerador y la use normalmente.",
-        "B) Trasladar el producto al área de Cuarentena e informar al Director Técnico para que evalúe el tiempo de excursión y la estabilidad según el fabricante.",
-        "C) Guardarla en el congelador 10 minutos para recuperar el frío y volver a ponerla a la venta.",
-        "D) Decirle que solo la use si el líquido cambió de color."
+        "B) Educar al paciente explicando que por normativa los medicamentos no tienen devolución una vez retirados, y consultar la ficha del fabricante o al Químico Farmacéutico para orientarlo sobre si la excursión térmica afecta la estabilidad de su uso personal.",
+        "C) Recibir el producto, ingresarlo a la zona de Cuarentena de la farmacia y emitir una nota de crédito para devolverlo al stock.",
+        "D) Indicarle que guarde la insulina en el congelador durante 10 minutos para recuperar el frío perdido antes de usarla."
       ],
       correctAnswer: 1, // B
-      explanation: "Según la Norma Técnica 208, cualquier producto que haya estado fuera de rango (+2°C a +8°C) sufre una 'excursión de temperatura'. Debe ser aislado inmediatamente en cuarentena (refrigerada) hasta que el Químico Farmacéutico evalúe, con datos del fabricante, si la estabilidad y eficacia se han comprometido."
+      explanation: "Por normativa sanitaria (D.S. 466), un medicamento que ha salido de la farmacia pierde su trazabilidad y no puede ser devuelto ni reingresado a la cadena de custodia del establecimiento. La labor del personal es educar al usuario sobre esta prohibición y, en el plano de la atención farmacéutica, evaluar la ficha técnica del fabricante para asesorarlo sobre si la excursión térmica compromete la estabilidad del producto para su uso individual."
     },
     {
       question: "2. Según la normativa técnica, ¿cuál es el rango de temperatura estricto para productos en refrigeración?",

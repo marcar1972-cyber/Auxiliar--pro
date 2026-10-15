@@ -12,7 +12,7 @@ import BannerVenta from "../components/BannerVenta";
 
 export default function DermoCheckClient() {
   const [code, setCode] = useState("");
-  const [brand, setBrand] = useState("Eucerin");
+  const [brand, setBrand] = useState("");
   const [isException, setIsException] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
@@ -107,15 +107,13 @@ export default function DermoCheckClient() {
 
             <div className="p-8 md:p-12 space-y-8">
               <div>
-                <label className="text-sm font-black text-slate-700 bg-slate-100 py-1.5 px-4 rounded-lg inline-block shadow-sm border border-slate-200 uppercase tracking-wider mb-4">
-                  1. Selecciona Marca Dermocosmética
-                </label>
                 <div className="relative group">
                   <select 
                     value={brand}
                     onChange={(e) => setBrand(e.target.value)}
                     className="w-full bg-slate-50 border-2 border-slate-200 pr-12 p-5 rounded-2xl text-lg text-slate-900 font-bold group-hover:border-emerald-500 focus:border-emerald-500 outline-none transition-all appearance-none cursor-pointer shadow-sm"
                   >
+                    <option value="" disabled>Selecciona Marca Dermocosmética</option>
                     {brands.map(b => <option key={b} value={b}>{b}</option>)}
                   </select>
                   <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none group-hover:text-emerald-500 transition-colors" size={24} />

@@ -1,446 +1,306 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { rellenarCertificado, type DatosCertificado } from "../../lib/rellenarCertificado";
-import { guardarSolicitud } from "../../lib/guardarSolicitud";
-import EncabezadoFormulario from "../../components/EncabezadoFormulario";
-import DocumentosTramite from "../../components/DocumentosTramite";
-import FooterFormulario from "../../components/FooterFormulario";
+import { useState } from 'react';
+import Link from 'next/link';
+import { 
+  FileText, Download, CheckCircle2, AlertTriangle, 
+  ChevronRight, ChevronLeft, Building2, 
+  Calendar, UserCheck, ShieldCheck, Sparkles
+} from 'lucide-react';
 
-// Datos por defecto: actividades prellenadas según Manual AuxiliarPro
-const DATOS_INICIALES: DatosCertificado = {
-  nombrePostulante: "",
-  rutPostulante: "",
-  nombreEstablecimiento: "",
-  direccionEstablecimiento: "",
-  comunaEstablecimiento: "",
-  telefonoEstablecimiento: "",
-  duracionPeriodo: "",
-  fechaInicio: "",
-  fechaTermino: "",
-  vigente: false,
-  actividad1:
-    "Recepción de productos farmacéuticos y almacenamiento ordenado en estanterías, asegurando el orden y limpieza (asepsia) del lugar de trabajo.",
-  actividad2:
-    "Revisión periódica de fechas de vencimiento (control de stock), retiro de mermas y reposición de productos en las áreas de dispensación.",
-  actividad3:
-    "Lectura e interpretación de recetas médicas simples y dispensación de medicamentos de venta directa, informando al paciente sobre su uso adecuado.",
-  actividad4:
-    "Control y registro diario de las temperaturas ambientales y del refrigerador para asegurar la conservación adecuada de los medicamentos.",
-  actividad5:
-    "Registro del movimiento diario de fármacos e insumos, y colaboración en la toma de inventarios físicos.",
-  nombreQF: "",
-  rutQF: "",
-  emailQF: "",
-  ciudadEmision: "",
-  fechaEmision: "",
-};
+// Importación usando ruta relativa para app/components/PlanesSuscripcion.js
+import PlanesSuscripcion from '../components/PlanesSuscripcion';
 
 export default function FormularioPage() {
-  const [datos, setDatos] = useState<DatosCertificado>(DATOS_INICIALES);
-  const [cargando, setCargando] = useState(false);
-  const [pdfGenerado, setPdfGenerado] = useState(false);
-  const [guardado, setGuardado] = useState<boolean | null>(null);
+  const [currentStep, setCurrentStep] = useState(1);
 
-  const cambiar = (campo: keyof DatosCertificado, valor: string | boolean) => {
-    setDatos((prev) => ({ ...prev, [campo]: valor }));
+  const activitiesList = [
+    {
+      titulo: "1. Bodegaje y Reposición",
+      desc: "Recepción de productos farmacéuticos y almacenamiento ordenado en estanterías, asegurando el orden y limpieza (asepsia) del lugar de trabajo."
+    },
+    {
+      titulo: "2. Control de Vencimientos y Reposición",
+      desc: "Revisión periódica de fechas de vencimiento (control de stock), retiro de mermas y reposición de productos en las áreas de dispensación."
+    },
+    {
+      titulo: "3. Dispensación Asistida de Medicamentos",
+      desc: "Lectura e interpretación de recetas médicas simples y dispensación de medicamentos de venta directa, informando al paciente sobre su uso adecuado."
+    },
+    {
+      titulo: "4. Cadena de Frío y Temperatura",
+      desc: "Control y registro diario de las temperaturas ambientales y del refrigerador para asegurar la conservación adecuada de los medicamentos."
+    },
+    {
+      titulo: "5. Colaboración Administrativa",
+      desc: "Registro del movimiento diario de fármacos e insumos, y colaboración en la toma de inventarios físicos."
+    }
+  ];
+
+  const handleNext = () => {
+    if (currentStep < 5) setCurrentStep(prev => prev + 1);
   };
 
-  const validarRut = (rut: string): boolean => {
-    const limpio = rut.replace(/[^0-9kK]/g, "").toUpperCase();
-    if (limpio.length < 8 || limpio.length > 9) return false;
-    const cuerpo = limpio.slice(0, -1);
-    const dv = limpio.slice(-1);
-    if (!/^\d+$/.test(cuerpo)) return false;
-    let suma = 0;
-    let mult = 2;
-    for (let i = cuerpo.length - 1; i >= 0; i--) {
-      suma += parseInt(cuerpo[i], 10) * mult;
-      mult = mult === 7 ? 2 : mult + 1;
-    }
-    const residuo = 11 - (suma % 11);
-    let dvEsperado: string;
-    if (residuo === 11) dvEsperado = "0";
-    else if (residuo === 10) dvEsperado = "K";
-    else dvEsperado = residuo.toString();
-    return dv === dvEsperado;
+  const handleBack = () => {
+    if (currentStep > 1) setCurrentStep(prev => prev - 1);
   };
 
-  const generarPDF = async () => {
-    if (!datos.nombrePostulante || !datos.rutPostulante) {
-      alert("Completa el nombre y RUT del postulante.");
-      return;
-    }
-    if (!validarRut(datos.rutPostulante)) {
-      alert("El RUT del postulante no es válido.");
-      return;
-    }
-
-    setCargando(true);
-    setPdfGenerado(false);
-    setGuardado(null);
-
-    try {
-      const pdfBytes = await rellenarCertificado(datos);
-
-      const blob = new Blob([pdfBytes as BlobPart], { type: "application/pdf" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `Certificado_Idoneidad_${datos.nombrePostulante.replace(/\s+/g, "_")}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-
-      // Guardar la solicitud en Firebase (no bloquea el PDF si falla)
-      const resultado = await guardarSolicitud(datos);
-      setGuardado(resultado.ok);
-
-      setPdfGenerado(true);
-    } catch (error) {
-      console.error("Error al generar PDF:", error);
-      alert("Error al generar el PDF. Verifica que el archivo oficial esté en public/templates/certificado-oficial.pdf");
-    } finally {
-      setCargando(false);
-    }
+  const handleStepClick = (step: number) => {
+    setCurrentStep(step);
   };
 
-  // Limpia el formulario y vuelve arriba para registrar a otro alumno
-  const crearOtroFormulario = () => {
-    setDatos(DATOS_INICIALES);
-    setPdfGenerado(false);
-    setGuardado(null);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  const renderStep = () => {
+    switch (currentStep) {
+      case 1:
+        return (
+          <div className="space-y-6 animate-in fade-in duration-300">
+            <div className="flex items-center gap-3 text-[#003366]">
+              <div className="p-3 bg-blue-50 rounded-xl text-[#003366]">
+                <Building2 size={28} />
+              </div>
+              <div>
+                <span className="text-[10px] font-black uppercase text-[#28a745] tracking-widest block">Paso 1 de 5</span>
+                <h2 className="text-xl font-black text-[#003366]">Membrete y Datos del Establecimiento</h2>
+              </div>
+            </div>
+            
+            <p className="text-sm text-slate-600 leading-relaxed">
+              El certificado debe emitirse formalmente por la Farmacia donde realizaste tus funciones o práctica supervisada.
+            </p>
+
+            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3">
+              <h3 className="font-bold text-[#003366] text-sm flex items-center gap-2">
+                <CheckCircle2 size={16} className="text-[#28a745]" /> Datos indispensables en el encabezado:
+              </h3>
+              <ul className="text-xs text-slate-600 space-y-2 list-disc pl-5 font-medium">
+                <li><strong>Razón Social y Nombre Fantasía:</strong> Nombre completo del establecimiento (Ej: <em>Farmacia Cruz Verde - Sucursal Providencia</em>).</li>
+                <li><strong>Dirección exacta y Comuna:</strong> Coincidente con la resolución de autorización sanitaria de la farmacia.</li>
+                <li><strong>Teléfono o Email de contacto:</strong> La SEREMI realiza fiscalizaciones para verificar la autenticidad del documento.</li>
+              </ul>
+            </div>
+
+            <div className="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl">
+              <p className="text-xs text-amber-900 font-medium">
+                💡 <strong>Tip SEREMI:</strong> Si la farmacia cuenta con hoja membretada oficial o logo impreso, es preferible imprimir el certificado directamente sobre este papel.
+              </p>
+            </div>
+          </div>
+        );
+
+      case 2:
+        return (
+          <div className="space-y-6 animate-in fade-in duration-300">
+            <div className="flex items-center gap-3 text-[#003366]">
+              <div className="p-3 bg-blue-50 rounded-xl text-[#003366]">
+                <Calendar size={28} />
+              </div>
+              <div>
+                <span className="text-[10px] font-black uppercase text-[#28a745] tracking-widest block">Paso 2 de 5</span>
+                <h2 className="text-xl font-black text-[#003366]">Periodo de Desempeño Laboral</h2>
+              </div>
+            </div>
+
+            <p className="text-sm text-slate-600 leading-relaxed">
+              La SEREMI exige acreditar la experiencia laboral continua o práctica en el establecimiento.
+            </p>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                <span className="text-[10px] font-black text-[#28a745] bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full inline-block mb-2 uppercase">Requisito de Tiempo</span>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Para el examen directo de idoneidad, se debe acreditar el periodo mínimo exigido por el Reglamento de Farmacias (DS 466/1984).
+                </p>
+              </div>
+              <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                <span className="text-[10px] font-black text-[#003366] bg-blue-50 border border-blue-200 px-3 py-1 rounded-full inline-block mb-2 uppercase">Redacción de Fechas</span>
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  Indicar la <strong>Fecha de Inicio</strong> y <strong>Fecha de Término</strong> exacta (o colocar <em>"a la actual fecha"</em> si aún trabajas allí).
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-red-50 border border-red-200 p-4 rounded-xl">
+              <h4 className="text-xs font-bold text-red-900 flex items-center gap-2 mb-1">
+                <AlertTriangle size={16} className="text-red-600" /> Criterio de rechazo SEREMI:
+              </h4>
+              <p className="text-xs text-red-800">
+                Las fechas declaradas en el Certificado de Idoneidad <strong>deben coincidir de forma exacta con tu Contrato de Trabajo</strong> o Finiquito que adjuntarás a la plataforma.
+              </p>
+            </div>
+          </div>
+        );
+
+      case 3:
+        return (
+          <div className="space-y-6 animate-in fade-in duration-300">
+            <div className="flex items-center gap-3 text-[#003366]">
+              <div className="p-3 bg-blue-50 rounded-xl text-[#003366]">
+                <Sparkles size={28} />
+              </div>
+              <div>
+                <span className="text-[10px] font-black uppercase text-[#28a745] tracking-widest block">Paso 3 de 5</span>
+                <h2 className="text-xl font-black text-[#003366]">Actividades de Apoyo (Art. 28, DS 466)</h2>
+              </div>
+            </div>
+
+            <p className="text-sm text-slate-600 leading-relaxed">
+              El certificado no puede limitarse a decir "cumplió funciones". La fiscalización exige detallar las tareas de apoyo técnico realizadas:
+            </p>
+
+            <div className="space-y-3">
+              {activitiesList.map((act, index) => (
+                <div key={index} className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex gap-3 items-start">
+                  <CheckCircle2 size={18} className="text-[#28a745] shrink-0 mt-0.5" />
+                  <div>
+                    <h4 className="text-xs font-bold text-[#003366]">{act.titulo}</h4>
+                    <p className="text-xs text-slate-600 mt-1 leading-relaxed">{act.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+
+      case 4:
+        return (
+          <div className="space-y-6 animate-in fade-in duration-300">
+            <div className="flex items-center gap-3 text-[#003366]">
+              <div className="p-3 bg-blue-50 rounded-xl text-[#003366]">
+                <UserCheck size={28} />
+              </div>
+              <div>
+                <span className="text-[10px] font-black uppercase text-[#28a745] tracking-widest block">Paso 4 de 5</span>
+                <h2 className="text-xl font-black text-[#003366]">Firma del Director Técnico (QF)</h2>
+              </div>
+            </div>
+
+            <p className="text-sm text-slate-600 leading-relaxed">
+              El único profesional facultado por ley para respaldar tu idoneidad práctica es el <strong>Químico Farmacéutico Director Técnico</strong> del establecimiento.
+            </p>
+
+            <div className="bg-[#002244] text-white p-6 rounded-2xl space-y-3 shadow-md">
+              <h3 className="font-bold text-[#28a745] text-sm flex items-center gap-2">
+                <ShieldCheck size={18} /> Requisitos para la Firma e Identificación:
+              </h3>
+              <ul className="text-xs text-blue-100 space-y-2 list-disc pl-5">
+                <li>Nombre completo del Químico Farmacéutico y Cédula de Identidad (RUT).</li>
+                <li>Título profesional acreditado (Ej: <em>Químico Farmacéutico - Director Técnico</em>).</li>
+                <li>Firma manuscrita del profesional.</li>
+                <li><strong>Timbre de la Farmacia o del QF:</strong> Requisito obligatorio para validación de la SEREMI.</li>
+              </ul>
+            </div>
+          </div>
+        );
+
+      case 5:
+        return (
+          <div className="text-center space-y-6 animate-in zoom-in-95 duration-300">
+            <div className="w-16 h-16 bg-emerald-50 text-[#28a745] border border-emerald-200 rounded-full flex items-center justify-center mx-auto shadow-sm">
+              <FileText size={32} />
+            </div>
+
+            <div>
+              <span className="text-[10px] font-black uppercase text-[#28a745] tracking-widest block">Paso 5 de 5</span>
+              <h2 className="text-2xl font-black text-[#003366]">¡Instrucciones Completadas!</h2>
+              <p className="text-sm text-slate-600 mt-2 max-w-md mx-auto">
+                Ya conoces la estructura y los requisitos legales. Descarga la plantilla oficial en formato PDF para editarla o imprimirla para la firma de tu Químico Farmacéutico.
+              </p>
+            </div>
+
+            <div className="bg-blue-50 border border-blue-200 p-6 rounded-2xl max-w-lg mx-auto space-y-4 shadow-sm">
+              <h3 className="font-bold text-[#003366] text-sm">Descarga de Material Oficial</h3>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <a
+                  href="/templates/certificado-oficial.pdf"
+                  download
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-[#28a745] hover:bg-[#218838] text-white font-black text-sm rounded-xl transition-all shadow-md uppercase tracking-wider"
+                >
+                  <Download size={18} /> Descargar Plantilla Oficial (PDF)
+                </a>
+              </div>
+              <p className="text-[11px] text-slate-500 font-medium">
+                Imprime este archivo, complétalo con tu Químico Farmacéutico y solicítale su firma y timbre oficial.
+              </p>
+            </div>
+          </div>
+        );
+
+      default:
+        return null;
+    }
   };
 
   return (
-    <main className="min-h-screen bg-gray-50">
-      {/* Encabezado motivacional */}
-      <EncabezadoFormulario />
+    <main className="min-h-screen bg-slate-50 py-12 px-4 font-sans">
+      <div className="max-w-3xl mx-auto mb-8 text-center">
+        <span className="inline-block bg-blue-100 text-[#003366] text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-wider mb-3">
+          Guía Paso a Paso · Trámite SEREMI
+        </span>
+        <h1 className="text-3xl md:text-4xl font-black text-[#003366] tracking-tight">
+          Cómo Preparar tu Certificado de Idoneidad
+        </h1>
+        <p className="text-slate-600 text-sm mt-2 max-w-xl mx-auto">
+          Conoce los requisitos legales exigidos por la SEREMI de Salud según el Decreto Supremo 466/1984 y descarga la plantilla oficial.
+        </p>
+      </div>
 
-      <div className="max-w-2xl mx-auto px-4 py-10">
-        <div className="space-y-6">
-          {/* SECCIÓN 1 */}
-          <section className="bg-white rounded-xl shadow p-6">
-            <h2 className="text-lg font-bold text-blue-700 mb-4">1. Datos del Postulante</h2>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Nombre Completo *</label>
-                <input
-                  type="text"
-                  required
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
-                  value={datos.nombrePostulante}
-                  onChange={(e) => cambiar("nombrePostulante", e.target.value)}
-                  placeholder="Ej: María Fernanda González Pérez"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Cédula de Identidad (RUT) *</label>
-                <input
-                  type="text"
-                  required
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
-                  value={datos.rutPostulante}
-                  onChange={(e) => cambiar("rutPostulante", e.target.value)}
-                  placeholder="12.345.678-9"
-                />
-              </div>
-            </div>
-          </section>
-
-          {/* SECCIÓN 2 */}
-          <section className="bg-white rounded-xl shadow p-6">
-            <h2 className="text-lg font-bold text-blue-700 mb-4">2. Establecimiento Farmacéutico</h2>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Nombre del Establecimiento *</label>
-                <input
-                  type="text"
-                  required
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
-                  value={datos.nombreEstablecimiento}
-                  onChange={(e) => cambiar("nombreEstablecimiento", e.target.value)}
-                  placeholder="Nombre de tu farmacia"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Dirección (Calle) *</label>
-                <input
-                  type="text"
-                  required
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
-                  value={datos.direccionEstablecimiento}
-                  onChange={(e) => cambiar("direccionEstablecimiento", e.target.value)}
-                  placeholder="Ej: Av. Libertador Bernardo O'Higgins 1234"
-                />
-              </div>
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Comuna *</label>
-                  <input
-                    type="text"
-                    required
-                    className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
-                    value={datos.comunaEstablecimiento}
-                    onChange={(e) => cambiar("comunaEstablecimiento", e.target.value)}
-                    placeholder="Ej: Santiago"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
-                  <input
-                    type="tel"
-                    className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
-                    value={datos.telefonoEstablecimiento}
-                    onChange={(e) => cambiar("telefonoEstablecimiento", e.target.value)}
-                    placeholder="+56 2 2345 6789"
-                  />
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* SECCIÓN 3 */}
-          <section className="bg-white rounded-xl shadow p-6">
-            <h2 className="text-lg font-bold text-blue-700 mb-4">3. Período de Desempeño</h2>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Duración del período *</label>
-                <input
-                  type="text"
-                  required
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
-                  value={datos.duracionPeriodo}
-                  onChange={(e) => cambiar("duracionPeriodo", e.target.value)}
-                  placeholder="Ej: 1 año y 6 meses"
-                />
-              </div>
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Fecha de Inicio *</label>
-                  <input
-                    type="date"
-                    required
-                    className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
-                    value={datos.fechaInicio}
-                    onChange={(e) => cambiar("fechaInicio", e.target.value)}
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Fecha de Término</label>
-                  <input
-                    type="date"
-                    className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none disabled:bg-gray-100"
-                    value={datos.fechaTermino}
-                    onChange={(e) => cambiar("fechaTermino", e.target.value)}
-                    disabled={datos.vigente}
-                  />
-                  <label className="flex items-center gap-2 mt-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={datos.vigente}
-                      onChange={(e) => cambiar("vigente", e.target.checked)}
-                      className="h-4 w-4 text-blue-600 rounded"
-                    />
-                    <span className="text-sm text-gray-600">Contrato vigente ("la actual fecha")</span>
-                  </label>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* SECCIÓN 4 */}
-          <section className="bg-white rounded-xl shadow p-6">
-            <h2 className="text-lg font-bold text-blue-700 mb-4">4. Actividades de Apoyo</h2>
-            <p className="text-sm text-gray-600 mb-4">
-              Actividades prellenadas según el Manual AuxiliarPro. Puedes editarlas si necesitas ajustarlas.
-            </p>
-            <div className="space-y-3">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Actividad 1 - Recepción y Almacenamiento *
-                </label>
-                <textarea
-                  rows={3}
-                  required
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none text-sm"
-                  value={datos.actividad1}
-                  onChange={(e) => cambiar("actividad1", e.target.value)}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Actividad 2 - Control de Vencimientos y Reposición *
-                </label>
-                <textarea
-                  rows={3}
-                  required
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none text-sm"
-                  value={datos.actividad2}
-                  onChange={(e) => cambiar("actividad2", e.target.value)}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Actividad 3 - Dispensación de Medicamentos *
-                </label>
-                <textarea
-                  rows={3}
-                  required
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none text-sm"
-                  value={datos.actividad3}
-                  onChange={(e) => cambiar("actividad3", e.target.value)}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Actividad 4 - Cadena de Frío y Temperatura
-                </label>
-                <textarea
-                  rows={3}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none text-sm"
-                  value={datos.actividad4}
-                  onChange={(e) => cambiar("actividad4", e.target.value)}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Actividad 5 - Colaboración Administrativa
-                </label>
-                <textarea
-                  rows={3}
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none text-sm"
-                  value={datos.actividad5}
-                  onChange={(e) => cambiar("actividad5", e.target.value)}
-                />
-              </div>
-            </div>
-          </section>
-
-          {/* SECCIÓN 5 */}
-          <section className="bg-white rounded-xl shadow p-6">
-            <h2 className="text-lg font-bold text-emerald-700 mb-4">5. Químico Farmacéutico / Director Técnico</h2>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Nombres y Apellidos *</label>
-                <input
-                  type="text"
-                  required
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-emerald-500 outline-none"
-                  value={datos.nombreQF}
-                  onChange={(e) => cambiar("nombreQF", e.target.value)}
-                  placeholder="Ej: Juan Andrés Morales Rojas"
-                />
-              </div>
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Cédula de Identidad *</label>
-                  <input
-                    type="text"
-                    required
-                    className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-emerald-500 outline-none"
-                    value={datos.rutQF}
-                    onChange={(e) => cambiar("rutQF", e.target.value)}
-                    placeholder="12.345.678-9"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">E-mail *</label>
-                  <input
-                    type="email"
-                    required
-                    className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-emerald-500 outline-none"
-                    value={datos.emailQF}
-                    onChange={(e) => cambiar("emailQF", e.target.value)}
-                    placeholder="director@farmacia.cl"
-                  />
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* SECCIÓN 6 */}
-          <section className="bg-white rounded-xl shadow p-6">
-            <h2 className="text-lg font-bold text-blue-700 mb-4">6. Ciudad y Fecha de Emisión</h2>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Ciudad *</label>
-                <input
-                  type="text"
-                  required
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
-                  value={datos.ciudadEmision}
-                  onChange={(e) => cambiar("ciudadEmision", e.target.value)}
-                  placeholder="Ej: Santiago"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Fecha de Emisión *</label>
-                <input
-                  type="date"
-                  required
-                  className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
-                  value={datos.fechaEmision}
-                  onChange={(e) => cambiar("fechaEmision", e.target.value)}
-                />
-              </div>
-            </div>
-          </section>
-
-          {/* Aviso de éxito + botón crear otro */}
-          {pdfGenerado && (
-            <div className="bg-emerald-50 border-2 border-emerald-300 rounded-xl p-6 text-center">
-              <div className="text-5xl mb-3">✅</div>
-              <h2 className="text-xl font-bold text-emerald-800 mb-2">¡Tu certificado se descargó!</h2>
-              <p className="text-emerald-700 text-sm mb-3">
-                Revisa el PDF, imprímelo y llévalo firmado por tu Químico Farmacéutico
-                Director Técnico. Tus datos siguen visibles arriba por si necesitas
-                corregir algo y volver a generar.
-              </p>
-              {guardado === true && (
-                <p className="text-emerald-700 text-sm font-semibold mb-4">
-                  ☁️ Tus datos quedaron guardados en AuxiliarPro para seguimiento.
-                </p>
-              )}
-              {guardado === false && (
-                <p className="text-amber-600 text-sm font-semibold mb-4">
-                  ⚠️ No pudimos guardar tus datos en línea, pero tu PDF se descargó correctamente.
-                </p>
-              )}
-              <button
-                onClick={crearOtroFormulario}
-                className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-8 rounded-lg transition shadow-md"
-              >
-                ➕ Crear otro formulario
-              </button>
-            </div>
-          )}
-
-          {/* Botón principal */}
+      <div className="bg-white rounded-[2rem] border border-slate-200 shadow-sm p-6 md:p-8 max-w-3xl mx-auto mb-16">
+        {/* BARRA DE NAVEGACIÓN SUPERIOR INTEGRADA */}
+        <div className="flex items-center justify-between gap-2 mb-8 bg-slate-50 p-3 rounded-2xl border border-slate-100">
           <button
-            onClick={generarPDF}
-            disabled={cargando}
-            className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold py-4 px-6 rounded-lg text-lg transition shadow-lg"
+            onClick={handleBack}
+            disabled={currentStep === 1}
+            className={`flex items-center gap-1 px-3 py-1.5 rounded-xl font-bold text-xs uppercase transition-all ${
+              currentStep === 1
+                ? 'opacity-30 cursor-not-allowed text-slate-400'
+                : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200 shadow-sm cursor-pointer'
+            }`}
           >
-            {cargando ? "⏳ Generando..." : "📥 Generar Certificado de Idoneidad (PDF)"}
+            <ChevronLeft size={16} /> <span className="hidden sm:inline">Anterior</span>
           </button>
 
-          {/* Nota de confidencialidad (Ley 19.628) */}
-          <p className="text-xs text-gray-400 text-center">
-            🔒 Tus datos son confidenciales: se utilizan únicamente para generar tu
-            certificado y se tratan conforme a la Ley N° 19.628 sobre Protección de
-            la Vida Privada.
-          </p>
+          <div className="flex items-center gap-1 sm:gap-3">
+            {[1, 2, 3, 4, 5].map((step) => (
+              <button
+                key={step}
+                onClick={() => handleStepClick(step)}
+                title={`Ir al paso ${step}`}
+                className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-black transition-all cursor-pointer ${
+                  step === currentStep
+                    ? 'bg-[#003366] text-white ring-4 ring-blue-100 scale-105'
+                    : step < currentStep
+                    ? 'bg-emerald-100 text-[#28a745] hover:bg-emerald-200'
+                    : 'bg-white text-slate-400 border border-slate-200 hover:bg-slate-100'
+                }`}
+              >
+                {step < currentStep ? <CheckCircle2 size={16} /> : step}
+              </button>
+            ))}
+          </div>
+
+          <button
+            onClick={handleNext}
+            disabled={currentStep === 5}
+            className={`flex items-center gap-1 px-3 py-1.5 rounded-xl font-bold text-xs uppercase transition-all ${
+              currentStep === 5
+                ? 'opacity-30 cursor-not-allowed text-slate-400'
+                : 'bg-[#28a745] text-white hover:bg-[#218838] shadow-sm cursor-pointer'
+            }`}
+          >
+            <span className="hidden sm:inline">Siguiente</span> <ChevronRight size={16} />
+          </button>
+        </div>
+
+        {/* CONTENIDO DEL PASO */}
+        <div className="min-h-[280px] mb-4">
+          {renderStep()}
         </div>
       </div>
 
-      {/* Listado de documentos requeridos (debajo del formulario, antes del footer) */}
-      <DocumentosTramite />
-
-      {/* Footer con link oficial y tips */}
-      <FooterFormulario />
+      {/* PLANES DE SUSCRIPCIÓN */}
+      <section className="max-w-5xl mx-auto mb-12">
+        <PlanesSuscripcion />
+      </section>
     </main>
   );
 }

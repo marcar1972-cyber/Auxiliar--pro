@@ -1,13 +1,6 @@
 // app/quizData/index.js
 
-// Importaciones del Nivel Básico (Gratis) - Reducido a 3 niveles
-// Importamos sin llaves (export default)
-import basicEval1 from './basic-eval-1.js';
-import basicEval2 from './basic-eval-2.js';
-import basicEval3 from './basic-eval-3.js';
-
-// Importaciones del Nivel PRO - Escalado a 15 evaluaciones + Global SEREMI
-// Importamos con llaves porque este archivo usa 'export const'
+// Importaciones del Nivel PRO
 import { proEval1 } from './pro-eval-1.js';
 import { proEval2 } from './pro-eval-2.js';
 import { proEval3 } from './pro-eval-3.js';
@@ -24,13 +17,15 @@ import { proEval13 } from './pro-eval-13.js';
 import { proEval14 } from './pro-eval-14.js';
 import { proEval15 } from './pro-eval-15.js';
 import { proEvalGlobal } from './pro-eval-global.js';
+import { proEvalGlobal01 } from './pro-eval-global-01.js';
 
-// Mantenemos los nombres de las constantes exportadas (LEVELS y PRO_LEVELS)
-// ESTRATEGIA CTO: .filter(Boolean) elimina cualquier 'undefined' evitando caídas.
+// 🚀 CTO FIX: El diagnóstico tiene su propia página (page.tsx).
+// Si las preguntas están dentro de ese page.tsx, no necesitamos importarlo aquí.
+// (Solo descomenta la línea de abajo si tu page.tsx importa los datos desde un archivo .js aquí)
+// import diagnosticoData from './nombre-real-de-tu-archivo.js'; 
+
 export const LEVELS = [
-  basicEval1,
-  basicEval2,
-  basicEval3
+  // diagnosticoData 
 ].filter(Boolean);
 
 export const PRO_LEVELS = [
@@ -49,5 +44,6 @@ export const PRO_LEVELS = [
   proEval13,
   proEval14,
   proEval15,
-  proEvalGlobal
+  proEvalGlobal,
+  proEvalGlobal01
 ].filter(Boolean);

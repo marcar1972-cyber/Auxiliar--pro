@@ -23,21 +23,25 @@ export default function BannerVenta() {
             </h3>
             
             <p className="text-slate-600 text-sm md:text-base leading-relaxed mb-4">
-              Toma el control de tu certificación SEREMI. Accede al arsenal completo de AuxiliarPro y obtén <strong className="text-[#28a745]">preparación total</strong> para el mesón.
+              Toma el control de tu certificación SEREMI. Accede al arsenal completo de AuxiliarPro con el <strong className="text-[#28a745]">Plan Mensual (Mejor Valorado)</strong>:
             </p>
             
             <ul className="space-y-3 mb-6 ml-1 text-sm md:text-base">
               <li className="flex items-start gap-3 text-slate-600">
                 <CheckCircle size={18} className="shrink-0 mt-0.5 text-[#28a745]" />
-                <span className="text-left"><strong className="text-[#003366]">Simulador Inicial Completo:</strong> Niveles 1 al 3.</span>
+                <span className="text-left"><strong className="text-[#003366]">Campus Virtual PRO completo:</strong> 4 Módulos de estudio.</span>
               </li>
               <li className="flex items-start gap-3 text-slate-600">
                 <CheckCircle size={18} className="shrink-0 mt-0.5 text-[#28a745]" />
-                <span className="text-left"><strong className="text-[#003366]">Simulador Avanzado:</strong> Preguntas complejas tipo SEREMI.</span>
+                <span className="text-left"><strong className="text-[#003366]">2 Exámenes Globales TIPO SEREMI:</strong> Doble entrenamiento real.</span>
               </li>
               <li className="flex items-start gap-3 text-slate-600">
                 <CheckCircle size={18} className="shrink-0 mt-0.5 text-[#28a745]" />
-                <span className="text-left"><strong className="text-[#003366]">Vademécum Profesional (Beta)</strong>.</span>
+                <span className="text-left"><strong className="text-[#003366]">Certificado Oficial de Participación:</strong> Validación QR AuxiliarPro.</span>
+              </li>
+              <li className="flex items-start gap-3 text-slate-600">
+                <CheckCircle size={18} className="shrink-0 mt-0.5 text-[#28a745]" />
+                <span className="text-left"><strong className="text-[#003366]">Desafío de Racha Diaria:</strong> Entrenamiento continuo.</span>
               </li>
             </ul>
             
@@ -65,8 +69,8 @@ export default function BannerVenta() {
               </div>
             </div>
 
-            <Link href="/quiz" className="block w-full text-center font-bold py-3.5 rounded-xl text-xs md:text-sm transition-all flex items-center justify-center gap-2 bg-slate-50 hover:bg-slate-100 text-[#003366] border border-slate-200 uppercase tracking-widest">
-              Continuar en versión gratis
+            <Link href="/quiz/basic/diagnostico" className="block w-full text-center font-bold py-3.5 rounded-xl text-xs md:text-sm transition-all flex items-center justify-center gap-2 bg-slate-50 hover:bg-slate-100 text-[#003366] border border-slate-200 uppercase tracking-widest">
+              Ir a prueba de diagnóstico
             </Link>
         </div>
       </div>
