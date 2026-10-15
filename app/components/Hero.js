@@ -31,7 +31,7 @@ export default function Hero() {
 
           <div className="bg-emerald-50/60 border border-emerald-100 rounded-3xl p-5 md:p-6 text-left max-w-2xl mx-auto shadow-sm">
             <p className="text-xs font-black text-[#28a745] uppercase tracking-widest mb-3 text-center">
-              ✨ Nuevas Suscripciones Mensual y Anual
+              ✨ Nuevas Suscripciones: Sprint 15 Días y Mensual
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs md:text-sm text-slate-700 font-medium">
               <div className="flex items-start gap-2.5 bg-white p-3 rounded-2xl border border-slate-100 shadow-xs">
