@@ -73,7 +73,7 @@ export default function FormularioPage() {
                 <CheckCircle2 size={16} className="text-[#28a745]" /> Datos indispensables en el encabezado:
               </h3>
               <ul className="text-xs text-slate-600 space-y-2 list-disc pl-5 font-medium">
-                <li><strong>Razón Social y Nombre Fantasía:</strong> Nombre completo del establecimiento (Ej: <em>Farmacia Cruz Verde - Sucursal Providencia</em>).</li>
+                <li><strong>Razón Social y Nombre Fantasía:</strong> Nombre completo del establecimiento (Ej: <em>Farmacia Cruz del Sur - Sucursal Providencia</em>).</li>
                 <li><strong>Dirección exacta y Comuna:</strong> Coincidente con la resolución de autorización sanitaria de la farmacia.</li>
                 <li><strong>Teléfono o Email de contacto:</strong> La SEREMI realiza fiscalizaciones para verificar la autenticidad del documento.</li>
               </ul>
