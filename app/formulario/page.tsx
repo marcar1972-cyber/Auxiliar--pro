@@ -5,7 +5,8 @@ import Link from 'next/link';
 import { 
   FileText, Download, CheckCircle2, AlertTriangle, 
   ChevronRight, ChevronLeft, Building2, 
-  Calendar, UserCheck, ShieldCheck, Sparkles
+  Calendar, UserCheck, ShieldCheck, Sparkles,
+  GraduationCap, ExternalLink
 } from 'lucide-react';
 
 // Importación usando ruta relativa para app/components/PlanesSuscripcion.js
@@ -203,10 +204,11 @@ export default function FormularioPage() {
               <span className="text-[10px] font-black uppercase text-[#28a745] tracking-widest block">Paso 5 de 5</span>
               <h2 className="text-2xl font-black text-[#003366]">¡Instrucciones Completadas!</h2>
               <p className="text-sm text-slate-600 mt-2 max-w-md mx-auto">
-                Ya conoces la estructura y los requisitos legales. Descarga la plantilla oficial en formato PDF para editarla o imprimirla para la firma de tu Químico Farmacéutico.
+                Ya conoces la estructura y los requisitos legales. Descarga la plantilla oficial en formato PDF e ingresa a los portales oficiales para obtener tus certificados complementarios.
               </p>
             </div>
 
+            {/* DESCARGA PLANTILLA OFICIAL */}
             <div className="bg-blue-50 border border-blue-200 p-6 rounded-2xl max-w-lg mx-auto space-y-4 shadow-sm">
               <h3 className="font-bold text-[#003366] text-sm">Descarga de Material Oficial</h3>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -220,6 +222,43 @@ export default function FormularioPage() {
               </div>
               <p className="text-[11px] text-slate-500 font-medium">
                 Imprime este archivo, complétalo con tu Químico Farmacéutico y solicítale su firma y timbre oficial.
+              </p>
+            </div>
+
+            {/* ENLACES COMPLEMENTARIOS MINEDUC Y CLAVEÚNICA */}
+            <div className="bg-slate-50 border border-slate-200 p-5 rounded-2xl max-w-lg mx-auto space-y-3 text-left shadow-sm">
+              <h3 className="font-bold text-[#003366] text-xs uppercase tracking-wider flex items-center gap-2">
+                <GraduationCap size={18} className="text-[#003366]" /> Trámites Complementarios SEREMI en Línea:
+              </h3>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                <a
+                  href="https://certificados.mineduc.cl/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between p-3 bg-white border border-slate-200 hover:border-blue-300 rounded-xl text-xs font-bold text-[#003366] hover:bg-blue-50/50 transition-all shadow-xs"
+                >
+                  <span className="flex items-center gap-2">
+                    <GraduationCap size={16} className="text-blue-600" /> Certificado MINEDUC
+                  </span>
+                  <ExternalLink size={14} className="text-slate-400" />
+                </a>
+
+                <a
+                  href="https://claveunica.gob.cl/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between p-3 bg-white border border-slate-200 hover:border-blue-300 rounded-xl text-xs font-bold text-[#003366] hover:bg-blue-50/50 transition-all shadow-xs"
+                >
+                  <span className="flex items-center gap-2">
+                    <ShieldCheck size={16} className="text-emerald-600" /> Obtener ClaveÚnica
+                  </span>
+                  <ExternalLink size={14} className="text-slate-400" />
+                </a>
+              </div>
+
+              <p className="text-[11px] text-slate-500 font-medium pt-1">
+                Recuerda que la SEREMI exige adjuntar tu Certificado de Licencia de Enseñanza Media descargado desde MINEDUC mediante tu ClaveÚnica.
               </p>
             </div>
           </div>
