@@ -108,7 +108,7 @@ export default function FormularioPage() {
               <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
                 <span className="text-[10px] font-black text-[#28a745] bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full inline-block mb-2 uppercase">Requisito de Tiempo</span>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Para el examen directo de idoneidad, se debe acreditar el periodo mínimo exigido por el Reglamento de Farmacias (DS 466/1984).
+                  Para el examen directo de idoneidad, se debe acreditar el periodo mínimo de un año exigido por el Reglamento de Farmacias (DS 466/1984).
                 </p>
               </div>
               <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
